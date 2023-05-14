@@ -9,12 +9,6 @@ export async function postLogin(data: iLoginRequest): Promise<iLoginResponse> {
   return response;
 }
 
-export async function postRecovery(
-  data: iRecoveryRequest
-): Promise<iLoginResponse> {
-  const { data: response } = await apiUsingNow.post<iLoginResponse>(
-    "login",
-    data
-  );
-  return response;
+export async function postRecovery(data: iRecoveryRequest): Promise<void> {
+  await apiUsingNow.post("password", data);
 }

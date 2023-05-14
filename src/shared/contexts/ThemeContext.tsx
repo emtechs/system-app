@@ -1,22 +1,36 @@
-import { createContext, useContext } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useContext,
+  useState,
+} from "react";
 import { iChildren } from "../interfaces";
 import { Theme } from "../themes";
-import { Box, ThemeProvider } from "@mui/material";
+import { Backdrop, CircularProgress, ThemeProvider } from "@mui/material";
 
-const ThemeContext = createContext({});
+interface iThemeContextProps {
+  setLoading: Dispatch<SetStateAction<boolean>>;
+}
+
+const ThemeContext = createContext({} as iThemeContextProps);
 
 export const AppThemeProvider = ({ children }: iChildren) => {
   const theme = Theme;
+  const [loading, setLoading] = useState(false);
   return (
-    <ThemeContext.Provider value={{}}>
+    <ThemeContext.Provider value={{ setLoading }}>
       <ThemeProvider theme={theme}>
-        <Box
-          width="100vw"
-          height="100vh"
-          bgcolor={theme.palette.background.default}
+        {children}
+        <Backdrop
+          sx={{
+            color: theme.palette.secondary.main,
+            zIndex: theme.zIndex.drawer + 1,
+          }}
+          open={loading}
         >
-          {children}
-        </Box>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </ThemeProvider>
     </ThemeContext.Provider>
   );
