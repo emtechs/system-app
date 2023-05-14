@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: iChildren) => {
 
   const handleRecovey = useCallback(async (data: iRecoveryRequest) => {
     try {
-      const { access: token } = await postRecovery(data);
+      await postRecovery(data);
       toast.success("Siga as instruções enviadas no email da sua conta");
       navigate("/");
     } catch {
