@@ -19,4 +19,4 @@ if (token) {
   apiServerSide.defaults.headers.authorization = `Bearer ${token}`;
 }
 
-export const apiUsingNow = localServer;
+export const apiUsingNow = serverUrl;
