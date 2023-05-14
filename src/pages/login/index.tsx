@@ -1,13 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Box,
-  Button,
-  Container,
-  Paper,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
-import { Login as LoginIcon, LockReset } from "@mui/icons-material";
+import { Button, IconButton } from "@mui/material";
+import { Login as LoginIcon, LockReset, Info } from "@mui/icons-material";
 import {
   FormContainer,
   TextFieldElement,
@@ -15,73 +8,36 @@ import {
 } from "react-hook-form-mui";
 import { loginSchema, recoverySchema } from "../../shared/schemas";
 import { useAuthContext } from "../../shared/contexts";
-import { iChildren } from "../../shared/interfaces";
 import { useState } from "react";
-
-const BoxResp = ({ children }: iChildren) => {
-  const matches = useMediaQuery("(max-width:305px)");
-  const dateData = new Date();
-  if (matches) {
-    return (
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        gap={2}
-        width="80vw"
-      >
-        <img src="/pref_massape.png" width="100%" />
-        {children}
-        <Typography fontSize="0.7rem">
-          {dateData.getUTCFullYear()} © EM Soluções Tecnológicas
-        </Typography>
-      </Box>
-    );
-  }
-  return (
-    <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-      <img src="/pref_massape.png" />
-      {children}
-      <Typography>
-        {dateData.getUTCFullYear()} © EM Soluções Tecnológicas
-      </Typography>
-    </Box>
-  );
-};
+import {
+  BasePage,
+  BoxResp,
+  Glossary,
+  ValidateLogin,
+} from "../../shared/components";
 
 export const Login = () => {
   const { login, recovery } = useAuthContext();
-  const matches = useMediaQuery("(max-width:395px)");
   const [isLogin, setIsLogin] = useState(true);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(!open);
 
   return (
-    <Container
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        minHeight: "100vh",
-        alignItems: "center",
-      }}
-    >
-      <Box
-        component={Paper}
-        width="100vw"
-        maxWidth={400}
-        display="flex"
-        justifyContent="center"
-        padding={matches ? 0 : 8}
-        paddingTop={8}
-        paddingBottom={8}
-      >
+    <>
+      <BasePage padding={6}>
         {isLogin ? (
           <FormContainer onSuccess={login} resolver={zodResolver(loginSchema)}>
-            <BoxResp>
+            <BoxResp isLogin>
+              <IconButton onClick={handleOpen} color="secondary">
+                <Info />
+              </IconButton>
               <TextFieldElement
                 name="login"
                 label="Usuário"
                 required
                 fullWidth
               />
+              <ValidateLogin />
               <PasswordElement
                 name="password"
                 label="Senha"
@@ -112,14 +68,17 @@ export const Login = () => {
             onSuccess={recovery}
             resolver={zodResolver(recoverySchema)}
           >
-            <BoxResp>
+            <BoxResp isLogin>
+              <IconButton onClick={handleOpen} color="secondary">
+                <Info />
+              </IconButton>
               <TextFieldElement
                 name="login"
                 label="Usuário"
                 required
                 fullWidth
               />
-
+              <ValidateLogin />
               <Button
                 variant="contained"
                 color="secondary"
@@ -140,7 +99,20 @@ export const Login = () => {
             </BoxResp>
           </FormContainer>
         )}
-      </Box>
-    </Container>
+      </BasePage>
+      <Glossary open={open} onClose={handleOpen}>
+        {isLogin ? (
+          <>
+            Preencha as informações com seu usuário e senha para obter acesso ao
+            sistema.
+          </>
+        ) : (
+          <>
+            Preencha o campo com seu usuário. Em seguida, você receberá um link
+            no seu email cadastrado para efetuar a troca da senha.
+          </>
+        )}
+      </Glossary>
+    </>
   );
 };
