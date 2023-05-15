@@ -2,12 +2,14 @@ import { z } from "zod";
 
 export const userCreateSchema = z
   .object({
+    name: z
+      .string({ required_error: "Nome obrigatório" })
+      .nonempty("Nome obrigatório"),
     login: z.string(),
     cpf: z
       .string({ required_error: "CPF obrigatório" })
-      .min(11, "Precisa ter 11 números"),
+      .min(14, "Precisa ter 14 digitos"),
     password: z.string().optional(),
-
     role: z.enum(["SERV", "DIRET", "SECRET", "ADMIN"]),
   })
   .refine((fields) => (fields.password = fields.login.substring(0, 6)));

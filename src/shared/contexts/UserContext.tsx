@@ -1,4 +1,6 @@
 import {
+  Dispatch,
+  SetStateAction,
   createContext,
   useCallback,
   useContext,
@@ -7,11 +9,13 @@ import {
 } from "react";
 import {
   iChildren,
+  iDash,
   iUser,
   iUserFirstRequest,
   iUserPasswordRequest,
   iUserRequest,
   iUserUpdateRequest,
+  iWorkSchool,
 } from "../interfaces";
 import { apiUsingNow, patchUser, postUser } from "../services";
 import { toast } from "react-toastify";
@@ -24,6 +28,10 @@ interface iUserContextData {
   first: (id: string, data: iUserFirstRequest) => Promise<void>;
   updateUser: (id: string, data: iUserUpdateRequest) => Promise<void>;
   userData: iUser | undefined;
+  dashData: iDash | undefined;
+  setDashData: Dispatch<SetStateAction<iDash | undefined>>;
+  schoolData: iWorkSchool | undefined;
+  setSchoolData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
 }
 
 const UserContext = createContext({} as iUserContextData);
@@ -34,6 +42,8 @@ export const UserProvider = ({ children }: iChildren) => {
   const { accessToken, setAccessToken } = useAuthContext();
   const { setOpenEditProfile, setOpenEditPassword } = useModalProfileContext();
   const [userData, setUserData] = useState<iUser>();
+  const [schoolData, setSchoolData] = useState<iWorkSchool>();
+  const [dashData, setDashData] = useState<iDash>();
 
   useEffect(() => {
     if (accessToken) {
@@ -45,10 +55,13 @@ export const UserProvider = ({ children }: iChildren) => {
         .then((res) => {
           apiUsingNow.defaults.headers.authorization = `Bearer ${accessToken}`;
           setUserData(res.data);
+          setDashData(res.data.dash);
+          if (res.data.work_school.length === 0) setSchoolData(undefined);
           setLoading(false);
         })
         .catch(() => {
           setAccessToken(undefined);
+          setSchoolData(undefined);
           setLoading(false);
         });
     }
@@ -58,13 +71,12 @@ export const UserProvider = ({ children }: iChildren) => {
     try {
       setLoading(true);
       await postUser(data);
-      toast.success(
-        "Conta criada com sucesso, aguarde até o Administrador autorizar seu acesso!"
-      );
+      toast.success("Usuário cadastrado com sucesso!");
       setLoading(false);
+      navigate("/");
     } catch {
       setLoading(false);
-      toast.error("Conta já criada, entre em contato com o suporte!");
+      toast.error("Não foi possível cadastrar o usuário no momento!");
     }
   }, []);
 
@@ -128,6 +140,10 @@ export const UserProvider = ({ children }: iChildren) => {
         first: handleFirstUser,
         updateUser: handleUpdateUser,
         editPassword: handlePasswordUser,
+        dashData,
+        setDashData,
+        schoolData,
+        setSchoolData,
       }}
     >
       {children}

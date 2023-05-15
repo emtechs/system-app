@@ -5,6 +5,11 @@ import {
   userPasswordSchema,
   userUpdateSchema,
 } from "../schemas";
+import { iSchool, iWorkSchool } from "./school.interface";
+
+export type iRole = "ADMIN" | "SERV" | "DIRET" | "SECRET";
+
+export type iDash = "COMMON" | "SCHOOL" | "ORGAN" | "ADMIN";
 
 export interface iUser {
   id: string;
@@ -12,10 +17,13 @@ export interface iUser {
   name: string;
   cpf: string;
   email: string;
-  role: "SERV" | "DIRET" | "SECRET" | "ADMIN";
+  role: iRole;
+  dash: iDash;
   is_active: boolean;
   is_first_access: boolean;
   created_at: Date;
+  director_school: iSchool;
+  work_school: iWorkSchool[];
 }
 
 export type iUserRequest = z.infer<typeof userCreateSchema>;

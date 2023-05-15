@@ -17,9 +17,11 @@ interface iModalProfileContextData {
   setOpenEditProfile: Dispatch<SetStateAction<boolean>>;
   openEditPassword: boolean;
   setOpenEditPassword: Dispatch<SetStateAction<boolean>>;
+  openGlossary: boolean;
   handleOpenMenu: () => void;
   handleOpenEditProfile: () => void;
   handleOpenEditPassword: () => void;
+  handleOpenGlossary: () => void;
   handleClick: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -30,6 +32,7 @@ export const ModalProfileProvider = ({ children }: iChildren) => {
   const openMenu = useMemo(() => !!anchorEl, [anchorEl]);
   const [openEditProfile, setOpenEditProfile] = useState(false);
   const [openEditPassword, setOpenEditPassword] = useState(false);
+  const [openGlossary, setOpenGlossary] = useState(false);
   const handleOpenMenu = () => setAnchorEl(null);
   const handleOpenEditProfile = () => {
     setOpenEditProfile(!openEditProfile);
@@ -39,6 +42,7 @@ export const ModalProfileProvider = ({ children }: iChildren) => {
     setOpenEditPassword(!openEditPassword);
     setAnchorEl(null);
   };
+  const handleOpenGlossary = () => setOpenGlossary(!openGlossary);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -57,6 +61,8 @@ export const ModalProfileProvider = ({ children }: iChildren) => {
         setAnchorEl,
         setOpenEditPassword,
         setOpenEditProfile,
+        openGlossary,
+        handleOpenGlossary,
       }}
     >
       {children}
