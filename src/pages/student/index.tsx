@@ -5,9 +5,9 @@ import {
 } from "react-hook-form-mui";
 import { BasePage, BoxResp, Glossary } from "../../shared/components";
 import {
+  useAuthContext,
   useModalProfileContext,
   useSchoolContext,
-  useUserContext,
 } from "../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { studentCreateSchema } from "../../shared/schemas";
@@ -21,21 +21,23 @@ interface iData extends iClass {
 }
 
 export const Student = () => {
-  const { schoolData } = useUserContext();
+  const { schoolData } = useAuthContext();
   const { createStudent } = useSchoolContext();
   const { openGlossary, handleOpenGlossary } = useModalProfileContext();
   const [data, setData] = useState<iData[]>();
   const [loading, setloading] = useState(false);
   useEffect(() => {
     setloading(true);
-    apiUsingNow.get<iClass[]>("classes").then((res) => {
-      setData(
-        res.data.map((el) => {
-          return { ...el, label: el.name };
-        })
-      );
-      setloading(false);
-    });
+    apiUsingNow
+      .get<iClass[]>(`classes?school_id=${schoolData?.school.id}`)
+      .then((res) => {
+        setData(
+          res.data.map((el) => {
+            return { ...el, label: el.name };
+          })
+        );
+        setloading(false);
+      });
   }, []);
 
   return (

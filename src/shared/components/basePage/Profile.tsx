@@ -20,11 +20,7 @@ import {
 } from "@mui/material";
 import { ArrowBackIosNew, Info, Person } from "@mui/icons-material";
 import { iChildren } from "../../interfaces";
-import {
-  useAuthContext,
-  useModalProfileContext,
-  useUserContext,
-} from "../../contexts";
+import { useAuthContext, useModalProfileContext } from "../../contexts";
 import { EditProfile } from "./EditProfile";
 import { EditPassword } from "./EditPassword";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -35,7 +31,7 @@ export const BasePageProfile = ({ children }: iChildren) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuthContext();
-  const { userData, setDashData, schoolData, setSchoolData } = useUserContext();
+  const { userData, setDashData, schoolData, setSchoolData } = useAuthContext();
   const isDash = useMemo(() => {
     if (userData?.work_school.length === 0) {
       return false;

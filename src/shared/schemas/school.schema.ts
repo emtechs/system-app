@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { z } from "zod";
 
 export const schoolCreateSchema = z
@@ -48,3 +49,37 @@ export const studentCreateSchema = z
     class_id: z.string().uuid().optional(),
   })
   .refine((field) => (field.class_id = field.class.id));
+
+export const frequencyCreateSchema = z
+  .object({
+    date: z
+      .string({ required_error: "Data obrigatório" })
+      .nonempty("Data obrigatório"),
+    class: z.object(
+      {
+        id: z.string().uuid(),
+        students: z.object({ id: z.string().uuid() }).array(),
+      },
+      { required_error: "Turma obrigatória" }
+    ),
+    class_id: z.string().uuid().optional(),
+    students: z.object({ student_id: z.string().uuid() }).array().optional(),
+  })
+  .refine((field) => (field.class_id = field.class.id))
+  .refine(
+    (field) =>
+      (field.students = field.class.students.map(({ id }) => {
+        return { student_id: id };
+      }))
+  );
+
+export const frequencyUpdateSchema = z
+  .object({
+    justification: z
+      .string({ required_error: "Justificativa obrigatória" })
+      .nonempty("Justificativa obrigatória"),
+    status: z.enum(["PRESENTED", "MISSED", "JUSTIFIED"]).optional(),
+    updated_at: z.string().optional(),
+  })
+  .refine((field) => (field.status = "JUSTIFIED"))
+  .refine((field) => (field.updated_at = dayjs().format()));

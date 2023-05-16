@@ -8,8 +8,15 @@ import {
   useMemo,
   useState,
 } from "react";
-import { iChildren, iLoginRequest, iRecoveryRequest } from "../interfaces";
-import { postLogin, postRecovery } from "../services";
+import {
+  iChildren,
+  iDash,
+  iLoginRequest,
+  iRecoveryRequest,
+  iUser,
+  iWorkSchool,
+} from "../interfaces";
+import { apiUsingNow, postLogin, postRecovery } from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useModalProfileContext } from "./ModalProfileContext";
@@ -23,6 +30,12 @@ interface iAuthContextData {
   isAuthenticated: boolean;
   login: (data: iLoginRequest) => Promise<void>;
   recovery: (data: iRecoveryRequest) => Promise<void>;
+  userData: iUser | undefined;
+  setUserData: Dispatch<SetStateAction<iUser | undefined>>;
+  schoolData: iWorkSchool | undefined;
+  setSchoolData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
+  dashData: iDash | undefined;
+  setDashData: Dispatch<SetStateAction<iDash | undefined>>;
 }
 
 const AuthContext = createContext({} as iAuthContextData);
@@ -32,6 +45,9 @@ export const AuthProvider = ({ children }: iChildren) => {
   const { setLoading } = useAppThemeContext();
   const { setAnchorEl } = useModalProfileContext();
   const [accessToken, setAccessToken] = useState<string>();
+  const [userData, setUserData] = useState<iUser>();
+  const [schoolData, setSchoolData] = useState<iWorkSchool>();
+  const [dashData, setDashData] = useState<iDash>();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("@EMTechs:token");
@@ -42,6 +58,30 @@ export const AuthProvider = ({ children }: iChildren) => {
       setAccessToken(undefined);
     }
   }, []);
+
+  useEffect(() => {
+    if (accessToken) {
+      setLoading(true);
+      apiUsingNow
+        .get<iUser>("users/profile", {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+        .then((res) => {
+          apiUsingNow.defaults.headers.authorization = `Bearer ${accessToken}`;
+          setUserData(res.data);
+          setDashData(res.data.dash);
+          if (res.data.work_school.length === 0) setSchoolData(undefined);
+          setLoading(false);
+        })
+        .catch(() => {
+          setAccessToken(undefined);
+          setUserData(undefined);
+          setDashData(undefined);
+          setSchoolData(undefined);
+          setLoading(false);
+        });
+    }
+  }, [accessToken]);
 
   const handleLogin = useCallback(async (data: iLoginRequest) => {
     try {
@@ -96,6 +136,9 @@ export const AuthProvider = ({ children }: iChildren) => {
   const handleLogout = useCallback(() => {
     localStorage.removeItem("@EMTechs:token");
     setAccessToken(undefined);
+    setUserData(undefined);
+    setDashData(undefined);
+    setSchoolData(undefined);
     setAnchorEl(null);
     navigate("/login");
   }, []);
@@ -111,6 +154,12 @@ export const AuthProvider = ({ children }: iChildren) => {
         accessToken,
         recovery: handleRecovey,
         setAccessToken,
+        dashData,
+        schoolData,
+        setDashData,
+        setSchoolData,
+        setUserData,
+        userData,
       }}
     >
       {children}

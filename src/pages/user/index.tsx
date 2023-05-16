@@ -5,6 +5,7 @@ import {
   ValidateCPF,
 } from "../../shared/components";
 import {
+  useAuthContext,
   useModalProfileContext,
   useSchoolContext,
   useUserContext,
@@ -18,7 +19,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { serverCreateSchema, userCreateSchema } from "../../shared/schemas";
 
 export const User = () => {
-  const { create, dashData, schoolData } = useUserContext();
+  const { dashData, schoolData } = useAuthContext();
+  const { create } = useUserContext();
   const { createServer } = useSchoolContext();
   const { openGlossary, handleOpenGlossary } = useModalProfileContext();
 

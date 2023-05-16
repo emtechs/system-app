@@ -1,18 +1,21 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import {
   ClassPage,
+  CreateFrequency,
   Dashboard,
   First,
+  Frequency,
+  ListFrequency,
   Login,
   School,
   Student,
   User,
 } from "../pages";
-import { useAuthContext, useUserContext } from "../shared/contexts";
+import { useAuthContext } from "../shared/contexts";
 
 const AppRoutes = () => {
-  const { isAuthenticated } = useAuthContext();
-  const { userData, dashData } = useUserContext();
+  const { isAuthenticated, userData, dashData } = useAuthContext();
+
   if (isAuthenticated) {
     if (!userData?.is_first_access) {
       return (
@@ -32,6 +35,13 @@ const AppRoutes = () => {
           <>
             <Route path="/class" element={<ClassPage />} />
             <Route path="/student" element={<Student />} />
+          </>
+        )}
+        {dashData && dashData === "COMMON" && (
+          <>
+            <Route path="/frequency" element={<Frequency />} />
+            <Route path="/frequency/create" element={<CreateFrequency />} />
+            <Route path="/frequency/list" element={<ListFrequency />} />
           </>
         )}
         <Route path="*" element={<Navigate to="/" />} />

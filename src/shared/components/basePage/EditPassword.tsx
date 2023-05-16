@@ -1,5 +1,9 @@
 import { Button, IconButton } from "@mui/material";
-import { useModalProfileContext, useUserContext } from "../../contexts";
+import {
+  useAuthContext,
+  useModalProfileContext,
+  useUserContext,
+} from "../../contexts";
 import { ModalGeneral } from "../modal";
 import { FormContainer, PasswordElement } from "react-hook-form-mui";
 import { userPasswordSchema } from "../../schemas";
@@ -10,7 +14,8 @@ import { useState } from "react";
 
 export const EditPassword = () => {
   const { openEditPassword, handleOpenEditPassword } = useModalProfileContext();
-  const { userData, editPassword } = useUserContext();
+  const { userData } = useAuthContext();
+  const { editPassword } = useUserContext();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(!open);
 

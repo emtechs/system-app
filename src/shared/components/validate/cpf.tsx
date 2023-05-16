@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form-mui";
 import { apiUsingNow } from "../../services";
-import { iUser } from "../../interfaces";
+import { iDash, iUser } from "../../interfaces";
 import { Button } from "@mui/material";
 
 interface iValidateCPFProps {
-  dash: "COMMON" | "SCHOOL" | "ORGAN" | "ADMIN";
+  dash: iDash;
   school_id?: string;
 }
 

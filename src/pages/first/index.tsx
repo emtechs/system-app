@@ -7,12 +7,13 @@ import {
   PasswordElement,
 } from "react-hook-form-mui";
 import { userFirstSchema } from "../../shared/schemas";
-import { useUserContext } from "../../shared/contexts";
+import { useAuthContext, useUserContext } from "../../shared/contexts";
 import { BasePage, BoxResp, Glossary } from "../../shared/components";
 import { useState } from "react";
 
 export const First = () => {
-  const { first, userData } = useUserContext();
+  const { userData } = useAuthContext();
+  const { first } = useUserContext();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(!open);
 
@@ -35,7 +36,13 @@ export const First = () => {
               required
               fullWidth
             />
-            <TextFieldElement name="email" label="Email" required fullWidth />
+            <TextFieldElement
+              name="email"
+              label="Email"
+              type="email"
+              required
+              fullWidth
+            />
             <PasswordElement name="password" label="Senha" required fullWidth />
             <PasswordElement
               name="repeat_password"

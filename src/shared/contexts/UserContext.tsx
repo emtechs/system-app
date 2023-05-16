@@ -1,23 +1,12 @@
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext } from "react";
 import {
   iChildren,
-  iDash,
-  iUser,
   iUserFirstRequest,
   iUserPasswordRequest,
   iUserRequest,
   iUserUpdateRequest,
-  iWorkSchool,
 } from "../interfaces";
-import { apiUsingNow, patchUser, postUser } from "../services";
+import { patchUser, postUser } from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext, useAuthContext, useModalProfileContext } from ".";
@@ -27,11 +16,6 @@ interface iUserContextData {
   editPassword: (id: string, data: iUserPasswordRequest) => Promise<void>;
   first: (id: string, data: iUserFirstRequest) => Promise<void>;
   updateUser: (id: string, data: iUserUpdateRequest) => Promise<void>;
-  userData: iUser | undefined;
-  dashData: iDash | undefined;
-  setDashData: Dispatch<SetStateAction<iDash | undefined>>;
-  schoolData: iWorkSchool | undefined;
-  setSchoolData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
 }
 
 const UserContext = createContext({} as iUserContextData);
@@ -39,33 +23,8 @@ const UserContext = createContext({} as iUserContextData);
 export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading } = useAppThemeContext();
-  const { accessToken, setAccessToken } = useAuthContext();
+  const { setDashData, setSchoolData, setUserData } = useAuthContext();
   const { setOpenEditProfile, setOpenEditPassword } = useModalProfileContext();
-  const [userData, setUserData] = useState<iUser>();
-  const [schoolData, setSchoolData] = useState<iWorkSchool>();
-  const [dashData, setDashData] = useState<iDash>();
-
-  useEffect(() => {
-    if (accessToken) {
-      setLoading(true);
-      apiUsingNow
-        .get<iUser>("users/profile", {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
-        .then((res) => {
-          apiUsingNow.defaults.headers.authorization = `Bearer ${accessToken}`;
-          setUserData(res.data);
-          setDashData(res.data.dash);
-          if (res.data.work_school.length === 0) setSchoolData(undefined);
-          setLoading(false);
-        })
-        .catch(() => {
-          setAccessToken(undefined);
-          setSchoolData(undefined);
-          setLoading(false);
-        });
-    }
-  }, [accessToken]);
 
   const handleCreateUser = useCallback(async (data: iUserRequest) => {
     try {
@@ -87,6 +46,8 @@ export const UserProvider = ({ children }: iChildren) => {
         const user = await patchUser(id, data);
         toast.success("Dados cadastrados com sucesso");
         setUserData(user);
+        setDashData(user.dash);
+        if (user.work_school.length === 0) setSchoolData(undefined);
         navigate("/");
         setLoading(false);
       } catch {
@@ -135,15 +96,10 @@ export const UserProvider = ({ children }: iChildren) => {
   return (
     <UserContext.Provider
       value={{
-        userData,
         create: handleCreateUser,
         first: handleFirstUser,
         updateUser: handleUpdateUser,
         editPassword: handlePasswordUser,
-        dashData,
-        setDashData,
-        schoolData,
-        setSchoolData,
       }}
     >
       {children}

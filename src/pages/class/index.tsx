@@ -1,16 +1,16 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { BasePage, BoxResp, Glossary } from "../../shared/components";
 import {
+  useAuthContext,
   useModalProfileContext,
   useSchoolContext,
-  useUserContext,
 } from "../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { classCreateSchema } from "../../shared/schemas";
 import { Button } from "@mui/material";
 
 export const ClassPage = () => {
-  const { schoolData } = useUserContext();
+  const { schoolData } = useAuthContext();
   const { createClass } = useSchoolContext();
   const { openGlossary, handleOpenGlossary } = useModalProfileContext();
 

@@ -1,5 +1,9 @@
 import { Button, IconButton } from "@mui/material";
-import { useModalProfileContext, useUserContext } from "../../contexts";
+import {
+  useAuthContext,
+  useModalProfileContext,
+  useUserContext,
+} from "../../contexts";
 import { ModalGeneral } from "../modal";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,7 +14,8 @@ import { useState } from "react";
 
 export const EditProfile = () => {
   const { openEditProfile, handleOpenEditProfile } = useModalProfileContext();
-  const { userData, updateUser } = useUserContext();
+  const { userData } = useAuthContext();
+  const { updateUser } = useUserContext();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(!open);
   return (
