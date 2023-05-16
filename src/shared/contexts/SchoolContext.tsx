@@ -11,6 +11,7 @@ import {
   iClassRequest,
   iFrequency,
   iFrequencyRequest,
+  iFrequencyStudents,
   iSchoolRequest,
   iStudentRequest,
 } from "../interfaces";
@@ -38,6 +39,8 @@ interface iSchoolContextData {
   updateFrequencyStudent: (data: FieldValues, id: string) => Promise<void>;
   frequencyData: iFrequency | undefined;
   setFrequencyData: Dispatch<SetStateAction<iFrequency | undefined>>;
+  studentData: iFrequencyStudents | undefined;
+  setStudentData: Dispatch<SetStateAction<iFrequencyStudents | undefined>>;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -46,6 +49,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading } = useAppThemeContext();
   const [frequencyData, setFrequencyData] = useState<iFrequency>();
+  const [studentData, setStudentData] = useState<iFrequencyStudents>();
 
   const handleCreateSchool = useCallback(async (data: iSchoolRequest) => {
     try {
@@ -146,8 +150,10 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setLoading(true);
         await patchFrequencyStudent(data, id);
         toast.success("Falta cadastrada com sucesso!");
+        setStudentData(undefined);
         setLoading(false);
       } catch {
+        setStudentData(undefined);
         setLoading(false);
         toast.error("Não foi possível cadastrar a falta no momento!");
       }
@@ -167,6 +173,8 @@ export const SchoolProvider = ({ children }: iChildren) => {
         updateFrequencyStudent: handleUpdateStudentFrequency,
         frequencyData,
         setFrequencyData,
+        studentData,
+        setStudentData,
       }}
     >
       {children}

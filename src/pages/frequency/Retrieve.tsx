@@ -24,7 +24,7 @@ import {
   iFrequencyStudents,
   iStatusStudent,
 } from "../../shared/interfaces";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { apiUsingNow } from "../../shared/services";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,10 +38,6 @@ dayjs.extend(relativeTime);
 interface iCardFrequencyProps {
   frequency: iFrequencyStudents;
   theme: Theme;
-  studentData: iFrequencyStudents | undefined;
-  setStudentData: Dispatch<SetStateAction<iFrequencyStudents | undefined>>;
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 const statusFrequencyPtBr = (status: iStatusStudent) => {
@@ -57,16 +53,14 @@ const statusFrequencyPtBr = (status: iStatusStudent) => {
   }
 };
 
-const CardFrequency = ({
-  frequency,
-  theme,
-  studentData,
-  setStudentData,
-  open,
-  setOpen,
-}: iCardFrequencyProps) => {
-  const { updateFrequencyStudent } = useSchoolContext();
-  const handleClose = () => setOpen(!open);
+const CardFrequency = ({ frequency, theme }: iCardFrequencyProps) => {
+  const { updateFrequencyStudent, studentData, setStudentData } =
+    useSchoolContext();
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setStudentData(frequency);
+    setOpen(!open);
+  };
   return (
     <>
       <Card
@@ -84,10 +78,7 @@ const CardFrequency = ({
         }}
       >
         <CardContent
-          onClick={() => {
-            setStudentData(frequency);
-            setOpen(true);
-          }}
+          onClick={handleClose}
           sx={{
             display: "flex",
             alignItems: "center",
@@ -140,7 +131,7 @@ const CardFrequency = ({
                 <FormContainer
                   onSuccess={(data) => {
                     updateFrequencyStudent(data, studentData.id);
-                    setOpen(false);
+                    setOpen(!open);
                   }}
                   resolver={zodResolver(frequencyUpdateSchema)}
                 >
@@ -169,7 +160,7 @@ const CardFrequency = ({
                         { status: "MISSED", updated_at: dayjs().format() },
                         studentData.id
                       );
-                      setOpen(false);
+                      setOpen(!open);
                     }}
                   >
                     Faltou
@@ -209,7 +200,7 @@ const CardFrequency = ({
                         },
                         studentData.id
                       );
-                      setOpen(false);
+                      setOpen(!open);
                     }}
                   >
                     Continuar
@@ -227,20 +218,21 @@ const CardFrequency = ({
 export const Frequency = () => {
   const theme = useTheme();
   const { setLoading } = useAppThemeContext();
-  const { frequencyData, setFrequencyData, updateFrequency } =
+  const { frequencyData, setFrequencyData, updateFrequency, studentData } =
     useSchoolContext();
   const { openGlossary, handleOpenGlossary } = useModalProfileContext();
-  const [studentData, setStudentData] = useState<iFrequencyStudents>();
-  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     setLoading(true);
     apiUsingNow
       .get<iFrequency>(`frequencies/${frequencyData?.id}`)
       .then((res) => {
         setFrequencyData(res.data);
+      })
+      .finally(() => {
         setLoading(false);
       });
-  }, [open]);
+  }, [studentData]);
   return (
     <>
       <BasePage isProfile>
@@ -272,10 +264,6 @@ export const Frequency = () => {
                 key={frequency.id}
                 frequency={frequency}
                 theme={theme}
-                studentData={studentData}
-                setStudentData={setStudentData}
-                open={open}
-                setOpen={setOpen}
               />
             ))}
             <Button
