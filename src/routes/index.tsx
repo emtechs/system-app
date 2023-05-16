@@ -17,13 +17,15 @@ const AppRoutes = () => {
   const { isAuthenticated, userData, dashData } = useAuthContext();
 
   if (isAuthenticated) {
-    if (!userData?.is_first_access) {
-      return (
-        <Routes>
-          <Route path="/first" element={<First />} />
-          <Route path="*" element={<Navigate to="/first" />} />
-        </Routes>
-      );
+    if (userData) {
+      if (!userData.is_first_access) {
+        return (
+          <Routes>
+            <Route path="/first" element={<First />} />
+            <Route path="*" element={<Navigate to="/first" />} />
+          </Routes>
+        );
+      }
     }
 
     return (

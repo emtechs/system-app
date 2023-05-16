@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { BasePage, Glossary } from "../../shared/components";
 import {
+  useAppThemeContext,
   useModalProfileContext,
   useSchoolContext,
 } from "../../shared/contexts";
@@ -225,15 +226,20 @@ const CardFrequency = ({
 
 export const Frequency = () => {
   const theme = useTheme();
+  const { setLoading } = useAppThemeContext();
   const { frequencyData, setFrequencyData, updateFrequency } =
     useSchoolContext();
   const { openGlossary, handleOpenGlossary } = useModalProfileContext();
   const [studentData, setStudentData] = useState<iFrequencyStudents>();
   const [open, setOpen] = useState(false);
   useEffect(() => {
+    setLoading(true);
     apiUsingNow
       .get<iFrequency>(`frequencies/${frequencyData?.id}`)
-      .then((res) => setFrequencyData(res.data));
+      .then((res) => {
+        setFrequencyData(res.data);
+        setLoading(false);
+      });
   }, [open]);
   return (
     <>

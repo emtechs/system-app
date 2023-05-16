@@ -12,7 +12,10 @@ export const Dashboard = () => {
     case "SCHOOL":
       return <School />;
 
-    default:
+    case "COMMON":
       return <Common />;
+
+    default:
+      return <></>;
   }
 };
