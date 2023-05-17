@@ -3,52 +3,66 @@ import {
   SetStateAction,
   createContext,
   useContext,
+  useMemo,
   useState,
+  MouseEvent,
 } from "react";
 import { iChildren } from "../interfaces";
 
 interface iModalContextData {
-  openDepart: boolean;
-  setOpenDepart: Dispatch<SetStateAction<boolean>>;
-  openPosition: boolean;
-  setOpenPosition: Dispatch<SetStateAction<boolean>>;
-  openUser: boolean;
-  setOpenUser: Dispatch<SetStateAction<boolean>>;
-  openAcceptUser: boolean;
-  setOpenAcceptUser: Dispatch<SetStateAction<boolean>>;
-  handleOpenDepart: () => void;
-  handleOpenPosition: () => void;
-  handleOpenUser: () => void;
-  handleOpenAcceptUser: () => void;
+  anchorEl: HTMLElement | null;
+  setAnchorEl: Dispatch<SetStateAction<HTMLElement | null>>;
+  openMenu: boolean;
+  openEditProfile: boolean;
+  setOpenEditProfile: Dispatch<SetStateAction<boolean>>;
+  openEditPassword: boolean;
+  setOpenEditPassword: Dispatch<SetStateAction<boolean>>;
+  openGlossary: boolean;
+  handleOpenMenu: () => void;
+  handleOpenEditProfile: () => void;
+  handleOpenEditPassword: () => void;
+  handleOpenGlossary: () => void;
+  handleClick: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const ModalContext = createContext({} as iModalContextData);
 
 export const ModalProvider = ({ children }: iChildren) => {
-  const [openDepart, setOpenDepart] = useState(false);
-  const [openPosition, setOpenPosition] = useState(false);
-  const [openUser, setOpenUser] = useState(false);
-  const [openAcceptUser, setOpenAcceptUser] = useState(false);
-  const handleOpenDepart = () => setOpenDepart(!openDepart);
-  const handleOpenPosition = () => setOpenPosition(!openPosition);
-  const handleOpenUser = () => setOpenUser(!openUser);
-  const handleOpenAcceptUser = () => setOpenAcceptUser(!openAcceptUser);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const openMenu = useMemo(() => !!anchorEl, [anchorEl]);
+  const [openEditProfile, setOpenEditProfile] = useState(false);
+  const [openEditPassword, setOpenEditPassword] = useState(false);
+  const [openGlossary, setOpenGlossary] = useState(false);
+  const handleOpenMenu = () => setAnchorEl(null);
+  const handleOpenEditProfile = () => {
+    setOpenEditProfile(!openEditProfile);
+    setAnchorEl(null);
+  };
+  const handleOpenEditPassword = () => {
+    setOpenEditPassword(!openEditPassword);
+    setAnchorEl(null);
+  };
+  const handleOpenGlossary = () => setOpenGlossary(!openGlossary);
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   return (
     <ModalContext.Provider
       value={{
-        handleOpenAcceptUser,
-        handleOpenDepart,
-        handleOpenPosition,
-        handleOpenUser,
-        openAcceptUser,
-        openDepart,
-        openPosition,
-        openUser,
-        setOpenAcceptUser,
-        setOpenDepart,
-        setOpenPosition,
-        setOpenUser,
+        anchorEl,
+        handleClick,
+        handleOpenEditPassword,
+        handleOpenEditProfile,
+        handleOpenMenu,
+        openEditPassword,
+        openEditProfile,
+        openMenu,
+        setAnchorEl,
+        setOpenEditPassword,
+        setOpenEditProfile,
+        openGlossary,
+        handleOpenGlossary,
       }}
     >
       {children}

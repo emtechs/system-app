@@ -1,7 +1,7 @@
 import { Button, IconButton } from "@mui/material";
 import {
   useAuthContext,
-  useModalProfileContext,
+  useModalContext,
   useUserContext,
 } from "../../contexts";
 import { ModalGeneral } from "../modal";
@@ -13,7 +13,7 @@ import { Info } from "@mui/icons-material";
 import { useState } from "react";
 
 export const EditPassword = () => {
-  const { openEditPassword, handleOpenEditPassword } = useModalProfileContext();
+  const { openEditPassword, handleOpenEditPassword } = useModalContext();
   const { userData } = useAuthContext();
   const { editPassword } = useUserContext();
   const [open, setOpen] = useState(false);

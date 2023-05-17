@@ -20,13 +20,23 @@ import {
 } from "@mui/material";
 import { ArrowBackIosNew, Info, Person } from "@mui/icons-material";
 import { iChildren } from "../../interfaces";
-import { useAuthContext, useModalProfileContext } from "../../contexts";
+import { useAuthContext, useModalContext } from "../../contexts";
 import { EditProfile } from "./EditProfile";
 import { EditPassword } from "./EditPassword";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
+import { Glossary } from "..";
 
-export const BasePageProfile = ({ children }: iChildren) => {
+interface iBasePageProfileProps extends iChildren {
+  back?: string;
+  glossaryMessage?: string;
+}
+
+export const BasePageProfile = ({
+  children,
+  back = "-1",
+  glossaryMessage = "",
+}: iBasePageProfileProps) => {
   const theme = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
@@ -48,7 +58,7 @@ export const BasePageProfile = ({ children }: iChildren) => {
     handleOpenEditProfile,
     handleOpenEditPassword,
     handleOpenGlossary,
-  } = useModalProfileContext();
+  } = useModalContext();
 
   useEffect(() => {
     if (schoolData) {
@@ -97,7 +107,7 @@ export const BasePageProfile = ({ children }: iChildren) => {
                     cursor: "pointer",
                   }}
                   onClick={() => {
-                    navigate("-1");
+                    navigate(`${back}`);
                   }}
                 >
                   <CardContent
@@ -265,6 +275,7 @@ export const BasePageProfile = ({ children }: iChildren) => {
           ))}
         </List>
       </Dialog>
+      <Glossary>{glossaryMessage}</Glossary>
     </>
   );
 };

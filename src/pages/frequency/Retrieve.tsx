@@ -13,12 +13,8 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { BasePage, Glossary } from "../../shared/components";
-import {
-  useAppThemeContext,
-  useModalProfileContext,
-  useSchoolContext,
-} from "../../shared/contexts";
+import { BasePage } from "../../shared/components";
+import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
 import {
   iFrequency,
   iFrequencyStudents,
@@ -215,12 +211,15 @@ const CardFrequency = ({ frequency, theme }: iCardFrequencyProps) => {
   );
 };
 
-export const Frequency = () => {
+interface iFrequencyProps {
+  back: string;
+}
+
+export const Frequency = ({ back }: iFrequencyProps) => {
   const theme = useTheme();
   const { setLoading } = useAppThemeContext();
   const { frequencyData, setFrequencyData, updateFrequency, studentData } =
     useSchoolContext();
-  const { openGlossary, handleOpenGlossary } = useModalProfileContext();
 
   useEffect(() => {
     setLoading(true);
@@ -234,53 +233,48 @@ export const Frequency = () => {
       });
   }, [studentData]);
   return (
-    <>
-      <BasePage isProfile>
-        {frequencyData && (
-          <Box display="flex" flexDirection="column" gap={theme.spacing(2)}>
-            <Card
+    <BasePage isProfile back={back}>
+      {frequencyData && (
+        <Box display="flex" flexDirection="column" gap={theme.spacing(2)}>
+          <Card
+            sx={{
+              width: "100%",
+              height: 80,
+              maxWidth: 250,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CardContent
               sx={{
-                width: "100%",
-                height: 80,
-                maxWidth: 250,
                 display: "flex",
-                justifyContent: "center",
+                flexDirection: "column",
                 alignItems: "center",
               }}
             >
-              <CardContent
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <Typography>{frequencyData.date}</Typography>
-                <Typography>{frequencyData.class.name}</Typography>
-              </CardContent>
-            </Card>
-            {frequencyData.students.map((frequency) => (
-              <CardFrequency
-                key={frequency.id}
-                frequency={frequency}
-                theme={theme}
-              />
-            ))}
-            <Button
-              variant="contained"
-              onClick={() => {
-                updateFrequency({ status: "CLOSED" }, frequencyData.id);
-              }}
-              fullWidth
-            >
-              Salvar
-            </Button>
-          </Box>
-        )}
-      </BasePage>
-      <Glossary open={openGlossary} onClose={handleOpenGlossary}>
-        <></>
-      </Glossary>
-    </>
+              <Typography>{frequencyData.date}</Typography>
+              <Typography>{frequencyData.class.name}</Typography>
+            </CardContent>
+          </Card>
+          {frequencyData.students.map((frequency) => (
+            <CardFrequency
+              key={frequency.id}
+              frequency={frequency}
+              theme={theme}
+            />
+          ))}
+          <Button
+            variant="contained"
+            onClick={() => {
+              updateFrequency({ status: "CLOSED" }, frequencyData.id);
+            }}
+            fullWidth
+          >
+            Salvar
+          </Button>
+        </Box>
+      )}
+    </BasePage>
   );
 };

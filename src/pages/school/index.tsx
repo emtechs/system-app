@@ -1,8 +1,5 @@
-import { BasePage, BoxResp, Glossary } from "../../shared/components";
-import {
-  useModalProfileContext,
-  useSchoolContext,
-} from "../../shared/contexts";
+import { BasePage, BoxResp } from "../../shared/components";
+import { useSchoolContext } from "../../shared/contexts";
 import {
   AutocompleteElement,
   FormContainer,
@@ -21,7 +18,6 @@ interface iData extends iUser {
 
 export const School = () => {
   const { createSchool } = useSchoolContext();
-  const { openGlossary, handleOpenGlossary } = useModalProfileContext();
   const [data, setData] = useState<iData[]>();
   const [loading, setloading] = useState(false);
   useEffect(() => {
@@ -38,41 +34,36 @@ export const School = () => {
       });
   }, []);
   return (
-    <>
-      <BasePage isProfile>
-        <FormContainer
-          onSuccess={createSchool}
-          resolver={zodResolver(schoolCreateSchema)}
-        >
-          <BoxResp isProfile>
-            <TextFieldElement name="name" label="Nome" required fullWidth />
-            <div style={{ width: "100%" }}>
-              <AutocompleteElement
-                name="director"
-                label="Diretor"
-                options={
-                  data?.length
-                    ? data
-                    : [
-                        {
-                          id: 1,
-                          label:
-                            "No momento, não há nenhum usuário do tipo Diretor disponível",
-                        },
-                      ]
-                }
-                loading={loading}
-              />
-            </div>
-            <Button variant="contained" type="submit" fullWidth>
-              Salvar
-            </Button>
-          </BoxResp>
-        </FormContainer>
-      </BasePage>
-      <Glossary open={openGlossary} onClose={handleOpenGlossary}>
-        <></>
-      </Glossary>
-    </>
+    <BasePage isProfile>
+      <FormContainer
+        onSuccess={createSchool}
+        resolver={zodResolver(schoolCreateSchema)}
+      >
+        <BoxResp isProfile>
+          <TextFieldElement name="name" label="Nome" required fullWidth />
+          <div style={{ width: "100%" }}>
+            <AutocompleteElement
+              name="director"
+              label="Diretor"
+              options={
+                data?.length
+                  ? data
+                  : [
+                      {
+                        id: 1,
+                        label:
+                          "No momento, não há nenhum usuário do tipo Diretor disponível",
+                      },
+                    ]
+              }
+              loading={loading}
+            />
+          </div>
+          <Button variant="contained" type="submit" fullWidth>
+            Salvar
+          </Button>
+        </BoxResp>
+      </FormContainer>
+    </BasePage>
   );
 };

@@ -41,7 +41,10 @@ const AppRoutes = () => {
         )}
         {dashData && dashData === "COMMON" && (
           <>
-            <Route path="/frequency" element={<Frequency />} />
+            <Route
+              path="/frequency"
+              element={<Frequency back="/frequency/list" />}
+            />
             <Route path="/frequency/create" element={<CreateFrequency />} />
             <Route path="/frequency/list" element={<ListFrequency />} />
           </>

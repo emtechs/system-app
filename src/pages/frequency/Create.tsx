@@ -3,12 +3,8 @@ import {
   FormContainer,
   useFormContext,
 } from "react-hook-form-mui";
-import { BasePage, BoxResp, Glossary } from "../../shared/components";
-import {
-  useAuthContext,
-  useModalProfileContext,
-  useSchoolContext,
-} from "../../shared/contexts";
+import { BasePage, BoxResp } from "../../shared/components";
+import { useAuthContext, useSchoolContext } from "../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { frequencyCreateSchema } from "../../shared/schemas";
 import {
@@ -75,7 +71,6 @@ const DateValue = ({ setOpen }: iDateValueProps) => {
 export const CreateFrequency = () => {
   const { createFrequency, frequencyData } = useSchoolContext();
   const { schoolData } = useAuthContext();
-  const { openGlossary, handleOpenGlossary } = useModalProfileContext();
   const [data, setData] = useState<iData[]>();
   const [loading, setloading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -129,9 +124,6 @@ export const CreateFrequency = () => {
           </BoxResp>
         </FormContainer>
       </BasePage>
-      <Glossary open={openGlossary} onClose={handleOpenGlossary}>
-        <></>
-      </Glossary>
       <Dialog
         open={open}
         onClose={handleClose}

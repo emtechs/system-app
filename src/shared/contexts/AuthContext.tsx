@@ -19,7 +19,7 @@ import {
 import { apiUsingNow, postLogin, postRecovery } from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useModalProfileContext } from "./ModalProfileContext";
+import { useModalContext } from "./ModalContext";
 import { AxiosError } from "axios";
 import { useAppThemeContext } from ".";
 
@@ -43,7 +43,7 @@ const AuthContext = createContext({} as iAuthContextData);
 export const AuthProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading } = useAppThemeContext();
-  const { setAnchorEl } = useModalProfileContext();
+  const { setAnchorEl } = useModalContext();
   const [accessToken, setAccessToken] = useState<string>();
   const [userData, setUserData] = useState<iUser>();
   const [schoolData, setSchoolData] = useState<iWorkSchool>();

@@ -9,7 +9,7 @@ import {
 import { patchUser, postUser } from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useAppThemeContext, useAuthContext, useModalProfileContext } from ".";
+import { useAppThemeContext, useAuthContext, useModalContext } from ".";
 
 interface iUserContextData {
   create: (data: iUserRequest) => Promise<void>;
@@ -24,7 +24,7 @@ export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading } = useAppThemeContext();
   const { setDashData, setSchoolData, setUserData } = useAuthContext();
-  const { setOpenEditProfile, setOpenEditPassword } = useModalProfileContext();
+  const { setOpenEditProfile, setOpenEditPassword } = useModalContext();
 
   const handleCreateUser = useCallback(async (data: iUserRequest) => {
     try {

@@ -3,12 +3,8 @@ import {
   FormContainer,
   TextFieldElement,
 } from "react-hook-form-mui";
-import { BasePage, BoxResp, Glossary } from "../../shared/components";
-import {
-  useAuthContext,
-  useModalProfileContext,
-  useSchoolContext,
-} from "../../shared/contexts";
+import { BasePage, BoxResp } from "../../shared/components";
+import { useAuthContext, useSchoolContext } from "../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { studentCreateSchema } from "../../shared/schemas";
 import { Button } from "@mui/material";
@@ -23,7 +19,6 @@ interface iData extends iClass {
 export const Student = () => {
   const { schoolData } = useAuthContext();
   const { createStudent } = useSchoolContext();
-  const { openGlossary, handleOpenGlossary } = useModalProfileContext();
   const [data, setData] = useState<iData[]>();
   const [loading, setloading] = useState(false);
   useEffect(() => {
@@ -41,48 +36,43 @@ export const Student = () => {
   }, []);
 
   return (
-    <>
-      <BasePage isProfile>
-        <FormContainer
-          onSuccess={(data) => {
-            if (schoolData) createStudent(data, schoolData.school.id);
-          }}
-          resolver={zodResolver(studentCreateSchema)}
-        >
-          <BoxResp isProfile>
-            <TextFieldElement name="name" label="Nome" required fullWidth />
-            <TextFieldElement
-              name="registry"
-              label="Matricula"
-              required
-              fullWidth
+    <BasePage isProfile>
+      <FormContainer
+        onSuccess={(data) => {
+          if (schoolData) createStudent(data, schoolData.school.id);
+        }}
+        resolver={zodResolver(studentCreateSchema)}
+      >
+        <BoxResp isProfile>
+          <TextFieldElement name="name" label="Nome" required fullWidth />
+          <TextFieldElement
+            name="registry"
+            label="Matricula"
+            required
+            fullWidth
+          />
+          <div style={{ width: "100%" }}>
+            <AutocompleteElement
+              name="class"
+              label="Turma"
+              options={
+                data?.length
+                  ? data
+                  : [
+                      {
+                        id: 1,
+                        label: "No momento, não há nenhuma turma cadastrada",
+                      },
+                    ]
+              }
+              loading={loading}
             />
-            <div style={{ width: "100%" }}>
-              <AutocompleteElement
-                name="class"
-                label="Turma"
-                options={
-                  data?.length
-                    ? data
-                    : [
-                        {
-                          id: 1,
-                          label: "No momento, não há nenhuma turma cadastrada",
-                        },
-                      ]
-                }
-                loading={loading}
-              />
-            </div>
-            <Button variant="contained" type="submit" fullWidth>
-              Salvar
-            </Button>
-          </BoxResp>
-        </FormContainer>
-      </BasePage>
-      <Glossary open={openGlossary} onClose={handleOpenGlossary}>
-        <></>
-      </Glossary>
-    </>
+          </div>
+          <Button variant="contained" type="submit" fullWidth>
+            Salvar
+          </Button>
+        </BoxResp>
+      </FormContainer>
+    </BasePage>
   );
 };

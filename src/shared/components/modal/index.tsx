@@ -67,20 +67,18 @@ export const ModalGeneral = ({
               justifyContent="center"
               padding={5}
             >
-              {handleClose && (
-                <IconButton
-                  aria-label="close"
-                  onClick={handleClose}
-                  sx={{
-                    position: "absolute",
-                    right: 8,
-                    top: 8,
-                    color: theme.palette.primary.main,
-                  }}
-                >
-                  <Close />
-                </IconButton>
-              )}
+              <IconButton
+                aria-label="close"
+                onClick={handleClose}
+                sx={{
+                  position: "absolute",
+                  right: 8,
+                  top: 8,
+                  color: theme.palette.primary.main,
+                }}
+              >
+                <Close />
+              </IconButton>
               {children}
             </Box>
           </Container>
