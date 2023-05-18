@@ -1,4 +1,3 @@
-export * from "./class";
 export * from "./dashboard";
 export * from "./first";
 export * from "./frequency";

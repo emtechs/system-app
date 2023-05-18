@@ -3,10 +3,10 @@ import {
   FormContainer,
   useFormContext,
 } from "react-hook-form-mui";
-import { BasePage, BoxResp } from "../../shared/components";
-import { useAuthContext, useSchoolContext } from "../../shared/contexts";
+import { BasePage, BoxResp } from "../../../shared/components";
+import { useAuthContext, useSchoolContext } from "../../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { frequencyCreateSchema } from "../../shared/schemas";
+import { frequencyCreateSchema } from "../../../shared/schemas";
 import {
   Button,
   Dialog,
@@ -16,8 +16,8 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { iClass, iFrequency } from "../../shared/interfaces";
-import { apiUsingNow } from "../../shared/services";
+import { iClass, iFrequency } from "../../../shared/interfaces";
+import { apiUsingNow } from "../../../shared/services";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";

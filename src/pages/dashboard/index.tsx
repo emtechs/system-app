@@ -1,19 +1,19 @@
-import { Admin } from "./Admin";
-import { School } from "./School";
+import { DashboardAdmin } from "./Admin";
+import { DashboardSchool } from "./School";
 import { useAuthContext } from "../../shared/contexts";
-import { Common } from "./Common";
+import { DashboardCommon } from "./Common";
 
 export const Dashboard = () => {
   const { dashData } = useAuthContext();
   switch (dashData) {
     case "ADMIN":
-      return <Admin />;
+      return <DashboardAdmin />;
 
     case "SCHOOL":
-      return <School />;
+      return <DashboardSchool />;
 
     case "COMMON":
-      return <Common />;
+      return <DashboardCommon />;
 
     default:
       return <></>;

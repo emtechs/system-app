@@ -1,17 +1,29 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import {
-  ClassPage,
   CreateFrequency,
+  CreateFrequencyAdm,
+  CreateSchool,
+  CreateServer,
+  CreateStudent,
+  CreateStudentAdm,
+  CreateUser,
   Dashboard,
   First,
   Frequency,
   ListFrequency,
+  ListFrequencyAdm,
+  ListSchool,
+  ListUser,
   Login,
+  RetrieveFrequency,
   School,
   Student,
   User,
 } from "../pages";
 import { useAuthContext } from "../shared/contexts";
+import { CreateServerAdm } from "../pages/school/create/CreateServerAdm";
+import { CreateClass } from "../pages/student/create/Class";
+import { CreateClassAdm } from "../pages/student/create/ClassAdm";
 
 const AppRoutes = () => {
   const { isAuthenticated, userData, dashData } = useAuthContext();
@@ -28,30 +40,73 @@ const AppRoutes = () => {
       }
     }
 
-    return (
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/user" element={<User />} />
-        <Route path="/school" element={<School />} />
-        {dashData && dashData === "SCHOOL" && (
-          <>
-            <Route path="/class" element={<ClassPage />} />
-            <Route path="/student" element={<Student />} />
-          </>
-        )}
-        {dashData && dashData === "COMMON" && (
-          <>
+    switch (dashData) {
+      case "ADMIN":
+        return (
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/user" element={<User />} />
+            <Route path="/user/create" element={<CreateUser back="/user" />} />
+            <Route path="/user/list" element={<ListUser back="/user" />} />
+            <Route path="/school" element={<School />} />
             <Route
-              path="/frequency"
-              element={<Frequency back="/frequency/list" />}
+              path="/school/create"
+              element={<CreateSchool back="/school" />}
             />
+            <Route
+              path="/school/create/server"
+              element={<CreateServerAdm back="/school" />}
+            />
+            <Route
+              path="/school/list"
+              element={<ListSchool back="/school" />}
+            />
+            <Route path="/student" element={<Student />} />
+            <Route
+              path="/student/create"
+              element={<CreateStudentAdm back="/student" />}
+            />
+            <Route
+              path="/student/create/class"
+              element={<CreateClassAdm back="/student" />}
+            />
+            <Route path="/frequency" element={<Frequency />} />
+            <Route
+              path="/frequency/create"
+              element={<CreateFrequencyAdm back="/frequency" />}
+            />
+            <Route
+              path="/frequency/retrieve"
+              element={<RetrieveFrequency back="/frequency" />}
+            />
+            <Route
+              path="/frequency/list"
+              element={<ListFrequencyAdm back="/frequency" />}
+            />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        );
+      case "SCHOOL":
+        return (
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/user" element={<CreateServer />} />
+            <Route path="/class" element={<CreateClass />} />
+            <Route path="/student" element={<CreateStudent />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        );
+      case "COMMON":
+        return (
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/frequency/retrieve" element={<RetrieveFrequency />} />
             <Route path="/frequency/create" element={<CreateFrequency />} />
             <Route path="/frequency/list" element={<ListFrequency />} />
-          </>
-        )}
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    );
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        );
+    }
   }
 
   return (

@@ -18,6 +18,7 @@ import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
 import {
   iFrequency,
   iFrequencyStudents,
+  iPageProps,
   iStatusStudent,
 } from "../../shared/interfaces";
 import { useEffect, useState } from "react";
@@ -211,11 +212,7 @@ const CardFrequency = ({ frequency, theme }: iCardFrequencyProps) => {
   );
 };
 
-interface iFrequencyProps {
-  back: string;
-}
-
-export const Frequency = ({ back }: iFrequencyProps) => {
+export const RetrieveFrequency = ({ back }: iPageProps) => {
   const theme = useTheme();
   const { setLoading } = useAppThemeContext();
   const { frequencyData, setFrequencyData, updateFrequency, studentData } =
@@ -267,7 +264,7 @@ export const Frequency = ({ back }: iFrequencyProps) => {
           <Button
             variant="contained"
             onClick={() => {
-              updateFrequency({ status: "CLOSED" }, frequencyData.id);
+              updateFrequency({ status: "CLOSED" }, frequencyData.id, back);
             }}
             fullWidth
           >

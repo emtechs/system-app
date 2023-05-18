@@ -7,10 +7,7 @@ export async function postUser(data: FieldValues): Promise<iUser> {
   return response;
 }
 
-export async function patchUser(
-  id: string,
-  data: FormData | FieldValues
-): Promise<iUser> {
+export async function patchUser(id: string, data: FieldValues): Promise<iUser> {
   const { data: response } = await apiUsingNow.patch<iUser>(
     `users/${id}`,
     data

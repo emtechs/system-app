@@ -1,22 +1,22 @@
+import { useEffect, useState } from "react";
+import { useAuthContext, useSchoolContext } from "../../../shared/contexts";
+import { iClass } from "../../../shared/interfaces";
+import { apiUsingNow } from "../../../shared/services";
+import { BasePage, BoxResp } from "../../../shared/components";
 import {
   AutocompleteElement,
   FormContainer,
   TextFieldElement,
 } from "react-hook-form-mui";
-import { BasePage, BoxResp } from "../../shared/components";
-import { useAuthContext, useSchoolContext } from "../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { studentCreateSchema } from "../../shared/schemas";
+import { studentCreateSchema } from "../../../shared/schemas";
 import { Button } from "@mui/material";
-import { useEffect, useState } from "react";
-import { iClass } from "../../shared/interfaces";
-import { apiUsingNow } from "../../shared/services";
 
 interface iData extends iClass {
   label: string;
 }
 
-export const Student = () => {
+export const CreateStudent = () => {
   const { schoolData } = useAuthContext();
   const { createStudent } = useSchoolContext();
   const [data, setData] = useState<iData[]>();

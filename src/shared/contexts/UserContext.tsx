@@ -1,6 +1,14 @@
-import { createContext, useCallback, useContext } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+} from "react";
 import {
   iChildren,
+  iUser,
   iUserFirstRequest,
   iUserPasswordRequest,
   iUserRequest,
@@ -10,12 +18,16 @@ import { patchUser, postUser } from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext, useAuthContext, useModalContext } from ".";
+import { FieldValues } from "react-hook-form";
 
 interface iUserContextData {
-  create: (data: iUserRequest) => Promise<void>;
+  create: (data: iUserRequest, back?: string) => Promise<void>;
   editPassword: (id: string, data: iUserPasswordRequest) => Promise<void>;
   first: (id: string, data: iUserFirstRequest) => Promise<void>;
   updateUser: (id: string, data: iUserUpdateRequest) => Promise<void>;
+  updateIsActiveUser: (id: string, data: FieldValues) => Promise<void>;
+  updateUserData: iUser | undefined;
+  setUpdateUserData: Dispatch<SetStateAction<iUser | undefined>>;
 }
 
 const UserContext = createContext({} as iUserContextData);
@@ -25,19 +37,23 @@ export const UserProvider = ({ children }: iChildren) => {
   const { setLoading } = useAppThemeContext();
   const { setDashData, setSchoolData, setUserData } = useAuthContext();
   const { setOpenEditProfile, setOpenEditPassword } = useModalContext();
+  const [updateUserData, setUpdateUserData] = useState<iUser>();
 
-  const handleCreateUser = useCallback(async (data: iUserRequest) => {
-    try {
-      setLoading(true);
-      await postUser(data);
-      toast.success("Usuário cadastrado com sucesso!");
-      setLoading(false);
-      navigate("/");
-    } catch {
-      setLoading(false);
-      toast.error("Não foi possível cadastrar o usuário no momento!");
-    }
-  }, []);
+  const handleCreateUser = useCallback(
+    async (data: iUserRequest, back?: string) => {
+      try {
+        setLoading(true);
+        await postUser(data);
+        toast.success("Usuário cadastrado com sucesso!");
+        setLoading(false);
+        navigate(back ? back : "/");
+      } catch {
+        setLoading(false);
+        toast.error("Não foi possível cadastrar o usuário no momento!");
+      }
+    },
+    []
+  );
 
   const handleFirstUser = useCallback(
     async (id: string, data: iUserFirstRequest) => {
@@ -76,6 +92,24 @@ export const UserProvider = ({ children }: iChildren) => {
     []
   );
 
+  const handleUpdateIsActiveUser = useCallback(
+    async (id: string, data: FieldValues) => {
+      try {
+        setLoading(true);
+        const user = await patchUser(id, data);
+        setUpdateUserData(user);
+        toast.success("Sucesso ao alterar o estado do usuário!");
+        setLoading(false);
+      } catch {
+        setLoading(false);
+        toast.error(
+          "Não foi possível atualizar o estado do usuário no momento!"
+        );
+      }
+    },
+    []
+  );
+
   const handlePasswordUser = useCallback(
     async (id: string, data: iUserPasswordRequest) => {
       try {
@@ -100,6 +134,9 @@ export const UserProvider = ({ children }: iChildren) => {
         first: handleFirstUser,
         updateUser: handleUpdateUser,
         editPassword: handlePasswordUser,
+        updateIsActiveUser: handleUpdateIsActiveUser,
+        updateUserData,
+        setUpdateUserData,
       }}
     >
       {children}

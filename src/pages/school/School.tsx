@@ -1,9 +1,13 @@
 import { Card, CardContent, Typography } from "@mui/material";
 import { BasePage } from "../../shared/components";
 import { Link } from "react-router-dom";
-import { Checklist, Groups, People, School } from "@mui/icons-material";
+import {
+  People,
+  School as SchoolIcon,
+  SchoolTwoTone,
+} from "@mui/icons-material";
 
-export const DashboardAdmin = () => {
+export const School = () => {
   return (
     <BasePage isProfile>
       <Card
@@ -16,61 +20,44 @@ export const DashboardAdmin = () => {
           alignItems: "center",
         }}
       >
-        <Link to="/user">
+        <Link to="/school/create">
+          <CardContent sx={{ display: "flex", gap: 2 }}>
+            <SchoolIcon />
+            <Typography>Cadastrar Escola</Typography>
+          </CardContent>
+        </Link>
+      </Card>
+      <Card
+        sx={{
+          width: "100%",
+          height: 80,
+          maxWidth: 250,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Link to="/school/create/server">
           <CardContent sx={{ display: "flex", gap: 2 }}>
             <People />
-            <Typography>Gestão de Usuários</Typography>
+            <Typography>Cadastrar Servidor</Typography>
           </CardContent>
         </Link>
       </Card>
       <Card
         sx={{
           width: "100%",
-          height: 80,
           maxWidth: 250,
+          height: 80,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <Link to="/school">
+        <Link to="/school/list">
           <CardContent sx={{ display: "flex", gap: 2 }}>
-            <School />
-            <Typography>Gestão de Escolas</Typography>
-          </CardContent>
-        </Link>
-      </Card>
-      <Card
-        sx={{
-          width: "100%",
-          height: 80,
-          maxWidth: 250,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Link to="/student">
-          <CardContent sx={{ display: "flex", gap: 2 }}>
-            <Groups />
-            <Typography>Gestão de Alunos</Typography>
-          </CardContent>
-        </Link>
-      </Card>
-      <Card
-        sx={{
-          width: "100%",
-          height: 80,
-          maxWidth: 250,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Link to="/frequency">
-          <CardContent sx={{ display: "flex", gap: 2 }}>
-            <Checklist />
-            <Typography>Gestão de Frequência</Typography>
+            <SchoolTwoTone />
+            <Typography>Listar Escolas</Typography>
           </CardContent>
         </Link>
       </Card>

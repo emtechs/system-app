@@ -1,33 +1,26 @@
 import { Card, CardContent, Typography } from "@mui/material";
-import { BasePage } from "../../shared/components";
-import {
-  useAppThemeContext,
-  useAuthContext,
-  useSchoolContext,
-} from "../../shared/contexts";
+import { BasePage } from "../../../shared/components";
+import { useAppThemeContext, useSchoolContext } from "../../../shared/contexts";
 import { Link } from "react-router-dom";
 import { People } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { apiUsingNow } from "../../shared/services";
-import { iFrequency } from "../../shared/interfaces";
+import { apiUsingNow } from "../../../shared/services";
+import { iFrequency, iPageProps } from "../../../shared/interfaces";
 
-export const ListFrequency = () => {
+export const ListFrequencyAdm = ({ back }: iPageProps) => {
   const { setLoading } = useAppThemeContext();
-  const { schoolData } = useAuthContext();
   const { setFrequencyData } = useSchoolContext();
   const [data, setData] = useState<iFrequency[]>();
 
   useEffect(() => {
     setLoading(true);
     apiUsingNow
-      .get<iFrequency[]>(
-        `frequencies?status=OPENED&school_id=${schoolData?.school.id}`
-      )
+      .get<iFrequency[]>("frequencies?status=OPENED")
       .then((res) => setData(res.data))
       .finally(() => setLoading(false));
-  }, [schoolData]);
+  }, []);
   return (
-    <BasePage isProfile>
+    <BasePage isProfile back={back}>
       {data &&
         data.map((frequency) => (
           <Card
@@ -41,7 +34,7 @@ export const ListFrequency = () => {
               alignItems: "center",
             }}
           >
-            <Link to="/frequency">
+            <Link to="/frequency/retrieve">
               <button
                 style={{
                   background: "none",

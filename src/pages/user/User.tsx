@@ -1,9 +1,9 @@
 import { Card, CardContent, Typography } from "@mui/material";
 import { BasePage } from "../../shared/components";
 import { Link } from "react-router-dom";
-import { People, GroupAdd, Person } from "@mui/icons-material";
+import { PeopleAlt, PersonAdd } from "@mui/icons-material";
 
-export const DashboardSchool = () => {
+export const User = () => {
   return (
     <BasePage isProfile>
       <Card
@@ -16,44 +16,27 @@ export const DashboardSchool = () => {
           alignItems: "center",
         }}
       >
-        <Link to="/user">
+        <Link to="/user/create">
           <CardContent sx={{ display: "flex", gap: 2 }}>
-            <People />
-            <Typography>Cadastrar Servidor</Typography>
+            <PersonAdd />
+            <Typography>Cadastrar Usuário</Typography>
           </CardContent>
         </Link>
       </Card>
       <Card
         sx={{
           width: "100%",
-          height: 80,
           maxWidth: 250,
+          height: 80,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <Link to="/class">
+        <Link to="/user/list">
           <CardContent sx={{ display: "flex", gap: 2 }}>
-            <GroupAdd />
-            <Typography>Cadastrar Turma</Typography>
-          </CardContent>
-        </Link>
-      </Card>
-      <Card
-        sx={{
-          width: "100%",
-          height: 80,
-          maxWidth: 250,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Link to="/student">
-          <CardContent sx={{ display: "flex", gap: 2 }}>
-            <Person />
-            <Typography>Cadastrar Aluno</Typography>
+            <PeopleAlt />
+            <Typography>Listar Usuários</Typography>
           </CardContent>
         </Link>
       </Card>

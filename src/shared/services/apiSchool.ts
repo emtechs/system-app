@@ -51,6 +51,17 @@ export async function postFrequency(
   return response;
 }
 
+export async function patchSchool(
+  data: FieldValues,
+  id: string
+): Promise<iSchool> {
+  const { data: response } = await apiUsingNow.patch<iSchool>(
+    `schools/${id}`,
+    data
+  );
+  return response;
+}
+
 export async function patchFrequency(
   data: FieldValues,
   id: string

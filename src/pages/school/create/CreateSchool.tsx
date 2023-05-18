@@ -1,22 +1,26 @@
-import { BasePage, BoxResp } from "../../shared/components";
-import { useSchoolContext } from "../../shared/contexts";
+import { useEffect, useState } from "react";
+import { useSchoolContext } from "../../../shared/contexts";
+import { iUser } from "../../../shared/interfaces";
+import { apiUsingNow } from "../../../shared/services";
+import { BasePage, BoxResp } from "../../../shared/components";
 import {
   AutocompleteElement,
   FormContainer,
   TextFieldElement,
 } from "react-hook-form-mui";
+import { schoolCreateSchema } from "../../../shared/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { schoolCreateSchema } from "../../shared/schemas";
 import { Button } from "@mui/material";
-import { useEffect, useState } from "react";
-import { apiUsingNow } from "../../shared/services";
-import { iUser } from "../../shared/interfaces";
 
 interface iData extends iUser {
   label: string;
 }
 
-export const School = () => {
+interface iCreateSchoolProps {
+  back?: string;
+}
+
+export const CreateSchool = ({ back }: iCreateSchoolProps) => {
   const { createSchool } = useSchoolContext();
   const [data, setData] = useState<iData[]>();
   const [loading, setloading] = useState(false);
@@ -34,9 +38,9 @@ export const School = () => {
       });
   }, []);
   return (
-    <BasePage isProfile>
+    <BasePage isProfile back={back}>
       <FormContainer
-        onSuccess={createSchool}
+        onSuccess={(data) => createSchool(data, back)}
         resolver={zodResolver(schoolCreateSchema)}
       >
         <BoxResp isProfile>

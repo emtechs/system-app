@@ -3,7 +3,7 @@ import { BasePage } from "../../shared/components";
 import { Link } from "react-router-dom";
 import { Checklist, NoteAdd } from "@mui/icons-material";
 
-export const Common = () => {
+export const DashboardCommon = () => {
   return (
     <BasePage isProfile>
       <Card
