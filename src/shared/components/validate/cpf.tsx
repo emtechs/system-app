@@ -6,13 +6,19 @@ import { Button } from "@mui/material";
 
 interface iValidateCPFProps {
   school_id?: string;
+  allNotServ?: boolean;
 }
 
-export const ValidateCPF = ({ school_id }: iValidateCPFProps) => {
+export const ValidateCPF = ({ school_id, allNotServ }: iValidateCPFProps) => {
   const { setValue, watch, setError, clearErrors, formState } =
     useFormContext();
   const cpf = watch("cpf");
   const { isValid } = formState;
+  const query = () => {
+    if (school_id) return `?school_id=${school_id}`;
+    if (allNotServ) return `?allNotServ=${allNotServ}`;
+    return "";
+  };
 
   useEffect(() => {
     if (typeof cpf === "string") {
@@ -21,21 +27,9 @@ export const ValidateCPF = ({ school_id }: iValidateCPFProps) => {
       const limitNumber = notNumber.substring(0, 11);
       setValue("cpf", limitNumber);
       if (limitNumber.length === 11) {
-        if (school_id) {
-          apiUsingNow
-            .get<iUser>(`servers/${school_id}/cpf/${limitNumber}`)
-            .then((res) => {
-              if (res.data.id) {
-                setError("cpf", {
-                  message: "Usuário já está cadastrado",
-                });
-                setValue("login", 1);
-              } else {
-                clearErrors("cpf");
-              }
-            });
-        } else {
-          apiUsingNow.get<iUser>(`users/cpf/${limitNumber}`).then((res) => {
+        apiUsingNow
+          .get<iUser>(`users/cpf/${limitNumber}` + query())
+          .then((res) => {
             if (res.data.id) {
               setError("cpf", {
                 message: "Usuário já está cadastrado",
@@ -45,7 +39,6 @@ export const ValidateCPF = ({ school_id }: iValidateCPFProps) => {
               clearErrors("cpf");
             }
           });
-        }
       } else {
         clearErrors("cpf");
       }

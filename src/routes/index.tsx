@@ -1,13 +1,15 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import {
+  ActiveUser,
+  CreateAdm,
   CreateFrequency,
   CreateFrequencyAdm,
   CreateSchool,
-  CreateServer,
+  CreateServerPage,
   CreateStudent,
   CreateStudentAdm,
-  CreateUser,
   Dashboard,
+  DefineSecret,
   First,
   Frequency,
   ListFrequency,
@@ -46,8 +48,13 @@ const AppRoutes = () => {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/user" element={<User />} />
-            <Route path="/user/create" element={<CreateUser back="/user" />} />
+            <Route path="/user/create" element={<CreateAdm back="/user" />} />
+            <Route
+              path="/user/define/secret"
+              element={<DefineSecret back="/user" />}
+            />
             <Route path="/user/list" element={<ListUser back="/user" />} />
+            <Route path="/user/active" element={<ActiveUser back="/user" />} />
             <Route path="/school" element={<School />} />
             <Route
               path="/school/create"
@@ -90,7 +97,7 @@ const AppRoutes = () => {
         return (
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/user" element={<CreateServer />} />
+            <Route path="/user" element={<CreateServerPage />} />
             <Route path="/class" element={<CreateClass />} />
             <Route path="/student" element={<CreateStudent />} />
             <Route path="*" element={<Navigate to="/" />} />

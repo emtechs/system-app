@@ -8,7 +8,7 @@ import { useAuthContext, useSchoolContext } from "../../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { serverCreateSchema } from "../../../shared/schemas";
 
-export const CreateServer = () => {
+export const CreateServerPage = () => {
   const { schoolData } = useAuthContext();
   const { createServer } = useSchoolContext();
 

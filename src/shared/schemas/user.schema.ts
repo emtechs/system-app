@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const userCreateSchema = z
+export const createAdmSchema = z
   .object({
     name: z
       .string({ required_error: "Nome obrigatório" })
@@ -10,9 +10,39 @@ export const userCreateSchema = z
       .string({ required_error: "CPF obrigatório" })
       .min(14, "Precisa ter 14 digitos"),
     password: z.string().optional(),
-    role: z.enum(["SERV", "DIRET", "SECRET", "ADMIN"]),
+    role: z.enum(["SERV", "DIRET", "SECRET", "ADMIN"]).default("ADMIN"),
   })
   .refine((fields) => (fields.password = fields.login.substring(0, 6)));
+
+export const createSecretSchema = z
+  .object({
+    name: z
+      .string({ required_error: "Nome obrigatório" })
+      .nonempty("Nome obrigatório"),
+    login: z.string(),
+    cpf: z
+      .string({ required_error: "CPF obrigatório" })
+      .min(14, "Precisa ter 14 digitos"),
+    password: z.string().optional(),
+    role: z.enum(["SERV", "DIRET", "SECRET", "ADMIN"]).default("SECRET"),
+  })
+  .refine((fields) => (fields.password = fields.login.substring(0, 6)));
+
+export const activeUserSchema = z
+  .object({
+    is_active: z.boolean().default(true),
+    role: z.enum(["SERV", "DIRET", "SECRET", "ADMIN"]),
+    dash: z.enum(["COMMON", "SCHOOL", "ORGAN", "ADMIN"]).optional(),
+  })
+  .refine((fields) => {
+    switch (fields.role) {
+      case "ADMIN":
+        return (fields.dash = "ADMIN");
+
+      default:
+        return (fields.dash = "COMMON");
+    }
+  });
 
 export const userFirstSchema = z
   .object({

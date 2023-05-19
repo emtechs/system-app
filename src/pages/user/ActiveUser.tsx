@@ -13,15 +13,14 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import {
-  useAppThemeContext,
-  useAuthContext,
-  useUserContext,
-} from "../../shared/contexts";
+import { useAppThemeContext, useUserContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { iRole, iUser } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { BasePage } from "../../shared/components";
+import { FormContainer, RadioButtonGroup } from "react-hook-form-mui";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { activeUserSchema } from "../../shared/schemas";
 
 interface iCardUserProps {
   user: iUser;
@@ -45,21 +44,11 @@ const rolePtBr = (role: iRole) => {
 };
 
 const CardUser = ({ user, theme }: iCardUserProps) => {
-  const { userData } = useAuthContext();
   const { updateUserData, setUpdateUserData, updateAllUser } = useUserContext();
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setUpdateUserData(user);
     setOpen(!open);
-  };
-  const isUser = () => {
-    if (userData?.id === user.id) return true;
-
-    if (user?.role === "ADMIN") return false;
-
-    if (user?.role !== "SERV") return true;
-
-    return false;
   };
 
   return (
@@ -72,23 +61,16 @@ const CardUser = ({ user, theme }: iCardUserProps) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          bgcolor: theme.palette.success.main,
+          bgcolor: theme.palette.error.main,
         }}
       >
         <CardContent
-          onClick={
-            isUser()
-              ? () => {
-                  setOpen(false);
-                  setUpdateUserData(undefined);
-                }
-              : handleClose
-          }
+          onClick={handleClose}
           sx={{
             display: "flex",
             alignItems: "center",
             flexDirection: "column",
-            cursor: isUser() ? "unset" : "pointer",
+            cursor: "pointer",
             position: "relative",
           }}
         >
@@ -117,29 +99,42 @@ const CardUser = ({ user, theme }: iCardUserProps) => {
 
       {updateUserData && (
         <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Desativar Usuário</DialogTitle>
+          <DialogTitle>Ativar Usuário</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Deseja continuar desativando o usúario{" "}
+              Deseja continuar ativando o usúario{" "}
               {updateUserData.name.toUpperCase()}?
             </DialogContentText>
+            <FormContainer
+              onSuccess={(data) => {
+                updateAllUser(updateUserData.id, data, false);
+                setOpen(!open);
+              }}
+              resolver={zodResolver(activeUserSchema)}
+            >
+              <Box mt={1} display="flex" flexDirection="column" gap={1}>
+                <RadioButtonGroup
+                  label="Tipo do Usuário"
+                  name="role"
+                  options={[
+                    {
+                      id: "ADMIN",
+                      label: "Administrador",
+                    },
+                    {
+                      id: "SERV",
+                      label: "Servidor",
+                    },
+                  ]}
+                  required
+                />
+                <Button variant="contained" type="submit" fullWidth>
+                  Continuar
+                </Button>
+              </Box>
+            </FormContainer>
             <DialogActions>
               <Button onClick={handleClose}>Cancelar</Button>
-              <Button
-                onClick={() => {
-                  updateAllUser(
-                    updateUserData.id,
-                    {
-                      role: "SERV",
-                      is_active: false,
-                    },
-                    false
-                  );
-                  setOpen(!open);
-                }}
-              >
-                Continuar
-              </Button>
             </DialogActions>
           </DialogContent>
         </Dialog>
@@ -148,11 +143,11 @@ const CardUser = ({ user, theme }: iCardUserProps) => {
   );
 };
 
-interface iListUserProps {
+interface iActiveUserProps {
   back: string;
 }
 
-export const ListUser = ({ back }: iListUserProps) => {
+export const ActiveUser = ({ back }: iActiveUserProps) => {
   const theme = useTheme();
   const { setLoading } = useAppThemeContext();
   const { updateUserData } = useUserContext();
@@ -161,18 +156,20 @@ export const ListUser = ({ back }: iListUserProps) => {
   useEffect(() => {
     setLoading(true);
     apiUsingNow
-      .get<iUser[]>("users?is_active=true")
+      .get<iUser[]>("users?is_active=false")
       .then((res) => setListUserData(res.data))
       .finally(() => setLoading(false));
   }, [updateUserData]);
   return (
     <BasePage isProfile back={back}>
-      {listUserData && (
+      {listUserData && listUserData.length > 0 ? (
         <Box display="flex" flexDirection="column" gap={theme.spacing(2)}>
           {listUserData.map((user) => (
             <CardUser key={user.id} user={user} theme={theme} />
           ))}
         </Box>
+      ) : (
+        <Typography>Nenhum usuário para ativar no momento!</Typography>
       )}
     </BasePage>
   );

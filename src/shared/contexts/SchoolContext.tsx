@@ -24,8 +24,8 @@ import {
   postClass,
   postFrequency,
   postSchool,
-  postServer,
   postStudent,
+  postUser,
 } from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -112,7 +112,8 @@ export const SchoolProvider = ({ children }: iChildren) => {
     async (data: iServerRequest, id: string, back?: string) => {
       try {
         setLoading(true);
-        await postServer(data, id);
+        const query = `?school_id=${id}`;
+        await postUser(data, query);
         toast.success("Servidor cadastrado com sucesso!");
         setLoading(false);
         navigate(back ? back : "/");
