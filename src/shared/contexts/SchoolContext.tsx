@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import {
@@ -14,15 +15,19 @@ import {
   iFrequencyStudents,
   iSchool,
   iSchoolRequest,
+  iSchoolSelect,
   iServerRequest,
+  iStudentImportRequest,
   iStudentRequest,
 } from "../interfaces";
 import {
+  apiUsingNow,
   patchFrequency,
   patchFrequencyStudent,
   patchSchool,
   postClass,
   postFrequency,
+  postImportStudent,
   postSchool,
   postStudent,
   postUser,
@@ -49,16 +54,30 @@ interface iSchoolContextData {
     id: string,
     back?: string
   ) => Promise<void>;
+  importStudent: (
+    data: iStudentImportRequest,
+    school_id: string,
+    back?: string
+  ) => Promise<void>;
   createFrequency: (data: iFrequencyRequest, id: string) => Promise<void>;
-  updateSchool: (data: FieldValues, id: string) => Promise<void>;
+  updateSchool: (
+    data: FieldValues,
+    id: string,
+    type: "nome" | "diretor" | "estado",
+    back?: string
+  ) => Promise<void>;
   updateFrequency: (
     data: FieldValues,
     id: string,
     back?: string
   ) => Promise<void>;
   updateFrequencyStudent: (data: FieldValues, id: string) => Promise<void>;
+  schoolDataSelect: iSchoolSelect[] | undefined;
+  setSchoolDataSelect: Dispatch<SetStateAction<iSchoolSelect[] | undefined>>;
   schoolSelect: iSchool | undefined;
   setschoolSelect: Dispatch<SetStateAction<iSchool | undefined>>;
+  listSchoolData: iSchool[] | undefined;
+  setListSchoolData: Dispatch<SetStateAction<iSchool[] | undefined>>;
   frequencyData: iFrequency | undefined;
   setFrequencyData: Dispatch<SetStateAction<iFrequency | undefined>>;
   studentData: iFrequencyStudents | undefined;
@@ -70,9 +89,28 @@ const SchoolContext = createContext({} as iSchoolContextData);
 export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading } = useAppThemeContext();
+  const [schoolDataSelect, setSchoolDataSelect] = useState<iSchoolSelect[]>();
+  const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setschoolSelect] = useState<iSchool>();
   const [frequencyData, setFrequencyData] = useState<iFrequency>();
   const [studentData, setStudentData] = useState<iFrequencyStudents>();
+
+  useEffect(() => {
+    setLoading(true);
+    apiUsingNow
+      .get<iSchool[]>("schools?is_active=true")
+      .then((res) => {
+        if (res.data) {
+          setListSchoolData(res.data);
+          setSchoolDataSelect(
+            res.data.map((school) => {
+              return { ...school, label: school.name };
+            })
+          );
+        }
+      })
+      .finally(() => setLoading(false));
+  }, [schoolSelect]);
 
   const handleCreateSchool = useCallback(
     async (data: iSchoolRequest, back?: string) => {
@@ -80,29 +118,35 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setLoading(true);
         await postSchool(data);
         toast.success("Escola cadastrada com sucesso!");
+      } catch {
+        toast.error("Não foi possível cadastrar a escola no momento!");
+      } finally {
         setLoading(false);
         navigate(back ? back : "/");
-      } catch {
-        setLoading(false);
-        toast.error("Não foi possível cadastrar a escola no momento!");
       }
     },
     []
   );
 
   const handleUpdateSchool = useCallback(
-    async (data: FieldValues, id: string) => {
+    async (
+      data: FieldValues,
+      id: string,
+      type: "nome" | "diretor" | "estado",
+      back?: string
+    ) => {
       try {
         setLoading(true);
-        const school = await patchSchool(data, id);
-        setschoolSelect(school);
-        toast.success("Sucesso ao alterar o estado da Escola!");
-        setLoading(false);
+        await patchSchool(data, id);
+        toast.success(`Sucesso ao alterar o ${type} da Escola!`);
       } catch {
-        setLoading(false);
         toast.error(
-          "Não foi possível atualizar o estado da escola no momento!"
+          `Não foi possível atualizar o ${type} da escola no momento!`
         );
+      } finally {
+        setschoolSelect(undefined);
+        setLoading(false);
+        if (back) navigate(back);
       }
     },
     []
@@ -152,6 +196,25 @@ export const SchoolProvider = ({ children }: iChildren) => {
       } catch {
         setLoading(false);
         toast.error("Não foi possível cadastrar o estudante no momento!");
+      }
+    },
+    []
+  );
+
+  const handleImportStudent = useCallback(
+    async (data: iStudentImportRequest, school_id: string, back?: string) => {
+      const file = new FormData();
+      file.append("file", data.file);
+      const class_id = data.class_id ? data.class_id : "";
+      try {
+        setLoading(true);
+        await postImportStudent(file, class_id, school_id);
+        toast.success("Estudantes importados com sucesso!");
+        setLoading(false);
+        navigate(back ? back : "/");
+      } catch {
+        setLoading(false);
+        toast.error("Não foi possível importar os estudantes no momento!");
       }
     },
     []
@@ -214,10 +277,15 @@ export const SchoolProvider = ({ children }: iChildren) => {
         createServer: handleCreateServer,
         createClass: handleCreateClass,
         createStudent: handleCreateStudent,
+        importStudent: handleImportStudent,
         createFrequency: handleCreateFrequency,
         updateSchool: handleUpdateSchool,
         updateFrequency: handleUpdateFrequency,
         updateFrequencyStudent: handleUpdateStudentFrequency,
+        schoolDataSelect,
+        setSchoolDataSelect,
+        listSchoolData,
+        setListSchoolData,
         frequencyData,
         setFrequencyData,
         studentData,

@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSchoolContext } from "../../../shared/contexts";
-import {
-  iClass,
-  iPageProps,
-  iSchool,
-  iSchoolSelect,
-} from "../../../shared/interfaces";
+import { iClass, iPageProps } from "../../../shared/interfaces";
 import { apiUsingNow } from "../../../shared/services";
-import { BasePage, BoxResp, SchoolValidate } from "../../../shared/components";
+import { BasePage, BoxResp, SelectSchool } from "../../../shared/components";
 import {
   AutocompleteElement,
   FormContainer,
@@ -23,25 +18,8 @@ interface iData extends iClass {
 
 export const CreateStudentAdm = ({ back }: iPageProps) => {
   const { createStudent, schoolSelect } = useSchoolContext();
-  const [schoolsSelect, setSchoolsSelect] = useState<iSchoolSelect[]>();
-  const [schoolsLoading, setSchoolsLoading] = useState(true);
   const [data, setData] = useState<iData[]>();
   const [loading, setloading] = useState(false);
-
-  useEffect(() => {
-    apiUsingNow
-      .get<iSchool[]>("schools")
-      .then((res) => {
-        if (res.data) {
-          setSchoolsSelect(
-            res.data.map((school) => {
-              return { ...school, label: school.name };
-            })
-          );
-        }
-      })
-      .finally(() => setSchoolsLoading(false));
-  }, []);
 
   useEffect(() => {
     setloading(true);
@@ -66,24 +44,7 @@ export const CreateStudentAdm = ({ back }: iPageProps) => {
         resolver={zodResolver(studentCreateSchema)}
       >
         <BoxResp isProfile>
-          <div style={{ width: "100%" }}>
-            <AutocompleteElement
-              name="school"
-              label="Escola"
-              loading={schoolsLoading}
-              options={
-                schoolsSelect
-                  ? schoolsSelect
-                  : [
-                      {
-                        id: 1,
-                        label: "No momento, não há nenhuma escola cadastrada",
-                      },
-                    ]
-              }
-            />
-          </div>
-          <SchoolValidate />
+          <SelectSchool />
           <TextFieldElement name="name" label="Nome" required fullWidth />
           <TextFieldElement
             name="registry"

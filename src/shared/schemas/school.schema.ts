@@ -1,18 +1,45 @@
 import dayjs from "dayjs";
 import { z } from "zod";
+import { csvSchema } from "./file.schema";
 
 export const schoolCreateSchema = z
   .object({
     name: z
-      .string({ required_error: "Nome obrigatório" })
-      .nonempty("Nome obrigatório"),
-    director: z.object(
-      { id: z.string().uuid() },
-      { required_error: "Diretor obrigatório" }
-    ),
-    director_id: z.string().uuid().optional(),
+      .string({ required_error: "Nome da Escola obrigatório" })
+      .nonempty("Nome da Escola obrigatório"),
+    login: z.string(),
+    cpf: z
+      .string({ required_error: "CPF obrigatório" })
+      .min(14, "Precisa ter 14 digitos"),
+    name_diret: z
+      .string({ required_error: "Nome do Diretor obrigatório" })
+      .nonempty("Nome do Diretor obrigatório"),
+    password: z.string().optional(),
+    role: z.enum(["SERV", "DIRET", "SECRET", "ADMIN"]).default("DIRET"),
+    dash: z.enum(["COMMON", "SCHOOL", "ORGAN", "ADMIN"]).default("SCHOOL"),
   })
-  .refine((field) => (field.director_id = field.director.id));
+  .refine((fields) => (fields.password = fields.login.substring(0, 6)));
+
+export const schoolUpdateSchema = z.object({
+  name: z
+    .string({ required_error: "Nome da Escola obrigatório" })
+    .nonempty("Nome da Escola obrigatório"),
+});
+
+export const schoolUpdateDirectorSchema = z
+  .object({
+    login: z.string(),
+    cpf: z
+      .string({ required_error: "CPF obrigatório" })
+      .min(14, "Precisa ter 14 digitos"),
+    name_diret: z
+      .string({ required_error: "Nome do Diretor obrigatório" })
+      .nonempty("Nome do Diretor obrigatório"),
+    password: z.string().optional(),
+    role: z.enum(["SERV", "DIRET", "SECRET", "ADMIN"]).default("DIRET"),
+    dash: z.enum(["COMMON", "SCHOOL", "ORGAN", "ADMIN"]).default("SCHOOL"),
+  })
+  .refine((fields) => (fields.password = fields.login.substring(0, 6)));
 
 export const serverCreateSchema = z
   .object({
@@ -42,6 +69,17 @@ export const studentCreateSchema = z
     registry: z
       .string({ required_error: "Matricula obrigatória" })
       .nonempty("Matricula obrigatória"),
+    class: z.object(
+      { id: z.string().uuid() },
+      { required_error: "Turma obrigatória" }
+    ),
+    class_id: z.string().uuid().optional(),
+  })
+  .refine((field) => (field.class_id = field.class.id));
+
+export const studentImportSchema = z
+  .object({
+    file: csvSchema,
     class: z.object(
       { id: z.string().uuid() },
       { required_error: "Turma obrigatória" }

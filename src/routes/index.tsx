@@ -1,17 +1,23 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import {
+  ActiveSchool,
   ActiveUser,
   CreateAdm,
+  CreateClass,
+  CreateClassAdm,
   CreateFrequency,
   CreateFrequencyAdm,
   CreateSchool,
+  CreateServerAdm,
   CreateServerPage,
   CreateStudent,
   CreateStudentAdm,
   Dashboard,
   DefineSecret,
+  EditSchool,
   First,
   Frequency,
+  ImportStudentPage,
   ListFrequency,
   ListFrequencyAdm,
   ListSchool,
@@ -23,9 +29,6 @@ import {
   User,
 } from "../pages";
 import { useAuthContext } from "../shared/contexts";
-import { CreateServerAdm } from "../pages/school/create/CreateServerAdm";
-import { CreateClass } from "../pages/student/create/Class";
-import { CreateClassAdm } from "../pages/student/create/ClassAdm";
 
 const AppRoutes = () => {
   const { isAuthenticated, userData, dashData } = useAuthContext();
@@ -65,8 +68,16 @@ const AppRoutes = () => {
               element={<CreateServerAdm back="/school" />}
             />
             <Route
+              path="/school/edit"
+              element={<EditSchool back="/school" />}
+            />
+            <Route
               path="/school/list"
               element={<ListSchool back="/school" />}
+            />
+            <Route
+              path="/school/active"
+              element={<ActiveSchool back="/school" />}
             />
             <Route path="/student" element={<Student />} />
             <Route
@@ -76,6 +87,10 @@ const AppRoutes = () => {
             <Route
               path="/student/create/class"
               element={<CreateClassAdm back="/student" />}
+            />
+            <Route
+              path="/student/import"
+              element={<ImportStudentPage back="/student" />}
             />
             <Route path="/frequency" element={<Frequency />} />
             <Route

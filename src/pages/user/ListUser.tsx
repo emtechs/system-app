@@ -96,19 +96,19 @@ const CardUser = ({ user, theme }: iCardUserProps) => {
             <Avatar>{user.name[0].toUpperCase()}</Avatar>
             <Box>
               <Typography
-                fontSize={10}
+                fontSize={11}
                 color={theme.palette.secondary.contrastText}
               >
                 {user.cpf}
               </Typography>
               <Typography
-                fontSize={10}
+                fontSize={11}
                 color={theme.palette.secondary.contrastText}
               >
                 {user.name}
               </Typography>
             </Box>
-            <Typography fontSize={8} color={theme.palette.grey[300]}>
+            <Typography fontSize={10} color={theme.palette.grey[300]}>
               {rolePtBr(user.role)}
             </Typography>
           </Box>

@@ -4,11 +4,11 @@ import { useSchoolContext } from "../../contexts";
 import { useEffect } from "react";
 import { ValidateCPF } from "./cpf";
 
-interface iSchoolValidateProps {
+interface iValidateSchoolProps {
   isCPF?: boolean;
 }
 
-export const SchoolValidate = ({ isCPF }: iSchoolValidateProps) => {
+export const ValidateSchool = ({ isCPF }: iValidateSchoolProps) => {
   const { watch } = useFormContext();
   const { schoolSelect, setschoolSelect } = useSchoolContext();
   const school: iSchool = watch("school");

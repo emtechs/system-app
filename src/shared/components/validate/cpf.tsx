@@ -15,7 +15,7 @@ export const ValidateCPF = ({ school_id, allNotServ }: iValidateCPFProps) => {
   const cpf = watch("cpf");
   const { isValid } = formState;
   const query = () => {
-    if (school_id) return `?school_id=${school_id}`;
+    if (school_id) return `?school_id=${school_id}&allNotServ=true`;
     if (allNotServ) return `?allNotServ=${allNotServ}`;
     return "";
   };

@@ -13,10 +13,11 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useSchoolContext } from "../../shared/contexts";
-import { iSchool } from "../../shared/interfaces";
+import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
+import { useEffect, useState } from "react";
+import { iSchool, iSchoolSelect } from "../../shared/interfaces";
+import { apiUsingNow } from "../../shared/services";
 import { BasePage } from "../../shared/components";
-import { useEffect } from "react";
 
 interface iCardSchoolProps {
   school: iSchool;
@@ -71,10 +72,10 @@ const CardSchool = ({ school, theme }: iCardSchoolProps) => {
         </CardContent>
       </Card>
       <Dialog open={!!schoolSelect} onClose={() => setschoolSelect(undefined)}>
-        <DialogTitle>Desativar Escola</DialogTitle>
+        <DialogTitle>Ativar Escola</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Deseja continuar desativando {schoolSelect?.name.toUpperCase()}?
+            Deseja continuar ativando {schoolSelect?.name.toUpperCase()}?
           </DialogContentText>
           <DialogActions>
             <Button onClick={() => setschoolSelect(undefined)}>Cancelar</Button>
@@ -83,7 +84,7 @@ const CardSchool = ({ school, theme }: iCardSchoolProps) => {
                 if (schoolSelect)
                   updateSchool(
                     {
-                      is_active: false,
+                      is_active: true,
                     },
                     schoolSelect.id,
                     "estado"
@@ -100,28 +101,43 @@ const CardSchool = ({ school, theme }: iCardSchoolProps) => {
   );
 };
 
-interface iListSchoolProps {
+interface iActiveSchoolProps {
   back: string;
 }
 
-export const ListSchool = ({ back }: iListSchoolProps) => {
+export const ActiveSchool = ({ back }: iActiveSchoolProps) => {
   const theme = useTheme();
-  const { listSchoolData, setschoolSelect } = useSchoolContext();
+  const { setLoading } = useAppThemeContext();
+  const { schoolSelect, setListSchoolData } = useSchoolContext();
+  const [schoolsData, setSchoolsData] = useState<iSchoolSelect[]>();
 
   useEffect(() => {
-    setschoolSelect(undefined);
-  }, []);
+    setLoading(true);
+    apiUsingNow
+      .get<iSchool[]>("schools?is_active=false")
+      .then((res) => {
+        if (res.data) {
+          setListSchoolData(res.data);
+          setSchoolsData(
+            res.data.map((school) => {
+              return { ...school, label: school.name };
+            })
+          );
+        }
+      })
+      .finally(() => setLoading(false));
+  }, [schoolSelect]);
 
   return (
     <BasePage isProfile back={back}>
-      {listSchoolData && listSchoolData.length > 0 ? (
+      {schoolsData && schoolsData.length > 0 ? (
         <Box display="flex" flexDirection="column" gap={theme.spacing(2)}>
-          {listSchoolData.map((school) => (
+          {schoolsData.map((school) => (
             <CardSchool key={school.id} school={school} theme={theme} />
           ))}
         </Box>
       ) : (
-        <Typography>Nenhuma escola ativa ou cadastrada!</Typography>
+        <Typography>Nenhuma escola para ativar no momento!</Typography>
       )}
     </BasePage>
   );

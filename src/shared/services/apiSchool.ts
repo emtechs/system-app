@@ -29,6 +29,14 @@ export async function postStudent(
   return response;
 }
 
+export async function postImportStudent(
+  data: FormData,
+  class_id: string,
+  school_id: string
+): Promise<void> {
+  await apiUsingNow.post(`students/import/${class_id}/${school_id}`, data);
+}
+
 export async function postFrequency(
   data: FieldValues,
   id: string

@@ -5,13 +5,21 @@ import {
   schoolCreateSchema,
   serverCreateSchema,
   studentCreateSchema,
+  studentImportSchema,
 } from "../schemas";
 import { iDash } from ".";
+
+export interface iDirector {
+  id: string;
+  name: string;
+  cpf: string;
+}
 
 export interface iSchool {
   id: string;
   name: string;
   is_active: boolean;
+  director: iDirector;
   frequencies: iFrequency[];
 }
 
@@ -64,5 +72,7 @@ export type iSchoolRequest = z.infer<typeof schoolCreateSchema>;
 export type iClassRequest = z.infer<typeof classCreateSchema>;
 
 export type iStudentRequest = z.infer<typeof studentCreateSchema>;
+
+export type iStudentImportRequest = z.infer<typeof studentImportSchema>;
 
 export type iFrequencyRequest = z.infer<typeof frequencyCreateSchema>;

@@ -3,7 +3,7 @@ import {
   FormContainer,
   useFormContext,
 } from "react-hook-form-mui";
-import { BasePage, BoxResp, SchoolValidate } from "../../../shared/components";
+import { BasePage, BoxResp, SelectSchool } from "../../../shared/components";
 import { useSchoolContext } from "../../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { frequencyCreateSchema } from "../../../shared/schemas";
@@ -16,13 +16,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import {
-  iClass,
-  iFrequency,
-  iPageProps,
-  iSchool,
-  iSchoolSelect,
-} from "../../../shared/interfaces";
+import { iClass, iFrequency, iPageProps } from "../../../shared/interfaces";
 import { apiUsingNow } from "../../../shared/services";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -81,23 +75,6 @@ export const CreateFrequencyAdm = ({ back }: iPageProps) => {
   const [loading, setloading] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(!open);
-  const [schoolsSelect, setSchoolsSelect] = useState<iSchoolSelect[]>();
-  const [schoolsLoading, setSchoolsLoading] = useState(true);
-
-  useEffect(() => {
-    apiUsingNow
-      .get<iSchool[]>("schools")
-      .then((res) => {
-        if (res.data) {
-          setSchoolsSelect(
-            res.data.map((school) => {
-              return { ...school, label: school.name };
-            })
-          );
-        }
-      })
-      .finally(() => setSchoolsLoading(false));
-  }, []);
 
   useEffect(() => {
     setloading(true);
@@ -123,24 +100,7 @@ export const CreateFrequencyAdm = ({ back }: iPageProps) => {
           resolver={zodResolver(frequencyCreateSchema)}
         >
           <BoxResp isProfile>
-            <div style={{ width: "100%" }}>
-              <AutocompleteElement
-                name="school"
-                label="Escola"
-                loading={schoolsLoading}
-                options={
-                  schoolsSelect
-                    ? schoolsSelect
-                    : [
-                        {
-                          id: 1,
-                          label: "No momento, não há nenhuma escola cadastrada",
-                        },
-                      ]
-                }
-              />
-            </div>
-            <SchoolValidate />
+            <SelectSchool />
             <div style={{ width: "100%" }}>
               <AutocompleteElement
                 name="class"
