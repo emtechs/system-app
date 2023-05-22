@@ -9,7 +9,9 @@ import {
 } from "react";
 import {
   iChildren,
+  iClass,
   iClassRequest,
+  iClassSelect,
   iFrequency,
   iFrequencyRequest,
   iFrequencyStudents,
@@ -75,13 +77,19 @@ interface iSchoolContextData {
   schoolDataSelect: iSchoolSelect[] | undefined;
   setSchoolDataSelect: Dispatch<SetStateAction<iSchoolSelect[] | undefined>>;
   schoolSelect: iSchool | undefined;
-  setschoolSelect: Dispatch<SetStateAction<iSchool | undefined>>;
+  setSchoolSelect: Dispatch<SetStateAction<iSchool | undefined>>;
   listSchoolData: iSchool[] | undefined;
   setListSchoolData: Dispatch<SetStateAction<iSchool[] | undefined>>;
+  classDataSelect: iClassSelect[] | undefined;
+  setClassDataSelect: Dispatch<SetStateAction<iClassSelect[] | undefined>>;
+  listClassData: iClass[] | undefined;
+  setListClassData: Dispatch<SetStateAction<iClass[] | undefined>>;
   frequencyData: iFrequency | undefined;
   setFrequencyData: Dispatch<SetStateAction<iFrequency | undefined>>;
   studentData: iFrequencyStudents | undefined;
   setStudentData: Dispatch<SetStateAction<iFrequencyStudents | undefined>>;
+  classSelect: iClass | undefined;
+  setClassSelect: Dispatch<SetStateAction<iClass | undefined>>;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -91,7 +99,10 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const { setLoading } = useAppThemeContext();
   const [schoolDataSelect, setSchoolDataSelect] = useState<iSchoolSelect[]>();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
-  const [schoolSelect, setschoolSelect] = useState<iSchool>();
+  const [classDataSelect, setClassDataSelect] = useState<iClassSelect[]>();
+  const [listClassData, setListClassData] = useState<iClass[]>();
+  const [schoolSelect, setSchoolSelect] = useState<iSchool>();
+  const [classSelect, setClassSelect] = useState<iClass>();
   const [frequencyData, setFrequencyData] = useState<iFrequency>();
   const [studentData, setStudentData] = useState<iFrequencyStudents>();
 
@@ -105,6 +116,19 @@ export const SchoolProvider = ({ children }: iChildren) => {
           setSchoolDataSelect(
             res.data.map((school) => {
               return { ...school, label: school.name };
+            })
+          );
+        }
+      })
+      .finally(() => setLoading(false));
+    apiUsingNow
+      .get<iClass[]>(`classes?school_id=${schoolSelect?.id}&is_active=true`)
+      .then((res) => {
+        if (res.data) {
+          setListClassData(res.data);
+          setClassDataSelect(
+            res.data.map((el) => {
+              return { ...el, label: el.name };
             })
           );
         }
@@ -144,7 +168,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
           `Não foi possível atualizar o ${type} da escola no momento!`
         );
       } finally {
-        setschoolSelect(undefined);
+        setSchoolSelect(undefined);
         setLoading(false);
         if (back) navigate(back);
       }
@@ -291,7 +315,13 @@ export const SchoolProvider = ({ children }: iChildren) => {
         studentData,
         setStudentData,
         schoolSelect,
-        setschoolSelect,
+        setSchoolSelect,
+        classDataSelect,
+        listClassData,
+        classSelect,
+        setClassSelect,
+        setListClassData,
+        setClassDataSelect,
       }}
     >
       {children}

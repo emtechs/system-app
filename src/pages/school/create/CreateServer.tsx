@@ -23,7 +23,6 @@ export const CreateServerPage = () => {
         <BoxResp isProfile>
           <TextFieldElement name="cpf" label="CPF" required fullWidth />
           <TextFieldElement name="name" label="Nome" required fullWidth />
-
           <RadioButtonGroup
             label="Tela do Usuário"
             name="dash"

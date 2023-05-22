@@ -13,10 +13,11 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useSchoolContext } from "../../shared/contexts";
-import { iSchool } from "../../shared/interfaces";
+import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
+import { iPageProps, iSchool } from "../../shared/interfaces";
 import { BasePage } from "../../shared/components";
 import { useEffect } from "react";
+import { apiUsingNow } from "../../shared/services";
 
 interface iCardSchoolProps {
   school: iSchool;
@@ -24,7 +25,7 @@ interface iCardSchoolProps {
 }
 
 const CardSchool = ({ school, theme }: iCardSchoolProps) => {
-  const { schoolSelect, setschoolSelect, updateSchool } = useSchoolContext();
+  const { schoolSelect, setSchoolSelect, updateSchool } = useSchoolContext();
 
   return (
     <>
@@ -42,7 +43,7 @@ const CardSchool = ({ school, theme }: iCardSchoolProps) => {
         }}
       >
         <CardContent
-          onClick={() => setschoolSelect(school)}
+          onClick={() => setSchoolSelect(school)}
           sx={{
             display: "flex",
             alignItems: "center",
@@ -70,14 +71,14 @@ const CardSchool = ({ school, theme }: iCardSchoolProps) => {
           </Box>
         </CardContent>
       </Card>
-      <Dialog open={!!schoolSelect} onClose={() => setschoolSelect(undefined)}>
+      <Dialog open={!!schoolSelect} onClose={() => setSchoolSelect(undefined)}>
         <DialogTitle>Desativar Escola</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Deseja continuar desativando {schoolSelect?.name.toUpperCase()}?
           </DialogContentText>
           <DialogActions>
-            <Button onClick={() => setschoolSelect(undefined)}>Cancelar</Button>
+            <Button onClick={() => setSchoolSelect(undefined)}>Cancelar</Button>
             <Button
               onClick={() => {
                 if (schoolSelect)
@@ -88,7 +89,7 @@ const CardSchool = ({ school, theme }: iCardSchoolProps) => {
                     schoolSelect.id,
                     "estado"
                   );
-                setschoolSelect(undefined);
+                setSchoolSelect(undefined);
               }}
             >
               Continuar
@@ -100,16 +101,23 @@ const CardSchool = ({ school, theme }: iCardSchoolProps) => {
   );
 };
 
-interface iListSchoolProps {
-  back: string;
-}
-
-export const ListSchool = ({ back }: iListSchoolProps) => {
+export const ListSchool = ({ back }: iPageProps) => {
   const theme = useTheme();
-  const { listSchoolData, setschoolSelect } = useSchoolContext();
+  const { setLoading } = useAppThemeContext();
+  const { listSchoolData, setSchoolSelect, setListSchoolData } =
+    useSchoolContext();
 
   useEffect(() => {
-    setschoolSelect(undefined);
+    setSchoolSelect(undefined);
+    setLoading(true);
+    apiUsingNow
+      .get<iSchool[]>("schools?is_active=true")
+      .then((res) => {
+        if (res.data) {
+          setListSchoolData(res.data);
+        }
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   return (

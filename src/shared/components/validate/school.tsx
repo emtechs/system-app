@@ -2,7 +2,7 @@ import { useFormContext } from "react-hook-form-mui";
 import { iSchool } from "../../interfaces";
 import { useSchoolContext } from "../../contexts";
 import { useEffect } from "react";
-import { ValidateCPF } from "./cpf";
+import { ValidateCPF } from "./Cpf";
 
 interface iValidateSchoolProps {
   isCPF?: boolean;
@@ -10,11 +10,11 @@ interface iValidateSchoolProps {
 
 export const ValidateSchool = ({ isCPF }: iValidateSchoolProps) => {
   const { watch } = useFormContext();
-  const { schoolSelect, setschoolSelect } = useSchoolContext();
+  const { schoolSelect, setSchoolSelect } = useSchoolContext();
   const school: iSchool = watch("school");
 
   useEffect(() => {
-    setschoolSelect(school);
+    setSchoolSelect(school);
   }, [school]);
 
   return isCPF ? <ValidateCPF school_id={schoolSelect?.id} /> : <></>;

@@ -28,12 +28,12 @@ import { useNavigate } from "react-router-dom";
 export const EditSchool = ({ back }: iPageProps) => {
   const navigate = useNavigate();
   const { updateAllUser } = useUserContext();
-  const { updateSchool, schoolSelect, setschoolSelect } = useSchoolContext();
+  const { updateSchool, schoolSelect, setSchoolSelect } = useSchoolContext();
   const [updateDirectorData, setUpdateDirectorData] = useState<iDirector>();
   const handleClose = () => setUpdateDirectorData(undefined);
 
   useEffect(() => {
-    setschoolSelect(undefined);
+    setSchoolSelect(undefined);
   }, []);
 
   return (

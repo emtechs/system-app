@@ -43,6 +43,11 @@ export interface iClass {
   id: string;
   name: string;
   students: iStudent[];
+  _count: { students: number };
+}
+
+export interface iClassSelect extends iClass {
+  label: string;
 }
 
 export type iStatusFrequency = "OPENED" | "CLOSED";

@@ -1,15 +1,9 @@
 import { Card, CardContent, Typography } from "@mui/material";
 import { BasePage } from "../../shared/components";
 import { Link } from "react-router-dom";
-import {
-  Checklist,
-  Groups,
-  People,
-  School,
-  Workspaces,
-} from "@mui/icons-material";
+import { DoneAll, Edit, GroupAdd, Groups } from "@mui/icons-material";
 
-export const DashboardAdmin = () => {
+export const ClassPage = () => {
   return (
     <BasePage isProfile>
       <Card
@@ -22,10 +16,27 @@ export const DashboardAdmin = () => {
           alignItems: "center",
         }}
       >
-        <Link to="/user">
+        <Link to="/class/create">
           <CardContent sx={{ display: "flex", gap: 2 }}>
-            <People />
-            <Typography>Gestão de Usuários</Typography>
+            <GroupAdd />
+            <Typography>Cadastrar Turma</Typography>
+          </CardContent>
+        </Link>
+      </Card>
+      <Card
+        sx={{
+          width: "100%",
+          maxWidth: 250,
+          height: 80,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Link to="/class/edit">
+          <CardContent sx={{ display: "flex", gap: 2 }}>
+            <Edit />
+            <Typography>Editar Turma</Typography>
           </CardContent>
         </Link>
       </Card>
@@ -39,61 +50,27 @@ export const DashboardAdmin = () => {
           alignItems: "center",
         }}
       >
-        <Link to="/school">
-          <CardContent sx={{ display: "flex", gap: 2 }}>
-            <School />
-            <Typography>Gestão de Escolas</Typography>
-          </CardContent>
-        </Link>
-      </Card>
-      <Card
-        sx={{
-          width: "100%",
-          height: 80,
-          maxWidth: 250,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Link to="/class">
-          <CardContent sx={{ display: "flex", gap: 2 }}>
-            <Workspaces />
-            <Typography>Gestão de Turmas</Typography>
-          </CardContent>
-        </Link>
-      </Card>
-      <Card
-        sx={{
-          width: "100%",
-          height: 80,
-          maxWidth: 250,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Link to="/student">
+        <Link to="/class/list">
           <CardContent sx={{ display: "flex", gap: 2 }}>
             <Groups />
-            <Typography>Gestão de Alunos</Typography>
+            <Typography>Listar Turmas</Typography>
           </CardContent>
         </Link>
       </Card>
       <Card
         sx={{
           width: "100%",
-          height: 80,
           maxWidth: 250,
+          height: 80,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <Link to="/frequency">
+        <Link to="/class/active">
           <CardContent sx={{ display: "flex", gap: 2 }}>
-            <Checklist />
-            <Typography>Gestão de Frequência</Typography>
+            <DoneAll />
+            <Typography>Ativar Turma</Typography>
           </CardContent>
         </Link>
       </Card>

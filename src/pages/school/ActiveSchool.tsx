@@ -25,7 +25,7 @@ interface iCardSchoolProps {
 }
 
 const CardSchool = ({ school, theme }: iCardSchoolProps) => {
-  const { schoolSelect, setschoolSelect, updateSchool } = useSchoolContext();
+  const { schoolSelect, setSchoolSelect, updateSchool } = useSchoolContext();
 
   return (
     <>
@@ -43,7 +43,7 @@ const CardSchool = ({ school, theme }: iCardSchoolProps) => {
         }}
       >
         <CardContent
-          onClick={() => setschoolSelect(school)}
+          onClick={() => setSchoolSelect(school)}
           sx={{
             display: "flex",
             alignItems: "center",
@@ -71,14 +71,14 @@ const CardSchool = ({ school, theme }: iCardSchoolProps) => {
           </Box>
         </CardContent>
       </Card>
-      <Dialog open={!!schoolSelect} onClose={() => setschoolSelect(undefined)}>
+      <Dialog open={!!schoolSelect} onClose={() => setSchoolSelect(undefined)}>
         <DialogTitle>Ativar Escola</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Deseja continuar ativando {schoolSelect?.name.toUpperCase()}?
           </DialogContentText>
           <DialogActions>
-            <Button onClick={() => setschoolSelect(undefined)}>Cancelar</Button>
+            <Button onClick={() => setSchoolSelect(undefined)}>Cancelar</Button>
             <Button
               onClick={() => {
                 if (schoolSelect)
@@ -89,7 +89,7 @@ const CardSchool = ({ school, theme }: iCardSchoolProps) => {
                     schoolSelect.id,
                     "estado"
                   );
-                setschoolSelect(undefined);
+                setSchoolSelect(undefined);
               }}
             >
               Continuar
@@ -108,8 +108,13 @@ interface iActiveSchoolProps {
 export const ActiveSchool = ({ back }: iActiveSchoolProps) => {
   const theme = useTheme();
   const { setLoading } = useAppThemeContext();
-  const { schoolSelect, setListSchoolData } = useSchoolContext();
+  const { schoolSelect, setListSchoolData, setSchoolSelect } =
+    useSchoolContext();
   const [schoolsData, setSchoolsData] = useState<iSchoolSelect[]>();
+
+  useEffect(() => {
+    setSchoolSelect(undefined);
+  }, []);
 
   useEffect(() => {
     setLoading(true);

@@ -1,7 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import {
+  ActiveClass,
   ActiveSchool,
   ActiveUser,
+  ClassPage,
   CreateAdm,
   CreateClass,
   CreateClassAdm,
@@ -14,10 +16,12 @@ import {
   CreateStudentAdm,
   Dashboard,
   DefineSecret,
+  EditClass,
   EditSchool,
   First,
   Frequency,
   ImportStudentPage,
+  ListClass,
   ListFrequency,
   ListFrequencyAdm,
   ListSchool,
@@ -79,14 +83,21 @@ const AppRoutes = () => {
               path="/school/active"
               element={<ActiveSchool back="/school" />}
             />
+            <Route path="/class" element={<ClassPage />} />
+            <Route
+              path="/class/create"
+              element={<CreateClassAdm back="/class" />}
+            />
+            <Route path="/class/edit" element={<EditClass back="/class" />} />
+            <Route path="/class/list" element={<ListClass back="/class" />} />
+            <Route
+              path="/class/active"
+              element={<ActiveClass back="/class" />}
+            />
             <Route path="/student" element={<Student />} />
             <Route
               path="/student/create"
               element={<CreateStudentAdm back="/student" />}
-            />
-            <Route
-              path="/student/create/class"
-              element={<CreateClassAdm back="/student" />}
             />
             <Route
               path="/student/import"

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import {
   DoneAll,
   Edit,
-  People,
+  PersonAdd,
   School as SchoolIcon,
   SchoolTwoTone,
 } from "@mui/icons-material";
@@ -41,7 +41,7 @@ export const School = () => {
       >
         <Link to="/school/create/server">
           <CardContent sx={{ display: "flex", gap: 2 }}>
-            <People />
+            <PersonAdd />
             <Typography>Cadastrar Servidor</Typography>
           </CardContent>
         </Link>

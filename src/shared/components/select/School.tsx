@@ -2,11 +2,7 @@ import { AutocompleteElement } from "react-hook-form-mui";
 import { ValidateSchool } from "../validate";
 import { useSchoolContext } from "../../contexts";
 
-interface iSelectSchoolProps {
-  isCPF?: boolean;
-}
-
-export const SelectSchool = ({ isCPF }: iSelectSchoolProps) => {
+export const SelectSchool = () => {
   const { schoolDataSelect } = useSchoolContext();
 
   return (
@@ -28,7 +24,7 @@ export const SelectSchool = ({ isCPF }: iSelectSchoolProps) => {
           }
         />
       </div>
-      {isCPF ? <></> : <ValidateSchool />}
+      <ValidateSchool />
     </>
   );
 };

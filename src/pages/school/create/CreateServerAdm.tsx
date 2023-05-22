@@ -26,7 +26,7 @@ export const CreateServerAdm = ({ back }: iPageProps) => {
         resolver={zodResolver(serverCreateSchema)}
       >
         <BoxResp isProfile>
-          <SelectSchool isCPF />
+          <SelectSchool />
           <TextFieldElement name="cpf" label="CPF" required fullWidth />
           <TextFieldElement name="name" label="Nome" required fullWidth />
           <RadioButtonGroup
