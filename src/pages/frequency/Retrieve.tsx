@@ -112,7 +112,6 @@ const CardFrequency = ({ frequency, theme }: iCardFrequencyProps) => {
           )}
         </CardContent>
       </Card>
-
       {studentData && (
         <Dialog open={open} onClose={handleClose}>
           {studentData.status === "PRESENTED" ? (
@@ -173,7 +172,6 @@ const CardFrequency = ({ frequency, theme }: iCardFrequencyProps) => {
                   Deseja continuar removendo a falta do aluno{" "}
                   {studentData.student.name}?
                 </DialogContentText>
-
                 <Box mt={1} display="flex" flexDirection="column" gap={1}>
                   <Typography>
                     Matrícula: {studentData.student.registry}
