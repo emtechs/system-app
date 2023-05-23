@@ -262,7 +262,11 @@ export const RetrieveFrequency = ({ back }: iPageProps) => {
           <Button
             variant="contained"
             onClick={() => {
-              updateFrequency({ status: "CLOSED" }, frequencyData.id, back);
+              updateFrequency(
+                { status: "CLOSED", finished_at: Date.now() },
+                frequencyData.id,
+                back
+              );
             }}
             fullWidth
           >

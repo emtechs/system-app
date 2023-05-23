@@ -61,7 +61,7 @@ interface iSchoolContextData {
     school_id: string,
     back?: string
   ) => Promise<void>;
-  createFrequency: (data: iFrequencyRequest, id: string) => Promise<void>;
+  createFrequency: (data: iFrequencyRequest) => Promise<void>;
   updateSchool: (
     data: FieldValues,
     id: string,
@@ -121,6 +121,8 @@ export const SchoolProvider = ({ children }: iChildren) => {
         }
       })
       .finally(() => setLoading(false));
+    setLoading(true);
+    setClassDataSelect(undefined);
     apiUsingNow
       .get<iClass[]>(`classes?school_id=${schoolSelect?.id}&is_active=true`)
       .then((res) => {
@@ -244,22 +246,19 @@ export const SchoolProvider = ({ children }: iChildren) => {
     []
   );
 
-  const handleCreateFrequency = useCallback(
-    async (data: iFrequencyRequest, id: string) => {
-      try {
-        setLoading(true);
-        const frequency = await postFrequency(data, id);
-        toast.success("Frequência cadastrado com sucesso!");
-        setFrequencyData(frequency);
-        setLoading(false);
-        navigate("/frequency/retrieve");
-      } catch {
-        setLoading(false);
-        toast.error("Não foi possível cadastrar a frequência no momento!");
-      }
-    },
-    []
-  );
+  const handleCreateFrequency = useCallback(async (data: iFrequencyRequest) => {
+    try {
+      setLoading(true);
+      const frequency = await postFrequency(data);
+      toast.success("Frequência cadastrado com sucesso!");
+      setFrequencyData(frequency);
+      setLoading(false);
+      navigate("/frequency/retrieve");
+    } catch {
+      setLoading(false);
+      toast.error("Não foi possível cadastrar a frequência no momento!");
+    }
+  }, []);
 
   const handleUpdateFrequency = useCallback(
     async (data: FieldValues, id: string, back?: string) => {

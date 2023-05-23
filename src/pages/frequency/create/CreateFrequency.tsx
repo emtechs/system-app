@@ -94,9 +94,7 @@ export const CreateFrequency = () => {
     <>
       <BasePage isProfile>
         <FormContainer
-          onSuccess={(data) => {
-            if (schoolData) createFrequency(data, schoolData.school.id);
-          }}
+          onSuccess={createFrequency}
           resolver={zodResolver(frequencyCreateSchema)}
         >
           <BoxResp isProfile>

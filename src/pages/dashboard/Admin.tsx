@@ -6,6 +6,7 @@ import {
   Groups,
   People,
   School,
+  Summarize,
   Workspaces,
 } from "@mui/icons-material";
 
@@ -94,6 +95,23 @@ export const DashboardAdmin = () => {
           <CardContent sx={{ display: "flex", gap: 2 }}>
             <Checklist />
             <Typography>Gestão de Frequência</Typography>
+          </CardContent>
+        </Link>
+      </Card>
+      <Card
+        sx={{
+          width: "100%",
+          height: 80,
+          maxWidth: 250,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Link to="/report">
+          <CardContent sx={{ display: "flex", gap: 2 }}>
+            <Summarize />
+            <Typography>Relatórios</Typography>
           </CardContent>
         </Link>
       </Card>

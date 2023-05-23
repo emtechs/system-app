@@ -1,9 +1,10 @@
+import { FormContainer, useFormContext } from "react-hook-form-mui";
 import {
-  AutocompleteElement,
-  FormContainer,
-  useFormContext,
-} from "react-hook-form-mui";
-import { BasePage, BoxResp, SelectSchool } from "../../../shared/components";
+  BasePage,
+  BoxResp,
+  SelectClass,
+  SelectSchool,
+} from "../../../shared/components";
 import { useSchoolContext } from "../../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { frequencyCreateSchema } from "../../../shared/schemas";
@@ -25,10 +26,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Link } from "react-router-dom";
 import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/pt-br";
-
-interface iData extends iClass {
-  label: string;
-}
 
 interface iDateValueProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -70,54 +67,20 @@ const DateValue = ({ setOpen }: iDateValueProps) => {
 };
 
 export const CreateFrequencyAdm = ({ back }: iPageProps) => {
-  const { createFrequency, frequencyData, schoolSelect } = useSchoolContext();
-  const [data, setData] = useState<iData[]>();
-  const [loading, setloading] = useState(false);
+  const { createFrequency, frequencyData } = useSchoolContext();
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(!open);
-
-  useEffect(() => {
-    setloading(true);
-    apiUsingNow
-      .get<iClass[]>(`classes?school_id=${schoolSelect?.id}`)
-      .then((res) => {
-        setData(
-          res.data.map((el) => {
-            return { ...el, label: el.name };
-          })
-        );
-        setloading(false);
-      });
-  }, [schoolSelect]);
 
   return (
     <>
       <BasePage isProfile back={back}>
         <FormContainer
-          onSuccess={(data) => {
-            if (schoolSelect) createFrequency(data, schoolSelect.id);
-          }}
+          onSuccess={createFrequency}
           resolver={zodResolver(frequencyCreateSchema)}
         >
           <BoxResp isProfile>
             <SelectSchool />
-            <div style={{ width: "100%" }}>
-              <AutocompleteElement
-                name="class"
-                label="Turma"
-                options={
-                  data?.length
-                    ? data
-                    : [
-                        {
-                          id: 1,
-                          label: "No momento, não há nenhuma turma cadastrada",
-                        },
-                      ]
-                }
-                loading={loading}
-              />
-            </div>
+            <SelectClass />
             <DateValue setOpen={setOpen} />
             <Button variant="contained" type="submit" fullWidth>
               Salvar
@@ -145,7 +108,7 @@ export const CreateFrequencyAdm = ({ back }: iPageProps) => {
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Cadastrar</Button>
-              <Link to="/frequency">
+              <Link to="/frequency/retrieve">
                 <Button onClick={handleClose} autoFocus>
                   Realizar
                 </Button>

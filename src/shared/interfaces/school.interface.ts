@@ -20,7 +20,6 @@ export interface iSchool {
   name: string;
   is_active: boolean;
   director: iDirector;
-  frequencies: iFrequency[];
 }
 
 export interface iSchoolSelect extends iSchool {
@@ -37,13 +36,22 @@ export interface iStudent {
   id: string;
   name: string;
   registry: string;
+  is_active: boolean;
+  justify_disabled?: string;
+  presented: number;
+  justified: number;
+  missed: number;
+  total_frequencies: number;
+  infrequency: number;
 }
 
 export interface iClass {
   id: string;
   name: string;
   students: iStudent[];
-  _count: { students: number };
+  school: iSchool;
+  _count: { frequencies: number; students: number };
+  infrequency: number;
 }
 
 export interface iClassSelect extends iClass {

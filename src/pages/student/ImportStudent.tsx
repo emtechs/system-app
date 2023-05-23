@@ -84,7 +84,6 @@ export const ImportStudentPage = ({ back }: iPageProps) => {
     <BasePage isProfile back={back}>
       <FormContainer
         onSuccess={(data) => {
-          console.log(data);
           if (schoolSelect) importStudent(data, schoolSelect.id, back);
         }}
         resolver={zodResolver(studentImportSchema)}

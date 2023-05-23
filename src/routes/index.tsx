@@ -27,6 +27,9 @@ import {
   ListSchool,
   ListUser,
   Login,
+  Report,
+  ReportClass,
+  ReportRetrieve,
   RetrieveFrequency,
   School,
   Student,
@@ -115,6 +118,15 @@ const AppRoutes = () => {
             <Route
               path="/frequency/list"
               element={<ListFrequencyAdm back="/frequency" />}
+            />
+            <Route path="/report" element={<Report />} />
+            <Route
+              path="/report/class"
+              element={<ReportClass back="/report" />}
+            />
+            <Route
+              path="/report/class/retrieve"
+              element={<ReportRetrieve back="/report" />}
             />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

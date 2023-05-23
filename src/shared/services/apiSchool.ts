@@ -37,12 +37,9 @@ export async function postImportStudent(
   await apiUsingNow.post(`students/import/${class_id}/${school_id}`, data);
 }
 
-export async function postFrequency(
-  data: FieldValues,
-  id: string
-): Promise<iFrequency> {
+export async function postFrequency(data: FieldValues): Promise<iFrequency> {
   const { data: response } = await apiUsingNow.post<iFrequency>(
-    `frequencies/${id}`,
+    'frequencies',
     data
   );
   return response;
