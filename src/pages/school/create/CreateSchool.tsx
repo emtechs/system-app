@@ -1,14 +1,12 @@
 import { useSchoolContext } from "../../../shared/contexts";
-import { BasePage, BoxResp, ValidateCPF } from "../../../shared/components";
+import { BasePage, BoxResp } from "../../../shared/components";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { schoolCreateSchema } from "../../../shared/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { iPageProps } from "../../../shared/interfaces";
+import { Button } from "@mui/material";
 
-interface iCreateSchoolProps {
-  back?: string;
-}
-
-export const CreateSchool = ({ back }: iCreateSchoolProps) => {
+export const CreateSchool = ({ back }: iPageProps) => {
   const { createSchool } = useSchoolContext();
 
   return (
@@ -24,19 +22,9 @@ export const CreateSchool = ({ back }: iCreateSchoolProps) => {
             required
             fullWidth
           />
-          <TextFieldElement
-            name="cpf"
-            label="CPF do Diretor"
-            required
-            fullWidth
-          />
-          <TextFieldElement
-            name="name_diret"
-            label="Nome do Diretor"
-            required
-            fullWidth
-          />
-          <ValidateCPF allNotServ />
+          <Button variant="contained" type="submit" fullWidth>
+            Salvar
+          </Button>
         </BoxResp>
       </FormContainer>
     </BasePage>

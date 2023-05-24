@@ -2,23 +2,15 @@ import dayjs from "dayjs";
 import { z } from "zod";
 import { csvSchema } from "./file.schema";
 
-export const schoolCreateSchema = z
-  .object({
-    name: z
-      .string({ required_error: "Nome da Escola obrigatório" })
-      .nonempty("Nome da Escola obrigatório"),
-    login: z.string(),
-    cpf: z
-      .string({ required_error: "CPF obrigatório" })
-      .min(14, "Precisa ter 14 digitos"),
-    name_diret: z
-      .string({ required_error: "Nome do Diretor obrigatório" })
-      .nonempty("Nome do Diretor obrigatório"),
-    password: z.string().optional(),
-    role: z.enum(["SERV", "DIRET", "SECRET", "ADMIN"]).default("DIRET"),
-    dash: z.enum(["COMMON", "SCHOOL", "ORGAN", "ADMIN"]).default("SCHOOL"),
-  })
-  .refine((fields) => (fields.password = fields.login.substring(0, 6)));
+export const schoolCreateSchema = z.object({
+  name: z
+    .string({ required_error: "Nome da Escola obrigatório" })
+    .nonempty("Nome da Escola obrigatório"),
+});
+
+export const schoolImportSchema = z.object({
+  file: csvSchema,
+});
 
 export const schoolUpdateSchema = z.object({
   name: z
@@ -33,8 +25,8 @@ export const schoolUpdateDirectorSchema = z
       .string({ required_error: "CPF obrigatório" })
       .min(14, "Precisa ter 14 digitos"),
     name_diret: z
-      .string({ required_error: "Nome do Diretor obrigatório" })
-      .nonempty("Nome do Diretor obrigatório"),
+      .string({ required_error: "Nome obrigatório" })
+      .nonempty("Nome obrigatório"),
     password: z.string().optional(),
     role: z.enum(["SERV", "DIRET", "SECRET", "ADMIN"]).default("DIRET"),
     dash: z.enum(["COMMON", "SCHOOL", "ORGAN", "ADMIN"]).default("SCHOOL"),

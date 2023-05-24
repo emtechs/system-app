@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import {
   DoneAll,
   Edit,
+  FileUpload,
+  Person,
   PersonAdd,
   School as SchoolIcon,
   SchoolTwoTone,
@@ -26,6 +28,40 @@ export const School = () => {
           <CardContent sx={{ display: "flex", gap: 2 }}>
             <SchoolIcon />
             <Typography>Cadastrar Escola</Typography>
+          </CardContent>
+        </Link>
+      </Card>
+      <Card
+        sx={{
+          width: "100%",
+          height: 80,
+          maxWidth: 250,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Link to="/school/import">
+          <CardContent sx={{ display: "flex", gap: 2 }}>
+            <FileUpload />
+            <Typography>Importar Escolas</Typography>
+          </CardContent>
+        </Link>
+      </Card>
+      <Card
+        sx={{
+          width: "100%",
+          maxWidth: 250,
+          height: 80,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Link to="/school/define/diret">
+          <CardContent sx={{ display: "flex", gap: 2 }}>
+            <Person />
+            <Typography>Definir Diretor</Typography>
           </CardContent>
         </Link>
       </Card>

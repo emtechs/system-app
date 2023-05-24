@@ -61,12 +61,14 @@ const CardSchool = ({ school, theme }: iCardSchoolProps) => {
               >
                 {school.name}
               </Typography>
-              <Typography
-                fontSize={12}
-                color={theme.palette.secondary.contrastText}
-              >
-                Diretor: {school.director.name}
-              </Typography>
+              {school.director?.name && (
+                <Typography
+                  fontSize={12}
+                  color={theme.palette.secondary.contrastText}
+                >
+                  Diretor: {school.director.name}
+                </Typography>
+              )}
             </Box>
           </Box>
         </CardContent>

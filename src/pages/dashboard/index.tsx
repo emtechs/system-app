@@ -1,7 +1,7 @@
-import { DashboardAdmin } from "./Admin";
-import { DashboardSchool } from "./School";
 import { useAuthContext } from "../../shared/contexts";
+import { DashboardAdmin } from "./Admin";
 import { DashboardCommon } from "./Common";
+import { DashboardSchool } from "./School";
 
 export const Dashboard = () => {
   const { dashData } = useAuthContext();

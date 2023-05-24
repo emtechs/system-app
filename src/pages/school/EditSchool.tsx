@@ -1,18 +1,10 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { iDirector, iPageProps } from "../../shared/interfaces";
-import { useSchoolContext, useUserContext } from "../../shared/contexts";
-import { useEffect, useState } from "react";
-import {
-  BasePage,
-  BoxResp,
-  SelectSchool,
-  ValidateCPF,
-} from "../../shared/components";
+import { iPageProps } from "../../shared/interfaces";
+import { useSchoolContext } from "../../shared/contexts";
+import { useEffect } from "react";
+import { BasePage, BoxResp, SelectSchool } from "../../shared/components";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  schoolUpdateDirectorSchema,
-  schoolUpdateSchema,
-} from "../../shared/schemas";
+import { schoolUpdateSchema } from "../../shared/schemas";
 import {
   Box,
   Button,
@@ -27,10 +19,7 @@ import { useNavigate } from "react-router-dom";
 
 export const EditSchool = ({ back }: iPageProps) => {
   const navigate = useNavigate();
-  const { updateAllUser } = useUserContext();
   const { updateSchool, schoolSelect, setSchoolSelect } = useSchoolContext();
-  const [updateDirectorData, setUpdateDirectorData] = useState<iDirector>();
-  const handleClose = () => setUpdateDirectorData(undefined);
 
   useEffect(() => {
     setSchoolSelect(undefined);
@@ -50,10 +39,6 @@ export const EditSchool = ({ back }: iPageProps) => {
               <Box>
                 <Typography>Informações Atuais</Typography>
                 <Typography>Nome da Escola: {schoolSelect.name}</Typography>
-                <Typography>
-                  Diretor da Escola: {schoolSelect.director.name}
-                </Typography>
-                <Typography>CPF: {schoolSelect.director.cpf}</Typography>
               </Box>
             )}
 
@@ -66,59 +51,9 @@ export const EditSchool = ({ back }: iPageProps) => {
             <Button variant="contained" type="submit" fullWidth>
               Enviar
             </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => setUpdateDirectorData(schoolSelect?.director)}
-              fullWidth
-            >
-              Alterar Diretor
-            </Button>
           </BoxResp>
         </FormContainer>
       </BasePage>
-      {updateDirectorData && (
-        <Dialog open={!!updateDirectorData} onClose={handleClose}>
-          <DialogTitle>Editar Diretor</DialogTitle>
-          <DialogContent>
-            <FormContainer
-              onSuccess={(data) => {
-                updateAllUser(
-                  updateDirectorData.id,
-                  {
-                    is_active: false,
-                    role: "SERV",
-                  },
-                  true
-                );
-                if (schoolSelect)
-                  updateSchool(data, schoolSelect.id, "diretor", back);
-                setUpdateDirectorData(undefined);
-              }}
-              resolver={zodResolver(schoolUpdateDirectorSchema)}
-            >
-              <Box mt={1} display="flex" flexDirection="column" gap={1}>
-                <TextFieldElement
-                  name="cpf"
-                  label="CPF do Diretor"
-                  required
-                  fullWidth
-                />
-                <TextFieldElement
-                  name="name_diret"
-                  label="Nome do Diretor"
-                  required
-                  fullWidth
-                />
-                <ValidateCPF allNotServ />
-              </Box>
-            </FormContainer>
-            <DialogActions>
-              <Button onClick={handleClose}>Cancelar</Button>
-            </DialogActions>
-          </DialogContent>
-        </Dialog>
-      )}
       <Dialog open={!schoolSelect} onClose={() => navigate(back ? back : "/")}>
         <DialogTitle>Editar Escola</DialogTitle>
         <DialogContent>

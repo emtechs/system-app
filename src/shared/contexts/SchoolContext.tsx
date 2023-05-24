@@ -16,6 +16,7 @@ import {
   iFrequencyRequest,
   iFrequencyStudents,
   iSchool,
+  iSchoolImportRequest,
   iSchoolRequest,
   iSchoolSelect,
   iServerRequest,
@@ -29,6 +30,8 @@ import {
   patchSchool,
   postClass,
   postFrequency,
+  postImportClass,
+  postImportSchool,
   postImportStudent,
   postSchool,
   postStudent,
@@ -41,6 +44,7 @@ import { FieldValues } from "react-hook-form";
 
 interface iSchoolContextData {
   createSchool: (data: iSchoolRequest, back?: string) => Promise<void>;
+  importSchool: (data: iSchoolImportRequest, back?: string) => Promise<void>;
   createServer: (
     data: iServerRequest,
     id: string,
@@ -49,6 +53,11 @@ interface iSchoolContextData {
   createClass: (
     data: iClassRequest,
     id: string,
+    back?: string
+  ) => Promise<void>;
+  importClass: (
+    data: iSchoolImportRequest,
+    school_id: string,
     back?: string
   ) => Promise<void>;
   createStudent: (
@@ -154,6 +163,24 @@ export const SchoolProvider = ({ children }: iChildren) => {
     []
   );
 
+  const handleImportSchool = useCallback(
+    async (data: iSchoolImportRequest, back?: string) => {
+      const file = new FormData();
+      file.append("file", data.file);
+      try {
+        setLoading(true);
+        await postImportSchool(file);
+        toast.success("Escolas importadas com sucesso!");
+        setLoading(false);
+        navigate(back ? back : "/");
+      } catch {
+        setLoading(false);
+        toast.error("Não foi possível importar as escolas no momento!");
+      }
+    },
+    []
+  );
+
   const handleUpdateSchool = useCallback(
     async (
       data: FieldValues,
@@ -206,6 +233,24 @@ export const SchoolProvider = ({ children }: iChildren) => {
       } catch {
         setLoading(false);
         toast.error("Não foi possível cadastrar a turma no momento!");
+      }
+    },
+    []
+  );
+
+  const handleImportClass = useCallback(
+    async (data: iSchoolImportRequest, school_id: string, back?: string) => {
+      const file = new FormData();
+      file.append("file", data.file);
+      try {
+        setLoading(true);
+        await postImportClass(file, school_id);
+        toast.success("Turmas importadas com sucesso!");
+        setLoading(false);
+        navigate(back ? back : "/");
+      } catch {
+        setLoading(false);
+        toast.error("Não foi possível importar as turmas no momento!");
       }
     },
     []
@@ -297,8 +342,10 @@ export const SchoolProvider = ({ children }: iChildren) => {
     <SchoolContext.Provider
       value={{
         createSchool: handleCreateSchool,
+        importSchool: handleImportSchool,
         createServer: handleCreateServer,
         createClass: handleCreateClass,
+        importClass: handleImportClass,
         createStudent: handleCreateStudent,
         importStudent: handleImportStudent,
         createFrequency: handleCreateFrequency,

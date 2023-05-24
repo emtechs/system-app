@@ -1,7 +1,13 @@
 import { Card, CardContent, Typography } from "@mui/material";
 import { BasePage } from "../../shared/components";
 import { Link } from "react-router-dom";
-import { DoneAll, Edit, GroupAdd, Groups } from "@mui/icons-material";
+import {
+  DoneAll,
+  Edit,
+  FileUpload,
+  GroupAdd,
+  Groups,
+} from "@mui/icons-material";
 
 export const ClassPage = () => {
   return (
@@ -20,6 +26,23 @@ export const ClassPage = () => {
           <CardContent sx={{ display: "flex", gap: 2 }}>
             <GroupAdd />
             <Typography>Cadastrar Turma</Typography>
+          </CardContent>
+        </Link>
+      </Card>
+      <Card
+        sx={{
+          width: "100%",
+          height: 80,
+          maxWidth: 250,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Link to="/class/import">
+          <CardContent sx={{ display: "flex", gap: 2 }}>
+            <FileUpload />
+            <Typography>Importar Turmas</Typography>
           </CardContent>
         </Link>
       </Card>

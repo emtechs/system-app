@@ -3,6 +3,7 @@ import {
   classCreateSchema,
   frequencyCreateSchema,
   schoolCreateSchema,
+  schoolImportSchema,
   serverCreateSchema,
   studentCreateSchema,
   studentImportSchema,
@@ -19,7 +20,7 @@ export interface iSchool {
   id: string;
   name: string;
   is_active: boolean;
-  director: iDirector;
+  director?: iDirector;
 }
 
 export interface iSchoolSelect extends iSchool {
@@ -81,6 +82,8 @@ export interface iFrequencyStudents {
 export type iServerRequest = z.infer<typeof serverCreateSchema>;
 
 export type iSchoolRequest = z.infer<typeof schoolCreateSchema>;
+
+export type iSchoolImportRequest = z.infer<typeof schoolImportSchema>;
 
 export type iClassRequest = z.infer<typeof classCreateSchema>;
 

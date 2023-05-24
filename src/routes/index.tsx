@@ -15,11 +15,14 @@ import {
   CreateStudent,
   CreateStudentAdm,
   Dashboard,
+  DefineDiret,
   DefineSecret,
   EditClass,
   EditSchool,
   First,
   Frequency,
+  ImportClassPage,
+  ImportSchoolPage,
   ImportStudentPage,
   ListClass,
   ListFrequency,
@@ -75,6 +78,14 @@ const AppRoutes = () => {
               element={<CreateServerAdm back="/school" />}
             />
             <Route
+              path="/school/define/diret"
+              element={<DefineDiret back="/school" />}
+            />
+            <Route
+              path="/school/import"
+              element={<ImportSchoolPage back="/school" />}
+            />
+            <Route
               path="/school/edit"
               element={<EditSchool back="/school" />}
             />
@@ -90,6 +101,10 @@ const AppRoutes = () => {
             <Route
               path="/class/create"
               element={<CreateClassAdm back="/class" />}
+            />
+            <Route
+              path="/class/import"
+              element={<ImportClassPage back="/class" />}
             />
             <Route path="/class/edit" element={<EditClass back="/class" />} />
             <Route path="/class/list" element={<ListClass back="/class" />} />
