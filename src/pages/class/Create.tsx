@@ -1,20 +1,18 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { BasePage, BoxResp } from "../../../shared/components";
+import { BasePage, BoxResp } from "../../shared/components";
 import { Button } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { classCreateSchema } from "../../../shared/schemas";
-import { useAuthContext, useSchoolContext } from "../../../shared/contexts";
+import { classCreateSchema } from "../../shared/schemas";
+import { useClassContext } from "../../shared/contexts";
+import { iPageProps } from "../../shared/interfaces";
 
-export const CreateClass = () => {
-  const { schoolData } = useAuthContext();
-  const { createClass } = useSchoolContext();
+export const CreateClass = ({ back }: iPageProps) => {
+  const { createClass } = useClassContext();
 
   return (
-    <BasePage isProfile>
+    <BasePage isProfile back={back}>
       <FormContainer
-        onSuccess={(data) => {
-          if (schoolData) createClass(data, schoolData?.school.id);
-        }}
+        onSuccess={(data) => createClass(data, back)}
         resolver={zodResolver(classCreateSchema)}
       >
         <BoxResp isProfile>

@@ -4,14 +4,10 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useState,
 } from "react";
 import {
   iChildren,
-  iClass,
-  iClassRequest,
-  iClassSelect,
   iFrequency,
   iFrequencyRequest,
   iFrequencyStudents,
@@ -24,15 +20,13 @@ import {
   iStudentRequest,
 } from "../interfaces";
 import {
-  apiUsingNow,
   patchFrequency,
   patchFrequencyStudent,
   patchSchool,
-  postClass,
   postFrequency,
-  postImportClass,
   postImportSchool,
   postImportStudent,
+  postImportStudentAll,
   postSchool,
   postStudent,
   postUser,
@@ -50,16 +44,6 @@ interface iSchoolContextData {
     id: string,
     back?: string
   ) => Promise<void>;
-  createClass: (
-    data: iClassRequest,
-    id: string,
-    back?: string
-  ) => Promise<void>;
-  importClass: (
-    data: iSchoolImportRequest,
-    school_id: string,
-    back?: string
-  ) => Promise<void>;
   createStudent: (
     data: iStudentRequest,
     id: string,
@@ -68,6 +52,10 @@ interface iSchoolContextData {
   importStudent: (
     data: iStudentImportRequest,
     school_id: string,
+    back?: string
+  ) => Promise<void>;
+  importStudentAll: (
+    data: iStudentImportRequest,
     back?: string
   ) => Promise<void>;
   createFrequency: (data: iFrequencyRequest) => Promise<void>;
@@ -89,16 +77,10 @@ interface iSchoolContextData {
   setSchoolSelect: Dispatch<SetStateAction<iSchool | undefined>>;
   listSchoolData: iSchool[] | undefined;
   setListSchoolData: Dispatch<SetStateAction<iSchool[] | undefined>>;
-  classDataSelect: iClassSelect[] | undefined;
-  setClassDataSelect: Dispatch<SetStateAction<iClassSelect[] | undefined>>;
-  listClassData: iClass[] | undefined;
-  setListClassData: Dispatch<SetStateAction<iClass[] | undefined>>;
   frequencyData: iFrequency | undefined;
   setFrequencyData: Dispatch<SetStateAction<iFrequency | undefined>>;
   studentData: iFrequencyStudents | undefined;
   setStudentData: Dispatch<SetStateAction<iFrequencyStudents | undefined>>;
-  classSelect: iClass | undefined;
-  setClassSelect: Dispatch<SetStateAction<iClass | undefined>>;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -108,44 +90,9 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const { setLoading } = useAppThemeContext();
   const [schoolDataSelect, setSchoolDataSelect] = useState<iSchoolSelect[]>();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
-  const [classDataSelect, setClassDataSelect] = useState<iClassSelect[]>();
-  const [listClassData, setListClassData] = useState<iClass[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
-  const [classSelect, setClassSelect] = useState<iClass>();
   const [frequencyData, setFrequencyData] = useState<iFrequency>();
   const [studentData, setStudentData] = useState<iFrequencyStudents>();
-
-  useEffect(() => {
-    setLoading(true);
-    apiUsingNow
-      .get<iSchool[]>("schools?is_active=true")
-      .then((res) => {
-        if (res.data) {
-          setListSchoolData(res.data);
-          setSchoolDataSelect(
-            res.data.map((school) => {
-              return { ...school, label: school.name };
-            })
-          );
-        }
-      })
-      .finally(() => setLoading(false));
-    setLoading(true);
-    setClassDataSelect(undefined);
-    apiUsingNow
-      .get<iClass[]>(`classes?school_id=${schoolSelect?.id}&is_active=true`)
-      .then((res) => {
-        if (res.data) {
-          setListClassData(res.data);
-          setClassDataSelect(
-            res.data.map((el) => {
-              return { ...el, label: el.name };
-            })
-          );
-        }
-      })
-      .finally(() => setLoading(false));
-  }, [schoolSelect]);
 
   const handleCreateSchool = useCallback(
     async (data: iSchoolRequest, back?: string) => {
@@ -222,40 +169,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
     []
   );
 
-  const handleCreateClass = useCallback(
-    async (data: iClassRequest, id: string, back?: string) => {
-      try {
-        setLoading(true);
-        await postClass(data, id);
-        toast.success("Turma cadastrada com sucesso!");
-        setLoading(false);
-        navigate(back ? back : "/");
-      } catch {
-        setLoading(false);
-        toast.error("Não foi possível cadastrar a turma no momento!");
-      }
-    },
-    []
-  );
-
-  const handleImportClass = useCallback(
-    async (data: iSchoolImportRequest, school_id: string, back?: string) => {
-      const file = new FormData();
-      file.append("file", data.file);
-      try {
-        setLoading(true);
-        await postImportClass(file, school_id);
-        toast.success("Turmas importadas com sucesso!");
-        setLoading(false);
-        navigate(back ? back : "/");
-      } catch {
-        setLoading(false);
-        toast.error("Não foi possível importar as turmas no momento!");
-      }
-    },
-    []
-  );
-
   const handleCreateStudent = useCallback(
     async (data: iStudentRequest, id: string, back?: string) => {
       try {
@@ -280,6 +193,24 @@ export const SchoolProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         await postImportStudent(file, class_id, school_id);
+        toast.success("Estudantes importados com sucesso!");
+        setLoading(false);
+        navigate(back ? back : "/");
+      } catch {
+        setLoading(false);
+        toast.error("Não foi possível importar os estudantes no momento!");
+      }
+    },
+    []
+  );
+
+  const handleImportStudentAll = useCallback(
+    async (data: iStudentImportRequest, back?: string) => {
+      const file = new FormData();
+      file.append("file", data.file);
+      try {
+        setLoading(true);
+        await postImportStudentAll(file);
         toast.success("Estudantes importados com sucesso!");
         setLoading(false);
         navigate(back ? back : "/");
@@ -344,10 +275,9 @@ export const SchoolProvider = ({ children }: iChildren) => {
         createSchool: handleCreateSchool,
         importSchool: handleImportSchool,
         createServer: handleCreateServer,
-        createClass: handleCreateClass,
-        importClass: handleImportClass,
         createStudent: handleCreateStudent,
         importStudent: handleImportStudent,
+        importStudentAll: handleImportStudentAll,
         createFrequency: handleCreateFrequency,
         updateSchool: handleUpdateSchool,
         updateFrequency: handleUpdateFrequency,
@@ -362,12 +292,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setStudentData,
         schoolSelect,
         setSchoolSelect,
-        classDataSelect,
-        listClassData,
-        classSelect,
-        setClassSelect,
-        setListClassData,
-        setClassDataSelect,
       }}
     >
       {children}

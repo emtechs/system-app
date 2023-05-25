@@ -9,7 +9,7 @@ import {
   BasePage,
   BoxResp,
   SelectSchool,
-  ValidateSchool,
+  ValidateCPF,
 } from "../../../shared/components";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { serverCreateSchema } from "../../../shared/schemas";
@@ -44,7 +44,7 @@ export const CreateServerAdm = ({ back }: iPageProps) => {
             ]}
             required
           />
-          <ValidateSchool isCPF />
+          <ValidateCPF school_id={schoolSelect?.id} />
         </BoxResp>
       </FormContainer>
     </BasePage>

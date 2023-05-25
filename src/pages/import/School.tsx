@@ -1,19 +1,14 @@
 import { useState } from "react";
 import { useSchoolContext } from "../../shared/contexts";
 import { iPageProps } from "../../shared/interfaces";
-import {
-  BasePage,
-  BoxResp,
-  InputFile,
-  SelectSchool,
-} from "../../shared/components";
+import { BasePage, BoxResp, InputFile } from "../../shared/components";
 import { FormContainer } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schoolImportSchema } from "../../shared/schemas";
 import { Button } from "@mui/material";
 
-export const ImportClassPage = ({ back }: iPageProps) => {
-  const { importClass, schoolSelect } = useSchoolContext();
+export const ImportSchoolPage = ({ back }: iPageProps) => {
+  const { importSchool } = useSchoolContext();
   const urlToDownload = "/schools.csv";
   const [download, setDownload] = useState("");
   const [count, setCount] = useState(0);
@@ -22,12 +17,11 @@ export const ImportClassPage = ({ back }: iPageProps) => {
     <BasePage isProfile back={back}>
       <FormContainer
         onSuccess={(data) => {
-          if (schoolSelect) importClass(data, schoolSelect.id, back);
+          importSchool(data, back);
         }}
         resolver={zodResolver(schoolImportSchema)}
       >
         <BoxResp isProfile>
-          <SelectSchool />
           <Button
             onClick={() => {
               setDownload(urlToDownload);

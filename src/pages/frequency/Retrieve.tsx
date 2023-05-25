@@ -50,6 +50,19 @@ const statusFrequencyPtBr = (status: iStatusStudent) => {
   }
 };
 
+const defineBgColor = (status: iStatusStudent, theme: Theme) => {
+  switch (status) {
+    case "PRESENTED":
+      return theme.palette.success.main;
+
+    case "MISSED":
+      return theme.palette.error.main;
+
+    case "JUSTIFIED":
+      return theme.palette.warning.dark;
+  }
+};
+
 const CardFrequency = ({ frequency, theme }: iCardFrequencyProps) => {
   const { updateFrequencyStudent, studentData, setStudentData } =
     useSchoolContext();
@@ -68,10 +81,7 @@ const CardFrequency = ({ frequency, theme }: iCardFrequencyProps) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          bgcolor:
-            frequency.status === "PRESENTED"
-              ? theme.palette.success.main
-              : theme.palette.error.main,
+          bgcolor: defineBgColor(frequency.status, theme),
         }}
       >
         <CardContent

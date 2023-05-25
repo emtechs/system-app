@@ -1,8 +1,11 @@
-import { FormContainer } from "react-hook-form-mui";
 import { iClass, iPageProps } from "../../shared/interfaces";
-import { useSchoolContext } from "../../shared/contexts";
+import {
+  useAppThemeContext,
+  useClassContext,
+  useSchoolContext,
+} from "../../shared/contexts";
 import { useEffect, useState } from "react";
-import { BasePage, SelectSchool } from "../../shared/components";
+import { BasePage } from "../../shared/components";
 import {
   Avatar,
   Box,
@@ -18,7 +21,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { apiUsingNow } from "../../shared/services";
 
 interface iCardClassProps {
   el: iClass;
@@ -61,12 +64,6 @@ const CardClass = ({ el, theme }: iCardClassProps) => {
               >
                 {el.name}
               </Typography>
-              <Typography
-                fontSize={12}
-                color={theme.palette.secondary.contrastText}
-              >
-                Alunos: {el._count.students}
-              </Typography>
             </Box>
           </Box>
         </CardContent>
@@ -103,44 +100,32 @@ const CardClass = ({ el, theme }: iCardClassProps) => {
 
 export const ListClass = ({ back }: iPageProps) => {
   const theme = useTheme();
-  const navigate = useNavigate();
-  const { schoolSelect, setSchoolSelect, listClassData } = useSchoolContext();
+  const { setLoading } = useAppThemeContext();
+  const { setListClassData, listClassData } = useClassContext();
 
   useEffect(() => {
-    setSchoolSelect(undefined);
+    setLoading(true);
+    apiUsingNow
+      .get<iClass[]>("classes?&is_active=true")
+      .then((res) => {
+        if (res.data) {
+          setListClassData(res.data);
+        }
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   return (
-    <>
-      <BasePage isProfile back={back}>
-        {listClassData && listClassData.length > 0 ? (
-          <Box display="flex" flexDirection="column" gap={theme.spacing(2)}>
-            {listClassData.map((el) => (
-              <CardClass key={el.id} el={el} theme={theme} />
-            ))}
-          </Box>
-        ) : (
-          <Typography>Nenhuma turma ativa ou cadastrada!</Typography>
-        )}
-      </BasePage>
-      <Dialog open={!schoolSelect} onClose={() => navigate(back ? back : "/")}>
-        <DialogTitle>Listar Turmas</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Selecione uma escola para listar as turmas desejadas.
-          </DialogContentText>
-          <FormContainer>
-            <Box mt={1} display="flex" flexDirection="column" gap={1}>
-              <SelectSchool />
-            </Box>
-          </FormContainer>
-          <DialogActions>
-            <Button onClick={() => navigate(back ? back : "/")}>
-              Cancelar
-            </Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
-    </>
+    <BasePage isProfile back={back}>
+      {listClassData && listClassData.length > 0 ? (
+        <Box display="flex" flexDirection="column" gap={theme.spacing(2)}>
+          {listClassData.map((el) => (
+            <CardClass key={el.id} el={el} theme={theme} />
+          ))}
+        </Box>
+      ) : (
+        <Typography>Nenhuma turma ativa ou cadastrada!</Typography>
+      )}
+    </BasePage>
   );
 };

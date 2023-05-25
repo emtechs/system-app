@@ -1,5 +1,6 @@
 import { iChildren } from "../interfaces";
 import { AuthProvider } from "./AuthContext";
+import { ClassProvider } from "./ClassContext";
 import { ModalProvider } from "./ModalContext";
 import { SchoolProvider } from "./SchoolContext";
 import { AppThemeProvider } from "./ThemeContext";
@@ -10,7 +11,9 @@ const Providers = ({ children }: iChildren) => (
     <ModalProvider>
       <AuthProvider>
         <UserProvider>
-          <SchoolProvider>{children}</SchoolProvider>
+          <SchoolProvider>
+            <ClassProvider>{children}</ClassProvider>
+          </SchoolProvider>
         </UserProvider>
       </AuthProvider>
     </ModalProvider>
@@ -19,6 +22,7 @@ const Providers = ({ children }: iChildren) => (
 
 export default Providers;
 export { useAuthContext } from "./AuthContext";
+export { useClassContext } from "./ClassContext";
 export { useModalContext } from "./ModalContext";
 export { useSchoolContext } from "./SchoolContext";
 export { useAppThemeContext } from "./ThemeContext";

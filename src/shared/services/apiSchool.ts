@@ -8,25 +8,7 @@ export async function postSchool(data: FieldValues): Promise<iSchool> {
 }
 
 export async function postImportSchool(data: FormData): Promise<void> {
-  await apiUsingNow.post("schools/import", data);
-}
-
-export async function postClass(
-  data: FieldValues,
-  id: string
-): Promise<iClass> {
-  const { data: response } = await apiUsingNow.post<iClass>(
-    `classes/${id}`,
-    data
-  );
-  return response;
-}
-
-export async function postImportClass(
-  data: FormData,
-  school_id: string
-): Promise<void> {
-  await apiUsingNow.post(`classes/import/${school_id}`, data);
+  await apiUsingNow.post("imports/school", data);
 }
 
 export async function postStudent(
@@ -45,7 +27,11 @@ export async function postImportStudent(
   class_id: string,
   school_id: string
 ): Promise<void> {
-  await apiUsingNow.post(`students/import/${class_id}/${school_id}`, data);
+  await apiUsingNow.post(`imports/student/${class_id}/${school_id}`, data);
+}
+
+export async function postImportStudentAll(data: FormData): Promise<void> {
+  await apiUsingNow.post("imports/student", data);
 }
 
 export async function postFrequency(data: FieldValues): Promise<iFrequency> {

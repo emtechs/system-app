@@ -1,13 +1,8 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { iPageProps } from "../../shared/interfaces";
-import { useSchoolContext } from "../../shared/contexts";
+import { useClassContext, useSchoolContext } from "../../shared/contexts";
 import { useEffect } from "react";
-import {
-  BasePage,
-  BoxResp,
-  SelectClass,
-  SelectSchool,
-} from "../../shared/components";
+import { BasePage, BoxResp, SelectClass } from "../../shared/components";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schoolUpdateSchema } from "../../shared/schemas";
 import {
@@ -24,8 +19,8 @@ import { useNavigate } from "react-router-dom";
 
 export const EditClass = ({ back }: iPageProps) => {
   const navigate = useNavigate();
-  const { updateSchool, schoolSelect, classSelect, setClassSelect } =
-    useSchoolContext();
+  const { updateSchool, schoolSelect } = useSchoolContext();
+  const { classSelect, setClassSelect } = useClassContext();
 
   useEffect(() => {
     setClassSelect(undefined);
@@ -65,11 +60,10 @@ export const EditClass = ({ back }: iPageProps) => {
         <DialogTitle>Editar Turma</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Selecione a escola e, em seguida, a turma que você deseja editar.
+            Selecione a turma que você deseja editar.
           </DialogContentText>
           <FormContainer>
             <Box mt={1} display="flex" flexDirection="column" gap={1}>
-              <SelectSchool />
               <SelectClass />
             </Box>
           </FormContainer>

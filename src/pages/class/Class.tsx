@@ -7,6 +7,7 @@ import {
   FileUpload,
   GroupAdd,
   Groups,
+  School,
 } from "@mui/icons-material";
 
 export const ClassPage = () => {
@@ -39,10 +40,27 @@ export const ClassPage = () => {
           alignItems: "center",
         }}
       >
-        <Link to="/class/import">
+        <Link to="/import/class">
           <CardContent sx={{ display: "flex", gap: 2 }}>
             <FileUpload />
             <Typography>Importar Turmas</Typography>
+          </CardContent>
+        </Link>
+      </Card>
+      <Card
+        sx={{
+          width: "100%",
+          maxWidth: 250,
+          height: 80,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Link to="/class/define/school">
+          <CardContent sx={{ display: "flex", gap: 2 }}>
+            <School />
+            <Typography>Definir Escolas</Typography>
           </CardContent>
         </Link>
       </Card>

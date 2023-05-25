@@ -6,7 +6,6 @@ import {
   ClassPage,
   CreateAdm,
   CreateClass,
-  CreateClassAdm,
   CreateFrequency,
   CreateFrequencyAdm,
   CreateSchool,
@@ -16,13 +15,16 @@ import {
   CreateStudentAdm,
   Dashboard,
   DefineDiret,
+  DefineSchools,
   DefineSecret,
   EditClass,
   EditSchool,
   First,
   Frequency,
+  Import,
   ImportClassPage,
   ImportSchoolPage,
+  ImportStudentAllPage,
   ImportStudentPage,
   ListClass,
   ListFrequency,
@@ -82,10 +84,6 @@ const AppRoutes = () => {
               element={<DefineDiret back="/school" />}
             />
             <Route
-              path="/school/import"
-              element={<ImportSchoolPage back="/school" />}
-            />
-            <Route
               path="/school/edit"
               element={<EditSchool back="/school" />}
             />
@@ -100,11 +98,11 @@ const AppRoutes = () => {
             <Route path="/class" element={<ClassPage />} />
             <Route
               path="/class/create"
-              element={<CreateClassAdm back="/class" />}
+              element={<CreateClass back="/class" />}
             />
             <Route
-              path="/class/import"
-              element={<ImportClassPage back="/class" />}
+              path="/class/define/school"
+              element={<DefineSchools back="/class" />}
             />
             <Route path="/class/edit" element={<EditClass back="/class" />} />
             <Route path="/class/list" element={<ListClass back="/class" />} />
@@ -116,10 +114,6 @@ const AppRoutes = () => {
             <Route
               path="/student/create"
               element={<CreateStudentAdm back="/student" />}
-            />
-            <Route
-              path="/student/import"
-              element={<ImportStudentPage back="/student" />}
             />
             <Route path="/frequency" element={<Frequency />} />
             <Route
@@ -142,6 +136,23 @@ const AppRoutes = () => {
             <Route
               path="/report/class/retrieve"
               element={<ReportRetrieve back="/report" />}
+            />
+            <Route path="/import" element={<Import />} />
+            <Route
+              path="/import/school"
+              element={<ImportSchoolPage back="/school" />}
+            />
+            <Route
+              path="/import/class"
+              element={<ImportClassPage back="/class" />}
+            />
+            <Route
+              path="/import/student"
+              element={<ImportStudentPage back="/student" />}
+            />
+            <Route
+              path="/import/student/all"
+              element={<ImportStudentAllPage back="/import" />}
             />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

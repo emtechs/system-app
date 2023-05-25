@@ -92,10 +92,13 @@ export const frequencyCreateSchema = z
       },
       { required_error: "Turma obrigatória" }
     ),
+    school: z.object({ id: z.string().uuid() }),
     class_id: z.string().uuid().optional(),
+    school_id: z.string().uuid().optional(),
     students: z.object({ student_id: z.string().uuid() }).array().optional(),
   })
   .refine((field) => (field.class_id = field.class.id))
+  .refine((field) => (field.school_id = field.school.id))
   .refine(
     (field) =>
       (field.students = field.class.students.map(({ id }) => {

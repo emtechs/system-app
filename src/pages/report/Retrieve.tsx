@@ -4,9 +4,9 @@ import {
   GridToolbarContainer,
   GridToolbarExport,
 } from "@mui/x-data-grid";
-import { BasePage, SelectClass, SelectSchool } from "../../shared/components";
+import { BasePage, SelectSchoolClass } from "../../shared/components";
 import { iPageProps, iStudent } from "../../shared/interfaces";
-import { useSchoolContext } from "../../shared/contexts";
+import { useClassContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import {
   Box,
@@ -68,17 +68,17 @@ const CustomToolbar = () => {
 export const ReportRetrieve = ({ back }: iPageProps) => {
   const navigate = useNavigate();
   const [data, setData] = useState<iStudent[]>();
-  const { classSelect, setClassSelect } = useSchoolContext();
+  const { classWithSchoolSelect, setClassWithSchoolSelect } = useClassContext();
 
   useEffect(() => {
-    setClassSelect(undefined);
+    setClassWithSchoolSelect(undefined);
   }, []);
 
   useEffect(() => {
-    if (classSelect) {
-      setData(classSelect.students);
+    if (classWithSchoolSelect) {
+      setData(classWithSchoolSelect.students);
     }
-  }, [classSelect]);
+  }, [classWithSchoolSelect]);
   return (
     <>
       <BasePage isProfile back={back}>
@@ -93,7 +93,10 @@ export const ReportRetrieve = ({ back }: iPageProps) => {
           slots={{ toolbar: CustomToolbar }}
         />
       </BasePage>
-      <Dialog open={!classSelect} onClose={() => navigate(back ? back : "/")}>
+      <Dialog
+        open={!classWithSchoolSelect}
+        onClose={() => navigate(back ? back : "/")}
+      >
         <DialogTitle>Editar Turma</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -101,8 +104,7 @@ export const ReportRetrieve = ({ back }: iPageProps) => {
           </DialogContentText>
           <FormContainer>
             <Box mt={1} display="flex" flexDirection="column" gap={1}>
-              <SelectSchool />
-              <SelectClass />
+              <SelectSchoolClass />
             </Box>
           </FormContainer>
           <DialogActions>

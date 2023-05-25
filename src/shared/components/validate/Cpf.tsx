@@ -30,7 +30,7 @@ export const ValidateCPF = ({ school_id, allNotServ }: iValidateCPFProps) => {
         apiUsingNow
           .get<iUser>(`users/cpf/${limitNumber}` + query())
           .then((res) => {
-            if (res.data.id) {
+            if (res.data.dash) {
               setError("cpf", {
                 message: "Usuário já está cadastrado",
               });

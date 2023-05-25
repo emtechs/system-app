@@ -2,8 +2,7 @@ import { FormContainer, useFormContext } from "react-hook-form-mui";
 import {
   BasePage,
   BoxResp,
-  SelectClass,
-  SelectSchool,
+  SelectSchoolClass,
 } from "../../../shared/components";
 import { useSchoolContext } from "../../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -79,8 +78,7 @@ export const CreateFrequencyAdm = ({ back }: iPageProps) => {
           resolver={zodResolver(frequencyCreateSchema)}
         >
           <BoxResp isProfile>
-            <SelectSchool />
-            <SelectClass />
+            <SelectSchoolClass />
             <DateValue setOpen={setOpen} />
             <Button variant="contained" type="submit" fullWidth>
               Salvar

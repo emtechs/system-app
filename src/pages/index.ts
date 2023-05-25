@@ -1,6 +1,7 @@
 export * from "./class";
 export * from "./dashboard";
 export * from "./first";
+export * from "./import";
 export * from "./frequency";
 export * from "./login";
 export * from "./report";

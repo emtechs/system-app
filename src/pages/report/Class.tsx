@@ -5,8 +5,8 @@ import {
   GridToolbarExport,
 } from "@mui/x-data-grid";
 import { BasePage, SelectSchool } from "../../shared/components";
-import { iClass, iPageProps } from "../../shared/interfaces";
-import { useSchoolContext } from "../../shared/contexts";
+import { iClassWithSchool, iPageProps } from "../../shared/interfaces";
+import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import {
   Box,
@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import { FormContainer } from "react-hook-form-mui";
 import { useNavigate } from "react-router-dom";
+import { apiUsingNow } from "../../shared/services";
 
 const columns: GridColDef[] = [
   {
@@ -53,7 +54,8 @@ const CustomToolbar = () => {
   );
 };
 
-interface iData extends iClass {
+interface iData extends iClassWithSchool {
+  name: string;
   count_frequencies: number;
   count_students: number;
 }
@@ -61,23 +63,45 @@ interface iData extends iClass {
 export const ReportClass = ({ back }: iPageProps) => {
   const navigate = useNavigate();
   const [data, setData] = useState<iData[]>();
-  const { schoolSelect, setSchoolSelect, listClassData } = useSchoolContext();
+  const [dataSelect, setDataSelect] = useState<iClassWithSchool[]>();
+  const { setLoading } = useAppThemeContext();
+  const { schoolSelect, setSchoolSelect } = useSchoolContext();
+
   useEffect(() => {
     setSchoolSelect(undefined);
   }, []);
+
   useEffect(() => {
-    if (listClassData) {
+    setLoading(true);
+    apiUsingNow
+      .get<iClassWithSchool[]>(`classes/${schoolSelect?.id}?is_active=true`)
+      .then((res) => {
+        if (res.data) {
+          setDataSelect(
+            res.data.map((el) => {
+              return { ...el, id: el.class.id, label: el.class.name };
+            })
+          );
+        }
+      })
+      .finally(() => setLoading(false));
+  }, [schoolSelect]);
+
+  useEffect(() => {
+    if (dataSelect) {
       setData(
-        listClassData.map((el) => {
+        dataSelect.map((el) => {
           return {
             ...el,
+            name: el.class.name,
             count_frequencies: el._count.frequencies,
             count_students: el._count.students,
           };
         })
       );
     }
-  }, [listClassData]);
+  }, [dataSelect]);
+
   return (
     <>
       <BasePage isProfile back={back}>

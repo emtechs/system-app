@@ -41,7 +41,7 @@ export const School = () => {
           alignItems: "center",
         }}
       >
-        <Link to="/school/import">
+        <Link to="/import/school">
           <CardContent sx={{ display: "flex", gap: 2 }}>
             <FileUpload />
             <Typography>Importar Escolas</Typography>

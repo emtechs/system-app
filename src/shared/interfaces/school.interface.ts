@@ -49,10 +49,12 @@ export interface iStudent {
 export interface iClass {
   id: string;
   name: string;
+}
+
+export interface iClassWithSchool {
+  class: iClass;
   students: iStudent[];
-  school: iSchool;
   _count: { frequencies: number; students: number };
-  infrequency: number;
 }
 
 export interface iClassSelect extends iClass {

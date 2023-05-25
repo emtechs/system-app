@@ -3,6 +3,7 @@ import { BasePage } from "../../shared/components";
 import { Link } from "react-router-dom";
 import {
   Checklist,
+  FileUpload,
   Groups,
   People,
   School,
@@ -112,6 +113,23 @@ export const DashboardAdmin = () => {
           <CardContent sx={{ display: "flex", gap: 2 }}>
             <Summarize />
             <Typography>Relatórios</Typography>
+          </CardContent>
+        </Link>
+      </Card>
+      <Card
+        sx={{
+          width: "100%",
+          height: 80,
+          maxWidth: 250,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Link to="/import">
+          <CardContent sx={{ display: "flex", gap: 2 }}>
+            <FileUpload />
+            <Typography>Importar</Typography>
           </CardContent>
         </Link>
       </Card>
