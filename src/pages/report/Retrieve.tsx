@@ -5,7 +5,7 @@ import {
   GridToolbarExport,
 } from "@mui/x-data-grid";
 import { BasePage, SelectSchoolClass } from "../../shared/components";
-import { iPageProps, iStudent } from "../../shared/interfaces";
+import { iPageProps, iStudentWithSchool } from "../../shared/interfaces";
 import { useClassContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import {
@@ -67,7 +67,7 @@ const CustomToolbar = () => {
 
 export const ReportRetrieve = ({ back }: iPageProps) => {
   const navigate = useNavigate();
-  const [data, setData] = useState<iStudent[]>();
+  const [data, setData] = useState<iStudentWithSchool[]>();
   const { classWithSchoolSelect, setClassWithSchoolSelect } = useClassContext();
 
   useEffect(() => {

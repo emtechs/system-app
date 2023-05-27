@@ -46,15 +46,39 @@ export interface iStudent {
   infrequency: number;
 }
 
+export interface iStudentWithSchool {
+  id: string;
+  name: string;
+  registry: string;
+  presented: number;
+  justified: number;
+  missed: number;
+  total_frequencies: number;
+  infrequency: number;
+}
+
 export interface iClass {
   id: string;
   name: string;
 }
 
+export interface iWithSchool {
+  id: string;
+  name: string;
+}
+
+export interface iSchoolYear {
+  id: string;
+  year: string;
+}
+
 export interface iClassWithSchool {
   class: iClass;
-  students: iStudent[];
+  school: iWithSchool;
+  school_year: iSchoolYear;
+  students: iStudentWithSchool[];
   _count: { frequencies: number; students: number };
+  infrequency: number;
 }
 
 export interface iClassSelect extends iClass {
@@ -65,12 +89,28 @@ export type iStatusFrequency = "OPENED" | "CLOSED";
 
 export type iStatusStudent = "PRESENTED" | "MISSED" | "JUSTIFIED";
 
+interface iUserFreq {
+  id: string;
+  name: string;
+  cpf: string;
+}
+
+interface iClassFreq {
+  class: iClass;
+  school: iWithSchool;
+  school_year: iSchoolYear;
+}
+
 export interface iFrequency {
   id: string;
   date: string;
   status: iStatusFrequency;
-  class: iClass;
+  finished_at: number;
+  class: iClassFreq;
+  user: iUserFreq;
   students: iFrequencyStudents[];
+  infrequency: number;
+  _count: { students: number };
 }
 
 export interface iFrequencyStudents {
@@ -78,7 +118,10 @@ export interface iFrequencyStudents {
   status: iStatusStudent;
   justification?: string;
   updated_at?: string;
-  student: iStudent;
+  name: string;
+  registry: string;
+  infrequency: number;
+  frequencyStudent_id: string;
 }
 
 export type iServerRequest = z.infer<typeof serverCreateSchema>;

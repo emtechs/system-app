@@ -65,7 +65,7 @@ export const ReportClass = ({ back }: iPageProps) => {
   const [data, setData] = useState<iData[]>();
   const [dataSelect, setDataSelect] = useState<iClassWithSchool[]>();
   const { setLoading } = useAppThemeContext();
-  const { schoolSelect, setSchoolSelect } = useSchoolContext();
+  const { schoolSelect, setSchoolSelect, schoolYear } = useSchoolContext();
 
   useEffect(() => {
     setSchoolSelect(undefined);
@@ -74,7 +74,9 @@ export const ReportClass = ({ back }: iPageProps) => {
   useEffect(() => {
     setLoading(true);
     apiUsingNow
-      .get<iClassWithSchool[]>(`classes/${schoolSelect?.id}?is_active=true`)
+      .get<iClassWithSchool[]>(
+        `classes/${schoolSelect?.id}?is_active=true&school_year_id=${schoolYear}`
+      )
       .then((res) => {
         if (res.data) {
           setDataSelect(

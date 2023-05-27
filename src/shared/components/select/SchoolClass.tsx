@@ -33,7 +33,7 @@ interface iSelect extends iClassWithSchool {
 
 export const SelectSchoolClass = () => {
   const { setLoading } = useAppThemeContext();
-  const { schoolSelect, schoolDataSelect, setSchoolDataSelect } =
+  const { schoolSelect, schoolDataSelect, setSchoolDataSelect, schoolYear } =
     useSchoolContext();
   const [data, setData] = useState<iSelect[]>();
 
@@ -56,7 +56,9 @@ export const SelectSchoolClass = () => {
   useEffect(() => {
     setLoading(true);
     apiUsingNow
-      .get<iClassWithSchool[]>(`classes/${schoolSelect?.id}?is_active=true`)
+      .get<iClassWithSchool[]>(
+        `classes/${schoolSelect?.id}?is_active=true&school_year_id=${schoolYear}`
+      )
       .then((res) => {
         if (res.data) {
           setData(

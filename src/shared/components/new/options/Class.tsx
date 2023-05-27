@@ -1,11 +1,12 @@
 import {
+  AddBox,
+  DoneAll,
+  Edit,
   ExpandLess,
   ExpandMore,
-  HowToReg,
-  PeopleAlt,
-  Person,
-  PersonAdd,
+  SchoolTwoTone,
   Workspaces,
+  Groups,
 } from "@mui/icons-material";
 import {
   Collapse,
@@ -32,27 +33,33 @@ export const Class = () => {
       </ListItemButton>
       <Collapse in={open}>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
+          <ListItemButton sx={{ pl: theme.spacing(4) }}>
             <ListItemIcon>
-              <PersonAdd />
+              <AddBox />
             </ListItemIcon>
-            <ListItemText primary="Administrador" />
+            <ListItemText primary="Nova" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
+          <ListItemButton sx={{ pl: theme.spacing(4) }}>
             <ListItemIcon>
-              <Person />
+              <SchoolTwoTone />
             </ListItemIcon>
-            <ListItemText primary="Secretário" />
+            <ListItemText primary="Escolas" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
+          <ListItemButton sx={{ pl: theme.spacing(4) }}>
             <ListItemIcon>
-              <PeopleAlt />
+              <Edit />
+            </ListItemIcon>
+            <ListItemText primary="Editar" />
+          </ListItemButton>
+          <ListItemButton sx={{ pl: theme.spacing(4) }}>
+            <ListItemIcon>
+              <Groups />
             </ListItemIcon>
             <ListItemText primary="Listar" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
+          <ListItemButton sx={{ pl: theme.spacing(4) }}>
             <ListItemIcon>
-              <HowToReg />
+              <DoneAll />
             </ListItemIcon>
             <ListItemText primary="Ativar" />
           </ListItemButton>

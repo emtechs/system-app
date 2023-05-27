@@ -33,7 +33,7 @@ dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
 
 interface iCardFrequencyProps {
-  frequency: iFrequencyStudents;
+  student: iFrequencyStudents;
   theme: Theme;
 }
 
@@ -63,12 +63,12 @@ const defineBgColor = (status: iStatusStudent, theme: Theme) => {
   }
 };
 
-const CardFrequency = ({ frequency, theme }: iCardFrequencyProps) => {
+const CardFrequency = ({ student, theme }: iCardFrequencyProps) => {
   const { updateFrequencyStudent, studentData, setStudentData } =
     useSchoolContext();
   const [open, setOpen] = useState(false);
   const handleClose = () => {
-    setStudentData(frequency);
+    setStudentData(student);
     setOpen(!open);
   };
   return (
@@ -81,7 +81,7 @@ const CardFrequency = ({ frequency, theme }: iCardFrequencyProps) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          bgcolor: defineBgColor(frequency.status, theme),
+          bgcolor: defineBgColor(student.status, theme),
         }}
       >
         <CardContent
@@ -95,29 +95,29 @@ const CardFrequency = ({ frequency, theme }: iCardFrequencyProps) => {
           }}
         >
           <Box display="flex" alignItems="center" gap={2}>
-            <Avatar>{frequency.student.name[0].toUpperCase()}</Avatar>
+            <Avatar>{student.name[0].toUpperCase()}</Avatar>
             <Box>
               <Typography
                 fontSize={10}
                 color={theme.palette.secondary.contrastText}
               >
-                {frequency.student.registry}
+                {student.registry}
               </Typography>
               <Typography color={theme.palette.secondary.contrastText}>
-                {frequency.student.name}
+                {student.name}
               </Typography>
             </Box>
             <Typography fontSize={8} color={theme.palette.grey[300]}>
-              {statusFrequencyPtBr(frequency.status)}
+              {statusFrequencyPtBr(student.status)}
             </Typography>
           </Box>
-          {frequency.updated_at && (
+          {student.updated_at && (
             <Typography
               sx={{ position: "absolute", bottom: 4, right: 4 }}
               fontSize={7}
               color={theme.palette.grey[400]}
             >
-              {dayjs(frequency.updated_at).fromNow()}
+              {dayjs(student.updated_at).fromNow()}
             </Typography>
           )}
         </CardContent>
@@ -129,23 +129,24 @@ const CardFrequency = ({ frequency, theme }: iCardFrequencyProps) => {
               <DialogTitle>Informar Falta</DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  Você está cadastrando a falta para o aluno{" "}
-                  {studentData.student.name}. No campo abaixo, preencha a
-                  justificativa da falta caso o aluno tenha justificado. Caso
-                  contrário, clique no botão "Faltou".
+                  Você está cadastrando a falta para o aluno {studentData.name}.
+                  No campo abaixo, preencha a justificativa da falta caso o
+                  aluno tenha justificado. Caso contrário, clique no botão
+                  "Faltou".
                 </DialogContentText>
                 <FormContainer
                   onSuccess={(data) => {
-                    updateFrequencyStudent(data, studentData.id);
+                    updateFrequencyStudent(
+                      data,
+                      studentData.frequencyStudent_id
+                    );
                     setOpen(!open);
                   }}
                   resolver={zodResolver(frequencyUpdateSchema)}
                 >
                   <Box mt={1} display="flex" flexDirection="column" gap={1}>
-                    <Typography>
-                      Matrícula: {studentData.student.registry}
-                    </Typography>
-                    <Typography>Aluno: {studentData.student.name}</Typography>
+                    <Typography>Matrícula: {studentData.registry}</Typography>
+                    <Typography>Aluno: {studentData.name}</Typography>
                     <TextFieldElement
                       name="justification"
                       label="Justificativa"
@@ -164,7 +165,7 @@ const CardFrequency = ({ frequency, theme }: iCardFrequencyProps) => {
                     onClick={() => {
                       updateFrequencyStudent(
                         { status: "MISSED", updated_at: dayjs().format() },
-                        studentData.id
+                        studentData.frequencyStudent_id
                       );
                       setOpen(!open);
                     }}
@@ -179,14 +180,12 @@ const CardFrequency = ({ frequency, theme }: iCardFrequencyProps) => {
               <DialogTitle>Retirar Falta</DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  Deseja continuar removendo a falta do aluno{" "}
-                  {studentData.student.name}?
+                  Deseja continuar removendo a falta do aluno {studentData.name}
+                  ?
                 </DialogContentText>
                 <Box mt={1} display="flex" flexDirection="column" gap={1}>
-                  <Typography>
-                    Matrícula: {studentData.student.registry}
-                  </Typography>
-                  <Typography>Aluno: {studentData.student.name}</Typography>
+                  <Typography>Matrícula: {studentData.registry}</Typography>
+                  <Typography>Aluno: {studentData.name}</Typography>
                   {studentData.justification && (
                     <Typography>
                       Justificativa: {studentData.justification}
@@ -203,7 +202,7 @@ const CardFrequency = ({ frequency, theme }: iCardFrequencyProps) => {
                           justification: "",
                           updated_at: dayjs().format(),
                         },
-                        studentData.id
+                        studentData.frequencyStudent_id
                       );
                       setOpen(!open);
                     }}
@@ -259,15 +258,11 @@ export const RetrieveFrequency = ({ back }: iPageProps) => {
               }}
             >
               <Typography>{frequencyData.date}</Typography>
-              <Typography>{frequencyData.class.name}</Typography>
+              <Typography>{frequencyData.class.class.name}</Typography>
             </CardContent>
           </Card>
-          {frequencyData.students.map((frequency) => (
-            <CardFrequency
-              key={frequency.id}
-              frequency={frequency}
-              theme={theme}
-            />
+          {frequencyData.students.map((student) => (
+            <CardFrequency key={student.id} student={student} theme={theme} />
           ))}
           <Button
             variant="contained"

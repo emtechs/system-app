@@ -46,7 +46,7 @@ export const ListFrequencyAdm = ({ back }: iPageProps) => {
                 <CardContent sx={{ display: "flex", gap: 2 }}>
                   <People />
                   <Typography>{frequency.date}</Typography>
-                  <Typography>{frequency.class.name}</Typography>
+                  <Typography>{frequency.class.class.name}</Typography>
                 </CardContent>
               </button>
             </Link>

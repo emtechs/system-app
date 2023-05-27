@@ -32,25 +32,25 @@ export const User = () => {
       </ListItemButton>
       <Collapse in={open}>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
+          <ListItemButton sx={{ pl: theme.spacing(4) }}>
             <ListItemIcon>
               <PersonAdd />
             </ListItemIcon>
             <ListItemText primary="Administrador" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
+          <ListItemButton sx={{ pl: theme.spacing(4) }}>
             <ListItemIcon>
               <Person />
             </ListItemIcon>
             <ListItemText primary="Secretário" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
+          <ListItemButton sx={{ pl: theme.spacing(4) }}>
             <ListItemIcon>
               <PeopleAlt />
             </ListItemIcon>
             <ListItemText primary="Listar" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
+          <ListItemButton sx={{ pl: theme.spacing(4) }}>
             <ListItemIcon>
               <HowToReg />
             </ListItemIcon>

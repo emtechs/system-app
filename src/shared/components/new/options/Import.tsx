@@ -1,13 +1,10 @@
 import {
-  AddBox,
-  DoneAll,
-  Edit,
   ExpandLess,
   ExpandMore,
-  Person,
-  PersonAdd,
-  School as SchoolIcon,
-  SchoolTwoTone,
+  FileUpload,
+  Groups,
+  School,
+  Workspaces,
 } from "@mui/icons-material";
 import {
   Collapse,
@@ -19,7 +16,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-export const School = () => {
+export const Import = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const handleClick = () => setOpen(!open);
@@ -27,48 +24,30 @@ export const School = () => {
     <>
       <ListItemButton onClick={handleClick}>
         <ListItemIcon>
-          <SchoolIcon />
+          <FileUpload />
         </ListItemIcon>
-        <ListItemText primary="Escolas" />
+        <ListItemText primary="Importar" />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open}>
         <List component="div" disablePadding>
           <ListItemButton sx={{ pl: theme.spacing(4) }}>
             <ListItemIcon>
-              <AddBox />
+              <School />
             </ListItemIcon>
-            <ListItemText primary="Nova" />
+            <ListItemText primary="Escolas" />
           </ListItemButton>
           <ListItemButton sx={{ pl: theme.spacing(4) }}>
             <ListItemIcon>
-              <Person />
+              <Workspaces />
             </ListItemIcon>
-            <ListItemText primary="Diretor" />
+            <ListItemText primary="Turmas" />
           </ListItemButton>
           <ListItemButton sx={{ pl: theme.spacing(4) }}>
             <ListItemIcon>
-              <PersonAdd />
+              <Groups />
             </ListItemIcon>
-            <ListItemText primary="Servidor" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: theme.spacing(4) }}>
-            <ListItemIcon>
-              <Edit />
-            </ListItemIcon>
-            <ListItemText primary="Editar" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: theme.spacing(4) }}>
-            <ListItemIcon>
-              <SchoolTwoTone />
-            </ListItemIcon>
-            <ListItemText primary="Listar" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: theme.spacing(4) }}>
-            <ListItemIcon>
-              <DoneAll />
-            </ListItemIcon>
-            <ListItemText primary="Ativar" />
+            <ListItemText primary="Alunos" />
           </ListItemButton>
         </List>
       </Collapse>

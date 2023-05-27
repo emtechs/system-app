@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import {
@@ -20,6 +21,7 @@ import {
   iStudentRequest,
 } from "../interfaces";
 import {
+  apiUsingNow,
   patchFrequency,
   patchFrequencyStudent,
   patchSchool,
@@ -35,6 +37,8 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from ".";
 import { FieldValues } from "react-hook-form";
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
 
 interface iSchoolContextData {
   createSchool: (data: iSchoolRequest, back?: string) => Promise<void>;
@@ -81,6 +85,7 @@ interface iSchoolContextData {
   setFrequencyData: Dispatch<SetStateAction<iFrequency | undefined>>;
   studentData: iFrequencyStudents | undefined;
   setStudentData: Dispatch<SetStateAction<iFrequencyStudents | undefined>>;
+  schoolYear: string | undefined;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -93,6 +98,18 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
   const [frequencyData, setFrequencyData] = useState<iFrequency>();
   const [studentData, setStudentData] = useState<iFrequencyStudents>();
+  const [schoolYear, setSchoolYear] = useState<string>();
+
+  useEffect(() => {
+    const year = dayjs().year();
+    setLoading(true);
+    apiUsingNow
+      .get<{ id: string }>(`/schools/year/${year}`)
+      .then((res) => {
+        setSchoolYear(res.data.id);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   const handleCreateSchool = useCallback(
     async (data: iSchoolRequest, back?: string) => {
@@ -292,6 +309,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setStudentData,
         schoolSelect,
         setSchoolSelect,
+        schoolYear,
       }}
     >
       {children}

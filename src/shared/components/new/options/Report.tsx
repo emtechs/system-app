@@ -1,11 +1,9 @@
 import {
   ExpandLess,
   ExpandMore,
-  HowToReg,
-  PeopleAlt,
-  Person,
-  PersonAdd,
+  Groups,
   Summarize,
+  Workspaces,
 } from "@mui/icons-material";
 import {
   Collapse,
@@ -32,29 +30,17 @@ export const Report = () => {
       </ListItemButton>
       <Collapse in={open}>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
+          <ListItemButton sx={{ pl: theme.spacing(4) }}>
             <ListItemIcon>
-              <PersonAdd />
+              <Workspaces />
             </ListItemIcon>
-            <ListItemText primary="Administrador" />
+            <ListItemText primary="Todos" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
+          <ListItemButton sx={{ pl: theme.spacing(4) }}>
             <ListItemIcon>
-              <Person />
+              <Groups />
             </ListItemIcon>
-            <ListItemText primary="Secretário" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
-            <ListItemIcon>
-              <PeopleAlt />
-            </ListItemIcon>
-            <ListItemText primary="Listar" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
-            <ListItemIcon>
-              <HowToReg />
-            </ListItemIcon>
-            <ListItemText primary="Ativar" />
+            <ListItemText primary="Turma" />
           </ListItemButton>
         </List>
       </Collapse>

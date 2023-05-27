@@ -1,12 +1,4 @@
-import {
-  Checklist,
-  ExpandLess,
-  ExpandMore,
-  HowToReg,
-  PeopleAlt,
-  Person,
-  PersonAdd,
-} from "@mui/icons-material";
+import { AddBox, Checklist, ExpandLess, ExpandMore } from "@mui/icons-material";
 import {
   Collapse,
   List,
@@ -32,29 +24,17 @@ export const Frequency = () => {
       </ListItemButton>
       <Collapse in={open}>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
+          <ListItemButton sx={{ pl: theme.spacing(4) }}>
             <ListItemIcon>
-              <PersonAdd />
+              <AddBox />
             </ListItemIcon>
-            <ListItemText primary="Administrador" />
+            <ListItemText primary="Nova" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
+          <ListItemButton sx={{ pl: theme.spacing(4) }}>
             <ListItemIcon>
-              <Person />
+              <Checklist />
             </ListItemIcon>
-            <ListItemText primary="Secretário" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
-            <ListItemIcon>
-              <PeopleAlt />
-            </ListItemIcon>
-            <ListItemText primary="Listar" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: theme.spacing(3) }}>
-            <ListItemIcon>
-              <HowToReg />
-            </ListItemIcon>
-            <ListItemText primary="Ativar" />
+            <ListItemText primary="Realizar" />
           </ListItemButton>
         </List>
       </Collapse>
