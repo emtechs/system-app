@@ -14,7 +14,11 @@ import {
   useTheme,
 } from "@mui/material";
 import { BasePage } from "../../shared/components";
-import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
+import {
+  useAppThemeContext,
+  useClassContext,
+  useSchoolContext,
+} from "../../shared/contexts";
 import {
   iFrequency,
   iFrequencyStudents,
@@ -222,13 +226,21 @@ const CardFrequency = ({ student, theme }: iCardFrequencyProps) => {
 export const RetrieveFrequency = ({ back }: iPageProps) => {
   const theme = useTheme();
   const { setLoading } = useAppThemeContext();
-  const { frequencyData, setFrequencyData, updateFrequency, studentData } =
-    useSchoolContext();
+  const {
+    frequencyData,
+    setFrequencyData,
+    updateFrequency,
+    studentData,
+    schoolYear,
+  } = useSchoolContext();
+  const { updateClassSchool } = useClassContext();
 
   useEffect(() => {
     setLoading(true);
     apiUsingNow
-      .get<iFrequency>(`frequencies/${frequencyData?.id}`)
+      .get<iFrequency>(
+        `frequencies/${frequencyData?.id}?school_year_id=${schoolYear}`
+      )
       .then((res) => {
         setFrequencyData(res.data);
       })
@@ -269,7 +281,20 @@ export const RetrieveFrequency = ({ back }: iPageProps) => {
             onClick={() => {
               updateFrequency(
                 { status: "CLOSED", finished_at: Date.now() },
-                frequencyData.id,
+                frequencyData.id
+              );
+              updateClassSchool(
+                {
+                  class_id: frequencyData.class.class.id,
+                  school_id: frequencyData.class.school.id,
+                  school_year_id: frequencyData.class.school_year.id,
+                  class_infreq: frequencyData.class_infreq
+                    ? frequencyData.class_infreq
+                    : 0,
+                  school_infreq: frequencyData.school_infreq
+                    ? frequencyData.school_infreq
+                    : 0,
+                },
                 back
               );
             }}

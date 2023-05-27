@@ -10,3 +10,8 @@ export async function postClass(data: FieldValues): Promise<iClass> {
 export async function postImportClass(data: FormData): Promise<void> {
   await apiUsingNow.post("imports/class", data);
 }
+
+export async function patchClassSchool(data: FieldValues): Promise<iClass> {
+  const { data: response } = await apiUsingNow.patch<iClass>("classes", data);
+  return response;
+}

@@ -14,14 +14,16 @@ import {
   iClassWithSchool,
   iSchoolImportRequest,
 } from "../interfaces";
-import { postClass, postImportClass } from "../services";
+import { patchClassSchool, postClass, postImportClass } from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
+import { FieldValues } from "react-hook-form";
 
 interface iClassContextData {
   createClass: (data: iClassRequest, back?: string) => Promise<void>;
   importClass: (data: iSchoolImportRequest, back?: string) => Promise<void>;
+  updateClassSchool: (data: FieldValues, back?: string) => Promise<void>;
   classDataSelect: iClassSelect[] | undefined;
   setClassDataSelect: Dispatch<SetStateAction<iClassSelect[] | undefined>>;
   listClassData: iClass[] | undefined;
@@ -79,11 +81,26 @@ export const ClassProvider = ({ children }: iChildren) => {
     []
   );
 
+  const handleUpdateClassSchool = useCallback(
+    async (data: FieldValues, back?: string) => {
+      try {
+        setLoading(true);
+        await patchClassSchool(data);
+        navigate(back ? back : "/");
+        setLoading(false);
+      } catch {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
   return (
     <ClassContext.Provider
       value={{
         createClass: handleCreateClass,
         importClass: handleImportClass,
+        updateClassSchool: handleUpdateClassSchool,
         classDataSelect,
         listClassData,
         classSelect,

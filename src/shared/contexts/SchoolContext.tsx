@@ -69,11 +69,7 @@ interface iSchoolContextData {
     type: "nome" | "diretor" | "estado",
     back?: string
   ) => Promise<void>;
-  updateFrequency: (
-    data: FieldValues,
-    id: string,
-    back?: string
-  ) => Promise<void>;
+  updateFrequency: (data: FieldValues, id: string) => Promise<void>;
   updateFrequencyStudent: (data: FieldValues, id: string) => Promise<void>;
   schoolDataSelect: iSchoolSelect[] | undefined;
   setSchoolDataSelect: Dispatch<SetStateAction<iSchoolSelect[] | undefined>>;
@@ -254,13 +250,12 @@ export const SchoolProvider = ({ children }: iChildren) => {
   }, []);
 
   const handleUpdateFrequency = useCallback(
-    async (data: FieldValues, id: string, back?: string) => {
+    async (data: FieldValues, id: string) => {
       try {
         setLoading(true);
         await patchFrequency(data, id);
         toast.success("Frequência realizada com sucesso!");
         setLoading(false);
-        navigate(back ? back : "/");
       } catch {
         setLoading(false);
         toast.error("Não foi possível realizar a frequência no momento!");

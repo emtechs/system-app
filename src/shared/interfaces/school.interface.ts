@@ -21,6 +21,7 @@ export interface iSchool {
   name: string;
   is_active: boolean;
   director?: iDirector;
+  school_infreq: number;
 }
 
 export interface iSchoolSelect extends iSchool {
@@ -74,6 +75,7 @@ export interface iSchoolYear {
 
 export interface iClassWithSchool {
   class: iClass;
+  class_infreq: number;
   school: iWithSchool;
   school_year: iSchoolYear;
   students: iStudentWithSchool[];
@@ -110,6 +112,8 @@ export interface iFrequency {
   user: iUserFreq;
   students: iFrequencyStudents[];
   infrequency: number;
+  class_infreq?: number;
+  school_infreq?: number;
   _count: { students: number };
 }
 
