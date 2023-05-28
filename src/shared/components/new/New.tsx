@@ -17,7 +17,7 @@ import {
   School,
   Student,
   User,
-} from "./options";
+} from "../menu/options";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
 import { useModalContext, useAuthContext } from "../../contexts";
