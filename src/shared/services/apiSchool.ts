@@ -1,6 +1,6 @@
 import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
-import { iClass, iFrequency, iSchool } from "../interfaces";
+import { iFrequency, iSchool, iStudent } from "../interfaces";
 
 export async function postSchool(data: FieldValues): Promise<iSchool> {
   const { data: response } = await apiUsingNow.post<iSchool>("schools", data);
@@ -14,8 +14,19 @@ export async function postImportSchool(data: FormData): Promise<void> {
 export async function postStudent(
   data: FieldValues,
   id: string
-): Promise<iClass> {
-  const { data: response } = await apiUsingNow.post<iClass>(
+): Promise<iStudent> {
+  const { data: response } = await apiUsingNow.post<iStudent>(
+    `students/${id}`,
+    data
+  );
+  return response;
+}
+
+export async function patchStudent(
+  data: FieldValues,
+  id: string
+): Promise<iStudent> {
+  const { data: response } = await apiUsingNow.patch<iStudent>(
     `students/${id}`,
     data
   );

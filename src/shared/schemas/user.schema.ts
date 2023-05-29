@@ -58,7 +58,7 @@ export const userFirstSchema = z
     repeat_password: z
       .string({ required_error: "Confirmar senha obrigatória" })
       .nonempty("Confirmar senha obrigatória"),
-    is_first_access: z.boolean().default(true),
+    is_first_access: z.boolean().default(false),
   })
   .refine((fields) => fields.password === fields.repeat_password, {
     path: ["repeat_password"],

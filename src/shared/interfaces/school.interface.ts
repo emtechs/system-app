@@ -24,6 +24,12 @@ export interface iSchool {
   school_infreq: number;
 }
 
+interface iClassWithSchoolDash {
+  class: iClass;
+  class_infreq: number;
+  _count: { students: number };
+}
+
 export interface iSchoolDash {
   id: string;
   name: string;
@@ -31,7 +37,7 @@ export interface iSchoolDash {
   director?: iDirector;
   school_infreq: number;
   total_students: number;
-  classes: { class: iClass; class_infreq: number }[];
+  classes: iClassWithSchoolDash[];
 }
 
 export interface iSchoolSelect extends iSchool {
@@ -39,7 +45,6 @@ export interface iSchoolSelect extends iSchool {
 }
 
 export interface iWorkSchool {
-  id: string;
   dash: iDash;
   school: iSchool;
 }
@@ -50,6 +55,7 @@ export interface iStudent {
   registry: string;
   is_active: boolean;
   justify_disabled?: string;
+  infreq: number;
   presented: number;
   justified: number;
   missed: number;
@@ -71,6 +77,17 @@ export interface iStudentWithSchool {
 export interface iClass {
   id: string;
   name: string;
+}
+
+export interface iClassDash {
+  class: iClass;
+  class_infreq: number;
+  school: iWithSchool;
+  school_year: iSchoolYear;
+  students: {
+    student: { id: string; name: string; registry: string };
+  }[];
+  _count: { frequencies: number; students: number };
 }
 
 export interface iWithSchool {
@@ -111,6 +128,7 @@ interface iClassFreq {
   class: iClass;
   school: iWithSchool;
   school_year: iSchoolYear;
+  class_infreq: number;
 }
 
 export interface iFrequency {
@@ -121,6 +139,20 @@ export interface iFrequency {
   class: iClassFreq;
   user: iUserFreq;
   students: iFrequencyStudents[];
+  infrequency?: number;
+  class_infreq?: number;
+  school_infreq?: number;
+  _count: { students: number };
+}
+
+export interface iFrequencyWithInfreq {
+  id: string;
+  date: string;
+  status: iStatusFrequency;
+  finished_at: number;
+  class: iClassFreq;
+  user: iUserFreq;
+  students: iFrequencyStudentsWithInfreq[];
   infrequency: number;
   class_infreq?: number;
   school_infreq?: number;
@@ -128,6 +160,19 @@ export interface iFrequency {
 }
 
 export interface iFrequencyStudents {
+  id: string;
+  status: iStatusStudent;
+  justification?: string;
+  updated_at?: string;
+  student: {
+    id: string;
+    name: string;
+    registry: string;
+  };
+  _count: { students: number };
+}
+
+export interface iFrequencyStudentsWithInfreq {
   id: string;
   status: iStatusStudent;
   justification?: string;

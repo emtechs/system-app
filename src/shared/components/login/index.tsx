@@ -6,21 +6,21 @@ import {
   TextFieldElement,
   PasswordElement,
 } from "react-hook-form-mui";
-import { loginSchema, recoverySchema } from "../../shared/schemas";
-import { useAuthContext } from "../../shared/contexts";
+import { loginSchema, recoverySchema } from "../../schemas";
+import { useAuthContext } from "../../contexts";
 import { useState } from "react";
-import {
-  BasePage,
-  BoxResp,
-  Glossary,
-  ValidateLogin,
-} from "../../shared/components";
+import { BasePage, BoxResp, Glossary, ValidateLogin } from "..";
+import { iChildren } from "../../interfaces";
 
-export const Login = () => {
-  const { login, recovery } = useAuthContext();
+export const Login = ({ children }: iChildren) => {
+  const { isAuthenticated, login, recovery } = useAuthContext();
   const [isLogin, setIsLogin] = useState(true);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(!open);
+
+  if (isAuthenticated) {
+    return <>{children}</>;
+  }
 
   return (
     <>

@@ -20,8 +20,8 @@ import {
   useSchoolContext,
 } from "../../shared/contexts";
 import {
-  iFrequency,
-  iFrequencyStudents,
+  iFrequencyStudentsWithInfreq,
+  iFrequencyWithInfreq,
   iPageProps,
   iStatusStudent,
 } from "../../shared/interfaces";
@@ -33,11 +33,12 @@ import { frequencyUpdateSchema } from "../../shared/schemas";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { useParams } from "react-router-dom";
 dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
 
 interface iCardFrequencyProps {
-  student: iFrequencyStudents;
+  student: iFrequencyStudentsWithInfreq;
   theme: Theme;
 }
 
@@ -225,24 +226,35 @@ const CardFrequency = ({ student, theme }: iCardFrequencyProps) => {
 
 export const RetrieveFrequency = ({ back }: iPageProps) => {
   const theme = useTheme();
+  const { id } = useParams<"id">();
   const { setLoading } = useAppThemeContext();
-  const {
-    frequencyData,
-    setFrequencyData,
-    updateFrequency,
-    studentData,
-    schoolYear,
-  } = useSchoolContext();
+  const { updateFrequency, updateStudent, studentData, schoolYear } =
+    useSchoolContext();
   const { updateClassSchool } = useClassContext();
+  const [retrieveFreq, setRetrieveFreq] = useState<iFrequencyWithInfreq>();
 
   useEffect(() => {
     setLoading(true);
     apiUsingNow
-      .get<iFrequency>(
-        `frequencies/${frequencyData?.id}?school_year_id=${schoolYear}`
+      .get<iFrequencyWithInfreq>(
+        `frequencies/${id}?school_year_id=${schoolYear}`
       )
       .then((res) => {
-        setFrequencyData(res.data);
+        setRetrieveFreq(res.data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    apiUsingNow
+      .get<iFrequencyWithInfreq>(
+        `frequencies/${id}?school_year_id=${schoolYear}`
+      )
+      .then((res) => {
+        setRetrieveFreq(res.data);
       })
       .finally(() => {
         setLoading(false);
@@ -250,7 +262,7 @@ export const RetrieveFrequency = ({ back }: iPageProps) => {
   }, [studentData]);
   return (
     <BasePage isProfile back={back}>
-      {frequencyData && (
+      {retrieveFreq && (
         <Box display="flex" flexDirection="column" gap={theme.spacing(2)}>
           <Card
             sx={{
@@ -269,11 +281,11 @@ export const RetrieveFrequency = ({ back }: iPageProps) => {
                 alignItems: "center",
               }}
             >
-              <Typography>{frequencyData.date}</Typography>
-              <Typography>{frequencyData.class.class.name}</Typography>
+              <Typography>{retrieveFreq.date}</Typography>
+              <Typography>{retrieveFreq.class.class.name}</Typography>
             </CardContent>
           </Card>
-          {frequencyData.students.map((student) => (
+          {retrieveFreq.students.map((student) => (
             <CardFrequency key={student.id} student={student} theme={theme} />
           ))}
           <Button
@@ -281,18 +293,21 @@ export const RetrieveFrequency = ({ back }: iPageProps) => {
             onClick={() => {
               updateFrequency(
                 { status: "CLOSED", finished_at: Date.now() },
-                frequencyData.id
+                retrieveFreq.id
               );
+              retrieveFreq.students.forEach((el) => {
+                updateStudent({ infreq: el.infrequency }, el.id);
+              });
               updateClassSchool(
                 {
-                  class_id: frequencyData.class.class.id,
-                  school_id: frequencyData.class.school.id,
-                  school_year_id: frequencyData.class.school_year.id,
-                  class_infreq: frequencyData.class_infreq
-                    ? frequencyData.class_infreq
+                  class_id: retrieveFreq.class.class.id,
+                  school_id: retrieveFreq.class.school.id,
+                  school_year_id: retrieveFreq.class.school_year.id,
+                  class_infreq: retrieveFreq.class_infreq
+                    ? retrieveFreq.class_infreq
                     : 0,
-                  school_infreq: frequencyData.school_infreq
-                    ? frequencyData.school_infreq
+                  school_infreq: retrieveFreq.school_infreq
+                    ? retrieveFreq.school_infreq
                     : 0,
                 },
                 back

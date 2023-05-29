@@ -15,7 +15,7 @@ import { iChildren } from "../../interfaces";
 import { Options } from "./options";
 import { useAuthContext, useDrawerContext } from "../../contexts";
 import { adaptName } from "../../scripts";
-import { Logout } from "@mui/icons-material";
+import { Logout, Person } from "@mui/icons-material";
 
 export const Menu = ({ children }: iChildren) => {
   const theme = useTheme();
@@ -61,7 +61,7 @@ export const Menu = ({ children }: iChildren) => {
                   bgcolor: theme.palette.secondary.main,
                 }}
               >
-                {user.name[0].toUpperCase()}
+                {user.name.length > 0 ? user.name[0].toUpperCase() : <Person />}
               </Avatar>
 
               <Typography color={theme.palette.primary.contrastText}>

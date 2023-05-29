@@ -65,9 +65,15 @@ export const studentCreateSchema = z
       { id: z.string().uuid() },
       { required_error: "Turma obrigatória" }
     ),
+    school: z.object(
+      { id: z.string().uuid() },
+      { required_error: "Escola obrigatório" }
+    ),
     class_id: z.string().uuid().optional(),
+    school_id: z.string().uuid().optional(),
   })
-  .refine((field) => (field.class_id = field.class.id));
+  .refine((field) => (field.class_id = field.class.id))
+  .refine((field) => (field.school_id = field.school.id));
 
 export const studentImportSchema = z
   .object({

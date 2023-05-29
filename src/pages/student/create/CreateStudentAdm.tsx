@@ -12,13 +12,13 @@ import { studentCreateSchema } from "../../../shared/schemas";
 import { Button } from "@mui/material";
 
 export const CreateStudentAdm = ({ back }: iPageProps) => {
-  const { createStudent, schoolSelect } = useSchoolContext();
+  const { createStudent, schoolYear } = useSchoolContext();
 
   return (
     <BasePage isProfile back={back}>
       <FormContainer
         onSuccess={(data) => {
-          if (schoolSelect) createStudent(data, schoolSelect.id, back);
+          if (schoolYear) createStudent(data, schoolYear, back);
         }}
         resolver={zodResolver(studentCreateSchema)}
       >

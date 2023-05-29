@@ -1,10 +1,6 @@
-import {
-  AutocompleteElement,
-  FormContainer,
-  useFormContext,
-} from "react-hook-form-mui";
-import { BasePage, BoxResp } from "../../../shared/components";
-import { useAuthContext, useSchoolContext } from "../../../shared/contexts";
+import { FormContainer, useFormContext } from "react-hook-form-mui";
+import { BasePage, BoxResp, SelectClassData } from "../../../shared/components";
+import { useSchoolContext } from "../../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { frequencyCreateSchema } from "../../../shared/schemas";
 import {
@@ -25,10 +21,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Link } from "react-router-dom";
 import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/pt-br";
-
-interface iData extends iClass {
-  label: string;
-}
 
 interface iDateValueProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -68,27 +60,10 @@ const DateValue = ({ setOpen }: iDateValueProps) => {
   );
 };
 
-export const CreateFrequency = () => {
+export const CreateFrequencyCommon = () => {
   const { createFrequency, frequencyData } = useSchoolContext();
-  const { schoolData } = useAuthContext();
-  const [data, setData] = useState<iData[]>();
-  const [loading, setloading] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(!open);
-
-  useEffect(() => {
-    setloading(true);
-    apiUsingNow
-      .get<iClass[]>(`classes?school_id=${schoolData?.school.id}`)
-      .then((res) => {
-        setData(
-          res.data.map((el) => {
-            return { ...el, label: el.name };
-          })
-        );
-        setloading(false);
-      });
-  }, [schoolData]);
 
   return (
     <>
@@ -98,23 +73,7 @@ export const CreateFrequency = () => {
           resolver={zodResolver(frequencyCreateSchema)}
         >
           <BoxResp isProfile>
-            <div style={{ width: "100%" }}>
-              <AutocompleteElement
-                name="class"
-                label="Turma"
-                options={
-                  data?.length
-                    ? data
-                    : [
-                        {
-                          id: 1,
-                          label: "No momento, não há nenhuma turma cadastrada",
-                        },
-                      ]
-                }
-                loading={loading}
-              />
-            </div>
+            <SelectClassData />
             <DateValue setOpen={setOpen} />
             <Button variant="contained" type="submit" fullWidth>
               Salvar
@@ -142,7 +101,7 @@ export const CreateFrequency = () => {
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Cadastrar</Button>
-              <Link to="/frequency">
+              <Link to={"/frequency/" + frequencyData.id}>
                 <Button onClick={handleClose} autoFocus>
                   Realizar
                 </Button>

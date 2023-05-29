@@ -13,12 +13,14 @@ import { ReactNode } from "react";
 interface iLayoutBasePageProps extends iChildren {
   title: string;
   tools?: ReactNode;
+  school?: ReactNode;
 }
 
 export const LayoutBasePage = ({
   children,
   title,
   tools,
+  school,
 }: iLayoutBasePageProps) => {
   const theme = useTheme();
   const smDown = useMediaQuery(theme.breakpoints.down("sm"));
@@ -55,6 +57,7 @@ export const LayoutBasePage = ({
         </Typography>
       </Box>
       {tools && <Box>{tools}</Box>}
+      {school && <Box>{school}</Box>}
       <Box flex={1} overflow="auto">
         {children}
       </Box>

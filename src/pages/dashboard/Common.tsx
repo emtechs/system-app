@@ -1,45 +1,328 @@
-import { Card, CardContent, Typography } from "@mui/material";
-import { BasePage } from "../../shared/components";
-import { Link } from "react-router-dom";
-import { Checklist, NoteAdd } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  Grid,
+  Paper,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { LayoutBasePage } from "../../shared/layouts";
+import { useEffect, useState } from "react";
+import { apiUsingNow } from "../../shared/services";
+import {
+  useAppThemeContext,
+  useAuthContext,
+  useSchoolContext,
+} from "../../shared/contexts";
+import {
+  iClassDash,
+  iClassWithSchool,
+  iFrequency,
+  iStudent,
+} from "../../shared/interfaces";
+import { SelectSchoolData } from "../../shared/components";
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
+import { useNavigate } from "react-router-dom";
+
+interface iClassDashProps {
+  classData: iClassDash;
+}
+
+const ClassDash = ({ classData }: iClassDashProps) => {
+  const { createFrequency } = useSchoolContext();
+  const date = dayjs().format("DD/MM/YYYY");
+  const students = classData.students.map(({ student }) => {
+    return { student_id: student.id };
+  });
+
+  return (
+    <Grid item xs={12} md={6} lg={3}>
+      <Card>
+        <CardActionArea
+          onClick={() =>
+            createFrequency({
+              date,
+              class_id: classData.class.id,
+              school_id: classData.school.id,
+              school_year_id: classData.school_year.id,
+              students,
+            })
+          }
+        >
+          <CardContent
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Typography>{classData.class.name}</Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    </Grid>
+  );
+};
+
+interface iFreqOpenDashProps {
+  freq: iFrequency;
+}
+
+const FreqOpenDash = ({ freq }: iFreqOpenDashProps) => {
+  const navigate = useNavigate();
+  return (
+    <Grid item xs={12} md={6} lg={3}>
+      <Card>
+        <CardActionArea onClick={() => navigate(`/frequency/${freq.id}`)}>
+          <CardContent
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography gutterBottom>{freq.date}</Typography>
+            <Typography gutterBottom>{freq.class.class.name}</Typography>
+            <Typography gutterBottom>{freq._count.students} Alunos</Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    </Grid>
+  );
+};
+
+interface iClassDashAlertProps {
+  classData: iClassWithSchool;
+}
+
+const ClassDashAlert = ({ classData }: iClassDashAlertProps) => {
+  return (
+    <Grid item xs={12} md={6} lg={4}>
+      <Card>
+        <CardContent>
+          <Typography
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipses"
+            gutterBottom
+          >
+            {classData.class.name}
+          </Typography>
+          <Typography gutterBottom>
+            {classData._count.students} Alunos
+          </Typography>
+          <Typography gutterBottom>
+            {String(classData.infrequency).replace(".", ",")}% de Infrequência
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button size="small">Saber Mais</Button>
+        </CardActions>
+      </Card>
+    </Grid>
+  );
+};
+
+interface iStudentAlertProps {
+  student: iStudent;
+}
+
+const StudentAlert = ({ student }: iStudentAlertProps) => {
+  return (
+    <Grid item xs={12} md={6} lg={4}>
+      <Card>
+        <CardContent>
+          <Typography gutterBottom>{student.registry}</Typography>
+          <Typography
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipses"
+            gutterBottom
+          >
+            {student.name}
+          </Typography>
+          <Typography gutterBottom>
+            {String(student.infrequency).replace(".", ",")}% de Infrequência
+          </Typography>
+        </CardContent>
+      </Card>
+    </Grid>
+  );
+};
 
 export const DashboardCommon = () => {
+  const theme = useTheme();
+  const mdLgBetween = useMediaQuery(theme.breakpoints.between("md", "lg"));
+  const mdUp = useMediaQuery(theme.breakpoints.up("md"));
+  const { setLoading } = useAppThemeContext();
+  const { schoolData } = useAuthContext();
+  const { schoolYear } = useSchoolContext();
+  const [listClassData, setListClassData] = useState<iClassDash[]>();
+  const [listFreqData, setListFreqData] = useState<iFrequency[]>();
+  const [listAlertClassData, setListAlertClassData] =
+    useState<iClassWithSchool[]>();
+  const [listAlertStudentData, setListAlertStudentData] =
+    useState<iStudent[]>();
+
+  useEffect(() => {
+    const date = dayjs().format("DD/MM/YYYY");
+    setLoading(true);
+    apiUsingNow
+      .get<iClassDash[]>(
+        `classes/${schoolData?.school.id}?is_dash=true&date=${date}`
+      )
+      .then((res) => setListClassData(res.data))
+      .finally(() => setLoading(false));
+    setLoading(true);
+    apiUsingNow
+      .get<iFrequency[]>(
+        `frequencies?status=OPENED&school_id=${schoolData?.school.id}`
+      )
+      .then((res) => setListFreqData(res.data))
+      .finally(() => setLoading(false));
+    let take = 1;
+    if (mdLgBetween) {
+      take = 2;
+    } else if (mdUp) {
+      take = 3;
+    }
+    setLoading(true);
+    apiUsingNow
+      .get<iClassWithSchool[]>(
+        `classes/${schoolData?.school.id}?school_year_id=${schoolYear}&class_infreq=1&take=${take}`
+      )
+      .then((res) => setListAlertClassData(res.data))
+      .finally(() => setLoading(false));
+    setLoading(true);
+    apiUsingNow
+      .get<iStudent[]>(
+        `students?school_year_id=${schoolYear}&school_id=${schoolData?.school.id}&take=${take}`
+      )
+      .then((res) => setListAlertStudentData(res.data))
+      .finally(() => setLoading(false));
+  }, [schoolData]);
+
   return (
-    <BasePage isProfile>
-      <Card
-        sx={{
-          width: "100%",
-          height: 80,
-          maxWidth: 250,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+    <LayoutBasePage title="Página Inicial" school={<SelectSchoolData />}>
+      <Box
+        mx={2}
+        display="flex"
+        flexDirection="column"
+        component={Paper}
+        variant="outlined"
       >
-        <Link to="/frequency/create">
-          <CardContent sx={{ display: "flex", gap: 2 }}>
-            <NoteAdd />
-            <Typography>Cadastrar Frequência</Typography>
+        <Card>
+          <CardContent>
+            <Grid container direction="column" p={2} spacing={2}>
+              <Typography variant="h6">Realizar Frequência</Typography>
+              <Grid
+                container
+                item
+                direction="row"
+                justifyContent="center"
+                spacing={2}
+              >
+                {listClassData &&
+                  listClassData.map((el) => (
+                    <ClassDash key={el.class.id} classData={el} />
+                  ))}
+              </Grid>
+            </Grid>
           </CardContent>
-        </Link>
-      </Card>
-      <Card
-        sx={{
-          width: "100%",
-          height: 80,
-          maxWidth: 250,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+        </Card>
+      </Box>
+      <Box
+        m={2}
+        display="flex"
+        flexDirection="column"
+        component={Paper}
+        variant="outlined"
       >
-        <Link to="/frequency/list">
-          <CardContent sx={{ display: "flex", gap: 2 }}>
-            <Checklist />
-            <Typography>Realizar Frequência</Typography>
+        <Card>
+          <CardContent>
+            <Grid container direction="column" p={2} spacing={2}>
+              <Typography variant="h6">Frequências Em Aberto</Typography>
+              <Grid
+                container
+                item
+                direction="row"
+                justifyContent="center"
+                spacing={2}
+              >
+                {listFreqData &&
+                  listFreqData.map((el) => (
+                    <FreqOpenDash key={el.id} freq={el} />
+                  ))}
+              </Grid>
+            </Grid>
           </CardContent>
-        </Link>
-      </Card>
-    </BasePage>
+        </Card>
+      </Box>
+      <Box
+        m={2}
+        display="flex"
+        flexDirection="column"
+        component={Paper}
+        variant="outlined"
+      >
+        <Card>
+          <CardContent>
+            <Grid container direction="column" p={2} spacing={2}>
+              <Typography variant="h6">Alerta Turmas</Typography>
+              <Grid
+                container
+                item
+                direction="row"
+                justifyContent="center"
+                spacing={2}
+              >
+                {listAlertClassData &&
+                  listAlertClassData.map((el) => (
+                    <ClassDashAlert key={el.class.id} classData={el} />
+                  ))}
+              </Grid>
+            </Grid>
+          </CardContent>
+          <CardActions sx={{ justifyContent: "flex-end" }}>
+            <Button>Saber Mais</Button>
+          </CardActions>
+        </Card>
+      </Box>
+      <Box
+        m={2}
+        display="flex"
+        flexDirection="column"
+        component={Paper}
+        variant="outlined"
+      >
+        <Card>
+          <CardContent>
+            <Grid container direction="column" p={2} spacing={2}>
+              <Typography variant="h6">Alerta Alunos</Typography>
+              <Grid
+                container
+                item
+                direction="row"
+                justifyContent="center"
+                spacing={2}
+              >
+                {listAlertStudentData &&
+                  listAlertStudentData.map((el) => (
+                    <StudentAlert key={el.id} student={el} />
+                  ))}
+              </Grid>
+            </Grid>
+          </CardContent>
+          <CardActions sx={{ justifyContent: "flex-end" }}>
+            <Button>Saber Mais</Button>
+          </CardActions>
+        </Card>
+      </Box>
+    </LayoutBasePage>
   );
 };

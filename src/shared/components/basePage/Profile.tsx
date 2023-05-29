@@ -252,7 +252,7 @@ export const BasePageProfile = ({
         <DialogTitle>Selecione a Escola</DialogTitle>
         <List sx={{ pt: 0 }}>
           {userData?.work_school.map((el) => (
-            <ListItem disableGutters key={el.id}>
+            <ListItem disableGutters key={el.school.id}>
               <ListItemButton
                 onClick={() => {
                   setSchoolData(el);

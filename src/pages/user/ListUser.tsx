@@ -22,6 +22,7 @@ import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
 import { RemoveDone } from "@mui/icons-material";
 import { TableUser } from "../../shared/components";
+import { useNavigate } from "react-router-dom";
 
 interface iCardUserProps {
   user: iUser;
@@ -44,6 +45,7 @@ const rolePtBr = (role: iRole) => {
 };
 
 const CardUser = ({ user }: iCardUserProps) => {
+  const navigate = useNavigate();
   const { userData } = useAuthContext();
   const { updateUserData, setUpdateUserData, updateAllUser } = useUserContext();
   const [open, setOpen] = useState(false);
@@ -63,7 +65,15 @@ const CardUser = ({ user }: iCardUserProps) => {
 
   return (
     <>
-      <TableRow>
+      <TableRow
+        hover={user.role === "SERV"}
+        sx={{ cursor: user.role === "SERV" ? "pointer" : "unset" }}
+        onClick={() => {
+          if (user.role === "SERV") {
+            navigate(`/user/list/${user.id}`);
+          }
+        }}
+      >
         <TableCell>
           {isUser() && (
             <Tooltip title="Desativar Usuário">

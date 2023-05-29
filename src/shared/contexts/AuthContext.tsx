@@ -140,7 +140,7 @@ export const AuthProvider = ({ children }: iChildren) => {
     setDashData(undefined);
     setSchoolData(undefined);
     setAnchorEl(null);
-    navigate("/login");
+    navigate("/");
   }, []);
 
   const isAuthenticated = useMemo(() => !!accessToken, [accessToken]);

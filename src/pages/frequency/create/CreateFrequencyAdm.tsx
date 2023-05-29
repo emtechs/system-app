@@ -107,7 +107,7 @@ export const CreateFrequencyAdm = ({ back }: iPageProps) => {
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Cadastrar</Button>
-              <Link to="/frequency/retrieve">
+              <Link to={"/frequency/" + frequencyData.id}>
                 <Button onClick={handleClose} autoFocus>
                   Realizar
                 </Button>

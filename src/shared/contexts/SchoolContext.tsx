@@ -10,8 +10,7 @@ import {
 import {
   iChildren,
   iFrequency,
-  iFrequencyRequest,
-  iFrequencyStudents,
+  iFrequencyStudentsWithInfreq,
   iSchool,
   iSchoolImportRequest,
   iSchoolRequest,
@@ -25,6 +24,7 @@ import {
   patchFrequency,
   patchFrequencyStudent,
   patchSchool,
+  patchStudent,
   postFrequency,
   postImportSchool,
   postImportStudent,
@@ -53,6 +53,7 @@ interface iSchoolContextData {
     id: string,
     back?: string
   ) => Promise<void>;
+  updateStudent: (data: FieldValues, id: string) => Promise<void>;
   importStudent: (
     data: iStudentImportRequest,
     school_id: string,
@@ -62,7 +63,7 @@ interface iSchoolContextData {
     data: iStudentImportRequest,
     back?: string
   ) => Promise<void>;
-  createFrequency: (data: iFrequencyRequest) => Promise<void>;
+  createFrequency: (data: FieldValues) => Promise<void>;
   updateSchool: (
     data: FieldValues,
     id: string,
@@ -79,8 +80,10 @@ interface iSchoolContextData {
   setListSchoolData: Dispatch<SetStateAction<iSchool[] | undefined>>;
   frequencyData: iFrequency | undefined;
   setFrequencyData: Dispatch<SetStateAction<iFrequency | undefined>>;
-  studentData: iFrequencyStudents | undefined;
-  setStudentData: Dispatch<SetStateAction<iFrequencyStudents | undefined>>;
+  studentData: iFrequencyStudentsWithInfreq | undefined;
+  setStudentData: Dispatch<
+    SetStateAction<iFrequencyStudentsWithInfreq | undefined>
+  >;
   schoolYear: string | undefined;
 }
 
@@ -93,7 +96,8 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
   const [frequencyData, setFrequencyData] = useState<iFrequency>();
-  const [studentData, setStudentData] = useState<iFrequencyStudents>();
+  const [studentData, setStudentData] =
+    useState<iFrequencyStudentsWithInfreq>();
   const [schoolYear, setSchoolYear] = useState<string>();
 
   useEffect(() => {
@@ -198,6 +202,20 @@ export const SchoolProvider = ({ children }: iChildren) => {
     []
   );
 
+  const handleUpdateStudent = useCallback(
+    async (data: FieldValues, id: string) => {
+      try {
+        setLoading(true);
+        await patchStudent(data, id);
+      } catch {
+        /* empty */
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
   const handleImportStudent = useCallback(
     async (data: iStudentImportRequest, school_id: string, back?: string) => {
       const file = new FormData();
@@ -235,14 +253,14 @@ export const SchoolProvider = ({ children }: iChildren) => {
     []
   );
 
-  const handleCreateFrequency = useCallback(async (data: iFrequencyRequest) => {
+  const handleCreateFrequency = useCallback(async (data: FieldValues) => {
     try {
       setLoading(true);
       const frequency = await postFrequency(data);
       toast.success("Frequência cadastrado com sucesso!");
       setFrequencyData(frequency);
       setLoading(false);
-      navigate("/frequency/retrieve");
+      navigate(`/frequency/${frequency.id}`);
     } catch {
       setLoading(false);
       toast.error("Não foi possível cadastrar a frequência no momento!");
@@ -288,6 +306,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
         importSchool: handleImportSchool,
         createServer: handleCreateServer,
         createStudent: handleCreateStudent,
+        updateStudent: handleUpdateStudent,
         importStudent: handleImportStudent,
         importStudentAll: handleImportStudentAll,
         createFrequency: handleCreateFrequency,
