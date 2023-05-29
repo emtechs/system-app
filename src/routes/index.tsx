@@ -13,7 +13,6 @@ import {
   CreateServerPage,
   CreateStudent,
   CreateStudentAdm,
-  Dashboard,
   DefineDiret,
   DefineSchools,
   DefineSecret,
@@ -37,10 +36,10 @@ import {
   RetrieveFrequency,
   School,
   Student,
-  User,
 } from "../pages";
 import { useAuthContext } from "../shared/contexts";
 import { Menu } from "../shared/components";
+import { Dashboard } from "../pages/dashboard/Dashboard";
 
 const AppRoutes = () => {
   const { isAuthenticated, userData, dashData } = useAuthContext();
@@ -63,17 +62,10 @@ const AppRoutes = () => {
           <Menu>
             <Routes>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/user" element={<User />} />
-              <Route path="/user/create" element={<CreateAdm back="/user" />} />
-              <Route
-                path="/user/define/secret"
-                element={<DefineSecret back="/user" />}
-              />
-              <Route path="/user/list" element={<ListUser back="/user" />} />
-              <Route
-                path="/user/active"
-                element={<ActiveUser back="/user" />}
-              />
+              <Route path="/user/create" element={<CreateAdm />} />
+              <Route path="/user/define/secret" element={<DefineSecret />} />
+              <Route path="/user/list" element={<ListUser />} />
+              <Route path="/user/active" element={<ActiveUser />} />
               <Route path="/school" element={<School />} />
               <Route
                 path="/school/create"

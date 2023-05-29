@@ -24,6 +24,16 @@ export interface iSchool {
   school_infreq: number;
 }
 
+export interface iSchoolDash {
+  id: string;
+  name: string;
+  is_active: boolean;
+  director?: iDirector;
+  school_infreq: number;
+  total_students: number;
+  classes: { class: iClass; class_infreq: number }[];
+}
+
 export interface iSchoolSelect extends iSchool {
   label: string;
 }

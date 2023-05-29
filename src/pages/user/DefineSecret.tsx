@@ -1,4 +1,4 @@
-import { BasePage, BoxResp, ValidateCPF } from "../../shared/components";
+import { ValidateCPF } from "../../shared/components";
 import { useAppThemeContext, useUserContext } from "../../shared/contexts";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,13 +6,10 @@ import { createSecretSchema } from "../../shared/schemas";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
 import { iUser } from "../../shared/interfaces";
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Paper, Typography } from "@mui/material";
+import { LayoutBasePage } from "../../shared/layouts";
 
-interface iDefineSecretProps {
-  back?: string;
-}
-
-export const DefineSecret = ({ back }: iDefineSecretProps) => {
+export const DefineSecret = () => {
   const { setLoading } = useAppThemeContext();
   const { createSecret, updateAllUser } = useUserContext();
   const [secretData, setSecretData] = useState<iUser>();
@@ -26,7 +23,7 @@ export const DefineSecret = ({ back }: iDefineSecretProps) => {
   }, []);
 
   return (
-    <BasePage isProfile back={back}>
+    <LayoutBasePage title="Definir Secretário">
       <FormContainer
         onSuccess={(data) => {
           if (secretData)
@@ -38,23 +35,55 @@ export const DefineSecret = ({ back }: iDefineSecretProps) => {
               },
               true
             );
-          createSecret(data, back);
+          createSecret(data);
         }}
         resolver={zodResolver(createSecretSchema)}
       >
-        <BoxResp isProfile>
-          {secretData && (
-            <Box>
-              <Typography>Secretário Atual</Typography>
-              <Typography>Nome: {secretData.name}</Typography>
-              <Typography>CPF: {secretData.cpf}</Typography>
-            </Box>
-          )}
-          <TextFieldElement name="cpf" label="CPF" required fullWidth />
-          <TextFieldElement name="name" label="Nome" required fullWidth />
-          <ValidateCPF allNotServ />
-        </BoxResp>
+        <Box
+          m={2}
+          display="flex"
+          flexDirection="column"
+          component={Paper}
+          variant="outlined"
+        >
+          <Grid container direction="column" p={2} spacing={2}>
+            {secretData && (
+              <Grid container item direction="row" justifyContent="center">
+                <Grid
+                  item
+                  xs={12}
+                  sm={9}
+                  md={6}
+                  lg={3}
+                  display="flex"
+                  justifyContent="center"
+                >
+                  <Box>
+                    <Typography>Secretário Atual</Typography>
+                    <Typography>Nome: {secretData.name}</Typography>
+                    <Typography>CPF: {secretData.cpf}</Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+            )}
+            <Grid container item direction="row" justifyContent="center">
+              <Grid item xs={12} sm={9} md={6} lg={3}>
+                <TextFieldElement name="cpf" label="CPF" required fullWidth />
+              </Grid>
+            </Grid>
+            <Grid container item direction="row" justifyContent="center">
+              <Grid item xs={12} sm={9} md={6} lg={3}>
+                <TextFieldElement name="name" label="Nome" required fullWidth />
+              </Grid>
+            </Grid>
+            <Grid container item direction="row" justifyContent="center">
+              <Grid item xs={12} sm={9} md={6} lg={3}>
+                <ValidateCPF allNotServ />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Box>
       </FormContainer>
-    </BasePage>
+    </LayoutBasePage>
   );
 };

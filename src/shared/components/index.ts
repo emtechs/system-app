@@ -5,4 +5,6 @@ export * from "./inputFile";
 export * from "./menu";
 export * from "./modal";
 export * from "./select";
+export * from "./table";
+export * from "./tools";
 export * from "./validate";

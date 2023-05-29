@@ -2,10 +2,12 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useDrawerContext } from "../../../contexts";
 
 interface iListItemLinkProps {
   icon: ReactNode;
@@ -15,9 +17,16 @@ interface iListItemLinkProps {
 
 export const ListItemLink = ({ icon, label, to }: iListItemLinkProps) => {
   const theme = useTheme();
+  const smDown = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
   const location = useLocation();
-  const onClick = () => navigate(to);
+  const { toggleDrawerOpen } = useDrawerContext();
+  const onClick = () => {
+    if (smDown) {
+      toggleDrawerOpen();
+    }
+    navigate(to);
+  };
   return (
     <ListItemButton
       onClick={onClick}

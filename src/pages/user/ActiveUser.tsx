@@ -1,30 +1,30 @@
 import {
-  Avatar,
   Box,
   Button,
-  Card,
-  CardContent,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Theme,
+  IconButton,
+  TableCell,
+  TableRow,
+  Tooltip,
   Typography,
-  useTheme,
 } from "@mui/material";
 import { useAppThemeContext, useUserContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { iRole, iUser } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
-import { BasePage } from "../../shared/components";
+import { TableUser } from "../../shared/components";
 import { FormContainer, RadioButtonGroup } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { activeUserSchema } from "../../shared/schemas";
+import { LayoutBasePage } from "../../shared/layouts";
+import { DoneAll } from "@mui/icons-material";
 
 interface iCardUserProps {
   user: iUser;
-  theme: Theme;
 }
 
 const rolePtBr = (role: iRole) => {
@@ -43,59 +43,28 @@ const rolePtBr = (role: iRole) => {
   }
 };
 
-const CardUser = ({ user, theme }: iCardUserProps) => {
+const CardUser = ({ user }: iCardUserProps) => {
   const { updateUserData, setUpdateUserData, updateAllUser } = useUserContext();
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setUpdateUserData(user);
-    setOpen(!open);
+    setOpen((oldOpen) => !oldOpen);
   };
 
   return (
     <>
-      <Card
-        sx={{
-          width: "100%",
-          height: 80,
-          maxWidth: 250,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          bgcolor: theme.palette.error.main,
-        }}
-      >
-        <CardContent
-          onClick={handleClose}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            cursor: "pointer",
-            position: "relative",
-          }}
-        >
-          <Box display="flex" alignItems="center" gap={2}>
-            <Avatar>{user.name[0].toUpperCase()}</Avatar>
-            <Box>
-              <Typography
-                fontSize={10}
-                color={theme.palette.secondary.contrastText}
-              >
-                {user.cpf}
-              </Typography>
-              <Typography
-                fontSize={10}
-                color={theme.palette.secondary.contrastText}
-              >
-                {user.name}
-              </Typography>
-            </Box>
-            <Typography fontSize={8} color={theme.palette.grey[300]}>
-              {rolePtBr(user.role)}
-            </Typography>
-          </Box>
-        </CardContent>
-      </Card>
+      <TableRow>
+        <TableCell>
+          <Tooltip title="Ativar Usuário">
+            <IconButton color="success" onClick={handleClose}>
+              <DoneAll />
+            </IconButton>
+          </Tooltip>
+        </TableCell>
+        <TableCell>{user.name}</TableCell>
+        <TableCell>{user.cpf}</TableCell>
+        <TableCell>{rolePtBr(user.role)}</TableCell>
+      </TableRow>
 
       {updateUserData && (
         <Dialog open={open} onClose={handleClose}>
@@ -143,12 +112,7 @@ const CardUser = ({ user, theme }: iCardUserProps) => {
   );
 };
 
-interface iActiveUserProps {
-  back: string;
-}
-
-export const ActiveUser = ({ back }: iActiveUserProps) => {
-  const theme = useTheme();
+export const ActiveUser = () => {
   const { setLoading } = useAppThemeContext();
   const { updateUserData } = useUserContext();
   const [listUserData, setListUserData] = useState<iUser[]>();
@@ -160,17 +124,20 @@ export const ActiveUser = ({ back }: iActiveUserProps) => {
       .then((res) => setListUserData(res.data))
       .finally(() => setLoading(false));
   }, [updateUserData]);
+
   return (
-    <BasePage isProfile back={back}>
+    <LayoutBasePage title="Listagem de Usuários">
       {listUserData && listUserData.length > 0 ? (
-        <Box display="flex" flexDirection="column" gap={theme.spacing(2)}>
-          {listUserData.map((user) => (
-            <CardUser key={user.id} user={user} theme={theme} />
-          ))}
-        </Box>
+        <TableUser>
+          <>
+            {listUserData.map((el) => (
+              <CardUser key={el.id} user={el} />
+            ))}
+          </>
+        </TableUser>
       ) : (
-        <Typography>Nenhum usuário para ativar no momento!</Typography>
+        <Typography m={2}>Nenhum usuário para ativar no momento!</Typography>
       )}
-    </BasePage>
+    </LayoutBasePage>
   );
 };

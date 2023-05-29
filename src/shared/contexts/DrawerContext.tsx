@@ -69,9 +69,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenSchool(false);
     setOpenStudent(false);
     setOpenUser(false);
-    if (smDown) {
-      toggleDrawerOpen();
-    }
   }, []);
 
   const handleClickFrequency = useCallback(() => {
@@ -83,9 +80,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenSchool(false);
     setOpenStudent(false);
     setOpenUser(false);
-    if (smDown) {
-      toggleDrawerOpen();
-    }
   }, []);
 
   const handleClickImport = useCallback(() => {
@@ -97,9 +91,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenSchool(false);
     setOpenStudent(false);
     setOpenUser(false);
-    if (smDown) {
-      toggleDrawerOpen();
-    }
   }, []);
 
   const handleClickProfile = useCallback(() => {
@@ -111,9 +102,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenSchool(false);
     setOpenStudent(false);
     setOpenUser(false);
-    if (smDown) {
-      toggleDrawerOpen();
-    }
   }, []);
 
   const handleClickReport = useCallback(() => {
@@ -125,9 +113,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenSchool(false);
     setOpenStudent(false);
     setOpenUser(false);
-    if (smDown) {
-      toggleDrawerOpen();
-    }
   }, []);
 
   const handleClickSchool = useCallback(() => {
@@ -139,9 +124,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenReport(false);
     setOpenStudent(false);
     setOpenUser(false);
-    if (smDown) {
-      toggleDrawerOpen();
-    }
   }, []);
 
   const handleClickStudent = useCallback(() => {
@@ -153,9 +135,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenReport(false);
     setOpenSchool(false);
     setOpenUser(false);
-    if (smDown) {
-      toggleDrawerOpen();
-    }
   }, []);
 
   const handleClickUser = useCallback(() => {
@@ -167,9 +146,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenReport(false);
     setOpenSchool(false);
     setOpenStudent(false);
-    if (smDown) {
-      toggleDrawerOpen();
-    }
   }, []);
 
   return (

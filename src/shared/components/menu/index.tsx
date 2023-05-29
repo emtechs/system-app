@@ -4,6 +4,9 @@ import {
   Divider,
   Drawer,
   List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
   Typography,
   useMediaQuery,
   useTheme,
@@ -12,15 +15,17 @@ import { iChildren } from "../../interfaces";
 import { Options } from "./options";
 import { useAuthContext, useDrawerContext } from "../../contexts";
 import { adaptName } from "../../scripts";
+import { Logout } from "@mui/icons-material";
 
 export const Menu = ({ children }: iChildren) => {
   const theme = useTheme();
   const smDown = useMediaQuery(theme.breakpoints.down("sm"));
   const { isDrawerOpen, toggleDrawerOpen } = useDrawerContext();
-  const { userData } = useAuthContext();
+  const { userData, logout } = useAuthContext();
   const user = {
     name: adaptName(userData?.name ? userData?.name : ""),
   };
+
   return (
     <>
       <Drawer
@@ -37,24 +42,23 @@ export const Menu = ({ children }: iChildren) => {
           <Box
             width="100%"
             bgcolor={theme.palette.primary.main}
-            height={theme.spacing(20)}
+            height={theme.spacing(17)}
             display="flex"
-            alignItems="center"
-            justifyContent="center"
+            flexDirection="column"
             flexShrink={0}
           >
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <img src="/pref_massape_out.png" height={theme.spacing(8)} />
+            </Box>
             <Box
               display="flex"
               flexDirection="column"
               alignItems="center"
-              gap={theme.spacing(1)}
+              gap={theme.spacing(0.5)}
             >
               <Avatar
                 sx={{
                   bgcolor: theme.palette.secondary.main,
-                  height: theme.spacing(12),
-                  width: theme.spacing(12),
-                  fontSize: theme.spacing(7),
                 }}
               >
                 {user.name[0].toUpperCase()}
@@ -69,6 +73,16 @@ export const Menu = ({ children }: iChildren) => {
           <Box flex={1}>
             <List component="nav">
               <Options />
+            </List>
+          </Box>
+          <Box>
+            <List component="nav">
+              <ListItemButton onClick={logout}>
+                <ListItemIcon>
+                  <Logout />
+                </ListItemIcon>
+                <ListItemText primary="Sair" />
+              </ListItemButton>
             </List>
           </Box>
         </Box>
