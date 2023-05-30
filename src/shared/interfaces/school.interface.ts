@@ -155,6 +155,7 @@ interface iClassFreq {
 export interface iFrequency {
   id: string;
   date: string;
+  month: number;
   status: iStatusFrequency;
   finished_at: number;
   class: iClassFreq;
@@ -169,6 +170,7 @@ export interface iFrequency {
 export interface iFrequencyWithInfreq {
   id: string;
   date: string;
+  month: number;
   status: iStatusFrequency;
   finished_at: number;
   class: iClassFreq;
