@@ -1,28 +1,27 @@
 import {
-  Avatar,
   Box,
   Button,
-  Card,
-  CardContent,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  IconButton,
+  TableCell,
+  TableRow,
   Theme,
+  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
-import { BasePage } from "../../shared/components";
 import {
-  useAppThemeContext,
-  useClassContext,
-  useSchoolContext,
-} from "../../shared/contexts";
+  TableRetrieveFrequency,
+  ToolsFrequency,
+} from "../../shared/components";
+import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
 import {
   iFrequencyStudentsWithInfreq,
   iFrequencyWithInfreq,
-  iPageProps,
   iStatusStudent,
 } from "../../shared/interfaces";
 import { useEffect, useState } from "react";
@@ -34,12 +33,13 @@ import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useParams } from "react-router-dom";
+import { LayoutBasePage } from "../../shared/layouts";
+import { Checklist } from "@mui/icons-material";
 dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
 
 interface iCardFrequencyProps {
   student: iFrequencyStudentsWithInfreq;
-  theme: Theme;
 }
 
 const statusFrequencyPtBr = (status: iStatusStudent) => {
@@ -68,7 +68,21 @@ const defineBgColor = (status: iStatusStudent, theme: Theme) => {
   }
 };
 
-const CardFrequency = ({ student, theme }: iCardFrequencyProps) => {
+const defineColor = (status: iStatusStudent) => {
+  switch (status) {
+    case "PRESENTED":
+      return "success";
+
+    case "MISSED":
+      return "error";
+
+    case "JUSTIFIED":
+      return "warning";
+  }
+};
+
+const CardFrequency = ({ student }: iCardFrequencyProps) => {
+  const theme = useTheme();
   const { updateFrequencyStudent, studentData, setStudentData } =
     useSchoolContext();
   const [open, setOpen] = useState(false);
@@ -76,57 +90,44 @@ const CardFrequency = ({ student, theme }: iCardFrequencyProps) => {
     setStudentData(student);
     setOpen(!open);
   };
+
   return (
     <>
-      <Card
-        sx={{
-          width: "100%",
-          height: 80,
-          maxWidth: 250,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          bgcolor: defineBgColor(student.status, theme),
-        }}
-      >
-        <CardContent
-          onClick={handleClose}
+      <TableRow>
+        <TableCell>
+          <Tooltip title="Mudar Estado da Presença">
+            <IconButton
+              onClick={handleClose}
+              color={defineColor(student.status)}
+            >
+              <Checklist />
+            </IconButton>
+          </Tooltip>
+        </TableCell>
+        <TableCell>{student.registry}</TableCell>
+        <TableCell>{student.name}</TableCell>
+        <TableCell
           sx={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            cursor: "pointer",
-            position: "relative",
+            bgcolor: defineBgColor(student.status, theme),
+            color: theme.palette.secondary.contrastText,
           }}
         >
-          <Box display="flex" alignItems="center" gap={2}>
-            <Avatar>{student.name[0].toUpperCase()}</Avatar>
-            <Box>
-              <Typography
-                fontSize={10}
-                color={theme.palette.secondary.contrastText}
-              >
-                {student.registry}
-              </Typography>
-              <Typography color={theme.palette.secondary.contrastText}>
-                {student.name}
-              </Typography>
-            </Box>
-            <Typography fontSize={8} color={theme.palette.grey[300]}>
-              {statusFrequencyPtBr(student.status)}
-            </Typography>
-          </Box>
-          {student.updated_at && (
-            <Typography
-              sx={{ position: "absolute", bottom: 4, right: 4 }}
-              fontSize={7}
-              color={theme.palette.grey[400]}
-            >
-              {dayjs(student.updated_at).fromNow()}
-            </Typography>
-          )}
-        </CardContent>
-      </Card>
+          {statusFrequencyPtBr(student.status)}
+        </TableCell>
+        <TableCell>{String(student.infrequency).replace(".", ",")}%</TableCell>
+        <TableCell>
+          {student.updated_at ? dayjs(student.updated_at).fromNow() : "-"}
+        </TableCell>
+        {student.updated_at && (
+          <Typography
+            sx={{ position: "absolute", bottom: 4, right: 4 }}
+            fontSize={7}
+            color={theme.palette.grey[400]}
+          >
+            {dayjs(student.updated_at).fromNow()}
+          </Typography>
+        )}
+      </TableRow>
       {studentData && (
         <Dialog open={open} onClose={handleClose}>
           {studentData.status === "PRESENTED" ? (
@@ -224,14 +225,11 @@ const CardFrequency = ({ student, theme }: iCardFrequencyProps) => {
   );
 };
 
-export const RetrieveFrequency = ({ back }: iPageProps) => {
-  const theme = useTheme();
+export const RetrieveFrequency = () => {
   const { id } = useParams<"id">();
   const { setLoading } = useAppThemeContext();
-  const { updateFrequency, updateStudent, studentData, schoolYear } =
+  const { studentData, schoolYear, retrieveFreq, setRetrieveFreq } =
     useSchoolContext();
-  const { updateClassSchool } = useClassContext();
-  const [retrieveFreq, setRetrieveFreq] = useState<iFrequencyWithInfreq>();
 
   useEffect(() => {
     setLoading(true);
@@ -260,65 +258,25 @@ export const RetrieveFrequency = ({ back }: iPageProps) => {
         setLoading(false);
       });
   }, [studentData]);
+
   return (
-    <BasePage isProfile back={back}>
+    <LayoutBasePage
+      tools={<ToolsFrequency />}
+      title={
+        retrieveFreq
+          ? `${retrieveFreq.date} - ${retrieveFreq.class.class.name}`
+          : "Realizar Frequência"
+      }
+    >
       {retrieveFreq && (
-        <Box display="flex" flexDirection="column" gap={theme.spacing(2)}>
-          <Card
-            sx={{
-              width: "100%",
-              height: 80,
-              maxWidth: 250,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <CardContent
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <Typography>{retrieveFreq.date}</Typography>
-              <Typography>{retrieveFreq.class.class.name}</Typography>
-            </CardContent>
-          </Card>
-          {retrieveFreq.students.map((student) => (
-            <CardFrequency key={student.id} student={student} theme={theme} />
-          ))}
-          <Button
-            variant="contained"
-            onClick={() => {
-              updateFrequency(
-                { status: "CLOSED", finished_at: Date.now() },
-                retrieveFreq.id
-              );
-              retrieveFreq.students.forEach((el) => {
-                updateStudent({ infreq: el.infrequency }, el.id);
-              });
-              updateClassSchool(
-                {
-                  class_id: retrieveFreq.class.class.id,
-                  school_id: retrieveFreq.class.school.id,
-                  school_year_id: retrieveFreq.class.school_year.id,
-                  class_infreq: retrieveFreq.class_infreq
-                    ? retrieveFreq.class_infreq
-                    : 0,
-                  school_infreq: retrieveFreq.school_infreq
-                    ? retrieveFreq.school_infreq
-                    : 0,
-                },
-                back
-              );
-            }}
-            fullWidth
-          >
-            Salvar
-          </Button>
-        </Box>
+        <TableRetrieveFrequency>
+          <>
+            {retrieveFreq.students.map((el) => (
+              <CardFrequency key={el.id} student={el} />
+            ))}
+          </>
+        </TableRetrieveFrequency>
       )}
-    </BasePage>
+    </LayoutBasePage>
   );
 };

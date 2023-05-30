@@ -75,14 +75,8 @@ const AppRoutes = () => {
       />
       <Route path="/frequency" element={<Frequency />} />
       <Route path="/frequency/create" element={<CreateFrequency />} />
-      <Route
-        path="/frequency/:id"
-        element={<RetrieveFrequency back="/frequency" />}
-      />
-      <Route
-        path="/frequency/list"
-        element={<ListFrequencyAdm back="/frequency" />}
-      />
+      <Route path="/frequency/:id" element={<RetrieveFrequency />} />
+      <Route path="/frequency/list" element={<ListFrequencyAdm />} />
       <Route path="/report" element={<Report />} />
       <Route path="/report/class" element={<ReportClass back="/report" />} />
       <Route

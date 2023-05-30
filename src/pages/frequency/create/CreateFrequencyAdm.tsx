@@ -1,22 +1,21 @@
 import { FormContainer, useFormContext } from "react-hook-form-mui";
-import {
-  BasePage,
-  BoxResp,
-  SelectSchoolClass,
-} from "../../../shared/components";
+import { SelectSchoolClass } from "../../../shared/components";
 import { useSchoolContext } from "../../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { frequencyCreateSchema } from "../../../shared/schemas";
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Grid,
+  Paper,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { iClass, iFrequency, iPageProps } from "../../../shared/interfaces";
+import { iClass, iFrequency } from "../../../shared/interfaces";
 import { apiUsingNow } from "../../../shared/services";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -25,6 +24,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Link } from "react-router-dom";
 import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/pt-br";
+import { LayoutBasePage } from "../../../shared/layouts";
 
 interface iDateValueProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -66,27 +66,47 @@ const DateValue = ({ setOpen }: iDateValueProps) => {
   );
 };
 
-export const CreateFrequencyAdm = ({ back }: iPageProps) => {
+export const CreateFrequencyAdm = () => {
   const { createFrequency, frequencyData } = useSchoolContext();
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(!open);
 
   return (
     <>
-      <BasePage isProfile back={back}>
+      <LayoutBasePage title="Nova Frequência">
         <FormContainer
           onSuccess={createFrequency}
           resolver={zodResolver(frequencyCreateSchema)}
         >
-          <BoxResp isProfile>
-            <SelectSchoolClass />
-            <DateValue setOpen={setOpen} />
-            <Button variant="contained" type="submit" fullWidth>
-              Salvar
-            </Button>
-          </BoxResp>
+          <Box
+            m={2}
+            display="flex"
+            flexDirection="column"
+            component={Paper}
+            variant="outlined"
+          >
+            <Grid container direction="column" p={2} spacing={2}>
+              <Grid container item direction="row" justifyContent="center">
+                <Grid item xs={12} sm={9} md={6} lg={3}>
+                  <SelectSchoolClass />
+                </Grid>
+              </Grid>
+              <Grid container item direction="row" justifyContent="center">
+                <Grid item xs={12} sm={9} md={6} lg={3}>
+                  <DateValue setOpen={setOpen} />
+                </Grid>
+              </Grid>
+              <Grid container item direction="row" justifyContent="center">
+                <Grid item xs={12} sm={9} md={6} lg={3}>
+                  <Button variant="contained" type="submit" fullWidth>
+                    Salvar
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Box>
         </FormContainer>
-      </BasePage>
+      </LayoutBasePage>
       <Dialog
         open={open}
         onClose={handleClose}

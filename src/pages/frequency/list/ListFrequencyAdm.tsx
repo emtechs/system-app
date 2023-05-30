@@ -1,15 +1,35 @@
-import { Card, CardContent, Typography } from "@mui/material";
-import { BasePage } from "../../../shared/components";
-import { useAppThemeContext, useSchoolContext } from "../../../shared/contexts";
-import { Link } from "react-router-dom";
-import { People } from "@mui/icons-material";
+import { TableCell, TableRow, Typography } from "@mui/material";
+import { TableFrequency } from "../../../shared/components";
+import { useAppThemeContext } from "../../../shared/contexts";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../../shared/services";
-import { iFrequency, iPageProps } from "../../../shared/interfaces";
+import { iFrequency } from "../../../shared/interfaces";
+import { LayoutBasePage } from "../../../shared/layouts";
 
-export const ListFrequencyAdm = ({ back }: iPageProps) => {
+interface iCardFrequencyProps {
+  freq: iFrequency;
+}
+
+const CardFrequency = ({ freq }: iCardFrequencyProps) => {
+  const navigate = useNavigate();
+
+  return (
+    <TableRow
+      hover
+      sx={{ cursor: "pointer" }}
+      onClick={() => navigate(`/frequency/${freq.id}`)}
+    >
+      <TableCell>{freq.date}</TableCell>
+      <TableCell>{freq.class.class.name}</TableCell>
+      <TableCell>{freq._count.students}</TableCell>
+      <TableCell>{freq.class.school.name}</TableCell>
+    </TableRow>
+  );
+};
+
+export const ListFrequencyAdm = () => {
   const { setLoading } = useAppThemeContext();
-  const { setFrequencyData } = useSchoolContext();
   const [data, setData] = useState<iFrequency[]>();
 
   useEffect(() => {
@@ -20,38 +40,18 @@ export const ListFrequencyAdm = ({ back }: iPageProps) => {
       .finally(() => setLoading(false));
   }, []);
   return (
-    <BasePage isProfile back={back}>
-      {data &&
-        data.map((frequency) => (
-          <Card
-            key={frequency.id}
-            sx={{
-              width: "100%",
-              height: 80,
-              maxWidth: 250,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Link to="/frequency/retrieve">
-              <button
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-                onClick={() => setFrequencyData(frequency)}
-              >
-                <CardContent sx={{ display: "flex", gap: 2 }}>
-                  <People />
-                  <Typography>{frequency.date}</Typography>
-                  <Typography>{frequency.class.class.name}</Typography>
-                </CardContent>
-              </button>
-            </Link>
-          </Card>
-        ))}
-    </BasePage>
+    <LayoutBasePage title="Frequências em Aberto">
+      {data && data.length > 0 ? (
+        <TableFrequency>
+          <>
+            {data.map((el) => (
+              <CardFrequency key={el.id} freq={el} />
+            ))}
+          </>
+        </TableFrequency>
+      ) : (
+        <Typography m={2}>Nenhuma frequência em aberto no momento!</Typography>
+      )}
+    </LayoutBasePage>
   );
 };

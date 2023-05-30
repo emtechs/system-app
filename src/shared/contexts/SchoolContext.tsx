@@ -11,6 +11,7 @@ import {
   iChildren,
   iFrequency,
   iFrequencyStudentsWithInfreq,
+  iFrequencyWithInfreq,
   iSchool,
   iSchoolImportRequest,
   iSchoolRequest,
@@ -85,6 +86,8 @@ interface iSchoolContextData {
     SetStateAction<iFrequencyStudentsWithInfreq | undefined>
   >;
   schoolYear: string | undefined;
+  retrieveFreq: iFrequencyWithInfreq | undefined;
+  setRetrieveFreq: Dispatch<SetStateAction<iFrequencyWithInfreq | undefined>>;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -99,6 +102,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [studentData, setStudentData] =
     useState<iFrequencyStudentsWithInfreq>();
   const [schoolYear, setSchoolYear] = useState<string>();
+  const [retrieveFreq, setRetrieveFreq] = useState<iFrequencyWithInfreq>();
 
   useEffect(() => {
     const year = dayjs().year();
@@ -324,6 +328,8 @@ export const SchoolProvider = ({ children }: iChildren) => {
         schoolSelect,
         setSchoolSelect,
         schoolYear,
+        retrieveFreq,
+        setRetrieveFreq,
       }}
     >
       {children}

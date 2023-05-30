@@ -1,15 +1,18 @@
 import { FormContainer, useFormContext } from "react-hook-form-mui";
-import { BasePage, BoxResp, SelectClassData } from "../../../shared/components";
-import { useSchoolContext } from "../../../shared/contexts";
+import { SelectClassData } from "../../../shared/components";
+import { useAuthContext, useSchoolContext } from "../../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { frequencyCreateSchema } from "../../../shared/schemas";
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Grid,
+  Paper,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { iClass, iFrequency } from "../../../shared/interfaces";
@@ -21,6 +24,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Link } from "react-router-dom";
 import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/pt-br";
+import { LayoutBasePage } from "../../../shared/layouts";
 
 interface iDateValueProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,7 +32,8 @@ interface iDateValueProps {
 
 const DateValue = ({ setOpen }: iDateValueProps) => {
   const { watch, setValue } = useFormContext();
-  const { setFrequencyData } = useSchoolContext();
+  const { schoolData } = useAuthContext();
+  const { setFrequencyData, schoolYear } = useSchoolContext();
   const [dateData, setDateData] = useState<Dayjs | null>(dayjs());
   const classData: iClass = watch("class");
 
@@ -44,9 +49,12 @@ const DateValue = ({ setOpen }: iDateValueProps) => {
             setDateData(null);
           }
         });
+      setValue("school", schoolData?.school);
+      setValue("school_year_id", schoolYear);
       setValue("date", date);
     }
   }, [classData, dateData]);
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
       <DemoContainer components={["DatePicker"]}>
@@ -67,20 +75,40 @@ export const CreateFrequencyCommon = () => {
 
   return (
     <>
-      <BasePage isProfile>
+      <LayoutBasePage title="Nova Frequência">
         <FormContainer
           onSuccess={createFrequency}
           resolver={zodResolver(frequencyCreateSchema)}
         >
-          <BoxResp isProfile>
-            <SelectClassData />
-            <DateValue setOpen={setOpen} />
-            <Button variant="contained" type="submit" fullWidth>
-              Salvar
-            </Button>
-          </BoxResp>
+          <Box
+            m={2}
+            display="flex"
+            flexDirection="column"
+            component={Paper}
+            variant="outlined"
+          >
+            <Grid container direction="column" p={2} spacing={2}>
+              <Grid container item direction="row" justifyContent="center">
+                <Grid item xs={12} sm={9} md={6} lg={3}>
+                  <SelectClassData />
+                </Grid>
+              </Grid>
+              <Grid container item direction="row" justifyContent="center">
+                <Grid item xs={12} sm={9} md={6} lg={3}>
+                  <DateValue setOpen={setOpen} />
+                </Grid>
+              </Grid>
+              <Grid container item direction="row" justifyContent="center">
+                <Grid item xs={12} sm={9} md={6} lg={3}>
+                  <Button variant="contained" type="submit" fullWidth>
+                    Salvar
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Box>
         </FormContainer>
-      </BasePage>
+      </LayoutBasePage>
       <Dialog
         open={open}
         onClose={handleClose}

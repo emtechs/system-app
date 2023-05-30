@@ -63,6 +63,27 @@ export interface iStudent {
   infrequency: number;
 }
 
+export interface iStudentDash {
+  id: string;
+  name: string;
+  registry: string;
+  is_active: boolean;
+  justify_disabled?: string;
+  infreq: number;
+  presented: number;
+  justified: number;
+  missed: number;
+  total_frequencies: number;
+  infrequency: number;
+  classes: {
+    class: {
+      school_id: string;
+      school_year_id: string;
+      class: iClass;
+    };
+  }[];
+}
+
 export interface iStudentWithSchool {
   id: string;
   name: string;
@@ -179,6 +200,7 @@ export interface iFrequencyStudentsWithInfreq {
   updated_at?: string;
   name: string;
   registry: string;
+  infreq: number;
   infrequency: number;
   frequencyStudent_id: string;
 }

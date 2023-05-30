@@ -1,2 +1,4 @@
-export * from "./TableRetrieveUser";
-export * from "./TableUser";
+export * from "./Frequency";
+export * from "./RetrieveFrequency";
+export * from "./RetrieveUser";
+export * from "./User";

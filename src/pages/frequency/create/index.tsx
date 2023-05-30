@@ -11,6 +11,9 @@ export const CreateFrequency = () => {
     case "SCHOOL":
       return <CreateFrequencyCommon />;
 
+    case "COMMON":
+      return <CreateFrequencyCommon />;
+
     default:
       return <></>;
   }

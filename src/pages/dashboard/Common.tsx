@@ -23,7 +23,7 @@ import {
   iClassDash,
   iClassWithSchool,
   iFrequency,
-  iStudent,
+  iStudentDash,
 } from "../../shared/interfaces";
 import { SelectSchoolData } from "../../shared/components";
 import dayjs from "dayjs";
@@ -129,10 +129,17 @@ const ClassDashAlert = ({ classData }: iClassDashAlertProps) => {
 };
 
 interface iStudentAlertProps {
-  student: iStudent;
+  student: iStudentDash;
 }
 
 const StudentAlert = ({ student }: iStudentAlertProps) => {
+  const { schoolData } = useAuthContext();
+  const { schoolYear } = useSchoolContext();
+  const classData = student.classes.filter(
+    (el) =>
+      el.class.school_id === schoolData?.school.id &&
+      el.class.school_year_id === schoolYear
+  );
   return (
     <Grid item xs={12} md={6} lg={4}>
       <Card>
@@ -149,6 +156,7 @@ const StudentAlert = ({ student }: iStudentAlertProps) => {
           <Typography gutterBottom>
             {String(student.infrequency).replace(".", ",")}% de Infrequência
           </Typography>
+          <Typography gutterBottom>{classData[0].class.class.name}</Typography>
         </CardContent>
       </Card>
     </Grid>
@@ -167,7 +175,7 @@ export const DashboardCommon = () => {
   const [listAlertClassData, setListAlertClassData] =
     useState<iClassWithSchool[]>();
   const [listAlertStudentData, setListAlertStudentData] =
-    useState<iStudent[]>();
+    useState<iStudentDash[]>();
 
   useEffect(() => {
     const date = dayjs().format("DD/MM/YYYY");
@@ -200,7 +208,7 @@ export const DashboardCommon = () => {
       .finally(() => setLoading(false));
     setLoading(true);
     apiUsingNow
-      .get<iStudent[]>(
+      .get<iStudentDash[]>(
         `students?school_year_id=${schoolYear}&school_id=${schoolData?.school.id}&take=${take}`
       )
       .then((res) => setListAlertStudentData(res.data))

@@ -7,6 +7,7 @@ import {
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../services";
 import { iClassWithSchool, iSchool } from "../../interfaces";
+import { Box } from "@mui/material";
 
 const ValidateSchoolClass = () => {
   const { watch } = useFormContext();
@@ -73,40 +74,42 @@ export const SelectSchoolClass = () => {
 
   return (
     <>
-      <div style={{ width: "100%" }}>
-        <AutocompleteElement
-          name="school"
-          label="Escola"
-          loading={!schoolDataSelect}
-          options={
-            schoolDataSelect && schoolDataSelect.length > 0
-              ? schoolDataSelect
-              : [
-                  {
-                    id: 1,
-                    label: "No momento, não há nenhuma escola cadastrada",
-                  },
-                ]
-          }
-        />
-      </div>
-      <div style={{ width: "100%" }}>
-        <AutocompleteElement
-          name="class"
-          label="Turma"
-          loading={!data}
-          options={
-            data && data.length > 0
-              ? data
-              : [
-                  {
-                    id: 1,
-                    label: "No momento, não há nenhuma turma cadastrada",
-                  },
-                ]
-          }
-        />
-      </div>
+      <Box display="flex" flexDirection="column" gap={2}>
+        <div style={{ width: "100%" }}>
+          <AutocompleteElement
+            name="school"
+            label="Escola"
+            loading={!schoolDataSelect}
+            options={
+              schoolDataSelect && schoolDataSelect.length > 0
+                ? schoolDataSelect
+                : [
+                    {
+                      id: 1,
+                      label: "No momento, não há nenhuma escola cadastrada",
+                    },
+                  ]
+            }
+          />
+        </div>
+        <div style={{ width: "100%" }}>
+          <AutocompleteElement
+            name="class"
+            label="Turma"
+            loading={!data}
+            options={
+              data && data.length > 0
+                ? data
+                : [
+                    {
+                      id: 1,
+                      label: "No momento, não há nenhuma turma cadastrada",
+                    },
+                  ]
+            }
+          />
+        </div>
+      </Box>
       <ValidateSchoolClass />
     </>
   );
