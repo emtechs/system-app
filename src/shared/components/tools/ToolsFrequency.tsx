@@ -1,10 +1,15 @@
 import { Checklist } from "@mui/icons-material";
 import { Box, Button, Paper, useTheme } from "@mui/material";
-import { useClassContext, useSchoolContext } from "../../contexts";
+import {
+  useClassContext,
+  useFrequencyContext,
+  useSchoolContext,
+} from "../../contexts";
 
 export const ToolsFrequency = () => {
   const theme = useTheme();
-  const { updateFrequency, updateStudent, retrieveFreq } = useSchoolContext();
+  const { updateStudent } = useSchoolContext();
+  const { updateFrequency, retrieveFreq } = useFrequencyContext();
   const { updateClassSchool } = useClassContext();
   return (
     <Box

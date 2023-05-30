@@ -7,9 +7,9 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { iChildren } from "../../interfaces";
+import { iChildren } from "../../../interfaces";
 
-export const TableUser = ({ children }: iChildren) => {
+export const TableFrequency = ({ children }: iChildren) => {
   return (
     <TableContainer
       sx={{ m: 2, width: "auto" }}
@@ -19,10 +19,10 @@ export const TableUser = ({ children }: iChildren) => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell></TableCell>
-            <TableCell>Nome Completo</TableCell>
-            <TableCell>CPF</TableCell>
-            <TableCell>Função</TableCell>
+            <TableCell>Data</TableCell>
+            <TableCell>Turma</TableCell>
+            <TableCell>Alunos</TableCell>
+            <TableCell>Escola</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>{children}</TableBody>

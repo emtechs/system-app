@@ -13,20 +13,26 @@ import {
 import { LayoutBasePage } from "../../shared/layouts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
-import { useAppThemeContext } from "../../shared/contexts";
-import { iFrequencyWithInfreq, iSchoolDash } from "../../shared/interfaces";
+import { useAppThemeContext, useFrequencyContext } from "../../shared/contexts";
+import { iFrequencyWithInfreq } from "../../shared/interfaces";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import relativeTime from "dayjs/plugin/relativeTime";
+import {
+  DialogDeleteFrequency,
+  DialogRetrieveFrequency,
+} from "../../shared/components";
 dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
 
 interface iFreqDashProps {
   freq: iFrequencyWithInfreq;
   isOpen?: boolean;
+  handleOpen: () => void;
 }
 
-const FreqDash = ({ freq, isOpen }: iFreqDashProps) => {
+const FreqDash = ({ freq, isOpen, handleOpen }: iFreqDashProps) => {
+  const { setRetrieveFreq } = useFrequencyContext();
   return (
     <Grid item xs={12} md={6} lg={4}>
       <Card>
@@ -55,52 +61,26 @@ const FreqDash = ({ freq, isOpen }: iFreqDashProps) => {
         </CardContent>
         <CardActions>
           {isOpen ? (
-            <Button size="small">Excluir</Button>
+            <Button
+              size="small"
+              onClick={() => {
+                setRetrieveFreq(freq);
+                handleOpen();
+              }}
+            >
+              Excluir
+            </Button>
           ) : (
-            <Button size="small">Reabrir</Button>
+            <Button
+              size="small"
+              onClick={() => {
+                setRetrieveFreq(freq);
+                handleOpen();
+              }}
+            >
+              Reabrir
+            </Button>
           )}
-          <Button size="small">Saber Mais</Button>
-        </CardActions>
-      </Card>
-    </Grid>
-  );
-};
-
-interface iSchoolDashProps {
-  school: iSchoolDash;
-}
-
-const SchoolDash = ({ school }: iSchoolDashProps) => {
-  return (
-    <Grid item xs={12} md={6} lg={4}>
-      <Card>
-        <CardContent>
-          <Typography
-            overflow="hidden"
-            whiteSpace="nowrap"
-            textOverflow="ellipses"
-            gutterBottom
-          >
-            {school.name}
-          </Typography>
-          <Typography gutterBottom>{school.total_students} Alunos</Typography>
-          <Typography gutterBottom>
-            {String(school.school_infreq).replace(".", ",")}% de Infrequência
-          </Typography>
-          <Typography>{school.classes[0].class.name}</Typography>
-          <Typography>{school.classes[0]._count.students} Alunos</Typography>
-          <Typography>
-            {String(school.classes[0].class_infreq).replace(".", ",")}% de
-            Infrequência
-          </Typography>
-          {school.director && (
-            <>
-              <Typography>{school.director.name}</Typography>
-              <Typography>{school.director.cpf}</Typography>
-            </>
-          )}
-        </CardContent>
-        <CardActions>
           <Button size="small">Saber Mais</Button>
         </CardActions>
       </Card>
@@ -116,7 +96,11 @@ export const DashboardAdmin = () => {
   const [listFreqData, setListFreqData] = useState<iFrequencyWithInfreq[]>();
   const [listFreqOpenData, setListFreqOpenData] =
     useState<iFrequencyWithInfreq[]>();
-  const [listSchoolData, setListSchoolData] = useState<iSchoolDash[]>();
+  const { retrieveFreq } = useFrequencyContext();
+  const [openRetrieve, setOpenRetrieve] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const handleOpenRetrieve = () => setOpenRetrieve(!openRetrieve);
+  const handleOpenDelete = () => setOpenDelete(!openDelete);
 
   useEffect(() => {
     let take = 1;
@@ -137,105 +121,116 @@ export const DashboardAdmin = () => {
       .get<iFrequencyWithInfreq[]>(`frequencies?is_dash=true&take=${take}`)
       .then((res) => setListFreqOpenData(res.data))
       .finally(() => setLoading(false));
-    setLoading(true);
-    apiUsingNow
-      .get<iSchoolDash[]>(`schools?is_dash=true&take=${take}`)
-      .then((res) => {
-        setListSchoolData(res.data);
-      })
-      .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    let take = 1;
+    if (mdLgBetween) {
+      take = 2;
+    } else if (mdUp) {
+      take = 3;
+    }
+    setLoading(true);
+    apiUsingNow
+      .get<iFrequencyWithInfreq[]>(
+        `frequencies?status=CLOSED&take=${take}&is_infreq=true`
+      )
+      .then((res) => setListFreqData(res.data))
+      .finally(() => setLoading(false));
+    setLoading(true);
+    apiUsingNow
+      .get<iFrequencyWithInfreq[]>(`frequencies?is_dash=true&take=${take}`)
+      .then((res) => setListFreqOpenData(res.data))
+      .finally(() => setLoading(false));
+  }, [retrieveFreq]);
+
   return (
-    <LayoutBasePage title="Página Inicial">
-      <Box
-        mx={2}
-        display="flex"
-        flexDirection="column"
-        component={Paper}
-        variant="outlined"
-      >
-        <Card>
-          <CardContent>
-            <Grid container direction="column" p={2} spacing={2}>
-              <Typography variant="h6">Últimas Frequências</Typography>
-              <Grid
-                container
-                item
-                direction="row"
-                justifyContent="center"
-                spacing={2}
-              >
-                {listFreqData &&
-                  listFreqData.map((el) => <FreqDash key={el.id} freq={el} />)}
+    <>
+      <LayoutBasePage title="Página Inicial">
+        <Box
+          mx={2}
+          display="flex"
+          flexDirection="column"
+          component={Paper}
+          variant="outlined"
+        >
+          <Card>
+            <CardContent>
+              <Grid container direction="column" p={2} spacing={2}>
+                <Typography variant="h6">Últimas Frequências</Typography>
+                <Grid
+                  container
+                  item
+                  direction="row"
+                  justifyContent="center"
+                  spacing={2}
+                >
+                  {listFreqData &&
+                    listFreqData.map((el) => (
+                      <FreqDash
+                        key={el.id}
+                        freq={el}
+                        handleOpen={handleOpenRetrieve}
+                      />
+                    ))}
+                </Grid>
               </Grid>
-            </Grid>
-          </CardContent>
-          <CardActions sx={{ justifyContent: "flex-end" }}>
-            <Button>Saber Mais</Button>
-          </CardActions>
-        </Card>
-      </Box>
-      <Box
-        m={2}
-        display="flex"
-        flexDirection="column"
-        component={Paper}
-        variant="outlined"
-      >
-        <Card>
-          <CardContent>
-            <Grid container direction="column" p={2} spacing={2}>
-              <Typography variant="h6">Frequências Em Aberto</Typography>
-              <Grid
-                container
-                item
-                direction="row"
-                justifyContent="center"
-                spacing={2}
-              >
-                {listFreqOpenData &&
-                  listFreqOpenData.map((el) => (
-                    <FreqDash key={el.id} freq={el} isOpen />
-                  ))}
+            </CardContent>
+            <CardActions sx={{ justifyContent: "flex-end" }}>
+              <Button>Saber Mais</Button>
+            </CardActions>
+          </Card>
+        </Box>
+        <Box
+          m={2}
+          display="flex"
+          flexDirection="column"
+          component={Paper}
+          variant="outlined"
+        >
+          <Card>
+            <CardContent>
+              <Grid container direction="column" p={2} spacing={2}>
+                <Typography variant="h6">Frequências Em Aberto</Typography>
+                <Grid
+                  container
+                  item
+                  direction="row"
+                  justifyContent="center"
+                  spacing={2}
+                >
+                  {listFreqOpenData &&
+                    listFreqOpenData.map((el) => (
+                      <FreqDash
+                        key={el.id}
+                        freq={el}
+                        isOpen
+                        handleOpen={handleOpenDelete}
+                      />
+                    ))}
+                </Grid>
               </Grid>
-            </Grid>
-          </CardContent>
-          <CardActions sx={{ justifyContent: "flex-end" }}>
-            <Button>Saber Mais</Button>
-          </CardActions>
-        </Card>
-      </Box>
-      <Box
-        m={2}
-        display="flex"
-        flexDirection="column"
-        component={Paper}
-        variant="outlined"
-      >
-        <Card>
-          <CardContent>
-            <Grid container direction="column" p={2} spacing={2}>
-              <Typography variant="h6">Alerta Escolas</Typography>
-              <Grid
-                container
-                item
-                direction="row"
-                justifyContent="center"
-                spacing={2}
-              >
-                {listSchoolData &&
-                  listSchoolData.map((el) => (
-                    <SchoolDash key={el.id} school={el} />
-                  ))}
-              </Grid>
-            </Grid>
-          </CardContent>
-          <CardActions sx={{ justifyContent: "flex-end" }}>
-            <Button>Saber Mais</Button>
-          </CardActions>
-        </Card>
-      </Box>
-    </LayoutBasePage>
+            </CardContent>
+            <CardActions sx={{ justifyContent: "flex-end" }}>
+              <Button>Saber Mais</Button>
+            </CardActions>
+          </Card>
+        </Box>
+      </LayoutBasePage>
+      {retrieveFreq && (
+        <DialogRetrieveFrequency
+          open={openRetrieve}
+          onClose={handleOpenRetrieve}
+          frequency={retrieveFreq}
+        />
+      )}
+      {retrieveFreq && (
+        <DialogDeleteFrequency
+          open={openDelete}
+          onClose={handleOpenDelete}
+          frequency={retrieveFreq}
+        />
+      )}
+    </>
   );
 };

@@ -17,6 +17,7 @@ import { apiUsingNow } from "../../shared/services";
 import {
   useAppThemeContext,
   useAuthContext,
+  useFrequencyContext,
   useSchoolContext,
 } from "../../shared/contexts";
 import {
@@ -35,7 +36,7 @@ interface iClassDashProps {
 }
 
 const ClassDash = ({ classData }: iClassDashProps) => {
-  const { createFrequency } = useSchoolContext();
+  const { createFrequency } = useFrequencyContext();
   const date = dayjs().format("DD/MM/YYYY");
   const month = dayjs().month() + 1;
   const students = classData.students.map(({ student }) => {
@@ -103,6 +104,7 @@ interface iClassDashAlertProps {
 }
 
 const ClassDashAlert = ({ classData }: iClassDashAlertProps) => {
+  const navigate = useNavigate();
   return (
     <Grid item xs={12} md={6} lg={4}>
       <Card>
@@ -123,7 +125,16 @@ const ClassDashAlert = ({ classData }: iClassDashAlertProps) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small">Saber Mais</Button>
+          <Button
+            size="small"
+            onClick={() =>
+              navigate(
+                `/class/${classData.class.id}/${classData.school.id}/${classData.school_year.id}`
+              )
+            }
+          >
+            Saber Mais
+          </Button>
         </CardActions>
       </Card>
     </Grid>
@@ -176,6 +187,7 @@ const StudentAlert = ({ student }: iStudentAlertProps) => {
 
 export const DashboardCommon = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const mdLgBetween = useMediaQuery(theme.breakpoints.between("md", "lg"));
   const mdUp = useMediaQuery(theme.breakpoints.up("md"));
   const { setLoading } = useAppThemeContext();
@@ -199,9 +211,7 @@ export const DashboardCommon = () => {
       .finally(() => setLoading(false));
     setLoading(true);
     apiUsingNow
-      .get<iFrequency[]>(
-        `frequencies?school_id=${schoolData?.school.id}`
-      )
+      .get<iFrequency[]>(`frequencies?school_id=${schoolData?.school.id}`)
       .then((res) => setListFreqData(res.data))
       .finally(() => setLoading(false));
     let take = 1;
@@ -308,7 +318,13 @@ export const DashboardCommon = () => {
             </Grid>
           </CardContent>
           <CardActions sx={{ justifyContent: "flex-end" }}>
-            <Button>Saber Mais</Button>
+            <Button
+              onClick={() => {
+                navigate(`/class/list/${schoolData?.school.id}/${schoolYear}`);
+              }}
+            >
+              Saber Mais
+            </Button>
           </CardActions>
         </Card>
       </Box>
@@ -337,9 +353,6 @@ export const DashboardCommon = () => {
               </Grid>
             </Grid>
           </CardContent>
-          <CardActions sx={{ justifyContent: "flex-end" }}>
-            <Button>Saber Mais</Button>
-          </CardActions>
         </Card>
       </Box>
     </LayoutBasePage>

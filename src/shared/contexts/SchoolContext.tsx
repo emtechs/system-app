@@ -9,9 +9,6 @@ import {
 } from "react";
 import {
   iChildren,
-  iFrequency,
-  iFrequencyStudentsWithInfreq,
-  iFrequencyWithInfreq,
   iSchool,
   iSchoolImportRequest,
   iSchoolRequest,
@@ -22,11 +19,8 @@ import {
 } from "../interfaces";
 import {
   apiUsingNow,
-  patchFrequency,
-  patchFrequencyStudent,
   patchSchool,
   patchStudent,
-  postFrequency,
   postImportSchool,
   postImportStudent,
   postImportStudentAll,
@@ -64,30 +58,19 @@ interface iSchoolContextData {
     data: iStudentImportRequest,
     back?: string
   ) => Promise<void>;
-  createFrequency: (data: FieldValues) => Promise<void>;
   updateSchool: (
     data: FieldValues,
     id: string,
     type: "nome" | "diretor" | "estado",
     back?: string
   ) => Promise<void>;
-  updateFrequency: (data: FieldValues, id: string) => Promise<void>;
-  updateFrequencyStudent: (data: FieldValues, id: string) => Promise<void>;
   schoolDataSelect: iSchoolSelect[] | undefined;
   setSchoolDataSelect: Dispatch<SetStateAction<iSchoolSelect[] | undefined>>;
   schoolSelect: iSchool | undefined;
   setSchoolSelect: Dispatch<SetStateAction<iSchool | undefined>>;
   listSchoolData: iSchool[] | undefined;
   setListSchoolData: Dispatch<SetStateAction<iSchool[] | undefined>>;
-  frequencyData: iFrequency | undefined;
-  setFrequencyData: Dispatch<SetStateAction<iFrequency | undefined>>;
-  studentData: iFrequencyStudentsWithInfreq | undefined;
-  setStudentData: Dispatch<
-    SetStateAction<iFrequencyStudentsWithInfreq | undefined>
-  >;
   schoolYear: string | undefined;
-  retrieveFreq: iFrequencyWithInfreq | undefined;
-  setRetrieveFreq: Dispatch<SetStateAction<iFrequencyWithInfreq | undefined>>;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -98,11 +81,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [schoolDataSelect, setSchoolDataSelect] = useState<iSchoolSelect[]>();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
-  const [frequencyData, setFrequencyData] = useState<iFrequency>();
-  const [studentData, setStudentData] =
-    useState<iFrequencyStudentsWithInfreq>();
   const [schoolYear, setSchoolYear] = useState<string>();
-  const [retrieveFreq, setRetrieveFreq] = useState<iFrequencyWithInfreq>();
 
   useEffect(() => {
     const year = dayjs().year();
@@ -257,52 +236,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
     []
   );
 
-  const handleCreateFrequency = useCallback(async (data: FieldValues) => {
-    try {
-      setLoading(true);
-      const frequency = await postFrequency(data);
-      toast.success("Frequência cadastrado com sucesso!");
-      setFrequencyData(frequency);
-      setLoading(false);
-      navigate(`/frequency/${frequency.id}`);
-    } catch {
-      setLoading(false);
-      toast.error("Não foi possível cadastrar a frequência no momento!");
-    }
-  }, []);
-
-  const handleUpdateFrequency = useCallback(
-    async (data: FieldValues, id: string) => {
-      try {
-        setLoading(true);
-        await patchFrequency(data, id);
-        toast.success("Frequência realizada com sucesso!");
-        setLoading(false);
-      } catch {
-        setLoading(false);
-        toast.error("Não foi possível realizar a frequência no momento!");
-      }
-    },
-    []
-  );
-
-  const handleUpdateStudentFrequency = useCallback(
-    async (data: FieldValues, id: string) => {
-      try {
-        setLoading(true);
-        await patchFrequencyStudent(data, id);
-        toast.success("Falta cadastrada com sucesso!");
-        setStudentData(undefined);
-        setLoading(false);
-      } catch {
-        setStudentData(undefined);
-        setLoading(false);
-        toast.error("Não foi possível cadastrar a falta no momento!");
-      }
-    },
-    []
-  );
-
   return (
     <SchoolContext.Provider
       value={{
@@ -313,23 +246,14 @@ export const SchoolProvider = ({ children }: iChildren) => {
         updateStudent: handleUpdateStudent,
         importStudent: handleImportStudent,
         importStudentAll: handleImportStudentAll,
-        createFrequency: handleCreateFrequency,
         updateSchool: handleUpdateSchool,
-        updateFrequency: handleUpdateFrequency,
-        updateFrequencyStudent: handleUpdateStudentFrequency,
         schoolDataSelect,
         setSchoolDataSelect,
         listSchoolData,
         setListSchoolData,
-        frequencyData,
-        setFrequencyData,
-        studentData,
-        setStudentData,
         schoolSelect,
         setSchoolSelect,
         schoolYear,
-        retrieveFreq,
-        setRetrieveFreq,
       }}
     >
       {children}

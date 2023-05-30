@@ -3,7 +3,7 @@ import { BasePage } from "../../../shared/components";
 import {
   useAppThemeContext,
   useAuthContext,
-  useSchoolContext,
+  useFrequencyContext,
 } from "../../../shared/contexts";
 import { Link } from "react-router-dom";
 import { People } from "@mui/icons-material";
@@ -14,7 +14,7 @@ import { iFrequency } from "../../../shared/interfaces";
 export const ListFrequency = () => {
   const { setLoading } = useAppThemeContext();
   const { schoolData } = useAuthContext();
-  const { setFrequencyData } = useSchoolContext();
+  const { setFrequencyData } = useFrequencyContext();
   const [data, setData] = useState<iFrequency[]>();
 
   useEffect(() => {

@@ -18,7 +18,11 @@ import {
   TableRetrieveFrequency,
   ToolsFrequency,
 } from "../../shared/components";
-import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
+import {
+  useAppThemeContext,
+  useFrequencyContext,
+  useSchoolContext,
+} from "../../shared/contexts";
 import {
   iFrequencyStudentsWithInfreq,
   iFrequencyWithInfreq,
@@ -35,6 +39,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { useParams } from "react-router-dom";
 import { LayoutBasePage } from "../../shared/layouts";
 import { Checklist } from "@mui/icons-material";
+import { CardSchool } from "../../shared/components/card";
 dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
 
@@ -84,7 +89,7 @@ const defineColor = (status: iStatusStudent) => {
 const CardFrequency = ({ student }: iCardFrequencyProps) => {
   const theme = useTheme();
   const { updateFrequencyStudent, studentData, setStudentData } =
-    useSchoolContext();
+    useFrequencyContext();
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setStudentData(student);
@@ -118,15 +123,6 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
         <TableCell>
           {student.updated_at ? dayjs(student.updated_at).fromNow() : "-"}
         </TableCell>
-        {student.updated_at && (
-          <Typography
-            sx={{ position: "absolute", bottom: 4, right: 4 }}
-            fontSize={7}
-            color={theme.palette.grey[400]}
-          >
-            {dayjs(student.updated_at).fromNow()}
-          </Typography>
-        )}
       </TableRow>
       {studentData && (
         <Dialog open={open} onClose={handleClose}>
@@ -228,8 +224,8 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
 export const RetrieveFrequency = () => {
   const { id } = useParams<"id">();
   const { setLoading } = useAppThemeContext();
-  const { studentData, schoolYear, retrieveFreq, setRetrieveFreq } =
-    useSchoolContext();
+  const { schoolYear } = useSchoolContext();
+  const { studentData, retrieveFreq, setRetrieveFreq } = useFrequencyContext();
 
   useEffect(() => {
     setLoading(true);
@@ -261,6 +257,7 @@ export const RetrieveFrequency = () => {
 
   return (
     <LayoutBasePage
+      school={<CardSchool />}
       tools={<ToolsFrequency />}
       title={
         retrieveFreq

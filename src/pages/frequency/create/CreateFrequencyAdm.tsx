@@ -1,6 +1,9 @@
 import { FormContainer, useFormContext } from "react-hook-form-mui";
 import { SelectSchoolClass } from "../../../shared/components";
-import { useSchoolContext } from "../../../shared/contexts";
+import {
+  useFrequencyContext,
+  useSchoolContext,
+} from "../../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { frequencyCreateSchema } from "../../../shared/schemas";
 import {
@@ -32,7 +35,8 @@ interface iDateValueProps {
 
 const DateValue = ({ setOpen }: iDateValueProps) => {
   const { watch, setValue } = useFormContext();
-  const { setFrequencyData, schoolYear } = useSchoolContext();
+  const { schoolYear } = useSchoolContext();
+  const { setFrequencyData } = useFrequencyContext();
   const [dateData, setDateData] = useState<Dayjs | null>(dayjs());
   const classData: iClass = watch("class");
 
@@ -68,7 +72,7 @@ const DateValue = ({ setOpen }: iDateValueProps) => {
 };
 
 export const CreateFrequencyAdm = () => {
-  const { createFrequency, frequencyData } = useSchoolContext();
+  const { createFrequency, frequencyData } = useFrequencyContext();
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(!open);
 

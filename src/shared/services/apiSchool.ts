@@ -85,3 +85,7 @@ export async function patchFrequencyStudent(
   );
   return response;
 }
+
+export async function deleteFrequency(id: string) {
+  await apiUsingNow.delete(`frequencies/${id}`);
+}

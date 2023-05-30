@@ -1,5 +1,6 @@
 export * from "./basePage";
 export * from "./boxResp";
+export * from "./dialog";
 export * from "./first";
 export * from "./glossary";
 export * from "./inputFile";

@@ -1,6 +1,5 @@
 import { z } from "zod";
 import {
-  classCreateSchema,
   frequencyCreateSchema,
   schoolCreateSchema,
   schoolImportSchema,
@@ -8,7 +7,8 @@ import {
   studentCreateSchema,
   studentImportSchema,
 } from "../schemas";
-import { iDash } from ".";
+import { iDash, iStudent } from ".";
+import { iClassFreq, iClassWithSchoolDash } from "./class.interfaces";
 
 export interface iDirector {
   id: string;
@@ -22,12 +22,6 @@ export interface iSchool {
   is_active: boolean;
   director?: iDirector;
   school_infreq: number;
-}
-
-interface iClassWithSchoolDash {
-  class: iClass;
-  class_infreq: number;
-  _count: { students: number };
 }
 
 export interface iSchoolDash {
@@ -49,68 +43,6 @@ export interface iWorkSchool {
   school: iSchool;
 }
 
-export interface iStudent {
-  id: string;
-  name: string;
-  registry: string;
-  is_active: boolean;
-  justify_disabled?: string;
-  infreq: number;
-  presented: number;
-  justified: number;
-  missed: number;
-  total_frequencies: number;
-  infrequency: number;
-}
-
-export interface iStudentDash {
-  id: string;
-  name: string;
-  registry: string;
-  is_active: boolean;
-  justify_disabled?: string;
-  infreq: number;
-  presented: number;
-  justified: number;
-  missed: number;
-  total_frequencies: number;
-  infrequency: number;
-  classes: {
-    class: {
-      school_id: string;
-      school_year_id: string;
-      class: iClass;
-    };
-  }[];
-}
-
-export interface iStudentWithSchool {
-  id: string;
-  name: string;
-  registry: string;
-  presented: number;
-  justified: number;
-  missed: number;
-  total_frequencies: number;
-  infrequency: number;
-}
-
-export interface iClass {
-  id: string;
-  name: string;
-}
-
-export interface iClassDash {
-  class: iClass;
-  class_infreq: number;
-  school: iWithSchool;
-  school_year: iSchoolYear;
-  students: {
-    student: { id: string; name: string; registry: string };
-  }[];
-  _count: { frequencies: number; students: number };
-}
-
 export interface iWithSchool {
   id: string;
   name: string;
@@ -121,20 +53,6 @@ export interface iSchoolYear {
   year: string;
 }
 
-export interface iClassWithSchool {
-  class: iClass;
-  class_infreq: number;
-  school: iWithSchool;
-  school_year: iSchoolYear;
-  students: iStudentWithSchool[];
-  _count: { frequencies: number; students: number };
-  infrequency: number;
-}
-
-export interface iClassSelect extends iClass {
-  label: string;
-}
-
 export type iStatusFrequency = "OPENED" | "CLOSED";
 
 export type iStatusStudent = "PRESENTED" | "MISSED" | "JUSTIFIED";
@@ -143,13 +61,6 @@ interface iUserFreq {
   id: string;
   name: string;
   cpf: string;
-}
-
-interface iClassFreq {
-  class: iClass;
-  school: iWithSchool;
-  school_year: iSchoolYear;
-  class_infreq: number;
 }
 
 export interface iFrequency {
@@ -188,11 +99,7 @@ export interface iFrequencyStudents {
   status: iStatusStudent;
   justification?: string;
   updated_at?: string;
-  student: {
-    id: string;
-    name: string;
-    registry: string;
-  };
+  student: iStudent;
   _count: { students: number };
 }
 
@@ -213,8 +120,6 @@ export type iServerRequest = z.infer<typeof serverCreateSchema>;
 export type iSchoolRequest = z.infer<typeof schoolCreateSchema>;
 
 export type iSchoolImportRequest = z.infer<typeof schoolImportSchema>;
-
-export type iClassRequest = z.infer<typeof classCreateSchema>;
 
 export type iStudentRequest = z.infer<typeof studentCreateSchema>;
 

@@ -56,8 +56,8 @@ export const LayoutBasePage = ({
           {title}
         </Typography>
       </Box>
-      {tools && <Box>{tools}</Box>}
       {school && <Box>{school}</Box>}
+      {tools && <Box>{tools}</Box>}
       <Box flex={1} overflow="auto">
         {children}
       </Box>

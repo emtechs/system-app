@@ -1,6 +1,10 @@
 import { FormContainer, useFormContext } from "react-hook-form-mui";
 import { SelectClassData } from "../../../shared/components";
-import { useAuthContext, useSchoolContext } from "../../../shared/contexts";
+import {
+  useAuthContext,
+  useFrequencyContext,
+  useSchoolContext,
+} from "../../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { frequencyCreateSchema } from "../../../shared/schemas";
 import {
@@ -25,6 +29,7 @@ import { Link } from "react-router-dom";
 import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/pt-br";
 import { LayoutBasePage } from "../../../shared/layouts";
+import { CardSchool } from "../../../shared/components/card";
 
 interface iDateValueProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,7 +38,8 @@ interface iDateValueProps {
 const DateValue = ({ setOpen }: iDateValueProps) => {
   const { watch, setValue } = useFormContext();
   const { schoolData } = useAuthContext();
-  const { setFrequencyData, schoolYear } = useSchoolContext();
+  const { schoolYear } = useSchoolContext();
+  const { setFrequencyData } = useFrequencyContext();
   const [dateData, setDateData] = useState<Dayjs | null>(dayjs());
   const classData: iClass = watch("class");
 
@@ -70,13 +76,13 @@ const DateValue = ({ setOpen }: iDateValueProps) => {
 };
 
 export const CreateFrequencyCommon = () => {
-  const { createFrequency, frequencyData } = useSchoolContext();
+  const { createFrequency, frequencyData } = useFrequencyContext();
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(!open);
 
   return (
     <>
-      <LayoutBasePage title="Nova Frequência">
+      <LayoutBasePage title="Nova Frequência" school={<CardSchool />}>
         <FormContainer
           onSuccess={createFrequency}
           resolver={zodResolver(frequencyCreateSchema)}

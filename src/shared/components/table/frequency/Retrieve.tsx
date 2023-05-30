@@ -7,7 +7,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { iChildren } from "../../interfaces";
+import { iChildren } from "../../../interfaces";
 
 export const TableRetrieveFrequency = ({ children }: iChildren) => {
   return (

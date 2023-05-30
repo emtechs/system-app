@@ -15,6 +15,8 @@ import {
   DefineSchools,
   DefineSecret,
   EditClass,
+  EditPassword,
+  EditProfile,
   EditSchool,
   Frequency,
   Import,
@@ -28,6 +30,7 @@ import {
   Report,
   ReportClass,
   ReportRetrieve,
+  RetrieveClass,
   RetrieveFrequency,
   RetrieveUser,
   School,
@@ -60,13 +63,21 @@ const AppRoutes = () => {
       <Route path="/school/list" element={<ListSchool back="/school" />} />
       <Route path="/school/active" element={<ActiveSchool back="/school" />} />
       <Route path="/class" element={<ClassPage />} />
+      <Route
+        path="/class/:class_id/:school_id/:school_year_id"
+        element={<RetrieveClass />}
+      />
+      <Route
+        path="/class/list/:school_id/:school_year_id"
+        element={<ListClass />}
+      />
       <Route path="/class/create" element={<CreateClass back="/class" />} />
       <Route
         path="/class/define/school"
         element={<DefineSchools back="/class" />}
       />
       <Route path="/class/edit" element={<EditClass back="/class" />} />
-      <Route path="/class/list" element={<ListClass back="/class" />} />
+      <Route path="/class/list" element={<ListClass />} />
       <Route path="/class/active" element={<ActiveClass back="/class" />} />
       <Route path="/student" element={<Student />} />
       <Route
@@ -93,6 +104,8 @@ const AppRoutes = () => {
         path="/import/student"
         element={<ImportStudentPage back="/student" />}
       />
+      <Route path="/profile/edit" element={<EditProfile />} />
+      <Route path="/profile/edit/password" element={<EditPassword />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
