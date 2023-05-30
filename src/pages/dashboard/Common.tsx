@@ -135,11 +135,20 @@ interface iStudentAlertProps {
 const StudentAlert = ({ student }: iStudentAlertProps) => {
   const { schoolData } = useAuthContext();
   const { schoolYear } = useSchoolContext();
-  const classData = student.classes.filter(
-    (el) =>
-      el.class.school_id === schoolData?.school.id &&
-      el.class.school_year_id === schoolYear
-  );
+
+  let className = "";
+
+  if (student.classes) {
+    student.classes.forEach((el) => {
+      if (
+        el.class.school_id === schoolData?.school.id &&
+        el.class.school_year_id === schoolYear
+      ) {
+        className = el.class.class.name;
+      }
+    });
+  }
+
   return (
     <Grid item xs={12} md={6} lg={4}>
       <Card>
@@ -156,7 +165,7 @@ const StudentAlert = ({ student }: iStudentAlertProps) => {
           <Typography gutterBottom>
             {String(student.infrequency).replace(".", ",")}% de Infrequência
           </Typography>
-          <Typography gutterBottom>{classData[0].class.class.name}</Typography>
+          <Typography gutterBottom>{className}</Typography>
         </CardContent>
       </Card>
     </Grid>
