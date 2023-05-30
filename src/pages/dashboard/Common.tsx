@@ -200,7 +200,7 @@ export const DashboardCommon = () => {
     setLoading(true);
     apiUsingNow
       .get<iFrequency[]>(
-        `frequencies?status=OPENED&school_id=${schoolData?.school.id}`
+        `frequencies?school_id=${schoolData?.school.id}`
       )
       .then((res) => setListFreqData(res.data))
       .finally(() => setLoading(false));

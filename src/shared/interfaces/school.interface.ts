@@ -172,6 +172,7 @@ export interface iFrequencyWithInfreq {
   date: string;
   month: number;
   status: iStatusFrequency;
+  created_at: Date;
   finished_at: number;
   class: iClassFreq;
   user: iUserFreq;
