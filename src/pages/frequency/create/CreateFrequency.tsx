@@ -52,6 +52,7 @@ const DateValue = ({ setOpen }: iDateValueProps) => {
       setValue("school", schoolData?.school);
       setValue("school_year_id", schoolYear);
       setValue("date", date);
+      setValue("month", dayjs().month() + 1);
     }
   }, [classData, dateData]);
 

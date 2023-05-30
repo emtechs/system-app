@@ -37,6 +37,7 @@ interface iClassDashProps {
 const ClassDash = ({ classData }: iClassDashProps) => {
   const { createFrequency } = useSchoolContext();
   const date = dayjs().format("DD/MM/YYYY");
+  const month = dayjs().month() + 1;
   const students = classData.students.map(({ student }) => {
     return { student_id: student.id };
   });
@@ -48,6 +49,7 @@ const ClassDash = ({ classData }: iClassDashProps) => {
           onClick={() =>
             createFrequency({
               date,
+              month,
               class_id: classData.class.id,
               school_id: classData.school.id,
               school_year_id: classData.school_year.id,
