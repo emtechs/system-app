@@ -118,11 +118,11 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setLoading(true);
         await postImportSchool(file);
         toast.success("Escolas importadas com sucesso!");
-        setLoading(false);
         navigate(back ? back : "/");
       } catch {
-        setLoading(false);
         toast.error("Não foi possível importar as escolas no momento!");
+      } finally {
+        setLoading(false);
       }
     },
     []
@@ -159,11 +159,11 @@ export const SchoolProvider = ({ children }: iChildren) => {
         const query = `?school_id=${id}`;
         await postUser(data, query);
         toast.success("Servidor cadastrado com sucesso!");
-        setLoading(false);
         navigate(back ? back : "/");
       } catch {
-        setLoading(false);
         toast.error("Não foi possível cadastrar o servidor no momento!");
+      } finally {
+        setLoading(false);
       }
     },
     []
@@ -175,11 +175,11 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setLoading(true);
         await postStudent(data, id);
         toast.success("Estudante cadastrado com sucesso!");
-        setLoading(false);
         navigate(back ? back : "/");
       } catch {
-        setLoading(false);
         toast.error("Não foi possível cadastrar o estudante no momento!");
+      } finally {
+        setLoading(false);
       }
     },
     []
@@ -208,11 +208,11 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setLoading(true);
         await postImportStudent(file, class_id, school_id);
         toast.success("Estudantes importados com sucesso!");
-        setLoading(false);
         navigate(back ? back : "/");
       } catch {
-        setLoading(false);
         toast.error("Não foi possível importar os estudantes no momento!");
+      } finally {
+        setLoading(false);
       }
     },
     []
@@ -226,11 +226,11 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setLoading(true);
         await postImportStudentAll(file);
         toast.success("Estudantes importados com sucesso!");
-        setLoading(false);
         navigate(back ? back : "/");
       } catch {
-        setLoading(false);
         toast.error("Não foi possível importar os estudantes no momento!");
+      } finally {
+        setLoading(false);
       }
     },
     []

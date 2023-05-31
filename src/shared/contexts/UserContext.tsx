@@ -88,10 +88,10 @@ export const UserProvider = ({ children }: iChildren) => {
         setDashData(user.dash);
         if (user.work_school.length === 0) setSchoolData(undefined);
         navigate("/");
-        setLoading(false);
       } catch {
-        setLoading(false);
         toast.error("Não foi possível cadastrar os dados no momento!");
+      } finally {
+        setLoading(false);
       }
     },
     []
@@ -104,11 +104,10 @@ export const UserProvider = ({ children }: iChildren) => {
         const user = await patchUser(id, data);
         toast.success("Dados alterado com sucesso");
         setUserData(user);
-        setOpenEditProfile(false);
-        setLoading(false);
       } catch {
-        setLoading(false);
         toast.error("Não foi possível atualizar os dados no momento!");
+      } finally {
+        setLoading(false);
         setOpenEditProfile(false);
       }
     },
@@ -122,13 +121,13 @@ export const UserProvider = ({ children }: iChildren) => {
         const user = await patchUser(id, data);
         setUpdateUserData(user);
         if (!is_all) toast.success("Sucesso ao alterar o estado do usuário!");
-        setLoading(false);
       } catch {
-        setLoading(false);
         if (!is_all)
           toast.error(
             "Não foi possível atualizar o estado do usuário no momento!"
           );
+      } finally {
+        setLoading(false);
       }
     },
     []
@@ -140,12 +139,11 @@ export const UserProvider = ({ children }: iChildren) => {
         setLoading(true);
         await patchUser(id, data);
         toast.success("Senha alterada com sucesso");
-        setOpenEditPassword(false);
-        setLoading(false);
       } catch {
-        setLoading(false);
         toast.error("Senha atual incorreta!");
+      } finally {
         setOpenEditPassword(false);
+        setLoading(false);
       }
     },
     []

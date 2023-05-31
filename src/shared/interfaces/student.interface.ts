@@ -1,4 +1,4 @@
-import { iClassSchool } from "./class.interfaces";
+import { iClass } from "./class.interfaces";
 
 export interface iStudent {
   id: string;
@@ -26,7 +26,5 @@ export interface iStudentFrequency extends iStudent {
 }
 
 export interface iStudentDash extends iStudentFrequency {
-  classes: {
-    class: iClassSchool;
-  }[];
+  class: iClass;
 }

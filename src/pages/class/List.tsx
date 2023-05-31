@@ -54,7 +54,7 @@ export const ListClass = () => {
       <TableClass>
         <>
           {data?.map((el) => (
-            <CardClass el={el} />
+            <CardClass key={el.class.id} el={el} />
           ))}
         </>
       </TableClass>

@@ -21,7 +21,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useModalContext } from "./ModalContext";
 import { AxiosError } from "axios";
-import { useAppThemeContext } from ".";
+import { useAppThemeContext, useDrawerContext } from ".";
 
 interface iAuthContextData {
   logout: () => void;
@@ -43,6 +43,7 @@ const AuthContext = createContext({} as iAuthContextData);
 export const AuthProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading } = useAppThemeContext();
+  const { handleClick } = useDrawerContext();
   const { setAnchorEl } = useModalContext();
   const [accessToken, setAccessToken] = useState<string>();
   const [userData, setUserData] = useState<iUser>();
@@ -71,13 +72,8 @@ export const AuthProvider = ({ children }: iChildren) => {
           setUserData(res.data);
           setDashData(res.data.dash);
           if (res.data.work_school.length === 0) setSchoolData(undefined);
-          setLoading(false);
         })
-        .catch(() => {
-          setAccessToken(undefined);
-          setUserData(undefined);
-          setDashData(undefined);
-          setSchoolData(undefined);
+        .finally(() => {
           setLoading(false);
         });
     }
@@ -91,9 +87,7 @@ export const AuthProvider = ({ children }: iChildren) => {
       setAccessToken(token);
       toast.success("Login realizado com sucesso");
       navigate("/");
-      setLoading(false);
     } catch (e) {
-      setLoading(false);
       if (e instanceof AxiosError) {
         if (e.response?.status === 401) {
           toast.error(
@@ -103,6 +97,8 @@ export const AuthProvider = ({ children }: iChildren) => {
           toast.error("Combinação de Usuário e Senha incorretos");
         }
       }
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -112,9 +108,7 @@ export const AuthProvider = ({ children }: iChildren) => {
       await postRecovery(data);
       toast.success("Siga as instruções enviadas no email da sua conta");
       navigate("/");
-      setLoading(false);
     } catch (e) {
-      setLoading(false);
       if (e instanceof AxiosError) {
         if (e.response?.status === 401) {
           toast.error(
@@ -130,6 +124,8 @@ export const AuthProvider = ({ children }: iChildren) => {
           );
         }
       }
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -140,7 +136,7 @@ export const AuthProvider = ({ children }: iChildren) => {
     setDashData(undefined);
     setSchoolData(undefined);
     setAnchorEl(null);
-    navigate("/");
+    handleClick();
   }, []);
 
   const isAuthenticated = useMemo(() => !!accessToken, [accessToken]);

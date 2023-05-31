@@ -7,7 +7,7 @@ import {
   studentCreateSchema,
   studentImportSchema,
 } from "../schemas";
-import { iDash, iStudent } from ".";
+import { iDash, iStudent, iStudentDash } from ".";
 import { iClassFreq, iClassWithSchoolDash } from "./class.interfaces";
 
 export interface iDirector {
@@ -24,14 +24,13 @@ export interface iSchool {
   school_infreq: number;
 }
 
-export interface iSchoolDash {
-  id: string;
-  name: string;
-  is_active: boolean;
-  director?: iDirector;
-  school_infreq: number;
+export interface iSchoolDash extends iSchool {
   total_students: number;
   classes: iClassWithSchoolDash[];
+}
+
+export interface iSchoolWithStudents extends iSchoolDash {
+  students: iStudentDash[];
 }
 
 export interface iSchoolSelect extends iSchool {

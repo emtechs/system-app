@@ -53,11 +53,11 @@ export const ClassProvider = ({ children }: iChildren) => {
         setLoading(true);
         await postClass(data);
         toast.success("Turma cadastrada com sucesso!");
-        setLoading(false);
         navigate(back ? back : "/");
       } catch {
-        setLoading(false);
         toast.error("Não foi possível cadastrar a turma no momento!");
+      } finally {
+        setLoading(false);
       }
     },
     []
@@ -71,11 +71,11 @@ export const ClassProvider = ({ children }: iChildren) => {
         setLoading(true);
         await postImportClass(file);
         toast.success("Turmas importadas com sucesso!");
-        setLoading(false);
         navigate(back ? back : "/");
       } catch {
-        setLoading(false);
         toast.error("Não foi possível importar as turmas no momento!");
+      } finally {
+        setLoading(false);
       }
     },
     []
@@ -87,8 +87,9 @@ export const ClassProvider = ({ children }: iChildren) => {
         setLoading(true);
         await patchClassSchool(data);
         navigate(back ? back : "/");
-        setLoading(false);
       } catch {
+        /* empty */
+      } finally {
         setLoading(false);
       }
     },

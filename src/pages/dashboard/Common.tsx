@@ -24,6 +24,7 @@ import {
   iClassDash,
   iClassWithSchool,
   iFrequency,
+  iSchoolWithStudents,
   iStudentDash,
 } from "../../shared/interfaces";
 import { SelectSchoolData } from "../../shared/components";
@@ -91,7 +92,7 @@ const FreqOpenDash = ({ freq }: iFreqOpenDashProps) => {
           >
             <Typography gutterBottom>{freq.date}</Typography>
             <Typography gutterBottom>{freq.class.class.name}</Typography>
-            <Typography gutterBottom>{freq._count.students} Alunos</Typography>
+            <Typography>{freq._count.students} Alunos</Typography>
           </CardContent>
         </CardActionArea>
       </Card>
@@ -108,34 +109,29 @@ const ClassDashAlert = ({ classData }: iClassDashAlertProps) => {
   return (
     <Grid item xs={12} md={6} lg={4}>
       <Card>
-        <CardContent>
-          <Typography
-            overflow="hidden"
-            whiteSpace="nowrap"
-            textOverflow="ellipses"
-            gutterBottom
+        <CardActionArea
+          onClick={() =>
+            navigate(
+              `/class/${classData.class.id}/${classData.school.id}/${classData.school_year.id}`
+            )
+          }
+        >
+          <CardContent
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            {classData.class.name}
-          </Typography>
-          <Typography gutterBottom>
-            {classData._count.students} Alunos
-          </Typography>
-          <Typography gutterBottom>
-            {String(classData.infrequency).replace(".", ",")}% de Infrequência
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button
-            size="small"
-            onClick={() =>
-              navigate(
-                `/class/${classData.class.id}/${classData.school.id}/${classData.school_year.id}`
-              )
-            }
-          >
-            Saber Mais
-          </Button>
-        </CardActions>
+            <Typography gutterBottom>{classData.class.name}</Typography>
+            <Typography gutterBottom>
+              {classData._count.students} Alunos
+            </Typography>
+            <Typography>
+              {String(classData.infrequency).replace(".", ",")}% de Infrequência
+            </Typography>
+          </CardContent>
+        </CardActionArea>
       </Card>
     </Grid>
   );
@@ -146,26 +142,16 @@ interface iStudentAlertProps {
 }
 
 const StudentAlert = ({ student }: iStudentAlertProps) => {
-  const { schoolData } = useAuthContext();
-  const { schoolYear } = useSchoolContext();
-
-  let className = "";
-
-  if (student.classes) {
-    student.classes.forEach((el) => {
-      if (
-        el.class.school_id === schoolData?.school.id &&
-        el.class.school_year_id === schoolYear
-      ) {
-        className = el.class.class.name;
-      }
-    });
-  }
-
   return (
     <Grid item xs={12} md={6} lg={4}>
       <Card>
-        <CardContent>
+        <CardContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
           <Typography gutterBottom>{student.registry}</Typography>
           <Typography
             overflow="hidden"
@@ -178,7 +164,7 @@ const StudentAlert = ({ student }: iStudentAlertProps) => {
           <Typography gutterBottom>
             {String(student.infrequency).replace(".", ",")}% de Infrequência
           </Typography>
-          <Typography gutterBottom>{className}</Typography>
+          <Typography>{student.class.name}</Typography>
         </CardContent>
       </Card>
     </Grid>
@@ -201,39 +187,48 @@ export const DashboardCommon = () => {
     useState<iStudentDash[]>();
 
   useEffect(() => {
-    const date = dayjs().format("DD/MM/YYYY");
-    setLoading(true);
-    apiUsingNow
-      .get<iClassDash[]>(
-        `classes/${schoolData?.school.id}?is_dash=true&date=${date}`
-      )
-      .then((res) => setListClassData(res.data))
-      .finally(() => setLoading(false));
-    setLoading(true);
-    apiUsingNow
-      .get<iFrequency[]>(`frequencies?school_id=${schoolData?.school.id}`)
-      .then((res) => setListFreqData(res.data))
-      .finally(() => setLoading(false));
-    let take = 1;
-    if (mdLgBetween) {
-      take = 2;
-    } else if (mdUp) {
-      take = 3;
+    if (schoolData) {
+      const date = dayjs().format("DD/MM/YYYY");
+      setLoading(true);
+      apiUsingNow
+        .get<iClassDash[]>(
+          `classes/${schoolData.school.id}?is_dash=true&date=${date}`
+        )
+        .then((res) => setListClassData(res.data))
+        .finally(() => setLoading(false));
+      setLoading(true);
+      apiUsingNow
+        .get<iFrequency[]>(`frequencies?school_id=${schoolData.school.id}`)
+        .then((res) => setListFreqData(res.data))
+        .finally(() => setLoading(false));
+      let take = 1;
+      if (mdLgBetween) {
+        take = 2;
+      } else if (mdUp) {
+        take = 3;
+      }
+      setLoading(true);
+      apiUsingNow
+        .get<iClassWithSchool[]>(
+          `classes/${schoolData.school.id}?school_year_id=${schoolYear}&class_infreq=1&take=${take}`
+        )
+        .then((res) => setListAlertClassData(res.data))
+        .finally(() => setLoading(false));
+      setLoading(true);
+      apiUsingNow
+        .get<iSchoolWithStudents>(
+          `schools/${schoolData.school.id}?school_year_id=${schoolYear}`
+        )
+        .then((res) => {
+          const students = res.data.students;
+          if (students.length <= take) {
+            setListAlertStudentData(students);
+          } else {
+            setListAlertStudentData(students.slice(0, take));
+          }
+        })
+        .finally(() => setLoading(false));
     }
-    setLoading(true);
-    apiUsingNow
-      .get<iClassWithSchool[]>(
-        `classes/${schoolData?.school.id}?school_year_id=${schoolYear}&class_infreq=1&take=${take}`
-      )
-      .then((res) => setListAlertClassData(res.data))
-      .finally(() => setLoading(false));
-    setLoading(true);
-    apiUsingNow
-      .get<iStudentDash[]>(
-        `students?school_year_id=${schoolYear}&school_id=${schoolData?.school.id}&take=${take}`
-      )
-      .then((res) => setListAlertStudentData(res.data))
-      .finally(() => setLoading(false));
   }, [schoolData]);
 
   return (
@@ -284,10 +279,15 @@ export const DashboardCommon = () => {
                 justifyContent="center"
                 spacing={2}
               >
-                {listFreqData &&
+                {listFreqData && listFreqData.length > 0 ? (
                   listFreqData.map((el) => (
                     <FreqOpenDash key={el.id} freq={el} />
-                  ))}
+                  ))
+                ) : (
+                  <Typography m={2}>
+                    Nenhuma frequência em aberto no momento!
+                  </Typography>
+                )}
               </Grid>
             </Grid>
           </CardContent>
@@ -311,10 +311,15 @@ export const DashboardCommon = () => {
                 justifyContent="center"
                 spacing={2}
               >
-                {listAlertClassData &&
+                {listAlertClassData && listAlertClassData.length > 0 ? (
                   listAlertClassData.map((el) => (
                     <ClassDashAlert key={el.class.id} classData={el} />
-                  ))}
+                  ))
+                ) : (
+                  <Typography m={2}>
+                    Nenhuma tuma com infrequência no momento!
+                  </Typography>
+                )}
               </Grid>
             </Grid>
           </CardContent>
@@ -347,10 +352,15 @@ export const DashboardCommon = () => {
                 justifyContent="center"
                 spacing={2}
               >
-                {listAlertStudentData &&
+                {listAlertStudentData && listAlertStudentData.length > 0 ? (
                   listAlertStudentData.map((el) => (
                     <StudentAlert key={el.id} student={el} />
-                  ))}
+                  ))
+                ) : (
+                  <Typography m={2}>
+                    Nenhum aluno infrequente no momento!
+                  </Typography>
+                )}
               </Grid>
             </Grid>
           </CardContent>

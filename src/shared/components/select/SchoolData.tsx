@@ -23,7 +23,9 @@ export const SelectSchoolData = () => {
     return schoolData ? false : true;
   }, [userData, schoolData]);
   const [openDialog, setOpenDialog] = useState(isDash);
-  const handleOpenDialog = () => setOpenDialog(!openDialog);
+  const handleOpenDialog = () => {
+    if (schoolData) setOpenDialog(!openDialog);
+  };
 
   useEffect(() => {
     if (schoolData) {
