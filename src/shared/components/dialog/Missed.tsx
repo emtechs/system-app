@@ -25,7 +25,6 @@ export const DialogMissed = ({
       { status: "MISSED", updated_at: dayjs().format() },
       student.id
     );
-    setStudentData(undefined);
     onClose();
   };
   return (

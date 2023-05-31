@@ -111,12 +111,11 @@ export const FrequencyProvider = ({ children }: iChildren) => {
         setLoading(true);
         await patchFrequencyStudent(data, id);
         toast.success("Falta cadastrada com sucesso!");
-        setStudentData(undefined);
-        setLoading(false);
       } catch {
+        toast.error("Não foi possível cadastrar a falta no momento!");
+      } finally {
         setStudentData(undefined);
         setLoading(false);
-        toast.error("Não foi possível cadastrar a falta no momento!");
       }
     },
     []

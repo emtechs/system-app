@@ -16,7 +16,7 @@ export const DialogRemoveMissed = ({
   onClose,
   student,
 }: iDialogRemoveMissedProps) => {
-  const { updateFrequencyStudent, setStudentData } = useFrequencyContext();
+  const { updateFrequencyStudent } = useFrequencyContext();
   const action = () => {
     updateFrequencyStudent(
       {
@@ -26,7 +26,6 @@ export const DialogRemoveMissed = ({
       },
       student.id
     );
-    setStudentData(undefined);
     onClose();
   };
   return (
