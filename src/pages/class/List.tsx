@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
 import { useNavigate, useParams } from "react-router-dom";
 import { LayoutBasePage } from "../../shared/layouts";
-import { TableClass } from "../../shared/components";
+import { TableClass, ToolsCommon } from "../../shared/components";
 import { TableCell, TableRow } from "@mui/material";
 import { CardSchool } from "../../shared/components/card";
 
@@ -46,7 +46,11 @@ export const ListClass = () => {
   }, []);
 
   return (
-    <LayoutBasePage title="Listagem de Turmas" school={<CardSchool />}>
+    <LayoutBasePage
+      title="Listagem de Turmas"
+      school={<CardSchool />}
+      tools={<ToolsCommon isHome />}
+    >
       <TableClass>
         <>
           {data?.map((el) => (

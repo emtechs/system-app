@@ -1,2 +1,2 @@
 export * from "./Tools";
-export * from "./ToolsFrequency";
+export * from "./ToolsCommon";

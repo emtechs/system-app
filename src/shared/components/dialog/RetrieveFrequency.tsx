@@ -16,7 +16,7 @@ export const DialogRetrieveFrequency = ({
 }: iDialogDeleteFrequencyProps) => {
   const { updateFrequency, setRetrieveFreq } = useFrequencyContext();
   const action = () => {
-    updateFrequency({ status: "OPENED" }, frequency.id);
+    updateFrequency({ status: "OPENED" }, frequency.id, true);
     setRetrieveFreq(undefined);
     onClose();
   };

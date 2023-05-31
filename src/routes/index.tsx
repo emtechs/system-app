@@ -24,7 +24,7 @@ import {
   ImportSchoolPage,
   ImportStudentPage,
   ListClass,
-  ListFrequencyAdm,
+  ListFrequency,
   ListSchool,
   ListUser,
   Report,
@@ -87,7 +87,7 @@ const AppRoutes = () => {
       <Route path="/frequency" element={<Frequency />} />
       <Route path="/frequency/create" element={<CreateFrequency />} />
       <Route path="/frequency/:id" element={<RetrieveFrequency />} />
-      <Route path="/frequency/list" element={<ListFrequencyAdm />} />
+      <Route path="/frequency/list" element={<ListFrequency />} />
       <Route path="/report" element={<Report />} />
       <Route path="/report/class" element={<ReportClass back="/report" />} />
       <Route

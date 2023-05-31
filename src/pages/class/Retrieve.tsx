@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useAppThemeContext } from "../../shared/contexts";
+import { useAppThemeContext, useFrequencyContext } from "../../shared/contexts";
 import { apiUsingNow } from "../../shared/services";
 import { iClassWithSchool, iStudentWithSchool } from "../../shared/interfaces";
 import { LayoutBasePage } from "../../shared/layouts";
-import { TableRetrieveClass } from "../../shared/components";
+import { TableRetrieveClass, ToolsCommon } from "../../shared/components";
 import { TableCell, TableRow } from "@mui/material";
 import { CardSchool } from "../../shared/components/card";
 
@@ -28,20 +28,40 @@ const CardStudent = ({ student }: iCardStudentProps) => {
 export const RetrieveClass = () => {
   const { class_id, school_id, school_year_id } = useParams();
   const { setLoading } = useAppThemeContext();
+  const { isInfreq } = useFrequencyContext();
   const [data, setData] = useState<iClassWithSchool>();
   useEffect(() => {
     setLoading(true);
+    const query = isInfreq ? "?is_infreq=true" : "";
     apiUsingNow
       .get<iClassWithSchool>(
-        `classes/${class_id}/${school_id}/${school_year_id}`
+        `classes/${class_id}/${school_id}/${school_year_id}${query}`
       )
       .then((res) => setData(res.data))
       .finally(() => setLoading(false));
   }, []);
+  useEffect(() => {
+    setLoading(true);
+    const query = isInfreq ? "?is_infreq=true" : "";
+    apiUsingNow
+      .get<iClassWithSchool>(
+        `classes/${class_id}/${school_id}/${school_year_id}${query}`
+      )
+      .then((res) => setData(res.data))
+      .finally(() => setLoading(false));
+  }, [isInfreq]);
 
   return (
     <LayoutBasePage
       school={<CardSchool />}
+      tools={
+        <ToolsCommon
+          isBack
+          back={`/class/list/${data?.school.id}/${data?.school_year.id}`}
+          isHome
+          isFreq
+        />
+      }
       title={data ? data.class.name : "Listagem de Alunos de uma Classe"}
     >
       <TableRetrieveClass>

@@ -239,6 +239,7 @@ export const DashboardCommon = () => {
   return (
     <LayoutBasePage title="Página Inicial" school={<SelectSchoolData />}>
       <Box
+        my={1}
         mx={2}
         display="flex"
         flexDirection="column"

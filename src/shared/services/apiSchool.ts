@@ -1,6 +1,11 @@
 import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
-import { iFrequency, iSchool, iStudent } from "../interfaces";
+import {
+  iFrequency,
+  iFrequencyWithInfreq,
+  iSchool,
+  iStudent,
+} from "../interfaces";
 
 export async function postSchool(data: FieldValues): Promise<iSchool> {
   const { data: response } = await apiUsingNow.post<iSchool>("schools", data);
@@ -28,6 +33,14 @@ export async function patchStudent(
 ): Promise<iStudent> {
   const { data: response } = await apiUsingNow.patch<iStudent>(
     `students/${id}`,
+    data
+  );
+  return response;
+}
+
+export async function patchManyStudent(data: FieldValues): Promise<iStudent> {
+  const { data: response } = await apiUsingNow.patch<iStudent>(
+    "students",
     data
   );
   return response;
@@ -67,8 +80,8 @@ export async function patchSchool(
 export async function patchFrequency(
   data: FieldValues,
   id: string
-): Promise<iFrequency> {
-  const { data: response } = await apiUsingNow.patch<iFrequency>(
+): Promise<iFrequencyWithInfreq> {
+  const { data: response } = await apiUsingNow.patch<iFrequencyWithInfreq>(
     `frequencies/${id}`,
     data
   );

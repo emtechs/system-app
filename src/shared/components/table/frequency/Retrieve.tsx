@@ -19,11 +19,9 @@ export const TableRetrieveFrequency = ({ children }: iChildren) => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Informar</TableCell>
             <TableCell>Matrícula</TableCell>
             <TableCell>Aluno</TableCell>
             <TableCell>Estado da Presença</TableCell>
-            <TableCell>Infrequência</TableCell>
             <TableCell>Atualizado Em</TableCell>
           </TableRow>
         </TableHead>
