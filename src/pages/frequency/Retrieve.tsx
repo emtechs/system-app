@@ -30,7 +30,10 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
   const theme = useTheme();
   const { studentData, setStudentData } = useFrequencyContext();
   const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(!open);
+  const handleClose = () => {
+    setOpen(!open);
+    setStudentData(undefined);
+  };
 
   return (
     <>
