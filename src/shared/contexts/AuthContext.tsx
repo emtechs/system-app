@@ -150,7 +150,7 @@ export const AuthProvider = ({ children }: iChildren) => {
         toast.error("Link expirado, solicite um novo link na tela de login!");
       } finally {
         setLoading(false);
-        navigate("/login");
+        navigate("/");
       }
     },
     []
@@ -163,7 +163,7 @@ export const AuthProvider = ({ children }: iChildren) => {
     setDashData(undefined);
     setSchoolData(undefined);
     setAnchorEl(null);
-    handleClick("/login");
+    handleClick();
   }, []);
 
   const isAuthenticated = useMemo(() => !!accessToken, [accessToken]);

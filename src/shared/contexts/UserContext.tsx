@@ -18,7 +18,7 @@ import {
 import { patchUser, postUser } from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useAppThemeContext, useAuthContext, useModalContext } from ".";
+import { useAppThemeContext, useAuthContext } from ".";
 import { FieldValues } from "react-hook-form";
 
 interface iUserContextData {
@@ -42,7 +42,6 @@ export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading } = useAppThemeContext();
   const { setDashData, setSchoolData, setUserData } = useAuthContext();
-  const { setOpenEditProfile, setOpenEditPassword } = useModalContext();
   const [updateUserData, setUpdateUserData] = useState<iUser>();
 
   const handleCreateUserAdm = useCallback(
@@ -104,11 +103,11 @@ export const UserProvider = ({ children }: iChildren) => {
         const user = await patchUser(id, data);
         toast.success("Dados alterado com sucesso");
         setUserData(user);
+        navigate("/");
       } catch {
         toast.error("Não foi possível atualizar os dados no momento!");
       } finally {
         setLoading(false);
-        setOpenEditProfile(false);
       }
     },
     []
@@ -139,10 +138,10 @@ export const UserProvider = ({ children }: iChildren) => {
         setLoading(true);
         await patchUser(id, data);
         toast.success("Senha alterada com sucesso");
+        navigate("/");
       } catch {
         toast.error("Senha atual incorreta!");
       } finally {
-        setOpenEditPassword(false);
         setLoading(false);
       }
     },

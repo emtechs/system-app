@@ -22,7 +22,7 @@ interface iDrawerContextProps {
   handleClickStudent: () => void;
   openUser: boolean;
   handleClickUser: () => void;
-  handleClick: (back?: string) => void;
+  handleClick: () => void;
 }
 
 const DrawerContext = createContext({} as iDrawerContextProps);
@@ -45,7 +45,7 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setIsDrawerOpen((oldDrawerOpen) => !oldDrawerOpen);
   }, []);
 
-  const handleClick = useCallback((back?: string) => {
+  const handleClick = useCallback(() => {
     setOpenClass(false);
     setOpenFrequency(false);
     setOpenImport(false);
@@ -57,7 +57,7 @@ export const DrawerProvider = ({ children }: iChildren) => {
     if (smDown) {
       toggleDrawerOpen();
     }
-    navigate(back ? back : "/");
+    navigate("/");
   }, []);
 
   const handleClickClass = useCallback(() => {
