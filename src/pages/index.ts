@@ -2,6 +2,7 @@ export * from "./class";
 export * from "./dashboard";
 export * from "./frequency";
 export * from "./import";
+export * from "./auth";
 export * from "./profile";
 export * from "./report";
 export * from "./school";

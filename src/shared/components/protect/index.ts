@@ -1,1 +1,2 @@
-export * from "./ProtectAdmin";
+export * from "./Admin";
+export * from "./Auth";

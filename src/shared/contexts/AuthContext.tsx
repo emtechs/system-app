@@ -12,11 +12,17 @@ import {
   iChildren,
   iDash,
   iLoginRequest,
+  iRecoveryPasswordRequest,
   iRecoveryRequest,
   iUser,
   iWorkSchool,
 } from "../interfaces";
-import { apiUsingNow, postLogin, postRecovery } from "../services";
+import {
+  apiUsingNow,
+  postLogin,
+  postPasswordRecovery,
+  postRecovery,
+} from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useModalContext } from "./ModalContext";
@@ -30,6 +36,11 @@ interface iAuthContextData {
   isAuthenticated: boolean;
   login: (data: iLoginRequest) => Promise<void>;
   recovery: (data: iRecoveryRequest) => Promise<void>;
+  recoveryPassword: (
+    data: iRecoveryPasswordRequest,
+    userId: string,
+    token: string
+  ) => Promise<void>;
   userData: iUser | undefined;
   setUserData: Dispatch<SetStateAction<iUser | undefined>>;
   schoolData: iWorkSchool | undefined;
@@ -129,6 +140,22 @@ export const AuthProvider = ({ children }: iChildren) => {
     }
   }, []);
 
+  const handleRecoveyPassword = useCallback(
+    async (data: iRecoveryPasswordRequest, userId: string, token: string) => {
+      try {
+        setLoading(true);
+        await postPasswordRecovery(data, userId, token);
+        toast.success("Senha alterada com sucesso");
+      } catch (e) {
+        toast.error("Link expirado, solicite um novo link na tela de login!");
+      } finally {
+        setLoading(false);
+        navigate("/login");
+      }
+    },
+    []
+  );
+
   const handleLogout = useCallback(() => {
     localStorage.removeItem("@EMTechs:token");
     setAccessToken(undefined);
@@ -136,7 +163,7 @@ export const AuthProvider = ({ children }: iChildren) => {
     setDashData(undefined);
     setSchoolData(undefined);
     setAnchorEl(null);
-    handleClick();
+    handleClick("/login");
   }, []);
 
   const isAuthenticated = useMemo(() => !!accessToken, [accessToken]);
@@ -147,8 +174,9 @@ export const AuthProvider = ({ children }: iChildren) => {
         isAuthenticated,
         login: handleLogin,
         logout: handleLogout,
-        accessToken,
         recovery: handleRecovey,
+        recoveryPassword: handleRecoveyPassword,
+        accessToken,
         setAccessToken,
         dashData,
         schoolData,

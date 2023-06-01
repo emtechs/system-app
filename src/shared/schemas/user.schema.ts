@@ -90,3 +90,17 @@ export const userPasswordSchema = z
     path: ["repeat_password"],
     message: "As senhas precisam ser iguais",
   });
+
+export const passwordRecoverySchema = z
+  .object({
+    password: z
+      .string({ required_error: "Senha obrigatória" })
+      .nonempty("Senha obrigatória"),
+    repeat_password: z
+      .string({ required_error: "Confirmar senha obrigatória" })
+      .nonempty("Confirmar senha obrigatória"),
+  })
+  .refine((fields) => fields.password === fields.repeat_password, {
+    path: ["repeat_password"],
+    message: "As senhas precisam ser iguais",
+  });
