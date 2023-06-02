@@ -201,6 +201,11 @@ export const DashboardCommon = () => {
         .get<iFrequency[]>(`frequencies?school_id=${schoolData.school.id}`)
         .then((res) => setListFreqData(res.data))
         .finally(() => setLoading(false));
+    }
+  }, [schoolData]);
+
+  useEffect(() => {
+    if (schoolData && schoolYear) {
       let take = 1;
       if (mdLgBetween) {
         take = 2;
@@ -229,7 +234,7 @@ export const DashboardCommon = () => {
         })
         .finally(() => setLoading(false));
     }
-  }, [schoolData]);
+  }, [schoolData, schoolYear]);
 
   return (
     <LayoutBasePage title="Página Inicial" school={<SelectSchoolData />}>
