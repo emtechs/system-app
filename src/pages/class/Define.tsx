@@ -23,7 +23,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { apiUsingNow } from "../../shared/services";
 
-export const DefineSchools = ({ back }: iPageProps) => {
+export const DefineSchoolsPage = ({ back }: iPageProps) => {
   const navigate = useNavigate();
   const { updateAllUser } = useUserContext();
   const { setLoading } = useAppThemeContext();

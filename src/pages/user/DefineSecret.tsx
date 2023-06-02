@@ -1,4 +1,4 @@
-import { ValidateCPF } from "../../shared/components";
+import { Tools, ValidateCPF } from "../../shared/components";
 import { useAppThemeContext, useUserContext } from "../../shared/contexts";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,7 +9,7 @@ import { iUser } from "../../shared/interfaces";
 import { Box, Grid, Paper, Typography } from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
 
-export const DefineSecret = () => {
+export const DefineSecretPage = () => {
   const { setLoading } = useAppThemeContext();
   const { createSecret, updateAllUser } = useUserContext();
   const [secretData, setSecretData] = useState<iUser>();
@@ -23,7 +23,7 @@ export const DefineSecret = () => {
   }, []);
 
   return (
-    <LayoutBasePage title="Definir Secretário">
+    <LayoutBasePage title="Definir Secretário" tools={<Tools isHome />}>
       <FormContainer
         onSuccess={(data) => {
           if (secretData)

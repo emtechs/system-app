@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { studentCreateSchema } from "../../../shared/schemas";
 import { Button } from "@mui/material";
 
-export const CreateStudentAdm = ({ back }: iPageProps) => {
+export const CreateStudentAdmPage = ({ back }: iPageProps) => {
   const { createStudent } = useSchoolContext();
   const { schoolYear } = useAuthContext();
 

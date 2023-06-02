@@ -1,6 +1,10 @@
 export const adaptName = (name: string) => {
   if (name.length > 27) {
     const displayName = name.split(" ");
+    let name4 = "";
+    if (displayName[4]) {
+      name4 = " " + displayName[4];
+    }
     return (
       displayName[0] +
       " " +
@@ -10,8 +14,7 @@ export const adaptName = (name: string) => {
       " " +
       displayName[3][0] +
       "." +
-      " " +
-      displayName[4]
+      name4
     );
   }
   return name;

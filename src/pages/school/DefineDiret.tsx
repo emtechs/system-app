@@ -1,94 +1,93 @@
-import {
-  BasePage,
-  BoxResp,
-  SelectSchool,
-  ValidateCPF,
-} from "../../shared/components";
 import { useSchoolContext, useUserContext } from "../../shared/contexts";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schoolUpdateDirectorSchema } from "../../shared/schemas";
-import { useEffect } from "react";
-import { iPageProps } from "../../shared/interfaces";
+import { Box, Grid, Paper, Typography } from "@mui/material";
+import { LayoutBasePage } from "../../shared/layouts";
 import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Typography,
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";
+  SelectSchoolSelectData,
+  Tools,
+  ValidateCPF,
+} from "../../shared/components";
 
-export const DefineDiret = ({ back }: iPageProps) => {
-  const navigate = useNavigate();
+export const DefineDiretPage = () => {
   const { updateAllUser } = useUserContext();
-  const { schoolSelect, setSchoolSelect, updateSchool } = useSchoolContext();
-
-  useEffect(() => {
-    setSchoolSelect(undefined);
-  }, []);
+  const { updateSchool, schoolSelect } = useSchoolContext();
 
   return (
-    <>
-      <BasePage isProfile back={back}>
-        <FormContainer
-          onSuccess={(data) => {
-            if (schoolSelect) {
-              if (schoolSelect.director) {
-                updateAllUser(
-                  schoolSelect.director.id,
-                  {
-                    is_active: false,
-                    role: "SERV",
-                  },
-                  true
-                );
-              }
-              updateSchool(data, schoolSelect.id, "diretor", back);
+    <LayoutBasePage
+      title="Definir Diretor"
+      school={<SelectSchoolSelectData />}
+      tools={<Tools isHome />}
+    >
+      <FormContainer
+        onSuccess={(data) => {
+          if (schoolSelect) {
+            if (schoolSelect.director) {
+              updateAllUser(
+                schoolSelect.director.id,
+                {
+                  is_active: false,
+                  role: "SERV",
+                },
+                true
+              );
             }
-          }}
-          resolver={zodResolver(schoolUpdateDirectorSchema)}
+            updateSchool(data, schoolSelect.id, "diretor", "/");
+          }
+        }}
+        resolver={zodResolver(schoolUpdateDirectorSchema)}
+      >
+        <Box
+          m={2}
+          display="flex"
+          flexDirection="column"
+          component={Paper}
+          variant="outlined"
         >
-          <BoxResp isProfile>
+          <Grid container direction="column" p={2} spacing={2}>
             {schoolSelect?.director && (
-              <Box>
-                <Typography>Diretor Atual</Typography>
-                <Typography>Nome: {schoolSelect.director.name}</Typography>
-                <Typography>CPF: {schoolSelect.director.cpf}</Typography>
-              </Box>
+              <Grid container item direction="row" justifyContent="center">
+                <Grid
+                  item
+                  xs={12}
+                  sm={9}
+                  md={6}
+                  lg={3}
+                  display="flex"
+                  justifyContent="center"
+                >
+                  <Box>
+                    <Typography>Diretor Atual</Typography>
+                    <Typography>Nome: {schoolSelect.director.name}</Typography>
+                    <Typography>CPF: {schoolSelect.director.cpf}</Typography>
+                  </Box>
+                </Grid>
+              </Grid>
             )}
-            <TextFieldElement name="cpf" label="CPF" required fullWidth />
-            <TextFieldElement
-              name="name_diret"
-              label="Nome"
-              required
-              fullWidth
-            />
-            <ValidateCPF allNotServ />
-          </BoxResp>
-        </FormContainer>
-      </BasePage>
-      <Dialog open={!schoolSelect} onClose={() => navigate(back ? back : "/")}>
-        <DialogTitle>Definir Diretor</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Selecione a Escola que deseja Definir o Diretor
-          </DialogContentText>
-          <FormContainer>
-            <Box mt={1} display="flex" flexDirection="column" gap={1}>
-              <SelectSchool />
-            </Box>
-          </FormContainer>
-          <DialogActions>
-            <Button onClick={() => navigate(back ? back : "/")}>
-              Cancelar
-            </Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
-    </>
+            <Grid container item direction="row" justifyContent="center">
+              <Grid item xs={12} sm={9} md={6} lg={3}>
+                <TextFieldElement name="cpf" label="CPF" required fullWidth />
+              </Grid>
+            </Grid>
+            <Grid container item direction="row" justifyContent="center">
+              <Grid item xs={12} sm={9} md={6} lg={3}>
+                <TextFieldElement
+                  name="name_diret"
+                  label="Nome"
+                  required
+                  fullWidth
+                />
+              </Grid>
+            </Grid>
+            <Grid container item direction="row" justifyContent="center">
+              <Grid item xs={12} sm={9} md={6} lg={3}>
+                <ValidateCPF allNotServ />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Box>
+      </FormContainer>
+    </LayoutBasePage>
   );
 };

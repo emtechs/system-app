@@ -16,7 +16,7 @@ import { useAppThemeContext, useUserContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { iRole, iUser } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
-import { TableUser } from "../../shared/components";
+import { TableUser, Tools } from "../../shared/components";
 import { FormContainer, RadioButtonGroup } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { activeUserSchema } from "../../shared/schemas";
@@ -112,7 +112,7 @@ const CardUser = ({ user }: iCardUserProps) => {
   );
 };
 
-export const ActiveUser = () => {
+export const ActiveUserPage = () => {
   const { setLoading } = useAppThemeContext();
   const { updateUserData } = useUserContext();
   const [listUserData, setListUserData] = useState<iUser[]>();
@@ -126,9 +126,12 @@ export const ActiveUser = () => {
   }, [updateUserData]);
 
   return (
-    <LayoutBasePage title="Listagem de Usuários">
+    <LayoutBasePage
+      title="Listagem de Usuários"
+      tools={<Tools isHome isBack back="/user/list" />}
+    >
       {listUserData && listUserData.length > 0 ? (
-        <TableUser>
+        <TableUser is_active>
           <>
             {listUserData.map((el) => (
               <CardUser key={el.id} user={el} />

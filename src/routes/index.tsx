@@ -1,41 +1,36 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import {
-  ActiveClass,
-  ActiveSchool,
-  ActiveUser,
-  ClassPage,
-  CreateAdm,
-  CreateClass,
-  CreateFrequency,
-  CreateSchool,
-  CreateServerAdm,
-  CreateStudentAdm,
-  Dashboard,
-  DefineDiret,
-  DefineSchools,
-  DefineSecret,
-  EditClass,
-  EditPassword,
-  EditProfile,
-  EditSchool,
-  Frequency,
-  Import,
+  ActiveClassPage,
+  ActiveSchoolPage,
+  ActiveUserPage,
+  CreateAdmPage,
+  CreateClassPage,
+  CreateFrequencyPage,
+  CreateSchoolPage,
+  CreateServerPage,
+  CreateStudentAdmPage,
+  DashboardPage,
+  DefineDiretPage,
+  DefineSchoolsPage,
+  DefineSecretPage,
+  EditClassPage,
+  EditPasswordPage,
+  EditProfilePage,
+  EditSchoolPage,
   ImportClassPage,
   ImportSchoolPage,
   ImportStudentPage,
-  ListClass,
-  ListFrequency,
-  ListSchool,
-  ListUser,
+  ListClassPage,
+  ListFrequencyPage,
+  ListSchoolPage,
+  ListUserPage,
   PasswordPage,
-  Report,
-  ReportClass,
-  ReportRetrieve,
-  RetrieveClass,
-  RetrieveFrequency,
-  RetrieveUser,
-  School,
-  Student,
+  ReportClassPage,
+  ReportRetrievePage,
+  RetrieveClassPage,
+  RetrieveFrequencyPage,
+  RetrieveSchoolPage,
+  RetrieveUserPage,
 } from "../pages";
 import { ProtectedAdmin, ProtectedAuth } from "../shared/components";
 
@@ -46,65 +41,57 @@ const AppRoutes = () => {
       <Route path="/password/:userId/:token" element={<PasswordPage />} />
       <Route element={<ProtectedAuth />}>
         <Route element={<ProtectedAdmin />}>
-          <Route path="/user/create" element={<CreateAdm />} />
-          <Route path="/user/define/secret" element={<DefineSecret />} />
-          <Route path="/user/list" element={<ListUser />} />
-          <Route path="/user/list/:id" element={<RetrieveUser />} />
-          <Route path="/user/active" element={<ActiveUser />} />
+          <Route path="/user/create" element={<CreateAdmPage />} />
+          <Route path="/user/define/secret" element={<DefineSecretPage />} />
+          <Route path="/user/list" element={<ListUserPage />} />
+          <Route path="/user/list/:id" element={<RetrieveUserPage />} />
+          <Route path="/user/active" element={<ActiveUserPage />} />
         </Route>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/school" element={<School />} />
-        <Route
-          path="/school/create"
-          element={<CreateSchool back="/school" />}
-        />
-        <Route
-          path="/school/create/server"
-          element={<CreateServerAdm back="/school" />}
-        />
-        <Route
-          path="/school/define/diret"
-          element={<DefineDiret back="/school" />}
-        />
-        <Route path="/school/edit" element={<EditSchool back="/school" />} />
-        <Route path="/school/list" element={<ListSchool />} />
-        <Route
-          path="/school/active"
-          element={<ActiveSchool back="/school" />}
-        />
-        <Route path="/class" element={<ClassPage />} />
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/school/:id" element={<RetrieveSchoolPage />} />
+        <Route path="/school/create" element={<CreateSchoolPage />} />
+        <Route path="/school/create/server" element={<CreateServerPage />} />
+        <Route path="/school/define/diret" element={<DefineDiretPage />} />
+        <Route path="/school/edit" element={<EditSchoolPage />} />
+        <Route path="/school/list" element={<ListSchoolPage />} />
+        <Route path="/school/active" element={<ActiveSchoolPage />} />
         <Route
           path="/class/:class_id/:school_id/:school_year_id"
-          element={<RetrieveClass />}
+          element={<RetrieveClassPage />}
         />
         <Route
           path="/class/list/:school_id/:school_year_id"
-          element={<ListClass />}
+          element={<ListClassPage />}
         />
-        <Route path="/class/create" element={<CreateClass back="/class" />} />
+        <Route
+          path="/class/create"
+          element={<CreateClassPage back="/class" />}
+        />
         <Route
           path="/class/define/school"
-          element={<DefineSchools back="/class" />}
+          element={<DefineSchoolsPage back="/class" />}
         />
-        <Route path="/class/edit" element={<EditClass back="/class" />} />
-        <Route path="/class/list" element={<ListClass />} />
-        <Route path="/class/active" element={<ActiveClass back="/class" />} />
-        <Route path="/student" element={<Student />} />
+        <Route path="/class/edit" element={<EditClassPage back="/class" />} />
+        <Route path="/class/list" element={<ListClassPage />} />
+        <Route
+          path="/class/active"
+          element={<ActiveClassPage back="/class" />}
+        />
         <Route
           path="/student/create"
-          element={<CreateStudentAdm back="/student" />}
+          element={<CreateStudentAdmPage back="/student" />}
         />
-        <Route path="/frequency" element={<Frequency />} />
-        <Route path="/frequency/create" element={<CreateFrequency />} />
-        <Route path="/frequency/:id" element={<RetrieveFrequency />} />
-        <Route path="/frequency/list" element={<ListFrequency />} />
-        <Route path="/report" element={<Report />} />
-        <Route path="/report/class" element={<ReportClass back="/report" />} />
+        <Route path="/frequency/create" element={<CreateFrequencyPage />} />
+        <Route path="/frequency/:id" element={<RetrieveFrequencyPage />} />
+        <Route path="/frequency/list" element={<ListFrequencyPage />} />
+        <Route
+          path="/report/class"
+          element={<ReportClassPage back="/report" />}
+        />
         <Route
           path="/report/class/retrieve"
-          element={<ReportRetrieve back="/report" />}
+          element={<ReportRetrievePage back="/report" />}
         />
-        <Route path="/import" element={<Import />} />
         <Route
           path="/import/school"
           element={<ImportSchoolPage back="/school" />}
@@ -117,8 +104,8 @@ const AppRoutes = () => {
           path="/import/student"
           element={<ImportStudentPage back="/student" />}
         />
-        <Route path="/profile/edit" element={<EditProfile />} />
-        <Route path="/profile/edit/password" element={<EditPassword />} />
+        <Route path="/profile/edit" element={<EditProfilePage />} />
+        <Route path="/profile/edit/password" element={<EditPasswordPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

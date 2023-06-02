@@ -3,7 +3,7 @@ import { DashboardAdmin } from "./Admin";
 import { DashboardCommon } from "./Common";
 import { DashboardSchool } from "./School";
 
-export const Dashboard = () => {
+export const DashboardPage = () => {
   const { dashData } = useAuthContext();
   switch (dashData) {
     case "ADMIN":

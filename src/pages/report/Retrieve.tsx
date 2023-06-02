@@ -65,7 +65,7 @@ const CustomToolbar = () => {
   );
 };
 
-export const ReportRetrieve = ({ back }: iPageProps) => {
+export const ReportRetrievePage = ({ back }: iPageProps) => {
   const navigate = useNavigate();
   const [data, setData] = useState<iStudentWithSchool[]>();
   const { classWithSchoolSelect, setClassWithSchoolSelect } = useClassContext();

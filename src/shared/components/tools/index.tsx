@@ -11,23 +11,25 @@ import {
 } from "@mui/material";
 import { useFrequencyContext } from "../../contexts";
 import { useNavigate } from "react-router-dom";
-import { ChangeEvent } from "react";
+import { ChangeEvent, ReactNode } from "react";
 
-interface iToolsCommonProps {
+interface iToolsProps {
   isBack?: boolean;
   back?: string;
   isHome?: boolean;
   isFinish?: boolean;
   isFreq?: boolean;
+  finish?: ReactNode;
 }
 
-export const ToolsCommon = ({
+export const Tools = ({
   isBack,
   back = "/",
   isHome,
   isFinish,
   isFreq,
-}: iToolsCommonProps) => {
+  finish,
+}: iToolsProps) => {
   const theme = useTheme();
   const smDown = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
@@ -111,6 +113,7 @@ export const ToolsCommon = ({
             label="Infrequência"
           />
         )}
+        {finish}
       </Box>
     </Box>
   );

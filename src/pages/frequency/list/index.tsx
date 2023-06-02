@@ -2,7 +2,7 @@ import { useAuthContext } from "../../../shared/contexts";
 import { ListFrequencyCommon } from "./ListFrequency";
 import { ListFrequencyAdm } from "./ListFrequencyAdm";
 
-export const ListFrequency = () => {
+export const ListFrequencyPage = () => {
   const { dashData } = useAuthContext();
   switch (dashData) {
     case "ADMIN":

@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { studentCreateSchema } from "../../../shared/schemas";
 import { Button } from "@mui/material";
 
-export const CreateStudent = () => {
+export const CreateStudentPage = () => {
   const { schoolData } = useAuthContext();
   const { createStudent, setSchoolSelect } = useSchoolContext();
 

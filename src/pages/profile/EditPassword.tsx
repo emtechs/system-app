@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userPasswordSchema } from "../../shared/schemas";
 import { Box, Button, Grid, Paper } from "@mui/material";
 
-export const EditPassword = () => {
+export const EditPasswordPage = () => {
   const { userData } = useAuthContext();
   const { editPassword } = useUserContext();
   return (

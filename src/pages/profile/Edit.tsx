@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userUpdateSchema } from "../../shared/schemas";
 import { Box, Button, Grid, Paper } from "@mui/material";
 
-export const EditProfile = () => {
+export const EditProfilePage = () => {
   const { userData } = useAuthContext();
   const { updateUser } = useUserContext();
   return (

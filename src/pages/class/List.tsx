@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
 import { useNavigate, useParams } from "react-router-dom";
 import { LayoutBasePage } from "../../shared/layouts";
-import { TableClass, ToolsCommon } from "../../shared/components";
+import { TableClass, Tools } from "../../shared/components";
 import { TableCell, TableRow } from "@mui/material";
 import { CardSchool } from "../../shared/components/card";
 
@@ -30,7 +30,7 @@ const CardClass = ({ el }: iCardClassProps) => {
   );
 };
 
-export const ListClass = () => {
+export const ListClassPage = () => {
   const { school_id, school_year_id } = useParams();
   const { setLoading } = useAppThemeContext();
   const [data, setData] = useState<iClassWithSchool[]>();
@@ -49,7 +49,7 @@ export const ListClass = () => {
     <LayoutBasePage
       title="Listagem de Turmas"
       school={<CardSchool />}
-      tools={<ToolsCommon isHome />}
+      tools={<Tools isHome />}
     >
       <TableClass>
         <>

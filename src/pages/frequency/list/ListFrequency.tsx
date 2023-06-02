@@ -1,5 +1,5 @@
 import { TableCell, TableRow, Typography } from "@mui/material";
-import { TableFrequency, ToolsCommon } from "../../../shared/components";
+import { TableFrequency, Tools } from "../../../shared/components";
 import { useAppThemeContext, useAuthContext } from "../../../shared/contexts";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -48,7 +48,7 @@ export const ListFrequencyCommon = () => {
     <LayoutBasePage
       title="Frequências em Aberto"
       school={<CardSchool />}
-      tools={<ToolsCommon isHome />}
+      tools={<Tools isHome />}
     >
       {data && data.length > 0 ? (
         <TableFrequency>

@@ -98,7 +98,7 @@ const CardClass = ({ el, theme }: iCardClassProps) => {
   );
 };
 
-export const ActiveClass = ({ back }: iPageProps) => {
+export const ActiveClassPage = ({ back }: iPageProps) => {
   const theme = useTheme();
   const { setLoading } = useAppThemeContext();
   const { listClassData, setListClassData } = useClassContext();

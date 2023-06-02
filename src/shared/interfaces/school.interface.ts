@@ -7,8 +7,9 @@ import {
   studentCreateSchema,
   studentImportSchema,
 } from "../schemas";
-import { iDash, iStudent, iStudentDash } from ".";
 import { iClassFreq, iClassWithSchoolDash } from "./class.interfaces";
+import { iDash, iRole } from "./user.interfaces";
+import { iStudent, iStudentDash } from "./student.interface";
 
 export interface iDirector {
   id: string;
@@ -25,6 +26,7 @@ export interface iSchool {
 }
 
 export interface iSchoolList extends iSchool {
+  servers: { role: iRole; server: iDirector }[];
   num_students: number;
   num_frequencies: number;
   num_classes: number;

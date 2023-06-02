@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-export const EditClass = ({ back }: iPageProps) => {
+export const EditClassPage = ({ back }: iPageProps) => {
   const navigate = useNavigate();
   const { updateSchool, schoolSelect } = useSchoolContext();
   const { classSelect, setClassSelect } = useClassContext();

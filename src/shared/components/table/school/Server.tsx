@@ -9,11 +9,7 @@ import {
 } from "@mui/material";
 import { iChildren } from "../../../interfaces";
 
-interface iTableSchoolProps extends iChildren {
-  is_active?: boolean;
-}
-
-export const TableSchool = ({ children, is_active }: iTableSchoolProps) => {
+export const TableServer = ({ children }: iChildren) => {
   return (
     <TableContainer
       sx={{ m: 2, width: "auto" }}
@@ -23,13 +19,8 @@ export const TableSchool = ({ children, is_active }: iTableSchoolProps) => {
       <Table>
         <TableHead>
           <TableRow>
-            {is_active && <TableCell></TableCell>}
-            <TableCell>Escola</TableCell>
-            <TableCell>Diretor</TableCell>
-            <TableCell>Turmas</TableCell>
-            <TableCell>Alunos</TableCell>
-            <TableCell>Frequências</TableCell>
-            <TableCell>Infrequência</TableCell>
+            <TableCell>Nome Completo</TableCell>
+            <TableCell>CPF</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>{children}</TableBody>

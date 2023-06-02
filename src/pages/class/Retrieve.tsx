@@ -4,7 +4,7 @@ import { useAppThemeContext, useFrequencyContext } from "../../shared/contexts";
 import { apiUsingNow } from "../../shared/services";
 import { iClassWithSchool, iStudentWithSchool } from "../../shared/interfaces";
 import { LayoutBasePage } from "../../shared/layouts";
-import { TableRetrieveClass, ToolsCommon } from "../../shared/components";
+import { TableRetrieveClass, Tools } from "../../shared/components";
 import { TableCell, TableRow } from "@mui/material";
 import { CardSchool } from "../../shared/components/card";
 
@@ -25,7 +25,7 @@ const CardStudent = ({ student }: iCardStudentProps) => {
   );
 };
 
-export const RetrieveClass = () => {
+export const RetrieveClassPage = () => {
   const { class_id, school_id, school_year_id } = useParams();
   const { setLoading } = useAppThemeContext();
   const { isInfreq } = useFrequencyContext();
@@ -55,7 +55,7 @@ export const RetrieveClass = () => {
     <LayoutBasePage
       school={<CardSchool />}
       tools={
-        <ToolsCommon
+        <Tools
           isBack
           back={`/class/list/${data?.school.id}/${data?.school_year.id}`}
           isHome

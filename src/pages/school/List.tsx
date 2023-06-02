@@ -5,10 +5,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
   TableCell,
   TableRow,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import {
@@ -20,8 +18,7 @@ import { useEffect, useState } from "react";
 import { iSchoolList } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
-import { RemoveDone } from "@mui/icons-material";
-import { TableSchool } from "../../shared/components";
+import { TableSchool, Tools } from "../../shared/components";
 import { useNavigate } from "react-router-dom";
 
 interface iCardSchoolProps {
@@ -44,16 +41,9 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
         hover
         sx={{ cursor: "pointer" }}
         onClick={() => {
-          navigate(`/user/list/${school.id}`);
+          navigate(`/school/${school.id}`);
         }}
       >
-        <TableCell>
-          <Tooltip title="Desativar Escola">
-            <IconButton color="error" onClick={handleClose}>
-              <RemoveDone />
-            </IconButton>
-          </Tooltip>
-        </TableCell>
         <TableCell>{school.name}</TableCell>
         <TableCell>{school.director?.name}</TableCell>
         <TableCell>{school.num_classes}</TableCell>
@@ -94,7 +84,7 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
   );
 };
 
-export const ListSchool = () => {
+export const ListSchoolPage = () => {
   const { setLoading } = useAppThemeContext();
   const { schoolYear } = useAuthContext();
   const { updateSchoolData } = useSchoolContext();
@@ -111,7 +101,7 @@ export const ListSchool = () => {
   }, [updateSchoolData]);
 
   return (
-    <LayoutBasePage title="Listagem de Escolas">
+    <LayoutBasePage title="Listagem de Escolas" tools={<Tools isHome />}>
       {listSchoolData && listSchoolData.length > 0 ? (
         <TableSchool>
           <>

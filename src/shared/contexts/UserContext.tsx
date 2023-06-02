@@ -30,7 +30,8 @@ interface iUserContextData {
   updateAllUser: (
     id: string,
     data: FieldValues,
-    is_all: boolean
+    is_all: boolean,
+    back?: string
   ) => Promise<void>;
   updateUserData: iUser | undefined;
   setUpdateUserData: Dispatch<SetStateAction<iUser | undefined>>;
@@ -114,12 +115,13 @@ export const UserProvider = ({ children }: iChildren) => {
   );
 
   const handleUpdateAllUser = useCallback(
-    async (id: string, data: FieldValues, is_all: boolean) => {
+    async (id: string, data: FieldValues, is_all: boolean, back?: string) => {
       try {
         setLoading(true);
         const user = await patchUser(id, data);
         setUpdateUserData(user);
         if (!is_all) toast.success("Sucesso ao alterar o estado do usuário!");
+        if (back) navigate(back);
       } catch {
         if (!is_all)
           toast.error(

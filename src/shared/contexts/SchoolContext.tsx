@@ -151,6 +151,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
       } catch {
         toast.error("Não foi possível cadastrar o servidor no momento!");
       } finally {
+        setSchoolSelect(undefined);
         setLoading(false);
       }
     },

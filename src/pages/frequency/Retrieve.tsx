@@ -3,7 +3,7 @@ import {
   DialogMissed,
   DialogRemoveMissed,
   TableRetrieveFrequency,
-  ToolsCommon,
+  Tools,
 } from "../../shared/components";
 import { useAppThemeContext, useFrequencyContext } from "../../shared/contexts";
 import { iFrequency, iFrequencyStudents } from "../../shared/interfaces";
@@ -71,7 +71,7 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
   );
 };
 
-export const RetrieveFrequency = () => {
+export const RetrieveFrequencyPage = () => {
   const { id } = useParams<"id">();
   const { setLoading } = useAppThemeContext();
   const { studentData, frequencyData, setFrequencyData } =
@@ -104,7 +104,7 @@ export const RetrieveFrequency = () => {
   return (
     <LayoutBasePage
       school={<CardSchool />}
-      tools={<ToolsCommon isHome isFinish />}
+      tools={<Tools isHome isFinish />}
       title={
         frequencyData
           ? `${frequencyData.date} - ${frequencyData.class.class.name}`

@@ -9,7 +9,11 @@ import {
 } from "@mui/material";
 import { iChildren } from "../../../interfaces";
 
-export const TableUser = ({ children }: iChildren) => {
+interface iTableUserProps extends iChildren {
+  is_active?: boolean;
+}
+
+export const TableUser = ({ children, is_active }: iTableUserProps) => {
   return (
     <TableContainer
       sx={{ m: 2, width: "auto" }}
@@ -19,7 +23,7 @@ export const TableUser = ({ children }: iChildren) => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell></TableCell>
+            {is_active && <TableCell></TableCell>}
             <TableCell>Nome Completo</TableCell>
             <TableCell>CPF</TableCell>
             <TableCell>Função</TableCell>

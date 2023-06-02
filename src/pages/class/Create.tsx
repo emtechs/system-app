@@ -6,7 +6,7 @@ import { classCreateSchema } from "../../shared/schemas";
 import { useClassContext } from "../../shared/contexts";
 import { iPageProps } from "../../shared/interfaces";
 
-export const CreateClass = ({ back }: iPageProps) => {
+export const CreateClassPage = ({ back }: iPageProps) => {
   const { createClass } = useClassContext();
 
   return (

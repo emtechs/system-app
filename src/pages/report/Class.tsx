@@ -64,7 +64,7 @@ interface iData extends iClassWithSchool {
   count_students: number;
 }
 
-export const ReportClass = ({ back }: iPageProps) => {
+export const ReportClassPage = ({ back }: iPageProps) => {
   const navigate = useNavigate();
   const [data, setData] = useState<iData[]>();
   const [dataSelect, setDataSelect] = useState<iClassWithSchool[]>();

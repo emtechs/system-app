@@ -1,4 +1,4 @@
-import { ValidateCPF } from "../../shared/components";
+import { Tools, ValidateCPF } from "../../shared/components";
 import { useUserContext } from "../../shared/contexts";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,11 +6,11 @@ import { createAdmSchema } from "../../shared/schemas";
 import { LayoutBasePage } from "../../shared/layouts";
 import { Box, Grid, Paper } from "@mui/material";
 
-export const CreateAdm = () => {
+export const CreateAdmPage = () => {
   const { createAdm } = useUserContext();
 
   return (
-    <LayoutBasePage title="Novo Administrador">
+    <LayoutBasePage title="Novo Administrador" tools={<Tools isHome />}>
       <FormContainer
         onSuccess={(data) => {
           createAdm(data);

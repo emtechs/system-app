@@ -107,7 +107,7 @@ interface iActiveSchoolProps {
   back: string;
 }
 
-export const ActiveSchool = ({ back }: iActiveSchoolProps) => {
+export const ActiveSchoolPage = ({ back }: iActiveSchoolProps) => {
   const theme = useTheme();
   const { setLoading } = useAppThemeContext();
   const { schoolSelect, setListSchoolData, setSchoolSelect } =
