@@ -1,138 +1,128 @@
 import {
-  Avatar,
-  Box,
   Button,
-  Card,
-  CardContent,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Theme,
+  IconButton,
+  TableCell,
+  TableRow,
+  Tooltip,
   Typography,
-  useTheme,
 } from "@mui/material";
-import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
-import { iPageProps, iSchool } from "../../shared/interfaces";
-import { BasePage } from "../../shared/components";
-import { useEffect } from "react";
+import {
+  useAppThemeContext,
+  useAuthContext,
+  useSchoolContext,
+} from "../../shared/contexts";
+import { useEffect, useState } from "react";
+import { iSchoolList } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
+import { LayoutBasePage } from "../../shared/layouts";
+import { RemoveDone } from "@mui/icons-material";
+import { TableSchool } from "../../shared/components";
+import { useNavigate } from "react-router-dom";
 
 interface iCardSchoolProps {
-  school: iSchool;
-  theme: Theme;
+  school: iSchoolList;
 }
 
-const CardSchool = ({ school, theme }: iCardSchoolProps) => {
-  const { schoolSelect, setSchoolSelect, updateSchool } = useSchoolContext();
+const CardSchool = ({ school }: iCardSchoolProps) => {
+  const navigate = useNavigate();
+  const { updateSchoolData, setUpdateSchoolData, updateSchool } =
+    useSchoolContext();
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setUpdateSchoolData(school);
+    setOpen((oldOpen) => !oldOpen);
+  };
 
   return (
     <>
-      <Card
-        sx={{
-          width: "100%",
-          height: 80,
-          maxWidth: 250,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          bgcolor: school.is_active
-            ? theme.palette.success.main
-            : theme.palette.error.main,
+      <TableRow
+        hover
+        sx={{ cursor: "pointer" }}
+        onClick={() => {
+          navigate(`/user/list/${school.id}`);
         }}
       >
-        <CardContent
-          onClick={() => setSchoolSelect(school)}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            cursor: "pointer",
-            position: "relative",
-          }}
-        >
-          <Box display="flex" alignItems="center" gap={2}>
-            <Avatar>{school.name[0].toUpperCase()}</Avatar>
-            <Box display="flex" flexDirection="column" gap={0.5}>
-              <Typography
-                fontSize={12}
-                color={theme.palette.secondary.contrastText}
-              >
-                {school.name}
-              </Typography>
-              {school.director?.name && (
-                <Typography
-                  fontSize={12}
-                  color={theme.palette.secondary.contrastText}
-                >
-                  Diretor: {school.director.name}
-                </Typography>
-              )}
-            </Box>
-          </Box>
-        </CardContent>
-      </Card>
-      <Dialog open={!!schoolSelect} onClose={() => setSchoolSelect(undefined)}>
-        <DialogTitle>Desativar Escola</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Deseja continuar desativando {schoolSelect?.name.toUpperCase()}?
-          </DialogContentText>
-          <DialogActions>
-            <Button onClick={() => setSchoolSelect(undefined)}>Cancelar</Button>
-            <Button
-              onClick={() => {
-                if (schoolSelect)
+        <TableCell>
+          <Tooltip title="Desativar Escola">
+            <IconButton color="error" onClick={handleClose}>
+              <RemoveDone />
+            </IconButton>
+          </Tooltip>
+        </TableCell>
+        <TableCell>{school.name}</TableCell>
+        <TableCell>{school.director?.name}</TableCell>
+        <TableCell>{school.num_classes}</TableCell>
+        <TableCell>{school.num_students}</TableCell>
+        <TableCell>{school.num_frequencies}</TableCell>
+        <TableCell>{school.school_infreq}</TableCell>
+      </TableRow>
+
+      {updateSchoolData && (
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>Desativar Escola</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Deseja continuar desativando a Escola{" "}
+              {updateSchoolData.name.toUpperCase()}?
+            </DialogContentText>
+            <DialogActions>
+              <Button onClick={handleClose}>Cancelar</Button>
+              <Button
+                onClick={() => {
                   updateSchool(
                     {
                       is_active: false,
                     },
-                    schoolSelect.id,
+                    updateSchoolData.id,
                     "estado"
                   );
-                setSchoolSelect(undefined);
-              }}
-            >
-              Continuar
-            </Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
+                  setOpen(false);
+                }}
+              >
+                Continuar
+              </Button>
+            </DialogActions>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 };
 
-export const ListSchool = ({ back }: iPageProps) => {
-  const theme = useTheme();
+export const ListSchool = () => {
   const { setLoading } = useAppThemeContext();
-  const { listSchoolData, setSchoolSelect, setListSchoolData } =
-    useSchoolContext();
+  const { schoolYear } = useAuthContext();
+  const { updateSchoolData } = useSchoolContext();
+  const [listSchoolData, setListSchoolData] = useState<iSchoolList[]>();
 
   useEffect(() => {
-    setSchoolSelect(undefined);
     setLoading(true);
     apiUsingNow
-      .get<iSchool[]>("schools?is_active=true")
-      .then((res) => {
-        if (res.data) {
-          setListSchoolData(res.data);
-        }
-      })
+      .get<iSchoolList[]>(
+        `schools?school_year_id=${schoolYear}&is_listSchool=true`
+      )
+      .then((res) => setListSchoolData(res.data))
       .finally(() => setLoading(false));
-  }, []);
+  }, [updateSchoolData]);
 
   return (
-    <BasePage isProfile back={back}>
+    <LayoutBasePage title="Listagem de Escolas">
       {listSchoolData && listSchoolData.length > 0 ? (
-        <Box display="flex" flexDirection="column" gap={theme.spacing(2)}>
-          {listSchoolData.map((school) => (
-            <CardSchool key={school.id} school={school} theme={theme} />
-          ))}
-        </Box>
+        <TableSchool>
+          <>
+            {listSchoolData.map((el) => (
+              <CardSchool key={el.id} school={el} />
+            ))}
+          </>
+        </TableSchool>
       ) : (
-        <Typography>Nenhuma escola ativa ou cadastrada!</Typography>
+        <Typography m={2}>Nenhuma escola ativa no momento!</Typography>
       )}
-    </BasePage>
+    </LayoutBasePage>
   );
 };

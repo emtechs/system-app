@@ -1,13 +1,6 @@
-import {
-  Avatar,
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, Card, useTheme } from "@mui/material";
 import { useAuthContext } from "../../contexts";
-import { adaptName } from "../../scripts";
+import { CardSchoolContent } from "./CardSchoolContent";
 
 export const CardSchool = () => {
   const theme = useTheme();
@@ -15,24 +8,7 @@ export const CardSchool = () => {
   return schoolData ? (
     <Box mx={2} width={theme.spacing(45)} maxWidth="90%">
       <Card>
-        <CardContent
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: theme.spacing(2),
-          }}
-        >
-          <Avatar sx={{ bgcolor: theme.palette.primary.main }}>
-            {schoolData.school.name[0].toUpperCase()}
-          </Avatar>
-          <Typography
-            overflow="hidden"
-            whiteSpace="nowrap"
-            textOverflow="ellipses"
-          >
-            {adaptName(schoolData.school.name)}
-          </Typography>
-        </CardContent>
+        <CardSchoolContent school={schoolData.school} />
       </Card>
     </Box>
   ) : (

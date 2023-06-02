@@ -3,6 +3,7 @@ import {
   iChildren,
   iSchool,
   iSchoolImportRequest,
+  iSchoolList,
   iSchoolRequest,
   iSchoolSelect,
   iServerRequest,
@@ -66,6 +67,8 @@ interface iSchoolContextData {
   setSchoolSelect: Dispatch<SetStateAction<iSchool | undefined>>;
   listSchoolData: iSchool[] | undefined;
   setListSchoolData: Dispatch<SetStateAction<iSchool[] | undefined>>;
+  updateSchoolData: iSchoolList | undefined;
+  setUpdateSchoolData: Dispatch<SetStateAction<iSchoolList | undefined>>;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -76,6 +79,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [schoolDataSelect, setSchoolDataSelect] = useState<iSchoolSelect[]>();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
+  const [updateSchoolData, setUpdateSchoolData] = useState<iSchoolList>();
 
   const handleCreateSchool = useCallback(
     async (data: iSchoolRequest, back?: string) => {
@@ -128,6 +132,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
         );
       } finally {
         setSchoolSelect(undefined);
+        setUpdateSchoolData(undefined);
         setLoading(false);
         if (back) navigate(back);
       }
@@ -236,6 +241,8 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setListSchoolData,
         schoolSelect,
         setSchoolSelect,
+        updateSchoolData,
+        setUpdateSchoolData,
       }}
     >
       {children}

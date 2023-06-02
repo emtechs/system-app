@@ -24,7 +24,14 @@ export interface iSchool {
   school_infreq: number;
 }
 
+export interface iSchoolList extends iSchool {
+  num_students: number;
+  num_frequencies: number;
+  num_classes: number;
+}
+
 export interface iSchoolDash extends iSchool {
+  infrequency: number;
   total_students: number;
   classes: iClassWithSchoolDash[];
 }

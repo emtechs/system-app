@@ -67,7 +67,7 @@ const AppRoutes = () => {
           element={<DefineDiret back="/school" />}
         />
         <Route path="/school/edit" element={<EditSchool back="/school" />} />
-        <Route path="/school/list" element={<ListSchool back="/school" />} />
+        <Route path="/school/list" element={<ListSchool />} />
         <Route
           path="/school/active"
           element={<ActiveSchool back="/school" />}
