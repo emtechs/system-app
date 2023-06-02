@@ -1,12 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { FieldValues } from "react-hook-form";
 import {
   iChildren,
   iSchool,
@@ -18,7 +10,16 @@ import {
   iStudentRequest,
 } from "../interfaces";
 import {
-  apiUsingNow,
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+} from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppThemeContext } from "./ThemeContext";
+import {
   patchSchool,
   patchStudent,
   postImportSchool,
@@ -29,11 +30,6 @@ import {
   postUser,
 } from "../services";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { useAppThemeContext } from ".";
-import { FieldValues } from "react-hook-form";
-import dayjs from "dayjs";
-import "dayjs/locale/pt-br";
 
 interface iSchoolContextData {
   createSchool: (data: iSchoolRequest, back?: string) => Promise<void>;
@@ -70,7 +66,6 @@ interface iSchoolContextData {
   setSchoolSelect: Dispatch<SetStateAction<iSchool | undefined>>;
   listSchoolData: iSchool[] | undefined;
   setListSchoolData: Dispatch<SetStateAction<iSchool[] | undefined>>;
-  schoolYear: string | undefined;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -81,18 +76,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [schoolDataSelect, setSchoolDataSelect] = useState<iSchoolSelect[]>();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
-  const [schoolYear, setSchoolYear] = useState<string>();
-
-  useEffect(() => {
-    const year = dayjs().year();
-    setLoading(true);
-    apiUsingNow
-      .get<{ id: string }>(`/schools/year/${year}`)
-      .then((res) => {
-        setSchoolYear(res.data.id);
-      })
-      .finally(() => setLoading(false));
-  }, []);
 
   const handleCreateSchool = useCallback(
     async (data: iSchoolRequest, back?: string) => {
@@ -253,7 +236,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setListSchoolData,
         schoolSelect,
         setSchoolSelect,
-        schoolYear,
       }}
     >
       {children}

@@ -18,7 +18,6 @@ import {
   useAppThemeContext,
   useAuthContext,
   useFrequencyContext,
-  useSchoolContext,
 } from "../../shared/contexts";
 import {
   iClassDash,
@@ -177,8 +176,7 @@ export const DashboardCommon = () => {
   const mdLgBetween = useMediaQuery(theme.breakpoints.between("md", "lg"));
   const mdUp = useMediaQuery(theme.breakpoints.up("md"));
   const { setLoading } = useAppThemeContext();
-  const { schoolData } = useAuthContext();
-  const { schoolYear } = useSchoolContext();
+  const { schoolData, schoolYear } = useAuthContext();
   const [listClassData, setListClassData] = useState<iClassDash[]>();
   const [listFreqData, setListFreqData] = useState<iFrequency[]>();
   const [listAlertClassData, setListAlertClassData] =

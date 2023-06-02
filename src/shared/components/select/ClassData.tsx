@@ -3,7 +3,6 @@ import {
   useAppThemeContext,
   useAuthContext,
   useClassContext,
-  useSchoolContext,
 } from "../../contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../services";
@@ -28,8 +27,7 @@ interface iSelect extends iClassWithSchool {
 
 export const SelectClassData = () => {
   const { setLoading } = useAppThemeContext();
-  const { schoolData } = useAuthContext();
-  const { schoolYear } = useSchoolContext();
+  const { schoolData, schoolYear } = useAuthContext();
   const [data, setData] = useState<iSelect[]>();
 
   useEffect(() => {

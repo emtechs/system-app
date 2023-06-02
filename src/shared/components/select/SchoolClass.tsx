@@ -1,6 +1,7 @@
 import { AutocompleteElement, useFormContext } from "react-hook-form-mui";
 import {
   useAppThemeContext,
+  useAuthContext,
   useClassContext,
   useSchoolContext,
 } from "../../contexts";
@@ -34,7 +35,8 @@ interface iSelect extends iClassWithSchool {
 
 export const SelectSchoolClass = () => {
   const { setLoading } = useAppThemeContext();
-  const { schoolSelect, schoolDataSelect, setSchoolDataSelect, schoolYear } =
+  const { schoolYear } = useAuthContext();
+  const { schoolSelect, schoolDataSelect, setSchoolDataSelect } =
     useSchoolContext();
   const [data, setData] = useState<iSelect[]>();
 

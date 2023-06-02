@@ -17,17 +17,20 @@ import {
   iUser,
   iWorkSchool,
 } from "../interfaces";
+import { useNavigate } from "react-router-dom";
+import { useAppThemeContext } from "./ThemeContext";
+import { useDrawerContext } from "./DrawerContext";
+import { useModalContext } from "./ModalContext";
 import {
   apiUsingNow,
   postLogin,
   postPasswordRecovery,
   postRecovery,
 } from "../services";
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { useModalContext } from "./ModalContext";
 import { AxiosError } from "axios";
-import { useAppThemeContext, useDrawerContext } from ".";
 
 interface iAuthContextData {
   logout: () => void;
@@ -47,6 +50,7 @@ interface iAuthContextData {
   setSchoolData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
   dashData: iDash | undefined;
   setDashData: Dispatch<SetStateAction<iDash | undefined>>;
+  schoolYear: string | undefined;
 }
 
 const AuthContext = createContext({} as iAuthContextData);
@@ -60,6 +64,7 @@ export const AuthProvider = ({ children }: iChildren) => {
   const [userData, setUserData] = useState<iUser>();
   const [schoolData, setSchoolData] = useState<iWorkSchool>();
   const [dashData, setDashData] = useState<iDash>();
+  const [schoolYear, setSchoolYear] = useState<string>();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("@EMTechs:token");
@@ -87,6 +92,16 @@ export const AuthProvider = ({ children }: iChildren) => {
         .finally(() => {
           setLoading(false);
         });
+      setLoading(true);
+      const year = dayjs().year();
+      apiUsingNow
+        .get<{ id: string }>(`/schools/year/${year}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+        .then((res) => {
+          setSchoolYear(res.data.id);
+        })
+        .finally(() => setLoading(false));
     }
   }, [accessToken]);
 
@@ -184,6 +199,7 @@ export const AuthProvider = ({ children }: iChildren) => {
         setSchoolData,
         setUserData,
         userData,
+        schoolYear,
       }}
     >
       {children}

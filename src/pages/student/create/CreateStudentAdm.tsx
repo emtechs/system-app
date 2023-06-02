@@ -1,4 +1,4 @@
-import { useSchoolContext } from "../../../shared/contexts";
+import { useAuthContext, useSchoolContext } from "../../../shared/contexts";
 import { iPageProps } from "../../../shared/interfaces";
 import {
   BasePage,
@@ -12,7 +12,8 @@ import { studentCreateSchema } from "../../../shared/schemas";
 import { Button } from "@mui/material";
 
 export const CreateStudentAdm = ({ back }: iPageProps) => {
-  const { createStudent, schoolYear } = useSchoolContext();
+  const { createStudent } = useSchoolContext();
+  const { schoolYear } = useAuthContext();
 
   return (
     <BasePage isProfile back={back}>

@@ -6,7 +6,11 @@ import {
 } from "@mui/x-data-grid";
 import { BasePage, SelectSchool } from "../../shared/components";
 import { iClassWithSchool, iPageProps } from "../../shared/interfaces";
-import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
+import {
+  useAppThemeContext,
+  useAuthContext,
+  useSchoolContext,
+} from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import {
   Box,
@@ -65,7 +69,8 @@ export const ReportClass = ({ back }: iPageProps) => {
   const [data, setData] = useState<iData[]>();
   const [dataSelect, setDataSelect] = useState<iClassWithSchool[]>();
   const { setLoading } = useAppThemeContext();
-  const { schoolSelect, setSchoolSelect, schoolYear } = useSchoolContext();
+  const { schoolYear } = useAuthContext();
+  const { schoolSelect, setSchoolSelect } = useSchoolContext();
 
   useEffect(() => {
     setSchoolSelect(undefined);
