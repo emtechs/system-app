@@ -14,11 +14,7 @@ import {
 import { LayoutBasePage } from "../../shared/layouts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
-import {
-  useAppThemeContext,
-  useAuthContext,
-  useFrequencyContext,
-} from "../../shared/contexts";
+import { useAppThemeContext, useAuthContext } from "../../shared/contexts";
 import {
   iClassWithSchool,
   iFrequencyWithInfreq,

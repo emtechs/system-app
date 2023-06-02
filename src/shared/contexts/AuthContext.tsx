@@ -89,6 +89,14 @@ export const AuthProvider = ({ children }: iChildren) => {
           setDashData(res.data.dash);
           if (res.data.work_school.length === 0) setSchoolData(undefined);
         })
+        .catch((e) => {
+          if (e instanceof AxiosError) {
+            if (e.response?.status === 401) {
+              localStorage.removeItem("@EMTechs:token");
+              setAccessToken(undefined);
+            }
+          }
+        })
         .finally(() => {
           setLoading(false);
         });
