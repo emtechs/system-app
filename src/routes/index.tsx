@@ -5,6 +5,7 @@ import {
   ActiveUserPage,
   CreateAdmPage,
   CreateClassPage,
+  CreateDirectorPage,
   CreateFrequencyPage,
   CreateSchoolPage,
   CreateServerPage,
@@ -42,6 +43,10 @@ const AppRoutes = () => {
       <Route element={<ProtectedAuth />}>
         <Route element={<ProtectedAdmin />}>
           <Route path="/user/create" element={<CreateAdmPage />} />
+          <Route
+            path="/user/create/director"
+            element={<CreateDirectorPage />}
+          />
           <Route path="/user/define/secret" element={<DefineSecretPage />} />
           <Route path="/user/list" element={<ListUserPage />} />
           <Route path="/user/list/:id" element={<RetrieveUserPage />} />

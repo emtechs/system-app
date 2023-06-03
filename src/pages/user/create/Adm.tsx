@@ -1,9 +1,9 @@
-import { Tools, ValidateCPF } from "../../shared/components";
-import { useUserContext } from "../../shared/contexts";
+import { Tools, ValidateCPF } from "../../../shared/components";
+import { useUserContext } from "../../../shared/contexts";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createAdmSchema } from "../../shared/schemas";
-import { LayoutBasePage } from "../../shared/layouts";
+import { createAdmSchema } from "../../../shared/schemas";
+import { LayoutBasePage } from "../../../shared/layouts";
 import { Box, Grid, Paper } from "@mui/material";
 
 export const CreateAdmPage = () => {
@@ -12,9 +12,7 @@ export const CreateAdmPage = () => {
   return (
     <LayoutBasePage title="Novo Administrador" tools={<Tools isHome />}>
       <FormContainer
-        onSuccess={(data) => {
-          createAdm(data);
-        }}
+        onSuccess={createAdm}
         resolver={zodResolver(createAdmSchema)}
       >
         <Box

@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { useAppThemeContext, useUserContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
-import { iRole, iUser } from "../../shared/interfaces";
+import { iUser } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { TableUser, Tools } from "../../shared/components";
 import { FormContainer, RadioButtonGroup } from "react-hook-form-mui";
@@ -22,26 +22,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { activeUserSchema } from "../../shared/schemas";
 import { LayoutBasePage } from "../../shared/layouts";
 import { DoneAll } from "@mui/icons-material";
+import { rolePtBr } from "../../shared/scripts";
 
 interface iCardUserProps {
   user: iUser;
 }
-
-const rolePtBr = (role: iRole) => {
-  switch (role) {
-    case "ADMIN":
-      return "Administrador";
-
-    case "DIRET":
-      return "Diretor de Escola";
-
-    case "SECRET":
-      return "Secretário";
-
-    case "SERV":
-      return "Servidor";
-  }
-};
 
 const CardUser = ({ user }: iCardUserProps) => {
   const { updateUserData, setUpdateUserData, updateAllUser } = useUserContext();

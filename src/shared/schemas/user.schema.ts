@@ -14,6 +14,23 @@ export const createAdmSchema = z
   })
   .refine((fields) => (fields.password = fields.login.substring(0, 6)));
 
+export const createDirectorSchema = z
+  .object({
+    name: z
+      .string({ required_error: "Nome obrigatório" })
+      .nonempty("Nome obrigatório"),
+    login: z.string(),
+    cpf: z
+      .string({ required_error: "CPF obrigatório" })
+      .min(14, "Precisa ter 14 digitos"),
+    password: z.string().optional(),
+
+    role: z.enum(["SERV", "DIRET", "SECRET", "ADMIN"]).default("DIRET"),
+    dash: z.enum(["COMMON", "SCHOOL", "ORGAN", "ADMIN"]).default("SCHOOL"),
+    schools: z.object({ id: z.string().uuid() }).array(),
+  })
+  .refine((fields) => (fields.password = fields.login.substring(0, 6)));
+
 export const createSecretSchema = z
   .object({
     name: z

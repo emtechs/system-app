@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   createAdmSchema,
+  createDirectorSchema,
   createSecretSchema,
   userFirstSchema,
   userPasswordSchema,
@@ -28,6 +29,8 @@ export interface iUser {
 }
 
 export type iUserAdmRequest = z.infer<typeof createAdmSchema>;
+
+export type iUserDirectorRequest = z.infer<typeof createDirectorSchema>;
 
 export type iUserSecretRequest = z.infer<typeof createSecretSchema>;
 

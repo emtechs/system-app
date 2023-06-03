@@ -5,25 +5,12 @@ import { schoolCreateSchema } from "../../../shared/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Grid, Paper } from "@mui/material";
 import { Tools } from "../../../shared/components";
-import { Save } from "@mui/icons-material";
 
 export const CreateSchoolPage = () => {
   const { createSchool } = useSchoolContext();
 
   return (
-    <LayoutBasePage
-      title="Nova Escola"
-      tools={
-        <Tools
-          isHome
-          finish={
-            <Button variant="contained" type="submit" endIcon={<Save />}>
-              Salvar
-            </Button>
-          }
-        />
-      }
-    >
+    <LayoutBasePage title="Nova Escola" tools={<Tools isHome />}>
       <FormContainer
         onSuccess={(data) => createSchool(data)}
         resolver={zodResolver(schoolCreateSchema)}
@@ -44,6 +31,13 @@ export const CreateSchoolPage = () => {
                   required
                   fullWidth
                 />
+              </Grid>
+            </Grid>
+            <Grid container item direction="row" justifyContent="center">
+              <Grid item xs={12} sm={9} md={6} lg={3}>
+                <Button variant="contained" type="submit" fullWidth>
+                  Salvar
+                </Button>
               </Grid>
             </Grid>
           </Grid>

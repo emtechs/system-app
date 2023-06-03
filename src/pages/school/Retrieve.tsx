@@ -15,22 +15,25 @@ import {
   useSchoolContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
-import { iDirector, iSchoolList } from "../../shared/interfaces";
+import { iDirector, iRole, iSchoolList } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
 import { RemoveDone } from "@mui/icons-material";
-import { TableServer, Tools } from "../../shared/components";
+import { TableUser, Tools } from "../../shared/components";
 import { useParams } from "react-router-dom";
+import { rolePtBr } from "../../shared/scripts";
 
 interface iCardServerProps {
   server: iDirector;
+  role: iRole;
 }
 
-const CardServer = ({ server }: iCardServerProps) => {
+const CardServer = ({ server, role }: iCardServerProps) => {
   return (
     <TableRow>
       <TableCell>{server.name}</TableCell>
       <TableCell>{server.cpf}</TableCell>
+      <TableCell>{rolePtBr(role)}</TableCell>
     </TableRow>
   );
 };
@@ -84,13 +87,17 @@ export const RetrieveSchoolPage = () => {
         }
       >
         {retrieveSchool && retrieveSchool.servers.length > 0 ? (
-          <TableServer>
+          <TableUser>
             <>
               {retrieveSchool.servers.map((el) => (
-                <CardServer key={el.server.id} server={el.server} />
+                <CardServer
+                  key={el.server.id}
+                  server={el.server}
+                  role={el.role}
+                />
               ))}
             </>
-          </TableServer>
+          </TableUser>
         ) : (
           <Typography m={2}>Escola sem servidores no momento!</Typography>
         )}

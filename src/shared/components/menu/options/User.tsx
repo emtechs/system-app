@@ -15,6 +15,11 @@ export const User = () => {
             to="user/create"
           />
           <ListItemLink
+            icon={<PersonAdd />}
+            label="Diretor"
+            to="user/create/director"
+          />
+          <ListItemLink
             icon={<Person />}
             label="Secretário"
             to="user/define/secret"

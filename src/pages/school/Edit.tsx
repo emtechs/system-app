@@ -5,7 +5,6 @@ import { schoolUpdateSchema } from "../../shared/schemas";
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
 import { SelectSchoolSelectData, Tools } from "../../shared/components";
-import { Save } from "@mui/icons-material";
 
 export const EditSchoolPage = () => {
   const { updateSchool, schoolSelect } = useSchoolContext();
@@ -14,16 +13,7 @@ export const EditSchoolPage = () => {
     <LayoutBasePage
       title="Editar Escola"
       school={<SelectSchoolSelectData />}
-      tools={
-        <Tools
-          isHome
-          finish={
-            <Button variant="contained" type="submit" endIcon={<Save />}>
-              Salvar
-            </Button>
-          }
-        />
-      }
+      tools={<Tools isHome />}
     >
       <FormContainer
         onSuccess={(data) => {
@@ -65,6 +55,13 @@ export const EditSchoolPage = () => {
                   required
                   fullWidth
                 />
+              </Grid>
+            </Grid>
+            <Grid container item direction="row" justifyContent="center">
+              <Grid item xs={12} sm={9} md={6} lg={3}>
+                <Button variant="contained" type="submit" fullWidth>
+                  Salvar
+                </Button>
               </Grid>
             </Grid>
           </Grid>

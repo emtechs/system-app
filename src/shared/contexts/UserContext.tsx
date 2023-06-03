@@ -10,6 +10,7 @@ import {
   iChildren,
   iUser,
   iUserAdmRequest,
+  iUserDirectorRequest,
   iUserFirstRequest,
   iUserPasswordRequest,
   iUserSecretRequest,
@@ -22,7 +23,8 @@ import { useAppThemeContext, useAuthContext } from ".";
 import { FieldValues } from "react-hook-form";
 
 interface iUserContextData {
-  createAdm: (data: iUserAdmRequest, back?: string) => Promise<void>;
+  createAdm: (data: iUserAdmRequest) => Promise<void>;
+  createDirector: (data: iUserDirectorRequest) => Promise<void>;
   createSecret: (data: iUserSecretRequest, back?: string) => Promise<void>;
   editPassword: (id: string, data: iUserPasswordRequest) => Promise<void>;
   first: (id: string, data: iUserFirstRequest) => Promise<void>;
@@ -45,17 +47,30 @@ export const UserProvider = ({ children }: iChildren) => {
   const { setDashData, setSchoolData, setUserData } = useAuthContext();
   const [updateUserData, setUpdateUserData] = useState<iUser>();
 
-  const handleCreateUserAdm = useCallback(
-    async (data: iUserAdmRequest, back?: string) => {
+  const handleCreateUserAdm = useCallback(async (data: iUserAdmRequest) => {
+    try {
+      setLoading(true);
+      await postUser(data);
+      toast.success("Administrador cadastrado com sucesso!");
+    } catch {
+      toast.error("Não foi possível cadastrar o administrador no momento!");
+    } finally {
+      setLoading(false);
+      navigate("/");
+    }
+  }, []);
+
+  const handleCreateDirector = useCallback(
+    async (data: iUserDirectorRequest) => {
       try {
         setLoading(true);
         await postUser(data);
-        toast.success("Administrador cadastrado com sucesso!");
+        toast.success("Diretor cadastrado com sucesso!");
+        navigate("/");
       } catch {
-        toast.error("Não foi possível cadastrar o administrador no momento!");
+        toast.error("Não foi possível cadastrar o Diretor no momento!");
       } finally {
         setLoading(false);
-        navigate(back ? back : "/");
       }
     },
     []
@@ -154,6 +169,7 @@ export const UserProvider = ({ children }: iChildren) => {
     <UserContext.Provider
       value={{
         createAdm: handleCreateUserAdm,
+        createDirector: handleCreateDirector,
         createSecret: handleCreateUserSecret,
         first: handleFirstUser,
         updateUser: handleUpdateUser,

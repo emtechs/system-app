@@ -1,31 +1,16 @@
 import { TableCell, TableRow, Typography } from "@mui/material";
 import { useAppThemeContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
-import { iRole, iUser } from "../../shared/interfaces";
+import { iUser } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TableUser, Tools } from "../../shared/components";
 import { useNavigate } from "react-router-dom";
+import { rolePtBr } from "../../shared/scripts";
 
 interface iCardUserProps {
   user: iUser;
 }
-
-const rolePtBr = (role: iRole) => {
-  switch (role) {
-    case "ADMIN":
-      return "Administrador";
-
-    case "DIRET":
-      return "Diretor de Escola";
-
-    case "SECRET":
-      return "Secretário";
-
-    case "SERV":
-      return "Servidor";
-  }
-};
 
 const CardUser = ({ user }: iCardUserProps) => {
   const navigate = useNavigate();
