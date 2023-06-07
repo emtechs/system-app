@@ -38,7 +38,8 @@ interface iClassDashProps {
 const ClassDash = ({ classData }: iClassDashProps) => {
   const { createFrequency } = useFrequencyContext();
   const date = dayjs().format("DD/MM/YYYY");
-  const month = dayjs().month() + 1;
+  const month = +date.split("/")[1];
+  const day = +date.split("/")[0];
   const students = classData.students.map(({ student }) => {
     return { student_id: student.id };
   });
@@ -51,6 +52,7 @@ const ClassDash = ({ classData }: iClassDashProps) => {
             createFrequency({
               date,
               month,
+              day,
               class_id: classData.class.id,
               school_id: classData.school.id,
               school_year_id: classData.school_year.id,
@@ -294,6 +296,11 @@ export const DashboardCommon = () => {
               </Grid>
             </Grid>
           </CardContent>
+          <CardActions sx={{ justifyContent: "flex-end" }}>
+            <Button onClick={() => navigate("/frequency/list")}>
+              Saber Mais
+            </Button>
+          </CardActions>
         </Card>
       </Box>
       <Box
@@ -328,9 +335,9 @@ export const DashboardCommon = () => {
           </CardContent>
           <CardActions sx={{ justifyContent: "flex-end" }}>
             <Button
-              onClick={() => {
-                navigate(`/class/list/${schoolData?.school.id}/${schoolYear}`);
-              }}
+              onClick={() =>
+                navigate(`/class/list/${schoolData?.school.id}/${schoolYear}`)
+              }
             >
               Saber Mais
             </Button>

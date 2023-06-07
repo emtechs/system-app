@@ -5,6 +5,17 @@ export const adaptName = (name: string) => {
     if (displayName[4]) {
       name4 = " " + displayName[4];
     }
+    if (displayName[3].length < 3) {
+      return (
+        displayName[0] +
+        " " +
+        displayName[1] +
+        " " +
+        displayName[2][0] +
+        "." +
+        name4
+      );
+    }
     return (
       displayName[0] +
       " " +
