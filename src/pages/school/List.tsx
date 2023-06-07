@@ -91,14 +91,16 @@ export const ListSchoolPage = () => {
   const [listSchoolData, setListSchoolData] = useState<iSchoolList[]>();
 
   useEffect(() => {
-    setLoading(true);
-    apiUsingNow
-      .get<iSchoolList[]>(
-        `schools?school_year_id=${schoolYear}&is_listSchool=true`
-      )
-      .then((res) => setListSchoolData(res.data))
-      .finally(() => setLoading(false));
-  }, [updateSchoolData]);
+    if (schoolYear) {
+      setLoading(true);
+      apiUsingNow
+        .get<iSchoolList[]>(
+          `schools?school_year_id=${schoolYear}&is_listSchool=true`
+        )
+        .then((res) => setListSchoolData(res.data))
+        .finally(() => setLoading(false));
+    }
+  }, [schoolYear, updateSchoolData]);
 
   return (
     <LayoutBasePage title="Listagem de Escolas" tools={<Tools isHome />}>

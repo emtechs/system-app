@@ -11,37 +11,32 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useAppThemeContext, useUserContext } from "../../shared/contexts";
+import {
+  useAppThemeContext,
+  useSchoolContext,
+  useUserContext,
+} from "../../shared/contexts";
 import { useEffect, useState } from "react";
-import { iDash, iUser, iWorkSchool } from "../../shared/interfaces";
+import { iUser, iWorkSchool } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
 import { Delete, RemoveDone } from "@mui/icons-material";
 import { TableRetrieveUser, Tools } from "../../shared/components";
 import { useParams } from "react-router-dom";
+import { rolePtBr } from "../../shared/scripts";
 
 interface iCardUserProps {
+  user: iUser;
   work: iWorkSchool;
 }
 
-const dashPtBr = (dash: iDash) => {
-  switch (dash) {
-    case "ADMIN":
-      return "Administrador";
-
-    case "COMMON":
-      return "Servidor";
-
-    case "SCHOOL":
-      return "Secretário";
-  }
-};
-
-const CardUser = ({ work }: iCardUserProps) => {
-  const { updateUserData, updateAllUser } = useUserContext();
+const CardUser = ({ user, work }: iCardUserProps) => {
+  const { updateServerData, setUpdateServerData, deleteServer } =
+    useSchoolContext();
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setOpen((oldOpen) => !oldOpen);
+    setUpdateServerData(work);
   };
 
   return (
@@ -55,29 +50,23 @@ const CardUser = ({ work }: iCardUserProps) => {
           </Tooltip>
         </TableCell>
         <TableCell>{work.school.name}</TableCell>
-        <TableCell>{dashPtBr(work.dash)}</TableCell>
+        <TableCell>{rolePtBr(work.role)}</TableCell>
       </TableRow>
 
-      {updateUserData && (
+      {updateServerData && (
         <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Desativar Usuário</DialogTitle>
+          <DialogTitle>Remover Usuário da Função</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Deseja continuar desativando o usúario{" "}
-              {updateUserData.name.toUpperCase()}?
+              Deseja continuar removendo o usúario {user.name.toUpperCase()} da
+              Função {rolePtBr(updateServerData.role).toUpperCase()} da Escola{" "}
+              {updateServerData.school.name}?
             </DialogContentText>
             <DialogActions>
               <Button onClick={handleClose}>Cancelar</Button>
               <Button
                 onClick={() => {
-                  updateAllUser(
-                    updateUserData.id,
-                    {
-                      role: "SERV",
-                      is_active: false,
-                    },
-                    false
-                  );
+                  deleteServer(updateServerData.school.id, user.id);
                   setOpen(!open);
                 }}
               >
@@ -95,6 +84,7 @@ export const RetrieveUserPage = () => {
   const { id } = useParams<"id">();
   const { setLoading } = useAppThemeContext();
   const { updateAllUser } = useUserContext();
+  const { updateServerData, schoolId } = useSchoolContext();
   const [retrieveUser, setRetrieveUser] = useState<iUser>();
   const [open, setOpen] = useState(false);
   const handleClose = () => {
@@ -107,7 +97,7 @@ export const RetrieveUserPage = () => {
       .get<iUser>(`users/${id}`)
       .then((res) => setRetrieveUser(res.data))
       .finally(() => setLoading(false));
-  }, []);
+  }, [updateServerData]);
 
   return (
     <>
@@ -120,7 +110,7 @@ export const RetrieveUserPage = () => {
         tools={
           <Tools
             isBack
-            back="/user/list"
+            back={schoolId ? `/school/${schoolId}` : "/user/list"}
             isHome
             finish={
               <Button
@@ -140,7 +130,7 @@ export const RetrieveUserPage = () => {
           <TableRetrieveUser>
             <>
               {retrieveUser.work_school.map((el) => (
-                <CardUser key={el.school.id} work={el} />
+                <CardUser key={el.school.id} user={retrieveUser} work={el} />
               ))}
             </>
           </TableRetrieveUser>

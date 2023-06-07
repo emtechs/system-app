@@ -20,17 +20,27 @@ import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
 import { RemoveDone } from "@mui/icons-material";
 import { TableUser, Tools } from "../../shared/components";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { rolePtBr } from "../../shared/scripts";
 
 interface iCardServerProps {
+  school: iSchoolList;
   server: iDirector;
   role: iRole;
 }
 
-const CardServer = ({ server, role }: iCardServerProps) => {
+const CardServer = ({ school, server, role }: iCardServerProps) => {
+  const navigate = useNavigate();
+  const { setSchoolId } = useSchoolContext();
   return (
-    <TableRow>
+    <TableRow
+      hover
+      sx={{ cursor: "pointer" }}
+      onClick={() => {
+        setSchoolId(school.id);
+        navigate(`/user/list/${server.id}`);
+      }}
+    >
       <TableCell>{server.name}</TableCell>
       <TableCell>{server.cpf}</TableCell>
       <TableCell>{rolePtBr(role)}</TableCell>
@@ -92,6 +102,7 @@ export const RetrieveSchoolPage = () => {
               {retrieveSchool.servers.map((el) => (
                 <CardServer
                   key={el.server.id}
+                  school={retrieveSchool}
                   server={el.server}
                   role={el.role}
                 />

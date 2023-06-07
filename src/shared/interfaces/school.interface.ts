@@ -47,6 +47,7 @@ export interface iSchoolSelect extends iSchool {
 
 export interface iWorkSchool {
   dash: iDash;
+  role: iRole;
   school: iSchool;
 }
 

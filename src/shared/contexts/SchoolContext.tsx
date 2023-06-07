@@ -1,4 +1,3 @@
-import { FieldValues } from "react-hook-form";
 import {
   iChildren,
   iSchool,
@@ -9,7 +8,9 @@ import {
   iServerRequest,
   iStudentImportRequest,
   iStudentRequest,
+  iWorkSchool,
 } from "../interfaces";
+import { FieldValues } from "react-hook-form";
 import {
   Dispatch,
   SetStateAction,
@@ -21,6 +22,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import {
+  deleteSchoolServer,
   patchSchool,
   patchStudent,
   postImportSchool,
@@ -61,6 +63,7 @@ interface iSchoolContextData {
     type: "nome" | "diretor" | "estado",
     back?: string
   ) => Promise<void>;
+  deleteServer: (school_id: string, server_id: string) => Promise<void>;
   schoolDataSelect: iSchoolSelect[] | undefined;
   setSchoolDataSelect: Dispatch<SetStateAction<iSchoolSelect[] | undefined>>;
   schoolSelect: iSchool | undefined;
@@ -69,6 +72,10 @@ interface iSchoolContextData {
   setListSchoolData: Dispatch<SetStateAction<iSchool[] | undefined>>;
   updateSchoolData: iSchoolList | undefined;
   setUpdateSchoolData: Dispatch<SetStateAction<iSchoolList | undefined>>;
+  updateServerData: iWorkSchool | undefined;
+  setUpdateServerData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
+  schoolId: string | undefined;
+  setSchoolId: Dispatch<SetStateAction<string | undefined>>;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -80,6 +87,8 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
   const [updateSchoolData, setUpdateSchoolData] = useState<iSchoolList>();
+  const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
+  const [schoolId, setSchoolId] = useState<string>();
 
   const handleCreateSchool = useCallback(
     async (data: iSchoolRequest, back?: string) => {
@@ -152,6 +161,24 @@ export const SchoolProvider = ({ children }: iChildren) => {
         toast.error("Não foi possível cadastrar o servidor no momento!");
       } finally {
         setSchoolSelect(undefined);
+        setLoading(false);
+      }
+    },
+    []
+  );
+
+  const handleDeleteServer = useCallback(
+    async (school_id: string, server_id: string) => {
+      try {
+        setLoading(true);
+        await deleteSchoolServer(school_id, server_id);
+        toast.success("Usuário removido da função com sucesso!");
+      } catch {
+        toast.error(
+          "Não foi possível remover o usuário removido da função no momento!"
+        );
+      } finally {
+        setUpdateServerData(undefined);
         setLoading(false);
       }
     },
@@ -236,6 +263,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
         importStudent: handleImportStudent,
         importStudentAll: handleImportStudentAll,
         updateSchool: handleUpdateSchool,
+        deleteServer: handleDeleteServer,
         schoolDataSelect,
         setSchoolDataSelect,
         listSchoolData,
@@ -244,6 +272,10 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setSchoolSelect,
         updateSchoolData,
         setUpdateSchoolData,
+        updateServerData,
+        setUpdateServerData,
+        schoolId,
+        setSchoolId,
       }}
     >
       {children}

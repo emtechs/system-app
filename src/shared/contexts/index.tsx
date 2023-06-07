@@ -10,19 +10,19 @@ import { UserProvider } from "./UserContext";
 
 const Providers = ({ children }: iChildren) => (
   <AppThemeProvider>
-    <DrawerProvider>
-      <ModalProvider>
-        <AuthProvider>
-          <UserProvider>
-            <SchoolProvider>
-              <ClassProvider>
-                <FrequencyProvider>{children}</FrequencyProvider>
-              </ClassProvider>
-            </SchoolProvider>
-          </UserProvider>
-        </AuthProvider>
-      </ModalProvider>
-    </DrawerProvider>
+    <ModalProvider>
+      <AuthProvider>
+        <UserProvider>
+          <SchoolProvider>
+            <ClassProvider>
+              <FrequencyProvider>
+                <DrawerProvider>{children}</DrawerProvider>
+              </FrequencyProvider>
+            </ClassProvider>
+          </SchoolProvider>
+        </UserProvider>
+      </AuthProvider>
+    </ModalProvider>
   </AppThemeProvider>
 );
 

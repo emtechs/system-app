@@ -1,5 +1,8 @@
 import { FormContainer, useFormContext } from "react-hook-form-mui";
-import { SelectSchoolClass } from "../../../shared/components";
+import {
+  SelectClassSelectData,
+  SelectSchoolSelectData,
+} from "../../../shared/components";
 import { useAuthContext, useFrequencyContext } from "../../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { frequencyCreateSchema } from "../../../shared/schemas";
@@ -76,7 +79,10 @@ export const CreateFrequencyAdm = () => {
 
   return (
     <>
-      <LayoutBasePage title="Nova Frequência">
+      <LayoutBasePage
+        title="Nova Frequência"
+        school={<SelectSchoolSelectData />}
+      >
         <FormContainer
           onSuccess={createFrequency}
           resolver={zodResolver(frequencyCreateSchema)}
@@ -91,7 +97,7 @@ export const CreateFrequencyAdm = () => {
             <Grid container direction="column" p={2} spacing={2}>
               <Grid container item direction="row" justifyContent="center">
                 <Grid item xs={12} sm={9} md={6} lg={3}>
-                  <SelectSchoolClass />
+                  <SelectClassSelectData />
                 </Grid>
               </Grid>
               <Grid container item direction="row" justifyContent="center">

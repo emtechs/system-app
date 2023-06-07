@@ -102,3 +102,7 @@ export async function patchFrequencyStudent(
 export async function deleteFrequency(id: string) {
   await apiUsingNow.delete(`frequencies/${id}`);
 }
+
+export async function deleteSchoolServer(school_id: string, server_id: string) {
+  await apiUsingNow.delete(`schools/${school_id}/server/${server_id}`);
+}

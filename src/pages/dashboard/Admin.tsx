@@ -109,6 +109,7 @@ export const DashboardAdmin = () => {
     } else if (mdUp) {
       take = 3;
     }
+
     setLoading(true);
     apiUsingNow
       .get<iFrequencyWithInfreq[]>(
@@ -116,6 +117,7 @@ export const DashboardAdmin = () => {
       )
       .then((res) => setListFreqData(res.data))
       .finally(() => setLoading(false));
+
     setLoading(true);
     apiUsingNow
       .get<iFrequencyWithInfreq[]>(`frequencies?is_dash=true&take=${take}`)

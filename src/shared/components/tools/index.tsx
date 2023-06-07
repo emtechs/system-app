@@ -9,7 +9,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useFrequencyContext } from "../../contexts";
+import { useFrequencyContext, useSchoolContext } from "../../contexts";
 import { useNavigate } from "react-router-dom";
 import { ChangeEvent, ReactNode } from "react";
 
@@ -33,10 +33,14 @@ export const Tools = ({
   const theme = useTheme();
   const smDown = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
+  const { setSchoolId } = useSchoolContext();
   const { updateFrequency, frequencyData, isInfreq, setIsInfreq } =
     useFrequencyContext();
   const buttonBack = () => navigate(back);
-  const buttonHome = () => navigate("/");
+  const buttonHome = () => {
+    setSchoolId(undefined);
+    navigate("/");
+  };
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIsInfreq(event.target.checked);
   };

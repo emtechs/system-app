@@ -18,13 +18,9 @@ const CardUser = ({ user }: iCardUserProps) => {
   return (
     <>
       <TableRow
-        hover={user.role === "SERV"}
-        sx={{ cursor: user.role === "SERV" ? "pointer" : "unset" }}
-        onClick={() => {
-          if (user.role === "SERV") {
-            navigate(`/user/list/${user.id}`);
-          }
-        }}
+        hover
+        sx={{ cursor: "pointer" }}
+        onClick={() => navigate(`/user/list/${user.id}`)}
       >
         <TableCell>{user.name}</TableCell>
         <TableCell>{user.cpf}</TableCell>

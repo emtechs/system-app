@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useState } from "react";
 import { iChildren } from "../interfaces";
 import { useMediaQuery, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useSchoolContext } from "./SchoolContext";
 
 interface iDrawerContextProps {
   isDrawerOpen: boolean;
@@ -40,6 +41,7 @@ export const DrawerProvider = ({ children }: iChildren) => {
   const [openSchool, setOpenSchool] = useState(false);
   const [openStudent, setOpenStudent] = useState(false);
   const [openUser, setOpenUser] = useState(false);
+  const { setSchoolId } = useSchoolContext();
 
   const toggleDrawerOpen = useCallback(() => {
     setIsDrawerOpen((oldDrawerOpen) => !oldDrawerOpen);
@@ -57,6 +59,7 @@ export const DrawerProvider = ({ children }: iChildren) => {
     if (smDown) {
       toggleDrawerOpen();
     }
+    setSchoolId(undefined);
     navigate("/");
   }, []);
 
@@ -146,6 +149,7 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenReport(false);
     setOpenSchool(false);
     setOpenStudent(false);
+    setSchoolId(undefined);
   }, []);
 
   return (

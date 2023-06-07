@@ -103,7 +103,7 @@ export const AuthProvider = ({ children }: iChildren) => {
       setLoading(true);
       const year = dayjs().year();
       apiUsingNow
-        .get<{ id: string }>(`/schools/year/${year}`, {
+        .get<{ id: string }>(`/calendar/year/${year}`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         })
         .then((res) => {
