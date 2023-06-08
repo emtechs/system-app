@@ -27,14 +27,14 @@ interface iSelect extends iClassWithSchool {
 
 export const SelectClassData = () => {
   const { setLoading } = useAppThemeContext();
-  const { schoolData, schoolYear } = useAuthContext();
+  const { schoolData, yearId } = useAuthContext();
   const [data, setData] = useState<iSelect[]>();
 
   useEffect(() => {
     setLoading(true);
     apiUsingNow
       .get<iClassWithSchool[]>(
-        `classes/${schoolData?.school.id}?is_active=true&school_year_id=${schoolYear}`
+        `classes/${schoolData?.school.id}?is_active=true&year_id=${yearId}`
       )
       .then((res) => {
         if (res.data) {

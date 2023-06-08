@@ -79,7 +79,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
         await patchClassSchool({
           class_id: frequency.class.class.id,
           school_id: frequency.class.school.id,
-          school_year_id: frequency.class.school_year.id,
+          year_id: frequency.class.year.id,
           class_infreq: frequency.class_infreq ? frequency.class_infreq : 0,
           school_infreq: frequency.school_infreq ? frequency.school_infreq : 0,
         });

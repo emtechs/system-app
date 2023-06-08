@@ -74,7 +74,7 @@ const ClassDashAlert = ({ classData }: iClassDashAlertProps) => {
         <CardActionArea
           onClick={() =>
             navigate(
-              `/class/${classData.class.id}/${classData.school.id}/${classData.school_year.id}`
+              `/class/${classData.class.id}/${classData.school.id}/${classData.year.id}`
             )
           }
         >
@@ -139,7 +139,7 @@ export const DashboardSchool = () => {
   const mdLgBetween = useMediaQuery(theme.breakpoints.between("md", "lg"));
   const mdUp = useMediaQuery(theme.breakpoints.up("md"));
   const { setLoading } = useAppThemeContext();
-  const { schoolData, schoolYear } = useAuthContext();
+  const { schoolData, yearId } = useAuthContext();
   const [listFreqData, setListFreqData] = useState<iFrequencyWithInfreq[]>();
   const [listFreqOpenData, setListFreqOpenData] =
     useState<iFrequencyWithInfreq[]>();
@@ -172,7 +172,7 @@ export const DashboardSchool = () => {
   }, []);
 
   useEffect(() => {
-    if (schoolData && schoolYear) {
+    if (schoolData && yearId) {
       let take = 1;
       if (mdLgBetween) {
         take = 2;
@@ -182,14 +182,14 @@ export const DashboardSchool = () => {
       setLoading(true);
       apiUsingNow
         .get<iClassWithSchool[]>(
-          `classes/${schoolData.school.id}?school_year_id=${schoolYear}&class_infreq=1&take=${take}`
+          `classes/${schoolData.school.id}?year_id=${yearId}&class_infreq=1&take=${take}`
         )
         .then((res) => setListAlertClassData(res.data))
         .finally(() => setLoading(false));
       setLoading(true);
       apiUsingNow
         .get<iSchoolWithStudents>(
-          `schools/${schoolData.school.id}?school_year_id=${schoolYear}`
+          `schools/${schoolData.school.id}?year_id=${yearId}`
         )
         .then((res) => {
           const students = res.data.students;
@@ -201,7 +201,7 @@ export const DashboardSchool = () => {
         })
         .finally(() => setLoading(false));
     }
-  }, [schoolData, schoolYear]);
+  }, [schoolData, yearId]);
 
   return (
     <LayoutBasePage title="Página Inicial" school={<SelectSchoolData />}>
@@ -291,7 +291,7 @@ export const DashboardSchool = () => {
           <CardActions sx={{ justifyContent: "flex-end" }}>
             <Button
               onClick={() => {
-                navigate(`/class/list/${schoolData?.school.id}/${schoolYear}`);
+                navigate(`/class/list/${schoolData?.school.id}/${yearId}`);
               }}
             >
               Saber Mais

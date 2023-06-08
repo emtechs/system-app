@@ -56,11 +56,6 @@ export interface iWithSchool {
   name: string;
 }
 
-export interface iSchoolYear {
-  id: string;
-  year: string;
-}
-
 export type iServerRequest = z.infer<typeof serverCreateSchema>;
 
 export type iSchoolRequest = z.infer<typeof schoolCreateSchema>;

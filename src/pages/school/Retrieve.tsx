@@ -51,7 +51,7 @@ const CardServer = ({ school, server, role }: iCardServerProps) => {
 export const RetrieveSchoolPage = () => {
   const { id } = useParams<"id">();
   const { setLoading } = useAppThemeContext();
-  const { schoolYear } = useAuthContext();
+  const { yearId } = useAuthContext();
   const { updateSchool } = useSchoolContext();
   const [retrieveSchool, setRetrieveSchool] = useState<iSchoolList>();
   const [open, setOpen] = useState(false);
@@ -63,7 +63,7 @@ export const RetrieveSchoolPage = () => {
     setLoading(true);
     apiUsingNow
       .get<iSchoolList>(
-        `schools/${id}?is_listSchool=true&school_year_id=${schoolYear}`
+        `schools/${id}?is_listSchool=true&year_id=${yearId}`
       )
       .then((res) => setRetrieveSchool(res.data))
       .finally(() => setLoading(false));

@@ -26,7 +26,7 @@ const CardStudent = ({ student }: iCardStudentProps) => {
 };
 
 export const RetrieveClassPage = () => {
-  const { class_id, school_id, school_year_id } = useParams();
+  const { class_id, school_id, year_id } = useParams();
   const { setLoading } = useAppThemeContext();
   const { isInfreq } = useFrequencyContext();
   const [data, setData] = useState<iClassWithSchool>();
@@ -35,7 +35,7 @@ export const RetrieveClassPage = () => {
     const query = isInfreq ? "?is_infreq=true" : "";
     apiUsingNow
       .get<iClassWithSchool>(
-        `classes/${class_id}/${school_id}/${school_year_id}${query}`
+        `classes/${class_id}/${school_id}/${year_id}${query}`
       )
       .then((res) => setData(res.data))
       .finally(() => setLoading(false));
@@ -45,7 +45,7 @@ export const RetrieveClassPage = () => {
     const query = isInfreq ? "?is_infreq=true" : "";
     apiUsingNow
       .get<iClassWithSchool>(
-        `classes/${class_id}/${school_id}/${school_year_id}${query}`
+        `classes/${class_id}/${school_id}/${year_id}${query}`
       )
       .then((res) => setData(res.data))
       .finally(() => setLoading(false));
@@ -57,7 +57,7 @@ export const RetrieveClassPage = () => {
       tools={
         <Tools
           isBack
-          back={`/class/list/${data?.school.id}/${data?.school_year.id}`}
+          back={`/class/list/${data?.school.id}/${data?.year.id}`}
           isHome
           isFreq
         />

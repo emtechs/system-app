@@ -69,7 +69,7 @@ export const ReportClassPage = ({ back }: iPageProps) => {
   const [data, setData] = useState<iData[]>();
   const [dataSelect, setDataSelect] = useState<iClassWithSchool[]>();
   const { setLoading } = useAppThemeContext();
-  const { schoolYear } = useAuthContext();
+  const { yearId } = useAuthContext();
   const { schoolSelect, setSchoolSelect } = useSchoolContext();
 
   useEffect(() => {
@@ -80,7 +80,7 @@ export const ReportClassPage = ({ back }: iPageProps) => {
     setLoading(true);
     apiUsingNow
       .get<iClassWithSchool[]>(
-        `classes/${schoolSelect?.id}?is_active=true&school_year_id=${schoolYear}`
+        `classes/${schoolSelect?.id}?is_active=true&year_id=${yearId}`
       )
       .then((res) => {
         if (res.data) {

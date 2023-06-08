@@ -50,7 +50,7 @@ interface iAuthContextData {
   setSchoolData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
   dashData: iDash | undefined;
   setDashData: Dispatch<SetStateAction<iDash | undefined>>;
-  schoolYear: string | undefined;
+  yearId: string | undefined;
 }
 
 const AuthContext = createContext({} as iAuthContextData);
@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }: iChildren) => {
   const [userData, setUserData] = useState<iUser>();
   const [schoolData, setSchoolData] = useState<iWorkSchool>();
   const [dashData, setDashData] = useState<iDash>();
-  const [schoolYear, setSchoolYear] = useState<string>();
+  const [yearId, setYearId] = useState<string>();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("@EMTechs:token");
@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }: iChildren) => {
           headers: { Authorization: `Bearer ${accessToken}` },
         })
         .then((res) => {
-          setSchoolYear(res.data.id);
+          setYearId(res.data.id);
         })
         .finally(() => setLoading(false));
     }
@@ -207,7 +207,7 @@ export const AuthProvider = ({ children }: iChildren) => {
         setSchoolData,
         setUserData,
         userData,
-        schoolYear,
+        yearId,
       }}
     >
       {children}

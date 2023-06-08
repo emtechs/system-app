@@ -18,7 +18,7 @@ export const frequencyCreateSchema = z
     school: z.object({ id: z.string().uuid() }),
     class_id: z.string().uuid().optional(),
     school_id: z.string().uuid().optional(),
-    school_year_id: z.string().uuid(),
+    year_id: z.string().uuid(),
     students: z.object({ student_id: z.string().uuid() }).array().optional(),
   })
   .refine((field) => (field.class_id = field.class.id))

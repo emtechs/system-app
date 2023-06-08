@@ -61,11 +61,11 @@ const AppRoutes = () => {
         <Route path="/school/list" element={<ListSchoolPage />} />
         <Route path="/school/active" element={<ActiveSchoolPage />} />
         <Route
-          path="/class/:class_id/:school_id/:school_year_id"
+          path="/class/:class_id/:school_id/:year_id"
           element={<RetrieveClassPage />}
         />
         <Route
-          path="/class/list/:school_id/:school_year_id"
+          path="/class/list/:school_id/:year_id"
           element={<ListClassPage />}
         />
         <Route

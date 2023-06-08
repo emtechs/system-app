@@ -96,7 +96,7 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
 
 export const ActiveSchoolPage = () => {
   const { setLoading } = useAppThemeContext();
-  const { schoolYear } = useAuthContext();
+  const { yearId } = useAuthContext();
   const { updateSchoolData } = useSchoolContext();
   const [listSchoolData, setListSchoolData] = useState<iSchoolList[]>();
 
@@ -104,7 +104,7 @@ export const ActiveSchoolPage = () => {
     setLoading(true);
     apiUsingNow
       .get<iSchoolList[]>(
-        `schools?school_year_id=${schoolYear}&is_listSchool=true&is_active=false`
+        `schools?year_id=${yearId}&is_listSchool=true&is_active=false`
       )
       .then((res) => setListSchoolData(res.data))
       .finally(() => setLoading(false));

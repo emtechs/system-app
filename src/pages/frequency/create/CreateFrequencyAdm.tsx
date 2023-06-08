@@ -35,7 +35,7 @@ interface iDateValueProps {
 
 const DateValue = ({ setOpen }: iDateValueProps) => {
   const { watch, setValue } = useFormContext();
-  const { schoolYear } = useAuthContext();
+  const { yearId } = useAuthContext();
   const { setFrequencyData } = useFrequencyContext();
   const [dateData, setDateData] = useState<Dayjs | null>(dayjs());
   const classData: iClass = watch("class");
@@ -52,7 +52,7 @@ const DateValue = ({ setOpen }: iDateValueProps) => {
             setDateData(null);
           }
         });
-      setValue("school_year_id", schoolYear);
+      setValue("year_id", yearId);
       setValue("date", date);
       setValue("month", +date.split("/")[1]);
       setValue("day", +date.split("/")[0]);

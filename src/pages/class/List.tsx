@@ -19,7 +19,7 @@ const CardClass = ({ el }: iCardClassProps) => {
       hover
       sx={{ cursor: "pointer" }}
       onClick={() =>
-        navigate(`/class/${el.class.id}/${el.school.id}/${el.school_year.id}`)
+        navigate(`/class/${el.class.id}/${el.school.id}/${el.year.id}`)
       }
     >
       <TableCell>{el.class.name}</TableCell>
@@ -31,7 +31,7 @@ const CardClass = ({ el }: iCardClassProps) => {
 };
 
 export const ListClassPage = () => {
-  const { school_id, school_year_id } = useParams();
+  const { school_id, year_id } = useParams();
   const { setLoading } = useAppThemeContext();
   const [data, setData] = useState<iClassWithSchool[]>();
 
@@ -39,7 +39,7 @@ export const ListClassPage = () => {
     setLoading(true);
     apiUsingNow
       .get<iClassWithSchool[]>(
-        `classes/${school_id}?school_year_id=${school_year_id}&is_active=true`
+        `classes/${school_id}?year_id=${year_id}&is_active=true`
       )
       .then((res) => setData(res.data))
       .finally(() => setLoading(false));

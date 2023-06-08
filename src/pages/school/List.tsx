@@ -86,21 +86,19 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
 
 export const ListSchoolPage = () => {
   const { setLoading } = useAppThemeContext();
-  const { schoolYear } = useAuthContext();
+  const { yearId } = useAuthContext();
   const { updateSchoolData } = useSchoolContext();
   const [listSchoolData, setListSchoolData] = useState<iSchoolList[]>();
 
   useEffect(() => {
-    if (schoolYear) {
+    if (yearId) {
       setLoading(true);
       apiUsingNow
-        .get<iSchoolList[]>(
-          `schools?school_year_id=${schoolYear}&is_listSchool=true`
-        )
+        .get<iSchoolList[]>(`schools?year_id=${yearId}&is_listSchool=true`)
         .then((res) => setListSchoolData(res.data))
         .finally(() => setLoading(false));
     }
-  }, [schoolYear, updateSchoolData]);
+  }, [yearId, updateSchoolData]);
 
   return (
     <LayoutBasePage title="Listagem de Escolas" tools={<Tools isHome />}>
