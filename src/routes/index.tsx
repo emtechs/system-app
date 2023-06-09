@@ -22,6 +22,7 @@ import {
   ImportSchoolPage,
   ImportStudentPage,
   ListClassPage,
+  ListClassSchoolPage,
   ListFrequencyPage,
   ListSchoolPage,
   ListUserPage,
@@ -66,7 +67,7 @@ const AppRoutes = () => {
         />
         <Route
           path="/class/list/:school_id/:year_id"
-          element={<ListClassPage />}
+          element={<ListClassSchoolPage />}
         />
         <Route
           path="/class/create"

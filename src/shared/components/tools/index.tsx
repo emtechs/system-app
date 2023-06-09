@@ -35,9 +35,8 @@ export const Tools = ({
   const theme = useTheme();
   const { updateFrequency, frequencyData, isInfreq, setIsInfreq } =
     useFrequencyContext();
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
     setIsInfreq(event.target.checked);
-  };
   return (
     <Box
       display="flex"

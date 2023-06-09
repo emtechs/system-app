@@ -1,5 +1,8 @@
 import { TableCell, TableRow, Typography } from "@mui/material";
-import { useAppThemeContext } from "../../shared/contexts";
+import {
+  useAppThemeContext,
+  usePaginationContext,
+} from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { iUser } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
@@ -28,19 +31,25 @@ const CardUser = ({ user }: iCardUserProps) => {
 };
 
 export const ListUserPage = () => {
-  const { setLoading } = useAppThemeContext();
   const [searchParams] = useSearchParams();
   const role = searchParams.get("role");
+  const { setLoading } = useAppThemeContext();
+  const { setCount, take, skip } = usePaginationContext();
   const [listUserData, setListUserData] = useState<iUser[]>();
 
   useEffect(() => {
+    let query = role ? "?role=" + role : "?is_active=true";
+    if (take) query += `&take=${take}`;
+    if (skip) query += `&skip=${skip}`;
     setLoading(true);
-    const query = role ? "?role=" + role : "?is_active=true";
     apiUsingNow
-      .get<iUser[]>(`users${query}`)
-      .then((res) => setListUserData(res.data))
+      .get<{ total: number; result: iUser[] }>(`users${query}`)
+      .then((res) => {
+        setListUserData(res.data.result);
+        setCount(res.data.total);
+      })
       .finally(() => setLoading(false));
-  }, [role]);
+  }, [role, take, skip]);
 
   return (
     <LayoutBasePage title="Listagem de Usuários" tools={<Tools isHome />}>

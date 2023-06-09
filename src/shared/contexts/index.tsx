@@ -4,6 +4,7 @@ import { ClassProvider } from "./ClassContext";
 import { DrawerProvider } from "./DrawerContext";
 import { FrequencyProvider } from "./FrequencyContext";
 import { ModalProvider } from "./ModalContext";
+import { PaginationProvider } from "./PaginationContext";
 import { SchoolProvider } from "./SchoolContext";
 import { AppThemeProvider } from "./ThemeContext";
 import { UserProvider } from "./UserContext";
@@ -16,7 +17,9 @@ const Providers = ({ children }: iChildren) => (
           <UserProvider>
             <SchoolProvider>
               <ClassProvider>
-                <FrequencyProvider>{children}</FrequencyProvider>
+                <FrequencyProvider>
+                  <PaginationProvider>{children}</PaginationProvider>
+                </FrequencyProvider>
               </ClassProvider>
             </SchoolProvider>
           </UserProvider>
@@ -32,6 +35,7 @@ export { useClassContext } from "./ClassContext";
 export { useDrawerContext } from "./DrawerContext";
 export { useFrequencyContext } from "./FrequencyContext";
 export { useModalContext } from "./ModalContext";
+export { usePaginationContext } from "./PaginationContext";
 export { useSchoolContext } from "./SchoolContext";
 export { useAppThemeContext } from "./ThemeContext";
 export { useUserContext } from "./UserContext";

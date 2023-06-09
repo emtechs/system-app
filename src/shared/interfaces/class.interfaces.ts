@@ -37,6 +37,10 @@ export interface iClassFreq {
   class_infreq: number;
 }
 
+export interface iClassSchoolList extends iClassFreq {
+  _count: { frequencies: number; students: number };
+}
+
 export interface iClassWithSchoolDash {
   class: iClass;
   class_infreq: number;

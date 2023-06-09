@@ -1,20 +1,19 @@
-import { iClassSchoolList } from "../../shared/interfaces";
+import { iClassWithSchool } from "../../shared/interfaces";
 import {
   useAppThemeContext,
-  useAuthContext,
-  useFrequencyContext,
   usePaginationContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { LayoutBasePage } from "../../shared/layouts";
-import { TableClass, Tools } from "../../shared/components";
+import { TableClassSchool, Tools } from "../../shared/components";
 import { TableCell, TableRow, useTheme } from "@mui/material";
+import { CardSchoolId } from "../../shared/components/card";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 
 interface iCardClassProps {
-  el: iClassSchoolList;
+  el: iClassWithSchool;
 }
 const CardClass = ({ el }: iCardClassProps) => {
   const theme = useTheme();
@@ -28,59 +27,55 @@ const CardClass = ({ el }: iCardClassProps) => {
       }
     >
       <TableCell>{el.class.name}</TableCell>
-      <TableCell>{el.school.name}</TableCell>
       <TableCell>{el._count.students}</TableCell>
       <TableCell>{el._count.frequencies}</TableCell>
       <TableCell
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(el.class_infreq, theme),
+          bgcolor: defineBgColorInfrequency(el.infrequency, theme),
         }}
       >
-        {String(el.class_infreq).replace(".", ",")}%
+        {String(el.infrequency).replace(".", ",")}%
       </TableCell>
     </TableRow>
   );
 };
 
-export const ListClassPage = () => {
+export const ListClassSchoolPage = () => {
+  const { school_id, year_id } = useParams();
   const { setLoading } = useAppThemeContext();
-  const { yearId } = useAuthContext();
-  const { isInfreq } = useFrequencyContext();
   const { setCount, take, skip } = usePaginationContext();
-  const [data, setData] = useState<iClassSchoolList[]>();
+  const [data, setData] = useState<iClassWithSchool[]>();
 
   useEffect(() => {
-    if (yearId) {
-      let query = `?year_id=${yearId}&is_active=true`;
-      if (isInfreq) query += "&class_infreq=31";
-      if (take) query += `&take=${take}`;
-      if (skip) query += `&skip=${skip}`;
-      setLoading(true);
-      apiUsingNow
-        .get<{ total: number; result: iClassSchoolList[] }>(
-          `classes/year/${yearId}${query}`
-        )
-        .then((res) => {
-          setData(res.data.result);
-          setCount(res.data.total);
-        })
-        .finally(() => setLoading(false));
-    }
-  }, [take, skip, isInfreq, yearId]);
+    let query = `?year_id=${year_id}&is_active=true`;
+    if (take) query += `&take=${take}`;
+    if (skip) query += `&skip=${skip}`;
+    setLoading(true);
+    apiUsingNow
+      .get<{ total: number; result: iClassWithSchool[] }>(
+        `classes/school/${school_id}${query}`
+      )
+      .then((res) => {
+        setData(res.data.result);
+        setCount(res.data.total);
+      })
+      .finally(() => setLoading(false));
+  }, [take, skip]);
 
   return (
     <LayoutBasePage
       title={"Listagem de Turmas"}
-      tools={<Tools isHome isFreq />}
+      school={<CardSchoolId school_id={school_id ? school_id : ""} />}
+      tools={<Tools isHome isBack back={`/school/${school_id}`} />}
     >
-      <TableClass>
+      <TableClassSchool>
         <>
           {data?.map((el) => (
             <CardClass key={el.class.id} el={el} />
           ))}
         </>
-      </TableClass>
+      </TableClassSchool>
     </LayoutBasePage>
   );
 };

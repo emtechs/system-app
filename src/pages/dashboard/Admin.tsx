@@ -264,7 +264,7 @@ export const DashboardAdmin = () => {
                         icon={<Workspaces fontSize="large" />}
                         quant={userDashData.countClass}
                         info="Turmas"
-                        dest="/"
+                        dest="/class/list"
                       />
                       <GridDash
                         icon={<Groups fontSize="large" />}

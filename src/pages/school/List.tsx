@@ -14,6 +14,7 @@ import {
   useAppThemeContext,
   useAuthContext,
   useFrequencyContext,
+  usePaginationContext,
   useSchoolContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
@@ -59,7 +60,7 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
             bgcolor: defineBgColorInfrequency(school.school_infreq, theme),
           }}
         >
-          {school.school_infreq}%
+          {String(school.school_infreq).replace(".", ",")}%
         </TableCell>
       </TableRow>
 
@@ -100,19 +101,25 @@ export const ListSchoolPage = () => {
   const { yearId } = useAuthContext();
   const { updateSchoolData } = useSchoolContext();
   const { isInfreq } = useFrequencyContext();
+  const { setCount, take, skip } = usePaginationContext();
   const [listSchoolData, setListSchoolData] = useState<iSchoolList[]>();
 
   useEffect(() => {
     if (yearId) {
-      setLoading(true);
       let query = `?year_id=${yearId}&is_listSchool=true`;
       if (isInfreq) query += "&school_infreq=31";
+      if (take) query += `&take=${take}`;
+      if (skip) query += `&skip=${skip}`;
+      setLoading(true);
       apiUsingNow
-        .get<iSchoolList[]>(`schools${query}`)
-        .then((res) => setListSchoolData(res.data))
+        .get<{ total: number; result: iSchoolList[] }>(`schools${query}`)
+        .then((res) => {
+          setListSchoolData(res.data.result);
+          setCount(res.data.total);
+        })
         .finally(() => setLoading(false));
     }
-  }, [yearId, updateSchoolData, isInfreq]);
+  }, [yearId, updateSchoolData, isInfreq, take, skip]);
 
   return (
     <LayoutBasePage title="Listagem de Escolas" tools={<Tools isHome isFreq />}>
