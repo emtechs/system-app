@@ -7,10 +7,10 @@ export const defineBgColorFrequency = (
 ) => {
   switch (status) {
     case "PRESENTED":
-      return theme.palette.success.main;
+      return theme.palette.success.dark;
 
     case "MISSED":
-      return theme.palette.error.main;
+      return theme.palette.error.dark;
 
     case "JUSTIFIED":
       return theme.palette.warning.dark;

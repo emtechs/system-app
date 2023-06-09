@@ -28,17 +28,14 @@ interface iCardServerProps {
   server: iDirector;
   role: iRole;
 }
-
 const CardServer = ({ school, server, role }: iCardServerProps) => {
   const navigate = useNavigate();
-  const { setSchoolId } = useSchoolContext();
   return (
     <TableRow
       hover
       sx={{ cursor: "pointer" }}
       onClick={() => {
-        setSchoolId(school.id);
-        navigate(`/user/list/${server.id}`);
+        navigate(`/user/list/${server.id}?school_id=${school.id}`);
       }}
     >
       <TableCell>{server.name}</TableCell>
@@ -62,9 +59,7 @@ export const RetrieveSchoolPage = () => {
   useEffect(() => {
     setLoading(true);
     apiUsingNow
-      .get<iSchoolList>(
-        `schools/${id}?is_listSchool=true&year_id=${yearId}`
-      )
+      .get<iSchoolList>(`schools/${id}?is_listSchool=true&year_id=${yearId}`)
       .then((res) => setRetrieveSchool(res.data))
       .finally(() => setLoading(false));
   }, []);
@@ -82,13 +77,15 @@ export const RetrieveSchoolPage = () => {
             isBack
             back="/school/list"
             isHome
+            isClass
+            destClass={`/class/list/${retrieveSchool?.id}/${yearId}`}
             finish={
               <Button
                 variant="contained"
                 color="error"
                 disableElevation
                 onClick={handleClose}
-                startIcon={<RemoveDone />}
+                endIcon={<RemoveDone />}
               >
                 Desativar
               </Button>

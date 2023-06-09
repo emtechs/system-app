@@ -14,19 +14,16 @@ interface iCardUserProps {
 
 const CardUser = ({ user }: iCardUserProps) => {
   const navigate = useNavigate();
-
   return (
-    <>
-      <TableRow
-        hover
-        sx={{ cursor: "pointer" }}
-        onClick={() => navigate(`/user/list/${user.id}`)}
-      >
-        <TableCell>{user.name}</TableCell>
-        <TableCell>{user.cpf}</TableCell>
-        <TableCell>{rolePtBr(user.role)}</TableCell>
-      </TableRow>
-    </>
+    <TableRow
+      hover
+      sx={{ cursor: "pointer" }}
+      onClick={() => navigate(`/user/list/${user.id}`)}
+    >
+      <TableCell>{user.name}</TableCell>
+      <TableCell>{user.cpf}</TableCell>
+      <TableCell>{rolePtBr(user.role)}</TableCell>
+    </TableRow>
   );
 };
 

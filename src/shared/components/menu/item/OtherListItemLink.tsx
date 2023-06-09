@@ -1,7 +1,7 @@
 import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ReactNode } from "react";
+import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-
 export interface iOtherListItemLinkProps {
   icon: ReactNode;
   label: string;
@@ -15,9 +15,11 @@ export const OtherListItemLink = ({
 }: iOtherListItemLinkProps) => {
   const location = useLocation();
   return (
-    <ListItemButton onClick={onClick} selected={location.pathname === "/"}>
-      <ListItemIcon>{icon}</ListItemIcon>
-      <ListItemText primary={label} />
-    </ListItemButton>
+    <Link to="/">
+      <ListItemButton onClick={onClick} selected={location.pathname === "/"}>
+        <ListItemIcon>{icon}</ListItemIcon>
+        <ListItemText primary={label} />
+      </ListItemButton>
+    </Link>
   );
 };

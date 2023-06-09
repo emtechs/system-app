@@ -6,12 +6,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TableClass, Tools } from "../../shared/components";
 import { TableCell, TableRow } from "@mui/material";
-import { CardSchool } from "../../shared/components/card";
+import { CardSchoolId } from "../../shared/components/card";
 
 interface iCardClassProps {
   el: iClassWithSchool;
 }
-
 const CardClass = ({ el }: iCardClassProps) => {
   const navigate = useNavigate();
   return (
@@ -47,9 +46,9 @@ export const ListClassPage = () => {
 
   return (
     <LayoutBasePage
-      title="Listagem de Turmas"
-      school={<CardSchool />}
-      tools={<Tools isHome />}
+      title={"Listagem de Turmas"}
+      school={<CardSchoolId school_id={school_id ? school_id : ""} />}
+      tools={<Tools isHome isBack back={`/school/${school_id}`} />}
     >
       <TableClass>
         <>

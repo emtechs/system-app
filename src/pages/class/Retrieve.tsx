@@ -6,7 +6,7 @@ import { iClassWithSchool, iStudentWithSchool } from "../../shared/interfaces";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TableRetrieveClass, Tools } from "../../shared/components";
 import { TableCell, TableRow } from "@mui/material";
-import { CardSchool } from "../../shared/components/card";
+import { CardSchoolId } from "../../shared/components/card";
 
 interface iCardStudentProps {
   student: iStudentWithSchool;
@@ -53,7 +53,7 @@ export const RetrieveClassPage = () => {
 
   return (
     <LayoutBasePage
-      school={<CardSchool />}
+      school={<CardSchoolId school_id={school_id ? school_id : ""} />}
       tools={
         <Tools
           isBack

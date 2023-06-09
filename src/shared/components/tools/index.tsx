@@ -1,17 +1,15 @@
-import { ArrowBack, Checklist, Home } from "@mui/icons-material";
+import { ArrowBack, Checklist, Home, Workspaces } from "@mui/icons-material";
 import {
   Box,
   Button,
   Checkbox,
   FormControlLabel,
-  IconButton,
   Paper,
-  useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useFrequencyContext, useSchoolContext } from "../../contexts";
-import { useNavigate } from "react-router-dom";
+import { useFrequencyContext } from "../../contexts";
 import { ChangeEvent, ReactNode } from "react";
+import { Dest } from "./Dest";
 
 interface iToolsProps {
   isBack?: boolean;
@@ -19,6 +17,8 @@ interface iToolsProps {
   isHome?: boolean;
   isFinish?: boolean;
   isFreq?: boolean;
+  isClass?: boolean;
+  destClass?: string;
   finish?: ReactNode;
 }
 
@@ -28,19 +28,13 @@ export const Tools = ({
   isHome,
   isFinish,
   isFreq,
+  isClass,
+  destClass = "/",
   finish,
 }: iToolsProps) => {
   const theme = useTheme();
-  const smDown = useMediaQuery(theme.breakpoints.down("sm"));
-  const navigate = useNavigate();
-  const { setSchoolId } = useSchoolContext();
   const { updateFrequency, frequencyData, isInfreq, setIsInfreq } =
     useFrequencyContext();
-  const buttonBack = () => navigate(back);
-  const buttonHome = () => {
-    setSchoolId(undefined);
-    navigate("/");
-  };
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIsInfreq(event.target.checked);
   };
@@ -55,37 +49,14 @@ export const Tools = ({
       paddingX={2}
       component={Paper}
     >
-      {isBack && smDown ? (
-        <IconButton color="primary" onClick={buttonBack}>
-          <ArrowBack />
-        </IconButton>
-      ) : (
-        isBack && (
-          <Button
-            variant="contained"
-            disableElevation
-            onClick={buttonBack}
-            startIcon={<ArrowBack />}
-          >
-            Voltar
-          </Button>
-        )
+      {isBack && (
+        <Dest to={back} title="Voltar" startIcon={<ArrowBack />} isResp />
       )}
-      {isHome && smDown ? (
-        <IconButton color="primary" onClick={buttonHome}>
-          <Home />
-        </IconButton>
-      ) : (
-        isHome && (
-          <Button
-            variant="contained"
-            disableElevation
-            onClick={buttonHome}
-            startIcon={<Home />}
-          >
-            Página Inicial
-          </Button>
-        )
+      {isHome && (
+        <Dest to="/" title="Página Inicial" startIcon={<Home />} isResp />
+      )}
+      {isClass && (
+        <Dest to={destClass} title="Turmas" startIcon={<Workspaces />} isResp />
       )}
       <Box flex={1} display="flex" justifyContent="end">
         {isFinish && (

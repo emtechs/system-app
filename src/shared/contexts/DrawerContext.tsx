@@ -1,8 +1,6 @@
 import { createContext, useCallback, useContext, useState } from "react";
 import { iChildren } from "../interfaces";
 import { useMediaQuery, useTheme } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useSchoolContext } from "./SchoolContext";
 
 interface iDrawerContextProps {
   isDrawerOpen: boolean;
@@ -24,12 +22,12 @@ interface iDrawerContextProps {
   openUser: boolean;
   handleClickUser: () => void;
   handleClick: () => void;
+  handleClickButton: () => void;
 }
 
 const DrawerContext = createContext({} as iDrawerContextProps);
 
 export const DrawerProvider = ({ children }: iChildren) => {
-  const navigate = useNavigate();
   const theme = useTheme();
   const smDown = useMediaQuery(theme.breakpoints.down("sm"));
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -41,7 +39,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
   const [openSchool, setOpenSchool] = useState(false);
   const [openStudent, setOpenStudent] = useState(false);
   const [openUser, setOpenUser] = useState(false);
-  const { setSchoolId } = useSchoolContext();
 
   const toggleDrawerOpen = useCallback(() => {
     setIsDrawerOpen((oldDrawerOpen) => !oldDrawerOpen);
@@ -59,8 +56,12 @@ export const DrawerProvider = ({ children }: iChildren) => {
     if (smDown) {
       toggleDrawerOpen();
     }
-    setSchoolId(undefined);
-    navigate("/");
+  }, []);
+
+  const handleClickButton = useCallback(() => {
+    if (smDown) {
+      toggleDrawerOpen();
+    }
   }, []);
 
   const handleClickClass = useCallback(() => {
@@ -149,13 +150,13 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenReport(false);
     setOpenSchool(false);
     setOpenStudent(false);
-    setSchoolId(undefined);
   }, []);
 
   return (
     <DrawerContext.Provider
       value={{
         handleClick,
+        handleClickButton,
         handleClickClass,
         handleClickFrequency,
         handleClickImport,

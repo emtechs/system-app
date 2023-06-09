@@ -74,8 +74,6 @@ interface iSchoolContextData {
   setUpdateSchoolData: Dispatch<SetStateAction<iSchoolList | undefined>>;
   updateServerData: iWorkSchool | undefined;
   setUpdateServerData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
-  schoolId: string | undefined;
-  setSchoolId: Dispatch<SetStateAction<string | undefined>>;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -88,7 +86,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
   const [updateSchoolData, setUpdateSchoolData] = useState<iSchoolList>();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
-  const [schoolId, setSchoolId] = useState<string>();
 
   const handleCreateSchool = useCallback(
     async (data: iSchoolRequest, back?: string) => {
@@ -274,8 +271,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setUpdateSchoolData,
         updateServerData,
         setUpdateServerData,
-        schoolId,
-        setSchoolId,
       }}
     >
       {children}

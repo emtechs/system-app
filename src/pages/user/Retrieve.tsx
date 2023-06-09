@@ -22,7 +22,7 @@ import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
 import { Delete, RemoveDone } from "@mui/icons-material";
 import { TableRetrieveUser, Tools } from "../../shared/components";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { rolePtBr } from "../../shared/scripts";
 
 interface iCardUserProps {
@@ -82,9 +82,11 @@ const CardUser = ({ user, work }: iCardUserProps) => {
 
 export const RetrieveUserPage = () => {
   const { id } = useParams<"id">();
+  const [searchParams] = useSearchParams();
+  const school_id = searchParams.get("school_id");
   const { setLoading } = useAppThemeContext();
   const { updateAllUser } = useUserContext();
-  const { updateServerData, schoolId } = useSchoolContext();
+  const { updateServerData } = useSchoolContext();
   const [retrieveUser, setRetrieveUser] = useState<iUser>();
   const [open, setOpen] = useState(false);
   const handleClose = () => {
@@ -110,7 +112,7 @@ export const RetrieveUserPage = () => {
         tools={
           <Tools
             isBack
-            back={schoolId ? `/school/${schoolId}` : "/user/list"}
+            back={school_id ? `/school/${school_id}` : "/user/list"}
             isHome
             finish={
               <Button
@@ -118,7 +120,7 @@ export const RetrieveUserPage = () => {
                 color="error"
                 disableElevation
                 onClick={handleClose}
-                startIcon={<RemoveDone />}
+                endIcon={<RemoveDone />}
               >
                 Desativar
               </Button>

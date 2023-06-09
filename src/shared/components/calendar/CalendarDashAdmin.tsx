@@ -31,6 +31,7 @@ export const CalendarDashAdmin = () => {
       locale="pt-br"
       height={theme.spacing(60)}
       titleFormat={{ month: "long" }}
+      buttonText={{ today: "hoje" }}
       events={eventData}
       weekends={false}
       showNonCurrentDates={false}

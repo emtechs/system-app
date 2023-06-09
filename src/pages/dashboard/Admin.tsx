@@ -36,7 +36,7 @@ import {
   School,
   Workspaces,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
 
@@ -49,36 +49,37 @@ interface iGridDashProps {
 
 const GridDash = ({ icon, quant, info, dest }: iGridDashProps) => {
   const theme = useTheme();
-  const navigate = useNavigate();
-  const onClick = () => navigate(dest);
+
   return (
     <Grid item xs={4}>
       <Card>
-        <CardActionArea onClick={onClick}>
-          <CardContent>
-            <Box
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              gap={0.5}
-            >
-              {icon}
-              <Typography sx={{ fontSize: theme.spacing(4) }}>
-                {quant}
-              </Typography>
-              <Typography
-                component="div"
+        <Link to={dest}>
+          <CardActionArea>
+            <CardContent>
+              <Box
                 display="flex"
-                textAlign="center"
+                flexDirection="column"
                 alignItems="center"
-                height={30}
-                fontSize={theme.spacing(1.2)}
+                gap={0.5}
               >
-                {info}
-              </Typography>
-            </Box>
-          </CardContent>
-        </CardActionArea>
+                {icon}
+                <Typography sx={{ fontSize: theme.spacing(4) }}>
+                  {quant}
+                </Typography>
+                <Typography
+                  component="div"
+                  display="flex"
+                  textAlign="center"
+                  alignItems="center"
+                  height={30}
+                  fontSize={theme.spacing(1.2)}
+                >
+                  {info}
+                </Typography>
+              </Box>
+            </CardContent>
+          </CardActionArea>
+        </Link>
       </Card>
     </Grid>
   );

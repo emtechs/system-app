@@ -22,14 +22,12 @@ import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
 import { RemoveDone } from "@mui/icons-material";
 import { TableSchool, Tools } from "../../shared/components";
-import { useNavigate } from "react-router-dom";
 
 interface iCardSchoolProps {
   school: iSchoolList;
 }
 
 const CardSchool = ({ school }: iCardSchoolProps) => {
-  const navigate = useNavigate();
   const { updateSchoolData, setUpdateSchoolData, updateSchool } =
     useSchoolContext();
   const [open, setOpen] = useState(false);
@@ -40,13 +38,7 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
 
   return (
     <>
-      <TableRow
-        hover
-        sx={{ cursor: "pointer" }}
-        onClick={() => {
-          navigate(`/user/list/${school.id}`);
-        }}
-      >
+      <TableRow>
         <TableCell>
           <Tooltip title="Ativar Escola">
             <IconButton color="error" onClick={handleClose}>
