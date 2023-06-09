@@ -6,3 +6,10 @@ a {
   color: unset;
   text-decoration: none;
 }
+:root {
+  --fc-today-bg-color: #fff;
+  --fc-button-bg-color: #006cbe;
+  --fc-button-border-color: #006cbe;
+  --fc-button-hover-bg-color: #004b85ff;
+  --fc-button-hover-border-color: #004b85ff;
+}

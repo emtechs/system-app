@@ -28,6 +28,15 @@ export interface iUser {
   work_school: iWorkSchool[];
 }
 
+export interface iUserDash {
+  countSchool: number;
+  countClass: number;
+  countStudent: number;
+  countFrequency: number;
+  countServer: number;
+  countNotClass: number;
+}
+
 export type iUserAdmRequest = z.infer<typeof createAdmSchema>;
 
 export type iUserDirectorRequest = z.infer<typeof createDirectorSchema>;

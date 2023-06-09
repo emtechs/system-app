@@ -1,5 +1,7 @@
 export * from "./basePage";
 export * from "./boxResp";
+export * from "./calendar";
+export * from "./card";
 export * from "./dialog";
 export * from "./first";
 export * from "./glossary";

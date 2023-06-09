@@ -5,7 +5,7 @@ import { iUser } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TableUser, Tools } from "../../shared/components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { rolePtBr } from "../../shared/scripts";
 
 interface iCardUserProps {
@@ -32,15 +32,18 @@ const CardUser = ({ user }: iCardUserProps) => {
 
 export const ListUserPage = () => {
   const { setLoading } = useAppThemeContext();
+  const [searchParams] = useSearchParams();
+  const role = searchParams.get("role");
   const [listUserData, setListUserData] = useState<iUser[]>();
 
   useEffect(() => {
     setLoading(true);
+    const query = role ? "?role=" + role : "?is_active=true";
     apiUsingNow
-      .get<iUser[]>("users?is_active=true")
+      .get<iUser[]>(`users${query}`)
       .then((res) => setListUserData(res.data))
       .finally(() => setLoading(false));
-  }, []);
+  }, [role]);
 
   return (
     <LayoutBasePage title="Listagem de Usuários" tools={<Tools isHome />}>
