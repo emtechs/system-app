@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
   Grid,
@@ -12,14 +11,10 @@ import {
   useTheme,
 } from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
-import {
-  useAppThemeContext,
-  useAuthContext,
-  useFrequencyContext,
-} from "../../shared/contexts";
-import { iFrequencyWithInfreq, iUserDash } from "../../shared/interfaces";
+import { useAppThemeContext, useFrequencyContext } from "../../shared/contexts";
+import { iFrequencyWithInfreq } from "../../shared/interfaces";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -28,62 +23,9 @@ import {
   DialogDeleteFrequency,
   DialogRetrieveFrequency,
 } from "../../shared/components";
-import {
-  Checklist,
-  Close,
-  Groups,
-  People,
-  School,
-  Workspaces,
-} from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { GridDash } from "./GridDash";
 dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
-
-interface iGridDashProps {
-  icon: ReactNode;
-  quant: number | string;
-  info: string;
-  dest: string;
-}
-
-const GridDash = ({ icon, quant, info, dest }: iGridDashProps) => {
-  const theme = useTheme();
-
-  return (
-    <Grid item xs={4}>
-      <Card>
-        <Link to={dest}>
-          <CardActionArea>
-            <CardContent>
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                gap={0.5}
-              >
-                {icon}
-                <Typography sx={{ fontSize: theme.spacing(4) }}>
-                  {quant}
-                </Typography>
-                <Typography
-                  component="div"
-                  display="flex"
-                  textAlign="center"
-                  alignItems="center"
-                  height={30}
-                  fontSize={theme.spacing(1.6)}
-                >
-                  {info}
-                </Typography>
-              </Box>
-            </CardContent>
-          </CardActionArea>
-        </Link>
-      </Card>
-    </Grid>
-  );
-};
 
 interface iFreqDashProps {
   freq: iFrequencyWithInfreq;
@@ -153,12 +95,10 @@ export const DashboardAdmin = () => {
   const mdLgBetween = useMediaQuery(theme.breakpoints.between("md", "lg"));
   const mdUp = useMediaQuery(theme.breakpoints.up("md"));
   const { setLoading } = useAppThemeContext();
-  const { yearId } = useAuthContext();
   const { retrieveFreq } = useFrequencyContext();
   const [listFreqData, setListFreqData] = useState<iFrequencyWithInfreq[]>();
   const [listFreqOpenData, setListFreqOpenData] =
     useState<iFrequencyWithInfreq[]>();
-  const [userDashData, setUserDashData] = useState<iUserDash>();
   const [openRetrieve, setOpenRetrieve] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const handleOpenRetrieve = () => setOpenRetrieve(!openRetrieve);
@@ -186,16 +126,6 @@ export const DashboardAdmin = () => {
       .then((res) => setListFreqOpenData(res.data))
       .finally(() => setLoading(false));
   }, []);
-
-  useEffect(() => {
-    if (yearId) {
-      setLoading(true);
-      apiUsingNow
-        .get<iUserDash>(`users/dash/${yearId}`)
-        .then((res) => setUserDashData(res.data))
-        .finally(() => setLoading(false));
-    }
-  }, [yearId]);
 
   useEffect(() => {
     let take = 1;
@@ -249,68 +179,7 @@ export const DashboardAdmin = () => {
                       <CalendarDashAdmin />
                     </Box>
                   </Grid>
-                  {userDashData && (
-                    <Grid
-                      container
-                      item
-                      direction="row"
-                      xs={12}
-                      md={5}
-                      spacing={2}
-                    >
-                      <GridDash
-                        icon={<School fontSize="large" />}
-                        quant={userDashData.countSchool}
-                        info="Escolas"
-                        dest="/school/list"
-                      />
-                      <GridDash
-                        icon={<Workspaces fontSize="large" />}
-                        quant={userDashData.countClass}
-                        info="Turmas"
-                        dest="/class/list"
-                      />
-                      <GridDash
-                        icon={<Groups fontSize="large" />}
-                        quant={userDashData.countStudent}
-                        info="Alunos"
-                        dest="/student/list"
-                      />
-                      <GridDash
-                        icon={<Checklist fontSize="large" />}
-                        quant={userDashData.countFrequency}
-                        info="Frequências"
-                        dest="/"
-                      />{" "}
-                      <GridDash
-                        icon={<People fontSize="large" />}
-                        quant={userDashData.countServer}
-                        info="Servidores"
-                        dest="/user/list?role=SERV"
-                      />
-                      <GridDash
-                        icon={<Close fontSize="large" />}
-                        quant={userDashData.countNotClass}
-                        info="Não enturmados"
-                        dest="/"
-                      />
-                      <Grid item xs={12}>
-                        <Card>
-                          <CardContent>
-                            <Box
-                              display="flex"
-                              justifyContent="space-evenly"
-                              alignItems="center"
-                              gap={1}
-                            >
-                              <img width="50%" src="/pref_massape.png" />
-                              <img width="25%" src="/emtechs.jpg" />
-                            </Box>
-                          </CardContent>
-                        </Card>
-                      </Grid>
-                    </Grid>
-                  )}
+                  <GridDash />
                 </Grid>
               </Grid>
             </CardContent>

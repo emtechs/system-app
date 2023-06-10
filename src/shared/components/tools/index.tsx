@@ -7,7 +7,7 @@ import {
   Paper,
   useTheme,
 } from "@mui/material";
-import { useFrequencyContext } from "../../contexts";
+import { useDrawerContext, useFrequencyContext } from "../../contexts";
 import { ChangeEvent, ReactNode } from "react";
 import { Dest } from "./Dest";
 
@@ -33,6 +33,7 @@ export const Tools = ({
   finish,
 }: iToolsProps) => {
   const theme = useTheme();
+  const { handleClick } = useDrawerContext();
   const { updateFrequency, frequencyData, isInfreq, setIsInfreq } =
     useFrequencyContext();
   const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
@@ -52,7 +53,13 @@ export const Tools = ({
         <Dest to={back} title="Voltar" startIcon={<ArrowBack />} isResp />
       )}
       {isHome && (
-        <Dest to="/" title="Página Inicial" startIcon={<Home />} isResp />
+        <Dest
+          to="/"
+          title="Página Inicial"
+          startIcon={<Home />}
+          onClick={handleClick}
+          isResp
+        />
       )}
       {isClass && (
         <Dest to={destClass} title="Turmas" startIcon={<Workspaces />} isResp />

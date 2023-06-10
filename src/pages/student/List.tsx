@@ -1,6 +1,8 @@
-import { iStudent } from "../../shared/interfaces";
+import { iStudentList } from "../../shared/interfaces";
 import {
   useAppThemeContext,
+  useAuthContext,
+  useFrequencyContext,
   usePaginationContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
@@ -11,7 +13,7 @@ import { TableCell, TableRow, useTheme } from "@mui/material";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 
 interface iCardStudentProps {
-  student: iStudent;
+  student: iStudentList;
 }
 const CardStudent = ({ student }: iCardStudentProps) => {
   const theme = useTheme();
@@ -20,6 +22,12 @@ const CardStudent = ({ student }: iCardStudentProps) => {
     <TableRow>
       <TableCell>{student.registry}</TableCell>
       <TableCell>{student.name}</TableCell>
+      {student.classes && student.classes.length > 0 && (
+        <>
+          <TableCell>{student.classes[0].class.class.name}</TableCell>
+          <TableCell>{student.classes[0].class.school.name}</TableCell>
+        </>
+      )}
       <TableCell
         sx={{
           color: "#fff",
@@ -34,25 +42,33 @@ const CardStudent = ({ student }: iCardStudentProps) => {
 
 export const ListStudentPage = () => {
   const { setLoading } = useAppThemeContext();
+  const { yearId } = useAuthContext();
+  const { isInfreq } = useFrequencyContext();
   const { setCount, take, skip } = usePaginationContext();
-  const [data, setData] = useState<iStudent[]>();
+  const [data, setData] = useState<iStudentList[]>();
 
   useEffect(() => {
-    let query = "?";
-    if (take) query += `take=${take}`;
-    if (skip) query += `&skip=${skip}`;
-    setLoading(true);
-    apiUsingNow
-      .get<{ total: number; result: iStudent[] }>(`students${query}`)
-      .then((res) => {
-        setData(res.data.result);
-        setCount(res.data.total);
-      })
-      .finally(() => setLoading(false));
-  }, [take, skip]);
+    if (yearId) {
+      let query = `?is_list=true&year_id=${yearId}`;
+      if (isInfreq) query += "&infreq=31";
+      if (take) query += `&take=${take}`;
+      if (skip) query += `&skip=${skip}`;
+      setLoading(true);
+      apiUsingNow
+        .get<{ total: number; result: iStudentList[] }>(`students${query}`)
+        .then((res) => {
+          setData(res.data.result);
+          setCount(res.data.total);
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [yearId, isInfreq, take, skip]);
 
   return (
-    <LayoutBasePage title={"Listagem de Alunos"} tools={<Tools isHome />}>
+    <LayoutBasePage
+      title={"Listagem de Alunos"}
+      tools={<Tools isHome isFreq />}
+    >
       <TableStudent>
         <>
           {data?.map((student) => (

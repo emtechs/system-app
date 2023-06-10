@@ -53,6 +53,7 @@ const AppRoutes = () => {
           <Route path="/user/active" element={<ActiveUserPage />} />
           <Route path="/school/list" element={<ListSchoolPage />} />
           <Route path="/class/list" element={<ListClassPage />} />
+          <Route path="/student/list" element={<ListStudentPage />} />
         </Route>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/user/list" element={<ListUserPage />} />
@@ -88,7 +89,6 @@ const AppRoutes = () => {
           path="/student/create"
           element={<CreateStudentAdmPage back="/student" />}
         />
-        <Route path="/student/list" element={<ListStudentPage />} />
         <Route path="/frequency/create" element={<CreateFrequencyPage />} />
         <Route path="/frequency/:id" element={<RetrieveFrequencyPage />} />
         <Route path="/frequency/list" element={<ListFrequencyPage />} />

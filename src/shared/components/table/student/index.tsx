@@ -9,6 +9,8 @@ export const TableStudent = ({ children }: iChildren) => {
         <TableRow>
           <TableCell>Matrícula</TableCell>
           <TableCell>Aluno</TableCell>
+          <TableCell>Turma</TableCell>
+          <TableCell>Escola</TableCell>
           <TableCell>Infrequência</TableCell>
         </TableRow>
       </TableHead>

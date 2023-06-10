@@ -1,10 +1,15 @@
-import { iClass } from "./class.interfaces";
+import { iClass, iClassFreq } from "./class.interfaces";
 
 export interface iStudent {
   id: string;
   name: string;
   registry: string;
+  created_at: Date;
   infreq: number;
+}
+
+export interface iStudentList extends iStudent {
+  classes?: { class: iClassFreq }[];
 }
 
 export interface iStudentWithSchool extends iStudent {
