@@ -23,6 +23,7 @@ import {
   ImportStudentPage,
   ListClassPage,
   ListClassSchoolPage,
+  ListFrequencyClosedAdm,
   ListFrequencyPage,
   ListSchoolPage,
   ListStudentPage,
@@ -91,7 +92,8 @@ const AppRoutes = () => {
         />
         <Route path="/frequency/create" element={<CreateFrequencyPage />} />
         <Route path="/frequency/:id" element={<RetrieveFrequencyPage />} />
-        <Route path="/frequency/list" element={<ListFrequencyPage />} />
+        <Route path="/frequency/realize" element={<ListFrequencyPage />} />
+        <Route path="/frequency/list" element={<ListFrequencyClosedAdm />} />
         <Route
           path="/report/class"
           element={<ReportClassPage back="/report" />}

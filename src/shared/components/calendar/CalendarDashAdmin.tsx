@@ -36,6 +36,9 @@ export const CalendarDashAdmin = () => {
       weekends={false}
       showNonCurrentDates={false}
       datesSet={(arg) => setMonthData(arg.start.getMonth() + 1)}
+      eventClick={(arg) =>
+        console.log(dayjs(arg.event.start).format("DD/MM/YYYY"))
+      }
     />
   );
 };

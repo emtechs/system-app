@@ -24,6 +24,7 @@ import {
   DialogRetrieveFrequency,
 } from "../../shared/components";
 import { GridDash } from "./GridDash";
+import { Link } from "react-router-dom";
 dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
 
@@ -114,16 +115,18 @@ export const DashboardAdmin = () => {
 
     setLoading(true);
     apiUsingNow
-      .get<iFrequencyWithInfreq[]>(
+      .get<{ result: iFrequencyWithInfreq[] }>(
         `frequencies?status=CLOSED&take=${take}&is_infreq=true`
       )
-      .then((res) => setListFreqData(res.data))
+      .then((res) => setListFreqData(res.data.result))
       .finally(() => setLoading(false));
 
     setLoading(true);
     apiUsingNow
-      .get<iFrequencyWithInfreq[]>(`frequencies?is_dash=true&take=${take}`)
-      .then((res) => setListFreqOpenData(res.data))
+      .get<{ result: iFrequencyWithInfreq[] }>(
+        `frequencies?is_dash=true&take=${take}`
+      )
+      .then((res) => setListFreqOpenData(res.data.result))
       .finally(() => setLoading(false));
   }, []);
 
@@ -136,15 +139,17 @@ export const DashboardAdmin = () => {
     }
     setLoading(true);
     apiUsingNow
-      .get<iFrequencyWithInfreq[]>(
+      .get<{ result: iFrequencyWithInfreq[] }>(
         `frequencies?status=CLOSED&take=${take}&is_infreq=true`
       )
-      .then((res) => setListFreqData(res.data))
+      .then((res) => setListFreqData(res.data.result))
       .finally(() => setLoading(false));
     setLoading(true);
     apiUsingNow
-      .get<iFrequencyWithInfreq[]>(`frequencies?is_dash=true&take=${take}`)
-      .then((res) => setListFreqOpenData(res.data))
+      .get<{ result: iFrequencyWithInfreq[] }>(
+        `frequencies?is_dash=true&take=${take}`
+      )
+      .then((res) => setListFreqOpenData(res.data.result))
       .finally(() => setLoading(false));
   }, [retrieveFreq]);
 
@@ -215,7 +220,9 @@ export const DashboardAdmin = () => {
               </Grid>
             </CardContent>
             <CardActions sx={{ justifyContent: "flex-end" }}>
-              <Button>Saber Mais</Button>
+              <Link to="/frequency/list">
+                <Button>Saber Mais</Button>
+              </Link>
             </CardActions>
           </Card>
         </Box>

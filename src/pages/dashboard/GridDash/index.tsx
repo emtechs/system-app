@@ -128,7 +128,7 @@ export const GridDash = () => {
             icon={<Checklist fontSize="large" />}
             quant={userDashData.countFrequency}
             info="Frequências"
-            dest="/"
+            dest="/frequency/list"
             onClick={handleClickFrequency}
           />
           <GridDashContent

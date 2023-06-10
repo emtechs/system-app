@@ -1,4 +1,4 @@
-import { AddBox, Checklist } from "@mui/icons-material";
+import { AddBox, Checklist, List as ListIcon } from "@mui/icons-material";
 import { List } from "@mui/material";
 import { ListItemLink } from "../item";
 
@@ -9,8 +9,9 @@ export const Frequency = () => {
       <ListItemLink
         icon={<Checklist />}
         label="Realizar"
-        to="frequency/list"
+        to="frequency/realize"
       />
+      <ListItemLink icon={<ListIcon />} label="Listar" to="frequency/list" />
     </List>
   );
 };
