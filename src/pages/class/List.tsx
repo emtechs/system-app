@@ -24,7 +24,9 @@ const CardClass = ({ el }: iCardClassProps) => {
       hover
       sx={{ cursor: "pointer" }}
       onClick={() =>
-        navigate(`/class/${el.class.id}/${el.school.id}/${el.year.id}`)
+        navigate(
+          `/class/${el.class.id}/${el.school.id}/${el.year.id}?class=true`
+        )
       }
     >
       <TableCell>{el.class.name}</TableCell>
@@ -76,8 +78,8 @@ export const ListClassPage = () => {
     >
       <TableClass>
         <>
-          {data?.map((el) => (
-            <CardClass key={el.class.id} el={el} />
+          {data?.map((el, index) => (
+            <CardClass key={index} el={el} />
           ))}
         </>
       </TableClass>

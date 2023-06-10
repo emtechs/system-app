@@ -25,6 +25,7 @@ import {
   ListClassSchoolPage,
   ListFrequencyPage,
   ListSchoolPage,
+  ListStudentPage,
   ListUserPage,
   PasswordPage,
   ReportClassPage,
@@ -49,17 +50,18 @@ const AppRoutes = () => {
             element={<CreateDirectorPage />}
           />
           <Route path="/user/define/secret" element={<DefineSecretPage />} />
-          <Route path="/user/list" element={<ListUserPage />} />
-          <Route path="/user/list/:id" element={<RetrieveUserPage />} />
           <Route path="/user/active" element={<ActiveUserPage />} />
+          <Route path="/school/list" element={<ListSchoolPage />} />
+          <Route path="/class/list" element={<ListClassPage />} />
         </Route>
         <Route path="/" element={<DashboardPage />} />
+        <Route path="/user/list" element={<ListUserPage />} />
+        <Route path="/user/list/:id" element={<RetrieveUserPage />} />
         <Route path="/school/:id" element={<RetrieveSchoolPage />} />
         <Route path="/school/create" element={<CreateSchoolPage />} />
         <Route path="/school/create/server" element={<CreateServerPage />} />
         <Route path="/school/define/diret" element={<DefineDiretPage />} />
         <Route path="/school/edit" element={<EditSchoolPage />} />
-        <Route path="/school/list" element={<ListSchoolPage />} />
         <Route path="/school/active" element={<ActiveSchoolPage />} />
         <Route
           path="/class/:class_id/:school_id/:year_id"
@@ -78,7 +80,6 @@ const AppRoutes = () => {
           element={<DefineSchoolsPage back="/class" />}
         />
         <Route path="/class/edit" element={<EditClassPage back="/class" />} />
-        <Route path="/class/list" element={<ListClassPage />} />
         <Route
           path="/class/active"
           element={<ActiveClassPage back="/class" />}
@@ -87,6 +88,7 @@ const AppRoutes = () => {
           path="/student/create"
           element={<CreateStudentAdmPage back="/student" />}
         />
+        <Route path="/student/list" element={<ListStudentPage />} />
         <Route path="/frequency/create" element={<CreateFrequencyPage />} />
         <Route path="/frequency/:id" element={<RetrieveFrequencyPage />} />
         <Route path="/frequency/list" element={<ListFrequencyPage />} />

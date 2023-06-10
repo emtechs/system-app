@@ -72,7 +72,7 @@ const GridDash = ({ icon, quant, info, dest }: iGridDashProps) => {
                   textAlign="center"
                   alignItems="center"
                   height={30}
-                  fontSize={theme.spacing(1.2)}
+                  fontSize={theme.spacing(1.6)}
                 >
                   {info}
                 </Typography>
@@ -185,13 +185,17 @@ export const DashboardAdmin = () => {
       .get<iFrequencyWithInfreq[]>(`frequencies?is_dash=true&take=${take}`)
       .then((res) => setListFreqOpenData(res.data))
       .finally(() => setLoading(false));
-
-    setLoading(true);
-    apiUsingNow
-      .get<iUserDash>(`users/dash/${yearId}`)
-      .then((res) => setUserDashData(res.data))
-      .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (yearId) {
+      setLoading(true);
+      apiUsingNow
+        .get<iUserDash>(`users/dash/${yearId}`)
+        .then((res) => setUserDashData(res.data))
+        .finally(() => setLoading(false));
+    }
+  }, [yearId]);
 
   useEffect(() => {
     let take = 1;
@@ -270,7 +274,7 @@ export const DashboardAdmin = () => {
                         icon={<Groups fontSize="large" />}
                         quant={userDashData.countStudent}
                         info="Alunos"
-                        dest="/"
+                        dest="/student/list"
                       />
                       <GridDash
                         icon={<Checklist fontSize="large" />}

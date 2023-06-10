@@ -4,6 +4,7 @@ export interface iStudent {
   id: string;
   name: string;
   registry: string;
+  infreq: number;
 }
 
 export interface iStudentWithSchool extends iStudent {
@@ -17,7 +18,6 @@ export interface iStudentWithSchool extends iStudent {
 export interface iStudentFrequency extends iStudent {
   is_active: boolean;
   justify_disabled?: string;
-  infreq: number;
   presented: number;
   justified: number;
   missed: number;
