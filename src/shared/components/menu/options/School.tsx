@@ -24,7 +24,11 @@ export const School = () => {
         to="school/create/server"
       />
       <ListItemLink icon={<Edit />} label="Editar" to="school/edit" />
-      <ListItemLink icon={<SchoolTwoTone />} label="Listar" to="school/list" />
+      <ListItemLink
+        icon={<SchoolTwoTone />}
+        label="Listar"
+        to="school/list?order=name"
+      />
       <ListItemLink icon={<DoneAll />} label="Ativar" to="school/active" />
     </List>
   );

@@ -9,10 +9,9 @@ import {
   TableCell,
   TableRow,
   Tooltip,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import {
+  useAppThemeContext,
   useAuthContext,
   useSchoolContext,
   useTableContext,
@@ -26,11 +25,11 @@ import {
   iheadCell,
 } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
-import { LayoutBasePage } from "../../shared/layouts";
 import { RemoveDone } from "@mui/icons-material";
 import { TableBase, Tools } from "../../shared/components";
 import { useNavigate, useParams } from "react-router-dom";
 import { rolePtBr } from "../../shared/scripts";
+import { LayoutSchoolPage } from "./Layout";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Nome Completo" },
@@ -64,9 +63,8 @@ const CardServer = ({ school_id, server, role, dash }: iCardServerProps) => {
 };
 
 export const RetrieveSchoolPage = () => {
-  const theme = useTheme();
-  const mdDown = useMediaQuery(theme.breakpoints.down("md"));
   const { id } = useParams<"id">();
+  const { mdDown } = useAppThemeContext();
   const { yearId } = useAuthContext();
   const { updateSchool } = useSchoolContext();
   const { setIsLoading } = useTableContext();
@@ -88,7 +86,7 @@ export const RetrieveSchoolPage = () => {
 
   return (
     <>
-      <LayoutBasePage
+      <LayoutSchoolPage
         title={
           retrieveSchool?.name
             ? retrieveSchool.name
@@ -132,7 +130,7 @@ export const RetrieveSchoolPage = () => {
             />
           ))}
         </TableBase>
-      </LayoutBasePage>
+      </LayoutSchoolPage>
       {retrieveSchool && (
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Desativar Escola</DialogTitle>

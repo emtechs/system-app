@@ -94,7 +94,7 @@ export const SchoolDash = ({ school_id }: iSchoolDashProps) => {
             Servidor
           </MenuItem>
         </Link>
-        <Link to={"/school/edit" + school_id}>
+        <Link to={"/school/edit?id=" + school_id}>
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <Edit />

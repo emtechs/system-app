@@ -1,20 +1,15 @@
+import { useSearchParams } from "react-router-dom";
+import { Box, Grid, Paper } from "@mui/material";
 import {
   FormContainer,
   RadioButtonGroup,
   TextFieldElement,
 } from "react-hook-form-mui";
-import {
-  CardSchoolId,
-  SelectSchoolSelectData,
-  Tools,
-  ValidateCPF,
-} from "../../../shared/components";
-import { useSchoolContext } from "../../../shared/contexts";
-import { LayoutBasePage } from "../../../shared/layouts";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { serverCreateSchema } from "../../../shared/schemas";
-import { Box, Grid, Paper } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import { useSchoolContext } from "../../shared/contexts";
+import { ValidateCPF } from "../../shared/components";
+import { serverCreateSchema } from "../../shared/schemas";
+import { LayoutSchoolPage } from "./Layout";
 
 export const CreateServerPage = () => {
   const [searchParams] = useSearchParams();
@@ -26,11 +21,7 @@ export const CreateServerPage = () => {
   } else if (schoolSelect) school_id = schoolSelect.id;
 
   return (
-    <LayoutBasePage
-      title="Adicionar Servidor"
-      school={id ? <CardSchoolId school_id={id} /> : <SelectSchoolSelectData />}
-      tools={<Tools isHome back={`/school/${id}`} />}
-    >
+    <LayoutSchoolPage title="Adicionar Servidor" isSchool>
       <FormContainer
         onSuccess={(data) => {
           const back = id ? `/school/${id}` : undefined;
@@ -64,7 +55,7 @@ export const CreateServerPage = () => {
                   options={[
                     {
                       id: "COMMON",
-                      label: "Comum",
+                      label: "Frequência",
                     },
                     {
                       id: "SCHOOL",
@@ -83,6 +74,6 @@ export const CreateServerPage = () => {
           </Grid>
         </Box>
       </FormContainer>
-    </LayoutBasePage>
+    </LayoutSchoolPage>
   );
 };

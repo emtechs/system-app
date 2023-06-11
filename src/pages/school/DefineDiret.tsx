@@ -1,40 +1,38 @@
-import { useSchoolContext, useUserContext } from "../../shared/contexts";
+import { useSearchParams } from "react-router-dom";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { schoolUpdateDirectorSchema } from "../../shared/schemas";
 import { Box, Grid, Paper, Typography } from "@mui/material";
-import { LayoutBasePage } from "../../shared/layouts";
-import {
-  SelectSchoolSelectData,
-  Tools,
-  ValidateCPF,
-} from "../../shared/components";
+import { useSchoolContext, useUserContext } from "../../shared/contexts";
+import { ValidateCPF } from "../../shared/components";
+import { schoolUpdateDirectorSchema } from "../../shared/schemas";
+import { LayoutSchoolPage } from "./Layout";
 
 export const DefineDiretPage = () => {
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
   const { updateAllUser } = useUserContext();
   const { updateSchool, schoolSelect } = useSchoolContext();
+  let school_id = "";
+  if (id) {
+    school_id = id;
+  } else if (schoolSelect) school_id = schoolSelect.id;
 
   return (
-    <LayoutBasePage
-      title="Definir Diretor"
-      school={<SelectSchoolSelectData />}
-      tools={<Tools isHome />}
-    >
+    <LayoutSchoolPage title="Definir Diretor" isSchool>
       <FormContainer
         onSuccess={(data) => {
-          if (schoolSelect) {
-            if (schoolSelect.director) {
-              updateAllUser(
-                schoolSelect.director.id,
-                {
-                  is_active: false,
-                  role: "SERV",
-                },
-                true
-              );
-            }
-            updateSchool(data, schoolSelect.id, "diretor", "/");
+          if (schoolSelect?.director) {
+            updateAllUser(
+              schoolSelect.director.id,
+              {
+                is_active: false,
+                role: "SERV",
+              },
+              true
+            );
           }
+          const back = id ? `/school/${id}` : "/";
+          updateSchool(data, school_id, "diretor", back);
         }}
         resolver={zodResolver(schoolUpdateDirectorSchema)}
       >
@@ -82,12 +80,12 @@ export const DefineDiretPage = () => {
             </Grid>
             <Grid container item direction="row" justifyContent="center">
               <Grid item xs={12} sm={9} md={6} lg={3}>
-                <ValidateCPF director school_id={schoolSelect?.id} />
+                <ValidateCPF director school_id={school_id} />
               </Grid>
             </Grid>
           </Grid>
         </Box>
       </FormContainer>
-    </LayoutBasePage>
+    </LayoutSchoolPage>
   );
 };

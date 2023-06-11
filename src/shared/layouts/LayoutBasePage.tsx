@@ -1,13 +1,7 @@
-import {
-  Box,
-  IconButton,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { iChildren } from "../interfaces";
 import { Menu } from "@mui/icons-material";
-import { useDrawerContext } from "../contexts";
+import { useAppThemeContext, useDrawerContext } from "../contexts";
 import { ReactNode } from "react";
 
 interface iLayoutBasePageProps extends iChildren {
@@ -22,9 +16,7 @@ export const LayoutBasePage = ({
   tools,
   school,
 }: iLayoutBasePageProps) => {
-  const theme = useTheme();
-  const smDown = useMediaQuery(theme.breakpoints.down("sm"));
-  const mdDown = useMediaQuery(theme.breakpoints.down("md"));
+  const { theme, smDown, mdDown } = useAppThemeContext();
   const { toggleDrawerOpen } = useDrawerContext();
   return (
     <Box

@@ -1,22 +1,15 @@
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { useSchoolContext } from "../../../shared/contexts";
-import { LayoutBasePage } from "../../../shared/layouts";
-import { schoolCreateSchema } from "../../../shared/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Grid, Paper } from "@mui/material";
-import { Tools } from "../../../shared/components";
-import { useSearchParams } from "react-router-dom";
+import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useSchoolContext } from "../../shared/contexts";
+import { schoolCreateSchema } from "../../shared/schemas";
+import { LayoutSchoolPage } from "./Layout";
 
 export const CreateSchoolPage = () => {
-  const [searchParams] = useSearchParams();
-  const back = searchParams.get("back");
   const { createSchool } = useSchoolContext();
 
   return (
-    <LayoutBasePage
-      title="Nova Escola"
-      tools={<Tools back={back ? back : undefined} isHome />}
-    >
+    <LayoutSchoolPage title="Nova Escola">
       <FormContainer
         onSuccess={createSchool}
         resolver={zodResolver(schoolCreateSchema)}
@@ -49,6 +42,6 @@ export const CreateSchoolPage = () => {
           </Grid>
         </Box>
       </FormContainer>
-    </LayoutBasePage>
+    </LayoutSchoolPage>
   );
 };

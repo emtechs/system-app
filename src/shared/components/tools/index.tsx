@@ -15,6 +15,7 @@ import { SchoolDash } from "./School";
 
 interface iToolsProps {
   back?: string;
+  isSingle?: boolean;
   isHome?: boolean;
   school_id?: string;
   isNew?: boolean;
@@ -30,6 +31,7 @@ interface iToolsProps {
 
 export const Tools = ({
   back,
+  isSingle,
   isHome,
   school_id,
   isNew,
@@ -43,7 +45,7 @@ export const Tools = ({
   finish,
 }: iToolsProps) => {
   const theme = useTheme();
-  const { handleClick } = useDrawerContext();
+  const { handleClickButtonTools } = useDrawerContext();
   const { updateFrequency, frequencyData, isInfreq, setIsInfreq } =
     useFrequencyContext();
   const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
@@ -63,12 +65,20 @@ export const Tools = ({
       {back && (
         <Dest to={back} title="Voltar" startIcon={<ArrowBack />} isResp />
       )}
+      {isSingle && (
+        <Dest
+          to="/"
+          title="Página Inicial"
+          startIcon={<Home />}
+          onClick={handleClickButtonTools}
+        />
+      )}
       {isHome && (
         <Dest
           to="/"
           title="Página Inicial"
           startIcon={<Home />}
-          onClick={handleClick}
+          onClick={handleClickButtonTools}
           isHome
         />
       )}

@@ -8,11 +8,11 @@ import {
 import { useEffect, useState } from "react";
 import { iSchoolList, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
-import { LayoutBasePage } from "../../shared/layouts";
 import { TableBase, Tools } from "../../shared/components";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDebounce } from "../../shared/hooks";
+import { LayoutSchoolPage } from "./Layout";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Escola" },
@@ -117,7 +117,7 @@ export const ListSchoolPage = () => {
   ]);
 
   return (
-    <LayoutBasePage
+    <LayoutSchoolPage
       title="Listagem de Escolas"
       tools={
         <Tools
@@ -137,6 +137,6 @@ export const ListSchoolPage = () => {
           <CardSchool key={el.id} school={el} />
         ))}
       </TableBase>
-    </LayoutBasePage>
+    </LayoutSchoolPage>
   );
 };

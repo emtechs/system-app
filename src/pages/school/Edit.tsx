@@ -3,21 +3,24 @@ import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schoolUpdateSchema } from "../../shared/schemas";
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
-import { LayoutBasePage } from "../../shared/layouts";
-import { SelectSchoolSelectData, Tools } from "../../shared/components";
+import { useSearchParams } from "react-router-dom";
+import { LayoutSchoolPage } from "./Layout";
 
 export const EditSchoolPage = () => {
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
   const { updateSchool, schoolSelect } = useSchoolContext();
+  let school_id = "";
+  if (id) {
+    school_id = id;
+  } else if (schoolSelect) school_id = schoolSelect.id;
 
   return (
-    <LayoutBasePage
-      title="Editar Escola"
-      school={<SelectSchoolSelectData />}
-      tools={<Tools isHome />}
-    >
+    <LayoutSchoolPage title="Editar Escola" isSchool>
       <FormContainer
         onSuccess={(data) => {
-          if (schoolSelect) updateSchool(data, schoolSelect.id, "nome", "/");
+          const back = id ? `/school/${id}` : "/";
+          updateSchool(data, school_id, "nome", back);
         }}
         resolver={zodResolver(schoolUpdateSchema)}
       >
@@ -67,6 +70,6 @@ export const EditSchoolPage = () => {
           </Grid>
         </Box>
       </FormContainer>
-    </LayoutBasePage>
+    </LayoutSchoolPage>
   );
 };

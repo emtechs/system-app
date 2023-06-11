@@ -23,6 +23,7 @@ interface iDrawerContextProps {
   handleClickUser: () => void;
   handleClick: () => void;
   handleClickButton: () => void;
+  handleClickButtonTools: () => void;
 }
 
 const DrawerContext = createContext({} as iDrawerContextProps);
@@ -61,6 +62,12 @@ export const DrawerProvider = ({ children }: iChildren) => {
   const handleClickButton = useCallback(() => {
     if (smDown) {
       toggleDrawerOpen();
+    }
+  }, []);
+
+  const handleClickButtonTools = useCallback(() => {
+    if (smDown) {
+      setIsDrawerOpen(false);
     }
   }, []);
 
@@ -175,6 +182,7 @@ export const DrawerProvider = ({ children }: iChildren) => {
         openStudent,
         openUser,
         toggleDrawerOpen,
+        handleClickButtonTools,
       }}
     >
       {children}
