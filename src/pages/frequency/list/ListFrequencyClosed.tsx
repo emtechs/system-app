@@ -1,15 +1,19 @@
-import { TableCell, TableRow, Typography, useTheme } from "@mui/material";
-import { TableFrequency, Tools } from "../../../shared/components";
-import {
-  useAppThemeContext,
-  useAuthContext,
-  useTableContext,
-} from "../../../shared/contexts";
+import { TableCell, TableRow, useTheme } from "@mui/material";
+import { TableBase, Tools } from "../../../shared/components";
+import { useAuthContext, useTableContext } from "../../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../../shared/services";
-import { iFrequency } from "../../../shared/interfaces";
+import { iFrequency, iheadCell } from "../../../shared/interfaces";
 import { LayoutBasePage } from "../../../shared/layouts";
 import { defineBgColorInfrequency } from "../../../shared/scripts";
+
+const headCells: iheadCell[] = [
+  { order: "date", numeric: false, label: "Data" },
+  { order: "name", numeric: false, label: "Turma" },
+  { numeric: true, label: "Alunos" },
+  { order: "name", numeric: false, label: "Escola" },
+  { order: "infreq", numeric: true, label: "Infrequência" },
+];
 
 interface iCardFrequencyProps {
   freq: iFrequency;
@@ -40,9 +44,8 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
 };
 
 export const ListFrequencyClosedAdm = () => {
-  const { setLoading } = useAppThemeContext();
   const { yearId } = useAuthContext();
-  const { setCount, take, skip } = useTableContext();
+  const { setCount, take, skip, setIsLoading } = useTableContext();
   const [data, setData] = useState<iFrequency[]>();
 
   useEffect(() => {
@@ -50,29 +53,23 @@ export const ListFrequencyClosedAdm = () => {
       let query = `?year_id=${yearId}&status=CLOSED&is_infreq=true`;
       if (take) query += `&take=${take}`;
       if (skip) query += `&skip=${skip}`;
-      setLoading(true);
+      setIsLoading(true);
       apiUsingNow
         .get<{ total: number; result: iFrequency[] }>(`frequencies${query}`)
         .then((res) => {
           setCount(res.data.total);
           setData(res.data.result);
         })
-        .finally(() => setLoading(false));
+        .finally(() => setIsLoading(false));
     }
   }, [yearId, take, skip]);
   return (
     <LayoutBasePage title="Frequências Realizadas" tools={<Tools isHome />}>
-      {data && data.length > 0 ? (
-        <TableFrequency isClosed>
-          <>
-            {data.map((el) => (
-              <CardFrequency key={el.id} freq={el} />
-            ))}
-          </>
-        </TableFrequency>
-      ) : (
-        <Typography m={2}>Nenhuma frequência realizada no momento!</Typography>
-      )}
+      <TableBase headCells={headCells}>
+        {data?.map((el) => (
+          <CardFrequency key={el.id} freq={el} />
+        ))}
+      </TableBase>
     </LayoutBasePage>
   );
 };

@@ -2,11 +2,15 @@ import { TableCell, TableRow, useTheme } from "@mui/material";
 import {
   DialogMissed,
   DialogRemoveMissed,
-  TableRetrieveFrequency,
+  TableBase,
   Tools,
 } from "../../shared/components";
-import { useAppThemeContext, useFrequencyContext } from "../../shared/contexts";
-import { iFrequency, iFrequencyStudents } from "../../shared/interfaces";
+import { useFrequencyContext, useTableContext } from "../../shared/contexts";
+import {
+  iFrequency,
+  iFrequencyStudents,
+  iheadCell,
+} from "../../shared/interfaces";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
 import dayjs from "dayjs";
@@ -21,6 +25,13 @@ import {
 } from "../../shared/scripts";
 dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
+
+const headCells: iheadCell[] = [
+  { order: "date", numeric: false, label: "Matrícula" },
+  { order: "name", numeric: false, label: "Aluno" },
+  { numeric: true, label: "Estado da Presença" },
+  { order: "name", numeric: false, label: "Atualizado Em" },
+];
 
 interface iCardFrequencyProps {
   student: iFrequencyStudents;
@@ -73,31 +84,31 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
 
 export const RetrieveFrequencyPage = () => {
   const { id } = useParams<"id">();
-  const { setLoading } = useAppThemeContext();
+  const { setIsLoading } = useTableContext();
   const { studentData, frequencyData, setFrequencyData } =
     useFrequencyContext();
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     apiUsingNow
       .get<iFrequency>(`frequencies/${id}`)
       .then((res) => {
         setFrequencyData(res.data);
       })
       .finally(() => {
-        setLoading(false);
+        setIsLoading(false);
       });
   }, []);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     apiUsingNow
       .get<iFrequency>(`frequencies/${id}`)
       .then((res) => {
         setFrequencyData(res.data);
       })
       .finally(() => {
-        setLoading(false);
+        setIsLoading(false);
       });
   }, [studentData]);
 
@@ -111,15 +122,11 @@ export const RetrieveFrequencyPage = () => {
           : "Realizar Frequência"
       }
     >
-      {frequencyData && (
-        <TableRetrieveFrequency>
-          <>
-            {frequencyData.students.map((el) => (
-              <CardFrequency key={el.id} student={el} />
-            ))}
-          </>
-        </TableRetrieveFrequency>
-      )}
+      <TableBase headCells={headCells}>
+        {frequencyData?.students.map((el) => (
+          <CardFrequency key={el.id} student={el} />
+        ))}
+      </TableBase>
     </LayoutBasePage>
   );
 };

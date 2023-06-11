@@ -1,12 +1,19 @@
-import { TableCell, TableRow, Typography } from "@mui/material";
-import { TableFrequency, Tools } from "../../../shared/components";
-import { useAppThemeContext, useAuthContext } from "../../../shared/contexts";
+import { TableCell, TableRow } from "@mui/material";
+import { TableBase, Tools } from "../../../shared/components";
+import { useAuthContext, useTableContext } from "../../../shared/contexts";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../../shared/services";
-import { iFrequency } from "../../../shared/interfaces";
+import { iFrequency, iheadCell } from "../../../shared/interfaces";
 import { LayoutBasePage } from "../../../shared/layouts";
 import { CardSchool } from "../../../shared/components/card";
+
+const headCells: iheadCell[] = [
+  { order: "date", numeric: false, label: "Data" },
+  { order: "name", numeric: false, label: "Turma" },
+  { numeric: true, label: "Alunos" },
+  { order: "name", numeric: false, label: "Escola" },
+];
 
 interface iCardFrequencyProps {
   freq: iFrequency;
@@ -30,18 +37,18 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
 };
 
 export const ListFrequencyCommon = () => {
-  const { setLoading } = useAppThemeContext();
   const { schoolData } = useAuthContext();
+  const { setIsLoading } = useTableContext();
   const [data, setData] = useState<iFrequency[]>();
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     apiUsingNow
       .get<iFrequency[]>(
         `frequencies?status=OPENED&school_id=${schoolData?.school.id}`
       )
       .then((res) => setData(res.data))
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, [schoolData]);
 
   return (
@@ -50,17 +57,11 @@ export const ListFrequencyCommon = () => {
       school={<CardSchool />}
       tools={<Tools isHome />}
     >
-      {data && data.length > 0 ? (
-        <TableFrequency>
-          <>
-            {data.map((el) => (
-              <CardFrequency key={el.id} freq={el} />
-            ))}
-          </>
-        </TableFrequency>
-      ) : (
-        <Typography m={2}>Nenhuma frequência em aberto no momento!</Typography>
-      )}
+      <TableBase headCells={headCells}>
+        {data?.map((el) => (
+          <CardFrequency key={el.id} freq={el} />
+        ))}
+      </TableBase>
     </LayoutBasePage>
   );
 };

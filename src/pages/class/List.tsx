@@ -1,6 +1,5 @@
-import { iClassSchoolList } from "../../shared/interfaces";
+import { iClassSchoolList, iheadCell } from "../../shared/interfaces";
 import {
-  useAppThemeContext,
   useAuthContext,
   useFrequencyContext,
   useTableContext,
@@ -9,9 +8,17 @@ import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
 import { useNavigate } from "react-router-dom";
 import { LayoutBasePage } from "../../shared/layouts";
-import { TableClass, Tools } from "../../shared/components";
+import { TableBase, Tools } from "../../shared/components";
 import { TableCell, TableRow, useTheme } from "@mui/material";
 import { defineBgColorInfrequency } from "../../shared/scripts";
+
+const headCells: iheadCell[] = [
+  { order: "name", numeric: false, label: "Turma" },
+  { order: "name", numeric: false, label: "Escola" },
+  { numeric: true, label: "Alunos" },
+  { numeric: true, label: "Frequências" },
+  { order: "infreq", numeric: true, label: "Infrequência" },
+];
 
 interface iCardClassProps {
   el: iClassSchoolList;
@@ -46,10 +53,9 @@ const CardClass = ({ el }: iCardClassProps) => {
 };
 
 export const ListClassPage = () => {
-  const { setLoading } = useAppThemeContext();
   const { yearId } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
-  const { setCount, take, skip } = useTableContext();
+  const { setCount, take, skip, setIsLoading } = useTableContext();
   const [data, setData] = useState<iClassSchoolList[]>();
 
   useEffect(() => {
@@ -58,7 +64,7 @@ export const ListClassPage = () => {
       if (isInfreq) query += "&class_infreq=31";
       if (take) query += `&take=${take}`;
       if (skip) query += `&skip=${skip}`;
-      setLoading(true);
+      setIsLoading(true);
       apiUsingNow
         .get<{ total: number; result: iClassSchoolList[] }>(
           `classes/year/${yearId}${query}`
@@ -67,7 +73,7 @@ export const ListClassPage = () => {
           setData(res.data.result);
           setCount(res.data.total);
         })
-        .finally(() => setLoading(false));
+        .finally(() => setIsLoading(false));
     }
   }, [take, skip, isInfreq, yearId]);
 
@@ -76,13 +82,11 @@ export const ListClassPage = () => {
       title={"Listagem de Turmas"}
       tools={<Tools isHome isFreq />}
     >
-      <TableClass>
-        <>
-          {data?.map((el, index) => (
-            <CardClass key={index} el={el} />
-          ))}
-        </>
-      </TableClass>
+      <TableBase headCells={headCells}>
+        {data?.map((el, index) => (
+          <CardClass key={index} el={el} />
+        ))}
+      </TableBase>
     </LayoutBasePage>
   );
 };

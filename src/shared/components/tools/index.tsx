@@ -1,17 +1,9 @@
-import {
-  AddBox,
-  ArrowBack,
-  Checklist,
-  Home,
-  Search,
-  Workspaces,
-} from "@mui/icons-material";
+import { AddBox, ArrowBack, Checklist, Home } from "@mui/icons-material";
 import {
   Box,
   Button,
   Checkbox,
   FormControlLabel,
-  InputAdornment,
   Paper,
   TextField,
   useTheme,
@@ -29,8 +21,8 @@ interface iToolsProps {
   destNew?: string;
   titleNew?: string;
   isSearch?: boolean;
-  titleSearch?: string;
-  setTitleSearch: () => void;
+  search?: string;
+  setSearch?: (text: string) => void;
   isFinish?: boolean;
   isFreq?: boolean;
   finish?: ReactNode;
@@ -44,8 +36,8 @@ export const Tools = ({
   destNew = "/",
   titleNew = "Novo",
   isSearch,
-  titleSearch = "",
-  setTitleSearch,
+  search = "",
+  setSearch,
   isFinish,
   isFreq,
   finish,
@@ -87,17 +79,9 @@ export const Tools = ({
       {isSearch && (
         <TextField
           size="small"
-          value={titleSearch}
+          value={search}
           placeholder="Pesquisar..."
-          onChange={(e) => setTitleSearch?.(e.target.value)}
-          inputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search />
-              </InputAdornment>
-            ),
-          }}
-          variant="standard"
+          onChange={(e) => setSearch?.(e.target.value)}
         />
       )}
       <Box flex={1} display="flex" justifyContent="end">

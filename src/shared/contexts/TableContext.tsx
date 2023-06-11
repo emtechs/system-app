@@ -21,6 +21,8 @@ interface iTableContextData {
   setOrder: Dispatch<SetStateAction<string | undefined | null>>;
   by: "asc" | "desc";
   setBy: Dispatch<SetStateAction<"asc" | "desc">>;
+  isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 type iRowsPage =
@@ -40,6 +42,7 @@ export const TableProvider = ({ children }: iChildren) => {
   const [skip, setSkip] = useState<number>();
   const [order, setOrder] = useState<string | null>();
   const [by, setBy] = useState<"asc" | "desc">("asc");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (count < 10) {
@@ -87,6 +90,8 @@ export const TableProvider = ({ children }: iChildren) => {
         setOrder,
         by,
         setBy,
+        isLoading,
+        setIsLoading,
       }}
     >
       {children}

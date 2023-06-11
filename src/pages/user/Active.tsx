@@ -10,19 +10,24 @@ import {
   TableCell,
   TableRow,
   Tooltip,
-  Typography,
 } from "@mui/material";
-import { useAppThemeContext, useUserContext } from "../../shared/contexts";
+import { useTableContext, useUserContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
-import { iUser } from "../../shared/interfaces";
+import { iUser, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
-import { TableUser, Tools } from "../../shared/components";
+import { TableBase, Tools } from "../../shared/components";
 import { FormContainer, RadioButtonGroup } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { activeUserSchema } from "../../shared/schemas";
 import { LayoutBasePage } from "../../shared/layouts";
 import { DoneAll } from "@mui/icons-material";
 import { rolePtBr } from "../../shared/scripts";
+
+const headCells: iheadCell[] = [
+  { order: "name", numeric: false, label: "Nome Completo" },
+  { numeric: false, label: "CPF" },
+  { numeric: false, label: "Função" },
+];
 
 interface iCardUserProps {
   user: iUser;
@@ -98,34 +103,28 @@ const CardUser = ({ user }: iCardUserProps) => {
 };
 
 export const ActiveUserPage = () => {
-  const { setLoading } = useAppThemeContext();
   const { updateUserData } = useUserContext();
+  const { setIsLoading } = useTableContext();
   const [listUserData, setListUserData] = useState<iUser[]>();
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     apiUsingNow
       .get<iUser[]>("users?is_active=false")
       .then((res) => setListUserData(res.data))
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, [updateUserData]);
 
   return (
     <LayoutBasePage
       title="Listagem de Usuários"
-      tools={<Tools isHome isBack back="/user/list" />}
+      tools={<Tools isHome back="/user/list" />}
     >
-      {listUserData && listUserData.length > 0 ? (
-        <TableUser is_active>
-          <>
-            {listUserData.map((el) => (
-              <CardUser key={el.id} user={el} />
-            ))}
-          </>
-        </TableUser>
-      ) : (
-        <Typography m={2}>Nenhum usuário para ativar no momento!</Typography>
-      )}
+      <TableBase headCells={headCells} is_active>
+        {listUserData?.map((el) => (
+          <CardUser key={el.id} user={el} />
+        ))}
+      </TableBase>
     </LayoutBasePage>
   );
 };

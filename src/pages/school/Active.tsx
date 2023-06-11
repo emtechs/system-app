@@ -9,19 +9,27 @@ import {
   TableCell,
   TableRow,
   Tooltip,
-  Typography,
 } from "@mui/material";
 import {
-  useAppThemeContext,
   useAuthContext,
   useSchoolContext,
+  useTableContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
-import { iSchoolList } from "../../shared/interfaces";
+import { iSchoolList, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
 import { RemoveDone } from "@mui/icons-material";
-import { TableSchool, Tools } from "../../shared/components";
+import { TableBase, Tools } from "../../shared/components";
+
+const headCells: iheadCell[] = [
+  { order: "name", numeric: false, label: "Escola" },
+  { order: "director_name", numeric: false, label: "Diretor" },
+  { numeric: true, label: "Turmas" },
+  { numeric: true, label: "Alunos" },
+  { numeric: true, label: "Frequências" },
+  { order: "infreq", numeric: true, label: "Infrequência" },
+];
 
 interface iCardSchoolProps {
   school: iSchoolList;
@@ -87,34 +95,28 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
 };
 
 export const ActiveSchoolPage = () => {
-  const { setLoading } = useAppThemeContext();
   const { yearId } = useAuthContext();
   const { updateSchoolData } = useSchoolContext();
+  const { setIsLoading } = useTableContext();
   const [listSchoolData, setListSchoolData] = useState<iSchoolList[]>();
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     apiUsingNow
       .get<iSchoolList[]>(
         `schools?year_id=${yearId}&is_listSchool=true&is_active=false`
       )
       .then((res) => setListSchoolData(res.data))
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, [updateSchoolData]);
 
   return (
     <LayoutBasePage title="Listagem de Escolas" tools={<Tools isHome />}>
-      {listSchoolData && listSchoolData.length > 0 ? (
-        <TableSchool>
-          <>
-            {listSchoolData.map((el) => (
-              <CardSchool key={el.id} school={el} />
-            ))}
-          </>
-        </TableSchool>
-      ) : (
-        <Typography m={2}>Nenhuma escola para ativar no momento!</Typography>
-      )}
+      <TableBase headCells={headCells} is_active>
+        {listSchoolData?.map((el) => (
+          <CardSchool key={el.id} school={el} />
+        ))}
+      </TableBase>
     </LayoutBasePage>
   );
 };

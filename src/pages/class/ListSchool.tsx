@@ -1,13 +1,20 @@
-import { iClassWithSchool } from "../../shared/interfaces";
-import { useAppThemeContext, useTableContext } from "../../shared/contexts";
+import { iClassWithSchool, iheadCell } from "../../shared/interfaces";
+import { useTableContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
 import { useNavigate, useParams } from "react-router-dom";
 import { LayoutBasePage } from "../../shared/layouts";
-import { TableClassSchool, Tools } from "../../shared/components";
+import { TableBase, Tools } from "../../shared/components";
 import { TableCell, TableRow, useTheme } from "@mui/material";
 import { CardSchoolId } from "../../shared/components/card";
 import { defineBgColorInfrequency } from "../../shared/scripts";
+
+const headCells: iheadCell[] = [
+  { order: "name", numeric: false, label: "Turma" },
+  { numeric: true, label: "Alunos" },
+  { numeric: true, label: "Frequências" },
+  { order: "infreq", numeric: true, label: "Infrequência" },
+];
 
 interface iCardClassProps {
   el: iClassWithSchool;
@@ -40,15 +47,14 @@ const CardClass = ({ el }: iCardClassProps) => {
 
 export const ListClassSchoolPage = () => {
   const { school_id, year_id } = useParams();
-  const { setLoading } = useAppThemeContext();
-  const { setCount, take, skip } = useTableContext();
+  const { setCount, take, skip, setIsLoading } = useTableContext();
   const [data, setData] = useState<iClassWithSchool[]>();
 
   useEffect(() => {
     let query = `?year_id=${year_id}&is_active=true`;
     if (take) query += `&take=${take}`;
     if (skip) query += `&skip=${skip}`;
-    setLoading(true);
+    setIsLoading(true);
     apiUsingNow
       .get<{ total: number; result: iClassWithSchool[] }>(
         `classes/school/${school_id}${query}`
@@ -57,22 +63,20 @@ export const ListClassSchoolPage = () => {
         setData(res.data.result);
         setCount(res.data.total);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, [take, skip]);
 
   return (
     <LayoutBasePage
       title={"Listagem de Turmas"}
       school={<CardSchoolId school_id={school_id ? school_id : ""} />}
-      tools={<Tools isHome isBack back={`/school/${school_id}`} />}
+      tools={<Tools isHome back={`/school/${school_id}`} />}
     >
-      <TableClassSchool>
-        <>
-          {data?.map((el) => (
-            <CardClass key={el.class.id} el={el} />
-          ))}
-        </>
-      </TableClassSchool>
+      <TableBase headCells={headCells}>
+        {data?.map((el) => (
+          <CardClass key={el.class.id} el={el} />
+        ))}
+      </TableBase>
     </LayoutBasePage>
   );
 };

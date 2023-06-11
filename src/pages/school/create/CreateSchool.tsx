@@ -15,7 +15,7 @@ export const CreateSchoolPage = () => {
   return (
     <LayoutBasePage
       title="Nova Escola"
-      tools={<Tools isBack={!!back} back={back ? back : undefined} isHome />}
+      tools={<Tools back={back ? back : undefined} isHome />}
     >
       <FormContainer
         onSuccess={createSchool}

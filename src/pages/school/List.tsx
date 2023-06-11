@@ -1,18 +1,27 @@
-import { TableCell, TableRow, Typography, useTheme } from "@mui/material";
+import { TableCell, TableRow, useTheme } from "@mui/material";
 import {
-  useAppThemeContext,
   useAuthContext,
   useFrequencyContext,
   useSchoolContext,
   useTableContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
-import { iSchoolList } from "../../shared/interfaces";
+import { iSchoolList, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
-import { TableSchool, Tools } from "../../shared/components";
+import { TableBase, Tools } from "../../shared/components";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useDebounce } from "../../shared/hooks";
+
+const headCells: iheadCell[] = [
+  { order: "name", numeric: false, label: "Escola" },
+  { order: "director_name", numeric: false, label: "Diretor" },
+  { numeric: true, label: "Turmas" },
+  { numeric: true, label: "Alunos" },
+  { numeric: true, label: "Frequências" },
+  { order: "infreq", numeric: true, label: "Infrequência" },
+];
 
 interface iCardSchoolProps {
   school: iSchoolList;
@@ -51,12 +60,14 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
 export const ListSchoolPage = () => {
   const [searchParams] = useSearchParams();
   const orderData = searchParams.get("order");
-  const { setLoading } = useAppThemeContext();
+  const { debounce } = useDebounce();
   const { yearId } = useAuthContext();
   const { updateSchoolData } = useSchoolContext();
   const { isInfreq } = useFrequencyContext();
-  const { setCount, take, skip, order, setOrder, by } = useTableContext();
+  const { setCount, take, skip, order, setOrder, by, setIsLoading } =
+    useTableContext();
   const [listSchoolData, setListSchoolData] = useState<iSchoolList[]>();
+  const [search, setSearch] = useState<string>();
 
   useEffect(() => {
     if (yearId) {
@@ -70,16 +81,40 @@ export const ListSchoolPage = () => {
       if (isInfreq) query += "&infreq=31";
       if (take) query += `&take=${take}`;
       if (skip) query += `&skip=${skip}`;
-      setLoading(true);
-      apiUsingNow
-        .get<{ total: number; result: iSchoolList[] }>(`schools${query}`)
-        .then((res) => {
-          setListSchoolData(res.data.result);
-          setCount(res.data.total);
-        })
-        .finally(() => setLoading(false));
+      if (search) {
+        query += `&name=${search}`;
+        setIsLoading(true);
+        debounce(() => {
+          apiUsingNow
+            .get<{ total: number; result: iSchoolList[] }>(`schools${query}`)
+            .then((res) => {
+              setListSchoolData(res.data.result);
+              setCount(res.data.total);
+            })
+            .finally(() => setIsLoading(false));
+        });
+      } else {
+        setIsLoading(true);
+        apiUsingNow
+          .get<{ total: number; result: iSchoolList[] }>(`schools${query}`)
+          .then((res) => {
+            setListSchoolData(res.data.result);
+            setCount(res.data.total);
+          })
+          .finally(() => setIsLoading(false));
+      }
     }
-  }, [yearId, updateSchoolData, isInfreq, take, skip, orderData, order, by]);
+  }, [
+    yearId,
+    updateSchoolData,
+    isInfreq,
+    take,
+    skip,
+    orderData,
+    order,
+    by,
+    search,
+  ]);
 
   return (
     <LayoutBasePage
@@ -88,31 +123,20 @@ export const ListSchoolPage = () => {
         <Tools
           isHome
           isNew
+          isSearch
+          search={search}
+          setSearch={(text) => setSearch(text)}
           destNew="/school/create?back=/school/list?order=name"
           titleNew="Nova"
           isFreq
         />
       }
     >
-      {listSchoolData && listSchoolData.length > 0 ? (
-        <TableSchool>
-          <>
-            {listSchoolData.map((el) => (
-              <CardSchool key={el.id} school={el} />
-            ))}
-          </>
-        </TableSchool>
-      ) : (
-        <>
-          {isInfreq ? (
-            <Typography m={2}>
-              Nenhuma escola infrequente no momento!
-            </Typography>
-          ) : (
-            <Typography m={2}>Nenhuma escola ativa no momento!</Typography>
-          )}
-        </>
-      )}
+      <TableBase headCells={headCells}>
+        {listSchoolData?.map((el) => (
+          <CardSchool key={el.id} school={el} />
+        ))}
+      </TableBase>
     </LayoutBasePage>
   );
 };

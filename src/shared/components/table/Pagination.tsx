@@ -1,5 +1,5 @@
 import { MouseEvent } from "react";
-import { useTableContext } from "../../../contexts";
+import { useTableContext } from "../../contexts";
 import { Box, IconButton, TablePagination, useTheme } from "@mui/material";
 import {
   FirstPage,

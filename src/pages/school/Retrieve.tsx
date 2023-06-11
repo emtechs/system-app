@@ -9,42 +9,56 @@ import {
   TableCell,
   TableRow,
   Tooltip,
-  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import {
-  useAppThemeContext,
   useAuthContext,
   useSchoolContext,
+  useTableContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
-import { iDirector, iRole, iSchoolRetrieve } from "../../shared/interfaces";
+import {
+  iDash,
+  iDirector,
+  iRole,
+  iSchoolRetrieve,
+  iheadCell,
+} from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
 import { RemoveDone } from "@mui/icons-material";
-import { TableUser, Tools } from "../../shared/components";
+import { TableBase, Tools } from "../../shared/components";
 import { useNavigate, useParams } from "react-router-dom";
 import { rolePtBr } from "../../shared/scripts";
 
+const headCells: iheadCell[] = [
+  { order: "name", numeric: false, label: "Nome Completo" },
+  { numeric: false, label: "CPF" },
+  { numeric: false, label: "Função" },
+  { numeric: false, label: "Tela" },
+];
+
 interface iCardServerProps {
-  school: iSchoolRetrieve;
+  school_id: string;
   server: iDirector;
   role: iRole;
+  dash: iDash;
 }
-const CardServer = ({ school, server, role }: iCardServerProps) => {
+const CardServer = ({ school_id, server, role, dash }: iCardServerProps) => {
   const navigate = useNavigate();
   return (
     <TableRow
       hover
       sx={{ cursor: "pointer" }}
       onClick={() => {
-        navigate(`/user/list/${server.id}?school_id=${school.id}`);
+        navigate(`/user/list/${server.id}?school_id=${school_id}`);
       }}
     >
       <TableCell>{server.name}</TableCell>
       <TableCell>{server.cpf}</TableCell>
       <TableCell>{rolePtBr(role)}</TableCell>
+      <TableCell>{dash === "SCHOOL" ? "Escola" : "Frequência"}</TableCell>
     </TableRow>
   );
 };
@@ -53,9 +67,9 @@ export const RetrieveSchoolPage = () => {
   const theme = useTheme();
   const mdDown = useMediaQuery(theme.breakpoints.down("md"));
   const { id } = useParams<"id">();
-  const { setLoading } = useAppThemeContext();
   const { yearId } = useAuthContext();
   const { updateSchool } = useSchoolContext();
+  const { setIsLoading } = useTableContext();
   const [retrieveSchool, setRetrieveSchool] = useState<iSchoolRetrieve>();
   const [open, setOpen] = useState(false);
   const handleClose = () => {
@@ -63,13 +77,13 @@ export const RetrieveSchoolPage = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     apiUsingNow
       .get<iSchoolRetrieve>(
         `schools/${id}?is_listSchool=true&year_id=${yearId}`
       )
       .then((res) => setRetrieveSchool(res.data))
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -82,7 +96,6 @@ export const RetrieveSchoolPage = () => {
         }
         tools={
           <Tools
-            isBack
             back="/school/list"
             school_id={retrieveSchool?.id}
             isHome
@@ -108,22 +121,17 @@ export const RetrieveSchoolPage = () => {
           />
         }
       >
-        {retrieveSchool && retrieveSchool.servers.length > 0 ? (
-          <TableUser>
-            <>
-              {retrieveSchool.servers.map((el) => (
-                <CardServer
-                  key={el.server.id}
-                  school={retrieveSchool}
-                  server={el.server}
-                  role={el.role}
-                />
-              ))}
-            </>
-          </TableUser>
-        ) : (
-          <Typography m={2}>Escola sem servidores no momento!</Typography>
-        )}
+        <TableBase headCells={headCells}>
+          {retrieveSchool?.servers.map((el) => (
+            <CardServer
+              key={el.server.id}
+              school_id={id ? id : ""}
+              server={el.server}
+              role={el.role}
+              dash={el.dash}
+            />
+          ))}
+        </TableBase>
       </LayoutBasePage>
       {retrieveSchool && (
         <Dialog open={open} onClose={handleClose}>

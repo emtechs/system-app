@@ -5,7 +5,8 @@ export interface iChildren {
 }
 
 export interface iTable extends iChildren {
-  isPagination?: boolean;
+  is_active?: boolean;
+  headCells: iheadCell[];
 }
 
 export interface iPageProps {

@@ -1,6 +1,6 @@
 import { TableCell, TableSortLabel } from "@mui/material";
-import { iheadCell } from "../../../interfaces";
-import { useTableContext } from "../../../contexts";
+import { iheadCell } from "../../interfaces";
+import { useTableContext } from "../../contexts";
 
 interface iSortProps {
   headCells: iheadCell[];

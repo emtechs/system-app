@@ -9,21 +9,25 @@ import {
   TableCell,
   TableRow,
   Tooltip,
-  Typography,
 } from "@mui/material";
 import {
-  useAppThemeContext,
   useSchoolContext,
+  useTableContext,
   useUserContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
-import { iUser, iWorkSchool } from "../../shared/interfaces";
+import { iUser, iWorkSchool, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
 import { Delete, RemoveDone } from "@mui/icons-material";
-import { TableRetrieveUser, Tools } from "../../shared/components";
+import { TableBase, Tools } from "../../shared/components";
 import { useParams, useSearchParams } from "react-router-dom";
 import { rolePtBr } from "../../shared/scripts";
+
+const headCells: iheadCell[] = [
+  { order: "name", numeric: false, label: "Escola" },
+  { numeric: false, label: "Função" },
+];
 
 interface iCardUserProps {
   user: iUser;
@@ -84,9 +88,9 @@ export const RetrieveUserPage = () => {
   const { id } = useParams<"id">();
   const [searchParams] = useSearchParams();
   const school_id = searchParams.get("school_id");
-  const { setLoading } = useAppThemeContext();
   const { updateAllUser } = useUserContext();
   const { updateServerData } = useSchoolContext();
+  const { setIsLoading } = useTableContext();
   const [retrieveUser, setRetrieveUser] = useState<iUser>();
   const [open, setOpen] = useState(false);
   const handleClose = () => {
@@ -94,11 +98,11 @@ export const RetrieveUserPage = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     apiUsingNow
       .get<iUser>(`users/${id}`)
       .then((res) => setRetrieveUser(res.data))
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, [updateServerData]);
 
   return (
@@ -111,7 +115,6 @@ export const RetrieveUserPage = () => {
         }
         tools={
           <Tools
-            isBack
             back={school_id ? `/school/${school_id}` : "/user/list"}
             isHome
             finish={
@@ -128,17 +131,11 @@ export const RetrieveUserPage = () => {
           />
         }
       >
-        {retrieveUser && retrieveUser.work_school.length > 0 ? (
-          <TableRetrieveUser>
-            <>
-              {retrieveUser.work_school.map((el) => (
-                <CardUser key={el.school.id} user={retrieveUser} work={el} />
-              ))}
-            </>
-          </TableRetrieveUser>
-        ) : (
-          <Typography m={2}>Usuário sem funções no momento!</Typography>
-        )}
+        <TableBase headCells={headCells} is_active>
+          {retrieveUser?.work_school.map((el) => (
+            <CardUser key={el.school.id} user={retrieveUser} work={el} />
+          ))}
+        </TableBase>
       </LayoutBasePage>
       {retrieveUser && (
         <Dialog open={open} onClose={handleClose}>

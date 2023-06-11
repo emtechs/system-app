@@ -1,13 +1,26 @@
 import { useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useAppThemeContext, useFrequencyContext } from "../../shared/contexts";
+import { useFrequencyContext, useTableContext } from "../../shared/contexts";
 import { apiUsingNow } from "../../shared/services";
-import { iClassWithSchool, iStudentWithSchool } from "../../shared/interfaces";
+import {
+  iClassWithSchool,
+  iStudentWithSchool,
+  iheadCell,
+} from "../../shared/interfaces";
 import { LayoutBasePage } from "../../shared/layouts";
-import { TableRetrieveClass, Tools } from "../../shared/components";
+import { TableBase, Tools } from "../../shared/components";
 import { TableCell, TableRow, useTheme } from "@mui/material";
 import { CardSchoolId } from "../../shared/components/card";
 import { defineBgColorInfrequency } from "../../shared/scripts";
+
+const headCells: iheadCell[] = [
+  { numeric: true, label: "Matrícula" },
+  { order: "name", numeric: false, label: "Aluno" },
+  { numeric: true, label: "Presenças" },
+  { numeric: true, label: "Justificadas" },
+  { numeric: true, label: "Faltas" },
+  { order: "infreq", numeric: true, label: "Infrequência" },
+];
 
 interface iCardStudentProps {
   student: iStudentWithSchool;
@@ -38,30 +51,30 @@ export const RetrieveClassPage = () => {
   const { class_id, school_id, year_id } = useParams();
   const [searchParams] = useSearchParams();
   const classBack = searchParams.get("class");
-  const { setLoading } = useAppThemeContext();
   const { isInfreq } = useFrequencyContext();
+  const { setIsLoading } = useTableContext();
   const [data, setData] = useState<iClassWithSchool>();
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     const query = isInfreq ? "?is_infreq=true" : "";
     apiUsingNow
       .get<iClassWithSchool>(
         `classes/${class_id}/${school_id}/${year_id}${query}`
       )
       .then((res) => setData(res.data))
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     const query = isInfreq ? "?is_infreq=true" : "";
     apiUsingNow
       .get<iClassWithSchool>(
         `classes/${class_id}/${school_id}/${year_id}${query}`
       )
       .then((res) => setData(res.data))
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, [isInfreq]);
 
   return (
@@ -69,7 +82,6 @@ export const RetrieveClassPage = () => {
       school={<CardSchoolId school_id={school_id ? school_id : ""} />}
       tools={
         <Tools
-          isBack
           back={
             classBack
               ? "/class/list"
@@ -81,13 +93,11 @@ export const RetrieveClassPage = () => {
       }
       title={data ? data.class.name : "Listagem de Alunos de uma Classe"}
     >
-      <TableRetrieveClass>
-        <>
-          {data?.students.map((student) => (
-            <CardStudent key={student.id} student={student} />
-          ))}
-        </>
-      </TableRetrieveClass>
+      <TableBase headCells={headCells}>
+        {data?.students.map((student) => (
+          <CardStudent key={student.id} student={student} />
+        ))}
+      </TableBase>
     </LayoutBasePage>
   );
 };

@@ -26,7 +26,7 @@ export interface iSchool {
 }
 
 export interface iSchoolRetrieve extends iSchool {
-  servers: { role: iRole; server: iDirector }[];
+  servers: { role: iRole; dash: iDash; server: iDirector }[];
 }
 
 export interface iSchoolList extends iSchool {

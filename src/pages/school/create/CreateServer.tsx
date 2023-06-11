@@ -29,7 +29,7 @@ export const CreateServerPage = () => {
     <LayoutBasePage
       title="Adicionar Servidor"
       school={id ? <CardSchoolId school_id={id} /> : <SelectSchoolSelectData />}
-      tools={<Tools isHome isBack={!!id} back={`/school/${id}`} />}
+      tools={<Tools isHome back={`/school/${id}`} />}
     >
       <FormContainer
         onSuccess={(data) => {
