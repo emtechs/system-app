@@ -7,14 +7,20 @@ import { Button } from "@mui/material";
 interface iValidateCPFProps {
   school_id?: string;
   allNotServ?: boolean;
+  director?: boolean;
 }
 
-export const ValidateCPF = ({ school_id, allNotServ }: iValidateCPFProps) => {
+export const ValidateCPF = ({
+  school_id,
+  allNotServ,
+  director,
+}: iValidateCPFProps) => {
   const { setValue, watch, setError, clearErrors, formState } =
     useFormContext();
   const cpf = watch("cpf");
   const { isValid } = formState;
   const query = () => {
+    if (director) return `?school_id=${school_id}&director=true`;
     if (school_id) return `?school_id=${school_id}&allNotServ=true`;
     if (allNotServ) return `?allNotServ=${allNotServ}`;
     return "";
@@ -29,16 +35,13 @@ export const ValidateCPF = ({ school_id, allNotServ }: iValidateCPFProps) => {
       if (limitNumber.length === 11) {
         apiUsingNow
           .get<iUser>(`users/cpf/${limitNumber}` + query())
-          .then((res) => {
-            if (res.data.dash) {
-              setError("cpf", {
-                message: "Usuário já está cadastrado",
-              });
-              setValue("login", 1);
-            } else {
-              clearErrors("cpf");
-            }
-          });
+          .then(() => {
+            setError("cpf", {
+              message: "Usuário já está cadastrado",
+            });
+            setValue("login", 1);
+          })
+          .catch(() => clearErrors("cpf"));
       } else {
         clearErrors("cpf");
       }

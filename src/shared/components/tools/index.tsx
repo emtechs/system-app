@@ -1,8 +1,9 @@
 import {
-  Add,
+  AddBox,
   ArrowBack,
   Checklist,
   Home,
+  Search,
   Workspaces,
 } from "@mui/icons-material";
 import {
@@ -10,38 +11,43 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
+  InputAdornment,
   Paper,
+  TextField,
   useTheme,
 } from "@mui/material";
 import { useDrawerContext, useFrequencyContext } from "../../contexts";
 import { ChangeEvent, ReactNode } from "react";
 import { Dest } from "./Dest";
+import { SchoolDash } from "./School";
 
 interface iToolsProps {
-  isBack?: boolean;
   back?: string;
   isHome?: boolean;
+  school_id?: string;
   isNew?: boolean;
   destNew?: string;
   titleNew?: string;
+  isSearch?: boolean;
+  titleSearch?: string;
+  setTitleSearch: () => void;
   isFinish?: boolean;
   isFreq?: boolean;
-  isClass?: boolean;
-  destClass?: string;
   finish?: ReactNode;
 }
 
 export const Tools = ({
-  isBack,
-  back = "/",
+  back,
   isHome,
+  school_id,
   isNew,
   destNew = "/",
   titleNew = "Novo",
+  isSearch,
+  titleSearch = "",
+  setTitleSearch,
   isFinish,
   isFreq,
-  isClass,
-  destClass = "/",
   finish,
 }: iToolsProps) => {
   const theme = useTheme();
@@ -50,6 +56,7 @@ export const Tools = ({
     useFrequencyContext();
   const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
     setIsInfreq(event.target.checked);
+
   return (
     <Box
       display="flex"
@@ -61,7 +68,7 @@ export const Tools = ({
       paddingX={2}
       component={Paper}
     >
-      {isBack && (
+      {back && (
         <Dest to={back} title="Voltar" startIcon={<ArrowBack />} isResp />
       )}
       {isHome && (
@@ -70,14 +77,28 @@ export const Tools = ({
           title="Página Inicial"
           startIcon={<Home />}
           onClick={handleClick}
-          isResp
+          isHome
         />
       )}
+      {school_id && <SchoolDash school_id={school_id} />}
       {isNew && (
-        <Dest to={destNew} title={titleNew} startIcon={<Add />} isResp />
+        <Dest to={destNew} title={titleNew} startIcon={<AddBox />} isResp />
       )}
-      {isClass && (
-        <Dest to={destClass} title="Turmas" startIcon={<Workspaces />} isResp />
+      {isSearch && (
+        <TextField
+          size="small"
+          value={titleSearch}
+          placeholder="Pesquisar..."
+          onChange={(e) => setTitleSearch?.(e.target.value)}
+          inputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Search />
+              </InputAdornment>
+            ),
+          }}
+          variant="standard"
+        />
       )}
       <Box flex={1} display="flex" justifyContent="end">
         {isFinish && (

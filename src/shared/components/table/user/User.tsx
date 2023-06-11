@@ -4,9 +4,14 @@ import { TableBase } from "../frame/Base";
 
 interface iTableUserProps extends iChildren {
   is_active?: boolean;
+  is_dash?: boolean;
 }
 
-export const TableUser = ({ children, is_active }: iTableUserProps) => {
+export const TableUser = ({
+  children,
+  is_active,
+  is_dash,
+}: iTableUserProps) => {
   return (
     <TableBase isPagination>
       <TableHead>
@@ -15,6 +20,7 @@ export const TableUser = ({ children, is_active }: iTableUserProps) => {
           <TableCell>Nome Completo</TableCell>
           <TableCell>CPF</TableCell>
           <TableCell>Função</TableCell>
+          {is_dash && <TableCell>Tela</TableCell>}
         </TableRow>
       </TableHead>
       <TableBody>{children}</TableBody>

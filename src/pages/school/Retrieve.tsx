@@ -5,9 +5,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  IconButton,
   TableCell,
   TableRow,
+  Tooltip,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import {
   useAppThemeContext,
@@ -46,6 +50,8 @@ const CardServer = ({ school, server, role }: iCardServerProps) => {
 };
 
 export const RetrieveSchoolPage = () => {
+  const theme = useTheme();
+  const mdDown = useMediaQuery(theme.breakpoints.down("md"));
   const { id } = useParams<"id">();
   const { setLoading } = useAppThemeContext();
   const { yearId } = useAuthContext();
@@ -78,19 +84,26 @@ export const RetrieveSchoolPage = () => {
           <Tools
             isBack
             back="/school/list"
+            school_id={retrieveSchool?.id}
             isHome
-            isClass
-            destClass={`/class/list/${retrieveSchool?.id}/${yearId}`}
             finish={
-              <Button
-                variant="contained"
-                color="error"
-                disableElevation
-                onClick={handleClose}
-                endIcon={<RemoveDone />}
-              >
-                Desativar
-              </Button>
+              mdDown ? (
+                <Tooltip title="Desativar">
+                  <IconButton color="error" onClick={handleClose}>
+                    <RemoveDone />
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="error"
+                  disableElevation
+                  onClick={handleClose}
+                  endIcon={<RemoveDone />}
+                >
+                  Desativar
+                </Button>
+              )
             }
           />
         }

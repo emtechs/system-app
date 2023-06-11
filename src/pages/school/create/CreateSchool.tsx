@@ -18,7 +18,7 @@ export const CreateSchoolPage = () => {
       tools={<Tools isBack={!!back} back={back ? back : undefined} isHome />}
     >
       <FormContainer
-        onSuccess={(data) => createSchool(data)}
+        onSuccess={createSchool}
         resolver={zodResolver(schoolCreateSchema)}
       >
         <Box

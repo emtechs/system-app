@@ -68,7 +68,7 @@ export const TableProvider = ({ children }: iChildren) => {
     if (page === 0) {
       setSkip(undefined);
     } else if (take) {
-      setSkip(page * take + 1);
+      setSkip(page * take);
     }
   }, [page, take]);
 

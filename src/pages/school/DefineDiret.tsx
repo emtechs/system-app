@@ -82,7 +82,7 @@ export const DefineDiretPage = () => {
             </Grid>
             <Grid container item direction="row" justifyContent="center">
               <Grid item xs={12} sm={9} md={6} lg={3}>
-                <ValidateCPF allNotServ school_id={schoolSelect?.id} />
+                <ValidateCPF director school_id={schoolSelect?.id} />
               </Grid>
             </Grid>
           </Grid>

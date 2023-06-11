@@ -35,7 +35,7 @@ import {
 import { toast } from "react-toastify";
 
 interface iSchoolContextData {
-  createSchool: (data: iSchoolRequest, back?: string) => Promise<void>;
+  createSchool: (data: iSchoolRequest) => Promise<void>;
   importSchool: (data: iSchoolImportRequest, back?: string) => Promise<void>;
   createServer: (
     data: iServerRequest,
@@ -87,21 +87,20 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [updateSchoolData, setUpdateSchoolData] = useState<iSchoolList>();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
 
-  const handleCreateSchool = useCallback(
-    async (data: iSchoolRequest, back?: string) => {
-      try {
-        setLoading(true);
-        await postSchool(data);
-        toast.success("Escola cadastrada com sucesso!");
-      } catch {
-        toast.error("Não foi possível cadastrar a escola no momento!");
-      } finally {
-        setLoading(false);
-        navigate(back ? back : "/");
-      }
-    },
-    []
-  );
+  const handleCreateSchool = useCallback(async (data: iSchoolRequest) => {
+    try {
+      setLoading(true);
+      const school = await postSchool(data);
+      toast.success("A escola foi cadastrada com sucesso!");
+      navigate(`/school/${school.id}`);
+    } catch {
+      toast.error(
+        "No momento, não foi possível cadastrar a escola. Por favor, tente novamente mais tarde."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   const handleImportSchool = useCallback(
     async (data: iSchoolImportRequest, back?: string) => {

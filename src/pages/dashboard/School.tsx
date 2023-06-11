@@ -207,16 +207,18 @@ export const DashboardSchool = () => {
 
     setLoading(true);
     apiUsingNow
-      .get<iFrequencyWithInfreq[]>(
+      .get<{ result: iFrequencyWithInfreq[] }>(
         `frequencies?status=CLOSED&take=${take}&is_infreq=true`
       )
-      .then((res) => setListFreqData(res.data))
+      .then((res) => setListFreqData(res.data.result))
       .finally(() => setLoading(false));
 
     setLoading(true);
     apiUsingNow
-      .get<iFrequencyWithInfreq[]>(`frequencies?is_dash=true&take=${take}`)
-      .then((res) => setListFreqOpenData(res.data))
+      .get<{ result: iFrequencyWithInfreq[] }>(
+        `frequencies?is_dash=true&take=${take}`
+      )
+      .then((res) => setListFreqOpenData(res.data.result))
       .finally(() => setLoading(false));
   }, []);
 

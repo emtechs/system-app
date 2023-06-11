@@ -15,6 +15,7 @@ interface iDestProps {
   endIcon?: ReactNode;
   onClick?: () => void;
   isResp?: boolean;
+  isHome?: boolean;
 }
 
 export const Dest = ({
@@ -24,13 +25,15 @@ export const Dest = ({
   endIcon,
   onClick,
   isResp,
+  isHome,
 }: iDestProps) => {
   const theme = useTheme();
-  const m750Down = useMediaQuery(theme.breakpoints.down(750));
+  const mdDown = useMediaQuery(theme.breakpoints.down("md"));
+  const smDown = useMediaQuery(theme.breakpoints.down("sm"));
   return (
     <Link to={to}>
       {isResp ? (
-        m750Down ? (
+        mdDown ? (
           <Tooltip title={title}>
             <IconButton color="primary" onClick={onClick}>
               {startIcon && startIcon}
@@ -47,6 +50,15 @@ export const Dest = ({
           >
             {title}
           </Button>
+        )
+      ) : isHome ? (
+        smDown && (
+          <Tooltip title={title}>
+            <IconButton color="primary" onClick={onClick}>
+              {startIcon && startIcon}
+              {endIcon && endIcon}
+            </IconButton>
+          </Tooltip>
         )
       ) : (
         <Button

@@ -36,7 +36,11 @@ import {
   RetrieveSchoolPage,
   RetrieveUserPage,
 } from "../pages";
-import { ProtectedAdmin, ProtectedAuth } from "../shared/components";
+import {
+  ProtectedAdmin,
+  ProtectedAuth,
+  ProtectedSchool,
+} from "../shared/components";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -56,15 +60,17 @@ const AppRoutes = () => {
           <Route path="/class/list" element={<ListClassPage />} />
           <Route path="/student/list" element={<ListStudentPage />} />
         </Route>
+        <Route element={<ProtectedSchool />}>
+          <Route path="/user/list" element={<ListUserPage />} />
+          <Route path="/user/list/:id" element={<RetrieveUserPage />} />
+          <Route path="/school/:id" element={<RetrieveSchoolPage />} />
+          <Route path="/school/create" element={<CreateSchoolPage />} />
+          <Route path="/school/create/server" element={<CreateServerPage />} />
+          <Route path="/school/define/diret" element={<DefineDiretPage />} />
+          <Route path="/school/edit" element={<EditSchoolPage />} />
+          <Route path="/school/active" element={<ActiveSchoolPage />} />
+        </Route>
         <Route path="/" element={<DashboardPage />} />
-        <Route path="/user/list" element={<ListUserPage />} />
-        <Route path="/user/list/:id" element={<RetrieveUserPage />} />
-        <Route path="/school/:id" element={<RetrieveSchoolPage />} />
-        <Route path="/school/create" element={<CreateSchoolPage />} />
-        <Route path="/school/create/server" element={<CreateServerPage />} />
-        <Route path="/school/define/diret" element={<DefineDiretPage />} />
-        <Route path="/school/edit" element={<EditSchoolPage />} />
-        <Route path="/school/active" element={<ActiveSchoolPage />} />
         <Route
           path="/class/:class_id/:school_id/:year_id"
           element={<RetrieveClassPage />}
