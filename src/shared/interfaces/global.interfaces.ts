@@ -11,3 +11,9 @@ export interface iTable extends iChildren {
 export interface iPageProps {
   back?: string;
 }
+
+export interface iheadCell {
+  order?: string;
+  numeric: boolean;
+  label: string;
+}

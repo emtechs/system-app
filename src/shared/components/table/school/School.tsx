@@ -1,10 +1,19 @@
 import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
-import { iChildren } from "../../../interfaces";
-import { TableBase } from "../Base";
+import { iChildren, iheadCell } from "../../../interfaces";
+import { TableBase, TableSort } from "../frame";
 
 interface iTableSchoolProps extends iChildren {
   is_active?: boolean;
 }
+
+const headCells: iheadCell[] = [
+  { order: "name", numeric: false, label: "Escola" },
+  { order: "director_name", numeric: false, label: "Diretor" },
+  { numeric: true, label: "Turmas" },
+  { numeric: true, label: "Alunos" },
+  { numeric: true, label: "Frequências" },
+  { order: "infreq", numeric: true, label: "Infrequência" },
+];
 
 export const TableSchool = ({ children, is_active }: iTableSchoolProps) => {
   return (
@@ -12,12 +21,7 @@ export const TableSchool = ({ children, is_active }: iTableSchoolProps) => {
       <TableHead>
         <TableRow>
           {is_active && <TableCell></TableCell>}
-          <TableCell>Escola</TableCell>
-          <TableCell>Diretor</TableCell>
-          <TableCell>Turmas</TableCell>
-          <TableCell>Alunos</TableCell>
-          <TableCell>Frequências</TableCell>
-          <TableCell>Infrequência</TableCell>
+          <TableSort headCells={headCells} />
         </TableRow>
       </TableHead>
       <TableBody>{children}</TableBody>

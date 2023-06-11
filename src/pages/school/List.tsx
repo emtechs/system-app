@@ -1,21 +1,10 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  TableCell,
-  TableRow,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { TableCell, TableRow, Typography, useTheme } from "@mui/material";
 import {
   useAppThemeContext,
   useAuthContext,
   useFrequencyContext,
-  usePaginationContext,
   useSchoolContext,
+  useTableContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { iSchoolList } from "../../shared/interfaces";
@@ -23,7 +12,7 @@ import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TableSchool, Tools } from "../../shared/components";
 import { defineBgColorInfrequency } from "../../shared/scripts";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 interface iCardSchoolProps {
   school: iSchoolList;
@@ -32,82 +21,53 @@ interface iCardSchoolProps {
 const CardSchool = ({ school }: iCardSchoolProps) => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { updateSchoolData, setUpdateSchoolData, updateSchool } =
-    useSchoolContext();
-  const [open, setOpen] = useState(false);
-  const handleClose = () => {
-    setUpdateSchoolData(school);
-    setOpen((oldOpen) => !oldOpen);
-  };
 
   return (
-    <>
-      <TableRow
-        hover
-        sx={{ cursor: "pointer" }}
-        onClick={() => {
-          navigate(`/school/${school.id}`);
+    <TableRow
+      hover
+      sx={{ cursor: "pointer" }}
+      onClick={() => {
+        navigate(`/school/${school.id}`);
+      }}
+    >
+      <TableCell>{school.name}</TableCell>
+      <TableCell>{school.director?.name}</TableCell>
+      <TableCell align="right">{school.num_classes}</TableCell>
+      <TableCell align="right">{school.num_students}</TableCell>
+      <TableCell align="right">{school.num_frequencies}</TableCell>
+      <TableCell
+        align="right"
+        sx={{
+          color: "#fff",
+          bgcolor: defineBgColorInfrequency(school.infreq, theme),
         }}
       >
-        <TableCell>{school.name}</TableCell>
-        <TableCell>{school.director?.name}</TableCell>
-        <TableCell>{school.num_classes}</TableCell>
-        <TableCell>{school.num_students}</TableCell>
-        <TableCell>{school.num_frequencies}</TableCell>
-        <TableCell
-          sx={{
-            color: "#fff",
-            bgcolor: defineBgColorInfrequency(school.school_infreq, theme),
-          }}
-        >
-          {String(school.school_infreq).replace(".", ",")}%
-        </TableCell>
-      </TableRow>
-
-      {updateSchoolData && (
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Desativar Escola</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Deseja continuar desativando a Escola{" "}
-              {updateSchoolData.name.toUpperCase()}?
-            </DialogContentText>
-            <DialogActions>
-              <Button onClick={handleClose}>Cancelar</Button>
-              <Button
-                onClick={() => {
-                  updateSchool(
-                    {
-                      is_active: false,
-                    },
-                    updateSchoolData.id,
-                    "estado"
-                  );
-                  setOpen(false);
-                }}
-              >
-                Continuar
-              </Button>
-            </DialogActions>
-          </DialogContent>
-        </Dialog>
-      )}
-    </>
+        {String(school.infreq).replace(".", ",")}%
+      </TableCell>
+    </TableRow>
   );
 };
 
 export const ListSchoolPage = () => {
+  const [searchParams] = useSearchParams();
+  const orderData = searchParams.get("order");
   const { setLoading } = useAppThemeContext();
   const { yearId } = useAuthContext();
   const { updateSchoolData } = useSchoolContext();
   const { isInfreq } = useFrequencyContext();
-  const { setCount, take, skip } = usePaginationContext();
+  const { setCount, take, skip, order, setOrder, by } = useTableContext();
   const [listSchoolData, setListSchoolData] = useState<iSchoolList[]>();
 
   useEffect(() => {
     if (yearId) {
-      let query = `?year_id=${yearId}&is_listSchool=true`;
-      if (isInfreq) query += "&school_infreq=31";
+      let query = `?year_id=${yearId}&is_listSchool=true&by=${by}&is_active=true`;
+      if (order) {
+        query += `&order=${order}`;
+      } else if (orderData) {
+        setOrder(orderData);
+        query += `&order=${orderData}`;
+      }
+      if (isInfreq) query += "&infreq=31";
       if (take) query += `&take=${take}`;
       if (skip) query += `&skip=${skip}`;
       setLoading(true);
@@ -119,10 +79,21 @@ export const ListSchoolPage = () => {
         })
         .finally(() => setLoading(false));
     }
-  }, [yearId, updateSchoolData, isInfreq, take, skip]);
+  }, [yearId, updateSchoolData, isInfreq, take, skip, orderData, order, by]);
 
   return (
-    <LayoutBasePage title="Listagem de Escolas" tools={<Tools isHome isFreq />}>
+    <LayoutBasePage
+      title="Listagem de Escolas"
+      tools={
+        <Tools
+          isHome
+          isNew
+          destNew="/school/create?back=/school/list?order=name"
+          titleNew="Nova"
+          isFreq
+        />
+      }
+    >
       {listSchoolData && listSchoolData.length > 0 ? (
         <TableSchool>
           <>
@@ -132,7 +103,15 @@ export const ListSchoolPage = () => {
           </>
         </TableSchool>
       ) : (
-        <Typography m={2}>Nenhuma escola ativa no momento!</Typography>
+        <>
+          {isInfreq ? (
+            <Typography m={2}>
+              Nenhuma escola infrequente no momento!
+            </Typography>
+          ) : (
+            <Typography m={2}>Nenhuma escola ativa no momento!</Typography>
+          )}
+        </>
       )}
     </LayoutBasePage>
   );

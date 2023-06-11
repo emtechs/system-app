@@ -6,7 +6,7 @@ import {
   TableSortLabel,
 } from "@mui/material";
 import { iChildren } from "../../../interfaces";
-import { TableBase } from "../Base";
+import { TableBase } from "../frame/Base";
 
 interface iTableFrequencyProps extends iChildren {
   isClosed?: boolean;

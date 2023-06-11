@@ -5,12 +5,18 @@ import { schoolCreateSchema } from "../../../shared/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Grid, Paper } from "@mui/material";
 import { Tools } from "../../../shared/components";
+import { useSearchParams } from "react-router-dom";
 
 export const CreateSchoolPage = () => {
+  const [searchParams] = useSearchParams();
+  const back = searchParams.get("back");
   const { createSchool } = useSchoolContext();
 
   return (
-    <LayoutBasePage title="Nova Escola" tools={<Tools isHome />}>
+    <LayoutBasePage
+      title="Nova Escola"
+      tools={<Tools isBack={!!back} back={back ? back : undefined} isHome />}
+    >
       <FormContainer
         onSuccess={(data) => createSchool(data)}
         resolver={zodResolver(schoolCreateSchema)}

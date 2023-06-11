@@ -15,7 +15,7 @@ import {
   useSchoolContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
-import { iDirector, iRole, iSchoolList } from "../../shared/interfaces";
+import { iDirector, iRole, iSchoolRetrieve } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
 import { RemoveDone } from "@mui/icons-material";
@@ -24,7 +24,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { rolePtBr } from "../../shared/scripts";
 
 interface iCardServerProps {
-  school: iSchoolList;
+  school: iSchoolRetrieve;
   server: iDirector;
   role: iRole;
 }
@@ -50,7 +50,7 @@ export const RetrieveSchoolPage = () => {
   const { setLoading } = useAppThemeContext();
   const { yearId } = useAuthContext();
   const { updateSchool } = useSchoolContext();
-  const [retrieveSchool, setRetrieveSchool] = useState<iSchoolList>();
+  const [retrieveSchool, setRetrieveSchool] = useState<iSchoolRetrieve>();
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setOpen((oldOpen) => !oldOpen);
@@ -59,7 +59,9 @@ export const RetrieveSchoolPage = () => {
   useEffect(() => {
     setLoading(true);
     apiUsingNow
-      .get<iSchoolList>(`schools/${id}?is_listSchool=true&year_id=${yearId}`)
+      .get<iSchoolRetrieve>(
+        `schools/${id}?is_listSchool=true&year_id=${yearId}`
+      )
       .then((res) => setRetrieveSchool(res.data))
       .finally(() => setLoading(false));
   }, []);

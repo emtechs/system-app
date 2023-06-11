@@ -1,4 +1,10 @@
-import { ArrowBack, Checklist, Home, Workspaces } from "@mui/icons-material";
+import {
+  Add,
+  ArrowBack,
+  Checklist,
+  Home,
+  Workspaces,
+} from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -15,6 +21,9 @@ interface iToolsProps {
   isBack?: boolean;
   back?: string;
   isHome?: boolean;
+  isNew?: boolean;
+  destNew?: string;
+  titleNew?: string;
   isFinish?: boolean;
   isFreq?: boolean;
   isClass?: boolean;
@@ -26,6 +35,9 @@ export const Tools = ({
   isBack,
   back = "/",
   isHome,
+  isNew,
+  destNew = "/",
+  titleNew = "Novo",
   isFinish,
   isFreq,
   isClass,
@@ -60,6 +72,9 @@ export const Tools = ({
           onClick={handleClick}
           isResp
         />
+      )}
+      {isNew && (
+        <Dest to={destNew} title={titleNew} startIcon={<Add />} isResp />
       )}
       {isClass && (
         <Dest to={destClass} title="Turmas" startIcon={<Workspaces />} isResp />

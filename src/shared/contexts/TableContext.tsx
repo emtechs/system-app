@@ -8,7 +8,7 @@ import {
 } from "react";
 import { iChildren } from "../interfaces";
 
-interface iPaginationContextData {
+interface iTableContextData {
   count: number;
   setCount: Dispatch<SetStateAction<number>>;
   rowsPage: iRowsPage[] | undefined;
@@ -17,6 +17,10 @@ interface iPaginationContextData {
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
   skip: number | undefined;
+  order: string | null | undefined;
+  setOrder: Dispatch<SetStateAction<string | undefined | null>>;
+  by: "asc" | "desc";
+  setBy: Dispatch<SetStateAction<"asc" | "desc">>;
 }
 
 type iRowsPage =
@@ -26,14 +30,16 @@ type iRowsPage =
       label: string;
     };
 
-const PaginationContext = createContext({} as iPaginationContextData);
+const TableContext = createContext({} as iTableContextData);
 
-export const PaginationProvider = ({ children }: iChildren) => {
+export const TableProvider = ({ children }: iChildren) => {
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPage, setrowsPage] = useState<iRowsPage[]>();
   const [take, setTake] = useState<number>();
   const [skip, setSkip] = useState<number>();
+  const [order, setOrder] = useState<string | null>();
+  const [by, setBy] = useState<"asc" | "desc">("asc");
 
   useEffect(() => {
     if (count < 10) {
@@ -67,12 +73,25 @@ export const PaginationProvider = ({ children }: iChildren) => {
   }, [page, take]);
 
   return (
-    <PaginationContext.Provider
-      value={{ count, setCount, rowsPage, setTake, take, page, setPage, skip }}
+    <TableContext.Provider
+      value={{
+        count,
+        setCount,
+        rowsPage,
+        setTake,
+        take,
+        page,
+        setPage,
+        skip,
+        order,
+        setOrder,
+        by,
+        setBy,
+      }}
     >
       {children}
-    </PaginationContext.Provider>
+    </TableContext.Provider>
   );
 };
 
-export const usePaginationContext = () => useContext(PaginationContext);
+export const useTableContext = () => useContext(TableContext);

@@ -20,12 +20,16 @@ export interface iSchool {
   id: string;
   name: string;
   is_active: boolean;
+  created_at: Date;
+  infreq: number;
   director?: iDirector;
-  school_infreq: number;
+}
+
+export interface iSchoolRetrieve extends iSchool {
+  servers: { role: iRole; server: iDirector }[];
 }
 
 export interface iSchoolList extends iSchool {
-  servers: { role: iRole; server: iDirector }[];
   num_students: number;
   num_frequencies: number;
   num_classes: number;

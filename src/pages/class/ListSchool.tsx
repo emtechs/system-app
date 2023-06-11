@@ -1,8 +1,5 @@
 import { iClassWithSchool } from "../../shared/interfaces";
-import {
-  useAppThemeContext,
-  usePaginationContext,
-} from "../../shared/contexts";
+import { useAppThemeContext, useTableContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
 import { useNavigate, useParams } from "react-router-dom";
@@ -44,7 +41,7 @@ const CardClass = ({ el }: iCardClassProps) => {
 export const ListClassSchoolPage = () => {
   const { school_id, year_id } = useParams();
   const { setLoading } = useAppThemeContext();
-  const { setCount, take, skip } = usePaginationContext();
+  const { setCount, take, skip } = useTableContext();
   const [data, setData] = useState<iClassWithSchool[]>();
 
   useEffect(() => {

@@ -35,7 +35,7 @@ const SchoolDash = ({ school }: iSchoolDashProps) => {
           </Typography>
           <Typography gutterBottom>{school.total_students} Alunos</Typography>
           <Typography gutterBottom>
-            {String(school.school_infreq).replace(".", ",")}% de Infrequência
+            {String(school.infrequency).replace(".", ",")}% de Infrequência
           </Typography>
           <Typography>{school.classes[0].class.name}</Typography>
           <Typography>{school.classes[0]._count.students} Alunos</Typography>

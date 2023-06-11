@@ -1,8 +1,5 @@
 import { TableCell, TableRow, Typography } from "@mui/material";
-import {
-  useAppThemeContext,
-  usePaginationContext,
-} from "../../shared/contexts";
+import { useAppThemeContext, useTableContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { iUser } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
@@ -34,7 +31,7 @@ export const ListUserPage = () => {
   const [searchParams] = useSearchParams();
   const role = searchParams.get("role");
   const { setLoading } = useAppThemeContext();
-  const { setCount, take, skip } = usePaginationContext();
+  const { setCount, take, skip } = useTableContext();
   const [listUserData, setListUserData] = useState<iUser[]>();
 
   useEffect(() => {

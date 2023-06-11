@@ -3,7 +3,7 @@ import { TableFrequency, Tools } from "../../../shared/components";
 import {
   useAppThemeContext,
   useAuthContext,
-  usePaginationContext,
+  useTableContext,
 } from "../../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../../shared/services";
@@ -42,7 +42,7 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
 export const ListFrequencyClosedAdm = () => {
   const { setLoading } = useAppThemeContext();
   const { yearId } = useAuthContext();
-  const { setCount, take, skip } = usePaginationContext();
+  const { setCount, take, skip } = useTableContext();
   const [data, setData] = useState<iFrequency[]>();
 
   useEffect(() => {

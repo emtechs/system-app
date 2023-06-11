@@ -51,7 +51,7 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
         <TableCell>{school.num_classes}</TableCell>
         <TableCell>{school.num_students}</TableCell>
         <TableCell>{school.num_frequencies}</TableCell>
-        <TableCell>{school.school_infreq}</TableCell>
+        <TableCell>{school.infreq}</TableCell>
       </TableRow>
 
       {updateSchoolData && (

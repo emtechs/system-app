@@ -3,7 +3,7 @@ import {
   useAppThemeContext,
   useAuthContext,
   useFrequencyContext,
-  usePaginationContext,
+  useTableContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
@@ -44,7 +44,7 @@ export const ListStudentPage = () => {
   const { setLoading } = useAppThemeContext();
   const { yearId } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
-  const { setCount, take, skip } = usePaginationContext();
+  const { setCount, take, skip } = useTableContext();
   const [data, setData] = useState<iStudentList[]>();
 
   useEffect(() => {

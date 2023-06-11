@@ -1,6 +1,6 @@
 import { Paper, Table, TableContainer } from "@mui/material";
-import { Pagination } from "./pagination";
-import { iTable } from "../../interfaces";
+import { Pagination } from "./Pagination";
+import { iTable } from "../../../interfaces";
 
 export const TableBase = ({ children, isPagination }: iTable) => {
   return (
