@@ -5,12 +5,11 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
   TableCell,
   TableRow,
-  Tooltip,
 } from "@mui/material";
 import {
+  useDrawerContext,
   useSchoolContext,
   useTableContext,
   useUserContext,
@@ -18,19 +17,21 @@ import {
 import { useEffect, useState } from "react";
 import { iUser, iWorkSchool, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
-import { LayoutBasePage } from "../../shared/layouts";
-import { Delete, RemoveDone } from "@mui/icons-material";
+import { RemoveDone, School } from "@mui/icons-material";
 import { TableBase, Tools } from "../../shared/components";
-import { useParams, useSearchParams } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import { rolePtBr } from "../../shared/scripts";
+import { LayoutUserPage } from "./Layout";
+import { useDebounce } from "../../shared/hooks";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Escola" },
   { numeric: false, label: "Função" },
+  { numeric: false, label: "Tela" },
 ];
 
 interface iCardUserProps {
-  user: iUser;
+  user?: iUser;
   work: iWorkSchool;
 }
 
@@ -45,19 +46,15 @@ const CardUser = ({ user, work }: iCardUserProps) => {
 
   return (
     <>
-      <TableRow>
-        <TableCell>
-          <Tooltip title="Remover Usuário da Função">
-            <IconButton color="error" onClick={handleClose}>
-              <Delete />
-            </IconButton>
-          </Tooltip>
-        </TableCell>
+      <TableRow hover sx={{ cursor: "pointer" }} onClick={handleClose}>
         <TableCell>{work.school.name}</TableCell>
         <TableCell>{rolePtBr(work.role)}</TableCell>
+        <TableCell>
+          {work.dash === "SCHOOL" ? "Escola" : "Frequência"}
+        </TableCell>
       </TableRow>
 
-      {updateServerData && (
+      {user && updateServerData && (
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Remover Usuário da Função</DialogTitle>
           <DialogContent>
@@ -85,38 +82,90 @@ const CardUser = ({ user, work }: iCardUserProps) => {
 };
 
 export const RetrieveUserPage = () => {
-  const { id } = useParams<"id">();
   const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
   const school_id = searchParams.get("school_id");
-  const { updateAllUser } = useUserContext();
+  const orderData = searchParams.get("order");
+  const { debounce } = useDebounce();
+  const { updateAllUser, updateUserData } = useUserContext();
   const { updateServerData } = useSchoolContext();
-  const { setIsLoading } = useTableContext();
-  const [retrieveUser, setRetrieveUser] = useState<iUser>();
+  const { setCount, take, skip, order, setOrder, by, setIsLoading } =
+    useTableContext();
+  const { handleClickSchool } = useDrawerContext();
+  const [retrieveUser, setRetrieveUser] = useState<iWorkSchool[]>();
   const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState<string>();
+
   const handleClose = () => {
     setOpen((oldOpen) => !oldOpen);
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    apiUsingNow
-      .get<iUser>(`users/${id}`)
-      .then((res) => setRetrieveUser(res.data))
-      .finally(() => setIsLoading(false));
-  }, [updateServerData]);
+    let query = `?by=${by}&is_active=true`;
+    if (order) {
+      query += `&order=${order}`;
+    } else if (orderData) {
+      setOrder(orderData);
+      query += `&order=${orderData}`;
+    }
+    if (take) query += `&take=${take}`;
+    if (skip) query += `&skip=${skip}`;
+    if (search) {
+      query += `&name=${search}`;
+      debounce(() => {
+        setIsLoading(true);
+        apiUsingNow
+          .get<{ total: number; result: iWorkSchool[] }>(
+            `users/${id}/server${query}`
+          )
+          .then((res) => {
+            setCount(res.data.total);
+            setRetrieveUser(res.data.result);
+          })
+          .finally(() => setIsLoading(false));
+      });
+    } else {
+      setIsLoading(true);
+      apiUsingNow
+        .get<{ total: number; result: iWorkSchool[] }>(
+          `users/${id}/server${query}`
+        )
+        .then((res) => {
+          setCount(res.data.total);
+          setRetrieveUser(res.data.result);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [updateServerData, take, skip, orderData, order, by, search]);
+
+  if (!id) {
+    return <Navigate to="/user/list?order=name" />;
+  }
 
   return (
     <>
-      <LayoutBasePage
+      <LayoutUserPage
         title={
-          retrieveUser?.name
-            ? retrieveUser?.name
+          updateUserData?.name
+            ? updateUserData.name
             : "Listagem de Funções do Usuários"
         }
         tools={
           <Tools
-            back={school_id ? `/school?id=${school_id}&order=name` : "/user/list"}
+            back={
+              school_id
+                ? `/school?id=${school_id}&order=name`
+                : "/user/list?order=name"
+            }
             isHome
+            isNew
+            onClickBack={school_id ? handleClickSchool : undefined}
+            destNew={`/school/create/server?cpf=${updateUserData?.cpf}&name=${updateUserData?.name}&back=/user?id=${updateUserData?.id}&order=name`}
+            iconNew={<School />}
+            onClickNew={handleClickSchool}
+            isSearch
+            search={search}
+            setSearch={setSearch}
             finish={
               <Button
                 variant="contained"
@@ -131,26 +180,26 @@ export const RetrieveUserPage = () => {
           />
         }
       >
-        <TableBase headCells={headCells} is_active>
-          {retrieveUser?.work_school.map((el) => (
-            <CardUser key={el.school.id} user={retrieveUser} work={el} />
+        <TableBase headCells={headCells}>
+          {retrieveUser?.map((el) => (
+            <CardUser key={el.school.id} user={updateUserData} work={el} />
           ))}
         </TableBase>
-      </LayoutBasePage>
-      {retrieveUser && (
+      </LayoutUserPage>
+      {updateUserData && (
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Desativar Usuário</DialogTitle>
           <DialogContent>
             <DialogContentText>
               Deseja continuar desativando o usúario{" "}
-              {retrieveUser.name.toUpperCase()}?
+              {updateUserData.name.toUpperCase()}?
             </DialogContentText>
             <DialogActions>
               <Button onClick={handleClose}>Cancelar</Button>
               <Button
                 onClick={() => {
                   updateAllUser(
-                    retrieveUser.id,
+                    updateUserData.id,
                     {
                       role: "SERV",
                       is_active: false,

@@ -1,21 +1,21 @@
-import { Tools, ValidateCPF } from "../../../shared/components";
+import { ValidateCPF } from "../../shared/components";
 import {
   useAppThemeContext,
   useSchoolContext,
   useUserContext,
-} from "../../../shared/contexts";
+} from "../../shared/contexts";
 import {
   AutocompleteElement,
   FormContainer,
   TextFieldElement,
 } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createDirectorSchema } from "../../../shared/schemas";
-import { LayoutBasePage } from "../../../shared/layouts";
+import { createDirectorSchema } from "../../shared/schemas";
 import { Box, Grid, Paper } from "@mui/material";
 import { useEffect } from "react";
-import { apiUsingNow } from "../../../shared/services";
-import { iSchool } from "../../../shared/interfaces";
+import { apiUsingNow } from "../../shared/services";
+import { iSchool } from "../../shared/interfaces";
+import { LayoutUserPage } from "./Layout";
 
 export const CreateDirectorPage = () => {
   const { setLoading } = useAppThemeContext();
@@ -25,7 +25,7 @@ export const CreateDirectorPage = () => {
   useEffect(() => {
     setLoading(true);
     apiUsingNow
-      .get<{ result: iSchool[] }>("schools?is_director=true")
+      .get<{ result: iSchool[] }>("schools?is_director=true&is_active=true")
       .then((res) => {
         if (res.data) {
           setSchoolDataSelect(
@@ -39,7 +39,7 @@ export const CreateDirectorPage = () => {
   }, []);
 
   return (
-    <LayoutBasePage title="Novo Diretor" tools={<Tools isHome />}>
+    <LayoutUserPage title="Novo Diretor">
       <FormContainer
         onSuccess={createDirector}
         resolver={zodResolver(createDirectorSchema)}
@@ -92,6 +92,6 @@ export const CreateDirectorPage = () => {
           </Grid>
         </Box>
       </FormContainer>
-    </LayoutBasePage>
+    </LayoutUserPage>
   );
 };

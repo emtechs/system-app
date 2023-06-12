@@ -23,11 +23,11 @@ export const SelectSchool = () => {
   useEffect(() => {
     setLoading(true);
     apiUsingNow
-      .get<iSchool[]>("schools?is_active=true")
+      .get<{ result: iSchool[] }>("schools?is_active=true")
       .then((res) => {
         if (res.data) {
           setSchoolDataSelect(
-            res.data.map((school) => {
+            res.data.result.map((school) => {
               return { ...school, label: school.name };
             })
           );

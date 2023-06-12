@@ -33,13 +33,13 @@ export const SelectClassData = () => {
   useEffect(() => {
     setLoading(true);
     apiUsingNow
-      .get<iClassWithSchool[]>(
-        `classes/${schoolData?.school.id}?is_active=true&year_id=${yearId}`
+      .get<{ result: iClassWithSchool[] }>(
+        `classes/school/${schoolData?.school.id}?is_active=true&year_id=${yearId}`
       )
       .then((res) => {
-        if (res.data) {
+        if (res.data.result) {
           setData(
-            res.data.map((el) => {
+            res.data.result.map((el) => {
               return { ...el, id: el.class.id, label: el.class.name };
             })
           );

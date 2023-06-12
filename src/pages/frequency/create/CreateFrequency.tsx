@@ -42,10 +42,12 @@ const DateValue = ({ setOpen }: iDateValueProps) => {
     if (classData && dateData) {
       const date = dateData.format("DD/MM/YYYY");
       apiUsingNow
-        .get<iFrequency[]>(`frequencies?date=${date}&class_id=${classData.id}`)
+        .get<{ result: iFrequency[] }>(
+          `frequencies?date=${date}&class_id=${classData.id}`
+        )
         .then((res) => {
-          if (res.data[0].id) {
-            setFrequencyData(res.data[0]);
+          if (res.data.result[0].id) {
+            setFrequencyData(res.data.result[0]);
             setOpen(true);
             setDateData(null);
           }

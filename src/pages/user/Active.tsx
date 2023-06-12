@@ -6,10 +6,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
   TableCell,
   TableRow,
-  Tooltip,
 } from "@mui/material";
 import { useTableContext, useUserContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
@@ -19,14 +17,13 @@ import { TableBase, Tools } from "../../shared/components";
 import { FormContainer, RadioButtonGroup } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { activeUserSchema } from "../../shared/schemas";
-import { LayoutBasePage } from "../../shared/layouts";
-import { DoneAll } from "@mui/icons-material";
-import { rolePtBr } from "../../shared/scripts";
+import { LayoutUserPage } from "./Layout";
+import { useDebounce } from "../../shared/hooks";
+import { useSearchParams } from "react-router-dom";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Nome Completo" },
   { numeric: false, label: "CPF" },
-  { numeric: false, label: "Função" },
 ];
 
 interface iCardUserProps {
@@ -43,17 +40,9 @@ const CardUser = ({ user }: iCardUserProps) => {
 
   return (
     <>
-      <TableRow>
-        <TableCell>
-          <Tooltip title="Ativar Usuário">
-            <IconButton color="success" onClick={handleClose}>
-              <DoneAll />
-            </IconButton>
-          </Tooltip>
-        </TableCell>
+      <TableRow hover sx={{ cursor: "pointer" }} onClick={handleClose}>
         <TableCell>{user.name}</TableCell>
         <TableCell>{user.cpf}</TableCell>
-        <TableCell>{rolePtBr(user.role)}</TableCell>
       </TableRow>
 
       {updateUserData && (
@@ -103,28 +92,67 @@ const CardUser = ({ user }: iCardUserProps) => {
 };
 
 export const ActiveUserPage = () => {
+  const [searchParams] = useSearchParams();
+  const orderData = searchParams.get("order");
+  const { debounce } = useDebounce();
   const { updateUserData } = useUserContext();
-  const { setIsLoading } = useTableContext();
+  const { setCount, take, skip, order, setOrder, by, setIsLoading } =
+    useTableContext();
   const [listUserData, setListUserData] = useState<iUser[]>();
+  const [search, setSearch] = useState<string>();
 
   useEffect(() => {
-    setIsLoading(true);
-    apiUsingNow
-      .get<iUser[]>("users?is_active=false")
-      .then((res) => setListUserData(res.data))
-      .finally(() => setIsLoading(false));
-  }, [updateUserData]);
+    let query = `?is_active=false&by=${by}`;
+    if (order) {
+      query += `&order=${order}`;
+    } else if (orderData) {
+      setOrder(orderData);
+      query += `&order=${orderData}`;
+    }
+    if (take) query += `&take=${take}`;
+    if (skip) query += `&skip=${skip}`;
+    if (search) {
+      query += `&name=${search}`;
+      setIsLoading(true);
+      debounce(() => {
+        apiUsingNow
+          .get<{ total: number; result: iUser[] }>(`users${query}`)
+          .then((res) => {
+            setListUserData(res.data.result);
+            setCount(res.data.total);
+          })
+          .finally(() => setIsLoading(false));
+      });
+    } else {
+      setIsLoading(true);
+      apiUsingNow
+        .get<{ total: number; result: iUser[] }>(`users${query}`)
+        .then((res) => {
+          setListUserData(res.data.result);
+          setCount(res.data.total);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [updateUserData, take, skip, orderData, order, by, search]);
 
   return (
-    <LayoutBasePage
+    <LayoutUserPage
       title="Listagem de Usuários"
-      tools={<Tools isHome back="/user/list" />}
+      tools={
+        <Tools
+          isHome
+          back="/user/list"
+          isSearch
+          search={search}
+          setSearch={setSearch}
+        />
+      }
     >
-      <TableBase headCells={headCells} is_active>
+      <TableBase headCells={headCells}>
         {listUserData?.map((el) => (
           <CardUser key={el.id} user={el} />
         ))}
       </TableBase>
-    </LayoutBasePage>
+    </LayoutUserPage>
   );
 };

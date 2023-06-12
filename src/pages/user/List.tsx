@@ -3,10 +3,11 @@ import { useTableContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { iUser, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
-import { LayoutBasePage } from "../../shared/layouts";
 import { TableBase, Tools } from "../../shared/components";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { rolePtBr } from "../../shared/scripts";
+import { LayoutUserPage } from "./Layout";
+import { useDebounce } from "../../shared/hooks";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Nome Completo" },
@@ -24,7 +25,7 @@ const CardUser = ({ user }: iCardUserProps) => {
     <TableRow
       hover
       sx={{ cursor: "pointer" }}
-      onClick={() => navigate(`/user/list/${user.id}`)}
+      onClick={() => navigate(`/user?id=${user.id}&order=name`)}
     >
       <TableCell>{user.name}</TableCell>
       <TableCell>{user.cpf}</TableCell>
@@ -36,30 +37,60 @@ const CardUser = ({ user }: iCardUserProps) => {
 export const ListUserPage = () => {
   const [searchParams] = useSearchParams();
   const role = searchParams.get("role");
-  const { setCount, take, skip, setIsLoading } = useTableContext();
+  const orderData = searchParams.get("order");
+  const { debounce } = useDebounce();
+  const { setCount, take, skip, order, setOrder, by, setIsLoading } =
+    useTableContext();
   const [listUserData, setListUserData] = useState<iUser[]>();
+  const [search, setSearch] = useState<string>();
 
   useEffect(() => {
-    let query = role ? "?role=" + role : "?is_active=true";
+    let query = `?is_active=true&by=${by}`;
+    if (role) query += `&role=${role}`;
+    if (order) {
+      query += `&order=${order}`;
+    } else if (orderData) {
+      setOrder(orderData);
+      query += `&order=${orderData}`;
+    }
     if (take) query += `&take=${take}`;
     if (skip) query += `&skip=${skip}`;
-    setIsLoading(true);
-    apiUsingNow
-      .get<{ total: number; result: iUser[] }>(`users${query}`)
-      .then((res) => {
-        setListUserData(res.data.result);
-        setCount(res.data.total);
-      })
-      .finally(() => setIsLoading(false));
-  }, [role, take, skip]);
+    if (search) {
+      query += `&name=${search}`;
+      setIsLoading(true);
+      debounce(() => {
+        apiUsingNow
+          .get<{ total: number; result: iUser[] }>(`users${query}`)
+          .then((res) => {
+            setListUserData(res.data.result);
+            setCount(res.data.total);
+          })
+          .finally(() => setIsLoading(false));
+      });
+    } else {
+      setIsLoading(true);
+      apiUsingNow
+        .get<{ total: number; result: iUser[] }>(`users${query}`)
+        .then((res) => {
+          setListUserData(res.data.result);
+          setCount(res.data.total);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [take, skip, orderData, order, by, search]);
 
   return (
-    <LayoutBasePage title="Listagem de Usuários" tools={<Tools isHome />}>
+    <LayoutUserPage
+      title="Listagem de Usuários"
+      tools={
+        <Tools isHome isUser isSearch search={search} setSearch={setSearch} />
+      }
+    >
       <TableBase headCells={headCells}>
         {listUserData?.map((el) => (
           <CardUser key={el.id} user={el} />
         ))}
       </TableBase>
-    </LayoutBasePage>
+    </LayoutUserPage>
   );
 };

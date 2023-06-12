@@ -191,15 +191,17 @@ export const DashboardCommon = () => {
       const date = dayjs().format("DD/MM/YYYY");
       setLoading(true);
       apiUsingNow
-        .get<iClassDash[]>(
-          `classes/${schoolData.school.id}?is_dash=true&date=${date}`
+        .get<{ result: iClassDash[] }>(
+          `classes/school/${schoolData.school.id}?is_dash=true&date=${date}`
         )
-        .then((res) => setListClassData(res.data))
+        .then((res) => setListClassData(res.data.result))
         .finally(() => setLoading(false));
       setLoading(true);
       apiUsingNow
-        .get<iFrequency[]>(`frequencies?school_id=${schoolData.school.id}`)
-        .then((res) => setListFreqData(res.data))
+        .get<{ result: iFrequency[] }>(
+          `frequencies?school_id=${schoolData.school.id}&status=OPENED`
+        )
+        .then((res) => setListFreqData(res.data.result))
         .finally(() => setLoading(false));
     }
   }, [schoolData]);
@@ -214,10 +216,10 @@ export const DashboardCommon = () => {
       }
       setLoading(true);
       apiUsingNow
-        .get<iClassWithSchool[]>(
-          `classes/${schoolData.school.id}?year_id=${yearId}&class_infreq=1&take=${take}`
+        .get<{ result: iClassWithSchool[] }>(
+          `classes/school/${schoolData.school.id}?year_id=${yearId}&class_infreq=1&take=${take}`
         )
-        .then((res) => setListAlertClassData(res.data))
+        .then((res) => setListAlertClassData(res.data.result))
         .finally(() => setLoading(false));
       setLoading(true);
       apiUsingNow

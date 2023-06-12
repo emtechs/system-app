@@ -1,13 +1,5 @@
 import { MouseEvent, useState } from "react";
-import {
-  Edit,
-  ExpandLess,
-  ExpandMore,
-  Person,
-  PersonAdd,
-  School,
-  Workspaces,
-} from "@mui/icons-material";
+import { AddBox, ExpandLess, ExpandMore, PersonAdd } from "@mui/icons-material";
 import {
   Button,
   IconButton,
@@ -20,11 +12,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
-interface iSchoolToolsProps {
-  school_id: string;
-}
-
-export const SchoolTools = ({ school_id }: iSchoolToolsProps) => {
+export const UserTools = () => {
   const theme = useTheme();
   const mdDown = useMediaQuery(theme.breakpoints.down("md"));
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -48,7 +36,7 @@ export const SchoolTools = ({ school_id }: iSchoolToolsProps) => {
             color="primary"
             onClick={handleClick}
           >
-            <School />
+            <AddBox />
           </IconButton>
         </Tooltip>
       ) : (
@@ -60,10 +48,10 @@ export const SchoolTools = ({ school_id }: iSchoolToolsProps) => {
           onClick={handleClick}
           disableElevation
           variant="contained"
-          startIcon={<School />}
+          startIcon={<AddBox />}
           endIcon={open ? <ExpandLess /> : <ExpandMore />}
         >
-          Escola
+          Novo
         </Button>
       )}
 
@@ -76,36 +64,20 @@ export const SchoolTools = ({ school_id }: iSchoolToolsProps) => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <Link to={"/school/define/diret?id=" + school_id}>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Person />
-            </ListItemIcon>
-            Diretor
-          </MenuItem>
-        </Link>
-        <Link to={"/school/create/server?id=" + school_id}>
+        <Link to="/user/create?back=/user/list?order=name">
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <PersonAdd />
             </ListItemIcon>
-            Servidor
+            Administrador
           </MenuItem>
         </Link>
-        <Link to={"/school/edit?id=" + school_id}>
+        <Link to="/user/create/director?back=/user/list?order=name">
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
-              <Edit />
+              <PersonAdd />
             </ListItemIcon>
-            Editar
-          </MenuItem>
-        </Link>
-        <Link to={"/school/class?id=" + school_id}>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Workspaces />
-            </ListItemIcon>
-            Turmas
+            Diretor
           </MenuItem>
         </Link>
       </Menu>

@@ -135,7 +135,7 @@ export const GridDash = () => {
             icon={<People fontSize="large" />}
             quant={userDashData.countServer}
             info="Servidores"
-            dest="/user/list?role=SERV"
+            dest="/user/list?role=SERV&order=name"
             onClick={handleClickUser}
           />
           <GridDashContent

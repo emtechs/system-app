@@ -3,6 +3,7 @@ import { useFormContext } from "react-hook-form-mui";
 import { apiUsingNow } from "../../services";
 import { iUser } from "../../interfaces";
 import { Button } from "@mui/material";
+import { useSearchParams } from "react-router-dom";
 
 interface iValidateCPFProps {
   school_id?: string;
@@ -15,6 +16,9 @@ export const ValidateCPF = ({
   allNotServ,
   director,
 }: iValidateCPFProps) => {
+  const [searchParams] = useSearchParams();
+  const cpfData = searchParams.get("cpf");
+  const nameData = searchParams.get("name");
   const { setValue, watch, setError, clearErrors, formState } =
     useFormContext();
   const cpf = watch("cpf");
@@ -23,10 +27,13 @@ export const ValidateCPF = ({
     if (director) return `?school_id=${school_id}&director=true`;
     if (school_id) return `?school_id=${school_id}&allNotServ=true`;
     if (allNotServ) return `?allNotServ=${allNotServ}`;
+    if (cpfData) return `?allNotServ=true`;
     return "";
   };
 
   useEffect(() => {
+    if (cpfData) setValue("cpf", cpfData);
+    if (nameData) setValue("name", nameData);
     if (typeof cpf === "string") {
       const notNumber = cpf.replace(/\D/g, "");
       setValue("cpf", notNumber);
@@ -52,7 +59,7 @@ export const ValidateCPF = ({
       setValue("cpf", value);
       setValue("login", limitNumber);
     }
-  }, [cpf]);
+  }, [cpf, cpfData, nameData]);
   return (
     <Button variant="contained" type="submit" disabled={!isValid} fullWidth>
       Salvar

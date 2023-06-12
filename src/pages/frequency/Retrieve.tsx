@@ -84,7 +84,7 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
 
 export const RetrieveFrequencyPage = () => {
   const { id } = useParams<"id">();
-  const { setIsLoading } = useTableContext();
+  const { setIsLoading, setCount } = useTableContext();
   const { studentData, frequencyData, setFrequencyData } =
     useFrequencyContext();
 
@@ -93,18 +93,7 @@ export const RetrieveFrequencyPage = () => {
     apiUsingNow
       .get<iFrequency>(`frequencies/${id}`)
       .then((res) => {
-        setFrequencyData(res.data);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
-
-  useEffect(() => {
-    setIsLoading(true);
-    apiUsingNow
-      .get<iFrequency>(`frequencies/${id}`)
-      .then((res) => {
+        setCount(1);
         setFrequencyData(res.data);
       })
       .finally(() => {
@@ -122,7 +111,7 @@ export const RetrieveFrequencyPage = () => {
           : "Realizar Frequência"
       }
     >
-      <TableBase headCells={headCells}>
+      <TableBase headCells={headCells} is_pagination={false}>
         {frequencyData?.students.map((el) => (
           <CardFrequency key={el.id} student={el} />
         ))}

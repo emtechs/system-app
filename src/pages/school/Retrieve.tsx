@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import {
   useAppThemeContext,
+  useDrawerContext,
   useSchoolContext,
   useTableContext,
 } from "../../shared/contexts";
@@ -38,12 +39,16 @@ interface iCardServerProps {
 }
 const CardServer = ({ school_id, schoolServer }: iCardServerProps) => {
   const navigate = useNavigate();
+  const { handleClickUser } = useDrawerContext();
   return (
     <TableRow
       hover
       sx={{ cursor: "pointer" }}
       onClick={() => {
-        navigate(`/user/list/${schoolServer.server.id}?school_id=${school_id}`);
+        handleClickUser();
+        navigate(
+          `/user?id=${schoolServer.server.id}&school_id=${school_id}&order=name`
+        );
       }}
     >
       <TableCell>{schoolServer.server.name}</TableCell>
@@ -78,7 +83,7 @@ export const RetrieveSchoolPage = () => {
 
   useEffect(() => {
     if (school_id) {
-      let query = `?by=${by}`;
+      let query = `?by=${by}&is_active=true`;
       if (order) {
         query += `&order=${order}`;
       } else if (orderData) {

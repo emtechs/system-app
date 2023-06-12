@@ -11,17 +11,21 @@ import {
 import { useDrawerContext, useFrequencyContext } from "../../contexts";
 import { ChangeEvent, ReactNode } from "react";
 import { Dest } from "./Dest";
-import { SchoolDash } from "./School";
+import { SchoolTools } from "./School";
+import { UserTools } from "./User";
 
 interface iToolsProps {
   back?: string;
+  onClickBack?: () => void;
   isSingle?: boolean;
   isHome?: boolean;
+  isUser?: boolean;
   school_id?: string;
   isNew?: boolean;
   destNew?: string;
   titleNew?: string;
   iconNew?: ReactNode;
+  onClickNew?: () => void;
   isSearch?: boolean;
   search?: string;
   setSearch?: (text: string) => void;
@@ -32,13 +36,16 @@ interface iToolsProps {
 
 export const Tools = ({
   back,
+  onClickBack,
   isSingle,
   isHome,
+  isUser,
   school_id,
   isNew,
   destNew = "/",
   titleNew = "Novo",
   iconNew = <AddBox />,
+  onClickNew,
   isSearch,
   search = "",
   setSearch,
@@ -65,7 +72,13 @@ export const Tools = ({
       component={Paper}
     >
       {back && (
-        <Dest to={back} title="Voltar" startIcon={<ArrowBack />} isResp />
+        <Dest
+          to={back}
+          title="Voltar"
+          startIcon={<ArrowBack />}
+          onClick={onClickBack}
+          isResp
+        />
       )}
       {isSingle && (
         <Dest
@@ -84,9 +97,16 @@ export const Tools = ({
           isHome
         />
       )}
-      {school_id && <SchoolDash school_id={school_id} />}
+      {isUser && <UserTools />}
+      {school_id && <SchoolTools school_id={school_id} />}
       {isNew && (
-        <Dest to={destNew} title={titleNew} startIcon={iconNew} isResp />
+        <Dest
+          to={destNew}
+          title={titleNew}
+          startIcon={iconNew}
+          isResp
+          onClick={onClickNew}
+        />
       )}
       {isSearch && (
         <TextField
@@ -102,7 +122,10 @@ export const Tools = ({
             onClick={() => {
               if (frequencyData) {
                 updateFrequency(
-                  { status: "CLOSED", finished_at: Date.now() },
+                  {
+                    status: "CLOSED",
+                    finished_at: Date.now(),
+                  },
                   frequencyData.id
                 );
               }

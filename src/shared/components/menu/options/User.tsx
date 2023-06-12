@@ -1,7 +1,13 @@
 import { List } from "@mui/material";
 import { useAuthContext } from "../../../contexts";
 import { ListItemLink } from "../item";
-import { HowToReg, PeopleAlt, Person, PersonAdd } from "@mui/icons-material";
+import {
+  HowToReg,
+  PeopleAlt,
+  Person,
+  Person2,
+  PersonAdd,
+} from "@mui/icons-material";
 
 export const User = () => {
   const { dashData } = useAuthContext();
@@ -24,8 +30,17 @@ export const User = () => {
             label="Secretário"
             to="user/define/secret"
           />
-          <ListItemLink icon={<PeopleAlt />} label="Listar" to="user/list" />
-          <ListItemLink icon={<HowToReg />} label="Ativar" to="user/active" />
+          <ListItemLink icon={<Person2 />} label="Usuário" to="user" />
+          <ListItemLink
+            icon={<PeopleAlt />}
+            label="Listar"
+            to="user/list?order=name"
+          />
+          <ListItemLink
+            icon={<HowToReg />}
+            label="Ativar"
+            to="user/active?order=name"
+          />
         </List>
       );
 

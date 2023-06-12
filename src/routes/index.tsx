@@ -59,10 +59,22 @@ const AppRoutes = () => {
           <Route path="/school/list" element={<ListSchoolPage />} />
           <Route path="/class/list" element={<ListClassPage />} />
           <Route path="/student/list" element={<ListStudentPage />} />
+          <Route
+            path="/import/school"
+            element={<ImportSchoolPage back="/school" />}
+          />
+          <Route
+            path="/import/class"
+            element={<ImportClassPage back="/class" />}
+          />
+          <Route
+            path="/import/student"
+            element={<ImportStudentPage back="/student" />}
+          />
         </Route>
         <Route element={<ProtectedSchool />}>
           <Route path="/user/list" element={<ListUserPage />} />
-          <Route path="/user/list/:id" element={<RetrieveUserPage />} />
+          <Route path="/user" element={<RetrieveUserPage />} />
           <Route path="/school" element={<RetrieveSchoolPage />} />
           <Route path="/school/create" element={<CreateSchoolPage />} />
           <Route path="/school/create/server" element={<CreateServerPage />} />
@@ -104,18 +116,6 @@ const AppRoutes = () => {
         <Route
           path="/report/class/retrieve"
           element={<ReportRetrievePage back="/report" />}
-        />
-        <Route
-          path="/import/school"
-          element={<ImportSchoolPage back="/school" />}
-        />
-        <Route
-          path="/import/class"
-          element={<ImportClassPage back="/class" />}
-        />
-        <Route
-          path="/import/student"
-          element={<ImportStudentPage back="/student" />}
         />
         <Route path="/profile/edit" element={<EditProfilePage />} />
         <Route path="/profile/edit/password" element={<EditPasswordPage />} />

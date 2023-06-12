@@ -1,4 +1,4 @@
-import { Tools, ValidateCPF } from "../../shared/components";
+import { ValidateCPF } from "../../shared/components";
 import { useAppThemeContext, useUserContext } from "../../shared/contexts";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
 import { iUser } from "../../shared/interfaces";
 import { Box, Grid, Paper, Typography } from "@mui/material";
-import { LayoutBasePage } from "../../shared/layouts";
+import { LayoutUserPage } from "./Layout";
 
 export const DefineSecretPage = () => {
   const { setLoading } = useAppThemeContext();
@@ -23,7 +23,7 @@ export const DefineSecretPage = () => {
   }, []);
 
   return (
-    <LayoutBasePage title="Definir Secretário" tools={<Tools isHome />}>
+    <LayoutUserPage title="Definir Secretário">
       <FormContainer
         onSuccess={(data) => {
           if (secretData)
@@ -84,6 +84,6 @@ export const DefineSecretPage = () => {
           </Grid>
         </Box>
       </FormContainer>
-    </LayoutBasePage>
+    </LayoutUserPage>
   );
 };

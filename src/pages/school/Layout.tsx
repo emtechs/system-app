@@ -1,6 +1,10 @@
 import { ReactNode, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
+import {
+  useAppThemeContext,
+  useDrawerContext,
+  useSchoolContext,
+} from "../../shared/contexts";
 import {
   CardSchoolId,
   SelectSchoolSelectData,
@@ -27,6 +31,12 @@ export const LayoutSchoolPage = ({
   const back = searchParams.get("back");
   const { smDown, setLoading } = useAppThemeContext();
   const { setSchoolSelect } = useSchoolContext();
+  const { handleClickUser } = useDrawerContext();
+  let onClickBack;
+
+  if (back?.includes("user")) {
+    onClickBack = handleClickUser;
+  }
 
   useEffect(() => {
     if (id) {
@@ -54,7 +64,7 @@ export const LayoutSchoolPage = ({
         tools ? (
           tools
         ) : back ? (
-          <Tools isHome back={back} />
+          <Tools isHome back={back} onClickBack={onClickBack} />
         ) : id ? (
           <Tools isHome back={`/school?id=${id}&order=name`} />
         ) : (

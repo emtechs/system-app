@@ -88,6 +88,13 @@ export async function patchFrequency(
   return response;
 }
 
+export async function patchInfrequency(
+  data: FieldValues,
+  id: string
+): Promise<void> {
+  await apiUsingNow.patch(`frequencies/infreq/${id}`, data);
+}
+
 export async function patchFrequencyStudent(
   data: FieldValues,
   id: string

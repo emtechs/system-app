@@ -17,6 +17,7 @@ import {
   patchClassSchool,
   patchFrequency,
   patchFrequencyStudent,
+  patchInfrequency,
   patchManyStudent,
   postFrequency,
 } from "../services";
@@ -75,6 +76,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
         const students = frequency.students.map((el) => {
           return { infreq: el.infrequency, id: el.id };
         });
+        await patchInfrequency({ infreq: frequency.infrequency }, id);
         await patchManyStudent({ students });
         await patchClassSchool({
           class_id: frequency.class.class.id,
