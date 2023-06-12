@@ -25,8 +25,16 @@ export interface iSchool {
   director?: iDirector;
 }
 
-export interface iSchoolRetrieve extends iSchool {
-  servers: { role: iRole; dash: iDash; server: iDirector }[];
+interface iServer {
+  id: string;
+  name: string;
+  cpf: string;
+}
+
+export interface iSchoolServer {
+  role: iRole;
+  dash: iDash;
+  server: iServer;
 }
 
 export interface iSchoolList extends iSchool {

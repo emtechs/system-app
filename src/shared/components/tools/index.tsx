@@ -21,6 +21,7 @@ interface iToolsProps {
   isNew?: boolean;
   destNew?: string;
   titleNew?: string;
+  iconNew?: ReactNode;
   isSearch?: boolean;
   search?: string;
   setSearch?: (text: string) => void;
@@ -37,6 +38,7 @@ export const Tools = ({
   isNew,
   destNew = "/",
   titleNew = "Novo",
+  iconNew = <AddBox />,
   isSearch,
   search = "",
   setSearch,
@@ -84,7 +86,7 @@ export const Tools = ({
       )}
       {school_id && <SchoolDash school_id={school_id} />}
       {isNew && (
-        <Dest to={destNew} title={titleNew} startIcon={<AddBox />} isResp />
+        <Dest to={destNew} title={titleNew} startIcon={iconNew} isResp />
       )}
       {isSearch && (
         <TextField

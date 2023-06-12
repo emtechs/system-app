@@ -79,7 +79,7 @@ export const RetrieveClassPage = () => {
 
   return (
     <LayoutBasePage
-      school={<CardSchoolId school_id={school_id ? school_id : ""} />}
+      school={<CardSchoolId />}
       tools={
         <Tools
           back={

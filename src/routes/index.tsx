@@ -63,21 +63,18 @@ const AppRoutes = () => {
         <Route element={<ProtectedSchool />}>
           <Route path="/user/list" element={<ListUserPage />} />
           <Route path="/user/list/:id" element={<RetrieveUserPage />} />
-          <Route path="/school/:id" element={<RetrieveSchoolPage />} />
+          <Route path="/school" element={<RetrieveSchoolPage />} />
           <Route path="/school/create" element={<CreateSchoolPage />} />
           <Route path="/school/create/server" element={<CreateServerPage />} />
           <Route path="/school/define/diret" element={<DefineDiretPage />} />
           <Route path="/school/edit" element={<EditSchoolPage />} />
           <Route path="/school/active" element={<ActiveSchoolPage />} />
+          <Route path="/school/class" element={<ListClassSchoolPage />} />
         </Route>
         <Route path="/" element={<DashboardPage />} />
         <Route
           path="/class/:class_id/:school_id/:year_id"
           element={<RetrieveClassPage />}
-        />
-        <Route
-          path="/class/list/:school_id/:year_id"
-          element={<ListClassSchoolPage />}
         />
         <Route
           path="/class/create"

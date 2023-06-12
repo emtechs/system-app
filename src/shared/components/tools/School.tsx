@@ -19,7 +19,6 @@ import {
   useTheme,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useAuthContext } from "../../contexts";
 
 interface iSchoolDashProps {
   school_id: string;
@@ -28,7 +27,6 @@ interface iSchoolDashProps {
 export const SchoolDash = ({ school_id }: iSchoolDashProps) => {
   const theme = useTheme();
   const mdDown = useMediaQuery(theme.breakpoints.down("md"));
-  const { yearId } = useAuthContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -102,7 +100,7 @@ export const SchoolDash = ({ school_id }: iSchoolDashProps) => {
             Editar
           </MenuItem>
         </Link>
-        <Link to={`/class/list/${school_id}/${yearId}`}>
+        <Link to={"/school/class?id=" + school_id}>
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <Workspaces />

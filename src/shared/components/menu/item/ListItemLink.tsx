@@ -19,12 +19,13 @@ export const ListItemLink = ({ icon, label, to }: iListItemLinkProps) => {
   const theme = useTheme();
   const location = useLocation();
   const { handleClickButton } = useDrawerContext();
+  const normalizeTo = to.split("?")[0];
 
   return (
     <Link to={to}>
       <ListItemButton
         onClick={handleClickButton}
-        selected={location.pathname === `/${to}`}
+        selected={location.pathname === `/${normalizeTo}`}
         sx={{ pl: theme.spacing(4) }}
       >
         <ListItemIcon>{icon}</ListItemIcon>

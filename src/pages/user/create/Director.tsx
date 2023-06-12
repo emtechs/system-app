@@ -25,11 +25,11 @@ export const CreateDirectorPage = () => {
   useEffect(() => {
     setLoading(true);
     apiUsingNow
-      .get<iSchool[]>("schools?is_director=true")
+      .get<{ result: iSchool[] }>("schools?is_director=true")
       .then((res) => {
         if (res.data) {
           setSchoolDataSelect(
-            res.data.map((school) => {
+            res.data.result.map((school) => {
               return { ...school, label: school.name };
             })
           );

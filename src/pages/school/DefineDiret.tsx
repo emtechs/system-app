@@ -31,7 +31,7 @@ export const DefineDiretPage = () => {
               true
             );
           }
-          const back = id ? `/school/${id}` : "/";
+          const back = id ? `/school?id=${id}&order=name` : "/";
           updateSchool(data, school_id, "diretor", back);
         }}
         resolver={zodResolver(schoolUpdateDirectorSchema)}

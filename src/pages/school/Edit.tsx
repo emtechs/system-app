@@ -19,7 +19,7 @@ export const EditSchoolPage = () => {
     <LayoutSchoolPage title="Editar Escola" isSchool>
       <FormContainer
         onSuccess={(data) => {
-          const back = id ? `/school/${id}` : "/";
+          const back = id ? `/school?id=${id}&order=name` : "/";
           updateSchool(data, school_id, "nome", back);
         }}
         resolver={zodResolver(schoolUpdateSchema)}

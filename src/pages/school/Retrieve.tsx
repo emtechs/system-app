@@ -12,24 +12,18 @@ import {
 } from "@mui/material";
 import {
   useAppThemeContext,
-  useAuthContext,
   useSchoolContext,
   useTableContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
-import {
-  iDash,
-  iDirector,
-  iRole,
-  iSchoolRetrieve,
-  iheadCell,
-} from "../../shared/interfaces";
+import { iSchoolServer, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { RemoveDone } from "@mui/icons-material";
 import { TableBase, Tools } from "../../shared/components";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { rolePtBr } from "../../shared/scripts";
 import { LayoutSchoolPage } from "./Layout";
+import { useDebounce } from "../../shared/hooks";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Nome Completo" },
@@ -40,63 +34,100 @@ const headCells: iheadCell[] = [
 
 interface iCardServerProps {
   school_id: string;
-  server: iDirector;
-  role: iRole;
-  dash: iDash;
+  schoolServer: iSchoolServer;
 }
-const CardServer = ({ school_id, server, role, dash }: iCardServerProps) => {
+const CardServer = ({ school_id, schoolServer }: iCardServerProps) => {
   const navigate = useNavigate();
   return (
     <TableRow
       hover
       sx={{ cursor: "pointer" }}
       onClick={() => {
-        navigate(`/user/list/${server.id}?school_id=${school_id}`);
+        navigate(`/user/list/${schoolServer.server.id}?school_id=${school_id}`);
       }}
     >
-      <TableCell>{server.name}</TableCell>
-      <TableCell>{server.cpf}</TableCell>
-      <TableCell>{rolePtBr(role)}</TableCell>
-      <TableCell>{dash === "SCHOOL" ? "Escola" : "Frequência"}</TableCell>
+      <TableCell>{schoolServer.server.name}</TableCell>
+      <TableCell>{schoolServer.server.cpf}</TableCell>
+      <TableCell>{rolePtBr(schoolServer.role)}</TableCell>
+      <TableCell>
+        {schoolServer.dash === "SCHOOL" ? "Escola" : "Frequência"}
+      </TableCell>
     </TableRow>
   );
 };
 
 export const RetrieveSchoolPage = () => {
-  const { id } = useParams<"id">();
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+  const orderData = searchParams.get("order");
+  const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
-  const { yearId } = useAuthContext();
-  const { updateSchool } = useSchoolContext();
-  const { setIsLoading } = useTableContext();
-  const [retrieveSchool, setRetrieveSchool] = useState<iSchoolRetrieve>();
+  const { updateSchool, schoolSelect } = useSchoolContext();
+  const { setIsLoading, by, order, take, skip, setCount, setOrder } =
+    useTableContext();
+  const [serversData, setServersData] = useState<iSchoolServer[]>();
   const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState<string>();
   const handleClose = () => {
     setOpen((oldOpen) => !oldOpen);
   };
+  let school_id = "";
+  if (id) {
+    school_id = id;
+  } else if (schoolSelect) school_id = schoolSelect.id;
 
   useEffect(() => {
-    setIsLoading(true);
-    apiUsingNow
-      .get<iSchoolRetrieve>(
-        `schools/${id}?is_listSchool=true&year_id=${yearId}`
-      )
-      .then((res) => setRetrieveSchool(res.data))
-      .finally(() => setIsLoading(false));
-  }, []);
+    if (school_id) {
+      let query = `?by=${by}`;
+      if (order) {
+        query += `&order=${order}`;
+      } else if (orderData) {
+        setOrder(orderData);
+        query += `&order=${orderData}`;
+      }
+      if (take) query += `&take=${take}`;
+      if (skip) query += `&skip=${skip}`;
+      if (search) {
+        query += `&name=${search}`;
+        setIsLoading(true);
+        debounce(() => {
+          apiUsingNow
+            .get<{ total: number; result: iSchoolServer[] }>(
+              `schools/${school_id}/server${query}`
+            )
+            .then((res) => {
+              setServersData(res.data.result);
+              setCount(res.data.total);
+            })
+            .finally(() => setIsLoading(false));
+        });
+      } else {
+        setIsLoading(true);
+        apiUsingNow
+          .get<{ total: number; result: iSchoolServer[] }>(
+            `schools/${school_id}/server${query}`
+          )
+          .then((res) => {
+            setServersData(res.data.result);
+            setCount(res.data.total);
+          })
+          .finally(() => setIsLoading(false));
+      }
+    }
+  }, [school_id, take, skip, order, by, search]);
 
   return (
     <>
       <LayoutSchoolPage
-        title={
-          retrieveSchool?.name
-            ? retrieveSchool.name
-            : "Listagem de Servidores da Escola"
-        }
+        title="Listagem de Servidores da Escola"
         tools={
           <Tools
             back="/school/list"
-            school_id={retrieveSchool?.id}
             isHome
+            school_id={school_id}
+            isSearch
+            search={search}
+            setSearch={(text) => setSearch(text)}
             finish={
               mdDown ? (
                 <Tooltip title="Desativar">
@@ -118,26 +149,25 @@ export const RetrieveSchoolPage = () => {
             }
           />
         }
+        isSchool
       >
         <TableBase headCells={headCells}>
-          {retrieveSchool?.servers.map((el) => (
+          {serversData?.map((el) => (
             <CardServer
               key={el.server.id}
-              school_id={id ? id : ""}
-              server={el.server}
-              role={el.role}
-              dash={el.dash}
+              school_id={school_id}
+              schoolServer={el}
             />
           ))}
         </TableBase>
       </LayoutSchoolPage>
-      {retrieveSchool && (
+      {schoolSelect && (
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Desativar Escola</DialogTitle>
           <DialogContent>
             <DialogContentText>
               Deseja continuar desativando a escola{" "}
-              {retrieveSchool.name.toUpperCase()}?
+              {schoolSelect.name.toUpperCase()}?
             </DialogContentText>
             <DialogActions>
               <Button onClick={handleClose}>Cancelar</Button>
@@ -147,7 +177,7 @@ export const RetrieveSchoolPage = () => {
                     {
                       is_active: false,
                     },
-                    retrieveSchool.id,
+                    schoolSelect.id,
                     "estado",
                     "/school/list"
                   );

@@ -1,13 +1,16 @@
 import { iClassWithSchool, iheadCell } from "../../shared/interfaces";
-import { useTableContext } from "../../shared/contexts";
+import {
+  useAuthContext,
+  useSchoolContext,
+  useTableContext,
+} from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
-import { useNavigate, useParams } from "react-router-dom";
-import { LayoutBasePage } from "../../shared/layouts";
-import { TableBase, Tools } from "../../shared/components";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { TableBase } from "../../shared/components";
 import { TableCell, TableRow, useTheme } from "@mui/material";
-import { CardSchoolId } from "../../shared/components/card";
 import { defineBgColorInfrequency } from "../../shared/scripts";
+import { LayoutSchoolPage } from "./Layout";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Turma" },
@@ -46,12 +49,19 @@ const CardClass = ({ el }: iCardClassProps) => {
 };
 
 export const ListClassSchoolPage = () => {
-  const { school_id, year_id } = useParams();
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+  const { yearId } = useAuthContext();
+  const { schoolSelect } = useSchoolContext();
   const { setCount, take, skip, setIsLoading } = useTableContext();
   const [data, setData] = useState<iClassWithSchool[]>();
+  let school_id = "";
+  if (id) {
+    school_id = id;
+  } else if (schoolSelect) school_id = schoolSelect.id;
 
   useEffect(() => {
-    let query = `?year_id=${year_id}&is_active=true`;
+    let query = `?year_id=${yearId}&is_active=true`;
     if (take) query += `&take=${take}`;
     if (skip) query += `&skip=${skip}`;
     setIsLoading(true);
@@ -67,16 +77,12 @@ export const ListClassSchoolPage = () => {
   }, [take, skip]);
 
   return (
-    <LayoutBasePage
-      title={"Listagem de Turmas"}
-      school={<CardSchoolId school_id={school_id ? school_id : ""} />}
-      tools={<Tools isHome back={`/school/${school_id}`} />}
-    >
+    <LayoutSchoolPage title="Listagem de Turmas" isSchool>
       <TableBase headCells={headCells}>
         {data?.map((el) => (
           <CardClass key={el.class.id} el={el} />
         ))}
       </TableBase>
-    </LayoutBasePage>
+    </LayoutSchoolPage>
   );
 };

@@ -1,13 +1,14 @@
+import { ReactNode, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useAppThemeContext } from "../../shared/contexts";
+import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
 import {
   CardSchoolId,
   SelectSchoolSelectData,
   Tools,
 } from "../../shared/components";
-import { iChildren } from "../../shared/interfaces";
+import { iChildren, iSchool } from "../../shared/interfaces";
 import { LayoutBasePage } from "../../shared/layouts";
-import { ReactNode } from "react";
+import { apiUsingNow } from "../../shared/services";
 
 interface iLayoutSchoolPageProps extends iChildren {
   title: string;
@@ -24,14 +25,26 @@ export const LayoutSchoolPage = ({
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const back = searchParams.get("back");
-  const { smDown } = useAppThemeContext();
+  const { smDown, setLoading } = useAppThemeContext();
+  const { setSchoolSelect } = useSchoolContext();
+
+  useEffect(() => {
+    if (id) {
+      setLoading(true);
+      apiUsingNow
+        .get<iSchool>(`schools/${id}`)
+        .then((res) => setSchoolSelect(res.data))
+        .finally(() => setLoading(false));
+    }
+  }, [id]);
+
   return (
     <LayoutBasePage
       title={title}
       school={
         isSchool ? (
           id ? (
-            <CardSchoolId school_id={id} />
+            <CardSchoolId />
           ) : (
             <SelectSchoolSelectData />
           )
@@ -43,7 +56,7 @@ export const LayoutSchoolPage = ({
         ) : back ? (
           <Tools isHome back={back} />
         ) : id ? (
-          <Tools isHome back={`/school/${id}`} />
+          <Tools isHome back={`/school?id=${id}&order=name`} />
         ) : (
           smDown && <Tools isSingle />
         )

@@ -1,4 +1,5 @@
 export * from "./Active";
+export * from "./Class";
 export * from "./CreateSchool";
 export * from "./CreateServer";
 export * from "./DefineDiret";

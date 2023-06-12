@@ -36,7 +36,7 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
       hover
       sx={{ cursor: "pointer" }}
       onClick={() => {
-        navigate(`/school/${school.id}`);
+        navigate(`/school?id=${school.id}&order=name`);
       }}
     >
       <TableCell>{school.name}</TableCell>

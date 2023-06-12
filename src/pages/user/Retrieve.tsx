@@ -115,7 +115,7 @@ export const RetrieveUserPage = () => {
         }
         tools={
           <Tools
-            back={school_id ? `/school/${school_id}` : "/user/list"}
+            back={school_id ? `/school?id=${school_id}&order=name` : "/user/list"}
             isHome
             finish={
               <Button

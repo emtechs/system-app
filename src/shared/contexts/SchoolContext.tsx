@@ -2,7 +2,6 @@ import {
   iChildren,
   iSchool,
   iSchoolImportRequest,
-  iSchoolList,
   iSchoolRequest,
   iSchoolSelect,
   iServerRequest,
@@ -70,8 +69,8 @@ interface iSchoolContextData {
   setSchoolSelect: Dispatch<SetStateAction<iSchool | undefined>>;
   listSchoolData: iSchool[] | undefined;
   setListSchoolData: Dispatch<SetStateAction<iSchool[] | undefined>>;
-  updateSchoolData: iSchoolList | undefined;
-  setUpdateSchoolData: Dispatch<SetStateAction<iSchoolList | undefined>>;
+  updateSchoolData: iSchool | undefined;
+  setUpdateSchoolData: Dispatch<SetStateAction<iSchool | undefined>>;
   updateServerData: iWorkSchool | undefined;
   setUpdateServerData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
 }
@@ -84,7 +83,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [schoolDataSelect, setSchoolDataSelect] = useState<iSchoolSelect[]>();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
-  const [updateSchoolData, setUpdateSchoolData] = useState<iSchoolList>();
+  const [updateSchoolData, setUpdateSchoolData] = useState<iSchool>();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
 
   const handleCreateSchool = useCallback(async (data: iSchoolRequest) => {
@@ -92,7 +91,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
       setLoading(true);
       const school = await postSchool(data);
       toast.success("A escola foi cadastrada com sucesso!");
-      navigate(`/school/${school.id}`);
+      navigate(`/school?id=${school.id}&order=name`);
     } catch {
       toast.error(
         "No momento, não foi possível cadastrar a escola. Por favor, tente novamente mais tarde."

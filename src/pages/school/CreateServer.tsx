@@ -24,7 +24,7 @@ export const CreateServerPage = () => {
     <LayoutSchoolPage title="Adicionar Servidor" isSchool>
       <FormContainer
         onSuccess={(data) => {
-          const back = id ? `/school/${id}` : undefined;
+          const back = id ? `/school?id=${id}&order=name` : undefined;
           createServer(data, school_id, back);
         }}
         resolver={zodResolver(serverCreateSchema)}

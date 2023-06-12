@@ -14,7 +14,12 @@ import { useTableContext } from "../../contexts";
 import { Pagination } from "./Pagination";
 import { TableSort } from "./Sort";
 
-export const TableBase = ({ children, is_active, headCells }: iTable) => {
+export const TableBase = ({
+  children,
+  is_active,
+  headCells,
+  is_pagination = true,
+}: iTable) => {
   const { isLoading, count } = useTableContext();
   return (
     <>
@@ -47,7 +52,7 @@ export const TableBase = ({ children, is_active, headCells }: iTable) => {
           </TableFooter>
         </Table>
       </TableContainer>
-      <Pagination />
+      {is_pagination && <Pagination />}
     </>
   );
 };
