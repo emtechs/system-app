@@ -12,14 +12,14 @@ import "dayjs/locale/pt-br";
 export const CalendarDashAdmin = () => {
   const theme = useTheme();
   const { setLoading } = useAppThemeContext();
-  const { yearId } = useAuthContext();
+  const { yearData } = useAuthContext();
   const [eventData, setEventData] = useState<EventSourceInput>();
   const [monthData, setMonthData] = useState<number>(dayjs().month() + 1);
 
   useEffect(() => {
     setLoading(true);
     apiUsingNow
-      .get<iCalendar[]>(`calendar/${monthData}/${yearId}`)
+      .get<iCalendar[]>(`calendar/${monthData}/${yearData?.id}`)
       .then((res) => setEventData(res.data))
       .finally(() => setLoading(false));
   }, [monthData]);
@@ -29,6 +29,10 @@ export const CalendarDashAdmin = () => {
       plugins={[dayGridPlugin]}
       initialView="dayGridMonth"
       locale="pt-br"
+      validRange={{
+        start: `${yearData?.year}-01-01`,
+        end: `${yearData?.year}-12-31`,
+      }}
       height={theme.spacing(60)}
       titleFormat={{ month: "long" }}
       buttonText={{ today: "hoje" }}

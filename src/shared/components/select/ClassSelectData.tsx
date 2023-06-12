@@ -28,20 +28,20 @@ interface iSelect extends iClassWithSchool {
 
 export const SelectClassSelectData = () => {
   const { setLoading } = useAppThemeContext();
-  const { yearId } = useAuthContext();
+  const { yearData } = useAuthContext();
   const { schoolSelect } = useSchoolContext();
   const [data, setData] = useState<iSelect[]>();
 
   useEffect(() => {
     setLoading(true);
     apiUsingNow
-      .get<iClassWithSchool[]>(
-        `classes/${schoolSelect?.id}?is_active=true&year_id=${yearId}`
+      .get<{ result: iClassWithSchool[] }>(
+        `classes/school/${schoolSelect?.id}?is_active=true&year_id=${yearData?.id}`
       )
       .then((res) => {
         if (res.data) {
           setData(
-            res.data.map((el) => {
+            res.data.result.map((el) => {
               return { ...el, id: el.class.id, label: el.class.name };
             })
           );

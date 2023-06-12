@@ -27,7 +27,7 @@ export const SelectSchoolSelectData = () => {
   useEffect(() => {
     setLoading(true);
     apiUsingNow
-      .get<{ result: iSchool[] }>("schools?is_active=true")
+      .get<{ result: iSchool[] }>("schools?is_active=true&order=name&by=asc")
       .then((res) => setListSchool(res.data.result))
       .finally(() => setLoading(false));
   }, []);

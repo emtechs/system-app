@@ -35,7 +35,7 @@ interface iDateValueProps {
 
 const DateValue = ({ setOpen }: iDateValueProps) => {
   const { watch, setValue } = useFormContext();
-  const { yearId } = useAuthContext();
+  const { yearData } = useAuthContext();
   const { setFrequencyData } = useFrequencyContext();
   const [dateData, setDateData] = useState<Dayjs | null>(dayjs());
   const classData: iClass = watch("class");
@@ -52,7 +52,7 @@ const DateValue = ({ setOpen }: iDateValueProps) => {
             setDateData(null);
           }
         });
-      setValue("year_id", yearId);
+      setValue("year_id", yearData?.id);
       setValue("date", date);
       setValue("month", +date.split("/")[1]);
       setValue("day", +date.split("/")[0]);
@@ -65,6 +65,8 @@ const DateValue = ({ setOpen }: iDateValueProps) => {
         <DatePicker
           value={dateData}
           label="Data"
+          minDate={dayjs(`${yearData?.year}-01-01`)}
+          maxDate={dayjs(`${yearData?.year}-12-31`)}
           onChange={(newValue) => setDateData(newValue)}
         />
       </DemoContainer>

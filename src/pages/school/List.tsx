@@ -61,7 +61,7 @@ export const ListSchoolPage = () => {
   const [searchParams] = useSearchParams();
   const orderData = searchParams.get("order");
   const { debounce } = useDebounce();
-  const { yearId } = useAuthContext();
+  const { yearData } = useAuthContext();
   const { updateSchoolData } = useSchoolContext();
   const { isInfreq } = useFrequencyContext();
   const { setCount, take, skip, order, setOrder, by, setIsLoading } =
@@ -70,8 +70,8 @@ export const ListSchoolPage = () => {
   const [search, setSearch] = useState<string>();
 
   useEffect(() => {
-    if (yearId) {
-      let query = `?year_id=${yearId}&is_listSchool=true&by=${by}&is_active=true`;
+    if (yearData) {
+      let query = `?year_id=${yearData.id}&is_listSchool=true&by=${by}&is_active=true`;
       if (order) {
         query += `&order=${order}`;
       } else if (orderData) {
@@ -105,7 +105,7 @@ export const ListSchoolPage = () => {
       }
     }
   }, [
-    yearId,
+    yearData,
     updateSchoolData,
     isInfreq,
     take,

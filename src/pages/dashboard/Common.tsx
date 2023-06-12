@@ -178,7 +178,7 @@ export const DashboardCommon = () => {
   const mdLgBetween = useMediaQuery(theme.breakpoints.between("md", "lg"));
   const mdUp = useMediaQuery(theme.breakpoints.up("md"));
   const { setLoading } = useAppThemeContext();
-  const { schoolData, yearId } = useAuthContext();
+  const { schoolData, yearData } = useAuthContext();
   const [listClassData, setListClassData] = useState<iClassDash[]>();
   const [listFreqData, setListFreqData] = useState<iFrequency[]>();
   const [listAlertClassData, setListAlertClassData] =
@@ -207,7 +207,7 @@ export const DashboardCommon = () => {
   }, [schoolData]);
 
   useEffect(() => {
-    if (schoolData && yearId) {
+    if (schoolData && yearData) {
       let take = 1;
       if (mdLgBetween) {
         take = 2;
@@ -217,14 +217,14 @@ export const DashboardCommon = () => {
       setLoading(true);
       apiUsingNow
         .get<{ result: iClassWithSchool[] }>(
-          `classes/school/${schoolData.school.id}?year_id=${yearId}&class_infreq=1&take=${take}`
+          `classes/school/${schoolData.school.id}?year_id=${yearData.id}&class_infreq=1&take=${take}`
         )
         .then((res) => setListAlertClassData(res.data.result))
         .finally(() => setLoading(false));
       setLoading(true);
       apiUsingNow
         .get<iSchoolWithStudents>(
-          `schools/${schoolData.school.id}?year_id=${yearId}`
+          `schools/${schoolData.school.id}?year_id=${yearData.id}`
         )
         .then((res) => {
           const students = res.data.students;
@@ -236,7 +236,7 @@ export const DashboardCommon = () => {
         })
         .finally(() => setLoading(false));
     }
-  }, [schoolData, yearId]);
+  }, [schoolData, yearData]);
 
   return (
     <LayoutBasePage title="Página Inicial" school={<SelectSchoolData />}>
@@ -338,7 +338,7 @@ export const DashboardCommon = () => {
           <CardActions sx={{ justifyContent: "flex-end" }}>
             <Button
               onClick={() =>
-                navigate(`/class/list/${schoolData?.school.id}/${yearId}`)
+                navigate(`/class/list/${schoolData?.school.id}/${yearData?.id}`)
               }
             >
               Saber Mais

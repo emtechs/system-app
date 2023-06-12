@@ -51,7 +51,7 @@ const CardClass = ({ el }: iCardClassProps) => {
 export const ListClassSchoolPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const { yearId } = useAuthContext();
+  const { yearData } = useAuthContext();
   const { schoolSelect } = useSchoolContext();
   const { setCount, take, skip, setIsLoading } = useTableContext();
   const [data, setData] = useState<iClassWithSchool[]>();
@@ -61,7 +61,7 @@ export const ListClassSchoolPage = () => {
   } else if (schoolSelect) school_id = schoolSelect.id;
 
   useEffect(() => {
-    let query = `?year_id=${yearId}&is_active=true`;
+    let query = `?year_id=${yearData?.id}&is_active=true`;
     if (take) query += `&take=${take}`;
     if (skip) query += `&skip=${skip}`;
     setIsLoading(true);

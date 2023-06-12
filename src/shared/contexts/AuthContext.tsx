@@ -16,6 +16,7 @@ import {
   iRecoveryRequest,
   iUser,
   iWorkSchool,
+  iYear,
 } from "../interfaces";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
@@ -50,7 +51,7 @@ interface iAuthContextData {
   setSchoolData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
   dashData: iDash | undefined;
   setDashData: Dispatch<SetStateAction<iDash | undefined>>;
-  yearId: string | undefined;
+  yearData: iYear | undefined;
 }
 
 const AuthContext = createContext({} as iAuthContextData);
@@ -64,7 +65,7 @@ export const AuthProvider = ({ children }: iChildren) => {
   const [userData, setUserData] = useState<iUser>();
   const [schoolData, setSchoolData] = useState<iWorkSchool>();
   const [dashData, setDashData] = useState<iDash>();
-  const [yearId, setYearId] = useState<string>();
+  const [yearData, setYearData] = useState<iYear>();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("@EMTechs:token");
@@ -103,11 +104,11 @@ export const AuthProvider = ({ children }: iChildren) => {
       setLoading(true);
       const year = dayjs().year();
       apiUsingNow
-        .get<{ id: string }>(`/calendar/year/${year}`, {
+        .get<iYear>(`/calendar/year/${year}`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         })
         .then((res) => {
-          setYearId(res.data.id);
+          setYearData(res.data);
         })
         .finally(() => setLoading(false));
     }
@@ -207,7 +208,7 @@ export const AuthProvider = ({ children }: iChildren) => {
         setSchoolData,
         setUserData,
         userData,
-        yearId,
+        yearData,
       }}
     >
       {children}

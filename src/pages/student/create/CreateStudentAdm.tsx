@@ -13,13 +13,13 @@ import { Button } from "@mui/material";
 
 export const CreateStudentAdmPage = ({ back }: iPageProps) => {
   const { createStudent } = useSchoolContext();
-  const { yearId } = useAuthContext();
+  const { yearData } = useAuthContext();
 
   return (
     <BasePage isProfile back={back}>
       <FormContainer
         onSuccess={(data) => {
-          if (yearId) createStudent(data, yearId, back);
+          if (yearData) createStudent(data, yearData.id, back);
         }}
         resolver={zodResolver(studentCreateSchema)}
       >

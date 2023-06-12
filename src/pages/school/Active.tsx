@@ -80,7 +80,7 @@ export const ActiveSchoolPage = () => {
   const [searchParams] = useSearchParams();
   const orderData = searchParams.get("order");
   const { debounce } = useDebounce();
-  const { yearId } = useAuthContext();
+  const { yearData } = useAuthContext();
   const { updateSchoolData } = useSchoolContext();
   const { setCount, take, skip, order, setOrder, by, setIsLoading } =
     useTableContext();
@@ -88,8 +88,8 @@ export const ActiveSchoolPage = () => {
   const [search, setSearch] = useState<string>();
 
   useEffect(() => {
-    if (yearId) {
-      let query = `?year_id=${yearId}&by=${by}&is_active=false`;
+    if (yearData) {
+      let query = `?year_id=${yearData.id}&by=${by}&is_active=false`;
       if (order) {
         query += `&order=${order}`;
       } else if (orderData) {
@@ -121,7 +121,7 @@ export const ActiveSchoolPage = () => {
           .finally(() => setIsLoading(false));
       }
     }
-  }, [yearId, updateSchoolData, take, skip, orderData, order, by, search]);
+  }, [yearData, updateSchoolData, take, skip, orderData, order, by, search]);
 
   return (
     <LayoutSchoolPage

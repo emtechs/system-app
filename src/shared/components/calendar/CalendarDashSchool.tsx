@@ -3,9 +3,11 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import { EventSourceInput } from "@fullcalendar/core";
 import { useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useAuthContext } from "../../contexts";
 
 export const CalendarDashSchool = () => {
   const theme = useTheme();
+  const { yearData } = useAuthContext();
   const [eventData, setEventData] = useState<EventSourceInput>();
   const [monthData, setMonthData] = useState<number>();
 
@@ -70,7 +72,10 @@ export const CalendarDashSchool = () => {
     <FullCalendar
       plugins={[dayGridPlugin]}
       initialView="dayGridMonth"
-      initialDate={"2023-06-01"}
+      validRange={{
+        start: `${yearData?.year}-01-01`,
+        end: `${yearData?.year}-12-31`,
+      }}
       locale="pt-br"
       height={theme.spacing(60)}
       titleFormat={{ month: "long" }}

@@ -53,21 +53,21 @@ const CardClass = ({ el }: iCardClassProps) => {
 };
 
 export const ListClassPage = () => {
-  const { yearId } = useAuthContext();
+  const { yearData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
   const { setCount, take, skip, setIsLoading } = useTableContext();
   const [data, setData] = useState<iClassSchoolList[]>();
 
   useEffect(() => {
-    if (yearId) {
-      let query = `?year_id=${yearId}&is_active=true`;
+    if (yearData) {
+      let query = `?year_id=${yearData.id}&is_active=true`;
       if (isInfreq) query += "&class_infreq=31";
       if (take) query += `&take=${take}`;
       if (skip) query += `&skip=${skip}`;
       setIsLoading(true);
       apiUsingNow
         .get<{ total: number; result: iClassSchoolList[] }>(
-          `classes/year/${yearId}${query}`
+          `classes/year/${yearData.id}${query}`
         )
         .then((res) => {
           setData(res.data.result);
@@ -75,7 +75,7 @@ export const ListClassPage = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [take, skip, isInfreq, yearId]);
+  }, [take, skip, isInfreq, yearData]);
 
   return (
     <LayoutBasePage

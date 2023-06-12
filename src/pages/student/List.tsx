@@ -48,14 +48,14 @@ const CardStudent = ({ student }: iCardStudentProps) => {
 };
 
 export const ListStudentPage = () => {
-  const { yearId } = useAuthContext();
+  const { yearData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
   const { setCount, take, skip, setIsLoading } = useTableContext();
   const [data, setData] = useState<iStudentList[]>();
 
   useEffect(() => {
-    if (yearId) {
-      let query = `?is_list=true&year_id=${yearId}`;
+    if (yearData) {
+      let query = `?is_list=true&year_id=${yearData.id}`;
       if (isInfreq) query += "&infreq=31";
       if (take) query += `&take=${take}`;
       if (skip) query += `&skip=${skip}`;
@@ -68,7 +68,7 @@ export const ListStudentPage = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [yearId, isInfreq, take, skip]);
+  }, [yearData, isInfreq, take, skip]);
 
   return (
     <LayoutBasePage

@@ -44,13 +44,13 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
 };
 
 export const ListFrequencyClosedAdm = () => {
-  const { yearId } = useAuthContext();
+  const { yearData } = useAuthContext();
   const { setCount, take, skip, setIsLoading } = useTableContext();
   const [data, setData] = useState<iFrequency[]>();
 
   useEffect(() => {
-    if (yearId) {
-      let query = `?year_id=${yearId}&status=CLOSED&is_infreq=true`;
+    if (yearData) {
+      let query = `?year_id=${yearData.id}&status=CLOSED&is_infreq=true`;
       if (take) query += `&take=${take}`;
       if (skip) query += `&skip=${skip}`;
       setIsLoading(true);
@@ -62,7 +62,7 @@ export const ListFrequencyClosedAdm = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [yearId, take, skip]);
+  }, [yearData, take, skip]);
   return (
     <LayoutBasePage title="Frequências Realizadas" tools={<Tools isHome />}>
       <TableBase headCells={headCells}>

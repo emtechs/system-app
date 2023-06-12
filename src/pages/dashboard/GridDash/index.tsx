@@ -79,7 +79,7 @@ const GridDashContent = ({
 
 export const GridDash = () => {
   const { setLoading } = useAppThemeContext();
-  const { yearId } = useAuthContext();
+  const { yearData } = useAuthContext();
   const {
     handleClickSchool,
     handleClickClass,
@@ -90,14 +90,14 @@ export const GridDash = () => {
   const [userDashData, setUserDashData] = useState<iUserDash>();
 
   useEffect(() => {
-    if (yearId) {
+    if (yearData) {
       setLoading(true);
       apiUsingNow
-        .get<iUserDash>(`users/dash/${yearId}`)
+        .get<iUserDash>(`users/dash/${yearData.id}`)
         .then((res) => setUserDashData(res.data))
         .finally(() => setLoading(false));
     }
-  }, [yearId]);
+  }, [yearData]);
 
   return (
     <>
