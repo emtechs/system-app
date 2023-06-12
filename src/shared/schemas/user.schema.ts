@@ -24,9 +24,6 @@ export const createDirectorSchema = z
       .string({ required_error: "CPF obrigatório" })
       .min(14, "Precisa ter 14 digitos"),
     password: z.string().optional(),
-
-    role: z.enum(["SERV", "DIRET", "SECRET", "ADMIN"]).default("DIRET"),
-    dash: z.enum(["COMMON", "SCHOOL", "ORGAN", "ADMIN"]).default("SCHOOL"),
     schools: z.object({ id: z.string().uuid() }).array(),
   })
   .refine((fields) => (fields.password = fields.login.substring(0, 6)));
