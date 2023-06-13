@@ -27,8 +27,6 @@ interface iCardClassDashProps {
 const CardClassDash = ({ classDash, date }: iCardClassDashProps) => {
   const { theme } = useAppThemeContext();
   const { createFrequency } = useFrequencyContext();
-  const month = +date.split("/")[1];
-  const day = +date.split("/")[0];
   const students = classDash.students.map(({ student }) => {
     return { student_id: student.id };
   });
@@ -39,8 +37,6 @@ const CardClassDash = ({ classDash, date }: iCardClassDashProps) => {
       onClick={() => {
         createFrequency({
           date,
-          month,
-          day,
           class_id: classDash.class.id,
           school_id: classDash.school.id,
           year_id: classDash.year.id,

@@ -6,8 +6,6 @@ export const frequencyCreateSchema = z
     date: z
       .string({ required_error: "Data obrigatório" })
       .nonempty("Data obrigatório"),
-    day: z.number(),
-    month: z.number(),
     class: z.object(
       {
         id: z.string().uuid(),

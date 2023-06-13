@@ -55,8 +55,6 @@ const DateValue = ({ setOpen }: iDateValueProps) => {
       setValue("school", schoolData?.school);
       setValue("year_id", yearData?.id);
       setValue("date", date);
-      setValue("month", +date.split("/")[1]);
-      setValue("day", +date.split("/")[0]);
     }
   }, [classData, dateData]);
 

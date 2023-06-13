@@ -15,18 +15,12 @@ interface iUserFreq {
   cpf: string;
 }
 
-interface iMonth {
-  month: number;
-  name: string;
-}
-
 interface iFrequencyBase {
   id: string;
   date: string;
   status: iStatusFrequency;
   created_at: Date;
   finished_at: number;
-  month?: iMonth;
   user: iUserFreq;
   class: iClassFreq;
   _count: { students: number };

@@ -7,7 +7,7 @@ const App = () => {
   return (
     <Providers>
       <AppRoutes />
-      <ToastContainer />
+      <ToastContainer autoClose={3000} limit={2} pauseOnHover={false} />
     </Providers>
   );
 };
