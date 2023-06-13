@@ -40,7 +40,7 @@ const SchoolDash = ({ school }: iSchoolDashProps) => {
           <Typography>{school.classes[0].class.name}</Typography>
           <Typography>{school.classes[0]._count.students} Alunos</Typography>
           <Typography>
-            {String(school.classes[0].class_infreq).replace(".", ",")}% de
+            {String(school.classes[0].infreq).replace(".", ",")}% de
             Infrequência
           </Typography>
           {school.director && (

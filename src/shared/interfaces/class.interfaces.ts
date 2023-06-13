@@ -34,7 +34,7 @@ export interface iClassFreq {
   class: iClass;
   school: iWithSchool;
   year: iYear;
-  class_infreq: number;
+  infreq: number;
 }
 
 export interface iClassSchoolList extends iClassFreq {
@@ -43,13 +43,12 @@ export interface iClassSchoolList extends iClassFreq {
 
 export interface iClassWithSchoolDash {
   class: iClass;
-  class_infreq: number;
+  infreq: number;
   _count: { students: number };
 }
 
 export interface iClassWithSchool {
   class: iClass;
-  class_infreq: number;
   school: iWithSchool;
   year: iYear;
   students: iStudentWithSchool[];

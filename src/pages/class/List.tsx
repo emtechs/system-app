@@ -43,10 +43,10 @@ const CardClass = ({ el }: iCardClassProps) => {
       <TableCell
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(el.class_infreq, theme),
+          bgcolor: defineBgColorInfrequency(el.infreq, theme),
         }}
       >
-        {String(el.class_infreq).replace(".", ",")}%
+        {String(el.infreq).replace(".", ",")}%
       </TableCell>
     </TableRow>
   );
