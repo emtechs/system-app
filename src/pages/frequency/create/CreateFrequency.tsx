@@ -67,7 +67,7 @@ const DateValue = ({ setOpen }: iDateValueProps) => {
           value={dateData}
           label="Data"
           minDate={dayjs(`${yearData?.year}-01-01`)}
-          maxDate={dayjs(`${yearData?.year}-12-31`)}
+          maxDate={dayjs()}
           onChange={(newValue) => setDateData(newValue)}
         />
       </DemoContainer>

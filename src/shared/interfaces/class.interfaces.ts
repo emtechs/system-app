@@ -21,7 +21,7 @@ export interface iClassSelect extends iClass {
 
 export interface iClassDash {
   class: iClass;
-  class_infreq: number;
+  infreq: number;
   school: iWithSchool;
   year: iYear;
   students: {

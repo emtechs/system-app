@@ -3,247 +3,107 @@ import {
   Button,
   Card,
   CardActionArea,
-  CardActions,
   CardContent,
   Grid,
   Paper,
   Typography,
-  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
-import { useEffect, useState } from "react";
-import { apiUsingNow } from "../../shared/services";
+import { ReactNode, useEffect, useState } from "react";
 import {
-  useAppThemeContext,
   useAuthContext,
-  useFrequencyContext,
+  useCalendarContext,
+  useDrawerContext,
 } from "../../shared/contexts";
-import {
-  iClassDash,
-  iClassWithSchool,
-  iFrequency,
-  iSchoolWithStudents,
-  iStudentDash,
-} from "../../shared/interfaces";
-import { SelectSchoolData } from "../../shared/components";
+import { CalendarDashCommon, SelectSchoolData } from "../../shared/components";
 import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/pt-br";
-import { useNavigate } from "react-router-dom";
+import { useAppThemeContext } from "../../shared/contexts/ThemeContext";
+import { apiUsingNow } from "../../shared/services";
+import { iDashSchoolServer } from "../../shared/interfaces";
+import { Link } from "react-router-dom";
+import { Checklist, EventBusy, School } from "@mui/icons-material";
+dayjs.extend(localizedFormat);
 
-interface iClassDashProps {
-  classData: iClassDash;
+interface iGridDashContentProps {
+  icon: ReactNode;
+  quant: number | string;
+  info: string;
+  dest: string;
+  onClick?: () => void;
 }
 
-const ClassDash = ({ classData }: iClassDashProps) => {
-  const { createFrequency } = useFrequencyContext();
-  const date = dayjs().format("DD/MM/YYYY");
-  const month = +date.split("/")[1];
-  const day = +date.split("/")[0];
-  const students = classData.students.map(({ student }) => {
-    return { student_id: student.id };
-  });
+const GridDashContent = ({
+  icon,
+  quant,
+  info,
+  dest,
+  onClick,
+}: iGridDashContentProps) => {
+  const theme = useTheme();
 
   return (
-    <Grid item xs={12} md={6} lg={3}>
+    <Grid item xs={4}>
       <Card>
-        <CardActionArea
-          onClick={() =>
-            createFrequency({
-              date,
-              month,
-              day,
-              class_id: classData.class.id,
-              school_id: classData.school.id,
-              year_id: classData.year.id,
-              students,
-            })
-          }
-        >
-          <CardContent
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Typography>{classData.class.name}</Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    </Grid>
-  );
-};
-
-interface iFreqOpenDashProps {
-  freq: iFrequency;
-}
-
-const FreqOpenDash = ({ freq }: iFreqOpenDashProps) => {
-  const navigate = useNavigate();
-  return (
-    <Grid item xs={12} md={6} lg={3}>
-      <Card>
-        <CardActionArea onClick={() => navigate(`/frequency/${freq.id}`)}>
-          <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Typography gutterBottom>{freq.date}</Typography>
-            <Typography gutterBottom>{freq.class.class.name}</Typography>
-            <Typography>{freq._count.students} Alunos</Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    </Grid>
-  );
-};
-
-interface iClassDashAlertProps {
-  classData: iClassWithSchool;
-}
-
-const ClassDashAlert = ({ classData }: iClassDashAlertProps) => {
-  const navigate = useNavigate();
-  return (
-    <Grid item xs={12} md={6} lg={4}>
-      <Card>
-        <CardActionArea
-          onClick={() =>
-            navigate(
-              `/class/${classData.class.id}/${classData.school.id}/${classData.year.id}`
-            )
-          }
-        >
-          <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Typography gutterBottom>{classData.class.name}</Typography>
-            <Typography gutterBottom>
-              {classData._count.students} Alunos
-            </Typography>
-            <Typography>
-              {String(classData.infrequency).replace(".", ",")}% de Infrequência
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    </Grid>
-  );
-};
-
-interface iStudentAlertProps {
-  student: iStudentDash;
-}
-
-const StudentAlert = ({ student }: iStudentAlertProps) => {
-  return (
-    <Grid item xs={12} md={6} lg={4}>
-      <Card>
-        <CardContent
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Typography gutterBottom>{student.registry}</Typography>
-          <Typography
-            overflow="hidden"
-            whiteSpace="nowrap"
-            textOverflow="ellipses"
-            gutterBottom
-          >
-            {student.name}
-          </Typography>
-          <Typography gutterBottom>
-            {String(student.infrequency).replace(".", ",")}% de Infrequência
-          </Typography>
-          <Typography>{student.class.name}</Typography>
-        </CardContent>
+        <Link to={dest}>
+          <CardActionArea onClick={onClick}>
+            <CardContent>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                gap={0.5}
+              >
+                {icon}
+                <Typography sx={{ fontSize: theme.spacing(4) }}>
+                  {quant}
+                </Typography>
+                <Typography
+                  component="div"
+                  display="flex"
+                  textAlign="center"
+                  alignItems="center"
+                  height={30}
+                  fontSize={theme.spacing(1.6)}
+                >
+                  {info}
+                </Typography>
+              </Box>
+            </CardContent>
+          </CardActionArea>
+        </Link>
       </Card>
     </Grid>
   );
 };
 
 export const DashboardCommon = () => {
-  const theme = useTheme();
-  const navigate = useNavigate();
-  const mdLgBetween = useMediaQuery(theme.breakpoints.between("md", "lg"));
-  const mdUp = useMediaQuery(theme.breakpoints.up("md"));
-  const { setLoading } = useAppThemeContext();
+  const { theme, setLoading } = useAppThemeContext();
   const { schoolData, yearData } = useAuthContext();
-  const [listClassData, setListClassData] = useState<iClassDash[]>();
-  const [listFreqData, setListFreqData] = useState<iFrequency[]>();
-  const [listAlertClassData, setListAlertClassData] =
-    useState<iClassWithSchool[]>();
-  const [listAlertStudentData, setListAlertStudentData] =
-    useState<iStudentDash[]>();
-
-  useEffect(() => {
-    if (schoolData) {
-      const date = dayjs().format("DD/MM/YYYY");
-      setLoading(true);
-      apiUsingNow
-        .get<{ result: iClassDash[] }>(
-          `classes/school/${schoolData.school.id}?is_dash=true&date=${date}`
-        )
-        .then((res) => setListClassData(res.data.result))
-        .finally(() => setLoading(false));
-      setLoading(true);
-      apiUsingNow
-        .get<{ result: iFrequency[] }>(
-          `frequencies?school_id=${schoolData.school.id}&status=OPENED`
-        )
-        .then((res) => setListFreqData(res.data.result))
-        .finally(() => setLoading(false));
-    }
-  }, [schoolData]);
+  const { dateDisplay, dateData, setDateDisplay, setDateData } =
+    useCalendarContext();
+  const { handleClickFrequency } = useDrawerContext();
+  const [infoSchool, setInfoSchool] = useState<iDashSchoolServer>();
 
   useEffect(() => {
     if (schoolData && yearData) {
-      let take = 1;
-      if (mdLgBetween) {
-        take = 2;
-      } else if (mdUp) {
-        take = 3;
-      }
       setLoading(true);
       apiUsingNow
-        .get<{ result: iClassWithSchool[] }>(
-          `classes/school/${schoolData.school.id}?year_id=${yearData.id}&class_infreq=1&take=${take}`
+        .get<iDashSchoolServer>(
+          `schools/${schoolData.school.id}/dash/server?date=${dateData}&year_id=${yearData.id}`
         )
-        .then((res) => setListAlertClassData(res.data.result))
-        .finally(() => setLoading(false));
-      setLoading(true);
-      apiUsingNow
-        .get<iSchoolWithStudents>(
-          `schools/${schoolData.school.id}?year_id=${yearData.id}`
-        )
-        .then((res) => {
-          const students = res.data.students;
-          if (students.length <= take) {
-            setListAlertStudentData(students);
-          } else {
-            setListAlertStudentData(students.slice(0, take));
-          }
-        })
+        .then((res) => setInfoSchool(res.data))
         .finally(() => setLoading(false));
     }
-  }, [schoolData, yearData]);
+  }, [dateData, schoolData, yearData]);
 
   return (
-    <LayoutBasePage title="Página Inicial" school={<SelectSchoolData />}>
+    <LayoutBasePage title="Página Inicial">
       <Box
         my={1}
         mx={2}
-        display="flex"
         flexDirection="column"
         component={Paper}
         variant="outlined"
@@ -251,7 +111,6 @@ export const DashboardCommon = () => {
         <Card>
           <CardContent>
             <Grid container direction="column" p={2} spacing={2}>
-              <Typography variant="h6">Realizar Frequência</Typography>
               <Grid
                 container
                 item
@@ -259,120 +118,97 @@ export const DashboardCommon = () => {
                 justifyContent="center"
                 spacing={2}
               >
-                {listClassData &&
-                  listClassData.map((el) => (
-                    <ClassDash key={el.class.id} classData={el} />
-                  ))}
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Box>
-      <Box
-        m={2}
-        display="flex"
-        flexDirection="column"
-        component={Paper}
-        variant="outlined"
-      >
-        <Card>
-          <CardContent>
-            <Grid container direction="column" p={2} spacing={2}>
-              <Typography variant="h6">Frequências Em Aberto</Typography>
-              <Grid
-                container
-                item
-                direction="row"
-                justifyContent="center"
-                spacing={2}
-              >
-                {listFreqData && listFreqData.length > 0 ? (
-                  listFreqData.map((el) => (
-                    <FreqOpenDash key={el.id} freq={el} />
-                  ))
-                ) : (
-                  <Typography m={2}>
-                    Nenhuma frequência em aberto no momento!
-                  </Typography>
-                )}
-              </Grid>
-            </Grid>
-          </CardContent>
-          <CardActions sx={{ justifyContent: "flex-end" }}>
-            <Button onClick={() => navigate("/frequency/list")}>
-              Saber Mais
-            </Button>
-          </CardActions>
-        </Card>
-      </Box>
-      <Box
-        m={2}
-        display="flex"
-        flexDirection="column"
-        component={Paper}
-        variant="outlined"
-      >
-        <Card>
-          <CardContent>
-            <Grid container direction="column" p={2} spacing={2}>
-              <Typography variant="h6">Alerta Turmas</Typography>
-              <Grid
-                container
-                item
-                direction="row"
-                justifyContent="center"
-                spacing={2}
-              >
-                {listAlertClassData && listAlertClassData.length > 0 ? (
-                  listAlertClassData.map((el) => (
-                    <ClassDashAlert key={el.class.id} classData={el} />
-                  ))
-                ) : (
-                  <Typography m={2}>
-                    Nenhuma tuma com infrequência no momento!
-                  </Typography>
-                )}
-              </Grid>
-            </Grid>
-          </CardContent>
-          <CardActions sx={{ justifyContent: "flex-end" }}>
-            <Button
-              onClick={() =>
-                navigate(`/class/list/${schoolData?.school.id}/${yearData?.id}`)
-              }
-            >
-              Saber Mais
-            </Button>
-          </CardActions>
-        </Card>
-      </Box>
-      <Box
-        m={2}
-        display="flex"
-        flexDirection="column"
-        component={Paper}
-        variant="outlined"
-      >
-        <Card>
-          <CardContent>
-            <Grid container direction="column" p={2} spacing={2}>
-              <Typography variant="h6">Alerta Alunos</Typography>
-              <Grid
-                container
-                item
-                direction="row"
-                justifyContent="center"
-                spacing={2}
-              >
-                {listAlertStudentData && listAlertStudentData.length > 0 ? (
-                  listAlertStudentData.map((el) => (
-                    <StudentAlert key={el.id} student={el} />
-                  ))
-                ) : (
-                  <Typography m={2}>
-                    Nenhum aluno infrequente no momento!
-                  </Typography>
-                )}
+                <Grid item xs={12} md={7}>
+                  <Box
+                    fontFamily={theme.typography.fontFamily}
+                    width="100%"
+                    display="flex"
+                    flexDirection="column"
+                    gap={1}
+                  >
+                    <CalendarDashCommon />
+                  </Box>
+                </Grid>
+                <Grid container item direction="row" xs={12} md={5} spacing={2}>
+                  <Grid item xs={12}>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="space-between"
+                    >
+                      <Typography variant="subtitle1">{dateDisplay}</Typography>
+                      <Button
+                        size="small"
+                        variant="contained"
+                        disableElevation
+                        disabled={dateDisplay === dayjs().format("dddd, LL")}
+                        onClick={() => {
+                          setDateData(dayjs().format("DD/MM/YYYY"));
+                          setDateDisplay(dayjs().format("dddd, LL"));
+                        }}
+                      >
+                        hoje
+                      </Button>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <SelectSchoolData />
+                  </Grid>
+                  {infoSchool && (
+                    <>
+                      <GridDashContent
+                        icon={<Checklist fontSize="large" />}
+                        quant={`${infoSchool.frequencies}/${infoSchool.classTotal}`}
+                        info="Frequências no dia"
+                        dest={
+                          infoSchool.frequencies === infoSchool.classTotal
+                            ? "/frequency/list?date=" + dateData
+                            : "frequency?date=" + dateData + "&order=name"
+                        }
+                        onClick={handleClickFrequency}
+                      />
+                      <GridDashContent
+                        icon={<EventBusy fontSize="large" />}
+                        quant={infoSchool.frequencyOpen}
+                        info="Frequências em aberto"
+                        dest={
+                          infoSchool.frequencyOpen !== 0
+                            ? "/frequency/realize"
+                            : infoSchool.frequencies === infoSchool.classTotal
+                            ? "/frequency/list?date=" + dateData
+                            : "frequency?date=" + dateData + "&order=name"
+                        }
+                        onClick={handleClickFrequency}
+                      />
+                      <GridDashContent
+                        icon={<School fontSize="large" />}
+                        quant={
+                          infoSchool?.school_infreq
+                            ? infoSchool.school_infreq.toFixed(0) + "%"
+                            : "0%"
+                        }
+                        info="Infrequência"
+                        dest="/frequency/class"
+                        onClick={handleClickFrequency}
+                      />
+                    </>
+                  )}
+                  <Grid item xs={12}>
+                    <Card>
+                      <CardContent>
+                        <Box
+                          display="flex"
+                          justifyContent="space-evenly"
+                          alignItems="center"
+                          gap={1}
+                        >
+                          <img width="50%" src="/pref_massape.png" />
+                          <img width="25%" src="/emtechs.jpg" />
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </CardContent>

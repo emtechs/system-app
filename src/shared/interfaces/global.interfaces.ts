@@ -8,6 +8,7 @@ export interface iTable extends iChildren {
   is_active?: boolean;
   headCells: iheadCell[];
   is_pagination?: boolean;
+  message?: string;
 }
 
 export interface iPageProps {

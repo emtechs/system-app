@@ -12,4 +12,6 @@ a {
   --fc-button-border-color: #006cbe;
   --fc-button-hover-bg-color: #004b85ff;
   --fc-button-hover-border-color: #004b85ff;
+  --fc-button-active-bg-color: #599fd5ff;
+  --fc-button-active-border-color: #599fd5ff;
 }

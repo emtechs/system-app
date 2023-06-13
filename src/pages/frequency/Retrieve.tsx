@@ -1,22 +1,32 @@
-import { TableCell, TableRow, useTheme } from "@mui/material";
+import {
+  LinearProgress,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableFooter,
+  TableHead,
+  TableRow,
+  useTheme,
+} from "@mui/material";
 import {
   DialogMissed,
   DialogRemoveMissed,
-  TableBase,
   Tools,
 } from "../../shared/components";
-import { useFrequencyContext, useTableContext } from "../../shared/contexts";
 import {
-  iFrequency,
-  iFrequencyStudents,
-  iheadCell,
-} from "../../shared/interfaces";
+  useCalendarContext,
+  useFrequencyContext,
+  useTableContext,
+} from "../../shared/contexts";
+import { iFrequency, iFrequencyStudents } from "../../shared/interfaces";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useParams } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import { LayoutBasePage } from "../../shared/layouts";
 import { CardSchool } from "../../shared/components/card";
 import {
@@ -25,13 +35,6 @@ import {
 } from "../../shared/scripts";
 dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
-
-const headCells: iheadCell[] = [
-  { order: "date", numeric: false, label: "Matrícula" },
-  { order: "name", numeric: false, label: "Aluno" },
-  { numeric: true, label: "Estado da Presença" },
-  { order: "name", numeric: false, label: "Atualizado Em" },
-];
 
 interface iCardFrequencyProps {
   student: iFrequencyStudents;
@@ -83,8 +86,10 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
 };
 
 export const RetrieveFrequencyPage = () => {
-  const { id } = useParams<"id">();
-  const { setIsLoading, setCount } = useTableContext();
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+  const { dateData } = useCalendarContext();
+  const { setIsLoading, setCount, isLoading } = useTableContext();
   const { studentData, frequencyData, setFrequencyData } =
     useFrequencyContext();
 
@@ -99,7 +104,11 @@ export const RetrieveFrequencyPage = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [studentData]);
+  }, [studentData, id]);
+
+  if (!id) {
+    return <Navigate to={"/frequency?date=" + dateData + "&order=name"} />;
+  }
 
   return (
     <LayoutBasePage
@@ -111,11 +120,36 @@ export const RetrieveFrequencyPage = () => {
           : "Realizar Frequência"
       }
     >
-      <TableBase headCells={headCells} is_pagination={false}>
-        {frequencyData?.students.map((el) => (
-          <CardFrequency key={el.id} student={el} />
-        ))}
-      </TableBase>
+      <TableContainer
+        sx={{ mx: 2, mt: 1, width: "auto" }}
+        component={Paper}
+        variant="outlined"
+      >
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Matrícula</TableCell>
+              <TableCell>Aluno</TableCell>
+              <TableCell>Estado da Presença</TableCell>
+              <TableCell>Atualizado Em</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {frequencyData?.students.map((el) => (
+              <CardFrequency key={el.id} student={el} />
+            ))}
+          </TableBody>
+          <TableFooter>
+            {isLoading && (
+              <TableRow>
+                <TableCell colSpan={4}>
+                  <LinearProgress variant="indeterminate" />
+                </TableCell>
+              </TableRow>
+            )}
+          </TableFooter>
+        </Table>
+      </TableContainer>
     </LayoutBasePage>
   );
 };

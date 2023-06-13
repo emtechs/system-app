@@ -1,2 +1,3 @@
-export * from "./CalendarDashAdmin";
-export * from "./CalendarDashSchool";
+export * from "./Admin";
+export * from "./Common";
+export * from "./School";

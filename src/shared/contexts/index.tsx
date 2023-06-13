@@ -1,5 +1,6 @@
 import { iChildren } from "../interfaces";
 import { AuthProvider } from "./AuthContext";
+import { CalendarProvider } from "./CalendarContext";
 import { ClassProvider } from "./ClassContext";
 import { DrawerProvider } from "./DrawerContext";
 import { FrequencyProvider } from "./FrequencyContext";
@@ -18,7 +19,9 @@ const Providers = ({ children }: iChildren) => (
             <SchoolProvider>
               <ClassProvider>
                 <FrequencyProvider>
-                  <TableProvider>{children}</TableProvider>
+                  <TableProvider>
+                    <CalendarProvider>{children}</CalendarProvider>
+                  </TableProvider>
                 </FrequencyProvider>
               </ClassProvider>
             </SchoolProvider>
@@ -31,6 +34,7 @@ const Providers = ({ children }: iChildren) => (
 
 export default Providers;
 export { useAuthContext } from "./AuthContext";
+export { useCalendarContext } from "./CalendarContext";
 export { useClassContext } from "./ClassContext";
 export { useDrawerContext } from "./DrawerContext";
 export { useFrequencyContext } from "./FrequencyContext";

@@ -16,6 +16,13 @@ export interface iDirector {
   cpf: string;
 }
 
+export interface iDashSchoolServer {
+  frequencies: number;
+  school_infreq: number;
+  frequencyOpen: number;
+  classTotal: number;
+}
+
 export interface iSchool {
   id: string;
   name: string;

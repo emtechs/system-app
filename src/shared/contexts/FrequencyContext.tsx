@@ -60,7 +60,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
       setLoading(true);
       const frequency = await postFrequency(data);
       toast.success("Frequência cadastrado com sucesso!");
-      navigate(`/frequency/${frequency.id}`);
+      navigate(`/frequency/realize?id=${frequency.id}`);
     } catch {
       toast.error("Não foi possível cadastrar a frequência no momento!");
     } finally {
