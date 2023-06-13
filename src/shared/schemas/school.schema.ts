@@ -46,12 +46,6 @@ export const serverCreateSchema = z
   })
   .refine((fields) => (fields.password = fields.login.substring(0, 6)));
 
-export const classCreateSchema = z.object({
-  name: z
-    .string({ required_error: "Nome obrigatório" })
-    .nonempty("Nome obrigatório"),
-});
-
 export const studentCreateSchema = z
   .object({
     name: z

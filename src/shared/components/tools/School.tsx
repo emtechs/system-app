@@ -100,7 +100,7 @@ export const SchoolTools = ({ school_id }: iSchoolToolsProps) => {
             Editar
           </MenuItem>
         </Link>
-        <Link to={"/school/class?id=" + school_id}>
+        <Link to={"/school/class?id=" + school_id + "&order=name"}>
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <Workspaces />

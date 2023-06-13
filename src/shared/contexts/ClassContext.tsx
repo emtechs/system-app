@@ -10,11 +10,17 @@ import {
   iChildren,
   iClass,
   iClassRequest,
+  iClassSchoolRequest,
   iClassSelect,
   iClassWithSchool,
   iSchoolImportRequest,
 } from "../interfaces";
-import { patchClassSchool, postClass, postImportClass } from "../services";
+import {
+  patchClassSchool,
+  postClass,
+  postClassSchool,
+  postImportClass,
+} from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
@@ -22,6 +28,12 @@ import { FieldValues } from "react-hook-form";
 
 interface iClassContextData {
   createClass: (data: iClassRequest, back?: string) => Promise<void>;
+  createClassSchool: (
+    data: iClassSchoolRequest,
+    year_id: string,
+    school_id: string,
+    back?: string
+  ) => Promise<void>;
   importClass: (data: iSchoolImportRequest, back?: string) => Promise<void>;
   updateClassSchool: (data: FieldValues, back?: string) => Promise<void>;
   classDataSelect: iClassSelect[] | undefined;
@@ -56,6 +68,27 @@ export const ClassProvider = ({ children }: iChildren) => {
         navigate(back ? back : "/");
       } catch {
         toast.error("Não foi possível cadastrar a turma no momento!");
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
+  const handleCreateClassSchool = useCallback(
+    async (
+      data: iClassSchoolRequest,
+      year_id: string,
+      school_id: string,
+      back?: string
+    ) => {
+      try {
+        setLoading(true);
+        await postClassSchool(data, year_id, school_id);
+        toast.success("Escola definida com sucesso!");
+        navigate(back ? back : "/");
+      } catch {
+        toast.error("Não foi possível definir a escola no momento!");
       } finally {
         setLoading(false);
       }
@@ -100,6 +133,7 @@ export const ClassProvider = ({ children }: iChildren) => {
     <ClassContext.Provider
       value={{
         createClass: handleCreateClass,
+        createClassSchool: handleCreateClassSchool,
         importClass: handleImportClass,
         updateClassSchool: handleUpdateClassSchool,
         classDataSelect,

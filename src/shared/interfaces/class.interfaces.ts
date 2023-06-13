@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { classCreateSchema } from "../schemas";
+import { classCreateSchema, classSchoolCreateSchema } from "../schemas";
 import { iWithSchool } from "./school.interface";
 import { iStudent, iStudentWithSchool } from "./student.interface";
 import { iYear } from "./calendar.interfaces";
@@ -57,3 +57,5 @@ export interface iClassWithSchool {
 }
 
 export type iClassRequest = z.infer<typeof classCreateSchema>;
+
+export type iClassSchoolRequest = z.infer<typeof classSchoolCreateSchema>;

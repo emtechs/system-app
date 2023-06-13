@@ -1,9 +1,21 @@
 import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
-import { iClass } from "../interfaces";
+import { iClass, iClassSchoolRequest } from "../interfaces";
 
 export async function postClass(data: FieldValues): Promise<iClass> {
   const { data: response } = await apiUsingNow.post<iClass>("classes", data);
+  return response;
+}
+
+export async function postClassSchool(
+  data: iClassSchoolRequest,
+  year_id: string,
+  school_id: string
+): Promise<iClass> {
+  const { data: response } = await apiUsingNow.post<iClass>(
+    `classes/${year_id}/${school_id}`,
+    data
+  );
   return response;
 }
 

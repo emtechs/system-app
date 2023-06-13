@@ -18,7 +18,7 @@ export const Class = () => {
           <ListItemLink icon={<AddBox />} label="Nova" to="class/create" />
           <ListItemLink
             icon={<SchoolTwoTone />}
-            label="Escolas"
+            label="Escola"
             to="class/define/school"
           />
           <ListItemLink icon={<Edit />} label="Editar" to="class/edit" />
