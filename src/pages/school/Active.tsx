@@ -18,7 +18,6 @@ import { iSchool, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { TableBase, Tools } from "../../shared/components";
 import { LayoutSchoolPage } from "./Layout";
-import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "../../shared/hooks";
 
 const headCells: iheadCell[] = [
@@ -77,27 +76,17 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
 };
 
 export const ActiveSchoolPage = () => {
-  const [searchParams] = useSearchParams();
-  const orderData = searchParams.get("order");
   const { debounce } = useDebounce();
   const { yearData } = useAuthContext();
   const { updateSchoolData } = useSchoolContext();
-  const { setCount, take, skip, order, setOrder, by, setIsLoading } =
-    useTableContext();
+  const { setCount, setIsLoading, defineQuery } = useTableContext();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [search, setSearch] = useState<string>();
 
   useEffect(() => {
     if (yearData) {
-      let query = `?year_id=${yearData.id}&by=${by}&is_active=false`;
-      if (order) {
-        query += `&order=${order}`;
-      } else if (orderData) {
-        setOrder(orderData);
-        query += `&order=${orderData}`;
-      }
-      if (take) query += `&take=${take}`;
-      if (skip) query += `&skip=${skip}`;
+      let query = defineQuery(yearData.id);
+      query += "&is_active=false";
       if (search) {
         query += `&name=${search}`;
         setIsLoading(true);
@@ -121,7 +110,7 @@ export const ActiveSchoolPage = () => {
           .finally(() => setIsLoading(false));
       }
     }
-  }, [yearData, updateSchoolData, take, skip, orderData, order, by, search]);
+  }, [yearData, updateSchoolData, defineQuery, search]);
 
   return (
     <LayoutSchoolPage

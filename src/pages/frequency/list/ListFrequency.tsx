@@ -1,6 +1,7 @@
 import { useAuthContext } from "../../../shared/contexts";
 import { ListFrequencyCommon } from "./ListFrequencyCommon";
 import { ListFrequencyAdm } from "./ListFrequencyAdm";
+import { ListFrequencySchool } from "./ListFrequencySchool";
 
 export const ListFrequencyPage = () => {
   const { dashData } = useAuthContext();
@@ -12,7 +13,7 @@ export const ListFrequencyPage = () => {
       return <ListFrequencyCommon />;
 
     case "COMMON":
-      return <ListFrequencyCommon />;
+      return <ListFrequencySchool />;
 
     default:
       return <></>;

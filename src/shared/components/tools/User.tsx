@@ -64,7 +64,7 @@ export const UserTools = () => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <Link to="/user/create?back=/user/list?order=name">
+        <Link to="/user/create?back=/user/list">
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <PersonAdd />
@@ -72,7 +72,7 @@ export const UserTools = () => {
             Administrador
           </MenuItem>
         </Link>
-        <Link to="/user/create/director?back=/user/list?order=name">
+        <Link to="/user/create/director?back=/user/list">
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <PersonAdd />

@@ -8,7 +8,6 @@ import {
   useState,
 } from "react";
 import { iChildren } from "../interfaces";
-import { useSearchParams } from "react-router-dom";
 
 interface iTableContextData {
   count: number;
@@ -19,13 +18,18 @@ interface iTableContextData {
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
   skip: number | undefined;
-  order: string | null | undefined;
-  setOrder: Dispatch<SetStateAction<string | undefined | null>>;
+  order: string | undefined;
+  setOrder: Dispatch<SetStateAction<string | undefined>>;
   by: "asc" | "desc";
   setBy: Dispatch<SetStateAction<"asc" | "desc">>;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
-  defineQuery: (year_id?: string, school_id?: string, date?: string) => string;
+  defineQuery: (
+    year_id?: string,
+    school_id?: string,
+    class_id?: string,
+    date?: string
+  ) => string;
 }
 
 type iRowsPage =
@@ -38,14 +42,12 @@ type iRowsPage =
 const TableContext = createContext({} as iTableContextData);
 
 export const TableProvider = ({ children }: iChildren) => {
-  const [searchParams] = useSearchParams();
-  const orderData = searchParams.get("order");
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPage, setrowsPage] = useState<iRowsPage[]>();
   const [take, setTake] = useState<number>();
   const [skip, setSkip] = useState<number>();
-  const [order, setOrder] = useState<string | null>();
+  const [order, setOrder] = useState<string | undefined>("name");
   const [by, setBy] = useState<"asc" | "desc">("asc");
   const [isLoading, setIsLoading] = useState(true);
 
@@ -81,23 +83,26 @@ export const TableProvider = ({ children }: iChildren) => {
   }, [page, take]);
 
   const defineQuery = useCallback(
-    (year_id?: string, school_id?: string, date?: string) => {
+    (
+      year_id?: string,
+      school_id?: string,
+      class_id?: string,
+      date?: string
+    ) => {
       let query = "?by=" + by;
       if (order) {
         query += `&order=${order}`;
-      } else if (orderData) {
-        setOrder(orderData);
-        query += `&order=${orderData}`;
       }
       if (take) query += "&take=" + take;
       if (skip) query += "&skip=" + skip;
       if (year_id) query += "&year_id=" + year_id;
       if (school_id) query += "&school_id=" + school_id;
+      if (class_id) query += "&class_id=" + class_id;
       if (date) query += "&date=" + date;
 
       return query;
     },
-    [by, take, skip, order, orderData]
+    [by, take, skip, order]
   );
 
   return (

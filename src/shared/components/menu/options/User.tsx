@@ -34,12 +34,12 @@ export const User = () => {
           <ListItemLink
             icon={<PeopleAlt />}
             label="Listar"
-            to="user/list?order=name"
+            to="user/list"
           />
           <ListItemLink
             icon={<HowToReg />}
             label="Ativar"
-            to="user/active?order=name"
+            to="user/active"
           />
         </List>
       );

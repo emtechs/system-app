@@ -17,14 +17,14 @@ export const Frequency = () => {
       <ListItemLink
         icon={<EventAvailable />}
         label="Frequência"
-        to={"frequency?date=" + dateData + "&order=name"}
+        to={"frequency?date=" + dateData}
       />
       <ListItemLink
         icon={<Checklist />}
         label="Realizar"
         to="frequency/realize"
       />
-      <ListItemLink icon={<Outbox />} label="Em Aberto" to="frequency/list" />
+      <ListItemLink icon={<Outbox />} label="Em Aberto" to="frequency/open" />
       <ListItemLink icon={<ListIcon />} label="Listar" to="frequency/list" />
     </List>
   );

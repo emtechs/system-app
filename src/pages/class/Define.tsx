@@ -11,7 +11,6 @@ import {
 import {
   useAuthContext,
   useClassContext,
-  useDrawerContext,
   useSchoolContext,
 } from "../../shared/contexts";
 import { classSchoolCreateSchema } from "../../shared/schemas";
@@ -23,7 +22,6 @@ export const DefineSchoolsPage = () => {
   const { yearData } = useAuthContext();
   const { createClassSchool } = useClassContext();
   const { schoolSelect } = useSchoolContext();
-  const { handleClickSchool } = useDrawerContext();
   let school_id = "";
   if (id) {
     school_id = id;
@@ -37,10 +35,9 @@ export const DefineSchoolsPage = () => {
       tools={
         <Tools
           back={back}
-          onClickBack={handleClickSchool}
           isHome
           isNew
-          destNew="/class/create"
+          destNew="/class/create?back_click=school"
         />
       }
     >

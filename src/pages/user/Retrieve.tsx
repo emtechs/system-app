@@ -139,7 +139,7 @@ export const RetrieveUserPage = () => {
   }, [updateServerData, take, skip, orderData, order, by, search]);
 
   if (!id) {
-    return <Navigate to="/user/list?order=name" />;
+    return <Navigate to="/user/list" />;
   }
 
   return (
@@ -155,12 +155,11 @@ export const RetrieveUserPage = () => {
             back={
               school_id
                 ? `/school?id=${school_id}&order=name`
-                : "/user/list?order=name"
+                : "/user/list"
             }
             isHome
             isNew
-            onClickBack={school_id ? handleClickSchool : undefined}
-            destNew={`/school/create/server?cpf=${updateUserData?.cpf}&name=${updateUserData?.name}&back=/user?id=${updateUserData?.id}&order=name`}
+            destNew={`/school/create/server?cpf=${updateUserData?.cpf}&name=${updateUserData?.name}&back_click=user&back=/user?id=${updateUserData?.id}&order=name`}
             iconNew={<School />}
             onClickNew={handleClickSchool}
             isSearch

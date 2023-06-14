@@ -15,6 +15,11 @@ export interface iClassSchool {
   year_id: string;
 }
 
+export interface iClassStudent {
+  class: { class: iClass; school: iClass };
+  student: iStudent;
+}
+
 export interface iClassSelect extends iClass {
   label: string;
 }

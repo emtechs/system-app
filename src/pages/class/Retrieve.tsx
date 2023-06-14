@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   useAuthContext,
@@ -12,6 +12,7 @@ import { TableBase, Tools } from "../../shared/components";
 import { TableCell, TableRow, useTheme } from "@mui/material";
 import { CardSchoolId } from "../../shared/components/card";
 import { defineBgColorInfrequency } from "../../shared/scripts";
+import { useDebounce } from "../../shared/hooks";
 
 const headCells: iheadCell[] = [
   { order: "registry", numeric: true, label: "Matrícula" },
@@ -52,41 +53,65 @@ export const RetrieveClassPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const school_id = searchParams.get("school_id");
-  const classBack = searchParams.get("class");
-  const { yearData } = useAuthContext();
+  const back = searchParams.get("back");
+  const { debounce } = useDebounce();
+  const { yearData, dashData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
   const { setIsLoading, defineQuery, setCount } = useTableContext();
   const [data, setData] = useState<iStudentWithSchool[]>();
+  const [search, setSearch] = useState<string>();
 
   useEffect(() => {
-    if (yearData && school_id) {
-      let query = defineQuery(yearData.id, school_id);
+    if (yearData && school_id && id) {
+      let query = defineQuery(undefined, school_id, id);
+      query += "&is_infreq=true";
       if (isInfreq) query += "&infreq=31";
-      setIsLoading(true);
-      apiUsingNow
-        .get<{ total: number; result: iStudentWithSchool[] }>(
-          `classes/student/${id}/${school_id}/${yearData.id}${query}`
-        )
-        .then((res) => {
-          setCount(res.data.total);
-          setData(res.data.result);
-        })
-        .finally(() => setIsLoading(false));
+      if (search) {
+        query += `&name=${search}`;
+        setIsLoading(true);
+        debounce(() => {
+          apiUsingNow
+            .get<{ total: number; result: iStudentWithSchool[] }>(
+              `classes/student/${yearData.id}${query}`
+            )
+            .then((res) => {
+              setCount(res.data.total);
+              setData(res.data.result);
+            })
+            .finally(() => setIsLoading(false));
+        });
+      } else {
+        setIsLoading(true);
+        apiUsingNow
+          .get<{ total: number; result: iStudentWithSchool[] }>(
+            `classes/student/${yearData.id}${query}`
+          )
+          .then((res) => {
+            setCount(res.data.total);
+            setData(res.data.result);
+          })
+          .finally(() => setIsLoading(false));
+      }
     }
-  }, [yearData, id, school_id, isInfreq, defineQuery]);
+  }, [yearData, id, school_id, isInfreq, defineQuery, search]);
+
+  if (!id && dashData !== "ADMIN") {
+    return <Navigate to="/school/class" />;
+  }
 
   return (
     <LayoutBasePage
       school={<CardSchoolId />}
       tools={
         <Tools
-          back={
-            classBack
-              ? "/class/list"
-              : `/class/list/${school_id}/${yearData?.id}`
-          }
+          isBack={!!back}
+          back={back ? back : undefined}
           isHome
+          isNew={dashData === "ADMIN"}
           isFreq
+          isSearch
+          search={search}
+          setSearch={(text) => setSearch(text)}
         />
       }
       title="Listagem de Alunos"

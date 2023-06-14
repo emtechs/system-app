@@ -21,6 +21,7 @@ interface iFrequencyBase {
   status: iStatusFrequency;
   created_at: Date;
   finished_at: number;
+  infreq: number;
   user: iUserFreq;
   class: iClassFreq;
   _count: { students: number };

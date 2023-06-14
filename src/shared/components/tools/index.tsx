@@ -6,17 +6,21 @@ import {
   FormControlLabel,
   Paper,
   TextField,
-  useTheme,
 } from "@mui/material";
-import { useDrawerContext, useFrequencyContext } from "../../contexts";
+import {
+  useAppThemeContext,
+  useDrawerContext,
+  useFrequencyContext,
+} from "../../contexts";
 import { ChangeEvent, ReactNode } from "react";
 import { Dest } from "./Dest";
 import { SchoolTools } from "./School";
 import { UserTools } from "./User";
+import { useSearchParams } from "react-router-dom";
 
 interface iToolsProps {
   back?: string;
-  onClickBack?: () => void;
+  isBack?: boolean;
   isSingle?: boolean;
   isHome?: boolean;
   isUser?: boolean;
@@ -35,8 +39,8 @@ interface iToolsProps {
 }
 
 export const Tools = ({
-  back,
-  onClickBack,
+  back = "/",
+  isBack,
   isSingle,
   isHome,
   isUser,
@@ -53,12 +57,42 @@ export const Tools = ({
   isFreq,
   finish,
 }: iToolsProps) => {
-  const theme = useTheme();
-  const { handleClickButtonTools } = useDrawerContext();
+  const [searchParams] = useSearchParams();
+  const backclick = searchParams.get("back_click");
+  const { theme } = useAppThemeContext();
+  const {
+    handleClickButtonTools,
+    handleClickUser,
+    handleClickSchool,
+    handleClickClass,
+    handleClickFrequency,
+    handleClickStudent,
+  } = useDrawerContext();
   const { updateFrequency, frequencyData, isInfreq, setIsInfreq } =
     useFrequencyContext();
   const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
     setIsInfreq(event.target.checked);
+  let onClickBack;
+
+  if (backclick) {
+    switch (backclick) {
+      case "user":
+        onClickBack = handleClickUser;
+        break;
+      case "school":
+        onClickBack = handleClickSchool;
+        break;
+      case "class":
+        onClickBack = handleClickClass;
+        break;
+      case "frequency":
+        onClickBack = handleClickFrequency;
+        break;
+      case "student":
+        onClickBack = handleClickStudent;
+        break;
+    }
+  }
 
   return (
     <Box
@@ -71,7 +105,7 @@ export const Tools = ({
       paddingX={2}
       component={Paper}
     >
-      {back && (
+      {isBack && (
         <Dest
           to={back}
           title="Voltar"
@@ -121,6 +155,7 @@ export const Tools = ({
           <Button
             onClick={() => {
               if (frequencyData) {
+                handleClickButtonTools();
                 updateFrequency(
                   {
                     status: "CLOSED",

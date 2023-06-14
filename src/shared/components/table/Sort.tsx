@@ -1,6 +1,7 @@
 import { TableCell, TableSortLabel } from "@mui/material";
 import { iheadCell } from "../../interfaces";
 import { useTableContext } from "../../contexts";
+import { useEffect } from "react";
 
 interface iSortProps {
   headCells: iheadCell[];
@@ -14,6 +15,10 @@ export const TableSort = ({ headCells }: iSortProps) => {
     setOrder(property);
     setBy(isAsc ? "desc" : "asc");
   };
+
+  useEffect(() => {
+    return setOrder("name");
+  }, []);
 
   return (
     <>

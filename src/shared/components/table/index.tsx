@@ -24,11 +24,11 @@ export const TableBase = ({
   return (
     <>
       <TableContainer
-        sx={{ mx: 2, mt: 1, width: "auto", maxHeight: "80%" }}
+        sx={{ mx: 2, mt: 1, width: "auto" }}
         component={Paper}
         variant="outlined"
       >
-        <Table stickyHeader>
+        <Table>
           <TableHead>
             <TableRow>
               {is_active && <TableCell></TableCell>}

@@ -1,15 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import {
-  useAppThemeContext,
-  useDrawerContext,
-  useSchoolContext,
-} from "../../shared/contexts";
-import {
-  CardSchoolId,
-  SelectSchoolSelectData,
-  Tools,
-} from "../../shared/components";
+import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
+import { SchoolCardDash, Tools } from "../../shared/components";
 import { iChildren, iSchool } from "../../shared/interfaces";
 import { LayoutBasePage } from "../../shared/layouts";
 import { apiUsingNow } from "../../shared/services";
@@ -31,12 +23,6 @@ export const LayoutSchoolPage = ({
   const back = searchParams.get("back");
   const { smDown, setLoading } = useAppThemeContext();
   const { setSchoolSelect } = useSchoolContext();
-  const { handleClickUser } = useDrawerContext();
-  let onClickBack;
-
-  if (back?.includes("user")) {
-    onClickBack = handleClickUser;
-  }
 
   useEffect(() => {
     if (id) {
@@ -51,20 +37,12 @@ export const LayoutSchoolPage = ({
   return (
     <LayoutBasePage
       title={title}
-      school={
-        isSchool ? (
-          id ? (
-            <CardSchoolId />
-          ) : (
-            <SelectSchoolSelectData />
-          )
-        ) : undefined
-      }
+      school={isSchool && <SchoolCardDash />}
       tools={
         tools ? (
           tools
         ) : back ? (
-          <Tools isHome back={back} onClickBack={onClickBack} />
+          <Tools isHome back={back} />
         ) : id ? (
           <Tools isHome back={`/school?id=${id}&order=name`} />
         ) : (

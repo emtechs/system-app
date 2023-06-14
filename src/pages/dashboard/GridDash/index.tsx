@@ -107,7 +107,7 @@ export const GridDash = () => {
             icon={<School fontSize="large" />}
             quant={userDashData.countSchool}
             info="Escolas"
-            dest="/school/list?order=name"
+            dest="/school/list"
             onClick={handleClickSchool}
           />
           <GridDashContent

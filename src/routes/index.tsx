@@ -18,13 +18,13 @@ import {
   EditPasswordPage,
   EditProfilePage,
   EditSchoolPage,
+  FrequencyOpenPage,
   FrequencyPage,
   ImportClassPage,
   ImportSchoolPage,
   ImportStudentPage,
   ListClassPage,
   ListClassSchoolPage,
-  ListFrequencyClosedAdm,
   ListFrequencyPage,
   ListSchoolPage,
   ListStudentPage,
@@ -82,8 +82,8 @@ const AppRoutes = () => {
           <Route path="/school/define/diret" element={<DefineDiretPage />} />
           <Route path="/school/edit" element={<EditSchoolPage />} />
           <Route path="/school/active" element={<ActiveSchoolPage />} />
-          <Route path="/school/class" element={<ListClassSchoolPage />} />
         </Route>
+        <Route path="/school/class" element={<ListClassSchoolPage />} />
         <Route path="/" element={<DashboardPage />} />
         <Route path="/class" element={<RetrieveClassPage />} />
         <Route
@@ -104,7 +104,8 @@ const AppRoutes = () => {
         <Route path="/frequency/create" element={<CreateFrequencyPage />} />
         <Route path="/frequency/:id" element={<ListFrequencyPage />} />
         <Route path="/frequency/realize" element={<RetrieveFrequencyPage />} />
-        <Route path="/frequency/list" element={<ListFrequencyClosedAdm />} />
+        <Route path="/frequency/list" element={<ListFrequencyPage />} />
+        <Route path="/frequency/open" element={<FrequencyOpenPage />} />
         <Route
           path="/report/class"
           element={<ReportClassPage back="/report" />}

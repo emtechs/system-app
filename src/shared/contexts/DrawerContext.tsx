@@ -65,6 +65,14 @@ export const DrawerProvider = ({ children }: iChildren) => {
   }, []);
 
   const handleClickButtonTools = useCallback(() => {
+    setOpenClass(false);
+    setOpenFrequency(false);
+    setOpenImport(false);
+    setOpenProfile(false);
+    setOpenReport(false);
+    setOpenSchool(false);
+    setOpenStudent(false);
+    setOpenUser(false);
     if (smDown) {
       setIsDrawerOpen(false);
     }

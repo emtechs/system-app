@@ -55,7 +55,7 @@ export const ListFrequencyCommon = () => {
     <LayoutBasePage
       title="Frequências em Aberto"
       school={<CardSchool />}
-      tools={<Tools isHome />}
+      tools={<Tools isSingle />}
     >
       <TableBase headCells={headCells}>
         {data?.map((el) => (

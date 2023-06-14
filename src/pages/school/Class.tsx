@@ -8,7 +8,7 @@ import {
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiClass } from "../../shared/services";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { TableBase, Tools } from "../../shared/components";
 import { TableCell, TableRow, useTheme } from "@mui/material";
 import { defineBgColorInfrequency } from "../../shared/scripts";
@@ -34,7 +34,9 @@ const CardClass = ({ el, school_id }: iCardClassProps) => {
       hover
       sx={{ cursor: "pointer" }}
       onClick={() => {
-        navigate(`/class?id=${el.class.id}&school_id=${school_id}&order=name`);
+        navigate(
+          `/class?id=${el.class.id}&school_id=${school_id}&back=/school/class`
+        );
       }}
     >
       <TableCell>{el.class.name}</TableCell>
@@ -57,7 +59,7 @@ export const ListClassSchoolPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const { debounce } = useDebounce();
-  const { yearData } = useAuthContext();
+  const { yearData, schoolData, dashData } = useAuthContext();
   const { schoolSelect } = useSchoolContext();
   const { isInfreq } = useFrequencyContext();
   const { handleClickClass } = useDrawerContext();
@@ -68,7 +70,9 @@ export const ListClassSchoolPage = () => {
   let school_id = "";
   if (id) {
     school_id = id;
-  } else if (schoolSelect) school_id = schoolSelect.id;
+  } else if (schoolSelect) {
+    school_id = schoolSelect.id;
+  } else if (schoolData) school_id = schoolData.school.id;
 
   useEffect(() => {
     let query = defineQuery(undefined, school_id);
@@ -100,14 +104,19 @@ export const ListClassSchoolPage = () => {
     }
   }, [school_id, yearData, isInfreq, defineQuery, search]);
 
+  if (dashData !== "ADMIN" && !school_id) {
+    return <Navigate to="/" />;
+  }
+
   return (
     <LayoutSchoolPage
       title="Listagem de Turmas"
       isSchool
       tools={
         <Tools
-          back={"/school?id=" + school_id + "&order=name"}
-          isNew
+          isBack={dashData === "ADMIN"}
+          back={"/school?id=" + school_id}
+          isNew={dashData === "ADMIN"}
           destNew={"/class/define/school?id=" + school_id}
           onClickNew={handleClickClass}
           isSearch

@@ -1,14 +1,22 @@
 import { Frequency } from "./Frequency";
 import { useDrawerContext } from "../../../contexts";
-import { AccountBox, Checklist, Home } from "@mui/icons-material";
+import {
+  AccountBox,
+  Checklist,
+  Home,
+  School as SchoolIcon,
+} from "@mui/icons-material";
 import { Profile } from "./Profile";
 import { ListItemLinkOpen, OtherListItemLink } from "../item";
+import { School } from "./School";
 
 export const OptionsCommon = () => {
   const {
     handleClick,
+    handleClickSchool,
     handleClickFrequency,
     handleClickProfile,
+    openSchool,
     openFrequency,
     openProfile,
   } = useDrawerContext();
@@ -19,6 +27,14 @@ export const OptionsCommon = () => {
         icon={<Home />}
         label="Página Inicial"
       />
+      <ListItemLinkOpen
+        onClick={handleClickSchool}
+        open={openSchool}
+        icon={<SchoolIcon />}
+        label="Escola"
+      >
+        <School />
+      </ListItemLinkOpen>
       <ListItemLinkOpen
         onClick={handleClickFrequency}
         open={openFrequency}

@@ -64,28 +64,14 @@ export const FrequencyPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const date = searchParams.get("date");
-  const orderData = searchParams.get("order");
   const { schoolData } = useAuthContext();
-  const { setCount, take, skip, order, setOrder, by, setIsLoading } =
-    useTableContext();
+  const { setCount, setIsLoading, defineQuery } = useTableContext();
   const [listClassData, setListClassData] = useState<iClassDash[]>();
 
   useEffect(() => {
     if (schoolData && date) {
-      let query = '';
+      let query = defineQuery(undefined, undefined, undefined, date);
       query += "&is_dash=true";
-      let queryData = `?is_dash=true&date=${date}`;
-      if (order) {
-        queryData += `&order=${order}`;
-        query += `&order=${order}`;
-      } else if (orderData) {
-        setOrder(orderData);
-        queryData += `&order=${order}`;
-        query += `&order=${orderData}`;
-      }
-      if (take) query += `&take=${take}`;
-      if (skip) query += `&skip=${skip}`;
-      console.log(queryData, query);
       setIsLoading(true);
       apiUsingNow
         .get<{ total: number; result: iClassDash[] }>(
@@ -100,7 +86,7 @@ export const FrequencyPage = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [schoolData, date, take, skip, order, setOrder, by]);
+  }, [schoolData, date, defineQuery]);
 
   return (
     <LayoutBasePage title={"Frequência - " + date} school={<CardSchool />}>

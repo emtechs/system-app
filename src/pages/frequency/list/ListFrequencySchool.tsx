@@ -6,13 +6,12 @@ import { apiUsingNow } from "../../../shared/services";
 import { iFrequency, iheadCell } from "../../../shared/interfaces";
 import { LayoutBasePage } from "../../../shared/layouts";
 import { defineBgColorInfrequency } from "../../../shared/scripts";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const headCells: iheadCell[] = [
   { order: "date", numeric: false, label: "Data" },
   { order: "name", numeric: false, label: "Turma" },
   { numeric: true, label: "Alunos" },
-  { order: "school_name", numeric: false, label: "Escola" },
   { order: "infreq", numeric: true, label: "Infrequência" },
 ];
 
@@ -28,7 +27,6 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
       <TableCell>{freq.date}</TableCell>
       <TableCell>{freq.class.class.name}</TableCell>
       <TableCell align="right">{freq._count.students}</TableCell>
-      <TableCell>{freq.class.school.name}</TableCell>
       <TableCell
         align="right"
         sx={{
@@ -42,9 +40,11 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
   );
 };
 
-export const ListFrequencyClosedAdm = () => {
+export const ListFrequencySchool = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const date = searchParams.get("date");
+  const status = searchParams.get("status");
   const { yearData } = useAuthContext();
   const { setCount, take, skip, setIsLoading, defineQuery } = useTableContext();
   const [data, setData] = useState<iFrequency[]>();
@@ -52,7 +52,11 @@ export const ListFrequencyClosedAdm = () => {
   useEffect(() => {
     if (yearData) {
       let query = defineQuery(yearData.id);
-      query += "&status=CLOSED";
+      if (status) {
+        query += "&status=" + status;
+      } else {
+        query += "&status=CLOSED";
+      }
       if (date) query += `&date=${date}`;
       setIsLoading(true);
       apiUsingNow
@@ -60,10 +64,11 @@ export const ListFrequencyClosedAdm = () => {
         .then((res) => {
           setCount(res.data.total);
           setData(res.data.result);
+          if (res.data.total === 0 && status) navigate("/");
         })
         .finally(() => setIsLoading(false));
     }
-  }, [yearData, take, skip, date]);
+  }, [yearData, take, skip, date, status]);
   return (
     <LayoutBasePage
       title={`Frequências Realizadas ${date ? "- " + date : ""}`}

@@ -84,8 +84,13 @@ export const DashboardCommon = () => {
   const { schoolData, yearData } = useAuthContext();
   const { dateDisplay, dateData, setDateDisplay, setDateData } =
     useCalendarContext();
-  const { handleClickFrequency } = useDrawerContext();
+  const { handleClickFrequency, handleClickSchool } = useDrawerContext();
   const [infoSchool, setInfoSchool] = useState<iDashSchoolServer>();
+
+  useEffect(() => {
+    setDateData(dayjs().format("DD/MM/YYYY"));
+    setDateDisplay(dayjs().format("dddd, LL"));
+  }, []);
 
   useEffect(() => {
     if (schoolData && yearData) {
@@ -173,9 +178,9 @@ export const DashboardCommon = () => {
                         info="Frequências em aberto"
                         dest={
                           infoSchool.frequencyOpen !== 0
-                            ? "/frequency/realize"
+                            ? "/frequency/open"
                             : infoSchool.frequencies === infoSchool.classTotal
-                            ? "/frequency/list?date=" + dateData
+                            ? "/frequency/list"
                             : "frequency?date=" + dateData + "&order=name"
                         }
                         onClick={handleClickFrequency}
@@ -188,8 +193,8 @@ export const DashboardCommon = () => {
                             : "0%"
                         }
                         info="Infrequência"
-                        dest="/frequency/class"
-                        onClick={handleClickFrequency}
+                        dest="/school/class"
+                        onClick={handleClickSchool}
                       />
                     </>
                   )}

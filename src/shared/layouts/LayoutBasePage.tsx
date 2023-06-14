@@ -18,6 +18,7 @@ export const LayoutBasePage = ({
 }: iLayoutBasePageProps) => {
   const { theme, smDown, mdDown } = useAppThemeContext();
   const { toggleDrawerOpen } = useDrawerContext();
+
   return (
     <Box
       bgcolor={theme.palette.background.default}

@@ -2,6 +2,7 @@ import {
   AddBox,
   DoneAll,
   Edit,
+  Group,
   Person,
   PersonAdd,
   School as SchoolIcon,
@@ -10,16 +11,22 @@ import {
 } from "@mui/icons-material";
 import { List } from "@mui/material";
 import { ListItemLink } from "../item";
+import { useAuthContext } from "../../../contexts";
 
 export const School = () => {
+  const { dashData } = useAuthContext();
+  if (dashData !== "ADMIN") {
+    return (
+      <List component="div" disablePadding>
+        <ListItemLink icon={<Group />} label="Turma" to="class" />
+        <ListItemLink icon={<Workspaces />} label="Turmas" to="school/class" />
+      </List>
+    );
+  }
   return (
     <List component="div" disablePadding>
       <ListItemLink icon={<AddBox />} label="Nova" to="school/create" />
-      <ListItemLink
-        icon={<SchoolIcon />}
-        label="Escola"
-        to="school?order=name"
-      />
+      <ListItemLink icon={<SchoolIcon />} label="Escola" to="school" />
       <ListItemLink
         icon={<Person />}
         label="Diretor"
@@ -32,16 +39,8 @@ export const School = () => {
       />
       <ListItemLink icon={<Edit />} label="Editar" to="school/edit" />
       <ListItemLink icon={<Workspaces />} label="Turmas" to="school/class" />
-      <ListItemLink
-        icon={<SchoolTwoTone />}
-        label="Listar"
-        to="school/list?order=name"
-      />
-      <ListItemLink
-        icon={<DoneAll />}
-        label="Ativar"
-        to="school/active?order=name"
-      />
+      <ListItemLink icon={<SchoolTwoTone />} label="Listar" to="school/list" />
+      <ListItemLink icon={<DoneAll />} label="Ativar" to="school/active" />
     </List>
   );
 };

@@ -1,7 +1,7 @@
 import { AutocompleteElement, useFormContext } from "react-hook-form-mui";
 import { useAppThemeContext, useSchoolContext } from "../../contexts";
 import { useEffect } from "react";
-import { apiUsingNow } from "../../services";
+import { apiSchool } from "../../services";
 import { iSchool } from "../../interfaces";
 
 const ValidateSchool = () => {
@@ -22,12 +22,12 @@ export const SelectSchool = () => {
 
   useEffect(() => {
     setLoading(true);
-    apiUsingNow
-      .get<{ result: iSchool[] }>("schools?is_active=true")
+    apiSchool
+      .list("?is_active=true")
       .then((res) => {
-        if (res.data) {
+        if (res) {
           setSchoolDataSelect(
-            res.data.result.map((school) => {
+            res.result.map((school) => {
               return { ...school, label: school.name };
             })
           );

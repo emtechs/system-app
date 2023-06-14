@@ -1,4 +1,4 @@
-import { iStudentList, iheadCell } from "../../shared/interfaces";
+import { iClassStudent, iheadCell } from "../../shared/interfaces";
 import {
   useAuthContext,
   useFrequencyContext,
@@ -12,36 +12,34 @@ import { TableCell, TableRow, useTheme } from "@mui/material";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 
 const headCells: iheadCell[] = [
-  { order: "name", numeric: false, label: "Matrícula" },
-  { order: "director_name", numeric: false, label: "Aluno" },
-  { numeric: false, label: "Turma" },
-  { numeric: false, label: "Escola" },
+  { order: "registry", numeric: false, label: "Matrícula" },
+  { order: "name", numeric: false, label: "Aluno" },
+  { order: "class_name", numeric: false, label: "Turma" },
+  { order: "school_name", numeric: false, label: "Escola" },
   { order: "infreq", numeric: true, label: "Infrequência" },
 ];
 
 interface iCardStudentProps {
-  student: iStudentList;
+  classStudent: iClassStudent;
 }
-const CardStudent = ({ student }: iCardStudentProps) => {
+const CardStudent = ({ classStudent }: iCardStudentProps) => {
   const theme = useTheme();
 
   return (
     <TableRow>
-      <TableCell>{student.registry}</TableCell>
-      <TableCell>{student.name}</TableCell>
-      {student.classes && student.classes.length > 0 && (
-        <>
-          <TableCell>{student.classes[0].class.class.name}</TableCell>
-          <TableCell>{student.classes[0].class.school.name}</TableCell>
-        </>
-      )}
+      <TableCell>{classStudent.student.registry}</TableCell>
+      <TableCell>{classStudent.student.name}</TableCell>
+
+      <TableCell>{classStudent.class.class.name}</TableCell>
+      <TableCell>{classStudent.class.school.name}</TableCell>
+
       <TableCell
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(student.infreq, theme),
+          bgcolor: defineBgColorInfrequency(classStudent.student.infreq, theme),
         }}
       >
-        {String(student.infreq).replace(".", ",")}%
+        {String(classStudent.student.infreq).replace(".", ",")}%
       </TableCell>
     </TableRow>
   );
@@ -50,25 +48,25 @@ const CardStudent = ({ student }: iCardStudentProps) => {
 export const ListStudentPage = () => {
   const { yearData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
-  const { setCount, take, skip, setIsLoading } = useTableContext();
-  const [data, setData] = useState<iStudentList[]>();
+  const { setCount, setIsLoading, defineQuery } = useTableContext();
+  const [data, setData] = useState<iClassStudent[]>();
 
   useEffect(() => {
     if (yearData) {
-      let query = `?is_list=true&year_id=${yearData.id}`;
+      let query = defineQuery();
       if (isInfreq) query += "&infreq=31";
-      if (take) query += `&take=${take}`;
-      if (skip) query += `&skip=${skip}`;
       setIsLoading(true);
       apiUsingNow
-        .get<{ total: number; result: iStudentList[] }>(`students${query}`)
+        .get<{ total: number; result: iClassStudent[] }>(
+          `classes/student/${yearData.id}${query}`
+        )
         .then((res) => {
           setData(res.data.result);
           setCount(res.data.total);
         })
         .finally(() => setIsLoading(false));
     }
-  }, [yearData, isInfreq, take, skip]);
+  }, [yearData, isInfreq, defineQuery]);
 
   return (
     <LayoutBasePage
@@ -76,8 +74,11 @@ export const ListStudentPage = () => {
       tools={<Tools isHome isFreq />}
     >
       <TableBase headCells={headCells}>
-        {data?.map((student) => (
-          <CardStudent key={student.id} student={student} />
+        {data?.map((classStudent) => (
+          <CardStudent
+            key={classStudent.student.id}
+            classStudent={classStudent}
+          />
         ))}
       </TableBase>
     </LayoutBasePage>
