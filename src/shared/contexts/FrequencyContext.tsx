@@ -12,19 +12,11 @@ import {
   iFrequencyStudents,
   iFrequencyWithInfreq,
 } from "../interfaces";
-import {
-  deleteFrequency,
-  patchClassSchool,
-  patchFrequency,
-  patchFrequencyStudent,
-  patchInfrequency,
-  patchManyStudent,
-  postFrequency,
-} from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from ".";
 import { FieldValues } from "react-hook-form";
+import { apiClass, apiFrequency, apiStudent } from "../services";
 
 interface iFrequencyContextData {
   createFrequency: (data: FieldValues) => Promise<void>;
@@ -58,7 +50,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
   const handleCreateFrequency = useCallback(async (data: FieldValues) => {
     try {
       setLoading(true);
-      const frequency = await postFrequency(data);
+      const frequency = await apiFrequency.create(data);
       toast.success("Frequência cadastrado com sucesso!");
       navigate(`/frequency/realize?id=${frequency.id}`);
     } catch {
@@ -72,13 +64,13 @@ export const FrequencyProvider = ({ children }: iChildren) => {
     async (data: FieldValues, id: string, isOpen?: boolean) => {
       try {
         setLoading(true);
-        const frequency = await patchFrequency(data, id);
+        const frequency = await apiFrequency.update(data, id);
         const students = frequency.students.map((el) => {
           return { infreq: el.infrequency, id: el.id };
         });
-        await patchInfrequency({ infreq: frequency.infrequency }, id);
-        await patchManyStudent({ students });
-        await patchClassSchool({
+        await apiFrequency.updateInfreq({ infreq: frequency.infrequency }, id);
+        await apiStudent.updateMany({ students });
+        await apiClass.updateSchool({
           class_id: frequency.class.class.id,
           school_id: frequency.class.school.id,
           year_id: frequency.class.year.id,
@@ -110,7 +102,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
     async (data: FieldValues, id: string) => {
       try {
         setLoading(true);
-        await patchFrequencyStudent(data, id);
+        await apiFrequency.updateFreqStudent(data, id);
         toast.success("Falta cadastrada com sucesso!");
       } catch {
         toast.error("Não foi possível cadastrar a falta no momento!");
@@ -125,7 +117,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
   const handleDeleteFrequency = useCallback(async (id: string) => {
     try {
       setLoading(true);
-      await deleteFrequency(id);
+      await apiFrequency.destroy(id);
       toast.success("Frequência deletada com sucesso!");
     } catch {
       toast.error("Não foi possível deletar a frequência no momento!");

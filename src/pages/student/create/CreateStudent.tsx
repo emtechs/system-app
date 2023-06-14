@@ -1,5 +1,9 @@
 import { useEffect } from "react";
-import { useAuthContext, useSchoolContext } from "../../../shared/contexts";
+import {
+  useAuthContext,
+  useSchoolContext,
+  useStudentContext,
+} from "../../../shared/contexts";
 import { BasePage, BoxResp, SelectClass } from "../../../shared/components";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,7 +12,8 @@ import { Button } from "@mui/material";
 
 export const CreateStudentPage = () => {
   const { schoolData } = useAuthContext();
-  const { createStudent, setSchoolSelect } = useSchoolContext();
+  const { createStudent } = useStudentContext();
+  const { setSchoolSelect } = useSchoolContext();
 
   useEffect(() => {
     setSchoolSelect(schoolData?.school);

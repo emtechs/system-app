@@ -6,22 +6,24 @@ import {
   iRecoveryRequest,
 } from "../interfaces";
 
-export async function postLogin(data: iLoginRequest): Promise<iLoginResponse> {
+const login = async (data: iLoginRequest): Promise<iLoginResponse> => {
   const { data: response } = await apiUsingNow.post<iLoginResponse>(
     "login",
     data
   );
   return response;
-}
+};
 
-export async function postRecovery(data: iRecoveryRequest): Promise<void> {
+const recovery = async (data: iRecoveryRequest): Promise<void> => {
   await apiUsingNow.post("password", data);
-}
+};
 
-export async function postPasswordRecovery(
+const passwordRecovery = async (
   data: iRecoveryPasswordRequest,
   userId: string,
   token: string
-): Promise<void> {
+): Promise<void> => {
   await apiUsingNow.post(`password/${userId}/${token}`, data);
-}
+};
+
+export const apiAuth = { login, recovery, passwordRecovery };

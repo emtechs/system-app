@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSchoolContext } from "../../shared/contexts";
+import { useSchoolContext, useStudentContext } from "../../shared/contexts";
 import { iPageProps } from "../../shared/interfaces";
 import {
   BasePage,
@@ -14,7 +14,8 @@ import { studentImportSchema } from "../../shared/schemas";
 import { Button } from "@mui/material";
 
 export const ImportStudentPage = ({ back }: iPageProps) => {
-  const { importStudent, schoolSelect } = useSchoolContext();
+  const { importStudent } = useStudentContext();
+  const { schoolSelect } = useSchoolContext();
   const urlToDownload = "/students.csv";
   const [download, setDownload] = useState("");
   const [count, setCount] = useState(0);

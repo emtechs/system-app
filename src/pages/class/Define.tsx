@@ -11,6 +11,7 @@ import {
 import {
   useAuthContext,
   useClassContext,
+  useDrawerContext,
   useSchoolContext,
 } from "../../shared/contexts";
 import { classSchoolCreateSchema } from "../../shared/schemas";
@@ -22,6 +23,7 @@ export const DefineSchoolsPage = () => {
   const { yearData } = useAuthContext();
   const { createClassSchool } = useClassContext();
   const { schoolSelect } = useSchoolContext();
+  const { handleClickSchool } = useDrawerContext();
   let school_id = "";
   if (id) {
     school_id = id;
@@ -32,7 +34,15 @@ export const DefineSchoolsPage = () => {
     <LayoutBasePage
       title="Definir Escola"
       school={id ? <CardSchoolId /> : <SelectSchoolSelectData />}
-      tools={<Tools back={back} isHome isNew destNew="/class/create" />}
+      tools={
+        <Tools
+          back={back}
+          onClickBack={handleClickSchool}
+          isHome
+          isNew
+          destNew="/class/create"
+        />
+      }
     >
       <FormContainer
         onSuccess={(data) => {

@@ -15,16 +15,11 @@ import {
   iClassWithSchool,
   iSchoolImportRequest,
 } from "../interfaces";
-import {
-  patchClassSchool,
-  postClass,
-  postClassSchool,
-  postImportClass,
-} from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { FieldValues } from "react-hook-form";
+import { apiClass } from "../services";
 
 interface iClassContextData {
   createClass: (data: iClassRequest, back?: string) => Promise<void>;
@@ -63,7 +58,7 @@ export const ClassProvider = ({ children }: iChildren) => {
     async (data: iClassRequest, back?: string) => {
       try {
         setLoading(true);
-        await postClass(data);
+        await apiClass.create(data);
         toast.success("Turma cadastrada com sucesso!");
         navigate(back ? back : "/");
       } catch {
@@ -84,7 +79,7 @@ export const ClassProvider = ({ children }: iChildren) => {
     ) => {
       try {
         setLoading(true);
-        await postClassSchool(data, year_id, school_id);
+        await apiClass.createSchool(data, year_id, school_id);
         toast.success("Escola definida com sucesso!");
         navigate(back ? back : "/");
       } catch {
@@ -102,7 +97,7 @@ export const ClassProvider = ({ children }: iChildren) => {
       file.append("file", data.file);
       try {
         setLoading(true);
-        await postImportClass(file);
+        await apiClass.impClass(file);
         toast.success("Turmas importadas com sucesso!");
         navigate(back ? back : "/");
       } catch {
@@ -118,7 +113,7 @@ export const ClassProvider = ({ children }: iChildren) => {
     async (data: FieldValues, back?: string) => {
       try {
         setLoading(true);
-        await patchClassSchool(data);
+        await apiClass.updateSchool(data);
         navigate(back ? back : "/");
       } catch {
         /* empty */

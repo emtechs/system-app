@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useState } from "react";
 import { iChildren } from "../interfaces";
-import { useMediaQuery, useTheme } from "@mui/material";
+import { useAppThemeContext } from "./ThemeContext";
 
 interface iDrawerContextProps {
   isDrawerOpen: boolean;
@@ -29,8 +29,7 @@ interface iDrawerContextProps {
 const DrawerContext = createContext({} as iDrawerContextProps);
 
 export const DrawerProvider = ({ children }: iChildren) => {
-  const theme = useTheme();
-  const smDown = useMediaQuery(theme.breakpoints.down("sm"));
+  const { smDown } = useAppThemeContext();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [openClass, setOpenClass] = useState(false);
   const [openFrequency, setOpenFrequency] = useState(false);

@@ -72,15 +72,20 @@ export const FrequencyPage = () => {
 
   useEffect(() => {
     if (schoolData && date) {
-      let query = `?is_dash=true&date=${date}`;
+      let query = '';
+      query += "&is_dash=true";
+      let queryData = `?is_dash=true&date=${date}`;
       if (order) {
+        queryData += `&order=${order}`;
         query += `&order=${order}`;
       } else if (orderData) {
         setOrder(orderData);
+        queryData += `&order=${order}`;
         query += `&order=${orderData}`;
       }
       if (take) query += `&take=${take}`;
       if (skip) query += `&skip=${skip}`;
+      console.log(queryData, query);
       setIsLoading(true);
       apiUsingNow
         .get<{ total: number; result: iClassDash[] }>(

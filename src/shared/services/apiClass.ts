@@ -1,29 +1,53 @@
 import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
-import { iClass, iClassSchoolRequest } from "../interfaces";
+import { iClass, iClassSchoolList, iClassSchoolRequest } from "../interfaces";
 
-export async function postClass(data: FieldValues): Promise<iClass> {
+const create = async (data: FieldValues): Promise<iClass> => {
   const { data: response } = await apiUsingNow.post<iClass>("classes", data);
   return response;
-}
+};
 
-export async function postClassSchool(
+const createSchool = async (
   data: iClassSchoolRequest,
   year_id: string,
   school_id: string
-): Promise<iClass> {
+): Promise<iClass> => {
   const { data: response } = await apiUsingNow.post<iClass>(
     `classes/${year_id}/${school_id}`,
     data
   );
   return response;
-}
+};
 
-export async function postImportClass(data: FormData): Promise<void> {
+const impClass = async (data: FormData): Promise<void> => {
   await apiUsingNow.post("imports/class", data);
-}
+};
 
-export async function patchClassSchool(data: FieldValues): Promise<iClass> {
+const updateSchool = async (data: FieldValues): Promise<iClass> => {
   const { data: response } = await apiUsingNow.patch<iClass>("classes", data);
   return response;
+};
+
+interface ilistSchoolReturn {
+  total: number;
+  result: iClassSchoolList[];
 }
+
+const listSchool = async (
+  year_id: string,
+  query: string
+): Promise<ilistSchoolReturn> => {
+  const { data: response } = await apiUsingNow.get<ilistSchoolReturn>(
+    `classes/year/${year_id}${query}`
+  );
+
+  return response;
+};
+
+export const apiClass = {
+  create,
+  createSchool,
+  impClass,
+  updateSchool,
+  listSchool,
+};

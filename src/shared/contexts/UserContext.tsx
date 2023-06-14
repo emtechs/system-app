@@ -16,11 +16,11 @@ import {
   iUserSecretRequest,
   iUserUpdateRequest,
 } from "../interfaces";
-import { patchUser, postUser } from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext, useAuthContext } from ".";
 import { FieldValues } from "react-hook-form";
+import { apiUser } from "../services";
 
 interface iUserContextData {
   createAdm: (data: iUserAdmRequest) => Promise<void>;
@@ -50,7 +50,7 @@ export const UserProvider = ({ children }: iChildren) => {
   const handleCreateUserAdm = useCallback(async (data: iUserAdmRequest) => {
     try {
       setLoading(true);
-      await postUser(data);
+      await apiUser.create(data);
       toast.success("Administrador cadastrado com sucesso!");
     } catch {
       toast.error("Não foi possível cadastrar o administrador no momento!");
@@ -64,7 +64,7 @@ export const UserProvider = ({ children }: iChildren) => {
     async (data: iUserDirectorRequest) => {
       try {
         setLoading(true);
-        await postUser(data);
+        await apiUser.create(data);
         toast.success("Diretor cadastrado com sucesso!");
         navigate("/");
       } catch {
@@ -81,7 +81,7 @@ export const UserProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         const query = "?allNotServ=true";
-        await postUser(data, query);
+        await apiUser.create(data, query);
         toast.success("Secretário cadastrado com sucesso!");
       } catch {
         toast.error("Não foi possível cadastrar o secretário no momento!");
@@ -97,7 +97,7 @@ export const UserProvider = ({ children }: iChildren) => {
     async (id: string, data: iUserFirstRequest) => {
       try {
         setLoading(true);
-        const user = await patchUser(id, data);
+        const user = await apiUser.update(id, data);
         toast.success("Dados cadastrados com sucesso");
         setUserData(user);
         setDashData(user.dash);
@@ -116,7 +116,7 @@ export const UserProvider = ({ children }: iChildren) => {
     async (id: string, data: iUserUpdateRequest) => {
       try {
         setLoading(true);
-        const user = await patchUser(id, data);
+        const user = await apiUser.update(id, data);
         toast.success("Dados alterado com sucesso");
         setUserData(user);
         navigate("/");
@@ -133,7 +133,7 @@ export const UserProvider = ({ children }: iChildren) => {
     async (id: string, data: FieldValues, is_all: boolean, back?: string) => {
       try {
         setLoading(true);
-        const user = await patchUser(id, data);
+        const user = await apiUser.update(id, data);
         setUpdateUserData(user);
         if (!is_all) toast.success("Sucesso ao alterar o estado do usuário!");
         if (back) navigate(back);
@@ -153,7 +153,7 @@ export const UserProvider = ({ children }: iChildren) => {
     async (id: string, data: iUserPasswordRequest) => {
       try {
         setLoading(true);
-        await patchUser(id, data);
+        await apiUser.update(id, data);
         toast.success("Senha alterada com sucesso");
         navigate("/");
       } catch {

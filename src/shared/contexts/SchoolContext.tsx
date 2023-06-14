@@ -5,8 +5,6 @@ import {
   iSchoolRequest,
   iSchoolSelect,
   iServerRequest,
-  iStudentImportRequest,
-  iStudentRequest,
   iWorkSchool,
 } from "../interfaces";
 import { FieldValues } from "react-hook-form";
@@ -20,17 +18,7 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
-import {
-  deleteSchoolServer,
-  patchSchool,
-  patchStudent,
-  postImportSchool,
-  postImportStudent,
-  postImportStudentAll,
-  postSchool,
-  postStudent,
-  postUser,
-} from "../services";
+import { apiSchool, apiUser } from "../services";
 import { toast } from "react-toastify";
 
 interface iSchoolContextData {
@@ -39,21 +27,6 @@ interface iSchoolContextData {
   createServer: (
     data: iServerRequest,
     id: string,
-    back?: string
-  ) => Promise<void>;
-  createStudent: (
-    data: iStudentRequest,
-    id: string,
-    back?: string
-  ) => Promise<void>;
-  updateStudent: (data: FieldValues, id: string) => Promise<void>;
-  importStudent: (
-    data: iStudentImportRequest,
-    school_id: string,
-    back?: string
-  ) => Promise<void>;
-  importStudentAll: (
-    data: iStudentImportRequest,
     back?: string
   ) => Promise<void>;
   updateSchool: (
@@ -89,7 +62,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const handleCreateSchool = useCallback(async (data: iSchoolRequest) => {
     try {
       setLoading(true);
-      const school = await postSchool(data);
+      const school = await apiSchool.create(data);
       toast.success("A escola foi cadastrada com sucesso!");
       navigate(`/school?id=${school.id}&order=name`);
     } catch {
@@ -107,7 +80,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
       file.append("file", data.file);
       try {
         setLoading(true);
-        await postImportSchool(file);
+        await apiSchool.impSchool(file);
         toast.success("Escolas importadas com sucesso!");
         navigate(back ? back : "/");
       } catch {
@@ -128,7 +101,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
     ) => {
       try {
         setLoading(true);
-        await patchSchool(data, id);
+        await apiSchool.update(data, id);
         toast.success(`Sucesso ao alterar o ${type} da Escola!`);
       } catch {
         toast.error(
@@ -149,7 +122,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         const query = `?school_id=${id}`;
-        await postUser(data, query);
+        await apiUser.create(data, query);
         toast.success("Servidor cadastrado com sucesso!");
         navigate(back ? back : "/");
       } catch {
@@ -166,7 +139,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
     async (school_id: string, server_id: string) => {
       try {
         setLoading(true);
-        await deleteSchoolServer(school_id, server_id);
+        await apiSchool.deleteServer(school_id, server_id);
         toast.success("Usuário removido da função com sucesso!");
       } catch {
         toast.error(
@@ -180,83 +153,12 @@ export const SchoolProvider = ({ children }: iChildren) => {
     []
   );
 
-  const handleCreateStudent = useCallback(
-    async (data: iStudentRequest, id: string, back?: string) => {
-      try {
-        setLoading(true);
-        await postStudent(data, id);
-        toast.success("Estudante cadastrado com sucesso!");
-        navigate(back ? back : "/");
-      } catch {
-        toast.error("Não foi possível cadastrar o estudante no momento!");
-      } finally {
-        setLoading(false);
-      }
-    },
-    []
-  );
-
-  const handleUpdateStudent = useCallback(
-    async (data: FieldValues, id: string) => {
-      try {
-        setLoading(true);
-        await patchStudent(data, id);
-      } catch {
-        /* empty */
-      } finally {
-        setLoading(false);
-      }
-    },
-    []
-  );
-
-  const handleImportStudent = useCallback(
-    async (data: iStudentImportRequest, school_id: string, back?: string) => {
-      const file = new FormData();
-      file.append("file", data.file);
-      const class_id = data.class_id ? data.class_id : "";
-      try {
-        setLoading(true);
-        await postImportStudent(file, class_id, school_id);
-        toast.success("Estudantes importados com sucesso!");
-        navigate(back ? back : "/");
-      } catch {
-        toast.error("Não foi possível importar os estudantes no momento!");
-      } finally {
-        setLoading(false);
-      }
-    },
-    []
-  );
-
-  const handleImportStudentAll = useCallback(
-    async (data: iStudentImportRequest, back?: string) => {
-      const file = new FormData();
-      file.append("file", data.file);
-      try {
-        setLoading(true);
-        await postImportStudentAll(file);
-        toast.success("Estudantes importados com sucesso!");
-        navigate(back ? back : "/");
-      } catch {
-        toast.error("Não foi possível importar os estudantes no momento!");
-      } finally {
-        setLoading(false);
-      }
-    },
-    []
-  );
-
   return (
     <SchoolContext.Provider
       value={{
         createSchool: handleCreateSchool,
         importSchool: handleImportSchool,
         createServer: handleCreateServer,
-        createStudent: handleCreateStudent,
-        updateStudent: handleUpdateStudent,
-        importStudent: handleImportStudent,
-        importStudentAll: handleImportStudentAll,
         updateSchool: handleUpdateSchool,
         deleteServer: handleDeleteServer,
         schoolDataSelect,

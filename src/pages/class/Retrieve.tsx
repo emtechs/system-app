@@ -1,12 +1,12 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useFrequencyContext, useTableContext } from "../../shared/contexts";
-import { apiUsingNow } from "../../shared/services";
 import {
-  iClassWithSchool,
-  iStudentWithSchool,
-  iheadCell,
-} from "../../shared/interfaces";
+  useAuthContext,
+  useFrequencyContext,
+  useTableContext,
+} from "../../shared/contexts";
+import { apiUsingNow } from "../../shared/services";
+import { iStudentWithSchool, iheadCell } from "../../shared/interfaces";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TableBase, Tools } from "../../shared/components";
 import { TableCell, TableRow, useTheme } from "@mui/material";
@@ -14,7 +14,7 @@ import { CardSchoolId } from "../../shared/components/card";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 
 const headCells: iheadCell[] = [
-  { numeric: true, label: "Matrícula" },
+  { order: "registry", numeric: true, label: "Matrícula" },
   { order: "name", numeric: false, label: "Aluno" },
   { numeric: true, label: "Presenças" },
   { numeric: true, label: "Justificadas" },
@@ -30,12 +30,13 @@ const CardStudent = ({ student }: iCardStudentProps) => {
   const theme = useTheme();
   return (
     <TableRow>
-      <TableCell>{student.registry}</TableCell>
+      <TableCell align="right">{student.registry}</TableCell>
       <TableCell>{student.name}</TableCell>
-      <TableCell>{student.presented}</TableCell>
-      <TableCell>{student.justified}</TableCell>
-      <TableCell>{student.missed}</TableCell>
+      <TableCell align="right">{student.presented}</TableCell>
+      <TableCell align="right">{student.justified}</TableCell>
+      <TableCell align="right">{student.missed}</TableCell>
       <TableCell
+        align="right"
         sx={{
           color: "#fff",
           bgcolor: defineBgColorInfrequency(student.infrequency, theme),
@@ -48,34 +49,31 @@ const CardStudent = ({ student }: iCardStudentProps) => {
 };
 
 export const RetrieveClassPage = () => {
-  const { class_id, school_id, year_id } = useParams();
   const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+  const school_id = searchParams.get("school_id");
   const classBack = searchParams.get("class");
+  const { yearData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
-  const { setIsLoading } = useTableContext();
-  const [data, setData] = useState<iClassWithSchool>();
+  const { setIsLoading, defineQuery, setCount } = useTableContext();
+  const [data, setData] = useState<iStudentWithSchool[]>();
 
   useEffect(() => {
-    setIsLoading(true);
-    const query = isInfreq ? "?is_infreq=true" : "";
-    apiUsingNow
-      .get<iClassWithSchool>(
-        `classes/${class_id}/${school_id}/${year_id}${query}`
-      )
-      .then((res) => setData(res.data))
-      .finally(() => setIsLoading(false));
-  }, []);
-
-  useEffect(() => {
-    setIsLoading(true);
-    const query = isInfreq ? "?is_infreq=true" : "";
-    apiUsingNow
-      .get<iClassWithSchool>(
-        `classes/${class_id}/${school_id}/${year_id}${query}`
-      )
-      .then((res) => setData(res.data))
-      .finally(() => setIsLoading(false));
-  }, [isInfreq]);
+    if (yearData && school_id) {
+      let query = defineQuery(yearData.id, school_id);
+      if (isInfreq) query += "&infreq=31";
+      setIsLoading(true);
+      apiUsingNow
+        .get<{ total: number; result: iStudentWithSchool[] }>(
+          `classes/student/${id}/${school_id}/${yearData.id}${query}`
+        )
+        .then((res) => {
+          setCount(res.data.total);
+          setData(res.data.result);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [yearData, id, school_id, isInfreq, defineQuery]);
 
   return (
     <LayoutBasePage
@@ -85,16 +83,16 @@ export const RetrieveClassPage = () => {
           back={
             classBack
               ? "/class/list"
-              : `/class/list/${data?.school.id}/${data?.year.id}`
+              : `/class/list/${school_id}/${yearData?.id}`
           }
           isHome
           isFreq
         />
       }
-      title={data ? data.class.name : "Listagem de Alunos de uma Classe"}
+      title="Listagem de Alunos"
     >
       <TableBase headCells={headCells}>
-        {data?.students.map((student) => (
+        {data?.map((student) => (
           <CardStudent key={student.id} student={student} />
         ))}
       </TableBase>

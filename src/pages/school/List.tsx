@@ -1,16 +1,15 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { TableCell, TableRow, useTheme } from "@mui/material";
+import { TableBase, Tools } from "../../shared/components";
 import {
   useAuthContext,
   useFrequencyContext,
-  useSchoolContext,
   useTableContext,
 } from "../../shared/contexts";
-import { useEffect, useState } from "react";
 import { iSchoolList, iheadCell } from "../../shared/interfaces";
-import { apiUsingNow } from "../../shared/services";
-import { TableBase, Tools } from "../../shared/components";
+import { apiSchool } from "../../shared/services";
 import { defineBgColorInfrequency } from "../../shared/scripts";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutSchoolPage } from "./Layout";
 
@@ -58,63 +57,44 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
 };
 
 export const ListSchoolPage = () => {
-  const [searchParams] = useSearchParams();
-  const orderData = searchParams.get("order");
   const { debounce } = useDebounce();
   const { yearData } = useAuthContext();
-  const { updateSchoolData } = useSchoolContext();
   const { isInfreq } = useFrequencyContext();
-  const { setCount, take, skip, order, setOrder, by, setIsLoading } =
-    useTableContext();
+  const { setCount, setIsLoading, defineQuery } = useTableContext();
   const [listSchoolData, setListSchoolData] = useState<iSchoolList[]>();
   const [search, setSearch] = useState<string>();
 
   useEffect(() => {
     if (yearData) {
-      let query = `?year_id=${yearData.id}&is_listSchool=true&by=${by}&is_active=true`;
-      if (order) {
-        query += `&order=${order}`;
-      } else if (orderData) {
-        setOrder(orderData);
-        query += `&order=${orderData}`;
+      let query = defineQuery(yearData.id);
+      query += "&is_listSchool=true&is_active=true";
+      if (isInfreq) {
+        query += "&infreq=31";
       }
-      if (isInfreq) query += "&infreq=31";
-      if (take) query += `&take=${take}`;
-      if (skip) query += `&skip=${skip}`;
       if (search) {
         query += `&name=${search}`;
         setIsLoading(true);
         debounce(() => {
-          apiUsingNow
-            .get<{ total: number; result: iSchoolList[] }>(`schools${query}`)
+          apiSchool
+            .list(query)
             .then((res) => {
-              setListSchoolData(res.data.result);
-              setCount(res.data.total);
+              setListSchoolData(res.result);
+              setCount(res.total);
             })
             .finally(() => setIsLoading(false));
         });
       } else {
         setIsLoading(true);
-        apiUsingNow
-          .get<{ total: number; result: iSchoolList[] }>(`schools${query}`)
+        apiSchool
+          .list(query)
           .then((res) => {
-            setListSchoolData(res.data.result);
-            setCount(res.data.total);
+            setListSchoolData(res.result);
+            setCount(res.total);
           })
           .finally(() => setIsLoading(false));
       }
     }
-  }, [
-    yearData,
-    updateSchoolData,
-    isInfreq,
-    take,
-    skip,
-    orderData,
-    order,
-    by,
-    search,
-  ]);
+  }, [yearData, defineQuery, search, isInfreq]);
 
   return (
     <LayoutSchoolPage

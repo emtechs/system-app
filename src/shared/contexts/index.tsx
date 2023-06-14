@@ -6,6 +6,7 @@ import { DrawerProvider } from "./DrawerContext";
 import { FrequencyProvider } from "./FrequencyContext";
 import { ModalProvider } from "./ModalContext";
 import { SchoolProvider } from "./SchoolContext";
+import { StudentProvider } from "./StundetContext";
 import { TableProvider } from "./TableContext";
 import { AppThemeProvider } from "./ThemeContext";
 import { UserProvider } from "./UserContext";
@@ -19,9 +20,11 @@ const Providers = ({ children }: iChildren) => (
             <SchoolProvider>
               <ClassProvider>
                 <FrequencyProvider>
-                  <TableProvider>
-                    <CalendarProvider>{children}</CalendarProvider>
-                  </TableProvider>
+                  <StudentProvider>
+                    <TableProvider>
+                      <CalendarProvider>{children}</CalendarProvider>
+                    </TableProvider>
+                  </StudentProvider>
                 </FrequencyProvider>
               </ClassProvider>
             </SchoolProvider>
@@ -40,6 +43,7 @@ export { useDrawerContext } from "./DrawerContext";
 export { useFrequencyContext } from "./FrequencyContext";
 export { useModalContext } from "./ModalContext";
 export { useSchoolContext } from "./SchoolContext";
+export { useStudentContext } from "./StundetContext";
 export { useTableContext } from "./TableContext";
 export { useAppThemeContext } from "./ThemeContext";
 export { useUserContext } from "./UserContext";

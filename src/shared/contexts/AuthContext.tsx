@@ -22,12 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { useDrawerContext } from "./DrawerContext";
 import { useModalContext } from "./ModalContext";
-import {
-  apiUsingNow,
-  postLogin,
-  postPasswordRecovery,
-  postRecovery,
-} from "../services";
+import { apiAuth, apiCalendar, apiUser, apiUsingNow } from "../services";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import { toast } from "react-toastify";
@@ -80,15 +75,13 @@ export const AuthProvider = ({ children }: iChildren) => {
   useEffect(() => {
     if (accessToken) {
       setLoading(true);
-      apiUsingNow
-        .get<iUser>("users/profile", {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
+      apiUser
+        .profile(accessToken)
         .then((res) => {
           apiUsingNow.defaults.headers.authorization = `Bearer ${accessToken}`;
-          setUserData(res.data);
-          setDashData(res.data.dash);
-          if (res.data.work_school.length === 0) setSchoolData(undefined);
+          setUserData(res);
+          setDashData(res.dash);
+          if (res.work_school.length === 0) setSchoolData(undefined);
         })
         .catch((e) => {
           if (e instanceof AxiosError) {
@@ -98,17 +91,13 @@ export const AuthProvider = ({ children }: iChildren) => {
             }
           }
         })
-        .finally(() => {
-          setLoading(false);
-        });
+        .finally(() => setLoading(false));
+
       setLoading(true);
-      const year = dayjs().year();
-      apiUsingNow
-        .get<iYear>(`/calendar/year/${year}`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
+      apiCalendar
+        .year(accessToken, dayjs().year())
         .then((res) => {
-          setYearData(res.data);
+          setYearData(res);
         })
         .finally(() => setLoading(false));
     }
@@ -117,11 +106,10 @@ export const AuthProvider = ({ children }: iChildren) => {
   const handleLogin = useCallback(async (data: iLoginRequest) => {
     try {
       setLoading(true);
-      const { token } = await postLogin(data);
+      const { token } = await apiAuth.login(data);
       localStorage.setItem("@EMTechs:token", token);
       setAccessToken(token);
       toast.success("Login realizado com sucesso");
-      navigate("/");
     } catch (e) {
       if (e instanceof AxiosError) {
         if (e.response?.status === 401) {
@@ -140,7 +128,7 @@ export const AuthProvider = ({ children }: iChildren) => {
   const handleRecovey = useCallback(async (data: iRecoveryRequest) => {
     try {
       setLoading(true);
-      await postRecovery(data);
+      await apiAuth.recovery(data);
       toast.success("Siga as instruções enviadas no email da sua conta");
       navigate("/");
     } catch (e) {
@@ -168,7 +156,7 @@ export const AuthProvider = ({ children }: iChildren) => {
     async (data: iRecoveryPasswordRequest, userId: string, token: string) => {
       try {
         setLoading(true);
-        await postPasswordRecovery(data, userId, token);
+        await apiAuth.passwordRecovery(data, userId, token);
         toast.success("Senha alterada com sucesso");
       } catch (e) {
         toast.error("Link expirado, solicite um novo link na tela de login!");

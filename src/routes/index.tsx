@@ -85,10 +85,7 @@ const AppRoutes = () => {
           <Route path="/school/class" element={<ListClassSchoolPage />} />
         </Route>
         <Route path="/" element={<DashboardPage />} />
-        <Route
-          path="/class/:class_id/:school_id/:year_id"
-          element={<RetrieveClassPage />}
-        />
+        <Route path="/class" element={<RetrieveClassPage />} />
         <Route
           path="/class/create"
           element={<CreateClassPage back="/class" />}

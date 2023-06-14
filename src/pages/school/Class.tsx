@@ -1,17 +1,19 @@
 import { iClassSchoolList, iheadCell } from "../../shared/interfaces";
 import {
   useAuthContext,
+  useDrawerContext,
   useFrequencyContext,
   useSchoolContext,
   useTableContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
-import { apiUsingNow } from "../../shared/services";
+import { apiClass } from "../../shared/services";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { TableBase, Tools } from "../../shared/components";
 import { TableCell, TableRow, useTheme } from "@mui/material";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 import { LayoutSchoolPage } from "./Layout";
+import { useDebounce } from "../../shared/hooks";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Turma" },
@@ -22,17 +24,18 @@ const headCells: iheadCell[] = [
 
 interface iCardClassProps {
   el: iClassSchoolList;
+  school_id: string;
 }
-const CardClass = ({ el }: iCardClassProps) => {
+const CardClass = ({ el, school_id }: iCardClassProps) => {
   const theme = useTheme();
   const navigate = useNavigate();
   return (
     <TableRow
       hover
       sx={{ cursor: "pointer" }}
-      onClick={() =>
-        navigate(`/class/${el.class.id}/${el.school.id}/${el.year.id}`)
-      }
+      onClick={() => {
+        navigate(`/class?id=${el.class.id}&school_id=${school_id}&order=name`);
+      }}
     >
       <TableCell>{el.class.name}</TableCell>
       <TableCell align="right">{el._count.students}</TableCell>
@@ -53,42 +56,49 @@ const CardClass = ({ el }: iCardClassProps) => {
 export const ListClassSchoolPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const orderData = searchParams.get("order");
+  const { debounce } = useDebounce();
   const { yearData } = useAuthContext();
   const { schoolSelect } = useSchoolContext();
   const { isInfreq } = useFrequencyContext();
-  const { setCount, take, skip, setIsLoading, order, by, setOrder } =
-    useTableContext();
+  const { handleClickClass } = useDrawerContext();
+  const { setCount, setIsLoading, defineQuery } = useTableContext();
   const [data, setData] = useState<iClassSchoolList[]>();
+  const [search, setSearch] = useState<string>();
+
   let school_id = "";
   if (id) {
     school_id = id;
   } else if (schoolSelect) school_id = schoolSelect.id;
 
   useEffect(() => {
-    let query = `?is_active=true&school_id=${school_id}&by=${by}`;
-    if (take) query += `&take=${take}`;
-    if (skip) query += `&skip=${skip}`;
+    let query = defineQuery(undefined, school_id);
+    query += "&is_active=true";
     if (isInfreq) query += "&infreq=31";
-    if (order) {
-      query += `&order=${order}`;
-    } else if (orderData) {
-      setOrder(orderData);
-      query += `&order=${orderData}`;
-    }
     if (yearData) {
-      setIsLoading(true);
-      apiUsingNow
-        .get<{ total: number; result: iClassSchoolList[] }>(
-          `classes/year/${yearData?.id}${query}`
-        )
-        .then((res) => {
-          setData(res.data.result);
-          setCount(res.data.total);
-        })
-        .finally(() => setIsLoading(false));
+      if (search) {
+        query += `&name=${search}`;
+        setIsLoading(true);
+        debounce(() => {
+          apiClass
+            .listSchool(yearData.id, query)
+            .then((res) => {
+              setData(res.result);
+              setCount(res.total);
+            })
+            .finally(() => setIsLoading(false));
+        });
+      } else {
+        setIsLoading(true);
+        apiClass
+          .listSchool(yearData.id, query)
+          .then((res) => {
+            setData(res.result);
+            setCount(res.total);
+          })
+          .finally(() => setIsLoading(false));
+      }
     }
-  }, [school_id, orderData, yearData, take, skip, order, by, isInfreq]);
+  }, [school_id, yearData, isInfreq, defineQuery, search]);
 
   return (
     <LayoutSchoolPage
@@ -99,13 +109,17 @@ export const ListClassSchoolPage = () => {
           back={"/school?id=" + school_id + "&order=name"}
           isNew
           destNew={"/class/define/school?id=" + school_id}
+          onClickNew={handleClickClass}
+          isSearch
+          search={search}
+          setSearch={(text) => setSearch(text)}
           isFreq
         />
       }
     >
       <TableBase headCells={headCells}>
         {data?.map((el) => (
-          <CardClass key={el.class.id} el={el} />
+          <CardClass key={el.class.id} el={el} school_id={school_id} />
         ))}
       </TableBase>
     </LayoutSchoolPage>

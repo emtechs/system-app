@@ -2,22 +2,31 @@ import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
 import { iUser } from "../interfaces";
 
-export async function postUser(
+const create = async (
   data: FieldValues,
   queryData?: string
-): Promise<iUser> {
+): Promise<iUser> => {
   const query = queryData ? queryData : "";
   const { data: response } = await apiUsingNow.post<iUser>(
     "users" + query,
     data
   );
   return response;
-}
+};
 
-export async function patchUser(id: string, data: FieldValues): Promise<iUser> {
+const profile = async (token: string): Promise<iUser> => {
+  const { data: response } = await apiUsingNow.get<iUser>("users/profile", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response;
+};
+
+const update = async (id: string, data: FieldValues): Promise<iUser> => {
   const { data: response } = await apiUsingNow.patch<iUser>(
     `users/${id}`,
     data
   );
   return response;
-}
+};
+
+export const apiUser = { create, profile, update };

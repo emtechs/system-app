@@ -5,7 +5,7 @@ import {
   useTableContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
-import { apiUsingNow } from "../../shared/services";
+import { apiClass } from "../../shared/services";
 import { useNavigate } from "react-router-dom";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TableBase, Tools } from "../../shared/components";
@@ -55,27 +55,28 @@ const CardClass = ({ el }: iCardClassProps) => {
 export const ListClassPage = () => {
   const { yearData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
-  const { setCount, take, skip, setIsLoading } = useTableContext();
+  const { setCount, setIsLoading, defineQuery } = useTableContext();
   const [data, setData] = useState<iClassSchoolList[]>();
 
   useEffect(() => {
     if (yearData) {
-      let query = `?year_id=${yearData.id}&is_active=true`;
-      if (isInfreq) query += "&class_infreq=31";
-      if (take) query += `&take=${take}`;
-      if (skip) query += `&skip=${skip}`;
+      let query = defineQuery(yearData.id);
+      query += "&is_active=true";
+
+      if (isInfreq) {
+        query += "&class_infreq=31";
+      }
+
       setIsLoading(true);
-      apiUsingNow
-        .get<{ total: number; result: iClassSchoolList[] }>(
-          `classes/year/${yearData.id}${query}`
-        )
+      apiClass
+        .listSchool(yearData.id, query)
         .then((res) => {
-          setData(res.data.result);
-          setCount(res.data.total);
+          setData(res.result);
+          setCount(res.total);
         })
         .finally(() => setIsLoading(false));
     }
-  }, [take, skip, isInfreq, yearData]);
+  }, [isInfreq, yearData, defineQuery]);
 
   return (
     <LayoutBasePage

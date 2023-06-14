@@ -2,11 +2,13 @@ import {
   Dispatch,
   SetStateAction,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useState,
 } from "react";
 import { iChildren } from "../interfaces";
+import { useSearchParams } from "react-router-dom";
 
 interface iTableContextData {
   count: number;
@@ -23,6 +25,7 @@ interface iTableContextData {
   setBy: Dispatch<SetStateAction<"asc" | "desc">>;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  defineQuery: (year_id?: string, school_id?: string, date?: string) => string;
 }
 
 type iRowsPage =
@@ -35,6 +38,8 @@ type iRowsPage =
 const TableContext = createContext({} as iTableContextData);
 
 export const TableProvider = ({ children }: iChildren) => {
+  const [searchParams] = useSearchParams();
+  const orderData = searchParams.get("order");
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPage, setrowsPage] = useState<iRowsPage[]>();
@@ -75,6 +80,26 @@ export const TableProvider = ({ children }: iChildren) => {
     }
   }, [page, take]);
 
+  const defineQuery = useCallback(
+    (year_id?: string, school_id?: string, date?: string) => {
+      let query = "?by=" + by;
+      if (order) {
+        query += `&order=${order}`;
+      } else if (orderData) {
+        setOrder(orderData);
+        query += `&order=${orderData}`;
+      }
+      if (take) query += "&take=" + take;
+      if (skip) query += "&skip=" + skip;
+      if (year_id) query += "&year_id=" + year_id;
+      if (school_id) query += "&school_id=" + school_id;
+      if (date) query += "&date=" + date;
+
+      return query;
+    },
+    [by, take, skip, order, orderData]
+  );
+
   return (
     <TableContext.Provider
       value={{
@@ -92,6 +117,7 @@ export const TableProvider = ({ children }: iChildren) => {
         setBy,
         isLoading,
         setIsLoading,
+        defineQuery,
       }}
     >
       {children}

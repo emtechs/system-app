@@ -16,7 +16,11 @@ export const OtherListItemLink = ({
   const location = useLocation();
   return (
     <Link to="/">
-      <ListItemButton onClick={onClick} selected={location.pathname === "/"}>
+      <ListItemButton
+        autoFocus={true}
+        onClick={onClick}
+        selected={location.pathname === "/"}
+      >
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText primary={label} />
       </ListItemButton>

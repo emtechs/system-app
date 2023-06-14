@@ -24,6 +24,7 @@ export const ListItemLink = ({ icon, label, to }: iListItemLinkProps) => {
   return (
     <Link to={to}>
       <ListItemButton
+        autoFocus={true}
         onClick={handleClickButton}
         selected={location.pathname === `/${normalizeTo}`}
         sx={{ pl: theme.spacing(4) }}
