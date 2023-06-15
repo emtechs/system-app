@@ -10,10 +10,10 @@ export const ListFrequencyPage = () => {
       return <ListFrequencyAdm />;
 
     case "SCHOOL":
-      return <ListFrequencyCommon />;
+      return <ListFrequencySchool />;
 
     case "COMMON":
-      return <ListFrequencySchool />;
+      return <ListFrequencyCommon />;
 
     default:
       return <></>;

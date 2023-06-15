@@ -89,6 +89,10 @@ export const RetrieveFrequencyPage = () => {
     useFrequencyContext();
 
   useEffect(() => {
+    return setFrequencyData(undefined);
+  }, []);
+
+  useEffect(() => {
     if (id && !studentData) {
       setIsLoading(true);
       apiUsingNow

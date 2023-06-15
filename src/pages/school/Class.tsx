@@ -114,6 +114,7 @@ export const ListClassSchoolPage = () => {
       isSchool
       tools={
         <Tools
+          isHome
           isBack={dashData === "ADMIN"}
           back={"/school?id=" + school_id}
           isNew={dashData === "ADMIN"}
