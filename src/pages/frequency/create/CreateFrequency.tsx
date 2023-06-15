@@ -26,7 +26,7 @@ const DateValue = () => {
   const { setValue, formState } = useFormContext();
   const { schoolData, yearData } = useAuthContext();
   const { classWithSchoolSelect } = useClassContext();
-  const { dateFrequency } = useCalendarContext();
+  const { dateFrequency, buttonFreqRef } = useCalendarContext();
   const { errors } = formState;
 
   const errMessage = useMemo(() => {
@@ -61,7 +61,7 @@ const DateValue = () => {
       >
         {dateFrequency ? dateFrequency.format("dddd, LL") : errMessage}
       </Typography>
-      <Button variant="contained" type="submit" fullWidth>
+      <Button ref={buttonFreqRef} variant="contained" type="submit" fullWidth>
         Realizar
       </Button>
     </Box>

@@ -26,6 +26,7 @@ export const CalendarBase = ({ eventClick }: iCalendarBaseProps) => {
     setStart_date,
     setDateData,
     setDateFrequency,
+    buttonFreqRef,
   } = useCalendarContext();
 
   useEffect(() => {
@@ -70,6 +71,10 @@ export const CalendarBase = ({ eventClick }: iCalendarBaseProps) => {
         );
         if (date?.length === 0) {
           setDateFrequency(dayjs(arg.date));
+          if (buttonFreqRef) {
+            buttonFreqRef.current?.focus();
+            buttonFreqRef.current?.scrollIntoView();
+          }
           setDateData(dayjs(arg.date).format("DD/MM/YYYY"));
         }
       }}

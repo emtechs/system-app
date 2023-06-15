@@ -1,8 +1,10 @@
 import {
   Dispatch,
+  RefObject,
   SetStateAction,
   createContext,
   useContext,
+  useRef,
   useState,
 } from "react";
 import { iCalendar, iChildren } from "../interfaces";
@@ -22,6 +24,7 @@ interface iCalendarContextData {
   setEnd_date: Dispatch<SetStateAction<string>>;
   dateFrequency: dayjs.Dayjs | undefined;
   setDateFrequency: Dispatch<SetStateAction<dayjs.Dayjs | undefined>>;
+  buttonFreqRef: RefObject<HTMLButtonElement>;
 }
 
 const CalendarContext = createContext({} as iCalendarContextData);
@@ -32,6 +35,7 @@ export const CalendarProvider = ({ children }: iChildren) => {
   const [start_date, setStart_date] = useState<string>();
   const [end_date, setEnd_date] = useState(dayjs().format("DD/MM/YYYY"));
   const [dateFrequency, setDateFrequency] = useState<Dayjs>();
+  const buttonFreqRef = useRef<HTMLButtonElement>(null);
 
   return (
     <CalendarContext.Provider
@@ -46,6 +50,7 @@ export const CalendarProvider = ({ children }: iChildren) => {
         start_date,
         dateFrequency,
         setDateFrequency,
+        buttonFreqRef,
       }}
     >
       {children}
