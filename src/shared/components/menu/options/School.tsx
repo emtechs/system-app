@@ -18,8 +18,8 @@ export const School = () => {
   if (dashData !== "ADMIN") {
     return (
       <List component="div" disablePadding>
-        <ListItemLink icon={<Group />} label="Turma" to="class" />
         <ListItemLink icon={<Workspaces />} label="Turmas" to="school/class" />
+        <ListItemLink icon={<Group />} label="Alunos" to="school/student" />
       </List>
     );
   }

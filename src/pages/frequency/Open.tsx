@@ -64,7 +64,7 @@ export const FrequencyOpenPage = () => {
         .then((res) => {
           setCount(res.data.total);
           setData(res.data.result);
-          if (res.data.total === 0) navigate("/");
+          if (res.data.total === 0) navigate("/frequency/create");
         })
         .finally(() => setIsLoading(false));
     }

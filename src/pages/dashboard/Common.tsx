@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Card,
   CardActionArea,
   CardContent,
@@ -13,18 +12,18 @@ import { LayoutBasePage } from "../../shared/layouts";
 import { ReactNode, useEffect, useState } from "react";
 import {
   useAuthContext,
-  useCalendarContext,
   useDrawerContext,
+  useTableContext,
 } from "../../shared/contexts";
 import { CalendarDashCommon, SelectSchoolData } from "../../shared/components";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import "dayjs/locale/pt-br";
 import { useAppThemeContext } from "../../shared/contexts/ThemeContext";
 import { apiUsingNow } from "../../shared/services";
 import { iDashSchoolServer } from "../../shared/interfaces";
 import { Link } from "react-router-dom";
-import { Checklist, EventBusy, School } from "@mui/icons-material";
+import { Checklist, EventBusy, Groups, School } from "@mui/icons-material";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import "dayjs/locale/pt-br";
 dayjs.extend(localizedFormat);
 
 interface iGridDashContentProps {
@@ -82,37 +81,27 @@ const GridDashContent = ({
 export const DashboardCommon = () => {
   const { theme, setLoading } = useAppThemeContext();
   const { schoolData, yearData } = useAuthContext();
-  const { dateDisplay, dateData, setDateDisplay, setDateData } =
-    useCalendarContext();
   const { handleClickFrequency, handleClickSchool } = useDrawerContext();
+  const { defineQuery } = useTableContext();
   const [infoSchool, setInfoSchool] = useState<iDashSchoolServer>();
 
   useEffect(() => {
-    setDateData(dayjs().format("DD/MM/YYYY"));
-    setDateDisplay(dayjs().format("dddd, LL"));
-  }, []);
-
-  useEffect(() => {
     if (schoolData && yearData) {
+      const date = dayjs().format("DD/MM/YYYY");
+      const query = defineQuery(yearData.id, undefined, undefined, date);
       setLoading(true);
       apiUsingNow
         .get<iDashSchoolServer>(
-          `schools/${schoolData.school.id}/dash/server?date=${dateData}&year_id=${yearData.id}`
+          `schools/${schoolData.school.id}/dash/server${query}`
         )
         .then((res) => setInfoSchool(res.data))
         .finally(() => setLoading(false));
     }
-  }, [dateData, schoolData, yearData]);
+  }, [schoolData, yearData, defineQuery]);
 
   return (
     <LayoutBasePage title="Página Inicial">
-      <Box
-        my={1}
-        mx={2}
-        flexDirection="column"
-        component={Paper}
-        variant="outlined"
-      >
+      <Box my={1} mx={2} component={Paper} variant="outlined">
         <Card>
           <CardContent>
             <Grid container direction="column" p={2} spacing={2}>
@@ -141,19 +130,9 @@ export const DashboardCommon = () => {
                       alignItems="center"
                       justifyContent="space-between"
                     >
-                      <Typography variant="subtitle1">{dateDisplay}</Typography>
-                      <Button
-                        size="small"
-                        variant="contained"
-                        disableElevation
-                        disabled={dateDisplay === dayjs().format("dddd, LL")}
-                        onClick={() => {
-                          setDateData(dayjs().format("DD/MM/YYYY"));
-                          setDateDisplay(dayjs().format("dddd, LL"));
-                        }}
-                      >
-                        hoje
-                      </Button>
+                      <Typography variant="h6">
+                        {dayjs().format("dddd, LL")}
+                      </Typography>
                     </Box>
                   </Grid>
                   <Grid item xs={12}>
@@ -167,24 +146,34 @@ export const DashboardCommon = () => {
                         info="Frequências no dia"
                         dest={
                           infoSchool.frequencies === infoSchool.classTotal
-                            ? "/frequency/list?date=" + dateData
-                            : "frequency?date=" + dateData + "&order=name"
-                        }
-                        onClick={handleClickFrequency}
-                      />
-                      <GridDashContent
-                        icon={<EventBusy fontSize="large" />}
-                        quant={infoSchool.frequencyOpen}
-                        info="Frequências em aberto"
-                        dest={
-                          infoSchool.frequencyOpen !== 0
-                            ? "/frequency/open"
-                            : infoSchool.frequencies === infoSchool.classTotal
                             ? "/frequency/list"
-                            : "frequency?date=" + dateData + "&order=name"
+                            : "/frequency"
                         }
                         onClick={handleClickFrequency}
                       />
+                      {infoSchool.frequencyOpen !== 0 ? (
+                        <GridDashContent
+                          icon={<EventBusy fontSize="large" />}
+                          quant={infoSchool.frequencyOpen}
+                          info="Frequências em aberto"
+                          dest={
+                            infoSchool.frequencyOpen !== 0
+                              ? "/frequency/open"
+                              : infoSchool.frequencies === infoSchool.classTotal
+                              ? "/frequency/list"
+                              : "/frequency"
+                          }
+                          onClick={handleClickFrequency}
+                        />
+                      ) : (
+                        <GridDashContent
+                          icon={<Groups fontSize="large" />}
+                          quant={infoSchool.stundents}
+                          info="Alunos"
+                          dest="/school/student"
+                          onClick={handleClickSchool}
+                        />
+                      )}
                       <GridDashContent
                         icon={<School fontSize="large" />}
                         quant={

@@ -14,7 +14,7 @@ import {
 } from "../interfaces";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useAppThemeContext } from ".";
+import { useAppThemeContext, useTableContext } from ".";
 import { FieldValues } from "react-hook-form";
 import { apiClass, apiFrequency, apiStudent } from "../services";
 
@@ -42,6 +42,7 @@ const FrequencyContext = createContext({} as iFrequencyContextData);
 export const FrequencyProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading } = useAppThemeContext();
+  const { setIsLoading } = useTableContext();
   const [frequencyData, setFrequencyData] = useState<iFrequency>();
   const [studentData, setStudentData] = useState<iFrequencyStudents>();
   const [retrieveFreq, setRetrieveFreq] = useState<iFrequencyWithInfreq>();
@@ -101,14 +102,12 @@ export const FrequencyProvider = ({ children }: iChildren) => {
   const handleUpdateStudentFrequency = useCallback(
     async (data: FieldValues, id: string) => {
       try {
-        setLoading(true);
+        setIsLoading(true);
         await apiFrequency.updateFreqStudent(data, id);
-        toast.success("Falta cadastrada com sucesso!");
       } catch {
         toast.error("Não foi possível cadastrar a falta no momento!");
       } finally {
         setStudentData(undefined);
-        setLoading(false);
       }
     },
     []

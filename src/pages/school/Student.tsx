@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import {
   useAuthContext,
   useFrequencyContext,
+  useSchoolContext,
   useTableContext,
 } from "../../shared/contexts";
 import { apiUsingNow } from "../../shared/services";
@@ -10,7 +11,6 @@ import { iStudentWithSchool, iheadCell } from "../../shared/interfaces";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TableBase, Tools } from "../../shared/components";
 import { TableCell, TableRow, useTheme } from "@mui/material";
-import { CardSchoolId } from "../../shared/components/card";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 import { useDebounce } from "../../shared/hooks";
 
@@ -51,21 +51,33 @@ const CardStudent = ({ student }: iCardStudentProps) => {
   );
 };
 
-export const RetrieveClassPage = () => {
+export const ListStundetSchoolPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const school_id = searchParams.get("school_id");
+  const class_id = searchParams.get("class_id");
   const back = searchParams.get("back");
   const { debounce } = useDebounce();
-  const { yearData, dashData } = useAuthContext();
+  const { yearData, dashData, schoolData } = useAuthContext();
+  const { schoolSelect } = useSchoolContext();
   const { isInfreq } = useFrequencyContext();
   const { setIsLoading, defineQuery, setCount } = useTableContext();
   const [data, setData] = useState<iStudentWithSchool[]>();
   const [search, setSearch] = useState<string>();
 
+  let school_id = "";
+  if (id) {
+    school_id = id;
+  } else if (schoolSelect) {
+    school_id = schoolSelect.id;
+  } else if (schoolData) school_id = schoolData.school.id;
+
   useEffect(() => {
-    if (yearData && school_id && id) {
-      let query = defineQuery(undefined, school_id, id);
+    if (yearData) {
+      let query = defineQuery(
+        undefined,
+        school_id,
+        class_id ? class_id : undefined
+      );
       query += "&is_infreq=true";
       if (isInfreq) query += "&infreq=31";
       if (search) {
@@ -95,15 +107,13 @@ export const RetrieveClassPage = () => {
           .finally(() => setIsLoading(false));
       }
     }
-  }, [yearData, id, school_id, isInfreq, defineQuery, search]);
+  }, [yearData, school_id, isInfreq, defineQuery, search, class_id]);
 
-  if (!id && dashData !== "ADMIN") {
-    return <Navigate to="/school/class" />;
-  }
+  if (dashData !== "ADMIN" && school_id.length === 0)
+    return <Navigate to="/" />;
 
   return (
     <LayoutBasePage
-      school={<CardSchoolId />}
       tools={
         <Tools
           isBack={!!back}

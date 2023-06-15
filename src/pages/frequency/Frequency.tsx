@@ -10,8 +10,12 @@ import {
 } from "../../shared/contexts";
 import { iClassDash, iheadCell } from "../../shared/interfaces";
 import { CardSchool, TableBase } from "../../shared/components";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { defineBgColorInfrequency } from "../../shared/scripts";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import "dayjs/locale/pt-br";
+dayjs.extend(localizedFormat);
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Turma" },
@@ -62,14 +66,13 @@ const CardClassDash = ({ classDash, date }: iCardClassDashProps) => {
 
 export const FrequencyPage = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const date = searchParams.get("date");
   const { schoolData } = useAuthContext();
   const { setCount, setIsLoading, defineQuery } = useTableContext();
   const [listClassData, setListClassData] = useState<iClassDash[]>();
+  const date = dayjs().format("DD/MM/YYYY");
 
   useEffect(() => {
-    if (schoolData && date) {
+    if (schoolData) {
       let query = defineQuery(undefined, undefined, undefined, date);
       query += "&is_dash=true";
       setIsLoading(true);
@@ -79,14 +82,14 @@ export const FrequencyPage = () => {
         )
         .then((res) => {
           if (res.data.total === 0) {
-            navigate("/");
+            navigate("/frequency/create");
           }
           setCount(res.data.total);
           setListClassData(res.data.result);
         })
         .finally(() => setIsLoading(false));
     }
-  }, [schoolData, date, defineQuery]);
+  }, [schoolData, defineQuery]);
 
   return (
     <LayoutBasePage title={"Frequência - " + date} school={<CardSchool />}>

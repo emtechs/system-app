@@ -21,6 +21,7 @@ export interface iDashSchoolServer {
   school_infreq: number;
   frequencyOpen: number;
   classTotal: number;
+  stundents: number;
 }
 
 export interface iSchool {

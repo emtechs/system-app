@@ -3,26 +3,34 @@ import {
   useAppThemeContext,
   useAuthContext,
   useCalendarContext,
+  useClassContext,
 } from "../../contexts";
 import { CalendarBase } from "./Base";
 import { apiUsingNow } from "../../services";
 import { iCalendar } from "../../interfaces";
 
-export const CalendarDashCommon = () => {
+export const CalendarFrequency = () => {
   const { setLoading } = useAppThemeContext();
   const { yearData, schoolData } = useAuthContext();
+  const { classWithSchoolSelect } = useClassContext();
   const { start_date, end_date, setEventData } = useCalendarContext();
 
   useEffect(() => {
-    if (yearData && schoolData && start_date) {
-      const query = `?end_date=${end_date}&school_id=${schoolData.school.id}&start_date=${start_date}`;
+    return () => setEventData(undefined);
+  }, []);
+
+  useEffect(() => {
+    if (yearData && schoolData && classWithSchoolSelect && start_date) {
+      const query = `?end_date=${end_date}&start_date=${start_date}`;
       setLoading(true);
       apiUsingNow
-        .get<iCalendar[]>(`calendar/${yearData.id}${query}`)
+        .get<iCalendar[]>(
+          `calendar/frequency/${yearData.id}/${schoolData.school.id}/${classWithSchoolSelect.class.id}${query}`
+        )
         .then((res) => setEventData(res.data))
         .finally(() => setLoading(false));
     }
-  }, [schoolData, start_date, end_date, yearData]);
+  }, [classWithSchoolSelect, schoolData, start_date, end_date, yearData]);
 
   return <CalendarBase eventClick={(arg) => console.log(arg.event.start)} />;
 };

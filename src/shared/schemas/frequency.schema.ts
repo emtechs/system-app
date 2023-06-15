@@ -4,15 +4,20 @@ import { z } from "zod";
 export const frequencyCreateSchema = z
   .object({
     date: z
-      .string({ required_error: "Data obrigatório" })
-      .nonempty("Data obrigatório"),
+      .string({
+        required_error: "Por favor, selecione uma data no calendário.",
+      })
+      .nonempty("Por favor, selecione uma data no calendário."),
     class: z.object(
       {
         id: z.string().uuid(),
         students: z.object({ id: z.string().uuid() }).array(),
         school: z.object({ id: z.string().uuid() }),
       },
-      { required_error: "Turma obrigatória" }
+      {
+        required_error: "Turma obrigatória",
+        invalid_type_error: "Turma obrigatória",
+      }
     ),
     class_id: z.string().uuid().optional(),
     school_id: z.string().uuid().optional(),

@@ -1,5 +1,8 @@
+import { useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import { EventClickArg } from "@fullcalendar/core/index.js";
 import {
   useAppThemeContext,
   useAuthContext,
@@ -8,22 +11,32 @@ import {
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/pt-br";
-import { EventClickArg } from "@fullcalendar/core/index.js";
 dayjs.extend(localizedFormat);
 
 interface iCalendarBaseProps {
-  navLinks?: boolean;
   eventClick?: (arg: EventClickArg) => void;
 }
 
-export const CalendarBase = ({ navLinks, eventClick }: iCalendarBaseProps) => {
+export const CalendarBase = ({ eventClick }: iCalendarBaseProps) => {
   const { theme } = useAppThemeContext();
   const { yearData } = useAuthContext();
-  const { eventData, setEnd_date, setStart_date, setDateDisplay, setDateData } =
-    useCalendarContext();
+  const {
+    eventData,
+    setEnd_date,
+    setStart_date,
+    setDateData,
+    setDateFrequency,
+  } = useCalendarContext();
+
+  useEffect(() => {
+    return () => {
+      setDateFrequency(undefined);
+    };
+  }, []);
+
   return (
     <FullCalendar
-      plugins={[dayGridPlugin]}
+      plugins={[interactionPlugin, dayGridPlugin]}
       initialView="dayGridMonth"
       locale="pt-br"
       validRange={{
@@ -39,12 +52,27 @@ export const CalendarBase = ({ navLinks, eventClick }: iCalendarBaseProps) => {
         setStart_date(dayjs(arg.start).format("DD/MM/YYYY"));
         setEnd_date(dayjs(arg.end).format("DD/MM/YYYY"));
       }}
-      navLinks={navLinks}
-      navLinkDayClick={(date) => {
-        setDateData(dayjs(date).format("DD/MM/YYYY"));
-        setDateDisplay(dayjs(date).format("dddd, LL"));
+      dayCellClassNames={(arg) => {
+        const date = eventData?.filter(
+          (el) => el.date === dayjs(arg.date).format("YYYY-MM-DD")
+        );
+
+        return date?.length === 0 ? "calendar_cursor_pointer" : "";
       }}
+      eventClassNames="calendar_cursor_pointer"
       eventClick={eventClick}
+      eventOrder="start"
+      eventOrderStrict={true}
+      selectOverlap={false}
+      dateClick={(arg) => {
+        const date = eventData?.filter(
+          (el) => el.date === dayjs(arg.date).format("YYYY-MM-DD")
+        );
+        if (date?.length === 0) {
+          setDateFrequency(dayjs(arg.date));
+          setDateData(dayjs(arg.date).format("DD/MM/YYYY"));
+        }
+      }}
     />
   );
 };

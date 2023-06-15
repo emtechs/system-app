@@ -15,11 +15,7 @@ import {
   DialogRemoveMissed,
   Tools,
 } from "../../shared/components";
-import {
-  useCalendarContext,
-  useFrequencyContext,
-  useTableContext,
-} from "../../shared/contexts";
+import { useFrequencyContext, useTableContext } from "../../shared/contexts";
 import { iFrequency, iFrequencyStudents } from "../../shared/interfaces";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
@@ -88,26 +84,22 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
 export const RetrieveFrequencyPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const { dateData } = useCalendarContext();
-  const { setIsLoading, setCount, isLoading } = useTableContext();
-  const { studentData, frequencyData, setFrequencyData } =
+  const { setIsLoading, isLoading } = useTableContext();
+  const { frequencyData, setFrequencyData, studentData } =
     useFrequencyContext();
 
   useEffect(() => {
-    setIsLoading(true);
-    apiUsingNow
-      .get<iFrequency>(`frequencies/${id}`)
-      .then((res) => {
-        setCount(1);
-        setFrequencyData(res.data);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    if (id && !studentData) {
+      setIsLoading(true);
+      apiUsingNow
+        .get<iFrequency>(`frequencies/${id}`)
+        .then((res) => setFrequencyData(res.data))
+        .finally(() => setIsLoading(false));
+    }
   }, [studentData, id]);
 
   if (!id) {
-    return <Navigate to={"/frequency?date=" + dateData + "&order=name"} />;
+    return <Navigate to={"/frequency/create"} />;
   }
 
   return (

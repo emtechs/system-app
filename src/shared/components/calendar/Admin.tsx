@@ -14,13 +14,8 @@ export const CalendarDashAdmin = () => {
   const { start_date, end_date, setEventData } = useCalendarContext();
 
   useEffect(() => {
-    if (yearData) {
-      let query = `?end_date=${end_date}`;
-      if (start_date) {
-        query += `&start_date=${start_date}`;
-      } else {
-        query += "&take=0";
-      }
+    if (yearData && start_date) {
+      const query = `?end_date=${end_date}&start_date=${start_date}`;
       setLoading(true);
       apiUsingNow
         .get<iCalendar[]>(`calendar/${yearData.id}${query}`)

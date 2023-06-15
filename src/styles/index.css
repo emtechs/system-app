@@ -2,10 +2,12 @@ body {
   margin: 0;
   padding: 0;
 }
+
 a {
   color: unset;
   text-decoration: none;
 }
+
 :root {
   --fc-today-bg-color: #fff;
   --fc-button-bg-color: #006cbe;
@@ -14,4 +16,8 @@ a {
   --fc-button-hover-border-color: #004b85ff;
   --fc-button-active-bg-color: #599fd5ff;
   --fc-button-active-border-color: #599fd5ff;
+}
+
+.calendar_cursor_pointer {
+  cursor: pointer;
 }

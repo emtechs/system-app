@@ -28,6 +28,7 @@ import {
   ListFrequencyPage,
   ListSchoolPage,
   ListStudentPage,
+  ListStundetSchoolPage,
   ListUserPage,
   PasswordPage,
   ReportClassPage,
@@ -84,6 +85,7 @@ const AppRoutes = () => {
           <Route path="/school/active" element={<ActiveSchoolPage />} />
         </Route>
         <Route path="/school/class" element={<ListClassSchoolPage />} />
+        <Route path="/school/student" element={<ListStundetSchoolPage />} />
         <Route path="/" element={<DashboardPage />} />
         <Route path="/class" element={<RetrieveClassPage />} />
         <Route

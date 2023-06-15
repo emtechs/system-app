@@ -19,13 +19,13 @@ const Providers = ({ children }: iChildren) => (
           <UserProvider>
             <SchoolProvider>
               <ClassProvider>
-                <FrequencyProvider>
-                  <StudentProvider>
-                    <TableProvider>
+                <TableProvider>
+                  <FrequencyProvider>
+                    <StudentProvider>
                       <CalendarProvider>{children}</CalendarProvider>
-                    </TableProvider>
-                  </StudentProvider>
-                </FrequencyProvider>
+                    </StudentProvider>
+                  </FrequencyProvider>
+                </TableProvider>
               </ClassProvider>
             </SchoolProvider>
           </UserProvider>

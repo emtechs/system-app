@@ -14,6 +14,10 @@ const ValidateClass = () => {
   const classData: iClassWithSchool = watch("class");
 
   useEffect(() => {
+    return () => setClassWithSchoolSelect(undefined);
+  }, []);
+
+  useEffect(() => {
     setClassWithSchoolSelect(classData);
   }, [classData]);
 

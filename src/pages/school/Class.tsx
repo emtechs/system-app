@@ -35,7 +35,7 @@ const CardClass = ({ el, school_id }: iCardClassProps) => {
       sx={{ cursor: "pointer" }}
       onClick={() => {
         navigate(
-          `/class?id=${el.class.id}&school_id=${school_id}&back=/school/class`
+          `/school/student?id=${school_id}&class_id=${el.class.id}&back=/school/class`
         );
       }}
     >
