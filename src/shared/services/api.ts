@@ -6,7 +6,7 @@ const localServer = "http://localhost:4002/";
 
 const localApi = axios.create({
   baseURL: localServer,
-  timeout: 5000,
+  timeout: 10000,
 });
 
 const apiServerSide = axios.create({

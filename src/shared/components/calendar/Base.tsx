@@ -18,7 +18,7 @@ interface iCalendarBaseProps {
 }
 
 export const CalendarBase = ({ eventClick }: iCalendarBaseProps) => {
-  const { theme } = useAppThemeContext();
+  const { theme, mdDown } = useAppThemeContext();
   const { yearData } = useAuthContext();
   const {
     eventData,
@@ -43,7 +43,7 @@ export const CalendarBase = ({ eventClick }: iCalendarBaseProps) => {
         start: `${yearData?.year}-01-01`,
         end: dayjs().format(),
       }}
-      height={theme.spacing(60)}
+      height={mdDown ? "auto" : theme.spacing(60)}
       titleFormat={{ month: "long" }}
       buttonText={{ today: dayjs().format("MMMM") }}
       events={eventData}
