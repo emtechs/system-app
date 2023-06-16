@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import {
   useAppThemeContext,
   useAuthContext,
   useCalendarContext,
   useClassContext,
+  useFrequencyContext,
 } from "../../contexts";
 import { CalendarBase } from "./Base";
 import { apiUsingNow } from "../../services";
@@ -11,17 +12,33 @@ import { iCalendar } from "../../interfaces";
 
 export const CalendarFrequency = () => {
   const { setLoading } = useAppThemeContext();
+  const { createFrequency } = useFrequencyContext();
   const { yearData, schoolData } = useAuthContext();
   const { classWithSchoolSelect } = useClassContext();
-  const { start_date, end_date, setEventData } = useCalendarContext();
+  const { monthData, setEventData } = useCalendarContext();
+  const frequency = useMemo(() => {
+    if (classWithSchoolSelect && schoolData && yearData) {
+      const students = classWithSchoolSelect.students.map((el) => {
+        return { student_id: el.id };
+      });
+
+      return {
+        class_id: classWithSchoolSelect.class.id,
+        school_id: schoolData.school.id,
+        year_id: yearData.id,
+        students,
+      };
+    }
+    return undefined;
+  }, [classWithSchoolSelect, schoolData, yearData]);
 
   useEffect(() => {
     return () => setEventData(undefined);
   }, []);
 
   useEffect(() => {
-    if (yearData && schoolData && classWithSchoolSelect && start_date) {
-      const query = `?end_date=${end_date}&start_date=${start_date}`;
+    if (yearData && schoolData && classWithSchoolSelect && monthData) {
+      const query = `?month=${monthData}`;
       setLoading(true);
       apiUsingNow
         .get<iCalendar[]>(
@@ -30,7 +47,13 @@ export const CalendarFrequency = () => {
         .then((res) => setEventData(res.data))
         .finally(() => setLoading(false));
     }
-  }, [classWithSchoolSelect, schoolData, start_date, end_date, yearData]);
+  }, [classWithSchoolSelect, schoolData, monthData, yearData]);
 
-  return <CalendarBase eventClick={(arg) => console.log(arg.event.start)} />;
+  return (
+    <CalendarBase
+      createFrequency={createFrequency}
+      frequency={frequency}
+      eventClick={(arg) => console.log(arg.event.start)}
+    />
+  );
 };

@@ -1,13 +1,5 @@
-import { ReactNode, useEffect, useState } from "react";
-import {
-  Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  Grid,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Card, CardContent, Grid } from "@mui/material";
 import {
   Checklist,
   Close,
@@ -20,62 +12,10 @@ import {
   useAppThemeContext,
   useAuthContext,
   useDrawerContext,
-} from "../../../shared/contexts";
-import { Link } from "react-router-dom";
-import { iUserDash } from "../../../shared/interfaces";
-import { apiUsingNow } from "../../../shared/services";
-
-interface iGridDashContentProps {
-  icon: ReactNode;
-  quant: number | string;
-  info: string;
-  dest: string;
-  onClick?: () => void;
-}
-
-const GridDashContent = ({
-  icon,
-  quant,
-  info,
-  dest,
-  onClick,
-}: iGridDashContentProps) => {
-  const theme = useTheme();
-
-  return (
-    <Grid item xs={4}>
-      <Card>
-        <Link to={dest}>
-          <CardActionArea onClick={onClick}>
-            <CardContent>
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                gap={0.5}
-              >
-                {icon}
-                <Typography sx={{ fontSize: theme.spacing(4) }}>
-                  {quant}
-                </Typography>
-                <Typography
-                  component="div"
-                  display="flex"
-                  textAlign="center"
-                  alignItems="center"
-                  height={30}
-                  fontSize={theme.spacing(1.6)}
-                >
-                  {info}
-                </Typography>
-              </Box>
-            </CardContent>
-          </CardActionArea>
-        </Link>
-      </Card>
-    </Grid>
-  );
-};
+} from "../../contexts";
+import { iUserDash } from "../../interfaces";
+import { apiUsingNow } from "../../services";
+import { GridDashContent } from "./GridDashContent";
 
 export const GridDash = () => {
   const { setLoading } = useAppThemeContext();

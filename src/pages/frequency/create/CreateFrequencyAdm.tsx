@@ -1,126 +1,140 @@
-import { FormContainer, useFormContext } from "react-hook-form-mui";
-import {
-  CalendarFrequencyAdm,
-  SelectClassSelectData,
-  SelectSchoolSelectData,
-} from "../../../shared/components";
 import {
   useAppThemeContext,
   useAuthContext,
   useCalendarContext,
   useClassContext,
-  useFrequencyContext,
+  useDrawerContext,
+  useSchoolContext,
 } from "../../../shared/contexts";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { frequencyCreateSchema } from "../../../shared/schemas";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  Paper,
-  Typography,
-} from "@mui/material";
-import { useEffect, useMemo } from "react";
+import { Box, Card, CardContent, Grid, Paper } from "@mui/material";
 import { LayoutBasePage } from "../../../shared/layouts";
-
-const DateValue = () => {
-  const { setValue, formState } = useFormContext();
-  const { yearData } = useAuthContext();
-  const { classWithSchoolSelect } = useClassContext();
-  const { dateFrequency, buttonFreqRef } = useCalendarContext();
-  const { errors } = formState;
-
-  const errMessage = useMemo(() => {
-    return typeof errors.date?.message === "string" ? errors.date.message : "";
-  }, [errors.date]);
-
-  useEffect(() => {
-    if (yearData && dateFrequency) {
-      setValue("year_id", yearData.id);
-      setValue("date", dateFrequency.format("DD/MM/YYYY"));
-    }
-  }, [yearData, dateFrequency]);
-
-  return (
-    <Box display="flex" flexDirection="column" gap={2}>
-      <Typography variant="body2">
-        {classWithSchoolSelect
-          ? "Infrequência da Turma: " +
-            String(classWithSchoolSelect.infrequency).replace(".", ",") +
-            "%"
-          : ""}
-      </Typography>
-      <Typography
-        variant={dateFrequency ? "h6" : "subtitle1"}
-        color={dateFrequency ? undefined : "error"}
-        align="center"
-      >
-        {dateFrequency ? dateFrequency.format("dddd, LL") : errMessage}
-      </Typography>
-      <Button ref={buttonFreqRef} variant="contained" type="submit" fullWidth>
-        Realizar
-      </Button>
-    </Box>
-  );
-};
+import {
+  CalendarFrequencyAdm,
+  GridDashContent,
+  SelectSchoolSelectClassData,
+  SelectSchoolSelectData,
+} from "../../../shared/components";
+import { iDashClass } from "../../../shared/interfaces";
+import { useEffect, useState } from "react";
+import { Checklist, EventBusy, Groups, Workspaces } from "@mui/icons-material";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import "dayjs/locale/pt-br";
+import { apiUsingNow } from "../../../shared/services";
+dayjs.extend(localizedFormat);
 
 export const CreateFrequencyAdm = () => {
-  const { theme } = useAppThemeContext();
-  const { createFrequency } = useFrequencyContext();
+  const { theme, setLoading } = useAppThemeContext();
+  const { yearData } = useAuthContext();
+  const { schoolSelect } = useSchoolContext();
+  const { handleClickSchool } = useDrawerContext();
+  const { monthData } = useCalendarContext();
+  const { classWithSchoolSelect } = useClassContext();
+  const [infoClass, setInfoClass] = useState<iDashClass>();
+
+  useEffect(() => {
+    if (yearData && schoolSelect && classWithSchoolSelect && monthData) {
+      const query = `?month=${monthData}`;
+      setLoading(true);
+      apiUsingNow
+        .get<iDashClass>(
+          `classes/${classWithSchoolSelect.class.id}/${schoolSelect.id}/${yearData.id}/dash${query}`
+        )
+        .then((res) => setInfoClass(res.data))
+        .finally(() => setLoading(false));
+    }
+  }, [classWithSchoolSelect, schoolSelect, monthData, yearData]);
 
   return (
     <LayoutBasePage title="Nova Frequência" school={<SelectSchoolSelectData />}>
-      <FormContainer
-        onSuccess={createFrequency}
-        resolver={zodResolver(frequencyCreateSchema)}
-      >
-        <Box mx={2} component={Paper} variant="outlined">
-          <Card>
-            <CardContent>
-              <Grid container direction="column" p={2} spacing={2}>
-                <Grid
-                  container
-                  item
-                  direction="row"
-                  justifyContent="center"
-                  spacing={2}
-                >
-                  <Grid item xs={12} md={7}>
-                    <Box
-                      fontFamily={theme.typography.fontFamily}
-                      width="100%"
-                      display="flex"
-                      flexDirection="column"
-                      gap={1}
-                    >
-                      <CalendarFrequencyAdm />
-                    </Box>
-                  </Grid>
-                  <Grid
-                    container
-                    item
-                    direction="row"
-                    alignContent="center"
-                    justifyContent="center"
-                    xs={12}
-                    md={5}
-                    spacing={2}
+      <Box my={1} mx={2} component={Paper} variant="outlined">
+        <Card>
+          <CardContent>
+            <Grid container direction="column" p={2} spacing={2}>
+              <Grid
+                container
+                item
+                direction="row"
+                justifyContent="center"
+                spacing={2}
+              >
+                <Grid item xs={12} md={7}>
+                  <Box
+                    fontFamily={theme.typography.fontFamily}
+                    width="100%"
+                    display="flex"
+                    flexDirection="column"
+                    gap={1}
                   >
-                    <Grid item xs={12}>
-                      <SelectClassSelectData />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <DateValue />
-                    </Grid>
+                    <CalendarFrequencyAdm />
+                  </Box>
+                </Grid>
+                <Grid container item direction="row" xs={12} md={5} spacing={2}>
+                  <Grid item xs={12}>
+                    <SelectSchoolSelectClassData />
+                  </Grid>
+                  {infoClass && (
+                    <>
+                      <GridDashContent
+                        icon={<Checklist fontSize="large" />}
+                        quant={`${infoClass.frequencies}`}
+                        info="Frequências no mês"
+                        dest={"/"}
+                      />
+                      {infoClass.frequencyOpen !== 0 ? (
+                        <GridDashContent
+                          icon={<EventBusy fontSize="large" />}
+                          quant={infoClass.frequencyOpen}
+                          info="Frequências em aberto"
+                          dest={
+                            infoClass.frequencyOpen !== 0
+                              ? "/frequency/open"
+                              : "/frequency/list"
+                          }
+                        />
+                      ) : (
+                        <GridDashContent
+                          icon={<Groups fontSize="large" />}
+                          quant={infoClass.stundents}
+                          info="Alunos"
+                          dest="/school/student"
+                          onClick={handleClickSchool}
+                        />
+                      )}
+                      <GridDashContent
+                        icon={<Workspaces fontSize="large" />}
+                        quant={
+                          infoClass?.class_infreq
+                            ? infoClass.class_infreq.toFixed(0) + "%"
+                            : "0%"
+                        }
+                        info="Infrequência"
+                        dest="/school/class"
+                        onClick={handleClickSchool}
+                      />
+                    </>
+                  )}
+                  <Grid item xs={12}>
+                    <Card>
+                      <CardContent>
+                        <Box
+                          display="flex"
+                          justifyContent="space-evenly"
+                          alignItems="center"
+                          gap={1}
+                        >
+                          <img width="50%" src="/pref_massape.png" />
+                          <img width="25%" src="/emtechs.jpg" />
+                        </Box>
+                      </CardContent>
+                    </Card>
                   </Grid>
                 </Grid>
               </Grid>
-            </CardContent>
-          </Card>
-        </Box>
-      </FormContainer>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Box>
     </LayoutBasePage>
   );
 };

@@ -1,6 +1,5 @@
 import { useAuthContext } from "../../shared/contexts";
 import { DashboardAdmin } from "./Admin";
-import { DashboardCommon } from "./Common";
 import { DashboardSchool } from "./School";
 
 export const DashboardPage = () => {
@@ -13,7 +12,7 @@ export const DashboardPage = () => {
       return <DashboardSchool />;
 
     case "COMMON":
-      return <DashboardCommon />;
+      return <DashboardSchool />;
 
     default:
       return <></>;

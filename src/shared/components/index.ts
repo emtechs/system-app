@@ -5,6 +5,7 @@ export * from "./card";
 export * from "./dialog";
 export * from "./first";
 export * from "./glossary";
+export * from "./gridDash";
 export * from "./inputFile";
 export * from "./login";
 export * from "./menu";

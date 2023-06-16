@@ -2,7 +2,7 @@ import { Box, Card, CardContent, Grid, Paper } from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
 import { useAppThemeContext } from "../../shared/contexts";
 import { CalendarDashAdmin } from "../../shared/components";
-import { GridDash } from "./GridDash";
+import { GridDash } from "../../shared/components/gridDash";
 
 export const DashboardAdmin = () => {
   const { theme } = useAppThemeContext();

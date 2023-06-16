@@ -11,18 +11,18 @@ import { CalendarBase } from "./Base";
 export const CalendarDashAdmin = () => {
   const { setLoading } = useAppThemeContext();
   const { yearData } = useAuthContext();
-  const { start_date, end_date, setEventData } = useCalendarContext();
+  const { monthData, setEventData } = useCalendarContext();
 
   useEffect(() => {
-    if (yearData && start_date) {
-      const query = `?end_date=${end_date}&start_date=${start_date}`;
+    if (yearData && monthData) {
+      const query = `?month=${monthData}`;
       setLoading(true);
       apiUsingNow
         .get<iCalendar[]>(`calendar/${yearData.id}${query}`)
         .then((res) => setEventData(res.data))
         .finally(() => setLoading(false));
     }
-  }, [start_date, end_date, yearData]);
+  }, [monthData, yearData]);
 
   return <CalendarBase eventClick={(arg) => console.log(arg.event.start)} />;
 };

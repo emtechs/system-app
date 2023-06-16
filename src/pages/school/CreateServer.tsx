@@ -1,10 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { Box, Grid, Paper } from "@mui/material";
-import {
-  FormContainer,
-  RadioButtonGroup,
-  TextFieldElement,
-} from "react-hook-form-mui";
+import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSchoolContext } from "../../shared/contexts";
 import { ValidateCPF } from "../../shared/components";
@@ -45,25 +41,6 @@ export const CreateServerPage = () => {
             <Grid container item direction="row" justifyContent="center">
               <Grid item xs={12} sm={9} md={6} lg={3}>
                 <TextFieldElement name="name" label="Nome" required fullWidth />
-              </Grid>
-            </Grid>
-            <Grid container item direction="row" justifyContent="center">
-              <Grid item xs={12} sm={9} md={6} lg={3}>
-                <RadioButtonGroup
-                  label="Tela do Usuário"
-                  name="dash"
-                  options={[
-                    {
-                      id: "COMMON",
-                      label: "Frequência",
-                    },
-                    {
-                      id: "SCHOOL",
-                      label: "Escola",
-                    },
-                  ]}
-                  required
-                />
               </Grid>
             </Grid>
             <Grid container item direction="row" justifyContent="center">

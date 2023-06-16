@@ -9,6 +9,13 @@ export interface iClass {
   name: string;
 }
 
+export interface iDashClass {
+  frequencies: number;
+  class_infreq: number;
+  frequencyOpen: number;
+  stundents: number;
+}
+
 export interface iClassSchool {
   class: iClass;
   school_id: string;

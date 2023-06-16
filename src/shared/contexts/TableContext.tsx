@@ -28,7 +28,8 @@ interface iTableContextData {
     year_id?: string,
     school_id?: string,
     class_id?: string,
-    date?: string
+    date?: string,
+    month?: string
   ) => string;
 }
 
@@ -87,7 +88,8 @@ export const TableProvider = ({ children }: iChildren) => {
       year_id?: string,
       school_id?: string,
       class_id?: string,
-      date?: string
+      date?: string,
+      month?: string
     ) => {
       let query = "?by=" + by;
       if (order) {
@@ -99,6 +101,7 @@ export const TableProvider = ({ children }: iChildren) => {
       if (school_id) query += "&school_id=" + school_id;
       if (class_id) query += "&class_id=" + class_id;
       if (date) query += "&date=" + date;
+      if (month) query += "&month=" + month;
 
       return query;
     },
