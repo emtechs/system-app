@@ -3,6 +3,7 @@ import {
   useAppThemeContext,
   useAuthContext,
   useClassContext,
+  useSchoolContext,
 } from "../../contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../services";
@@ -31,26 +32,29 @@ interface iSelect extends iClassWithSchool {
 
 export const SelectClassData = () => {
   const { setLoading } = useAppThemeContext();
-  const { schoolData, yearData } = useAuthContext();
+  const { yearData } = useAuthContext();
+  const { schoolSelect } = useSchoolContext();
   const [data, setData] = useState<iSelect[]>();
 
   useEffect(() => {
-    setLoading(true);
-    apiUsingNow
-      .get<{ result: iClassWithSchool[] }>(
-        `classes/school/${schoolData?.school.id}?is_active=true&year_id=${yearData?.id}`
-      )
-      .then((res) => {
-        if (res.data.result) {
-          setData(
-            res.data.result.map((el) => {
-              return { ...el, id: el.class.id, label: el.class.name };
-            })
-          );
-        }
-      })
-      .finally(() => setLoading(false));
-  }, [schoolData]);
+    if (schoolSelect) {
+      setLoading(true);
+      apiUsingNow
+        .get<{ result: iClassWithSchool[] }>(
+          `classes/school/${schoolSelect.id}?is_active=true&year_id=${yearData?.id}`
+        )
+        .then((res) => {
+          if (res.data.result) {
+            setData(
+              res.data.result.map((el) => {
+                return { ...el, id: el.class.id, label: el.class.name };
+              })
+            );
+          }
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [schoolSelect]);
 
   return (
     <>

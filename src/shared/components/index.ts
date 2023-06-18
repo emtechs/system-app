@@ -1,3 +1,4 @@
+export * from "./autoComplete";
 export * from "./basePage";
 export * from "./boxResp";
 export * from "./calendar";

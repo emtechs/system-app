@@ -15,7 +15,6 @@ import {
   iRecoveryPasswordRequest,
   iRecoveryRequest,
   iUser,
-  iWorkSchool,
   iYear,
 } from "../interfaces";
 import { useNavigate } from "react-router-dom";
@@ -42,8 +41,6 @@ interface iAuthContextData {
   ) => Promise<void>;
   userData: iUser | undefined;
   setUserData: Dispatch<SetStateAction<iUser | undefined>>;
-  schoolData: iWorkSchool | undefined;
-  setSchoolData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
   dashData: iDash | undefined;
   setDashData: Dispatch<SetStateAction<iDash | undefined>>;
   yearData: iYear | undefined;
@@ -58,7 +55,6 @@ export const AuthProvider = ({ children }: iChildren) => {
   const { setAnchorEl } = useModalContext();
   const [accessToken, setAccessToken] = useState<string>();
   const [userData, setUserData] = useState<iUser>();
-  const [schoolData, setSchoolData] = useState<iWorkSchool>();
   const [dashData, setDashData] = useState<iDash>();
   const [yearData, setYearData] = useState<iYear>();
 
@@ -81,7 +77,6 @@ export const AuthProvider = ({ children }: iChildren) => {
           apiUsingNow.defaults.headers.authorization = `Bearer ${accessToken}`;
           setUserData(res);
           setDashData(res.dash);
-          if (res.work_school.length === 0) setSchoolData(undefined);
         })
         .catch((e) => {
           if (e instanceof AxiosError) {
@@ -173,7 +168,6 @@ export const AuthProvider = ({ children }: iChildren) => {
     setAccessToken(undefined);
     setUserData(undefined);
     setDashData(undefined);
-    setSchoolData(undefined);
     setAnchorEl(null);
     handleClick();
   }, []);
@@ -191,9 +185,7 @@ export const AuthProvider = ({ children }: iChildren) => {
         accessToken,
         setAccessToken,
         dashData,
-        schoolData,
         setDashData,
-        setSchoolData,
         setUserData,
         userData,
         yearData,

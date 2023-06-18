@@ -1,6 +1,10 @@
 import { TableCell, TableRow, useTheme } from "@mui/material";
 import { TableBase, Tools } from "../../../shared/components";
-import { useAuthContext, useTableContext } from "../../../shared/contexts";
+import {
+  useAuthContext,
+  useSchoolContext,
+  useTableContext,
+} from "../../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../../shared/services";
 import { iFrequency, iheadCell } from "../../../shared/interfaces";
@@ -45,13 +49,14 @@ export const ListFrequencyCommon = () => {
   const [searchParams] = useSearchParams();
   const date = searchParams.get("date");
   const status = searchParams.get("status");
-  const { yearData, schoolData } = useAuthContext();
+  const { yearData } = useAuthContext();
+  const { schoolSelect } = useSchoolContext();
   const { setCount, take, skip, setIsLoading, defineQuery } = useTableContext();
   const [data, setData] = useState<iFrequency[]>();
 
   useEffect(() => {
-    if (yearData && schoolData) {
-      let query = defineQuery(yearData.id, schoolData.school.id);
+    if (yearData && schoolSelect) {
+      let query = defineQuery(yearData.id, schoolSelect.id);
       if (status) {
         query += "&status=" + status;
       } else {
@@ -68,7 +73,7 @@ export const ListFrequencyCommon = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [yearData, schoolData, take, skip, date, status]);
+  }, [yearData, schoolSelect, take, skip, date, status]);
   return (
     <LayoutBasePage
       title={`Frequências Realizadas ${date ? "- " + date : ""}`}

@@ -1,61 +1,61 @@
-import { AutocompleteElement, useFormContext } from "react-hook-form-mui";
-import { useAppThemeContext, useSchoolContext } from "../../contexts";
-import { useEffect } from "react";
-import { apiSchool } from "../../services";
-import { iSchool } from "../../interfaces";
-
-const ValidateSchool = () => {
-  const { watch } = useFormContext();
-  const { setSchoolSelect } = useSchoolContext();
-  const school: iSchool = watch("school");
-
-  useEffect(() => {
-    setSchoolSelect(school);
-  }, [school]);
-
-  return <></>;
-};
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSchoolContext } from "../../contexts";
+import { CardSchoolAction } from "../card";
+import { apiUser } from "../../services";
+import { ValidateSchool } from "../validate";
+import { Dialog, DialogTitle, Divider, List } from "@mui/material";
+import { iSchoolSelect, iWorkSchool } from "../../interfaces";
+import { ListBase } from "./ListBase";
+import { Search } from "./Search";
 
 export const SelectSchool = () => {
-  const { setLoading } = useAppThemeContext();
-  const { schoolDataSelect, setSchoolDataSelect } = useSchoolContext();
+  const { schoolSelect, setSchoolSelect } = useSchoolContext();
+  const [listSchoolSelect, setListSchoolSelect] = useState<iSchoolSelect[]>();
+  const [listData, setListData] = useState<iWorkSchool[]>();
 
   useEffect(() => {
-    setLoading(true);
-    apiSchool
-      .list("?is_active=true")
-      .then((res) => {
-        if (res) {
-          setSchoolDataSelect(
-            res.result.map((school) => {
-              return { ...school, label: school.name };
-            })
-          );
-        }
-      })
-      .finally(() => setLoading(false));
+    apiUser.schools("").then((res) => {
+      setListSchoolSelect(res.schools);
+      setListData(res.result);
+    });
   }, []);
+
+  const openDialog = useMemo(() => {
+    if (listSchoolSelect?.length === 0) {
+      return false;
+    }
+    return schoolSelect ? false : true;
+  }, [listSchoolSelect, schoolSelect]);
+
+  const handleOpenDialog = useCallback(() => setSchoolSelect(undefined), []);
 
   return (
     <>
-      <div style={{ width: "100%" }}>
-        <AutocompleteElement
-          name="school"
-          label="Escola"
-          loading={!schoolDataSelect}
-          options={
-            schoolDataSelect && schoolDataSelect.length > 0
-              ? schoolDataSelect
-              : [
-                  {
-                    id: 1,
-                    label: "No momento, não há nenhuma escola cadastrada",
-                  },
-                ]
-          }
-        />
-      </div>
-      <ValidateSchool />
+      <CardSchoolAction onClick={handleOpenDialog} />
+      <Dialog open={openDialog}>
+        <DialogTitle>Selecione a Escola</DialogTitle>
+        <List sx={{ pt: 0 }}>
+          <Divider component="li" />
+          <Search
+            name="school"
+            label="Escola"
+            loading={!listSchoolSelect}
+            options={listSchoolSelect}
+          >
+            <ValidateSchool />
+          </Search>
+          <Divider component="li" />
+          {listData?.map((el) => (
+            <ListBase
+              key={el.school.id}
+              name={el.school.name}
+              onClick={() => {
+                setSchoolSelect(el.school);
+              }}
+            />
+          ))}
+        </List>
+      </Dialog>
     </>
   );
 };

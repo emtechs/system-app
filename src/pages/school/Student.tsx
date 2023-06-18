@@ -57,7 +57,7 @@ export const ListStundetSchoolPage = () => {
   const class_id = searchParams.get("class_id");
   const back = searchParams.get("back");
   const { debounce } = useDebounce();
-  const { yearData, dashData, schoolData } = useAuthContext();
+  const { yearData, dashData } = useAuthContext();
   const { schoolSelect } = useSchoolContext();
   const { isInfreq } = useFrequencyContext();
   const { setIsLoading, defineQuery, setCount } = useTableContext();
@@ -67,9 +67,7 @@ export const ListStundetSchoolPage = () => {
   let school_id = "";
   if (id) {
     school_id = id;
-  } else if (schoolSelect) {
-    school_id = schoolSelect.id;
-  } else if (schoolData) school_id = schoolData.school.id;
+  } else if (schoolSelect) school_id = schoolSelect.id;
 
   useEffect(() => {
     if (yearData) {

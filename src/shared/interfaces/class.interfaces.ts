@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { classCreateSchema, classSchoolCreateSchema } from "../schemas";
 import { iWithSchool } from "./school.interface";
-import { iStudent, iStudentWithSchool } from "./student.interface";
+import { iStudent, iStudentClass } from "./student.interface";
 import { iYear } from "./calendar.interfaces";
 
 export interface iClass {
@@ -25,6 +25,10 @@ export interface iClassSchool {
 export interface iClassStudent {
   class: { class: iClass; school: iClass };
   student: iStudent;
+}
+
+export interface iClassWithSchoolSelect extends iClassWithSchool {
+  label: string;
 }
 
 export interface iClassSelect extends iClass {
@@ -63,7 +67,7 @@ export interface iClassWithSchool {
   class: iClass;
   school: iWithSchool;
   year: iYear;
-  students: iStudentWithSchool[];
+  students: iStudentClass[];
   _count: { frequencies: number; students: number };
   infrequency: number;
 }

@@ -8,6 +8,14 @@ export interface iStudent {
   infreq: number;
 }
 
+export interface iStudentClass {
+  student: {
+    id: string;
+    name: string;
+    registry: string;
+  };
+}
+
 export interface iStudentList extends iStudent {
   classes?: { class: iClassFreq }[];
 }

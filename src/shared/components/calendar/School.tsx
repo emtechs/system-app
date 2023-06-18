@@ -3,6 +3,7 @@ import {
   useAppThemeContext,
   useAuthContext,
   useCalendarContext,
+  useSchoolContext,
   useTableContext,
 } from "../../contexts";
 import { CalendarBase } from "./Base";
@@ -11,15 +12,20 @@ import { iCalendar } from "../../interfaces";
 
 export const CalendarDashSchool = () => {
   const { setLoading } = useAppThemeContext();
-  const { yearData, schoolData } = useAuthContext();
+  const { yearData } = useAuthContext();
+  const { schoolSelect } = useSchoolContext();
   const { monthData, setEventData } = useCalendarContext();
   const { defineQuery } = useTableContext();
 
   useEffect(() => {
-    if (yearData && schoolData && monthData) {
+    return () => setEventData(undefined);
+  }, []);
+
+  useEffect(() => {
+    if (yearData && schoolSelect && monthData) {
       const query = defineQuery(
         undefined,
-        schoolData.school.id,
+        schoolSelect.id,
         undefined,
         undefined,
         monthData
@@ -30,7 +36,7 @@ export const CalendarDashSchool = () => {
         .then((res) => setEventData(res.data))
         .finally(() => setLoading(false));
     }
-  }, [schoolData, monthData, yearData, defineQuery]);
+  }, [schoolSelect, monthData, yearData, defineQuery]);
 
   return <CalendarBase />;
 };

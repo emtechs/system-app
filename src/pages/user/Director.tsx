@@ -1,9 +1,5 @@
 import { ValidateCPF } from "../../shared/components";
-import {
-  useAppThemeContext,
-  useSchoolContext,
-  useUserContext,
-} from "../../shared/contexts";
+import { useAppThemeContext, useUserContext } from "../../shared/contexts";
 import {
   AutocompleteElement,
   FormContainer,
@@ -12,15 +8,15 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createDirectorSchema } from "../../shared/schemas";
 import { Box, Grid, Paper } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
-import { iSchool } from "../../shared/interfaces";
+import { iSchool, iSchoolSelect } from "../../shared/interfaces";
 import { LayoutUserPage } from "./Layout";
 
 export const CreateDirectorPage = () => {
   const { setLoading } = useAppThemeContext();
   const { createDirector } = useUserContext();
-  const { schoolDataSelect, setSchoolDataSelect } = useSchoolContext();
+  const [schoolDataSelect, setSchoolDataSelect] = useState<iSchoolSelect[]>();
 
   useEffect(() => {
     setLoading(true);

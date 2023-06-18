@@ -2,6 +2,7 @@ import {
   Avatar,
   Dialog,
   DialogTitle,
+  Divider,
   List,
   ListItem,
   ListItemAvatar,
@@ -13,6 +14,7 @@ import {
   useAppThemeContext,
   useAuthContext,
   useClassContext,
+  useSchoolContext,
 } from "../../contexts";
 import { iClassWithSchool } from "../../interfaces";
 import { apiUsingNow } from "../../services";
@@ -21,7 +23,8 @@ import { Navigate } from "react-router-dom";
 
 export const SelectSchoolClassData = () => {
   const { theme, setLoading } = useAppThemeContext();
-  const { schoolData, yearData } = useAuthContext();
+  const { yearData } = useAuthContext();
+  const { schoolSelect } = useSchoolContext();
   const { classWithSchoolSelect, setClassWithSchoolSelect } = useClassContext();
   const [openDialog, setOpenDialog] = useState(!classWithSchoolSelect);
   const [data, setData] = useState<iClassWithSchool[]>();
@@ -34,18 +37,18 @@ export const SelectSchoolClassData = () => {
   }, []);
 
   useEffect(() => {
-    if (schoolData && yearData) {
+    if (schoolSelect && yearData) {
       setLoading(true);
       apiUsingNow
         .get<{ result: iClassWithSchool[] }>(
-          `classes/school/${schoolData.school.id}?is_active=true&year_id=${yearData.id}`
+          `classes/school/${schoolSelect.id}?is_active=true&year_id=${yearData.id}`
         )
         .then((res) => setData(res.data.result))
         .finally(() => setLoading(false));
     }
-  }, [schoolData, yearData]);
+  }, [schoolSelect, yearData]);
 
-  if (!schoolData) {
+  if (!schoolSelect) {
     return <Navigate to="/" />;
   }
 
@@ -55,6 +58,8 @@ export const SelectSchoolClassData = () => {
       <Dialog open={openDialog} onClose={handleOpenDialog}>
         <DialogTitle>Selecione a Turma</DialogTitle>
         <List sx={{ pt: 0 }}>
+          <ListItem></ListItem>
+          <Divider component="li" />
           {data?.map((el) => (
             <ListItem disableGutters key={el.class.id}>
               <ListItemButton

@@ -3,7 +3,6 @@ import {
   iSchool,
   iSchoolImportRequest,
   iSchoolRequest,
-  iSchoolSelect,
   iServerRequest,
   iWorkSchool,
 } from "../interfaces";
@@ -36,8 +35,6 @@ interface iSchoolContextData {
     back?: string
   ) => Promise<void>;
   deleteServer: (school_id: string, server_id: string) => Promise<void>;
-  schoolDataSelect: iSchoolSelect[] | undefined;
-  setSchoolDataSelect: Dispatch<SetStateAction<iSchoolSelect[] | undefined>>;
   schoolSelect: iSchool | undefined;
   setSchoolSelect: Dispatch<SetStateAction<iSchool | undefined>>;
   listSchoolData: iSchool[] | undefined;
@@ -53,7 +50,6 @@ const SchoolContext = createContext({} as iSchoolContextData);
 export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading } = useAppThemeContext();
-  const [schoolDataSelect, setSchoolDataSelect] = useState<iSchoolSelect[]>();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
   const [updateSchoolData, setUpdateSchoolData] = useState<iSchool>();
@@ -161,8 +157,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
         createServer: handleCreateServer,
         updateSchool: handleUpdateSchool,
         deleteServer: handleDeleteServer,
-        schoolDataSelect,
-        setSchoolDataSelect,
         listSchoolData,
         setListSchoolData,
         schoolSelect,

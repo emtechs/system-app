@@ -1,6 +1,5 @@
 import { iChildren } from "../../interfaces";
 import { BasePageDefault } from "./Default";
-import { BasePageProfile } from "./Profile";
 
 interface iBasePageProps extends iChildren {
   isProfile?: boolean;
@@ -9,19 +8,6 @@ interface iBasePageProps extends iChildren {
   glossaryMessage?: string;
 }
 
-export const BasePage = ({
-  isProfile,
-  padding,
-  back,
-  glossaryMessage,
-  children,
-}: iBasePageProps) => {
-  if (isProfile) {
-    return (
-      <BasePageProfile back={back} glossaryMessage={glossaryMessage}>
-        {children}
-      </BasePageProfile>
-    );
-  }
+export const BasePage = ({ padding, children }: iBasePageProps) => {
   return <BasePageDefault padding={padding}>{children}</BasePageDefault>;
 };

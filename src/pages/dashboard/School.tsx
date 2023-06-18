@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import {
   useAuthContext,
   useDrawerContext,
+  useSchoolContext,
   useTableContext,
 } from "../../shared/contexts";
 import {
   CalendarDashCommon,
   GridDashContent,
-  SelectSchoolData,
+  SelectSchool,
 } from "../../shared/components";
 import { useAppThemeContext } from "../../shared/contexts/ThemeContext";
 import { apiUsingNow } from "../../shared/services";
@@ -22,24 +23,25 @@ dayjs.extend(localizedFormat);
 
 export const DashboardSchool = () => {
   const { theme, setLoading } = useAppThemeContext();
-  const { schoolData, yearData } = useAuthContext();
+  const { yearData } = useAuthContext();
+  const { schoolSelect } = useSchoolContext();
   const { handleClickFrequency, handleClickSchool } = useDrawerContext();
   const { defineQuery } = useTableContext();
   const [infoSchool, setInfoSchool] = useState<iDashSchoolServer>();
 
   useEffect(() => {
-    if (schoolData && yearData) {
+    if (schoolSelect && yearData) {
       const date = dayjs().format("DD/MM/YYYY");
       const query = defineQuery(yearData.id, undefined, undefined, date);
       setLoading(true);
       apiUsingNow
         .get<iDashSchoolServer>(
-          `schools/${schoolData.school.id}/dash/server${query}`
+          `schools/${schoolSelect.id}/dash/server${query}`
         )
         .then((res) => setInfoSchool(res.data))
         .finally(() => setLoading(false));
     }
-  }, [schoolData, yearData, defineQuery]);
+  }, [schoolSelect, yearData, defineQuery]);
 
   return (
     <LayoutBasePage title="Página Inicial">
@@ -78,7 +80,7 @@ export const DashboardSchool = () => {
                     </Box>
                   </Grid>
                   <Grid item xs={12}>
-                    <SelectSchoolData />
+                    <SelectSchool />
                   </Grid>
                   {infoSchool && (
                     <>

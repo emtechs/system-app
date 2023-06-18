@@ -4,6 +4,6 @@ export * from "./ClassSelectData";
 export * from "./School";
 export * from "./SchoolClass";
 export * from "./SchoolClassData";
-export * from "./SchoolData";
+export * from "./School";
 export * from "./SchoolSelectClassData";
 export * from "./SchoolSelectData";

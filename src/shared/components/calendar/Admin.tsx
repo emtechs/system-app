@@ -14,6 +14,10 @@ export const CalendarDashAdmin = () => {
   const { monthData, setEventData } = useCalendarContext();
 
   useEffect(() => {
+    return () => setEventData(undefined);
+  }, []);
+
+  useEffect(() => {
     if (yearData && monthData) {
       const query = `?month=${monthData}`;
       setLoading(true);

@@ -21,7 +21,7 @@ export const CalendarFrequencyAdm = () => {
   const frequency = useMemo(() => {
     if (classWithSchoolSelect && schoolSelect && yearData) {
       const students = classWithSchoolSelect.students.map((el) => {
-        return { student_id: el.id };
+        return { student_id: el.student.id };
       });
 
       return {

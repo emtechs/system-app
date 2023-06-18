@@ -4,13 +4,14 @@ import {
   useCalendarContext,
   useClassContext,
   useDrawerContext,
+  useSchoolContext,
 } from "../../../shared/contexts";
 import { Box, Card, CardContent, Grid, Paper } from "@mui/material";
 import { LayoutBasePage } from "../../../shared/layouts";
 import {
   CalendarFrequency,
   GridDashContent,
-  SelectSchoolClassData,
+  SelectSchoolClass,
 } from "../../../shared/components";
 import { iDashClass } from "../../../shared/interfaces";
 import { useEffect, useState } from "react";
@@ -23,24 +24,25 @@ dayjs.extend(localizedFormat);
 
 export const CreateFrequencyCommon = () => {
   const { theme, setLoading } = useAppThemeContext();
-  const { schoolData, yearData } = useAuthContext();
+  const { yearData } = useAuthContext();
+  const { schoolSelect } = useSchoolContext();
   const { handleClickSchool } = useDrawerContext();
   const { monthData } = useCalendarContext();
   const { classWithSchoolSelect } = useClassContext();
   const [infoClass, setInfoClass] = useState<iDashClass>();
 
   useEffect(() => {
-    if (yearData && schoolData && classWithSchoolSelect && monthData) {
+    if (yearData && schoolSelect && classWithSchoolSelect && monthData) {
       const query = `?month=${monthData}`;
       setLoading(true);
       apiUsingNow
         .get<iDashClass>(
-          `classes/${classWithSchoolSelect.class.id}/${schoolData.school.id}/${yearData.id}/dash${query}`
+          `classes/${classWithSchoolSelect.class.id}/${schoolSelect.id}/${yearData.id}/dash${query}`
         )
         .then((res) => setInfoClass(res.data))
         .finally(() => setLoading(false));
     }
-  }, [classWithSchoolSelect, schoolData, monthData, yearData]);
+  }, [classWithSchoolSelect, schoolSelect, monthData, yearData]);
 
   return (
     <LayoutBasePage title="Nova Frequência">
@@ -68,7 +70,7 @@ export const CreateFrequencyCommon = () => {
                 </Grid>
                 <Grid container item direction="row" xs={12} md={5} spacing={2}>
                   <Grid item xs={12}>
-                    <SelectSchoolClassData />
+                    <SelectSchoolClass />
                   </Grid>
                   {infoClass && (
                     <>

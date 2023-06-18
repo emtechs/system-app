@@ -1,6 +1,6 @@
 import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
-import { iUser } from "../interfaces";
+import { iSchoolSelect, iUser, iWorkSchool } from "../interfaces";
 
 const create = async (
   data: FieldValues,
@@ -29,4 +29,17 @@ const update = async (id: string, data: FieldValues): Promise<iUser> => {
   return response;
 };
 
-export const apiUser = { create, profile, update };
+interface iSchool {
+  schools: iSchoolSelect[];
+  total: number;
+  result: iWorkSchool[];
+}
+
+const schools = async (query: string) => {
+  const { data: response } = await apiUsingNow.get<iSchool>(
+    `users/schools${query}`
+  );
+  return response;
+};
+
+export const apiUser = { create, profile, update, schools };

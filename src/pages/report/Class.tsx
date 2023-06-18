@@ -70,11 +70,7 @@ export const ReportClassPage = ({ back }: iPageProps) => {
   const [dataSelect, setDataSelect] = useState<iClassWithSchool[]>();
   const { setLoading } = useAppThemeContext();
   const { yearData } = useAuthContext();
-  const { schoolSelect, setSchoolSelect } = useSchoolContext();
-
-  useEffect(() => {
-    setSchoolSelect(undefined);
-  }, []);
+  const { schoolSelect } = useSchoolContext();
 
   useEffect(() => {
     setLoading(true);

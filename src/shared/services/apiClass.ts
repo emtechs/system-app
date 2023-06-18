@@ -1,6 +1,12 @@
 import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
-import { iClass, iClassSchoolList, iClassSchoolRequest } from "../interfaces";
+import {
+  iClass,
+  iClassSchoolList,
+  iClassSchoolRequest,
+  iClassWithSchool,
+  iClassWithSchoolSelect,
+} from "../interfaces";
 
 const create = async (data: FieldValues): Promise<iClass> => {
   const { data: response } = await apiUsingNow.post<iClass>("classes", data);
@@ -44,10 +50,25 @@ const listSchool = async (
   return response;
 };
 
+interface iListWithSchool {
+  classes: iClassWithSchoolSelect[];
+  total: number;
+  result: iClassWithSchool[];
+}
+
+const listWithSchool = async (school_id: string, query: string) => {
+  const { data: response } = await apiUsingNow.get<iListWithSchool>(
+    `classes/school/${school_id}${query}`
+  );
+
+  return response;
+};
+
 export const apiClass = {
   create,
   createSchool,
   impClass,
   updateSchool,
   listSchool,
+  listWithSchool,
 };

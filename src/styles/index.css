@@ -20,4 +20,7 @@ a {
 
 .calendar_cursor_pointer {
   cursor: pointer;
+  & > :hover {
+    background-color: #e5e5e5ff;
+  }
 }

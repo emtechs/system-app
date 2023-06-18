@@ -59,7 +59,7 @@ export const ListClassSchoolPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const { debounce } = useDebounce();
-  const { yearData, schoolData, dashData } = useAuthContext();
+  const { yearData, dashData } = useAuthContext();
   const { schoolSelect } = useSchoolContext();
   const { isInfreq } = useFrequencyContext();
   const { handleClickClass } = useDrawerContext();
@@ -70,9 +70,7 @@ export const ListClassSchoolPage = () => {
   let school_id = "";
   if (id) {
     school_id = id;
-  } else if (schoolSelect) {
-    school_id = schoolSelect.id;
-  } else if (schoolData) school_id = schoolData.school.id;
+  } else if (schoolSelect) school_id = schoolSelect.id;
 
   useEffect(() => {
     let query = defineQuery(undefined, school_id);

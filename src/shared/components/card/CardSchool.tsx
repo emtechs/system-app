@@ -1,14 +1,14 @@
 import { Box, Card, useTheme } from "@mui/material";
-import { useAuthContext } from "../../contexts";
+import { useSchoolContext } from "../../contexts";
 import { CardSchoolContent } from "./CardSchoolContent";
 
 export const CardSchool = () => {
   const theme = useTheme();
-  const { schoolData } = useAuthContext();
-  return schoolData ? (
+  const { schoolSelect } = useSchoolContext();
+  return schoolSelect ? (
     <Box mx={2} width={theme.spacing(45)} maxWidth="90%">
       <Card>
-        <CardSchoolContent school={schoolData.school} />
+        <CardSchoolContent school={schoolSelect} />
       </Card>
     </Box>
   ) : (

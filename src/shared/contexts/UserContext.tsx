@@ -44,7 +44,7 @@ const UserContext = createContext({} as iUserContextData);
 export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading } = useAppThemeContext();
-  const { setDashData, setSchoolData, setUserData } = useAuthContext();
+  const { setDashData, setUserData } = useAuthContext();
   const [updateUserData, setUpdateUserData] = useState<iUser>();
 
   const handleCreateUserAdm = useCallback(async (data: iUserAdmRequest) => {
@@ -101,7 +101,6 @@ export const UserProvider = ({ children }: iChildren) => {
         toast.success("Dados cadastrados com sucesso");
         setUserData(user);
         setDashData(user.dash);
-        if (user.work_school.length === 0) setSchoolData(undefined);
         navigate("/");
       } catch {
         toast.error("Não foi possível cadastrar os dados no momento!");
