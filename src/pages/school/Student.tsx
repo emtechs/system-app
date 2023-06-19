@@ -7,11 +7,11 @@ import {
 } from "../../shared/contexts";
 import { apiUsingNow } from "../../shared/services";
 import { iStudentWithSchool, iheadCell } from "../../shared/interfaces";
-import { LayoutBasePage } from "../../shared/layouts";
 import { TableBase, Tools } from "../../shared/components";
 import { TableCell, TableRow, useTheme } from "@mui/material";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 import { useDebounce } from "../../shared/hooks";
+import { LayoutSchoolPage } from "./Layout";
 
 const headCells: iheadCell[] = [
   { order: "registry", numeric: true, label: "Matrícula" },
@@ -109,7 +109,8 @@ export const ListStundetSchoolPage = () => {
     return <Navigate to="/" />;
 
   return (
-    <LayoutBasePage
+    <LayoutSchoolPage
+      isSchool
       tools={
         <Tools
           isBack={!!back}
@@ -129,6 +130,6 @@ export const ListStundetSchoolPage = () => {
           <CardStudent key={student.id} student={student} />
         ))}
       </TableBase>
-    </LayoutBasePage>
+    </LayoutSchoolPage>
   );
 };

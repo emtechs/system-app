@@ -7,7 +7,7 @@ import {
   ListItem,
 } from "@mui/material";
 import { iChildren } from "../../../interfaces";
-import { Pagination } from "./Pagination";
+import { PaginationList } from "../../pagination";
 import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
 import { CardSchoolAction } from "../../card";
 import { ValidateSchool } from "../../validate";
@@ -58,7 +58,7 @@ export const BaseSchool = ({
           </ListItem>
           <Divider component="li" />
           {children}
-          <Pagination />
+          <PaginationList />
         </List>
       </Dialog>
     </>

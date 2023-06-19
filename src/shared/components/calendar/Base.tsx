@@ -2,8 +2,13 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core/index.js";
-import { useAuthContext, useCalendarContext } from "../../contexts";
+import {
+  useAuthContext,
+  useCalendarContext,
+  useDrawerContext,
+} from "../../contexts";
 import { FieldValues } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/pt-br";
@@ -20,14 +25,18 @@ interface iCalendarBaseProps {
       student_id: string;
     }[];
   };
+  handleFrequency?: () => void;
 }
 
 export const CalendarBase = ({
   eventClick,
   createFrequency,
   frequency,
+  handleFrequency,
 }: iCalendarBaseProps) => {
+  const navigate = useNavigate();
   const { yearData } = useAuthContext();
+  const { handleClickFrequency } = useDrawerContext();
   const { eventData, setDateData, monthData, setMonthData } =
     useCalendarContext();
 
@@ -57,7 +66,22 @@ export const CalendarBase = ({
         return date?.length === 0 ? "calendar_cursor_pointer" : "";
       }}
       eventClassNames="calendar_cursor_pointer"
-      eventClick={eventClick}
+      eventClick={
+        handleFrequency
+          ? (arg) => {
+              handleFrequency();
+              if (arg.event.classNames.includes("allFrequency")) {
+                navigate(
+                  `/frequency/list?date=${dayjs(arg.event.start).format(
+                    "DD/MM/YYYY"
+                  )}`
+                );
+              } else {
+                setDateData(dayjs(arg.event.start));
+              }
+            }
+          : eventClick
+      }
       eventOrder="start"
       eventOrderStrict={true}
       selectOverlap={false}
@@ -74,8 +98,15 @@ export const CalendarBase = ({
               name: monthData,
               ...frequency,
             });
+          } else {
+            setDateData(dayjs(arg.date));
+            if (handleFrequency) {
+              handleFrequency();
+            } else {
+              handleClickFrequency();
+              navigate("/frequency");
+            }
           }
-          setDateData(dateData);
         }
       }}
     />

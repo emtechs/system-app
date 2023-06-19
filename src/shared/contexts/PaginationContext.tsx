@@ -13,7 +13,8 @@ interface iPaginationContextData {
   steps: number;
   setSteps: Dispatch<SetStateAction<number>>;
   activeStep: number;
-  query: () => string;
+  setActiveStep: Dispatch<SetStateAction<number>>;
+  query: (take: number, date?: string) => string;
   count: number;
   setCount: Dispatch<SetStateAction<number>>;
   rowsPage: iRowsPage[] | undefined;
@@ -60,9 +61,15 @@ export const PaginationProvider = ({ children }: iChildren) => {
   const [by, setBy] = useState<"asc" | "desc">("asc");
   const [isLoading, setIsLoading] = useState(true);
 
-  const query = useCallback(() => {
-    return `?take=3&skip=${activeStep * 3}`;
-  }, [activeStep]);
+  const query = useCallback(
+    (take: number, date?: string) => {
+      let queryData = `?by=${by}&take=${take}&skip=${activeStep * take}`;
+      if (order) queryData += `&order=${order}`;
+      if (date) queryData += "&date=" + date;
+      return queryData;
+    },
+    [by, order, activeStep]
+  );
 
   const handleNext = () => {
     if (activeStep !== steps - 1) {
@@ -116,9 +123,7 @@ export const PaginationProvider = ({ children }: iChildren) => {
       month?: string
     ) => {
       let query = "?by=" + by;
-      if (order) {
-        query += `&order=${order}`;
-      }
+      if (order) query += `&order=${order}`;
       if (take) query += "&take=" + take;
       if (skip) query += "&skip=" + skip;
       if (year_id) query += "&year_id=" + year_id;
@@ -138,6 +143,7 @@ export const PaginationProvider = ({ children }: iChildren) => {
         steps,
         setSteps,
         activeStep,
+        setActiveStep,
         query,
         count,
         setCount,

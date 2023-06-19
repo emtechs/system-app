@@ -80,7 +80,7 @@ const TablePaginationActions = (props: TablePaginationActionsProps) => {
   );
 };
 
-export const Pagination = () => {
+export const PaginationTable = () => {
   const { count, rowsPage, take, setTake, page, setPage } =
     usePaginationContext();
 

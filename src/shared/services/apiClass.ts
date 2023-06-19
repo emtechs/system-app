@@ -2,6 +2,8 @@ import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
 import {
   iClass,
+  iClassDash,
+  iClassDashSelect,
   iClassSchoolList,
   iClassSchoolRequest,
   iClassWithSchool,
@@ -64,6 +66,20 @@ const listWithSchool = async (school_id: string, query: string) => {
   return response;
 };
 
+interface ilistDash {
+  classes: iClassDashSelect[];
+  total: number;
+  result: iClassDash[];
+}
+
+const listDash = async (school_id: string, query: string) => {
+  const { data: response } = await apiUsingNow.get<ilistDash>(
+    `classes/school/${school_id}${query}`
+  );
+
+  return response;
+};
+
 export const apiClass = {
   create,
   createSchool,
@@ -71,4 +87,5 @@ export const apiClass = {
   updateSchool,
   listSchool,
   listWithSchool,
+  listDash,
 };

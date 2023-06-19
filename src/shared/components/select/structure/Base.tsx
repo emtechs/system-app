@@ -8,7 +8,7 @@ import {
   ListItem,
 } from "@mui/material";
 import { iChildren } from "../../../interfaces";
-import { Pagination } from "./Pagination";
+import { PaginationList } from "../../pagination";
 import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
 
 interface iBaseProps extends iChildren {
@@ -65,7 +65,7 @@ export const Base = ({
           </ListItem>
           <Divider component="li" />
           {children}
-          <Pagination />
+          <PaginationList />
         </List>
       </Dialog>
     </>

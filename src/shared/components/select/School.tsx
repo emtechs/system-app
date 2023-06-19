@@ -13,25 +13,26 @@ export const SelectSchool = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const take = 3;
     if (dashData === "ADMIN") {
       setLoading(true);
       apiSchool
-        .list(query())
+        .list(query(take))
         .then((res) => {
           setListSchoolSelect(res.schools);
           setListDataAdm(res.result);
-          const arredSteps = Math.ceil(res.total / 3);
+          const arredSteps = Math.ceil(res.total / take);
           setSteps(arredSteps === 1 ? 0 : arredSteps);
         })
         .finally(() => setLoading(false));
     } else {
       setLoading(true);
       apiUser
-        .schools(query())
+        .schools(query(take))
         .then((res) => {
           setListSchoolSelect(res.schools);
           setListDataCommon(res.result);
-          const arredSteps = Math.ceil(res.total / 3);
+          const arredSteps = Math.ceil(res.total / take);
           setSteps(arredSteps === 1 ? 0 : arredSteps);
         })
         .finally(() => setLoading(false));

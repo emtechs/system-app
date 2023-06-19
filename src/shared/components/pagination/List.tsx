@@ -1,10 +1,16 @@
+import { useEffect } from "react";
 import { Divider, IconButton, ListItem, MobileStepper } from "@mui/material";
-import { useAppThemeContext, usePaginationContext } from "../../../contexts";
+import { useAppThemeContext, usePaginationContext } from "../../contexts";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 
-export const Pagination = () => {
+export const PaginationList = () => {
   const { theme } = useAppThemeContext();
-  const { steps, activeStep, handleNext, handleBack } = usePaginationContext();
+  const { steps, activeStep, handleNext, handleBack, setActiveStep } =
+    usePaginationContext();
+
+  useEffect(() => {
+    setActiveStep(0);
+  }, []);
 
   return steps > 0 ? (
     <>

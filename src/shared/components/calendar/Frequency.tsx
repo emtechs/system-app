@@ -33,7 +33,7 @@ export const CalendarFrequency = () => {
   }, [classWithSchoolSelect, schoolData, yearData]);
 
   useEffect(() => {
-    return () => setEventData(undefined);
+    setEventData(undefined);
   }, []);
 
   useEffect(() => {

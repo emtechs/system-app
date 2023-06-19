@@ -5,16 +5,32 @@ import {
   useClassContext,
   useDrawerContext,
 } from "../../../shared/contexts";
-import { Box, Card, CardContent, Grid, Paper } from "@mui/material";
+import {
+  Box,
+  Breadcrumbs,
+  Card,
+  CardContent,
+  Grid,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { LayoutBasePage } from "../../../shared/layouts";
 import {
   CalendarFrequency,
   GridDashContent,
+  LinkRouter,
   SelectSchoolClass,
 } from "../../../shared/components";
 import { iDashClass } from "../../../shared/interfaces";
 import { useEffect, useState } from "react";
-import { Checklist, EventBusy, Groups, Workspaces } from "@mui/icons-material";
+import {
+  AddBox,
+  Checklist,
+  EventBusy,
+  Groups,
+  School,
+  Workspaces,
+} from "@mui/icons-material";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/pt-br";
@@ -25,9 +41,9 @@ dayjs.extend(localizedFormat);
 export const CreateFrequencyCommon = () => {
   const { theme, setLoading } = useAppThemeContext();
   const { yearData, schoolData } = useAuthContext();
-  const { handleClickSchool } = useDrawerContext();
+  const { handleClickSchool, handleClickButtonTools } = useDrawerContext();
   const { monthData } = useCalendarContext();
-  const { classWithSchoolSelect } = useClassContext();
+  const { classWithSchoolSelect, setClassWithSchoolSelect } = useClassContext();
   const [infoClass, setInfoClass] = useState<iDashClass>();
 
   useEffect(() => {
@@ -50,6 +66,41 @@ export const CreateFrequencyCommon = () => {
   return (
     <LayoutBasePage title="Nova Frequência">
       <Box my={1} mx={2} component={Paper} variant="outlined">
+        <Box mx={2} my={1}>
+          <Breadcrumbs aria-label="breadcrumb">
+            <LinkRouter
+              underline="hover"
+              sx={{ display: "flex", alignItems: "center" }}
+              color="inherit"
+              to="/"
+              onClick={handleClickButtonTools}
+            >
+              <School sx={{ mr: 0.5 }} fontSize="inherit" />
+              {schoolData?.name}
+            </LinkRouter>
+            {classWithSchoolSelect && (
+              <LinkRouter
+                underline="hover"
+                sx={{ display: "flex", alignItems: "center" }}
+                color="inherit"
+                to="/frequency/create"
+                onClick={() => {
+                  setClassWithSchoolSelect(undefined);
+                }}
+              >
+                <Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />
+                {classWithSchoolSelect.class.name}
+              </LinkRouter>
+            )}
+            <Typography
+              sx={{ display: "flex", alignItems: "center" }}
+              color="text.primary"
+            >
+              <AddBox sx={{ mr: 0.5 }} fontSize="inherit" />
+              Frequência
+            </Typography>
+          </Breadcrumbs>
+        </Box>
         <Card>
           <CardContent>
             <Grid container direction="column" p={2} spacing={2}>

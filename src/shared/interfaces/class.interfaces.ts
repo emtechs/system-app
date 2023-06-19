@@ -47,6 +47,11 @@ export interface iClassDash {
   _count: { frequencies: number; students: number };
 }
 
+export interface iClassDashSelect extends iClassDash {
+  id: string;
+  label: string;
+}
+
 export interface iClassFreq {
   class: iClass;
   school: iWithSchool;

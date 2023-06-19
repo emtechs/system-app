@@ -1,21 +1,49 @@
-import { TableCell, TableRow } from "@mui/material";
-import { LayoutBasePage } from "../../shared/layouts";
-import { useEffect, useState } from "react";
-import { apiUsingNow } from "../../shared/services";
 import {
-  useAppThemeContext,
+  Box,
+  Breadcrumbs,
+  Card,
+  CardContent,
+  Grid,
+  Paper,
+  TableCell,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import { LayoutBasePage } from "../../shared/layouts";
+import { useCallback, useEffect, useState } from "react";
+import {
   useAuthContext,
+  useCalendarContext,
+  useDrawerContext,
   useFrequencyContext,
   usePaginationContext,
 } from "../../shared/contexts";
-import { iClassDash, iheadCell } from "../../shared/interfaces";
-import { TableBase } from "../../shared/components";
-import { useNavigate } from "react-router-dom";
+import {
+  GridDashContent,
+  LinkRouter,
+  Pagination,
+  SelectDate,
+  TableBase,
+  ValidateFrequency,
+} from "../../shared/components";
+import { useAppThemeContext } from "../../shared/contexts/ThemeContext";
+import { apiClass, apiUsingNow } from "../../shared/services";
+import {
+  iClassDash,
+  iClassDashSelect,
+  iDashSchoolServer,
+  iheadCell,
+} from "../../shared/interfaces";
+import {
+  EventAvailable,
+  EventBusy,
+  Groups,
+  School,
+  Workspaces,
+} from "@mui/icons-material";
+import { Navigate } from "react-router-dom";
 import { defineBgColorInfrequency } from "../../shared/scripts";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import "dayjs/locale/pt-br";
-dayjs.extend(localizedFormat);
+import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Turma" },
@@ -27,8 +55,9 @@ const headCells: iheadCell[] = [
 interface iCardClassDashProps {
   classDash: iClassDash;
   date: string;
+  name: string;
 }
-const CardClassDash = ({ classDash, date }: iCardClassDashProps) => {
+const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
   const { theme } = useAppThemeContext();
   const { createFrequency } = useFrequencyContext();
   const students = classDash.students.map(({ student }) => {
@@ -41,6 +70,7 @@ const CardClassDash = ({ classDash, date }: iCardClassDashProps) => {
       onClick={() => {
         createFrequency({
           date,
+          name,
           class_id: classDash.class.id,
           school_id: classDash.school.id,
           year_id: classDash.year.id,
@@ -65,40 +95,203 @@ const CardClassDash = ({ classDash, date }: iCardClassDashProps) => {
 };
 
 export const FrequencyPage = () => {
-  const navigate = useNavigate();
-  const { schoolData } = useAuthContext();
-  const { setCount, setIsLoading, defineQuery } = usePaginationContext();
+  const { setLoading } = useAppThemeContext();
+  const { yearData, schoolData } = useAuthContext();
+  const { dateData, monthData } = useCalendarContext();
+  const { handleClickButtonTools, handleClickSchool } = useDrawerContext();
+  const { setSteps, setCount, setIsLoading, defineQuery, query } =
+    usePaginationContext();
+  const [infoSchool, setInfoSchool] = useState<iDashSchoolServer>();
   const [listClassData, setListClassData] = useState<iClassDash[]>();
-  const date = dayjs().format("DD/MM/YYYY");
+  const [listClassSelect, setListClassSelect] = useState<iClassDashSelect[]>();
+
+  const date = useCallback(() => {
+    return dateData.format("DD/MM/YYYY");
+  }, [dateData]);
 
   useEffect(() => {
     if (schoolData) {
-      let query = defineQuery(undefined, undefined, undefined, date);
-      query += "&is_dash=true";
+      const take = 4;
+      let queryData = query(take, date());
+      queryData += "&is_dash=true";
       setIsLoading(true);
-      apiUsingNow
-        .get<{ total: number; result: iClassDash[] }>(
-          `classes/school/${schoolData.id}${query}`
-        )
+      apiClass
+        .listDash(schoolData.id, queryData)
         .then((res) => {
-          if (res.data.total === 0) {
-            navigate("/frequency/create");
-          }
-          setCount(res.data.total);
-          setListClassData(res.data.result);
+          setCount(res.total);
+          setListClassData(res.result);
+          setListClassSelect(res.classes);
+          const arredSteps = Math.ceil(res.total / take);
+          setSteps(arredSteps === 1 ? 0 : arredSteps);
         })
         .finally(() => setIsLoading(false));
     }
-  }, [schoolData, defineQuery]);
+  }, [date, schoolData, query]);
+
+  useEffect(() => {
+    if (schoolData && yearData) {
+      const query = defineQuery(yearData.id, undefined, undefined, date());
+      setLoading(true);
+      apiUsingNow
+        .get<iDashSchoolServer>(`schools/${schoolData.id}/dash/server${query}`)
+        .then((res) => setInfoSchool(res.data))
+        .finally(() => setLoading(false));
+    }
+  }, [date, schoolData, yearData, defineQuery]);
+
+  if (!schoolData) return <Navigate to="/" />;
 
   return (
-    <LayoutBasePage title={"Frequência - " + date} isSchool>
-      <TableBase headCells={headCells}>
-        {date &&
-          listClassData?.map((el) => (
-            <CardClassDash key={el.class.id} classDash={el} date={date} />
-          ))}
-      </TableBase>
+    <LayoutBasePage title={"Frequência - " + dateData.format("DD/MM/YYYY")}>
+      <Box my={1} mx={2} component={Paper} variant="outlined">
+        <Box mx={2} my={1}>
+          <Breadcrumbs aria-label="breadcrumb">
+            <LinkRouter
+              underline="hover"
+              sx={{ display: "flex", alignItems: "center" }}
+              color="inherit"
+              to="/"
+              onClick={handleClickButtonTools}
+            >
+              <School sx={{ mr: 0.5 }} fontSize="inherit" />
+              {schoolData?.name}
+            </LinkRouter>
+            <Typography
+              sx={{ display: "flex", alignItems: "center" }}
+              color="text.primary"
+            >
+              <EventAvailable sx={{ mr: 0.5 }} fontSize="inherit" />
+              Frequência
+            </Typography>
+          </Breadcrumbs>
+        </Box>
+        <Card>
+          <CardContent>
+            <Grid container direction="column" p={2} spacing={2}>
+              <Grid
+                container
+                item
+                direction="row"
+                justifyContent="center"
+                spacing={2}
+              >
+                <Grid item xs={12} md={7}>
+                  <Box>
+                    <FormContainer>
+                      <AutocompleteElement
+                        name="class"
+                        label="Turma"
+                        loading={!listClassSelect}
+                        options={
+                          listClassSelect && listClassSelect.length > 0
+                            ? listClassSelect
+                            : [
+                                {
+                                  id: 1,
+                                  label:
+                                    "Todas as frequências do dia já foram registradas.",
+                                },
+                              ]
+                        }
+                        textFieldProps={{ fullWidth: true }}
+                      />
+                      <ValidateFrequency />
+                    </FormContainer>
+                  </Box>
+                  <TableBase
+                    message="Todas as frequências do dia já foram registradas."
+                    is_pagination={false}
+                    headCells={headCells}
+                  >
+                    {listClassData?.map((el) => (
+                      <CardClassDash
+                        key={el.class.id}
+                        classDash={el}
+                        date={date()}
+                        name={monthData}
+                      />
+                    ))}
+                  </TableBase>
+                  <Pagination />
+                </Grid>
+                <Grid container item direction="row" xs={12} md={5} spacing={2}>
+                  <Grid item xs={12}>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="center"
+                      justifyContent="center"
+                      gap={2}
+                    >
+                      <SelectDate />
+                    </Box>
+                  </Grid>
+
+                  {infoSchool && (
+                    <>
+                      <GridDashContent
+                        icon={<Workspaces fontSize="large" />}
+                        quant={infoSchool.classTotal}
+                        info={infoSchool.classTotal === 1 ? "Turma" : "Turmas"}
+                        dest="/school/class"
+                        onClick={handleClickSchool}
+                      />
+                      {infoSchool.frequencyOpen !== 0 ? (
+                        <GridDashContent
+                          icon={<EventBusy fontSize="large" />}
+                          quant={infoSchool.frequencyOpen}
+                          info={
+                            infoSchool.frequencyOpen === 1
+                              ? "Frequência em aberto"
+                              : "Frequências em aberto"
+                          }
+                          dest="/frequency/open"
+                        />
+                      ) : (
+                        <GridDashContent
+                          icon={<Groups fontSize="large" />}
+                          quant={infoSchool.stundents}
+                          info={infoSchool.stundents === 1 ? "Aluno" : "Alunos"}
+                          dest="/school/student"
+                          onClick={handleClickSchool}
+                        />
+                      )}
+                      <GridDashContent
+                        icon={<EventBusy fontSize="large" />}
+                        quant={
+                          infoSchool?.day_infreq
+                            ? infoSchool.day_infreq.toFixed(0) + "%"
+                            : "0%"
+                        }
+                        info="Infrequência do dia"
+                        dest={
+                          "/frequency/list?date=" +
+                          dateData.format("DD/MM/YYYY")
+                        }
+                      />
+                    </>
+                  )}
+                  <Grid item xs={12}>
+                    <Card>
+                      <CardContent>
+                        <Box
+                          display="flex"
+                          justifyContent="space-evenly"
+                          alignItems="center"
+                          gap={1}
+                        >
+                          <img width="50%" src="/pref_massape.png" />
+                          <img width="25%" src="/emtechs.jpg" />
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Box>
     </LayoutBasePage>
   );
 };

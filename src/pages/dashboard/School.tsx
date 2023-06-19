@@ -3,6 +3,7 @@ import { LayoutBasePage } from "../../shared/layouts";
 import { useEffect, useState } from "react";
 import {
   useAuthContext,
+  useCalendarContext,
   useDrawerContext,
   usePaginationContext,
 } from "../../shared/contexts";
@@ -24,6 +25,7 @@ export const DashboardSchool = () => {
   const { theme, setLoading } = useAppThemeContext();
   const { yearData, schoolData } = useAuthContext();
   const { handleClickFrequency, handleClickSchool } = useDrawerContext();
+  const { setDateData } = useCalendarContext();
   const { defineQuery } = usePaginationContext();
   const [infoSchool, setInfoSchool] = useState<iDashSchoolServer>();
 
@@ -87,30 +89,32 @@ export const DashboardSchool = () => {
                         info="Frequências no dia"
                         dest={
                           infoSchool.frequencies === infoSchool.classTotal
-                            ? "/frequency/list"
+                            ? "/frequency/list?date=" +
+                              dayjs().format("DD/MM/YYYY")
                             : "/frequency"
                         }
-                        onClick={handleClickFrequency}
+                        onClick={() => {
+                          setDateData(dayjs());
+                          handleClickFrequency();
+                        }}
                       />
                       {infoSchool.frequencyOpen !== 0 ? (
                         <GridDashContent
                           icon={<EventBusy fontSize="large" />}
                           quant={infoSchool.frequencyOpen}
-                          info="Frequências em aberto"
-                          dest={
-                            infoSchool.frequencyOpen !== 0
-                              ? "/frequency/open"
-                              : infoSchool.frequencies === infoSchool.classTotal
-                              ? "/frequency/list"
-                              : "/frequency"
+                          info={
+                            infoSchool.frequencyOpen === 1
+                              ? "Frequência em aberto"
+                              : "Frequências em aberto"
                           }
+                          dest="/frequency/open"
                           onClick={handleClickFrequency}
                         />
                       ) : (
                         <GridDashContent
                           icon={<Groups fontSize="large" />}
                           quant={infoSchool.stundents}
-                          info="Alunos"
+                          info={infoSchool.stundents === 1 ? "Aluno" : "Alunos"}
                           dest="/school/student"
                           onClick={handleClickSchool}
                         />

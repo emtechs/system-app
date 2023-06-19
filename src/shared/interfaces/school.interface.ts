@@ -18,6 +18,7 @@ export interface iDirector {
 
 export interface iDashSchoolServer {
   frequencies: number;
+  day_infreq?: number;
   school_infreq: number;
   frequencyOpen: number;
   classTotal: number;

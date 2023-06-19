@@ -14,7 +14,7 @@ export const CalendarDashAdmin = () => {
   const { monthData, setEventData } = useCalendarContext();
 
   useEffect(() => {
-    return () => setEventData(undefined);
+    setEventData(undefined);
   }, []);
 
   useEffect(() => {

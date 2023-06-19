@@ -6,14 +6,14 @@ import {
   useState,
 } from "react";
 import { iCalendar, iChildren } from "../interfaces";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/pt-br";
 dayjs.extend(localizedFormat);
 
 interface iCalendarContextData {
-  dateData: string;
-  setDateData: Dispatch<SetStateAction<string>>;
+  dateData: dayjs.Dayjs;
+  setDateData: Dispatch<SetStateAction<dayjs.Dayjs>>;
   eventData: iCalendar[] | undefined;
   setEventData: Dispatch<SetStateAction<iCalendar[] | undefined>>;
   monthData: string;
@@ -23,7 +23,7 @@ interface iCalendarContextData {
 const CalendarContext = createContext({} as iCalendarContextData);
 
 export const CalendarProvider = ({ children }: iChildren) => {
-  const [dateData, setDateData] = useState(dayjs().format("DD/MM/YYYY"));
+  const [dateData, setDateData] = useState<Dayjs>(dayjs());
   const [eventData, setEventData] = useState<iCalendar[]>();
   const [monthData, setMonthData] = useState(dayjs().format("MMMM"));
 

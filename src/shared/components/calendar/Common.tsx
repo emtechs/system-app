@@ -8,15 +8,25 @@ import {
 import { CalendarBase } from "./Base";
 import { apiUsingNow } from "../../services";
 import { iCalendar } from "../../interfaces";
+import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import "dayjs/locale/pt-br";
+dayjs.extend(localizedFormat);
 
-export const CalendarDashCommon = () => {
+interface iCalendarDashCommonProps {
+  onClick?: () => void;
+}
+
+export const CalendarDashCommon = ({ onClick }: iCalendarDashCommonProps) => {
+  const navigate = useNavigate();
   const { setLoading } = useAppThemeContext();
   const { yearData, schoolData } = useAuthContext();
-  const { monthData, setEventData } = useCalendarContext();
+  const { monthData, setEventData, setDateData } = useCalendarContext();
   const { defineQuery } = usePaginationContext();
 
   useEffect(() => {
-    return () => setEventData(undefined);
+    setEventData(undefined);
   }, []);
 
   useEffect(() => {
@@ -36,5 +46,22 @@ export const CalendarDashCommon = () => {
     }
   }, [schoolData, monthData, yearData, defineQuery]);
 
-  return <CalendarBase eventClick={(arg) => console.log(arg.event.start)} />;
+  return (
+    <CalendarBase
+      eventClick={(arg) => {
+        if (onClick) onClick();
+        if (arg.event.classNames.includes("allFrequency")) {
+          navigate(
+            `/frequency/list?date=${dayjs(arg.event.start).format(
+              "DD/MM/YYYY"
+            )}`
+          );
+        } else {
+          setDateData(dayjs(arg.event.start));
+          navigate("/frequency");
+        }
+      }}
+      handleFrequency={onClick}
+    />
+  );
 };

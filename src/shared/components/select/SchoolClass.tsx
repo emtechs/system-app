@@ -25,11 +25,12 @@ export const SelectSchoolClass = () => {
 
   useEffect(() => {
     if (schoolData) {
+      const take = 3;
       setLoading(true);
       apiClass
-        .listWithSchool(schoolData.id, query())
+        .listWithSchool(schoolData.id, query(take))
         .then((res) => {
-          const arredSteps = Math.ceil(res.total / 3);
+          const arredSteps = Math.ceil(res.total / take);
           setSteps(arredSteps === 1 ? 0 : arredSteps);
           setListClassSelect(res.classes);
           setListData(res.result);

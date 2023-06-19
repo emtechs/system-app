@@ -16,7 +16,7 @@ export const CalendarDashSchool = () => {
   const { defineQuery } = usePaginationContext();
 
   useEffect(() => {
-    return () => setEventData(undefined);
+    setEventData(undefined);
   }, []);
 
   useEffect(() => {

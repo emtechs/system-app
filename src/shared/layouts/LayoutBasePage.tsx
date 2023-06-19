@@ -3,7 +3,7 @@ import { iChildren } from "../interfaces";
 import { Menu } from "@mui/icons-material";
 import { useAppThemeContext, useDrawerContext } from "../contexts";
 import { ReactNode } from "react";
-import { SelectSchool } from "../components";
+import { CardSchool } from "../components";
 
 interface iLayoutBasePageProps extends iChildren {
   title: string;
@@ -50,7 +50,7 @@ export const LayoutBasePage = ({
           {title}
         </Typography>
       </Box>
-      {isSchool && <SelectSchool />}
+      {isSchool && <CardSchool />}
       {tools && <Box>{tools}</Box>}
       <Box flex={1} overflow="auto">
         {children}

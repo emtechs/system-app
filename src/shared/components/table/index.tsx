@@ -11,10 +11,11 @@ import {
 } from "@mui/material";
 import { iTable } from "../../interfaces";
 import { usePaginationContext } from "../../contexts";
-import { Pagination } from "./Pagination";
 import { TableSort } from "./Sort";
+import { PaginationTable } from "../pagination";
 
 export const TableBase = ({
+  message,
   children,
   is_active,
   headCells,
@@ -35,9 +36,11 @@ export const TableBase = ({
               <TableSort headCells={headCells} />
             </TableRow>
           </TableHead>
-          <TableBody>{children}</TableBody>
+          {isLoading ? <></> : <TableBody>{children}</TableBody>}
           {count === 0 && !isLoading && (
-            <caption>Nenhum registro encontrado.</caption>
+            <caption>
+              {message ? message : "Nenhum registro encontrado."}
+            </caption>
           )}
           <TableFooter>
             {isLoading && (
@@ -52,7 +55,7 @@ export const TableBase = ({
           </TableFooter>
         </Table>
       </TableContainer>
-      {is_pagination && <Pagination />}
+      {is_pagination && <PaginationTable />}
     </>
   );
 };
