@@ -1,6 +1,10 @@
-import { TableCell, TableRow, useTheme } from "@mui/material";
+import { TableCell, TableRow } from "@mui/material";
 import { TableBase, Tools } from "../../../shared/components";
-import { useAuthContext, usePaginationContext } from "../../../shared/contexts";
+import {
+  useAppThemeContext,
+  useAuthContext,
+  usePaginationContext,
+} from "../../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../../shared/services";
 import { iFrequency, iheadCell } from "../../../shared/interfaces";
@@ -14,13 +18,17 @@ interface iCardFrequencyProps {
 }
 
 const CardFrequency = ({ freq, isDate }: iCardFrequencyProps) => {
-  const theme = useTheme();
+  const { theme, mdDown } = useAppThemeContext();
 
   return (
     <TableRow>
       {isDate && <TableCell>{freq.date}</TableCell>}
       <TableCell>{freq.class.class.name}</TableCell>
-      <TableCell align="right">{freq._count.students}</TableCell>
+      {!isDate ? (
+        <TableCell align="right">{freq._count.students}</TableCell>
+      ) : (
+        !mdDown && <TableCell align="right">{freq._count.students}</TableCell>
+      )}
       <TableCell
         align="right"
         sx={{
@@ -39,18 +47,25 @@ export const ListFrequencyCommon = () => {
   const [searchParams] = useSearchParams();
   const date = searchParams.get("date");
   const status = searchParams.get("status");
+  const { mdDown } = useAppThemeContext();
   const { yearData, schoolData } = useAuthContext();
   const { setCount, take, skip, setIsLoading, defineQuery } =
     usePaginationContext();
   const [data, setData] = useState<iFrequency[]>();
 
   const headCells: iheadCell[] = !date
-    ? [
-        { order: "date", numeric: false, label: "Data" },
-        { order: "name", numeric: false, label: "Turma" },
-        { numeric: true, label: "Alunos" },
-        { order: "infreq", numeric: true, label: "Infrequência" },
-      ]
+    ? mdDown
+      ? [
+          { order: "date", numeric: false, label: "Data" },
+          { order: "name", numeric: false, label: "Turma" },
+          { order: "infreq", numeric: true, label: "Infrequência" },
+        ]
+      : [
+          { order: "date", numeric: false, label: "Data" },
+          { order: "name", numeric: false, label: "Turma" },
+          { numeric: true, label: "Alunos" },
+          { order: "infreq", numeric: true, label: "Infrequência" },
+        ]
     : [
         { order: "name", numeric: false, label: "Turma" },
         { numeric: true, label: "Alunos" },

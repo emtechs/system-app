@@ -1,6 +1,7 @@
 import { Navigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
+  useAppThemeContext,
   useAuthContext,
   useFrequencyContext,
   usePaginationContext,
@@ -8,35 +9,29 @@ import {
 import { apiUsingNow } from "../../shared/services";
 import { iStudentWithSchool, iheadCell } from "../../shared/interfaces";
 import { TableBase, Tools } from "../../shared/components";
-import { TableCell, TableRow, useTheme } from "@mui/material";
+import { TableCell, TableRow } from "@mui/material";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutSchoolPage } from "./Layout";
-
-const headCells: iheadCell[] = [
-  { order: "registry", numeric: true, label: "Matrícula" },
-  { order: "name", numeric: false, label: "Aluno" },
-  { numeric: true, label: "Presenças" },
-  { numeric: true, label: "Justificadas" },
-  { numeric: true, label: "Faltas" },
-  { numeric: true, label: "Frequências" },
-  { order: "infreq", numeric: true, label: "Infrequência" },
-];
 
 interface iCardStudentProps {
   student: iStudentWithSchool;
 }
 
 const CardStudent = ({ student }: iCardStudentProps) => {
-  const theme = useTheme();
+  const { theme, mdDown } = useAppThemeContext();
   return (
     <TableRow>
       <TableCell align="right">{student.registry}</TableCell>
       <TableCell>{student.name}</TableCell>
-      <TableCell align="right">{student.presented}</TableCell>
-      <TableCell align="right">{student.justified}</TableCell>
-      <TableCell align="right">{student.missed}</TableCell>
-      <TableCell align="right">{student.total_frequencies}</TableCell>
+      {!mdDown && (
+        <>
+          <TableCell align="right">{student.presented}</TableCell>
+          <TableCell align="right">{student.justified}</TableCell>
+          <TableCell align="right">{student.missed}</TableCell>
+          <TableCell align="right">{student.total_frequencies}</TableCell>
+        </>
+      )}
       <TableCell
         align="right"
         sx={{
@@ -56,11 +51,28 @@ export const ListStundetSchoolPage = () => {
   const class_id = searchParams.get("class_id");
   const back = searchParams.get("back");
   const { debounce } = useDebounce();
+  const { mdDown } = useAppThemeContext();
   const { yearData, dashData, schoolData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
   const { setIsLoading, defineQuery, setCount } = usePaginationContext();
   const [data, setData] = useState<iStudentWithSchool[]>();
   const [search, setSearch] = useState<string>();
+
+  const headCells: iheadCell[] = mdDown
+    ? [
+        { order: "registry", numeric: true, label: "Matrícula" },
+        { order: "name", numeric: false, label: "Aluno" },
+        { order: "infreq", numeric: true, label: "Infrequência" },
+      ]
+    : [
+        { order: "registry", numeric: true, label: "Matrícula" },
+        { order: "name", numeric: false, label: "Aluno" },
+        { numeric: true, label: "Presenças" },
+        { numeric: true, label: "Justificadas" },
+        { numeric: true, label: "Faltas" },
+        { numeric: true, label: "Frequências" },
+        { order: "infreq", numeric: true, label: "Infrequência" },
+      ];
 
   let school_id = "";
   if (id) {

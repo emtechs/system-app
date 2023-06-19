@@ -1,5 +1,6 @@
 import { iClassSchoolList, iheadCell } from "../../shared/interfaces";
 import {
+  useAppThemeContext,
   useAuthContext,
   useDrawerContext,
   useFrequencyContext,
@@ -9,24 +10,17 @@ import { useEffect, useState } from "react";
 import { apiClass } from "../../shared/services";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { TableBase, Tools } from "../../shared/components";
-import { TableCell, TableRow, useTheme } from "@mui/material";
+import { TableCell, TableRow } from "@mui/material";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 import { LayoutSchoolPage } from "./Layout";
 import { useDebounce } from "../../shared/hooks";
-
-const headCells: iheadCell[] = [
-  { order: "name", numeric: false, label: "Turma" },
-  { numeric: true, label: "Alunos" },
-  { numeric: true, label: "Frequências" },
-  { order: "infreq", numeric: true, label: "Infrequência" },
-];
 
 interface iCardClassProps {
   el: iClassSchoolList;
   school_id: string;
 }
 const CardClass = ({ el, school_id }: iCardClassProps) => {
-  const theme = useTheme();
+  const { theme, mdDown } = useAppThemeContext();
   const navigate = useNavigate();
   return (
     <TableRow
@@ -39,8 +33,12 @@ const CardClass = ({ el, school_id }: iCardClassProps) => {
       }}
     >
       <TableCell>{el.class.name}</TableCell>
-      <TableCell align="right">{el._count.students}</TableCell>
-      <TableCell align="right">{el._count.frequencies}</TableCell>
+      {!mdDown && (
+        <>
+          <TableCell align="right">{el._count.students}</TableCell>
+          <TableCell align="right">{el._count.frequencies}</TableCell>
+        </>
+      )}
       <TableCell
         align="right"
         sx={{
@@ -58,12 +56,25 @@ export const ListClassSchoolPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const { debounce } = useDebounce();
+  const { mdDown } = useAppThemeContext();
   const { yearData, dashData, schoolData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
   const { handleClickClass } = useDrawerContext();
   const { setCount, setIsLoading, defineQuery } = usePaginationContext();
   const [data, setData] = useState<iClassSchoolList[]>();
   const [search, setSearch] = useState<string>();
+
+  const headCells: iheadCell[] = mdDown
+    ? [
+        { order: "name", numeric: false, label: "Turma" },
+        { order: "infreq", numeric: true, label: "Infrequência" },
+      ]
+    : [
+        { order: "name", numeric: false, label: "Turma" },
+        { numeric: true, label: "Alunos" },
+        { numeric: true, label: "Frequências" },
+        { order: "infreq", numeric: true, label: "Infrequência" },
+      ];
 
   let school_id = "";
   if (id) {
