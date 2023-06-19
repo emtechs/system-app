@@ -1,36 +1,49 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useClassContext, useSchoolContext } from "../../contexts";
-import { apiClass } from "../../services";
-import { ValidateClassWithSchool } from "../validate";
-import { Dialog, DialogTitle, Divider, List } from "@mui/material";
+import {
+  useAuthContext,
+  useClassContext,
+  usePaginationContext,
+} from "../../contexts";
 import { iClassWithSchool, iClassWithSchoolSelect } from "../../interfaces";
-import { ListBase } from "./ListBase";
-import { Search } from "./Search";
+import { apiClass } from "../../services";
 import { CardSchoolClassAction } from "../card";
+import { ValidateClassWithSchool } from "../validate";
+import { Base, ListBase, Loading } from "./structure";
 
 export const SelectSchoolClass = () => {
-  const { schoolSelect } = useSchoolContext();
+  const { schoolData } = useAuthContext();
   const { classWithSchoolSelect, setClassWithSchoolSelect } = useClassContext();
+  const { query, setSteps } = usePaginationContext();
   const [listClassSelect, setListClassSelect] =
     useState<iClassWithSchoolSelect[]>();
   const [listData, setListData] = useState<iClassWithSchool[]>();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (schoolSelect) {
-      apiClass.listWithSchool(schoolSelect.id, "").then((res) => {
-        setListClassSelect(res.classes);
-        setListData(res.result);
-      });
-    }
     return () => setClassWithSchoolSelect(undefined);
   }, []);
 
+  useEffect(() => {
+    if (schoolData) {
+      setLoading(true);
+      apiClass
+        .listWithSchool(schoolData.id, query())
+        .then((res) => {
+          const arredSteps = Math.ceil(res.total / 3);
+          setSteps(arredSteps === 1 ? 0 : arredSteps);
+          setListClassSelect(res.classes);
+          setListData(res.result);
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [schoolData, query]);
+
   const openDialog = useMemo(() => {
-    if (schoolSelect) {
+    if (schoolData) {
       return !classWithSchoolSelect;
     }
     return false;
-  }, [classWithSchoolSelect, schoolSelect]);
+  }, [classWithSchoolSelect, schoolData]);
 
   const handleOpenDialog = useCallback(
     () => setClassWithSchoolSelect(undefined),
@@ -38,32 +51,29 @@ export const SelectSchoolClass = () => {
   );
 
   return (
-    <>
-      <CardSchoolClassAction onClick={handleOpenDialog} />
-      <Dialog open={openDialog}>
-        <DialogTitle>Selecione a Turma</DialogTitle>
-        <List sx={{ pt: 0 }}>
-          <Divider component="li" />
-          <Search
-            name="school"
-            label="Escola"
-            loading={!listClassSelect}
-            options={listClassSelect}
-          >
-            <ValidateClassWithSchool />
-          </Search>
-          <Divider component="li" />
-          {listData?.map((el) => (
-            <ListBase
-              key={el.class.id}
-              name={el.class.name}
-              onClick={() => {
-                setClassWithSchoolSelect(el);
-              }}
-            />
-          ))}
-        </List>
-      </Dialog>
-    </>
+    <Base
+      card={<CardSchoolClassAction onClick={handleOpenDialog} />}
+      open={openDialog}
+      title="Selecione a Turma"
+      name="class"
+      label="Turma"
+      loading={!listClassSelect}
+      options={listClassSelect}
+      validate={<ValidateClassWithSchool />}
+    >
+      {loading ? (
+        <Loading />
+      ) : (
+        listData?.map((el) => (
+          <ListBase
+            key={el.class.id}
+            name={el.class.name}
+            onClick={() => {
+              setClassWithSchoolSelect(el);
+            }}
+          />
+        ))
+      )}
+    </Base>
   );
 };

@@ -1,5 +1,5 @@
 import { TableCell, TableRow } from "@mui/material";
-import { useTableContext } from "../../shared/contexts";
+import { usePaginationContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { iUser, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
@@ -40,7 +40,7 @@ export const ListUserPage = () => {
   const orderData = searchParams.get("order");
   const { debounce } = useDebounce();
   const { setCount, take, skip, order, setOrder, by, setIsLoading } =
-    useTableContext();
+    usePaginationContext();
   const [listUserData, setListUserData] = useState<iUser[]>();
   const [search, setSearch] = useState<string>();
 

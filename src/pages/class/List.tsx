@@ -2,7 +2,7 @@ import { iClassSchoolList, iheadCell } from "../../shared/interfaces";
 import {
   useAuthContext,
   useFrequencyContext,
-  useTableContext,
+  usePaginationContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiClass } from "../../shared/services";
@@ -57,7 +57,7 @@ export const ListClassPage = () => {
   const { debounce } = useDebounce();
   const { yearData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
-  const { setCount, setIsLoading, defineQuery } = useTableContext();
+  const { setCount, setIsLoading, defineQuery } = usePaginationContext();
   const [data, setData] = useState<iClassSchoolList[]>();
   const [search, setSearch] = useState<string>();
 

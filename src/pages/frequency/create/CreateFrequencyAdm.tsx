@@ -11,8 +11,7 @@ import { LayoutBasePage } from "../../../shared/layouts";
 import {
   CalendarFrequencyAdm,
   GridDashContent,
-  SelectSchoolSelectClassData,
-  SelectSchoolSelectData,
+  SelectSchoolClass,
 } from "../../../shared/components";
 import { iDashClass } from "../../../shared/interfaces";
 import { useEffect, useState } from "react";
@@ -46,7 +45,7 @@ export const CreateFrequencyAdm = () => {
   }, [classWithSchoolSelect, schoolSelect, monthData, yearData]);
 
   return (
-    <LayoutBasePage title="Nova Frequência" school={<SelectSchoolSelectData />}>
+    <LayoutBasePage title="Nova Frequência" isSchool>
       <Box my={1} mx={2} component={Paper} variant="outlined">
         <Card>
           <CardContent>
@@ -71,7 +70,7 @@ export const CreateFrequencyAdm = () => {
                 </Grid>
                 <Grid container item direction="row" xs={12} md={5} spacing={2}>
                   <Grid item xs={12}>
-                    <SelectSchoolSelectClassData />
+                    <SelectSchoolClass />
                   </Grid>
                   {infoClass && (
                     <>

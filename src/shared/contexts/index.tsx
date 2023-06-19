@@ -7,7 +7,7 @@ import { FrequencyProvider } from "./FrequencyContext";
 import { ModalProvider } from "./ModalContext";
 import { SchoolProvider } from "./SchoolContext";
 import { StudentProvider } from "./StundetContext";
-import { TableProvider } from "./TableContext";
+import { PaginationProvider } from "./PaginationContext";
 import { AppThemeProvider } from "./ThemeContext";
 import { UserProvider } from "./UserContext";
 
@@ -21,9 +21,9 @@ const Providers = ({ children }: iChildren) => (
               <ClassProvider>
                 <FrequencyProvider>
                   <StudentProvider>
-                    <TableProvider>
+                    <PaginationProvider>
                       <CalendarProvider>{children}</CalendarProvider>
-                    </TableProvider>
+                    </PaginationProvider>
                   </StudentProvider>
                 </FrequencyProvider>
               </ClassProvider>
@@ -44,6 +44,6 @@ export { useFrequencyContext } from "./FrequencyContext";
 export { useModalContext } from "./ModalContext";
 export { useSchoolContext } from "./SchoolContext";
 export { useStudentContext } from "./StundetContext";
-export { useTableContext } from "./TableContext";
+export { usePaginationContext } from "./PaginationContext";
 export { useAppThemeContext } from "./ThemeContext";
 export { useUserContext } from "./UserContext";

@@ -9,7 +9,7 @@ import {
   TableCell,
   TableRow,
 } from "@mui/material";
-import { useTableContext, useUserContext } from "../../shared/contexts";
+import { usePaginationContext, useUserContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { iUser, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
@@ -97,7 +97,7 @@ export const ActiveUserPage = () => {
   const { debounce } = useDebounce();
   const { updateUserData } = useUserContext();
   const { setCount, take, skip, order, setOrder, by, setIsLoading } =
-    useTableContext();
+    usePaginationContext();
   const [listUserData, setListUserData] = useState<iUser[]>();
   const [search, setSearch] = useState<string>();
 

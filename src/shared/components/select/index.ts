@@ -3,7 +3,3 @@ export * from "./ClassData";
 export * from "./ClassSelectData";
 export * from "./School";
 export * from "./SchoolClass";
-export * from "./SchoolClassData";
-export * from "./School";
-export * from "./SchoolSelectClassData";
-export * from "./SchoolSelectData";

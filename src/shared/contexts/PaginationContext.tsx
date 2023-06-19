@@ -9,7 +9,11 @@ import {
 } from "react";
 import { iChildren } from "../interfaces";
 
-interface iTableContextData {
+interface iPaginationContextData {
+  steps: number;
+  setSteps: Dispatch<SetStateAction<number>>;
+  activeStep: number;
+  query: () => string;
   count: number;
   setCount: Dispatch<SetStateAction<number>>;
   rowsPage: iRowsPage[] | undefined;
@@ -31,6 +35,8 @@ interface iTableContextData {
     date?: string,
     month?: string
   ) => string;
+  handleNext: () => void;
+  handleBack: () => void;
 }
 
 type iRowsPage =
@@ -40,9 +46,11 @@ type iRowsPage =
       label: string;
     };
 
-const TableContext = createContext({} as iTableContextData);
+const PaginationContext = createContext({} as iPaginationContextData);
 
-export const TableProvider = ({ children }: iChildren) => {
+export const PaginationProvider = ({ children }: iChildren) => {
+  const [steps, setSteps] = useState(0);
+  const [activeStep, setActiveStep] = useState(0);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPage, setrowsPage] = useState<iRowsPage[]>();
@@ -51,6 +59,22 @@ export const TableProvider = ({ children }: iChildren) => {
   const [order, setOrder] = useState<string | undefined>("name");
   const [by, setBy] = useState<"asc" | "desc">("asc");
   const [isLoading, setIsLoading] = useState(true);
+
+  const query = useCallback(() => {
+    return `?take=3&skip=${activeStep * 3}`;
+  }, [activeStep]);
+
+  const handleNext = () => {
+    if (activeStep !== steps - 1) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    } else setActiveStep(0);
+  };
+
+  const handleBack = () => {
+    if (activeStep !== 0) {
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    } else setActiveStep(steps - 1);
+  };
 
   useEffect(() => {
     if (count < 10) {
@@ -109,8 +133,12 @@ export const TableProvider = ({ children }: iChildren) => {
   );
 
   return (
-    <TableContext.Provider
+    <PaginationContext.Provider
       value={{
+        steps,
+        setSteps,
+        activeStep,
+        query,
         count,
         setCount,
         rowsPage,
@@ -126,11 +154,13 @@ export const TableProvider = ({ children }: iChildren) => {
         isLoading,
         setIsLoading,
         defineQuery,
+        handleBack,
+        handleNext,
       }}
     >
       {children}
-    </TableContext.Provider>
+    </PaginationContext.Provider>
   );
 };
 
-export const useTableContext = () => useContext(TableContext);
+export const usePaginationContext = () => useContext(PaginationContext);

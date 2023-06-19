@@ -5,7 +5,7 @@ import { apiUsingNow } from "../../shared/services";
 import {
   useAppThemeContext,
   useAuthContext,
-  useTableContext,
+  usePaginationContext,
 } from "../../shared/contexts";
 import { iFrequency, iheadCell } from "../../shared/interfaces";
 import { TableBase, Tools } from "../../shared/components";
@@ -51,7 +51,8 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
 export const FrequencyOpenPage = () => {
   const navigate = useNavigate();
   const { yearData } = useAuthContext();
-  const { setCount, take, skip, setIsLoading, defineQuery } = useTableContext();
+  const { setCount, take, skip, setIsLoading, defineQuery } =
+    usePaginationContext();
   const [data, setData] = useState<iFrequency[]>();
 
   useEffect(() => {

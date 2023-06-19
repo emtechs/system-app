@@ -3,8 +3,7 @@ import {
   useAuthContext,
   useDrawerContext,
   useFrequencyContext,
-  useSchoolContext,
-  useTableContext,
+  usePaginationContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiClass } from "../../shared/services";
@@ -59,18 +58,17 @@ export const ListClassSchoolPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const { debounce } = useDebounce();
-  const { yearData, dashData } = useAuthContext();
-  const { schoolSelect } = useSchoolContext();
+  const { yearData, dashData, schoolData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
   const { handleClickClass } = useDrawerContext();
-  const { setCount, setIsLoading, defineQuery } = useTableContext();
+  const { setCount, setIsLoading, defineQuery } = usePaginationContext();
   const [data, setData] = useState<iClassSchoolList[]>();
   const [search, setSearch] = useState<string>();
 
   let school_id = "";
   if (id) {
     school_id = id;
-  } else if (schoolSelect) school_id = schoolSelect.id;
+  } else if (schoolData) school_id = schoolData.id;
 
   useEffect(() => {
     let query = defineQuery(undefined, school_id);

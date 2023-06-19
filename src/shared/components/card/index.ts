@@ -3,4 +3,3 @@ export * from "./CardSchoolId";
 export * from "./CardSchoolAction";
 export * from "./CardSchoolClassAction";
 export * from "./CardSchoolSelectAction";
-export * from "./View";

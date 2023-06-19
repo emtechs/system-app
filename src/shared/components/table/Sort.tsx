@@ -1,6 +1,6 @@
 import { TableCell, TableSortLabel } from "@mui/material";
 import { iheadCell } from "../../interfaces";
-import { useTableContext } from "../../contexts";
+import { usePaginationContext } from "../../contexts";
 import { useEffect } from "react";
 
 interface iSortProps {
@@ -8,7 +8,7 @@ interface iSortProps {
 }
 
 export const TableSort = ({ headCells }: iSortProps) => {
-  const { by, setBy, order, setOrder } = useTableContext();
+  const { by, setBy, order, setOrder } = usePaginationContext();
 
   const createSortHandler = (property?: string) => () => {
     const isAsc = order === property && by === "asc";

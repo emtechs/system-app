@@ -1,61 +1,82 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useSchoolContext } from "../../contexts";
-import { CardSchoolAction } from "../card";
-import { apiUser } from "../../services";
-import { ValidateSchool } from "../validate";
-import { Dialog, DialogTitle, Divider, List } from "@mui/material";
-import { iSchoolSelect, iWorkSchool } from "../../interfaces";
-import { ListBase } from "./ListBase";
-import { Search } from "./Search";
+import { useAuthContext, usePaginationContext } from "../../contexts";
+import { BaseSchool, ListBase, Loading } from "./structure";
+import { iSchoolList, iSchoolSelect, iWorkSchool } from "../../interfaces";
+import { apiSchool, apiUser } from "../../services";
 
 export const SelectSchool = () => {
-  const { schoolSelect, setSchoolSelect } = useSchoolContext();
+  const { dashData, schoolData, setSchoolData } = useAuthContext();
+  const { query, setSteps } = usePaginationContext();
   const [listSchoolSelect, setListSchoolSelect] = useState<iSchoolSelect[]>();
-  const [listData, setListData] = useState<iWorkSchool[]>();
+  const [listDataCommon, setListDataCommon] = useState<iWorkSchool[]>();
+  const [listDataAdm, setListDataAdm] = useState<iSchoolList[]>();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    apiUser.schools("").then((res) => {
-      setListSchoolSelect(res.schools);
-      setListData(res.result);
-    });
-  }, []);
+    if (dashData === "ADMIN") {
+      setLoading(true);
+      apiSchool
+        .list(query())
+        .then((res) => {
+          setListSchoolSelect(res.schools);
+          setListDataAdm(res.result);
+          const arredSteps = Math.ceil(res.total / 3);
+          setSteps(arredSteps === 1 ? 0 : arredSteps);
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(true);
+      apiUser
+        .schools(query())
+        .then((res) => {
+          setListSchoolSelect(res.schools);
+          setListDataCommon(res.result);
+          const arredSteps = Math.ceil(res.total / 3);
+          setSteps(arredSteps === 1 ? 0 : arredSteps);
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [dashData, query]);
 
   const openDialog = useMemo(() => {
     if (listSchoolSelect?.length === 0) {
       return false;
     }
-    return schoolSelect ? false : true;
-  }, [listSchoolSelect, schoolSelect]);
+    return schoolData ? false : true;
+  }, [listSchoolSelect, schoolData]);
 
-  const handleOpenDialog = useCallback(() => setSchoolSelect(undefined), []);
+  const handleOpenDialog = useCallback(() => setSchoolData(undefined), []);
 
   return (
-    <>
-      <CardSchoolAction onClick={handleOpenDialog} />
-      <Dialog open={openDialog}>
-        <DialogTitle>Selecione a Escola</DialogTitle>
-        <List sx={{ pt: 0 }}>
-          <Divider component="li" />
-          <Search
-            name="school"
-            label="Escola"
-            loading={!listSchoolSelect}
-            options={listSchoolSelect}
-          >
-            <ValidateSchool />
-          </Search>
-          <Divider component="li" />
-          {listData?.map((el) => (
-            <ListBase
-              key={el.school.id}
-              name={el.school.name}
-              onClick={() => {
-                setSchoolSelect(el.school);
-              }}
-            />
-          ))}
-        </List>
-      </Dialog>
-    </>
+    <BaseSchool
+      onClick={handleOpenDialog}
+      open={openDialog}
+      loading={!listSchoolSelect}
+      options={listSchoolSelect}
+    >
+      {loading ? (
+        <Loading />
+      ) : dashData === "ADMIN" ? (
+        listDataAdm?.map((el) => (
+          <ListBase
+            key={el.id}
+            name={el.name}
+            onClick={() => {
+              setSchoolData(el);
+            }}
+          />
+        ))
+      ) : (
+        listDataCommon?.map((el) => (
+          <ListBase
+            key={el.school.id}
+            name={el.school.name}
+            onClick={() => {
+              setSchoolData(el.school);
+            }}
+          />
+        ))
+      )}
+    </BaseSchool>
   );
 };

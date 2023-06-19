@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import {
   useAuthContext,
+  usePaginationContext,
   useSchoolContext,
-  useTableContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { iSchool, iheadCell } from "../../shared/interfaces";
@@ -79,7 +79,7 @@ export const ActiveSchoolPage = () => {
   const { debounce } = useDebounce();
   const { yearData } = useAuthContext();
   const { updateSchoolData } = useSchoolContext();
-  const { setCount, setIsLoading, defineQuery } = useTableContext();
+  const { setCount, setIsLoading, defineQuery } = usePaginationContext();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [search, setSearch] = useState<string>();
 

@@ -28,6 +28,7 @@ export interface iClassStudent {
 }
 
 export interface iClassWithSchoolSelect extends iClassWithSchool {
+  id: string;
   label: string;
 }
 

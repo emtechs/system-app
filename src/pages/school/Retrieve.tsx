@@ -13,8 +13,8 @@ import {
 import {
   useAppThemeContext,
   useDrawerContext,
+  usePaginationContext,
   useSchoolContext,
-  useTableContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { iSchoolServer, iheadCell } from "../../shared/interfaces";
@@ -69,7 +69,7 @@ export const RetrieveSchoolPage = () => {
   const { mdDown } = useAppThemeContext();
   const { updateSchool, schoolSelect } = useSchoolContext();
   const { setIsLoading, by, order, take, skip, setCount, setOrder } =
-    useTableContext();
+    usePaginationContext();
   const [serversData, setServersData] = useState<iSchoolServer[]>();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState<string>();

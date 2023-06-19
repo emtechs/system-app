@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import {
   useDrawerContext,
+  usePaginationContext,
   useSchoolContext,
-  useTableContext,
   useUserContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
@@ -90,7 +90,7 @@ export const RetrieveUserPage = () => {
   const { updateAllUser, updateUserData } = useUserContext();
   const { updateServerData } = useSchoolContext();
   const { setCount, take, skip, order, setOrder, by, setIsLoading } =
-    useTableContext();
+    usePaginationContext();
   const { handleClickSchool } = useDrawerContext();
   const [retrieveUser, setRetrieveUser] = useState<iWorkSchool[]>();
   const [open, setOpen] = useState(false);
@@ -153,9 +153,7 @@ export const RetrieveUserPage = () => {
         tools={
           <Tools
             back={
-              school_id
-                ? `/school?id=${school_id}&order=name`
-                : "/user/list"
+              school_id ? `/school?id=${school_id}&order=name` : "/user/list"
             }
             isHome
             isNew

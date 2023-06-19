@@ -1,6 +1,6 @@
 import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
-import { iSchool, iSchoolList } from "../interfaces";
+import { iSchool, iSchoolList, iSchoolSelect } from "../interfaces";
 
 const create = async (data: FieldValues): Promise<iSchool> => {
   const { data: response } = await apiUsingNow.post<iSchool>("schools", data);
@@ -24,6 +24,7 @@ const deleteServer = async (school_id: string, server_id: string) => {
 };
 
 interface iList {
+  schools: iSchoolSelect[];
   total: number;
   result: iSchoolList[];
 }
@@ -34,4 +35,4 @@ const list = async (query: string): Promise<iList> => {
   return response;
 };
 
-export const apiSchool = { create, impSchool, update, deleteServer,list };
+export const apiSchool = { create, impSchool, update, deleteServer, list };

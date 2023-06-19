@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { iTable } from "../../interfaces";
-import { useTableContext } from "../../contexts";
+import { usePaginationContext } from "../../contexts";
 import { Pagination } from "./Pagination";
 import { TableSort } from "./Sort";
 
@@ -20,7 +20,7 @@ export const TableBase = ({
   headCells,
   is_pagination = true,
 }: iTable) => {
-  const { isLoading, count } = useTableContext();
+  const { isLoading, count } = usePaginationContext();
   return (
     <>
       <TableContainer

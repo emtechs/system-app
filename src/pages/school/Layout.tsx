@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
-import { SchoolCardDash, Tools } from "../../shared/components";
+import { Tools } from "../../shared/components";
 import { iChildren, iSchool } from "../../shared/interfaces";
 import { LayoutBasePage } from "../../shared/layouts";
 import { apiUsingNow } from "../../shared/services";
@@ -37,7 +37,7 @@ export const LayoutSchoolPage = ({
   return (
     <LayoutBasePage
       title={title}
-      school={isSchool && <SchoolCardDash />}
+      isSchool={isSchool}
       tools={
         tools ? (
           tools

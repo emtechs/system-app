@@ -3,18 +3,19 @@ import { iChildren } from "../interfaces";
 import { Menu } from "@mui/icons-material";
 import { useAppThemeContext, useDrawerContext } from "../contexts";
 import { ReactNode } from "react";
+import { SelectSchool } from "../components";
 
 interface iLayoutBasePageProps extends iChildren {
   title: string;
   tools?: ReactNode;
-  school?: ReactNode;
+  isSchool?: boolean;
 }
 
 export const LayoutBasePage = ({
   children,
   title,
   tools,
-  school,
+  isSchool,
 }: iLayoutBasePageProps) => {
   const { theme, smDown, mdDown } = useAppThemeContext();
   const { toggleDrawerOpen } = useDrawerContext();
@@ -49,7 +50,7 @@ export const LayoutBasePage = ({
           {title}
         </Typography>
       </Box>
-      {school && <Box>{school}</Box>}
+      {isSchool && <SelectSchool />}
       {tools && <Box>{tools}</Box>}
       <Box flex={1} overflow="auto">
         {children}

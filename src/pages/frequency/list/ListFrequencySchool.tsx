@@ -1,6 +1,6 @@
 import { TableCell, TableRow, useTheme } from "@mui/material";
 import { TableBase, Tools } from "../../../shared/components";
-import { useAuthContext, useTableContext } from "../../../shared/contexts";
+import { useAuthContext, usePaginationContext } from "../../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../../shared/services";
 import { iFrequency, iheadCell } from "../../../shared/interfaces";
@@ -46,7 +46,8 @@ export const ListFrequencySchool = () => {
   const date = searchParams.get("date");
   const status = searchParams.get("status");
   const { yearData } = useAuthContext();
-  const { setCount, take, skip, setIsLoading, defineQuery } = useTableContext();
+  const { setCount, take, skip, setIsLoading, defineQuery } =
+    usePaginationContext();
   const [data, setData] = useState<iFrequency[]>();
 
   useEffect(() => {

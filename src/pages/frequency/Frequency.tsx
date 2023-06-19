@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
 import {
   useAppThemeContext,
+  useAuthContext,
   useFrequencyContext,
-  useSchoolContext,
-  useTableContext,
+  usePaginationContext,
 } from "../../shared/contexts";
 import { iClassDash, iheadCell } from "../../shared/interfaces";
-import { CardSchool, TableBase } from "../../shared/components";
+import { TableBase } from "../../shared/components";
 import { useNavigate } from "react-router-dom";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 import dayjs from "dayjs";
@@ -66,19 +66,19 @@ const CardClassDash = ({ classDash, date }: iCardClassDashProps) => {
 
 export const FrequencyPage = () => {
   const navigate = useNavigate();
-  const { schoolSelect } = useSchoolContext();
-  const { setCount, setIsLoading, defineQuery } = useTableContext();
+  const { schoolData } = useAuthContext();
+  const { setCount, setIsLoading, defineQuery } = usePaginationContext();
   const [listClassData, setListClassData] = useState<iClassDash[]>();
   const date = dayjs().format("DD/MM/YYYY");
 
   useEffect(() => {
-    if (schoolSelect) {
+    if (schoolData) {
       let query = defineQuery(undefined, undefined, undefined, date);
       query += "&is_dash=true";
       setIsLoading(true);
       apiUsingNow
         .get<{ total: number; result: iClassDash[] }>(
-          `classes/school/${schoolSelect.id}${query}`
+          `classes/school/${schoolData.id}${query}`
         )
         .then((res) => {
           if (res.data.total === 0) {
@@ -89,10 +89,10 @@ export const FrequencyPage = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [schoolSelect, defineQuery]);
+  }, [schoolData, defineQuery]);
 
   return (
-    <LayoutBasePage title={"Frequência - " + date} school={<CardSchool />}>
+    <LayoutBasePage title={"Frequência - " + date} isSchool>
       <TableBase headCells={headCells}>
         {date &&
           listClassData?.map((el) => (

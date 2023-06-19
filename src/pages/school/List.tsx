@@ -5,7 +5,7 @@ import { TableBase, Tools } from "../../shared/components";
 import {
   useAuthContext,
   useFrequencyContext,
-  useTableContext,
+  usePaginationContext,
 } from "../../shared/contexts";
 import { iSchoolList, iheadCell } from "../../shared/interfaces";
 import { apiSchool } from "../../shared/services";
@@ -60,7 +60,7 @@ export const ListSchoolPage = () => {
   const { debounce } = useDebounce();
   const { yearData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
-  const { setCount, setIsLoading, defineQuery } = useTableContext();
+  const { setCount, setIsLoading, defineQuery } = usePaginationContext();
   const [listSchoolData, setListSchoolData] = useState<iSchoolList[]>();
   const [search, setSearch] = useState<string>();
 

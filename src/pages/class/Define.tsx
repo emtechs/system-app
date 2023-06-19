@@ -2,36 +2,26 @@ import { FormContainer } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Grid, Paper } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
-import {
-  CardSchoolId,
-  SelectClass,
-  SelectSchoolSelectData,
-  Tools,
-} from "../../shared/components";
-import {
-  useAuthContext,
-  useClassContext,
-  useSchoolContext,
-} from "../../shared/contexts";
+import { SelectClass, Tools } from "../../shared/components";
+import { useAuthContext, useClassContext } from "../../shared/contexts";
 import { classSchoolCreateSchema } from "../../shared/schemas";
 import { LayoutBasePage } from "../../shared/layouts";
 
 export const DefineSchoolsPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const { yearData } = useAuthContext();
+  const { yearData, schoolData } = useAuthContext();
   const { createClassSchool } = useClassContext();
-  const { schoolSelect } = useSchoolContext();
   let school_id = "";
   if (id) {
     school_id = id;
-  } else if (schoolSelect) school_id = schoolSelect.id;
+  } else if (schoolData) school_id = schoolData.id;
   const back = id ? `/school/class?id=${id}&order=name` : undefined;
 
   return (
     <LayoutBasePage
       title="Definir Escola"
-      school={id ? <CardSchoolId /> : <SelectSchoolSelectData />}
+      isSchool
       tools={
         <Tools
           back={back}

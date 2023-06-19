@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import {
   useAuthContext,
   useDrawerContext,
-  useSchoolContext,
-  useTableContext,
+  usePaginationContext,
 } from "../../shared/contexts";
 import {
   CalendarDashCommon,
@@ -23,25 +22,22 @@ dayjs.extend(localizedFormat);
 
 export const DashboardSchool = () => {
   const { theme, setLoading } = useAppThemeContext();
-  const { yearData } = useAuthContext();
-  const { schoolSelect } = useSchoolContext();
+  const { yearData, schoolData } = useAuthContext();
   const { handleClickFrequency, handleClickSchool } = useDrawerContext();
-  const { defineQuery } = useTableContext();
+  const { defineQuery } = usePaginationContext();
   const [infoSchool, setInfoSchool] = useState<iDashSchoolServer>();
 
   useEffect(() => {
-    if (schoolSelect && yearData) {
+    if (schoolData && yearData) {
       const date = dayjs().format("DD/MM/YYYY");
       const query = defineQuery(yearData.id, undefined, undefined, date);
       setLoading(true);
       apiUsingNow
-        .get<iDashSchoolServer>(
-          `schools/${schoolSelect.id}/dash/server${query}`
-        )
+        .get<iDashSchoolServer>(`schools/${schoolData.id}/dash/server${query}`)
         .then((res) => setInfoSchool(res.data))
         .finally(() => setLoading(false));
     }
-  }, [schoolSelect, yearData, defineQuery]);
+  }, [schoolData, yearData, defineQuery]);
 
   return (
     <LayoutBasePage title="Página Inicial">

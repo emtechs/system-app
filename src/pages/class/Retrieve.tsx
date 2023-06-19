@@ -3,14 +3,13 @@ import { useEffect, useState } from "react";
 import {
   useAuthContext,
   useFrequencyContext,
-  useTableContext,
+  usePaginationContext,
 } from "../../shared/contexts";
 import { apiUsingNow } from "../../shared/services";
 import { iStudentWithSchool, iheadCell } from "../../shared/interfaces";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TableBase, Tools } from "../../shared/components";
 import { TableCell, TableRow, useTheme } from "@mui/material";
-import { CardSchoolId } from "../../shared/components/card";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 import { useDebounce } from "../../shared/hooks";
 
@@ -59,7 +58,7 @@ export const RetrieveClassPage = () => {
   const { debounce } = useDebounce();
   const { yearData, dashData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
-  const { setIsLoading, defineQuery, setCount } = useTableContext();
+  const { setIsLoading, defineQuery, setCount } = usePaginationContext();
   const [data, setData] = useState<iStudentWithSchool[]>();
   const [search, setSearch] = useState<string>();
 
@@ -103,7 +102,7 @@ export const RetrieveClassPage = () => {
 
   return (
     <LayoutBasePage
-      school={<CardSchoolId />}
+      isSchool
       tools={
         <Tools
           isBack={!!back}

@@ -15,7 +15,10 @@ import {
   DialogRemoveMissed,
   Tools,
 } from "../../shared/components";
-import { useFrequencyContext, useTableContext } from "../../shared/contexts";
+import {
+  useFrequencyContext,
+  usePaginationContext,
+} from "../../shared/contexts";
 import { iFrequency, iFrequencyStudents } from "../../shared/interfaces";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
@@ -24,7 +27,6 @@ import "dayjs/locale/pt-br";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Navigate, useSearchParams } from "react-router-dom";
 import { LayoutBasePage } from "../../shared/layouts";
-import { CardSchool } from "../../shared/components/card";
 import {
   defineBgColorFrequency,
   statusFrequencyPtBr,
@@ -84,7 +86,7 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
 export const RetrieveFrequencyPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const { setIsLoading, isLoading } = useTableContext();
+  const { setIsLoading, isLoading } = usePaginationContext();
   const { frequencyData, setFrequencyData, studentData } =
     useFrequencyContext();
 
@@ -108,7 +110,7 @@ export const RetrieveFrequencyPage = () => {
 
   return (
     <LayoutBasePage
-      school={<CardSchool />}
+      isSchool
       tools={<Tools isHome isFinish />}
       title={
         frequencyData

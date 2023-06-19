@@ -1,5 +1,5 @@
 import { MouseEvent } from "react";
-import { useTableContext } from "../../contexts";
+import { usePaginationContext } from "../../contexts";
 import { Box, IconButton, TablePagination, useTheme } from "@mui/material";
 import {
   FirstPage,
@@ -81,7 +81,8 @@ const TablePaginationActions = (props: TablePaginationActionsProps) => {
 };
 
 export const Pagination = () => {
-  const { count, rowsPage, take, setTake, page, setPage } = useTableContext();
+  const { count, rowsPage, take, setTake, page, setPage } =
+    usePaginationContext();
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
