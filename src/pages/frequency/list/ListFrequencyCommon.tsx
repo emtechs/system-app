@@ -8,23 +8,17 @@ import { LayoutBasePage } from "../../../shared/layouts";
 import { defineBgColorInfrequency } from "../../../shared/scripts";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-const headCells: iheadCell[] = [
-  { order: "date", numeric: false, label: "Data" },
-  { order: "name", numeric: false, label: "Turma" },
-  { numeric: true, label: "Alunos" },
-  { order: "infreq", numeric: true, label: "Infrequência" },
-];
-
 interface iCardFrequencyProps {
   freq: iFrequency;
+  isDate: boolean;
 }
 
-const CardFrequency = ({ freq }: iCardFrequencyProps) => {
+const CardFrequency = ({ freq, isDate }: iCardFrequencyProps) => {
   const theme = useTheme();
 
   return (
     <TableRow>
-      <TableCell>{freq.date}</TableCell>
+      {isDate && <TableCell>{freq.date}</TableCell>}
       <TableCell>{freq.class.class.name}</TableCell>
       <TableCell align="right">{freq._count.students}</TableCell>
       <TableCell
@@ -49,6 +43,19 @@ export const ListFrequencyCommon = () => {
   const { setCount, take, skip, setIsLoading, defineQuery } =
     usePaginationContext();
   const [data, setData] = useState<iFrequency[]>();
+
+  const headCells: iheadCell[] = !date
+    ? [
+        { order: "date", numeric: false, label: "Data" },
+        { order: "name", numeric: false, label: "Turma" },
+        { numeric: true, label: "Alunos" },
+        { order: "infreq", numeric: true, label: "Infrequência" },
+      ]
+    : [
+        { order: "name", numeric: false, label: "Turma" },
+        { numeric: true, label: "Alunos" },
+        { order: "infreq", numeric: true, label: "Infrequência" },
+      ];
 
   useEffect(() => {
     if (yearData && schoolData) {
@@ -77,7 +84,7 @@ export const ListFrequencyCommon = () => {
     >
       <TableBase headCells={headCells}>
         {data?.map((el) => (
-          <CardFrequency key={el.id} freq={el} />
+          <CardFrequency key={el.id} freq={el} isDate={!date} />
         ))}
       </TableBase>
     </LayoutBasePage>

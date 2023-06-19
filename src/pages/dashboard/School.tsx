@@ -74,7 +74,7 @@ export const DashboardSchool = () => {
                       justifyContent="center"
                       gap={2}
                     >
-                      <Typography variant="h6">
+                      <Typography variant="h6" textAlign="center">
                         {dayjs().format("dddd, LL")}
                       </Typography>
                       <SelectSchool />

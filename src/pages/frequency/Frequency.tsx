@@ -45,20 +45,13 @@ import { Navigate } from "react-router-dom";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
 
-const headCells: iheadCell[] = [
-  { order: "name", numeric: false, label: "Turma" },
-  { numeric: true, label: "Alunos" },
-  { numeric: true, label: "Frequências" },
-  { order: "infreq", numeric: true, label: "Infrequência" },
-];
-
 interface iCardClassDashProps {
   classDash: iClassDash;
   date: string;
   name: string;
 }
 const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
-  const { theme } = useAppThemeContext();
+  const { theme, mdDown } = useAppThemeContext();
   const { createFrequency } = useFrequencyContext();
   const students = classDash.students.map(({ student }) => {
     return { student_id: student.id };
@@ -79,8 +72,12 @@ const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
       }}
     >
       <TableCell>{classDash.class.name}</TableCell>
-      <TableCell align="right">{classDash._count.students}</TableCell>
-      <TableCell align="right">{classDash._count.frequencies}</TableCell>
+      {!mdDown && (
+        <>
+          <TableCell align="right">{classDash._count.students}</TableCell>
+          <TableCell align="right">{classDash._count.frequencies}</TableCell>
+        </>
+      )}
       <TableCell
         align="right"
         sx={{
@@ -95,7 +92,7 @@ const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
 };
 
 export const FrequencyPage = () => {
-  const { setLoading } = useAppThemeContext();
+  const { setLoading, mdDown } = useAppThemeContext();
   const { yearData, schoolData } = useAuthContext();
   const { dateData, monthData } = useCalendarContext();
   const { handleClickButtonTools, handleClickSchool } = useDrawerContext();
@@ -104,6 +101,18 @@ export const FrequencyPage = () => {
   const [infoSchool, setInfoSchool] = useState<iDashSchoolServer>();
   const [listClassData, setListClassData] = useState<iClassDash[]>();
   const [listClassSelect, setListClassSelect] = useState<iClassDashSelect[]>();
+
+  const headCells: iheadCell[] = mdDown
+    ? [
+        { order: "name", numeric: false, label: "Turma" },
+        { order: "infreq", numeric: true, label: "Infrequência" },
+      ]
+    : [
+        { order: "name", numeric: false, label: "Turma" },
+        { numeric: true, label: "Alunos" },
+        { numeric: true, label: "Frequências" },
+        { order: "infreq", numeric: true, label: "Infrequência" },
+      ];
 
   const date = useCallback(() => {
     return dateData.format("DD/MM/YYYY");
