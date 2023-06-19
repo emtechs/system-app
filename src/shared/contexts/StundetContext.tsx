@@ -8,7 +8,6 @@ import { createContext, useCallback, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { apiStudent } from "../services";
-import { toast } from "react-toastify";
 
 interface iStudentContextData {
   createStudent: (
@@ -32,17 +31,17 @@ const StudentContext = createContext({} as iStudentContextData);
 
 export const StudentProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
-  const { setLoading } = useAppThemeContext();
+  const { setLoading, handleSucess, handleError } = useAppThemeContext();
 
   const handleCreateStudent = useCallback(
     async (data: iStudentRequest, id: string, back?: string) => {
       try {
         setLoading(true);
         await apiStudent.create(data, id);
-        toast.success("Estudante cadastrado com sucesso!");
+        handleSucess("Estudante cadastrado com sucesso!");
         navigate(back ? back : "/");
       } catch {
-        toast.error("Não foi possível cadastrar o estudante no momento!");
+        handleError("Não foi possível cadastrar o estudante no momento!");
       } finally {
         setLoading(false);
       }
@@ -72,10 +71,10 @@ export const StudentProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         await apiStudent.impStudent(file, class_id, school_id);
-        toast.success("Estudantes importados com sucesso!");
+        handleSucess("Estudantes importados com sucesso!");
         navigate(back ? back : "/");
       } catch {
-        toast.error("Não foi possível importar os estudantes no momento!");
+        handleError("Não foi possível importar os estudantes no momento!");
       } finally {
         setLoading(false);
       }
@@ -90,10 +89,10 @@ export const StudentProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         await apiStudent.impStudentAll(file);
-        toast.success("Estudantes importados com sucesso!");
+        handleSucess("Estudantes importados com sucesso!");
         navigate(back ? back : "/");
       } catch {
-        toast.error("Não foi possível importar os estudantes no momento!");
+        handleError("Não foi possível importar os estudantes no momento!");
       } finally {
         setLoading(false);
       }

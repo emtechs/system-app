@@ -13,8 +13,6 @@ interface iDrawerContextProps {
   handleClickImport: () => void;
   openProfile: boolean;
   handleClickProfile: () => void;
-  openReport: boolean;
-  handleClickReport: () => void;
   openSchool: boolean;
   handleClickSchool: () => void;
   openStudent: boolean;
@@ -35,7 +33,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
   const [openFrequency, setOpenFrequency] = useState(false);
   const [openImport, setOpenImport] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
-  const [openReport, setOpenReport] = useState(false);
   const [openSchool, setOpenSchool] = useState(false);
   const [openStudent, setOpenStudent] = useState(false);
   const [openUser, setOpenUser] = useState(false);
@@ -49,7 +46,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenFrequency(false);
     setOpenImport(false);
     setOpenProfile(false);
-    setOpenReport(false);
     setOpenSchool(false);
     setOpenStudent(false);
     setOpenUser(false);
@@ -69,7 +65,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenFrequency(false);
     setOpenImport(false);
     setOpenProfile(false);
-    setOpenReport(false);
     setOpenSchool(false);
     setOpenStudent(false);
     setOpenUser(false);
@@ -83,7 +78,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenFrequency(false);
     setOpenImport(false);
     setOpenProfile(false);
-    setOpenReport(false);
     setOpenSchool(false);
     setOpenStudent(false);
     setOpenUser(false);
@@ -94,7 +88,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenClass(false);
     setOpenImport(false);
     setOpenProfile(false);
-    setOpenReport(false);
     setOpenSchool(false);
     setOpenStudent(false);
     setOpenUser(false);
@@ -105,7 +98,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenClass(false);
     setOpenFrequency(false);
     setOpenProfile(false);
-    setOpenReport(false);
     setOpenSchool(false);
     setOpenStudent(false);
     setOpenUser(false);
@@ -116,18 +108,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenClass(false);
     setOpenFrequency(false);
     setOpenImport(false);
-    setOpenReport(false);
-    setOpenSchool(false);
-    setOpenStudent(false);
-    setOpenUser(false);
-  }, []);
-
-  const handleClickReport = useCallback(() => {
-    setOpenReport((oldOpen) => !oldOpen);
-    setOpenClass(false);
-    setOpenFrequency(false);
-    setOpenImport(false);
-    setOpenProfile(false);
     setOpenSchool(false);
     setOpenStudent(false);
     setOpenUser(false);
@@ -139,7 +119,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenFrequency(false);
     setOpenImport(false);
     setOpenProfile(false);
-    setOpenReport(false);
     setOpenStudent(false);
     setOpenUser(false);
   }, []);
@@ -150,7 +129,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenFrequency(false);
     setOpenImport(false);
     setOpenProfile(false);
-    setOpenReport(false);
     setOpenSchool(false);
     setOpenUser(false);
   }, []);
@@ -161,7 +139,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
     setOpenFrequency(false);
     setOpenImport(false);
     setOpenProfile(false);
-    setOpenReport(false);
     setOpenSchool(false);
     setOpenStudent(false);
   }, []);
@@ -175,7 +152,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
         handleClickFrequency,
         handleClickImport,
         handleClickProfile,
-        handleClickReport,
         handleClickSchool,
         handleClickStudent,
         handleClickUser,
@@ -184,7 +160,6 @@ export const DrawerProvider = ({ children }: iChildren) => {
         openFrequency,
         openImport,
         openProfile,
-        openReport,
         openSchool,
         openStudent,
         openUser,

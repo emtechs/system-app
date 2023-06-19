@@ -15,7 +15,6 @@ import {
   iClassWithSchool,
   iSchoolImportRequest,
 } from "../interfaces";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { FieldValues } from "react-hook-form";
@@ -47,7 +46,7 @@ const ClassContext = createContext({} as iClassContextData);
 
 export const ClassProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
-  const { setLoading } = useAppThemeContext();
+  const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const [classDataSelect, setClassDataSelect] = useState<iClassSelect[]>();
   const [listClassData, setListClassData] = useState<iClass[]>();
   const [classSelect, setClassSelect] = useState<iClass>();
@@ -59,10 +58,10 @@ export const ClassProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         await apiClass.create(data);
-        toast.success("Turma cadastrada com sucesso!");
+        handleSucess("Turma cadastrada com sucesso!");
         navigate(back ? back : "/");
       } catch {
-        toast.error("Não foi possível cadastrar a turma no momento!");
+        handleError("Não foi possível cadastrar a turma no momento!");
       } finally {
         setLoading(false);
       }
@@ -80,10 +79,10 @@ export const ClassProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         await apiClass.createSchool(data, year_id, school_id);
-        toast.success("Escola definida com sucesso!");
+        handleSucess("Escola definida com sucesso!");
         navigate(back ? back : "/");
       } catch {
-        toast.error("Não foi possível definir a escola no momento!");
+        handleError("Não foi possível definir a escola no momento!");
       } finally {
         setLoading(false);
       }
@@ -98,10 +97,10 @@ export const ClassProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         await apiClass.impClass(file);
-        toast.success("Turmas importadas com sucesso!");
+        handleSucess("Turmas importadas com sucesso!");
         navigate(back ? back : "/");
       } catch {
-        toast.error("Não foi possível importar as turmas no momento!");
+        handleError("Não foi possível importar as turmas no momento!");
       } finally {
         setLoading(false);
       }

@@ -16,7 +16,6 @@ import {
   iUserSecretRequest,
   iUserUpdateRequest,
 } from "../interfaces";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext, useAuthContext } from ".";
 import { FieldValues } from "react-hook-form";
@@ -43,7 +42,7 @@ const UserContext = createContext({} as iUserContextData);
 
 export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
-  const { setLoading } = useAppThemeContext();
+  const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const { setDashData, setUserData } = useAuthContext();
   const [updateUserData, setUpdateUserData] = useState<iUser>();
 
@@ -51,9 +50,9 @@ export const UserProvider = ({ children }: iChildren) => {
     try {
       setLoading(true);
       await apiUser.create(data);
-      toast.success("Administrador cadastrado com sucesso!");
+      handleSucess("Administrador cadastrado com sucesso!");
     } catch {
-      toast.error("Não foi possível cadastrar o administrador no momento!");
+      handleError("Não foi possível cadastrar o administrador no momento!");
     } finally {
       setLoading(false);
       navigate("/");
@@ -65,10 +64,10 @@ export const UserProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         await apiUser.create(data);
-        toast.success("Diretor cadastrado com sucesso!");
+        handleSucess("Diretor cadastrado com sucesso!");
         navigate("/");
       } catch {
-        toast.error("Não foi possível cadastrar o Diretor no momento!");
+        handleError("Não foi possível cadastrar o Diretor no momento!");
       } finally {
         setLoading(false);
       }
@@ -82,9 +81,9 @@ export const UserProvider = ({ children }: iChildren) => {
         setLoading(true);
         const query = "?allNotServ=true";
         await apiUser.create(data, query);
-        toast.success("Secretário cadastrado com sucesso!");
+        handleSucess("Secretário cadastrado com sucesso!");
       } catch {
-        toast.error("Não foi possível cadastrar o secretário no momento!");
+        handleError("Não foi possível cadastrar o secretário no momento!");
       } finally {
         setLoading(false);
         navigate(back ? back : "/");
@@ -98,12 +97,12 @@ export const UserProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         const user = await apiUser.update(id, data);
-        toast.success("Dados cadastrados com sucesso");
+        handleSucess("Dados cadastrados com sucesso");
         setUserData(user);
         setDashData(user.dash);
         navigate("/");
       } catch {
-        toast.error("Não foi possível cadastrar os dados no momento!");
+        handleError("Não foi possível cadastrar os dados no momento!");
       } finally {
         setLoading(false);
       }
@@ -116,11 +115,11 @@ export const UserProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         const user = await apiUser.update(id, data);
-        toast.success("Dados alterado com sucesso");
+        handleSucess("Dados alterado com sucesso");
         setUserData(user);
         navigate("/");
       } catch {
-        toast.error("Não foi possível atualizar os dados no momento!");
+        handleError("Não foi possível atualizar os dados no momento!");
       } finally {
         setLoading(false);
       }
@@ -134,11 +133,11 @@ export const UserProvider = ({ children }: iChildren) => {
         setLoading(true);
         const user = await apiUser.update(id, data);
         setUpdateUserData(user);
-        if (!is_all) toast.success("Sucesso ao alterar o estado do usuário!");
+        if (!is_all) handleSucess("Sucesso ao alterar o estado do usuário!");
         if (back) navigate(back);
       } catch {
         if (!is_all)
-          toast.error(
+          handleError(
             "Não foi possível atualizar o estado do usuário no momento!"
           );
       } finally {
@@ -153,10 +152,10 @@ export const UserProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         await apiUser.update(id, data);
-        toast.success("Senha alterada com sucesso");
+        handleSucess("Senha alterada com sucesso");
         navigate("/");
       } catch {
-        toast.error("Senha atual incorreta!");
+        handleError("Senha atual incorreta!");
       } finally {
         setLoading(false);
       }

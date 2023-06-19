@@ -25,7 +25,6 @@ import { useModalContext } from "./ModalContext";
 import { apiAuth, apiCalendar, apiUser, apiUsingNow } from "../services";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
-import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 
 interface iAuthContextData {
@@ -53,7 +52,7 @@ const AuthContext = createContext({} as iAuthContextData);
 
 export const AuthProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
-  const { setLoading } = useAppThemeContext();
+  const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const { handleClick } = useDrawerContext();
   const { setAnchorEl } = useModalContext();
   const [accessToken, setAccessToken] = useState<string>();
@@ -108,15 +107,15 @@ export const AuthProvider = ({ children }: iChildren) => {
       const { token } = await apiAuth.login(data);
       localStorage.setItem("@EMTechs:token", token);
       setAccessToken(token);
-      toast.success("Login realizado com sucesso");
+      handleSucess("Login realizado com sucesso");
     } catch (e) {
       if (e instanceof AxiosError) {
         if (e.response?.status === 401) {
-          toast.error(
+          handleError(
             "Conta desativada, entre em contato com o administrador!"
           );
         } else {
-          toast.error("Combinação de Usuário e Senha incorretos");
+          handleError("Combinação de Usuário e Senha incorretos");
         }
       }
     } finally {
@@ -128,20 +127,20 @@ export const AuthProvider = ({ children }: iChildren) => {
     try {
       setLoading(true);
       await apiAuth.recovery(data);
-      toast.success("Siga as instruções enviadas no email da sua conta");
+      handleSucess("Siga as instruções enviadas no email da sua conta");
       navigate("/");
     } catch (e) {
       if (e instanceof AxiosError) {
         if (e.response?.status === 401) {
-          toast.error(
+          handleError(
             "Conta desativada, entre em contato com o administrador!"
           );
         } else if (e.response?.status === 404) {
-          toast.error(
+          handleError(
             "Usuário não cadastrado, entre em contato com o administrador!"
           );
         } else {
-          toast.error(
+          handleError(
             "Nenhum email cadastrado para essa conta, entre em contato com o administrador!"
           );
         }
@@ -156,9 +155,9 @@ export const AuthProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         await apiAuth.passwordRecovery(data, userId, token);
-        toast.success("Senha alterada com sucesso");
+        handleSucess("Senha alterada com sucesso");
       } catch (e) {
-        toast.error("Link expirado, solicite um novo link na tela de login!");
+        handleError("Link expirado, solicite um novo link na tela de login!");
       } finally {
         setLoading(false);
         navigate("/");

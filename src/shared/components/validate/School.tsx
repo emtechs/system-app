@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form-mui";
-import { useSchoolContext } from "../../contexts";
+import { useAuthContext } from "../../contexts";
 import { iSchool } from "../../interfaces";
 
 export const ValidateSchool = () => {
   const { watch } = useFormContext();
-  const { setSchoolSelect } = useSchoolContext();
+  const { setSchoolData } = useAuthContext();
   const school: iSchool = watch("school");
 
   useEffect(() => {
-    setSchoolSelect(school);
+    setSchoolData(school);
   }, [school]);
 
   return <></>;

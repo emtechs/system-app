@@ -1,19 +1,12 @@
-import { ToastContainer } from "react-toastify";
+import { CssBaseline } from "@mui/material";
 import AppRoutes from "./routes";
-import Providers, { useAppThemeContext } from "./shared/contexts";
-import "react-toastify/dist/ReactToastify.css";
+import Providers from "./shared/contexts";
 
 const App = () => {
-  const { smDown } = useAppThemeContext();
   return (
     <Providers>
+      <CssBaseline />
       <AppRoutes />
-      <ToastContainer
-        position={smDown ? "bottom-right" : undefined}
-        autoClose={3000}
-        limit={smDown ? 1 : undefined}
-        pauseOnHover={false}
-      />
     </Providers>
   );
 };

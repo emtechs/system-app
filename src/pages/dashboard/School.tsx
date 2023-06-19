@@ -67,17 +67,18 @@ export const DashboardSchool = () => {
                   <Grid item xs={12}>
                     <Box
                       display="flex"
+                      flexDirection="column"
                       alignItems="center"
-                      justifyContent="space-between"
+                      justifyContent="center"
+                      gap={2}
                     >
                       <Typography variant="h6">
                         {dayjs().format("dddd, LL")}
                       </Typography>
+                      <SelectSchool />
                     </Box>
                   </Grid>
-                  <Grid item xs={12}>
-                    <SelectSchool />
-                  </Grid>
+
                   {infoSchool && (
                     <>
                       <GridDashContent

@@ -18,7 +18,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { apiSchool, apiUser } from "../services";
-import { toast } from "react-toastify";
 
 interface iSchoolContextData {
   createSchool: (data: iSchoolRequest) => Promise<void>;
@@ -49,7 +48,7 @@ const SchoolContext = createContext({} as iSchoolContextData);
 
 export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
-  const { setLoading } = useAppThemeContext();
+  const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
   const [updateSchoolData, setUpdateSchoolData] = useState<iSchool>();
@@ -59,10 +58,10 @@ export const SchoolProvider = ({ children }: iChildren) => {
     try {
       setLoading(true);
       const school = await apiSchool.create(data);
-      toast.success("A escola foi cadastrada com sucesso!");
+      handleSucess("A escola foi cadastrada com sucesso!");
       navigate(`/school?id=${school.id}&order=name`);
     } catch {
-      toast.error(
+      handleError(
         "No momento, não foi possível cadastrar a escola. Por favor, tente novamente mais tarde."
       );
     } finally {
@@ -77,10 +76,10 @@ export const SchoolProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         await apiSchool.impSchool(file);
-        toast.success("Escolas importadas com sucesso!");
+        handleSucess("Escolas importadas com sucesso!");
         navigate(back ? back : "/");
       } catch {
-        toast.error("Não foi possível importar as escolas no momento!");
+        handleError("Não foi possível importar as escolas no momento!");
       } finally {
         setLoading(false);
       }
@@ -98,9 +97,9 @@ export const SchoolProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         await apiSchool.update(data, id);
-        toast.success(`Sucesso ao alterar o ${type} da Escola!`);
+        handleSucess(`Sucesso ao alterar o ${type} da Escola!`);
       } catch {
-        toast.error(
+        handleError(
           `Não foi possível atualizar o ${type} da escola no momento!`
         );
       } finally {
@@ -119,10 +118,10 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setLoading(true);
         const query = `?school_id=${id}`;
         await apiUser.create(data, query);
-        toast.success("Servidor cadastrado com sucesso!");
+        handleSucess("Servidor cadastrado com sucesso!");
         navigate(back ? back : "/");
       } catch {
-        toast.error("Não foi possível cadastrar o servidor no momento!");
+        handleError("Não foi possível cadastrar o servidor no momento!");
       } finally {
         setSchoolSelect(undefined);
         setLoading(false);
@@ -136,9 +135,9 @@ export const SchoolProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         await apiSchool.deleteServer(school_id, server_id);
-        toast.success("Usuário removido da função com sucesso!");
+        handleSucess("Usuário removido da função com sucesso!");
       } catch {
-        toast.error(
+        handleError(
           "Não foi possível remover o usuário removido da função no momento!"
         );
       } finally {

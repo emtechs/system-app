@@ -1,7 +1,6 @@
 import { Class } from "./Class";
 import { Frequency } from "./Frequency";
 import { Import } from "./Import";
-import { Report } from "./Report";
 import { School } from "./School";
 import { Student } from "./Student";
 import { User } from "./User";
@@ -14,7 +13,6 @@ import {
   Home,
   People,
   School as SchoolIcon,
-  Summarize,
   Workspaces,
 } from "@mui/icons-material";
 import { Profile } from "./Profile";
@@ -27,7 +25,6 @@ export const OptionsAdmin = () => {
     handleClickFrequency,
     handleClickImport,
     handleClickProfile,
-    handleClickReport,
     handleClickSchool,
     handleClickStudent,
     handleClickUser,
@@ -35,7 +32,6 @@ export const OptionsAdmin = () => {
     openFrequency,
     openImport,
     openProfile,
-    openReport,
     openSchool,
     openStudent,
     openUser,
@@ -86,14 +82,6 @@ export const OptionsAdmin = () => {
         label="Frequências"
       >
         <Frequency />
-      </ListItemLinkOpen>
-      <ListItemLinkOpen
-        onClick={handleClickReport}
-        open={openReport}
-        icon={<Summarize />}
-        label="Relatórios"
-      >
-        <Report />
       </ListItemLinkOpen>
       <ListItemLinkOpen
         onClick={handleClickImport}

@@ -12,7 +12,6 @@ import {
   iFrequencyStudents,
   iFrequencyWithInfreq,
 } from "../interfaces";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from ".";
 import { FieldValues } from "react-hook-form";
@@ -41,7 +40,7 @@ const FrequencyContext = createContext({} as iFrequencyContextData);
 
 export const FrequencyProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
-  const { setLoading } = useAppThemeContext();
+  const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const [frequencyData, setFrequencyData] = useState<iFrequency>();
   const [studentData, setStudentData] = useState<iFrequencyStudents>();
   const [retrieveFreq, setRetrieveFreq] = useState<iFrequencyWithInfreq>();
@@ -51,10 +50,10 @@ export const FrequencyProvider = ({ children }: iChildren) => {
     try {
       setLoading(true);
       const frequency = await apiFrequency.create(data);
-      toast.success("Frequência cadastrado com sucesso!");
+      handleSucess("Frequência cadastrado com sucesso!");
       navigate(`/frequency/realize?id=${frequency.id}`);
     } catch {
-      toast.error("Não foi possível cadastrar a frequência no momento!");
+      handleError("Não foi possível cadastrar a frequência no momento!");
     } finally {
       setLoading(false);
     }
@@ -78,16 +77,16 @@ export const FrequencyProvider = ({ children }: iChildren) => {
           school_infreq: frequency.school_infreq ? frequency.school_infreq : 0,
         });
         if (isOpen) {
-          toast.success("Frequência reaberta com sucesso!");
+          handleSucess("Frequência reaberta com sucesso!");
         } else {
-          toast.success("Frequência realizada com sucesso!");
+          handleSucess("Frequência realizada com sucesso!");
         }
         navigate("/");
       } catch {
         if (isOpen) {
-          toast.success("Não foi possível reabrir a frequência no momento!");
+          handleSucess("Não foi possível reabrir a frequência no momento!");
         } else {
-          toast.error(
+          handleError(
             "No momento, não foi possível realizar a frequência. Por favor, tente enviar novamente."
           );
         }
@@ -104,7 +103,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
         setLoading(true);
         await apiFrequency.updateFreqStudent(data, id);
       } catch {
-        toast.error("Não foi possível cadastrar a falta no momento!");
+        handleError("Não foi possível cadastrar a falta no momento!");
       } finally {
         setStudentData(undefined);
         setLoading(false);
@@ -117,9 +116,9 @@ export const FrequencyProvider = ({ children }: iChildren) => {
     try {
       setLoading(true);
       await apiFrequency.destroy(id);
-      toast.success("Frequência deletada com sucesso!");
+      handleSucess("Frequência deletada com sucesso!");
     } catch {
-      toast.error("Não foi possível deletar a frequência no momento!");
+      handleError("Não foi possível deletar a frequência no momento!");
     } finally {
       setLoading(false);
     }

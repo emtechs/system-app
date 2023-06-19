@@ -2,11 +2,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core/index.js";
-import {
-  useAppThemeContext,
-  useAuthContext,
-  useCalendarContext,
-} from "../../contexts";
+import { useAuthContext, useCalendarContext } from "../../contexts";
 import { FieldValues } from "react-hook-form";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -31,7 +27,6 @@ export const CalendarBase = ({
   createFrequency,
   frequency,
 }: iCalendarBaseProps) => {
-  const { theme, mdDown } = useAppThemeContext();
   const { yearData } = useAuthContext();
   const { eventData, setDateData, monthData, setMonthData } =
     useCalendarContext();
@@ -45,7 +40,7 @@ export const CalendarBase = ({
         start: `${yearData?.year}-01-01`,
         end: dayjs().format(),
       }}
-      height={mdDown ? "auto" : theme.spacing(60)}
+      height="auto"
       titleFormat={{ month: "long" }}
       buttonText={{ today: dayjs().format("MMMM") }}
       events={eventData}

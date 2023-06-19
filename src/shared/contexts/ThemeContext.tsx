@@ -2,15 +2,18 @@ import {
   Dispatch,
   SetStateAction,
   createContext,
+  useCallback,
   useContext,
   useState,
 } from "react";
 import { iChildren } from "../interfaces";
 import { Theme } from "../themes";
 import {
+  Alert,
   Backdrop,
   CircularProgress,
   Theme as iTheme,
+  Snackbar,
   ThemeProvider,
   useMediaQuery,
 } from "@mui/material";
@@ -20,6 +23,8 @@ interface iThemeContextProps {
   smDown: boolean;
   mdDown: boolean;
   setLoading: Dispatch<SetStateAction<boolean>>;
+  handleSucess: (msg: string) => void;
+  handleError: (msg: string) => void;
 }
 
 const ThemeContext = createContext({} as iThemeContextProps);
@@ -29,9 +34,40 @@ export const AppThemeProvider = ({ children }: iChildren) => {
   const smDown = useMediaQuery(theme.breakpoints.down("sm"));
   const mdDown = useMediaQuery(theme.breakpoints.down("md"));
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState<"success" | "error">("success");
+  const [message, setMessage] = useState<string>();
+
+  const handleSucess = useCallback((msg: string) => {
+    setMessage(msg);
+    setSeverity("success");
+    setOpen(true);
+  }, []);
+
+  const handleError = useCallback((msg: string) => {
+    setMessage(msg);
+    setSeverity("error");
+    setOpen(true);
+  }, []);
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (event) {
+      /* empty */
+    }
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   return (
-    <ThemeContext.Provider value={{ mdDown, setLoading, smDown, theme }}>
+    <ThemeContext.Provider
+      value={{ handleError, handleSucess, mdDown, setLoading, smDown, theme }}
+    >
       <ThemeProvider theme={theme}>
         {children}
         <Backdrop
@@ -43,6 +79,24 @@ export const AppThemeProvider = ({ children }: iChildren) => {
         >
           <CircularProgress color="inherit" />
         </Backdrop>
+        <Snackbar
+          anchorOrigin={
+            mdDown
+              ? { vertical: "bottom", horizontal: "center" }
+              : { vertical: "top", horizontal: "right" }
+          }
+          open={open}
+          autoHideDuration={3000}
+          onClose={handleClose}
+        >
+          <Alert
+            onClose={handleClose}
+            severity={severity}
+            sx={{ width: "100%" }}
+          >
+            {message}
+          </Alert>
+        </Snackbar>
       </ThemeProvider>
     </ThemeContext.Provider>
   );

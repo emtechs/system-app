@@ -1,8 +1,3 @@
-body {
-  margin: 0;
-  padding: 0;
-}
-
 a {
   color: unset;
   text-decoration: none;
@@ -16,6 +11,19 @@ a {
   --fc-button-hover-border-color: #004b85ff;
   --fc-button-active-bg-color: #599fd5ff;
   --fc-button-active-border-color: #599fd5ff;
+}
+
+.fc .fc-daygrid-day-number {
+  padding: unset;
+  padding-right: 4px;
+}
+
+.fc .fc-daygrid-body-natural .fc-daygrid-day-events {
+  margin-bottom: 1px;
+}
+
+.fc-daygrid-dot-event {
+  padding: 1px 0px;
 }
 
 .calendar_cursor_pointer {
