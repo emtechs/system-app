@@ -17,9 +17,8 @@ import { useDebounce } from "../../shared/hooks";
 
 interface iCardClassProps {
   el: iClassSchoolList;
-  school_id: string;
 }
-const CardClass = ({ el, school_id }: iCardClassProps) => {
+const CardClass = ({ el }: iCardClassProps) => {
   const { theme, mdDown } = useAppThemeContext();
   const navigate = useNavigate();
   return (
@@ -27,9 +26,7 @@ const CardClass = ({ el, school_id }: iCardClassProps) => {
       hover
       sx={{ cursor: "pointer" }}
       onClick={() => {
-        navigate(
-          `/school/student?id=${school_id}&class_id=${el.class.id}&back=/school/class`
-        );
+        navigate(`/school/student?class_id=${el.class.id}&back=/school/class`);
       }}
     >
       <TableCell>{el.class.name}</TableCell>
@@ -111,9 +108,8 @@ export const ListClassSchoolPage = () => {
     }
   }, [school_id, yearData, isInfreq, defineQuery, search]);
 
-  if (dashData !== "ADMIN" && !school_id) {
+  if (dashData !== "ADMIN" && school_id.length === 0)
     return <Navigate to="/" />;
-  }
 
   return (
     <LayoutSchoolPage
@@ -136,7 +132,7 @@ export const ListClassSchoolPage = () => {
     >
       <TableBase headCells={headCells}>
         {data?.map((el) => (
-          <CardClass key={el.class.id} el={el} school_id={school_id} />
+          <CardClass key={el.class.id} el={el} />
         ))}
       </TableBase>
     </LayoutSchoolPage>

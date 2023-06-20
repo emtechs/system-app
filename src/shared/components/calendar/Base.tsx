@@ -95,6 +95,7 @@ export const CalendarBase = ({
           if (createFrequency && frequency) {
             createFrequency({
               date: dateData,
+              date_time: dayjs(arg.date).format("YYYY-MM-DD"),
               name: monthData,
               ...frequency,
             });

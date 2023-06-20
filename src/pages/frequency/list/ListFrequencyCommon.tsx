@@ -91,7 +91,7 @@ export const ListFrequencyCommon = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [yearData, schoolData, take, skip, date, status]);
+  }, [yearData, schoolData, take, skip, date, status, defineQuery]);
   return (
     <LayoutBasePage
       title={`Frequências Realizadas ${date ? "- " + date : ""}`}

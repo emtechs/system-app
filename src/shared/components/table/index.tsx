@@ -19,6 +19,7 @@ export const TableBase = ({
   children,
   is_active,
   headCells,
+  is_body = true,
   is_pagination = true,
 }: iTable) => {
   const { isLoading, count } = usePaginationContext();
@@ -36,7 +37,13 @@ export const TableBase = ({
               <TableSort headCells={headCells} />
             </TableRow>
           </TableHead>
-          {isLoading ? <></> : <TableBody>{children}</TableBody>}
+          {is_body ? (
+            <TableBody>{children}</TableBody>
+          ) : isLoading ? (
+            <></>
+          ) : (
+            <TableBody>{children}</TableBody>
+          )}
           {count === 0 && !isLoading && (
             <caption>
               {message ? message : "Nenhum registro encontrado."}

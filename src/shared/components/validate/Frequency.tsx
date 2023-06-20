@@ -16,6 +16,7 @@ export const ValidateFrequency = () => {
       });
       createFrequency({
         date: dateData.format("DD/MM/YYYY"),
+        date_time: dateData.format("YYYY-MM-DD"),
         name: monthData,
         class_id: classData.class.id,
         school_id: classData.school.id,

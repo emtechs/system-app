@@ -48,9 +48,15 @@ import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
 interface iCardClassDashProps {
   classDash: iClassDash;
   date: string;
+  date_time: string;
   name: string;
 }
-const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
+const CardClassDash = ({
+  classDash,
+  date,
+  date_time,
+  name,
+}: iCardClassDashProps) => {
   const { theme, mdDown } = useAppThemeContext();
   const { createFrequency } = useFrequencyContext();
   const students = classDash.students.map(({ student }) => {
@@ -63,6 +69,7 @@ const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
       onClick={() => {
         createFrequency({
           date,
+          date_time,
           name,
           class_id: classDash.class.id,
           school_id: classDash.school.id,
@@ -151,7 +158,7 @@ export const FrequencyPage = () => {
   if (!schoolData) return <Navigate to="/" />;
 
   return (
-    <LayoutBasePage title={"Frequência - " + dateData.format("DD/MM/YYYY")}>
+    <LayoutBasePage title={"Frequência - " + date()}>
       <Box my={1} mx={2} component={Paper} variant="outlined">
         <Box mx={2} my={1}>
           <Breadcrumbs aria-label="breadcrumb">
@@ -209,6 +216,7 @@ export const FrequencyPage = () => {
                   </Box>
                   <TableBase
                     message="Todas as frequências do dia já foram registradas."
+                    is_body={false}
                     is_pagination={false}
                     headCells={headCells}
                   >
@@ -217,6 +225,7 @@ export const FrequencyPage = () => {
                         key={el.class.id}
                         classDash={el}
                         date={date()}
+                        date_time={dateData.format("YYYY-MM-DD")}
                         name={monthData}
                       />
                     ))}
