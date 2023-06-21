@@ -1,27 +1,30 @@
 import {
-  LinearProgress,
-  Paper,
-  Table,
-  TableBody,
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
   TableCell,
-  TableContainer,
-  TableFooter,
-  TableHead,
   TableRow,
   useTheme,
 } from "@mui/material";
 import {
   DialogMissed,
   DialogRemoveMissed,
+  TableBase,
   Tools,
 } from "../../shared/components";
 import {
+  useDrawerContext,
   useFrequencyContext,
   usePaginationContext,
 } from "../../shared/contexts";
-import { iFrequency, iFrequencyStudents } from "../../shared/interfaces";
-import { useEffect, useState } from "react";
-import { apiUsingNow } from "../../shared/services";
+import {
+  iFrequencyBase,
+  iFrequencyStudentsBase,
+  iheadCell,
+} from "../../shared/interfaces";
+import { ChangeEvent, useEffect, useState } from "react";
+import { apiFrequency } from "../../shared/services";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -31,11 +34,19 @@ import {
   defineBgColorFrequency,
   statusFrequencyPtBr,
 } from "../../shared/scripts";
+import { Checklist } from "@mui/icons-material";
 dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
 
+const headCells: iheadCell[] = [
+  { order: "registry", numeric: false, label: "Matrícula" },
+  { order: "name", numeric: false, label: "Aluno" },
+  { numeric: false, label: "Estado da Presença" },
+  { numeric: false, label: "Atualizado Em" },
+];
+
 interface iCardFrequencyProps {
-  student: iFrequencyStudents;
+  student: iFrequencyStudentsBase;
 }
 
 const CardFrequency = ({ student }: iCardFrequencyProps) => {
@@ -86,23 +97,35 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
 export const RetrieveFrequencyPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const { setIsLoading, isLoading } = usePaginationContext();
-  const { frequencyData, setFrequencyData, studentData } =
+  const { handleClickButtonTools } = useDrawerContext();
+  const { dataStudents, setDataStudents, updateFrequency } =
     useFrequencyContext();
+  const { setIsLoading, setCount, defineQuery } = usePaginationContext();
+  const [dataFrequency, setDataFrequency] = useState<iFrequencyBase>();
+  const [isAlter, setIsAlter] = useState(false);
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
+    setIsAlter(event.target.checked);
 
   useEffect(() => {
-    return setFrequencyData(undefined);
+    setDataStudents(undefined);
   }, []);
 
   useEffect(() => {
-    if (id && !studentData) {
+    if (id) {
+      let query = defineQuery();
+      if (isAlter) query += "&is_alter=true";
       setIsLoading(true);
-      apiUsingNow
-        .get<iFrequency>(`frequencies/${id}`)
-        .then((res) => setFrequencyData(res.data))
+      apiFrequency
+        .students(id, query)
+        .then((res) => {
+          setCount(res.total);
+          setDataFrequency(res.frequency);
+          setDataStudents(res.result);
+        })
         .finally(() => setIsLoading(false));
     }
-  }, [studentData, id]);
+  }, [id, defineQuery, isAlter]);
 
   if (!id) {
     return <Navigate to={"/frequency/create"} />;
@@ -111,43 +134,56 @@ export const RetrieveFrequencyPage = () => {
   return (
     <LayoutBasePage
       isSchool
-      tools={<Tools isHome isFinish />}
+      tools={
+        <Tools
+          isHome
+          finish={
+            <Box>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={isAlter}
+                    onChange={handleChange}
+                    inputProps={{ "aria-label": "controlled" }}
+                  />
+                }
+                label="Alteradas"
+              />
+              <Button
+                onClick={() => {
+                  if (dataFrequency) {
+                    handleClickButtonTools();
+                    updateFrequency(
+                      {
+                        status: "CLOSED",
+                        finished_at: Date.now(),
+                      },
+                      dataFrequency.id
+                    );
+                  }
+                }}
+                disableElevation
+                variant="contained"
+                endIcon={<Checklist />}
+              >
+                Finalizar
+              </Button>
+            </Box>
+          }
+        />
+      }
       title={
-        frequencyData
-          ? `${frequencyData.date} - ${frequencyData.class.class.name}`
+        dataFrequency
+          ? `${dataFrequency.date} - ${dataFrequency.class.class.name}`
           : "Realizar Frequência"
       }
     >
-      <TableContainer
-        sx={{ mx: 2, mt: 1, width: "auto" }}
-        component={Paper}
-        variant="outlined"
-      >
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Matrícula</TableCell>
-              <TableCell>Aluno</TableCell>
-              <TableCell>Estado da Presença</TableCell>
-              <TableCell>Atualizado Em</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {frequencyData?.students.map((el) => (
-              <CardFrequency key={el.id} student={el} />
-            ))}
-          </TableBody>
-          <TableFooter>
-            {isLoading && (
-              <TableRow>
-                <TableCell colSpan={4}>
-                  <LinearProgress variant="indeterminate" />
-                </TableCell>
-              </TableRow>
-            )}
-          </TableFooter>
-        </Table>
-      </TableContainer>
+      <TableBase headCells={headCells} is_pagination={false}>
+        {dataStudents?.map((el) => (
+          <CardFrequency key={el.id} student={el} />
+        ))}
+      </TableBase>
+      <Box height={20} />
     </LayoutBasePage>
   );
 };

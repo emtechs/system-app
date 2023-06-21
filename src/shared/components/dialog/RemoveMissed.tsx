@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { iFrequencyStudents } from "../../interfaces";
+import { iFrequencyStudentsBase } from "../../interfaces";
 import { useFrequencyContext } from "../../contexts";
 import { DialogBase } from "./DialogBase";
 import dayjs from "dayjs";
@@ -8,7 +8,7 @@ import "dayjs/locale/pt-br";
 interface iDialogRemoveMissedProps {
   open: boolean;
   onClose: () => void;
-  student: iFrequencyStudents;
+  student: iFrequencyStudentsBase;
 }
 
 export const DialogRemoveMissed = ({

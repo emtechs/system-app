@@ -1,7 +1,6 @@
-import { AddBox, ArrowBack, Checklist, Home } from "@mui/icons-material";
+import { AddBox, ArrowBack, Home } from "@mui/icons-material";
 import {
   Box,
-  Button,
   Checkbox,
   FormControlLabel,
   Paper,
@@ -33,7 +32,6 @@ interface iToolsProps {
   isSearch?: boolean;
   search?: string;
   setSearch?: (text: string) => void;
-  isFinish?: boolean;
   isFreq?: boolean;
   finish?: ReactNode;
 }
@@ -53,7 +51,6 @@ export const Tools = ({
   isSearch,
   search = "",
   setSearch,
-  isFinish,
   isFreq,
   finish,
 }: iToolsProps) => {
@@ -68,8 +65,7 @@ export const Tools = ({
     handleClickFrequency,
     handleClickStudent,
   } = useDrawerContext();
-  const { updateFrequency, frequencyData, isInfreq, setIsInfreq } =
-    useFrequencyContext();
+  const { isInfreq, setIsInfreq } = useFrequencyContext();
   const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
     setIsInfreq(event.target.checked);
   let onClickBack;
@@ -151,27 +147,6 @@ export const Tools = ({
         />
       )}
       <Box flex={1} display="flex" justifyContent="end">
-        {isFinish && (
-          <Button
-            onClick={() => {
-              if (frequencyData) {
-                handleClickButtonTools();
-                updateFrequency(
-                  {
-                    status: "CLOSED",
-                    finished_at: Date.now(),
-                  },
-                  frequencyData.id
-                );
-              }
-            }}
-            disableElevation
-            variant="contained"
-            endIcon={<Checklist />}
-          >
-            Finalizar
-          </Button>
-        )}
         {isFreq && (
           <FormControlLabel
             control={

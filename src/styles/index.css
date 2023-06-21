@@ -13,11 +13,6 @@ a {
   --fc-button-active-border-color: #599fd5ff;
 }
 
-.fc .fc-daygrid-day-number {
-  padding: unset;
-  padding-right: 4px;
-}
-
 .fc .fc-daygrid-body-natural .fc-daygrid-day-events {
   margin-bottom: 1px;
 }

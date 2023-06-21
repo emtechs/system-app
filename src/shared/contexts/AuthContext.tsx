@@ -81,13 +81,9 @@ export const AuthProvider = ({ children }: iChildren) => {
           setUserData(res);
           setDashData(res.dash);
         })
-        .catch((e) => {
-          if (e instanceof AxiosError) {
-            if (e.response?.status === 401) {
-              localStorage.removeItem("@EMTechs:token");
-              setAccessToken(undefined);
-            }
-          }
+        .catch(() => {
+          localStorage.removeItem("@EMTechs:token");
+          setAccessToken(undefined);
         })
         .finally(() => setLoading(false));
 

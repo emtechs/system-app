@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
-import { iFrequencyStudents } from "../../interfaces";
+import { iFrequencyStudentsBase } from "../../interfaces";
 import { useFrequencyContext } from "../../contexts";
 import { DialogBase } from "./DialogBase";
 import dayjs from "dayjs";
@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 interface iDialogMissedProps {
   open: boolean;
   onClose: () => void;
-  student: iFrequencyStudents;
+  student: iFrequencyStudentsBase;
 }
 
 export const DialogMissed = ({

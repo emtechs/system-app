@@ -9,11 +9,11 @@ import {
 import {
   iChildren,
   iFrequency,
-  iFrequencyStudents,
+  iFrequencyStudentsBase,
   iFrequencyWithInfreq,
 } from "../interfaces";
 import { useNavigate } from "react-router-dom";
-import { useAppThemeContext } from ".";
+import { useAppThemeContext, usePaginationContext } from ".";
 import { FieldValues } from "react-hook-form";
 import { apiClass, apiFrequency, apiStudent } from "../services";
 
@@ -28,10 +28,14 @@ interface iFrequencyContextData {
   destroyFrequency: (id: string) => Promise<void>;
   frequencyData: iFrequency | undefined;
   setFrequencyData: Dispatch<SetStateAction<iFrequency | undefined>>;
-  studentData: iFrequencyStudents | undefined;
-  setStudentData: Dispatch<SetStateAction<iFrequencyStudents | undefined>>;
+  studentData: iFrequencyStudentsBase | undefined;
+  setStudentData: Dispatch<SetStateAction<iFrequencyStudentsBase | undefined>>;
   retrieveFreq: iFrequencyWithInfreq | undefined;
   setRetrieveFreq: Dispatch<SetStateAction<iFrequencyWithInfreq | undefined>>;
+  dataStudents: iFrequencyStudentsBase[] | undefined;
+  setDataStudents: Dispatch<
+    SetStateAction<iFrequencyStudentsBase[] | undefined>
+  >;
   isInfreq: boolean;
   setIsInfreq: Dispatch<SetStateAction<boolean>>;
 }
@@ -41,9 +45,11 @@ const FrequencyContext = createContext({} as iFrequencyContextData);
 export const FrequencyProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
+  const { defineQuery } = usePaginationContext();
   const [frequencyData, setFrequencyData] = useState<iFrequency>();
-  const [studentData, setStudentData] = useState<iFrequencyStudents>();
+  const [studentData, setStudentData] = useState<iFrequencyStudentsBase>();
   const [retrieveFreq, setRetrieveFreq] = useState<iFrequencyWithInfreq>();
+  const [dataStudents, setDataStudents] = useState<iFrequencyStudentsBase[]>();
   const [isInfreq, setIsInfreq] = useState(false);
 
   const handleCreateFrequency = useCallback(async (data: FieldValues) => {
@@ -101,7 +107,12 @@ export const FrequencyProvider = ({ children }: iChildren) => {
     async (data: FieldValues, id: string) => {
       try {
         setLoading(true);
-        await apiFrequency.updateFreqStudent(data, id);
+        const { frequency_id } = await apiFrequency.updateFreqStudent(data, id);
+        const students = await apiFrequency.students(
+          frequency_id,
+          defineQuery()
+        );
+        setDataStudents(students.result);
       } catch {
         handleError("Não foi possível cadastrar a falta no momento!");
       } finally {
@@ -139,6 +150,8 @@ export const FrequencyProvider = ({ children }: iChildren) => {
         setRetrieveFreq,
         isInfreq,
         setIsInfreq,
+        dataStudents,
+        setDataStudents,
       }}
     >
       {children}

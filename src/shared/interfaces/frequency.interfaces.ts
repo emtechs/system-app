@@ -15,35 +15,41 @@ interface iUserFreq {
   cpf: string;
 }
 
-interface iFrequencyBase {
+export interface iFrequencyBase {
   id: string;
   date: string;
   status: iStatusFrequency;
   created_at: Date;
   finished_at: number;
   infreq: number;
-  user: iUserFreq;
   class: iClassFreq;
+}
+
+interface iFrequencyInfreqBase extends iFrequencyBase {
+  user: iUserFreq;
   _count: { students: number };
   infrequency?: number;
   class_infreq?: number;
   school_infreq?: number;
 }
 
-export interface iFrequency extends iFrequencyBase {
+export interface iFrequency extends iFrequencyInfreqBase {
   students: iFrequencyStudents[];
 }
 
-export interface iFrequencyWithInfreq extends iFrequencyBase {
+export interface iFrequencyWithInfreq extends iFrequencyInfreqBase {
   students: iFrequencyStudentsWithInfreq[];
 }
 
-export interface iFrequencyStudents {
+export interface iFrequencyStudentsBase {
   id: string;
   status: iStatusStudent;
   justification?: string;
   updated_at?: string;
   student: iStudent;
+}
+
+export interface iFrequencyStudents extends iFrequencyStudentsBase {
   _count: { students: number };
 }
 
