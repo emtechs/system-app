@@ -8,13 +8,13 @@ import {
   useTheme,
 } from "@mui/material";
 import {
+  DialogFinishFrequency,
   DialogMissed,
   DialogRemoveMissed,
   TableBase,
   Tools,
 } from "../../shared/components";
 import {
-  useDrawerContext,
   useFrequencyContext,
   usePaginationContext,
 } from "../../shared/contexts";
@@ -97,93 +97,111 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
 export const RetrieveFrequencyPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const { handleClickButtonTools } = useDrawerContext();
-  const { dataStudents, setDataStudents, updateFrequency } =
+  const { dataStudents, setDataStudents, alterStudents, setAlterStudents } =
     useFrequencyContext();
-  const { setIsLoading, setCount, defineQuery } = usePaginationContext();
+  const { setIsLoading, query, setTotal, setSteps } = usePaginationContext();
   const [dataFrequency, setDataFrequency] = useState<iFrequencyBase>();
   const [isAlter, setIsAlter] = useState(false);
+  const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(!open);
+
+  useEffect(() => {
+    setAlterStudents(undefined);
+    setDataStudents(undefined);
+  }, []);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
     setIsAlter(event.target.checked);
 
   useEffect(() => {
-    setDataStudents(undefined);
-  }, []);
-
-  useEffect(() => {
-    if (id) {
-      let query = defineQuery();
-      if (isAlter) query += "&is_alter=true";
+    if (id && open) {
+      const take = 3;
+      let queryData = query(take);
+      queryData += "&isNot_presented=true";
       setIsLoading(true);
       apiFrequency
-        .students(id, query)
+        .students(id, queryData)
         .then((res) => {
-          setCount(res.total);
+          setTotal(res.total);
+          setAlterStudents(res.result);
+          const arredSteps = Math.ceil(res.total / take);
+          setSteps(arredSteps === 1 ? 0 : arredSteps);
+        })
+        .finally(() => setIsLoading(false));
+    } else if (id) {
+      let queryData = query();
+      if (isAlter) queryData += "&is_alter=true";
+      setIsLoading(true);
+      apiFrequency
+        .students(id, queryData)
+        .then((res) => {
           setDataFrequency(res.frequency);
           setDataStudents(res.result);
         })
         .finally(() => setIsLoading(false));
     }
-  }, [id, defineQuery, isAlter]);
+  }, [id, open, query, isAlter]);
 
   if (!id) {
     return <Navigate to={"/frequency/create"} />;
   }
 
   return (
-    <LayoutBasePage
-      isSchool
-      tools={
-        <Tools
-          isHome
-          finish={
-            <Box>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={isAlter}
-                    onChange={handleChange}
-                    inputProps={{ "aria-label": "controlled" }}
-                  />
-                }
-                label="Alteradas"
-              />
-              <Button
-                onClick={() => {
-                  if (dataFrequency) {
-                    handleClickButtonTools();
-                    updateFrequency(
-                      {
-                        status: "CLOSED",
-                        finished_at: Date.now(),
-                      },
-                      dataFrequency.id
-                    );
+    <>
+      <LayoutBasePage
+        isSchool
+        tools={
+          <Tools
+            isHome
+            finish={
+              <Box>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={isAlter}
+                      onChange={handleChange}
+                      inputProps={{ "aria-label": "controlled" }}
+                    />
                   }
-                }}
-                disableElevation
-                variant="contained"
-                endIcon={<Checklist />}
-              >
-                Finalizar
-              </Button>
-            </Box>
-          }
+                  label="Alteradas"
+                />
+                <Button
+                  onClick={handleClose}
+                  disableElevation
+                  variant="contained"
+                  endIcon={<Checklist />}
+                >
+                  Finalizar
+                </Button>
+              </Box>
+            }
+          />
+        }
+        title={
+          dataFrequency
+            ? `${dataFrequency.date} - ${dataFrequency.class.class.name}`
+            : "Realizar Frequência"
+        }
+      >
+        <TableBase
+          headCells={headCells}
+          is_pagination={false}
+          is_message={false}
+        >
+          {dataStudents?.map((el) => (
+            <CardFrequency key={el.id} student={el} />
+          ))}
+        </TableBase>
+        <Box height={20} />
+      </LayoutBasePage>
+      {alterStudents && (
+        <DialogFinishFrequency
+          open={open}
+          onClose={handleClose}
+          frequency_id={id}
+          students={alterStudents}
         />
-      }
-      title={
-        dataFrequency
-          ? `${dataFrequency.date} - ${dataFrequency.class.class.name}`
-          : "Realizar Frequência"
-      }
-    >
-      <TableBase headCells={headCells} is_pagination={false}>
-        {dataStudents?.map((el) => (
-          <CardFrequency key={el.id} student={el} />
-        ))}
-      </TableBase>
-      <Box height={20} />
-    </LayoutBasePage>
+      )}
+    </>
   );
 };

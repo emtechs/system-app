@@ -30,6 +30,10 @@ interface iFrequencyContextData {
   setFrequencyData: Dispatch<SetStateAction<iFrequency | undefined>>;
   studentData: iFrequencyStudentsBase | undefined;
   setStudentData: Dispatch<SetStateAction<iFrequencyStudentsBase | undefined>>;
+  alterStudents: iFrequencyStudentsBase[] | undefined;
+  setAlterStudents: Dispatch<
+    SetStateAction<iFrequencyStudentsBase[] | undefined>
+  >;
   retrieveFreq: iFrequencyWithInfreq | undefined;
   setRetrieveFreq: Dispatch<SetStateAction<iFrequencyWithInfreq | undefined>>;
   dataStudents: iFrequencyStudentsBase[] | undefined;
@@ -50,6 +54,8 @@ export const FrequencyProvider = ({ children }: iChildren) => {
   const [studentData, setStudentData] = useState<iFrequencyStudentsBase>();
   const [retrieveFreq, setRetrieveFreq] = useState<iFrequencyWithInfreq>();
   const [dataStudents, setDataStudents] = useState<iFrequencyStudentsBase[]>();
+  const [alterStudents, setAlterStudents] =
+    useState<iFrequencyStudentsBase[]>();
   const [isInfreq, setIsInfreq] = useState(false);
 
   const handleCreateFrequency = useCallback(async (data: FieldValues) => {
@@ -116,7 +122,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
       } catch {
         handleError("Não foi possível cadastrar a falta no momento!");
       } finally {
-        setStudentData(undefined);
+        setAlterStudents(undefined);
         setLoading(false);
       }
     },
@@ -152,6 +158,8 @@ export const FrequencyProvider = ({ children }: iChildren) => {
         setIsInfreq,
         dataStudents,
         setDataStudents,
+        alterStudents,
+        setAlterStudents,
       }}
     >
       {children}

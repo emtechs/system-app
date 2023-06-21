@@ -103,7 +103,7 @@ export const FrequencyPage = () => {
   const { yearData, schoolData } = useAuthContext();
   const { dateData, monthData } = useCalendarContext();
   const { handleClickButtonTools, handleClickSchool } = useDrawerContext();
-  const { setSteps, setCount, setIsLoading, defineQuery, query } =
+  const { setSteps, setTotal, setIsLoading, defineQuery, query } =
     usePaginationContext();
   const [infoSchool, setInfoSchool] = useState<iDashSchoolServer>();
   const [listClassData, setListClassData] = useState<iClassDash[]>();
@@ -134,7 +134,7 @@ export const FrequencyPage = () => {
       apiClass
         .listDash(schoolData.id, queryData)
         .then((res) => {
-          setCount(res.total);
+          setTotal(res.total);
           setListClassData(res.result);
           setListClassSelect(res.classes);
           const arredSteps = Math.ceil(res.total / take);
