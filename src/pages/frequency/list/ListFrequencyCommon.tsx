@@ -18,10 +18,15 @@ interface iCardFrequencyProps {
 }
 
 const CardFrequency = ({ freq, isDate }: iCardFrequencyProps) => {
+  const navigate = useNavigate();
   const { theme, mdDown } = useAppThemeContext();
 
   return (
-    <TableRow>
+    <TableRow
+      hover
+      onClick={() => navigate(`/frequency/student?id=${freq.id}`)}
+      sx={{ cursor: "pointer", height: theme.spacing(10) }}
+    >
       {isDate && <TableCell>{freq.date}</TableCell>}
       <TableCell>{freq.class.class.name}</TableCell>
       {!isDate ? (

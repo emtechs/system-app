@@ -35,6 +35,7 @@ import {
   RetrieveFrequencyPage,
   RetrieveSchoolPage,
   RetrieveUserPage,
+  StudentFrequencyPage,
 } from "../pages";
 import {
   ProtectedAdmin,
@@ -106,6 +107,7 @@ const AppRoutes = () => {
         <Route path="/frequency/realize" element={<RetrieveFrequencyPage />} />
         <Route path="/frequency/list" element={<ListFrequencyPage />} />
         <Route path="/frequency/open" element={<FrequencyOpenPage />} />
+        <Route path="/frequency/student" element={<StudentFrequencyPage />} />
         <Route path="/profile/edit" element={<EditProfilePage />} />
         <Route path="/profile/edit/password" element={<EditPasswordPage />} />
       </Route>

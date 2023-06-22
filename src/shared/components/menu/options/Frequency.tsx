@@ -2,6 +2,7 @@ import {
   AddBox,
   Checklist,
   EventAvailable,
+  Group,
   List as ListIcon,
   Outbox,
 } from "@mui/icons-material";
@@ -24,6 +25,7 @@ export const Frequency = () => {
       />
       <ListItemLink icon={<Outbox />} label="Em Aberto" to="frequency/open" />
       <ListItemLink icon={<ListIcon />} label="Listar" to="frequency/list" />
+      <ListItemLink icon={<Group />} label="Alunos" to="frequency/student" />
     </List>
   );
 };
