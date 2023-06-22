@@ -27,6 +27,7 @@ import {
   ListClassSchoolPage,
   ListFrequencyPage,
   ListSchoolPage,
+  ListStudentFrequencyPage,
   ListStudentPage,
   ListStundetSchoolPage,
   ListUserPage,
@@ -108,6 +109,7 @@ const AppRoutes = () => {
         <Route path="/frequency/list" element={<ListFrequencyPage />} />
         <Route path="/frequency/open" element={<FrequencyOpenPage />} />
         <Route path="/frequency/student" element={<StudentFrequencyPage />} />
+        <Route path="/frequency/student/list" element={<ListStudentFrequencyPage />} />
         <Route path="/profile/edit" element={<EditProfilePage />} />
         <Route path="/profile/edit/password" element={<EditPasswordPage />} />
       </Route>

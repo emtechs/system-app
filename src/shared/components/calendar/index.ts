@@ -3,3 +3,4 @@ export * from "./Common";
 export * from "./Frequency";
 export * from "./FrequencyAdm";
 export * from "./School";
+export * from "./Student";

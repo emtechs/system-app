@@ -1,4 +1,4 @@
-import { Navigate, useSearchParams } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   useAppThemeContext,
@@ -19,9 +19,14 @@ interface iCardStudentProps {
 }
 
 const CardStudent = ({ student }: iCardStudentProps) => {
+  const navigate = useNavigate();
   const { theme, mdDown } = useAppThemeContext();
   return (
-    <TableRow>
+    <TableRow
+      hover
+      onClick={() => navigate(`/frequency/student?id=${student.id}`)}
+      sx={{ cursor: "pointer" }}
+    >
       <TableCell align="right">{student.registry}</TableCell>
       <TableCell>{student.name}</TableCell>
       {!mdDown && (

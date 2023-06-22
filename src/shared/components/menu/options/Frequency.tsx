@@ -5,6 +5,7 @@ import {
   Group,
   List as ListIcon,
   Outbox,
+  Person,
 } from "@mui/icons-material";
 import { List } from "@mui/material";
 import { ListItemLink } from "../item";
@@ -25,7 +26,12 @@ export const Frequency = () => {
       />
       <ListItemLink icon={<Outbox />} label="Em Aberto" to="frequency/open" />
       <ListItemLink icon={<ListIcon />} label="Listar" to="frequency/list" />
-      <ListItemLink icon={<Group />} label="Alunos" to="frequency/student" />
+      <ListItemLink
+        icon={<Group />}
+        label="Alunos"
+        to="frequency/student/list"
+      />
+      <ListItemLink icon={<Person />} label="Aluno" to="frequency/student" />
     </List>
   );
 };

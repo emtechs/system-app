@@ -1,22 +1,22 @@
 import { Box, TableCell, TableRow, useTheme } from "@mui/material";
-import { TableBase, Tools } from "../../shared/components";
+import { TableBase, Tools } from "../../../shared/components";
 import {
   useFrequencyContext,
   usePaginationContext,
-} from "../../shared/contexts";
+} from "../../../shared/contexts";
 import {
   iFrequencyBase,
   iFrequencyStudentsBase,
   iheadCell,
-} from "../../shared/interfaces";
+} from "../../../shared/interfaces";
 import { useEffect, useState } from "react";
-import { apiFrequency } from "../../shared/services";
-import { Navigate, useSearchParams } from "react-router-dom";
-import { LayoutBasePage } from "../../shared/layouts";
+import { apiFrequency } from "../../../shared/services";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
+import { LayoutBasePage } from "../../../shared/layouts";
 import {
   defineBgColorFrequency,
   statusFrequencyPtBr,
-} from "../../shared/scripts";
+} from "../../../shared/scripts";
 
 const headCells: iheadCell[] = [
   { order: "registry", numeric: false, label: "Matrícula" },
@@ -29,10 +29,15 @@ interface iCardFrequencyProps {
 }
 
 const CardFrequency = ({ student }: iCardFrequencyProps) => {
+  const navigate = useNavigate();
   const theme = useTheme();
 
   return (
-    <TableRow>
+    <TableRow
+      hover
+      onClick={() => navigate(`/frequency/student?id=${student.student.id}`)}
+      sx={{ cursor: "pointer" }}
+    >
       <TableCell>{student.student.registry}</TableCell>
       <TableCell>{student.student.name}</TableCell>
       <TableCell
@@ -47,7 +52,7 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
   );
 };
 
-export const StudentFrequencyPage = () => {
+export const ListStudentFrequencyPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const { dataStudents, setDataStudents } = useFrequencyContext();

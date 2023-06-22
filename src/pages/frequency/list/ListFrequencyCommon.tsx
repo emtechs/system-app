@@ -24,8 +24,8 @@ const CardFrequency = ({ freq, isDate }: iCardFrequencyProps) => {
   return (
     <TableRow
       hover
-      onClick={() => navigate(`/frequency/student?id=${freq.id}`)}
-      sx={{ cursor: "pointer", height: theme.spacing(10) }}
+      onClick={() => navigate(`/frequency/student/list?id=${freq.id}`)}
+      sx={{ cursor: "pointer" }}
     >
       {isDate && <TableCell>{freq.date}</TableCell>}
       <TableCell>{freq.class.class.name}</TableCell>
