@@ -38,10 +38,10 @@ const CardFrequency = ({ freq, isDate }: iCardFrequencyProps) => {
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(freq.infreq, theme),
+          bgcolor: defineBgColorInfrequency(freq.infrequency, theme),
         }}
       >
-        {String(freq.infreq).replace(".", ",")}%
+        {String(freq.infrequency).replace(".", ",")}%
       </TableCell>
     </TableRow>
   );

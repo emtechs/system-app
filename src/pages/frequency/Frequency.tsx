@@ -89,10 +89,10 @@ const CardClassDash = ({
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(classDash.infreq, theme),
+          bgcolor: defineBgColorInfrequency(classDash.infrequency, theme),
         }}
       >
-        {String(classDash.infreq).replace(".", ",")}%
+        {String(classDash.infrequency).replace(".", ",")}%
       </TableCell>
     </TableRow>
   );

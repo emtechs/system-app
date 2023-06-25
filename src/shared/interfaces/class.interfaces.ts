@@ -38,7 +38,7 @@ export interface iClassSelect extends iClass {
 
 export interface iClassDash {
   class: iClass;
-  infreq: number;
+  infrequency: number;
   school: iWithSchool;
   year: iYear;
   students: {
@@ -56,7 +56,7 @@ export interface iClassFreq {
   class: iClass;
   school: iWithSchool;
   year: iYear;
-  infreq: number;
+  infrequency: number;
 }
 
 export interface iClassSchoolList extends iClassFreq {

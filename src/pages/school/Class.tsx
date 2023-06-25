@@ -40,10 +40,10 @@ const CardClass = ({ el }: iCardClassProps) => {
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(el.infreq, theme),
+          bgcolor: defineBgColorInfrequency(el.infrequency, theme),
         }}
       >
-        {String(el.infreq).replace(".", ",")}%
+        {String(el.infrequency).replace(".", ",")}%
       </TableCell>
     </TableRow>
   );

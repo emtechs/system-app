@@ -80,7 +80,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
           return { infreq: el.infrequency, id: el.id };
         });
         await apiFrequency.updateInfreq({ infreq: frequency.infrequency }, id);
-        await apiStudent.updateMany({ students });
+        await apiStudent.updateMany({ students },frequency.class.year.id);
         await apiClass.updateSchool({
           class_id: frequency.class.class.id,
           school_id: frequency.class.school.id,

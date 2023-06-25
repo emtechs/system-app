@@ -21,14 +21,14 @@ export interface iFrequencyBase {
   status: iStatusFrequency;
   created_at: Date;
   finished_at: number;
-  infreq: number;
+  infrequency: number;
   class: iClassFreq;
 }
 
 interface iFrequencyInfreqBase extends iFrequencyBase {
   user: iUserFreq;
   _count: { students: number };
-  infrequency?: number;
+  infreq?: number;
   class_infreq?: number;
   school_infreq?: number;
 }
