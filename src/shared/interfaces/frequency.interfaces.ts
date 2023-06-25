@@ -30,6 +30,7 @@ interface iFrequencyInfreqBase extends iFrequencyBase {
   _count: { students: number };
   infreq?: number;
   class_infreq?: number;
+  school_frequencies?: number;
   school_infreq?: number;
 }
 
@@ -60,7 +61,10 @@ export interface iFrequencyStudentsWithInfreq {
   updated_at?: string;
   name: string;
   registry: string;
-  infreq: number;
-  infrequency: number;
   frequencyStudent_id: string;
+  presences: number;
+  justified: number;
+  absences: number;
+  frequencies: number;
+  infrequency: number;
 }

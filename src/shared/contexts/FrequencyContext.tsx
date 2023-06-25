@@ -77,15 +77,25 @@ export const FrequencyProvider = ({ children }: iChildren) => {
         setLoading(true);
         const frequency = await apiFrequency.update(data, id);
         const students = frequency.students.map((el) => {
-          return { infreq: el.infrequency, id: el.id };
+          return {
+            value: el.infrequency,
+            presences: el.presences,
+            justified: el.justified,
+            absences: el.absences,
+            frequencies: el.frequencies,
+            id: el.id,
+          };
         });
         await apiFrequency.updateInfreq({ infreq: frequency.infrequency }, id);
-        await apiStudent.updateMany({ students },frequency.class.year.id);
+        await apiStudent.updateMany({ students }, frequency.class.year.id);
         await apiClass.updateSchool({
           class_id: frequency.class.class.id,
           school_id: frequency.class.school.id,
           year_id: frequency.class.year.id,
           class_infreq: frequency.class_infreq ? frequency.class_infreq : 0,
+          school_frequencies: frequency.school_frequencies
+            ? frequency.school_frequencies
+            : 0,
           school_infreq: frequency.school_infreq ? frequency.school_infreq : 0,
         });
         if (isOpen) {
