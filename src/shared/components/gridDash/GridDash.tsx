@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Card, CardContent, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import {
   Checklist,
   Close,
@@ -16,6 +16,7 @@ import {
 import { iUserDash } from "../../interfaces";
 import { apiUsingNow } from "../../services";
 import { GridDashContent } from "./GridDashContent";
+import { GridDashOrgan } from "./Organ";
 
 export const GridDash = () => {
   const { setLoading } = useAppThemeContext();
@@ -85,21 +86,7 @@ export const GridDash = () => {
             dest="/"
             onClick={handleClickStudent}
           />
-          <Grid item xs={12}>
-            <Card>
-              <CardContent>
-                <Box
-                  display="flex"
-                  justifyContent="space-evenly"
-                  alignItems="center"
-                  gap={1}
-                >
-                  <img width="50%" src="/pref_massape.png" />
-                  <img width="25%" src="/emtechs.jpg" />
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
+          <GridDashOrgan />
         </Grid>
       )}
     </>

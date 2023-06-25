@@ -1,43 +1,31 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuthContext, usePaginationContext } from "../../contexts";
 import { BaseSchool, ListBase, Loading } from "./structure";
-import { iSchoolList, iSchoolSelect, iWorkSchool } from "../../interfaces";
-import { apiSchool, apiUser } from "../../services";
+import { iSchoolSelect, iWorkSchool } from "../../interfaces";
+import { apiUser } from "../../services";
 
 export const SelectSchool = () => {
-  const { dashData, schoolData, setSchoolData } = useAuthContext();
+  const { schoolData, setSchoolData } = useAuthContext();
   const { query, setSteps } = usePaginationContext();
   const [listSchoolSelect, setListSchoolSelect] = useState<iSchoolSelect[]>();
-  const [listDataCommon, setListDataCommon] = useState<iWorkSchool[]>();
-  const [listDataAdm, setListDataAdm] = useState<iSchoolList[]>();
+  const [listData, setListData] = useState<iWorkSchool[]>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const take = 3;
-    if (dashData === "ADMIN") {
-      setLoading(true);
-      apiSchool
-        .list(query(take))
-        .then((res) => {
-          setListSchoolSelect(res.schools);
-          setListDataAdm(res.result);
-          const arredSteps = Math.ceil(res.total / take);
-          setSteps(arredSteps === 1 ? 0 : arredSteps);
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(true);
-      apiUser
-        .schools(query(take))
-        .then((res) => {
-          setListSchoolSelect(res.schools);
-          setListDataCommon(res.result);
-          const arredSteps = Math.ceil(res.total / take);
-          setSteps(arredSteps === 1 ? 0 : arredSteps);
-        })
-        .finally(() => setLoading(false));
-    }
-  }, [dashData, query]);
+    const queryData = query(take) + "&is_active=true";
+
+    setLoading(true);
+    apiUser
+      .schools(queryData)
+      .then((res) => {
+        setListSchoolSelect(res.schools);
+        setListData(res.result);
+        const arredSteps = Math.ceil(res.total / take);
+        setSteps(arredSteps === 1 ? 0 : arredSteps);
+      })
+      .finally(() => setLoading(false));
+  }, [query]);
 
   const openDialog = useMemo(() => {
     if (listSchoolSelect?.length === 0) {
@@ -57,18 +45,8 @@ export const SelectSchool = () => {
     >
       {loading ? (
         <Loading />
-      ) : dashData === "ADMIN" ? (
-        listDataAdm?.map((el) => (
-          <ListBase
-            key={el.id}
-            name={el.name}
-            onClick={() => {
-              setSchoolData(el);
-            }}
-          />
-        ))
       ) : (
-        listDataCommon?.map((el) => (
+        listData?.map((el) => (
           <ListBase
             key={el.school.id}
             name={el.school.name}
