@@ -1,13 +1,20 @@
 import { ReactNode, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
-import { Tools } from "../../shared/components";
+import {
+  useAppThemeContext,
+  useAuthContext,
+  useDrawerContext,
+  useSchoolContext,
+} from "../../shared/contexts";
+import { LinkRouter, Tools } from "../../shared/components";
 import { iChildren, iSchool } from "../../shared/interfaces";
 import { LayoutBasePage } from "../../shared/layouts";
 import { apiUsingNow } from "../../shared/services";
+import { Breadcrumbs, Chip } from "@mui/material";
+import { School } from "@mui/icons-material";
 
 interface iLayoutSchoolPageProps extends iChildren {
-  title: string;
+  title: ReactNode;
   isSchool?: boolean;
   tools?: ReactNode;
 }
@@ -15,13 +22,14 @@ interface iLayoutSchoolPageProps extends iChildren {
 export const LayoutSchoolPage = ({
   children,
   title,
-  isSchool,
   tools,
 }: iLayoutSchoolPageProps) => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const back = searchParams.get("back");
   const { smDown, setLoading } = useAppThemeContext();
+  const { schoolData } = useAuthContext();
+  const { handleClickButtonTools } = useDrawerContext();
   const { setSchoolSelect } = useSchoolContext();
 
   useEffect(() => {
@@ -36,8 +44,25 @@ export const LayoutSchoolPage = ({
 
   return (
     <LayoutBasePage
-      title={title}
-      isSchool={isSchool}
+      title={
+        <Breadcrumbs aria-label="breadcrumb">
+          <LinkRouter
+            underline="none"
+            color="inherit"
+            to="/"
+            onClick={handleClickButtonTools}
+          >
+            <Chip
+              clickable
+              color="primary"
+              variant="outlined"
+              label={schoolData?.name}
+              icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </LinkRouter>
+          {title}
+        </Breadcrumbs>
+      }
       tools={
         tools ? (
           tools

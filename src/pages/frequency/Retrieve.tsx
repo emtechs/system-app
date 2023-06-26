@@ -1,7 +1,9 @@
 import {
   Box,
+  Breadcrumbs,
   Button,
   Checkbox,
+  Chip,
   FormControlLabel,
   TableCell,
   TableRow,
@@ -11,10 +13,13 @@ import {
   DialogFinishFrequency,
   DialogMissed,
   DialogRemoveMissed,
+  LinkRouter,
   TableBase,
   Tools,
 } from "../../shared/components";
 import {
+  useAuthContext,
+  useDrawerContext,
   useFrequencyContext,
   usePaginationContext,
 } from "../../shared/contexts";
@@ -34,7 +39,12 @@ import {
   defineBgColorFrequency,
   statusFrequencyPtBr,
 } from "../../shared/scripts";
-import { Checklist } from "@mui/icons-material";
+import {
+  Checklist,
+  EventAvailable,
+  School,
+  Workspaces,
+} from "@mui/icons-material";
 dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
 
@@ -97,6 +107,8 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
 export const RetrieveFrequencyPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
+  const { schoolData } = useAuthContext();
+  const { handleClickButtonTools } = useDrawerContext();
   const { dataStudents, setDataStudents, alterStudents, setAlterStudents } =
     useFrequencyContext();
   const { setIsLoading, query, setTotal, setSteps } = usePaginationContext();
@@ -149,10 +161,40 @@ export const RetrieveFrequencyPage = () => {
   return (
     <>
       <LayoutBasePage
-        isSchool
+        title={
+          <Breadcrumbs aria-label="breadcrumb">
+            <LinkRouter
+              underline="none"
+              color="inherit"
+              to="/"
+              onClick={handleClickButtonTools}
+            >
+              <Chip
+                clickable
+                color="primary"
+                variant="outlined"
+                label={schoolData?.name}
+                icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+              />
+            </LinkRouter>
+            <LinkRouter underline="none" color="inherit" to="/frequency/create">
+              <Chip
+                clickable
+                color="primary"
+                variant="outlined"
+                label={dataFrequency?.class.class.name}
+                icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
+              />
+            </LinkRouter>
+            <Chip
+              label={dataFrequency?.date}
+              color="primary"
+              icon={<EventAvailable sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </Breadcrumbs>
+        }
         tools={
           <Tools
-            isHome
             finish={
               <Box>
                 <FormControlLabel
@@ -176,11 +218,6 @@ export const RetrieveFrequencyPage = () => {
               </Box>
             }
           />
-        }
-        title={
-          dataFrequency
-            ? `${dataFrequency.date} - ${dataFrequency.class.class.name}`
-            : "Realizar Frequência"
         }
       >
         <TableBase

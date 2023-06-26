@@ -1,8 +1,9 @@
-import { TableCell, TableRow } from "@mui/material";
-import { TableBase, Tools } from "../../../shared/components";
+import { Breadcrumbs, Chip, TableCell, TableRow } from "@mui/material";
+import { LinkRouter, TableBase } from "../../../shared/components";
 import {
   useAppThemeContext,
   useAuthContext,
+  useDrawerContext,
   usePaginationContext,
 } from "../../../shared/contexts";
 import { useEffect, useState } from "react";
@@ -10,7 +11,8 @@ import { apiUsingNow } from "../../../shared/services";
 import { iFrequency, iheadCell } from "../../../shared/interfaces";
 import { LayoutBasePage } from "../../../shared/layouts";
 import { defineBgColorInfrequency } from "../../../shared/scripts";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
+import { EventAvailable, List, School } from "@mui/icons-material";
 
 interface iCardFrequencyProps {
   freq: iFrequency;
@@ -54,6 +56,7 @@ export const ListFrequencyCommon = () => {
   const status = searchParams.get("status");
   const { mdDown } = useAppThemeContext();
   const { yearData, schoolData } = useAuthContext();
+  const { handleClickButtonTools } = useDrawerContext();
   const { setCount, take, skip, setIsLoading, defineQuery } =
     usePaginationContext();
   const [data, setData] = useState<iFrequency[]>();
@@ -97,10 +100,45 @@ export const ListFrequencyCommon = () => {
         .finally(() => setIsLoading(false));
     }
   }, [yearData, schoolData, take, skip, date, status, defineQuery]);
+
+  if (!schoolData) return <Navigate to="/" />;
+
   return (
     <LayoutBasePage
-      title={`Frequências Realizadas ${date ? "- " + date : ""}`}
-      tools={<Tools isSingle />}
+      title={
+        <Breadcrumbs aria-label="breadcrumb">
+          <LinkRouter
+            underline="none"
+            color="inherit"
+            to="/"
+            onClick={handleClickButtonTools}
+          >
+            <Chip
+              clickable
+              color="primary"
+              variant="outlined"
+              label={schoolData.name}
+              icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </LinkRouter>
+          {date && (
+            <LinkRouter underline="none" color="inherit" to="/frequency">
+              <Chip
+                clickable
+                color="primary"
+                variant="outlined"
+                label={date}
+                icon={<EventAvailable sx={{ mr: 0.5 }} fontSize="inherit" />}
+              />
+            </LinkRouter>
+          )}
+          <Chip
+            label="Listar"
+            color="primary"
+            icon={<List sx={{ mr: 0.5 }} fontSize="inherit" />}
+          />
+        </Breadcrumbs>
+      }
     >
       <TableBase headCells={headCells}>
         {data?.map((el) => (

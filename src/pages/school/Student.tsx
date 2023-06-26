@@ -9,10 +9,11 @@ import {
 import { apiUsingNow } from "../../shared/services";
 import { iStudentWithSchool, iheadCell } from "../../shared/interfaces";
 import { TableBase, Tools } from "../../shared/components";
-import { TableCell, TableRow } from "@mui/material";
+import { Chip, TableCell, TableRow } from "@mui/material";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutSchoolPage } from "./Layout";
+import { Group } from "@mui/icons-material";
 
 interface iCardStudentProps {
   student: iStudentWithSchool;
@@ -127,12 +128,17 @@ export const ListStundetSchoolPage = () => {
 
   return (
     <LayoutSchoolPage
-      isSchool
+      title={
+        <Chip
+          label="Alunos"
+          color="primary"
+          icon={<Group sx={{ mr: 0.5 }} fontSize="inherit" />}
+        />
+      }
       tools={
         <Tools
           isBack={!!back}
           back={back ? back : undefined}
-          isHome
           isNew={dashData === "ADMIN"}
           isFreq
           isSearch
@@ -140,7 +146,6 @@ export const ListStundetSchoolPage = () => {
           setSearch={(text) => setSearch(text)}
         />
       }
-      title="Listagem de Alunos"
     >
       <TableBase headCells={headCells}>
         {data?.map((student) => (

@@ -1,12 +1,11 @@
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { iChildren } from "../interfaces";
 import { Menu } from "@mui/icons-material";
 import { useAppThemeContext, useDrawerContext } from "../contexts";
 import { ReactNode } from "react";
-import { CardSchool } from "../components";
 
 interface iLayoutBasePageProps extends iChildren {
-  title: string;
+  title: ReactNode;
   tools?: ReactNode;
   isSchool?: boolean;
 }
@@ -15,7 +14,6 @@ export const LayoutBasePage = ({
   children,
   title,
   tools,
-  isSchool,
 }: iLayoutBasePageProps) => {
   const { theme, smDown, mdDown } = useAppThemeContext();
   const { toggleDrawerOpen } = useDrawerContext();
@@ -37,20 +35,12 @@ export const LayoutBasePage = ({
         gap={1}
       >
         {smDown && (
-          <IconButton onClick={toggleDrawerOpen}>
+          <IconButton color="primary" onClick={toggleDrawerOpen}>
             <Menu />
           </IconButton>
         )}
-        <Typography
-          variant={smDown ? "h6" : mdDown ? "h5" : "h4"}
-          overflow="hidden"
-          whiteSpace="nowrap"
-          textOverflow="ellipsis"
-        >
-          {title}
-        </Typography>
+        {title}
       </Box>
-      {isSchool && <CardSchool />}
       {tools && <Box>{tools}</Box>}
       <Box flex={1} overflow="auto">
         {children}

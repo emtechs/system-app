@@ -10,9 +10,9 @@ import {
   Breadcrumbs,
   Card,
   CardContent,
+  Chip,
   Grid,
   Paper,
-  Typography,
 } from "@mui/material";
 import { LayoutBasePage } from "../../../shared/layouts";
 import {
@@ -24,9 +24,9 @@ import {
 import { iDashClass } from "../../../shared/interfaces";
 import { useEffect, useState } from "react";
 import {
-  AddBox,
   Checklist,
   EventBusy,
+  Group,
   Groups,
   School,
   Workspaces,
@@ -45,7 +45,7 @@ export const StudentFrequencyPage = () => {
   const { yearData, schoolData } = useAuthContext();
   const { handleClickSchool, handleClickButtonTools } = useDrawerContext();
   const { monthData } = useCalendarContext();
-  const { classWithSchoolSelect, setClassWithSchoolSelect } = useClassContext();
+  const { classWithSchoolSelect } = useClassContext();
   const [infoClass, setInfoClass] = useState<iDashClass>();
 
   useEffect(() => {
@@ -66,43 +66,32 @@ export const StudentFrequencyPage = () => {
   }
 
   return (
-    <LayoutBasePage title="Nova Frequência">
+    <LayoutBasePage
+      title={
+        <Breadcrumbs aria-label="breadcrumb">
+          <LinkRouter
+            underline="none"
+            color="inherit"
+            to="/"
+            onClick={handleClickButtonTools}
+          >
+            <Chip
+              clickable
+              color="primary"
+              variant="outlined"
+              label={schoolData?.name}
+              icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </LinkRouter>
+          <Chip
+            label="Alunos"
+            color="primary"
+            icon={<Group sx={{ mr: 0.5 }} fontSize="inherit" />}
+          />
+        </Breadcrumbs>
+      }
+    >
       <Box my={1} mx={2} component={Paper} variant="outlined">
-        <Box mx={2} my={1}>
-          <Breadcrumbs aria-label="breadcrumb">
-            <LinkRouter
-              underline="hover"
-              sx={{ display: "flex", alignItems: "center" }}
-              color="inherit"
-              to="/"
-              onClick={handleClickButtonTools}
-            >
-              <School sx={{ mr: 0.5 }} fontSize="inherit" />
-              {schoolData?.name}
-            </LinkRouter>
-            {classWithSchoolSelect && (
-              <LinkRouter
-                underline="hover"
-                sx={{ display: "flex", alignItems: "center" }}
-                color="inherit"
-                to="/frequency/create"
-                onClick={() => {
-                  setClassWithSchoolSelect(undefined);
-                }}
-              >
-                <Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />
-                {classWithSchoolSelect.class.name}
-              </LinkRouter>
-            )}
-            <Typography
-              sx={{ display: "flex", alignItems: "center" }}
-              color="text.primary"
-            >
-              <AddBox sx={{ mr: 0.5 }} fontSize="inherit" />
-              Frequência
-            </Typography>
-          </Breadcrumbs>
-        </Box>
         <Card>
           <CardContent>
             <Grid container direction="column" p={2} spacing={2}>

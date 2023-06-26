@@ -1,16 +1,18 @@
-import { TableCell, TableRow } from "@mui/material";
+import { Breadcrumbs, Chip, TableCell, TableRow } from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
 import {
   useAppThemeContext,
   useAuthContext,
+  useDrawerContext,
   usePaginationContext,
 } from "../../shared/contexts";
 import { iFrequency, iheadCell } from "../../shared/interfaces";
-import { TableBase, Tools } from "../../shared/components";
-import { useNavigate } from "react-router-dom";
+import { LinkRouter, TableBase } from "../../shared/components";
+import { Navigate, useNavigate } from "react-router-dom";
 import { defineBgColorInfrequency } from "../../shared/scripts";
+import { Home, Outbox } from "@mui/icons-material";
 
 const headCells: iheadCell[] = [
   { order: "date", numeric: false, label: "Data" },
@@ -50,7 +52,8 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
 
 export const FrequencyOpenPage = () => {
   const navigate = useNavigate();
-  const { yearData } = useAuthContext();
+  const { yearData, schoolData } = useAuthContext();
+  const { handleClickButtonTools } = useDrawerContext();
   const { setCount, take, skip, setIsLoading, defineQuery } =
     usePaginationContext();
   const [data, setData] = useState<iFrequency[]>();
@@ -70,8 +73,35 @@ export const FrequencyOpenPage = () => {
         .finally(() => setIsLoading(false));
     }
   }, [yearData, take, skip]);
+
+  if (!schoolData) return <Navigate to="/" />;
+
   return (
-    <LayoutBasePage title={"Frequências em aberto"} tools={<Tools isSingle />}>
+    <LayoutBasePage
+      title={
+        <Breadcrumbs aria-label="breadcrumb">
+          <LinkRouter
+            underline="none"
+            color="inherit"
+            to="/"
+            onClick={handleClickButtonTools}
+          >
+            <Chip
+              clickable
+              color="primary"
+              variant="outlined"
+              label="Página Inicial"
+              icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </LinkRouter>
+          <Chip
+            label="Em Aberto"
+            color="primary"
+            icon={<Outbox sx={{ mr: 0.5 }} fontSize="inherit" />}
+          />
+        </Breadcrumbs>
+      }
+    >
       <TableBase headCells={headCells}>
         {data?.map((el) => (
           <CardFrequency key={el.id} freq={el} />

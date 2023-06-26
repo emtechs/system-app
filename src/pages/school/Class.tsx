@@ -10,10 +10,11 @@ import { useEffect, useState } from "react";
 import { apiClass } from "../../shared/services";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { TableBase, Tools } from "../../shared/components";
-import { TableCell, TableRow } from "@mui/material";
+import { Chip, TableCell, TableRow } from "@mui/material";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 import { LayoutSchoolPage } from "./Layout";
 import { useDebounce } from "../../shared/hooks";
+import { Workspaces } from "@mui/icons-material";
 
 interface iCardClassProps {
   el: iClassSchoolList;
@@ -113,11 +114,15 @@ export const ListClassSchoolPage = () => {
 
   return (
     <LayoutSchoolPage
-      title="Listagem de Turmas"
-      isSchool
+      title={
+        <Chip
+          label="Turmas"
+          color="primary"
+          icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
+        />
+      }
       tools={
         <Tools
-          isHome
           isBack={dashData === "ADMIN"}
           back={"/school?id=" + school_id}
           isNew={dashData === "ADMIN"}

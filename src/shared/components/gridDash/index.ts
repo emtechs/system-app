@@ -1,3 +1,3 @@
-export * from "./GridDash";
+export * from "./GridDashAdmin";
 export * from "./GridDashContent";
-export * from "./Organ";
+export * from "./GridDashSchool";

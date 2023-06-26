@@ -10,9 +10,9 @@ import {
   Breadcrumbs,
   Card,
   CardContent,
+  Chip,
   Grid,
   Paper,
-  Typography,
 } from "@mui/material";
 import { LayoutBasePage } from "../../../shared/layouts";
 import {
@@ -64,43 +64,50 @@ export const CreateFrequencyCommon = () => {
   }
 
   return (
-    <LayoutBasePage title="Nova Frequência">
-      <Box my={1} mx={2} component={Paper} variant="outlined">
-        <Box mx={2} my={1}>
-          <Breadcrumbs aria-label="breadcrumb">
+    <LayoutBasePage
+      title={
+        <Breadcrumbs aria-label="breadcrumb">
+          <LinkRouter
+            underline="none"
+            color="inherit"
+            to="/"
+            onClick={handleClickButtonTools}
+          >
+            <Chip
+              clickable
+              color="primary"
+              variant="outlined"
+              label={schoolData?.name}
+              icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </LinkRouter>
+          {classWithSchoolSelect && (
             <LinkRouter
-              underline="hover"
-              sx={{ display: "flex", alignItems: "center" }}
+              underline="none"
               color="inherit"
-              to="/"
-              onClick={handleClickButtonTools}
+              to="/frequency/create"
+              onClick={() => {
+                setClassWithSchoolSelect(undefined);
+              }}
             >
-              <School sx={{ mr: 0.5 }} fontSize="inherit" />
-              {schoolData?.name}
+              <Chip
+                clickable
+                color="primary"
+                variant="outlined"
+                label={classWithSchoolSelect.class.name}
+                icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
+              />
             </LinkRouter>
-            {classWithSchoolSelect && (
-              <LinkRouter
-                underline="hover"
-                sx={{ display: "flex", alignItems: "center" }}
-                color="inherit"
-                to="/frequency/create"
-                onClick={() => {
-                  setClassWithSchoolSelect(undefined);
-                }}
-              >
-                <Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />
-                {classWithSchoolSelect.class.name}
-              </LinkRouter>
-            )}
-            <Typography
-              sx={{ display: "flex", alignItems: "center" }}
-              color="text.primary"
-            >
-              <AddBox sx={{ mr: 0.5 }} fontSize="inherit" />
-              Frequência
-            </Typography>
-          </Breadcrumbs>
-        </Box>
+          )}
+          <Chip
+            label="Frequência"
+            color="primary"
+            icon={<AddBox sx={{ mr: 0.5 }} fontSize="inherit" />}
+          />
+        </Breadcrumbs>
+      }
+    >
+      <Box my={1} mx={2} component={Paper} variant="outlined">
         <Card>
           <CardContent>
             <Grid container direction="column" p={2} spacing={2}>

@@ -3,11 +3,11 @@ import {
   Breadcrumbs,
   Card,
   CardContent,
+  Chip,
   Grid,
   Paper,
   TableCell,
   TableRow,
-  Typography,
 } from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
 import { useCallback, useEffect, useState } from "react";
@@ -158,29 +158,32 @@ export const FrequencyPage = () => {
   if (!schoolData) return <Navigate to="/" />;
 
   return (
-    <LayoutBasePage title={"Frequência - " + date()}>
+    <LayoutBasePage
+      title={
+        <Breadcrumbs aria-label="breadcrumb">
+          <LinkRouter
+            underline="none"
+            color="inherit"
+            to="/"
+            onClick={handleClickButtonTools}
+          >
+            <Chip
+              clickable
+              color="primary"
+              variant="outlined"
+              label={schoolData?.name}
+              icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </LinkRouter>
+          <Chip
+            label="Frequência"
+            color="primary"
+            icon={<EventAvailable sx={{ mr: 0.5 }} fontSize="inherit" />}
+          />
+        </Breadcrumbs>
+      }
+    >
       <Box my={1} mx={2} component={Paper} variant="outlined">
-        <Box mx={2} my={1}>
-          <Breadcrumbs aria-label="breadcrumb">
-            <LinkRouter
-              underline="hover"
-              sx={{ display: "flex", alignItems: "center" }}
-              color="inherit"
-              to="/"
-              onClick={handleClickButtonTools}
-            >
-              <School sx={{ mr: 0.5 }} fontSize="inherit" />
-              {schoolData?.name}
-            </LinkRouter>
-            <Typography
-              sx={{ display: "flex", alignItems: "center" }}
-              color="text.primary"
-            >
-              <EventAvailable sx={{ mr: 0.5 }} fontSize="inherit" />
-              Frequência
-            </Typography>
-          </Breadcrumbs>
-        </Box>
         <Card>
           <CardContent>
             <Grid container direction="column" p={2} spacing={2}>
