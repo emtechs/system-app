@@ -12,7 +12,7 @@ import { iFrequency, iheadCell } from "../../shared/interfaces";
 import { LinkRouter, TableBase } from "../../shared/components";
 import { Navigate, useNavigate } from "react-router-dom";
 import { defineBgColorInfrequency } from "../../shared/scripts";
-import { Home, Outbox } from "@mui/icons-material";
+import { Outbox, School } from "@mui/icons-material";
 
 const headCells: iheadCell[] = [
   { order: "date", numeric: false, label: "Data" },
@@ -59,8 +59,8 @@ export const FrequencyOpenPage = () => {
   const [data, setData] = useState<iFrequency[]>();
 
   useEffect(() => {
-    if (yearData) {
-      let query = defineQuery(yearData.id);
+    if (yearData && schoolData) {
+      let query = defineQuery(yearData.id, schoolData.id);
       query += "&status=OPENED";
       setIsLoading(true);
       apiUsingNow
@@ -72,7 +72,7 @@ export const FrequencyOpenPage = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [yearData, take, skip]);
+  }, [yearData, schoolData, take, skip]);
 
   if (!schoolData) return <Navigate to="/" />;
 
@@ -90,8 +90,8 @@ export const FrequencyOpenPage = () => {
               clickable
               color="primary"
               variant="outlined"
-              label="Página Inicial"
-              icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
+              label={schoolData.name}
+              icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
             />
           </LinkRouter>
           <Chip

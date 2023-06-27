@@ -1,5 +1,5 @@
 import { Frequency } from "./Frequency";
-import { useDrawerContext } from "../../../contexts";
+import { useAppThemeContext, useDrawerContext } from "../../../contexts";
 import {
   AccountBox,
   Checklist,
@@ -12,6 +12,7 @@ import { ListItemLinkOpen, OtherListItemLink } from "../item";
 import { School } from "./School";
 
 export const OptionsCommon = () => {
+  const { mdDown } = useAppThemeContext();
   const {
     handleClick,
     handleClickSchool,
@@ -44,12 +45,14 @@ export const OptionsCommon = () => {
       >
         <Frequency />
       </ListItemLinkOpen>
-      <OtherListItemLink
-        onClick={handleClick}
-        icon={<Summarize />}
-        label="Relatório"
-        to="/report"
-      />
+      {!mdDown && (
+        <OtherListItemLink
+          onClick={handleClick}
+          icon={<Summarize />}
+          label="Relatório"
+          to="/report"
+        />
+      )}
       <ListItemLinkOpen
         onClick={handleClickProfile}
         open={openProfile}

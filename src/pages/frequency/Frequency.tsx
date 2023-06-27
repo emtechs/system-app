@@ -171,7 +171,7 @@ export const FrequencyPage = () => {
               clickable
               color="primary"
               variant="outlined"
-              label={schoolData?.name}
+              label={schoolData.name}
               icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
             />
           </LinkRouter>

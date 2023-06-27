@@ -54,7 +54,7 @@ export const CalendarBase = ({
       buttonText={{ today: dayjs().format("MMMM") }}
       events={eventData}
       showNonCurrentDates={false}
-      weekends={false}
+      hiddenDays={[0]}
       datesSet={(arg) => {
         setMonthData(arg.view.title);
       }}
