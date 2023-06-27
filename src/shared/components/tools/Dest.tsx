@@ -1,12 +1,7 @@
-import {
-  Button,
-  IconButton,
-  Tooltip,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { Button, IconButton, Tooltip } from "@mui/material";
+import { useAppThemeContext } from "../../contexts";
 
 interface iDestProps {
   to: string;
@@ -27,9 +22,8 @@ export const Dest = ({
   isResp,
   isHome,
 }: iDestProps) => {
-  const theme = useTheme();
-  const mdDown = useMediaQuery(theme.breakpoints.down("md"));
-  const smDown = useMediaQuery(theme.breakpoints.down("sm"));
+  const { mdDown, smDown } = useAppThemeContext();
+
   return (
     <Link to={to}>
       {isResp ? (

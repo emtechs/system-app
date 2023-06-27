@@ -4,6 +4,7 @@ export * from "./frequency";
 export * from "./import";
 export * from "./auth";
 export * from "./profile";
+export * from "./report";
 export * from "./school";
 export * from "./student";
 export * from "./user";

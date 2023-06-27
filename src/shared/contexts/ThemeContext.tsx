@@ -6,8 +6,6 @@ import {
   useContext,
   useState,
 } from "react";
-import { iChildren } from "../interfaces";
-import { Theme } from "../themes";
 import {
   Alert,
   Backdrop,
@@ -17,6 +15,8 @@ import {
   ThemeProvider,
   useMediaQuery,
 } from "@mui/material";
+import { iChildren } from "../interfaces";
+import { Theme } from "../themes";
 
 interface iThemeContextProps {
   theme: iTheme;
@@ -66,7 +66,14 @@ export const AppThemeProvider = ({ children }: iChildren) => {
 
   return (
     <ThemeContext.Provider
-      value={{ handleError, handleSucess, mdDown, setLoading, smDown, theme }}
+      value={{
+        handleError,
+        handleSucess,
+        mdDown,
+        setLoading,
+        smDown,
+        theme,
+      }}
     >
       <ThemeProvider theme={theme}>
         {children}

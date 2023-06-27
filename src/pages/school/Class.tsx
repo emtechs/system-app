@@ -80,8 +80,7 @@ export const ListClassSchoolPage = () => {
   } else if (schoolData) school_id = schoolData.id;
 
   useEffect(() => {
-    let query = defineQuery(undefined, school_id);
-    query += "&is_active=true";
+    let query = defineQuery(undefined, school_id) + "&is_active=true";
     if (isInfreq) query += "&infreq=31";
     if (yearData) {
       if (search) {
@@ -136,8 +135,8 @@ export const ListClassSchoolPage = () => {
       }
     >
       <TableBase headCells={headCells}>
-        {data?.map((el) => (
-          <CardClass key={el.class.id} el={el} />
+        {data?.map((el, index) => (
+          <CardClass key={index} el={el} />
         ))}
       </TableBase>
     </LayoutSchoolPage>

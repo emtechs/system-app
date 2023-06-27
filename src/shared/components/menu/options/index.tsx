@@ -1,7 +1,6 @@
 import { useAuthContext } from "../../../contexts";
 import { OptionsAdmin } from "./OptionsAdmin";
 import { OptionsCommon } from "./OptionsCommon";
-import { OptionsSchool } from "./OptionsSchool";
 
 export const Options = () => {
   const { dashData } = useAuthContext();
@@ -10,7 +9,7 @@ export const Options = () => {
       return <OptionsAdmin />;
 
     case "SCHOOL":
-      return <OptionsSchool />;
+      return <OptionsCommon />;
 
     case "COMMON":
       return <OptionsCommon />;

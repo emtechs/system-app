@@ -4,6 +4,7 @@ import {
   Groups,
   Home,
   People,
+  Summarize,
   Workspaces,
 } from "@mui/icons-material";
 import { Profile } from "./Profile";
@@ -55,6 +56,12 @@ export const OptionsSchool = () => {
       >
         <Student />
       </ListItemLinkOpen>
+      <OtherListItemLink
+        onClick={handleClick}
+        icon={<Summarize />}
+        label="Relatório"
+        to="/report"
+      />
       <ListItemLinkOpen
         onClick={handleClickProfile}
         open={openProfile}

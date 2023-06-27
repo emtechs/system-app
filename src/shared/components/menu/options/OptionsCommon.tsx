@@ -5,6 +5,7 @@ import {
   Checklist,
   Home,
   School as SchoolIcon,
+  Summarize,
 } from "@mui/icons-material";
 import { Profile } from "./Profile";
 import { ListItemLinkOpen, OtherListItemLink } from "../item";
@@ -43,6 +44,12 @@ export const OptionsCommon = () => {
       >
         <Frequency />
       </ListItemLinkOpen>
+      <OtherListItemLink
+        onClick={handleClick}
+        icon={<Summarize />}
+        label="Relatório"
+        to="/report"
+      />
       <ListItemLinkOpen
         onClick={handleClickProfile}
         open={openProfile}
