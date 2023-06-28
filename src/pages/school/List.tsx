@@ -19,7 +19,7 @@ const headCells: iheadCell[] = [
   { numeric: true, label: "Turmas" },
   { numeric: true, label: "Alunos" },
   { numeric: true, label: "Frequências" },
-  { order: "infreq", numeric: true, label: "Infrequência" },
+  { numeric: true, label: "Infrequência" },
 ];
 
 interface iCardSchoolProps {
@@ -39,18 +39,18 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
       }}
     >
       <TableCell>{school.name}</TableCell>
-      <TableCell>{school.director?.name}</TableCell>
-      <TableCell align="right">{school.num_classes}</TableCell>
-      <TableCell align="right">{school.num_students}</TableCell>
-      <TableCell align="right">{school.num_frequencies}</TableCell>
+      <TableCell>{school.director}</TableCell>
+      <TableCell align="right">{school.classes}</TableCell>
+      <TableCell align="right">{school.students}</TableCell>
+      <TableCell align="right">{school.frequencies}</TableCell>
       <TableCell
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(school.infreq, theme),
+          bgcolor: defineBgColorInfrequency(school.infrequency, theme),
         }}
       >
-        {String(school.infreq).replace(".", ",")}%
+        {school.infrequency.toFixed(0)}%
       </TableCell>
     </TableRow>
   );
@@ -67,7 +67,6 @@ export const ListSchoolPage = () => {
   useEffect(() => {
     if (yearData) {
       let query = defineQuery(yearData.id);
-      query += "&is_listSchool=true&is_active=true";
       if (isInfreq) {
         query += "&infreq=31";
       }
@@ -76,7 +75,7 @@ export const ListSchoolPage = () => {
         setIsLoading(true);
         debounce(() => {
           apiSchool
-            .list(query)
+            .list(yearData.id, query)
             .then((res) => {
               setListSchoolData(res.result);
               setCount(res.total);
@@ -86,7 +85,7 @@ export const ListSchoolPage = () => {
       } else {
         setIsLoading(true);
         apiSchool
-          .list(query)
+          .list(yearData.id, query)
           .then((res) => {
             setListSchoolData(res.result);
             setCount(res.total);
@@ -98,7 +97,7 @@ export const ListSchoolPage = () => {
 
   return (
     <LayoutSchoolPage
-      title="Listagem de Escolas"
+      title=""
       tools={
         <Tools
           isHome

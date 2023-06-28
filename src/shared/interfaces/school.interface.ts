@@ -16,7 +16,7 @@ export interface iDirector {
   cpf: string;
 }
 
-export interface iDashSchool{
+export interface iDashSchool {
   frequencies: number;
   day_infreq?: number;
   school_infreq: number;
@@ -46,10 +46,14 @@ export interface iSchoolServer {
   server: iServer;
 }
 
-export interface iSchoolList extends iSchool {
-  num_students: number;
-  num_frequencies: number;
-  num_classes: number;
+export interface iSchoolList {
+  id: string;
+  name: string;
+  director: string;
+  classes: number;
+  students: number;
+  frequencies: number;
+  infrequency: number;
 }
 
 export interface iSchoolDash extends iSchool {
