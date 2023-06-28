@@ -28,12 +28,7 @@ import {
 } from "../../shared/components";
 import { useAppThemeContext } from "../../shared/contexts/ThemeContext";
 import { apiClass, apiUsingNow } from "../../shared/services";
-import {
-  iClassDash,
-  iClassDashSelect,
-  iDashSchoolServer,
-  iheadCell,
-} from "../../shared/interfaces";
+import { iClassDash, iDashSchool, iheadCell } from "../../shared/interfaces";
 import {
   EventAvailable,
   EventBusy,
@@ -48,20 +43,12 @@ import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
 interface iCardClassDashProps {
   classDash: iClassDash;
   date: string;
-  date_time: string;
   name: string;
 }
-const CardClassDash = ({
-  classDash,
-  date,
-  date_time,
-  name,
-}: iCardClassDashProps) => {
+
+const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
   const { theme, mdDown } = useAppThemeContext();
   const { createFrequency } = useFrequencyContext();
-  const students = classDash.students.map(({ student }) => {
-    return { student_id: student.id };
-  });
   return (
     <TableRow
       hover
@@ -69,12 +56,11 @@ const CardClassDash = ({
       onClick={() => {
         createFrequency({
           date,
-          date_time,
           name,
           class_id: classDash.class.id,
-          school_id: classDash.school.id,
-          year_id: classDash.year.id,
-          students,
+          school_id: classDash.school_id,
+          year_id: classDash.year_id,
+          students: classDash.students,
         });
       }}
     >
@@ -105,9 +91,8 @@ export const FrequencyPage = () => {
   const { handleClickButtonTools, handleClickSchool } = useDrawerContext();
   const { setSteps, setTotal, setIsLoading, defineQuery, query } =
     usePaginationContext();
-  const [infoSchool, setInfoSchool] = useState<iDashSchoolServer>();
+  const [infoSchool, setInfoSchool] = useState<iDashSchool>();
   const [listClassData, setListClassData] = useState<iClassDash[]>();
-  const [listClassSelect, setListClassSelect] = useState<iClassDashSelect[]>();
 
   const headCells: iheadCell[] = mdDown
     ? [
@@ -126,30 +111,30 @@ export const FrequencyPage = () => {
   }, [dateData]);
 
   useEffect(() => {
-    if (schoolData) {
+    if (schoolData && yearData) {
       const take = 4;
-      let queryData = query(take, date());
-      queryData += "&is_dash=true";
+      const queryData = query(take, date());
       setIsLoading(true);
       apiClass
-        .listDash(schoolData.id, queryData)
+        .listDash(schoolData.id, yearData.id, queryData)
         .then((res) => {
           setTotal(res.total);
           setListClassData(res.result);
-          setListClassSelect(res.classes);
           const arredSteps = Math.ceil(res.total / take);
           setSteps(arredSteps === 1 ? 0 : arredSteps);
         })
         .finally(() => setIsLoading(false));
     }
-  }, [date, schoolData, query]);
+  }, [date, schoolData, yearData, query]);
 
   useEffect(() => {
     if (schoolData && yearData) {
-      const query = defineQuery(yearData.id, undefined, undefined, date());
+      const query = defineQuery(undefined, undefined, undefined, date());
       setLoading(true);
       apiUsingNow
-        .get<iDashSchoolServer>(`schools/${schoolData.id}/dash/server${query}`)
+        .get<iDashSchool>(
+          `schools/${schoolData.id}/dash/${yearData.id}${query}`
+        )
         .then((res) => setInfoSchool(res.data))
         .finally(() => setLoading(false));
     }
@@ -200,10 +185,10 @@ export const FrequencyPage = () => {
                       <AutocompleteElement
                         name="class"
                         label="Turma"
-                        loading={!listClassSelect}
+                        loading={!listClassData}
                         options={
-                          listClassSelect && listClassSelect.length > 0
-                            ? listClassSelect
+                          listClassData && listClassData.length > 0
+                            ? listClassData
                             : [
                                 {
                                   id: 1,
@@ -228,7 +213,6 @@ export const FrequencyPage = () => {
                         key={el.class.id}
                         classDash={el}
                         date={date()}
-                        date_time={dateData.format("YYYY-MM-DD")}
                         name={monthData}
                       />
                     ))}

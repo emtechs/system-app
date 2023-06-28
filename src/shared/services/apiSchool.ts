@@ -19,6 +19,14 @@ const update = async (data: FieldValues, id: string): Promise<iSchool> => {
   return response;
 };
 
+const updateInfreq = async (data: FieldValues): Promise<iSchool> => {
+  const { data: response } = await apiUsingNow.patch<iSchool>(
+    `infrequency/school`,
+    data
+  );
+  return response;
+};
+
 const deleteServer = async (school_id: string, server_id: string) => {
   await apiUsingNow.delete(`schools/${school_id}/server/${server_id}`);
 };
@@ -35,4 +43,11 @@ const list = async (query: string): Promise<iList> => {
   return response;
 };
 
-export const apiSchool = { create, impSchool, update, deleteServer, list };
+export const apiSchool = {
+  create,
+  impSchool,
+  update,
+  updateInfreq,
+  deleteServer,
+  list,
+};

@@ -8,7 +8,7 @@ import {
   useDrawerContext,
   usePaginationContext,
 } from "../../contexts";
-import { iDashSchoolServer } from "../../interfaces";
+import { iDashSchool } from "../../interfaces";
 import { apiUsingNow } from "../../services";
 import { SelectSchool } from "../select";
 import { GridDashContent } from "./GridDashContent";
@@ -24,15 +24,17 @@ export const GridDashSchool = () => {
   const { handleClickFrequency, handleClickSchool } = useDrawerContext();
   const { setDateData } = useCalendarContext();
   const { defineQuery } = usePaginationContext();
-  const [infoSchool, setInfoSchool] = useState<iDashSchoolServer>();
+  const [infoSchool, setInfoSchool] = useState<iDashSchool>();
 
   useEffect(() => {
     if (schoolData && yearData) {
       const date = dayjs().format("DD/MM/YYYY");
-      const query = defineQuery(yearData.id, undefined, undefined, date);
+      const query = defineQuery(undefined, undefined, undefined, date);
       setLoading(true);
       apiUsingNow
-        .get<iDashSchoolServer>(`schools/${schoolData.id}/dash/server${query}`)
+        .get<iDashSchool>(
+          `schools/${schoolData.id}/dash/${yearData.id}${query}`
+        )
         .then((res) => setInfoSchool(res.data))
         .finally(() => setLoading(false));
     }

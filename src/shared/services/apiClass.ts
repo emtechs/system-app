@@ -3,7 +3,6 @@ import { apiUsingNow } from "./api";
 import {
   iClass,
   iClassDash,
-  iClassDashSelect,
   iClassSchoolList,
   iClassSchoolRequest,
   iClassWithSchool,
@@ -67,14 +66,13 @@ const listWithSchool = async (school_id: string, query: string) => {
 };
 
 interface ilistDash {
-  classes: iClassDashSelect[];
   total: number;
   result: iClassDash[];
 }
 
-const listDash = async (school_id: string, query: string) => {
+const listDash = async (school_id: string, year_id: string, query: string) => {
   const { data: response } = await apiUsingNow.get<ilistDash>(
-    `classes/school/${school_id}${query}`
+    `classes/school/${school_id}/dash/${year_id}${query}`
   );
 
   return response;

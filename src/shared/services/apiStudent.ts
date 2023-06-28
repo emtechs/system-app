@@ -18,12 +18,9 @@ const update = async (data: FieldValues, id: string): Promise<iStudent> => {
   return response;
 };
 
-const updateMany = async (
-  data: FieldValues,
-  year_id: string
-): Promise<iStudent> => {
+const updateInfreq = async (data: FieldValues): Promise<iStudent> => {
   const { data: response } = await apiUsingNow.patch<iStudent>(
-    `students/infreq/${year_id}`,
+    `/infrequency/student`,
     data
   );
   return response;
@@ -44,7 +41,7 @@ const impStudentAll = async (data: FormData): Promise<void> => {
 export const apiStudent = {
   create,
   update,
-  updateMany,
+  updateInfreq,
   impStudent,
   impStudentAll,
 };

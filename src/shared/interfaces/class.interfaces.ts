@@ -37,13 +37,15 @@ export interface iClassSelect extends iClass {
 }
 
 export interface iClassDash {
-  class: iClass;
+  id: string;
+  label: string;
   infrequency: number;
-  school: iWithSchool;
-  year: iYear;
+  class: iClass;
   students: {
-    student: iStudent;
+    student_id: string;
   }[];
+  school_id: string;
+  year_id: string;
   _count: { frequencies: number; students: number };
 }
 

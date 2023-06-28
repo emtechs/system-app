@@ -3,7 +3,6 @@ import {
   iFrequency,
   iFrequencyBase,
   iFrequencyStudentsBase,
-  iFrequencyWithInfreq,
 } from "../interfaces";
 import { apiUsingNow } from "./api";
 
@@ -15,11 +14,17 @@ const create = async (data: FieldValues): Promise<iFrequency> => {
   return response;
 };
 
-const update = async (
-  data: FieldValues,
-  id: string
-): Promise<iFrequencyWithInfreq> => {
-  const { data: response } = await apiUsingNow.patch<iFrequencyWithInfreq>(
+interface iFreqUpdate {
+  year_id: string;
+  class_id: string;
+  school_id: string;
+  students: { student_id: string }[];
+  periods: { period_id: string }[];
+  infrequency: number;
+}
+
+const update = async (data: FieldValues, id: string): Promise<iFreqUpdate> => {
+  const { data: response } = await apiUsingNow.patch<iFreqUpdate>(
     `frequencies/${id}`,
     data
   );
@@ -33,8 +38,8 @@ const updateInfreq = async (data: FieldValues, id: string): Promise<void> => {
 const updateFreqStudent = async (
   data: FieldValues,
   id: string
-): Promise<{frequency_id: string}> => {
-  const { data: response } = await apiUsingNow.patch<{frequency_id: string}>(
+): Promise<{ frequency_id: string }> => {
+  const { data: response } = await apiUsingNow.patch<{ frequency_id: string }>(
     `frequencies/student/${id}`,
     data
   );

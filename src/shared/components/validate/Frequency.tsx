@@ -11,17 +11,13 @@ export const ValidateFrequency = () => {
 
   useEffect(() => {
     if (classData) {
-      const students = classData.students.map(({ student }) => {
-        return { student_id: student.id };
-      });
       createFrequency({
         date: dateData.format("DD/MM/YYYY"),
-        date_time: dateData.format("YYYY-MM-DD"),
         name: monthData,
         class_id: classData.class.id,
-        school_id: classData.school.id,
-        year_id: classData.year.id,
-        students,
+        school_id: classData.school_id,
+        year_id: classData.year_id,
+        students: classData.students,
       });
     }
   }, [classData, dateData, monthData]);

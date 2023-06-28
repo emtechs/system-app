@@ -15,7 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext, usePaginationContext } from ".";
 import { FieldValues } from "react-hook-form";
-import { apiClass, apiFrequency, apiStudent } from "../services";
+import { apiFrequency } from "../services";
 
 interface iFrequencyContextData {
   createFrequency: (data: FieldValues) => Promise<void>;
@@ -75,29 +75,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
     async (data: FieldValues, id: string, isOpen?: boolean) => {
       try {
         setLoading(true);
-        const frequency = await apiFrequency.update(data, id);
-        const students = frequency.students.map((el) => {
-          return {
-            value: el.infrequency,
-            presences: el.presences,
-            justified: el.justified,
-            absences: el.absences,
-            frequencies: el.frequencies,
-            id: el.id,
-          };
-        });
-        await apiFrequency.updateInfreq({ infreq: frequency.infrequency }, id);
-        await apiStudent.updateMany({ students }, frequency.class.year.id);
-        await apiClass.updateSchool({
-          class_id: frequency.class.class.id,
-          school_id: frequency.class.school.id,
-          year_id: frequency.class.year.id,
-          class_infreq: frequency.class_infreq ? frequency.class_infreq : 0,
-          school_frequencies: frequency.school_frequencies
-            ? frequency.school_frequencies
-            : 0,
-          school_infreq: frequency.school_infreq ? frequency.school_infreq : 0,
-        });
+        await apiFrequency.update(data, id);
         if (isOpen) {
           handleSucess("Frequência reaberta com sucesso!");
         } else {

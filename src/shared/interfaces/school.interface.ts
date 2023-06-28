@@ -16,7 +16,7 @@ export interface iDirector {
   cpf: string;
 }
 
-export interface iDashSchoolServer {
+export interface iDashSchool{
   frequencies: number;
   day_infreq?: number;
   school_infreq: number;
