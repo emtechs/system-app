@@ -5,32 +5,16 @@ import {
   useClassContext,
   useDrawerContext,
 } from "../../../shared/contexts";
-import {
-  Box,
-  Breadcrumbs,
-  Card,
-  CardContent,
-  Chip,
-  Grid,
-  Paper,
-} from "@mui/material";
+import { Box, Card, CardContent, Grid, Paper } from "@mui/material";
 import { LayoutBasePage } from "../../../shared/layouts";
 import {
   CalendarFrequency,
   GridDashContent,
-  LinkRouter,
   SelectSchoolClass,
 } from "../../../shared/components";
 import { iDashClass } from "../../../shared/interfaces";
 import { useEffect, useState } from "react";
-import {
-  AddBox,
-  Checklist,
-  EventBusy,
-  Groups,
-  School,
-  Workspaces,
-} from "@mui/icons-material";
+import { Checklist, EventBusy, Groups, Workspaces } from "@mui/icons-material";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/pt-br";
@@ -41,9 +25,9 @@ dayjs.extend(localizedFormat);
 export const CreateFrequencyCommon = () => {
   const { theme, setLoading } = useAppThemeContext();
   const { yearData, schoolData } = useAuthContext();
-  const { handleClickSchool, handleClickButtonTools } = useDrawerContext();
+  const { handleClickSchool } = useDrawerContext();
   const { monthData } = useCalendarContext();
-  const { classWithSchoolSelect, setClassWithSchoolSelect } = useClassContext();
+  const { classWithSchoolSelect } = useClassContext();
   const [infoClass, setInfoClass] = useState<iDashClass>();
 
   useEffect(() => {
@@ -63,50 +47,50 @@ export const CreateFrequencyCommon = () => {
     return <Navigate to="/" />;
   }
 
+  // const title = (
+  //   <Breadcrumbs aria-label="breadcrumb">
+  //     <LinkRouter
+  //       underline="none"
+  //       color="inherit"
+  //       to="/"
+  //       onClick={handleClickButtonTools}
+  //     >
+  //       <Chip
+  //         clickable
+  //         color="primary"
+  //         variant="outlined"
+  //         label={schoolData?.name}
+  //         icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+  //       />
+  //     </LinkRouter>
+  //     {classWithSchoolSelect && (
+  //       <LinkRouter
+  //         underline="none"
+  //         color="inherit"
+  //         to="/frequency/create"
+  //         onClick={() => {
+  //           setClassWithSchoolSelect(undefined);
+  //         }}
+  //       >
+  //         <Chip
+  //           clickable
+  //           color="primary"
+  //           variant="outlined"
+  //           label={classWithSchoolSelect.class.name}
+  //           icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
+  //         />
+  //       </LinkRouter>
+  //     )}
+  //     <Chip
+  //       label="Frequência"
+  //       color="primary"
+  //       icon={<AddBox sx={{ mr: 0.5 }} fontSize="inherit" />}
+  //     />
+  //   </Breadcrumbs>
+  // );
+
   return (
-    <LayoutBasePage
-      title={
-        <Breadcrumbs aria-label="breadcrumb">
-          <LinkRouter
-            underline="none"
-            color="inherit"
-            to="/"
-            onClick={handleClickButtonTools}
-          >
-            <Chip
-              clickable
-              color="primary"
-              variant="outlined"
-              label={schoolData?.name}
-              icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-            />
-          </LinkRouter>
-          {classWithSchoolSelect && (
-            <LinkRouter
-              underline="none"
-              color="inherit"
-              to="/frequency/create"
-              onClick={() => {
-                setClassWithSchoolSelect(undefined);
-              }}
-            >
-              <Chip
-                clickable
-                color="primary"
-                variant="outlined"
-                label={classWithSchoolSelect.class.name}
-                icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
-              />
-            </LinkRouter>
-          )}
-          <Chip
-            label="Frequência"
-            color="primary"
-            icon={<AddBox sx={{ mr: 0.5 }} fontSize="inherit" />}
-          />
-        </Breadcrumbs>
-      }
-    >
+    <LayoutBasePage>
       <Box my={1} mx={2} component={Paper} variant="outlined">
         <Card>
           <CardContent>

@@ -66,6 +66,7 @@ const listWithSchool = async (school_id: string, query: string) => {
 };
 
 interface ilistDash {
+  classes: iClassDash[];
   total: number;
   result: iClassDash[];
 }

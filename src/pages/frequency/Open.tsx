@@ -1,18 +1,17 @@
-import { Breadcrumbs, Chip, TableCell, TableRow } from "@mui/material";
+import { Chip, TableCell, TableRow } from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
 import {
   useAppThemeContext,
   useAuthContext,
-  useDrawerContext,
   usePaginationContext,
 } from "../../shared/contexts";
 import { iFrequency, iheadCell } from "../../shared/interfaces";
-import { LinkRouter, TableBase } from "../../shared/components";
+import { TableBase } from "../../shared/components";
 import { Navigate, useNavigate } from "react-router-dom";
 import { defineBgColorInfrequency } from "../../shared/scripts";
-import { Outbox, School } from "@mui/icons-material";
+import { Outbox } from "@mui/icons-material";
 
 const headCells: iheadCell[] = [
   { order: "date", numeric: false, label: "Data" },
@@ -53,7 +52,6 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
 export const FrequencyOpenPage = () => {
   const navigate = useNavigate();
   const { yearData, schoolData } = useAuthContext();
-  const { handleClickButtonTools } = useDrawerContext();
   const { setCount, take, skip, setIsLoading, defineQuery } =
     usePaginationContext();
   const [data, setData] = useState<iFrequency[]>();
@@ -79,27 +77,11 @@ export const FrequencyOpenPage = () => {
   return (
     <LayoutBasePage
       title={
-        <Breadcrumbs aria-label="breadcrumb">
-          <LinkRouter
-            underline="none"
-            color="inherit"
-            to="/"
-            onClick={handleClickButtonTools}
-          >
-            <Chip
-              clickable
-              color="primary"
-              variant="outlined"
-              label={schoolData.name}
-              icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-            />
-          </LinkRouter>
-          <Chip
-            label="Em Aberto"
-            color="primary"
-            icon={<Outbox sx={{ mr: 0.5 }} fontSize="inherit" />}
-          />
-        </Breadcrumbs>
+        <Chip
+          label="Em Aberto"
+          color="primary"
+          icon={<Outbox sx={{ mr: 0.5 }} fontSize="inherit" />}
+        />
       }
     >
       <TableBase headCells={headCells}>

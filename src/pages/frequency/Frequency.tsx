@@ -1,6 +1,5 @@
 import {
   Box,
-  Breadcrumbs,
   Card,
   CardContent,
   Chip,
@@ -20,7 +19,6 @@ import {
 } from "../../shared/contexts";
 import {
   GridDashContent,
-  LinkRouter,
   Pagination,
   SelectDate,
   TableBase,
@@ -33,7 +31,6 @@ import {
   EventAvailable,
   EventBusy,
   Groups,
-  School,
   Workspaces,
 } from "@mui/icons-material";
 import { Navigate } from "react-router-dom";
@@ -78,7 +75,7 @@ const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
           bgcolor: defineBgColorInfrequency(classDash.infrequency, theme),
         }}
       >
-        {String(classDash.infrequency).replace(".", ",")}%
+        {classDash.infrequency.toFixed(0)}%
       </TableCell>
     </TableRow>
   );
@@ -88,11 +85,13 @@ export const FrequencyPage = () => {
   const { setLoading, mdDown } = useAppThemeContext();
   const { yearData, schoolData } = useAuthContext();
   const { dateData, monthData } = useCalendarContext();
-  const { handleClickButtonTools, handleClickSchool } = useDrawerContext();
+  const { handleClickSchool } = useDrawerContext();
   const { setSteps, setTotal, setIsLoading, defineQuery, query } =
     usePaginationContext();
   const [infoSchool, setInfoSchool] = useState<iDashSchool>();
   const [listClassData, setListClassData] = useState<iClassDash[]>();
+  const [listClassSelectData, setListClassSelectData] =
+    useState<iClassDash[]>();
 
   const headCells: iheadCell[] = mdDown
     ? [
@@ -119,6 +118,7 @@ export const FrequencyPage = () => {
         .listDash(schoolData.id, yearData.id, queryData)
         .then((res) => {
           setTotal(res.total);
+          setListClassSelectData(res.classes);
           setListClassData(res.result);
           const arredSteps = Math.ceil(res.total / take);
           setSteps(arredSteps === 1 ? 0 : arredSteps);
@@ -145,27 +145,11 @@ export const FrequencyPage = () => {
   return (
     <LayoutBasePage
       title={
-        <Breadcrumbs aria-label="breadcrumb">
-          <LinkRouter
-            underline="none"
-            color="inherit"
-            to="/"
-            onClick={handleClickButtonTools}
-          >
-            <Chip
-              clickable
-              color="primary"
-              variant="outlined"
-              label={schoolData.name}
-              icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-            />
-          </LinkRouter>
-          <Chip
-            label="Frequência"
-            color="primary"
-            icon={<EventAvailable sx={{ mr: 0.5 }} fontSize="inherit" />}
-          />
-        </Breadcrumbs>
+        <Chip
+          label="Frequência"
+          color="primary"
+          icon={<EventAvailable sx={{ mr: 0.5 }} fontSize="inherit" />}
+        />
       }
     >
       <Box my={1} mx={2} component={Paper} variant="outlined">
@@ -185,10 +169,10 @@ export const FrequencyPage = () => {
                       <AutocompleteElement
                         name="class"
                         label="Turma"
-                        loading={!listClassData}
+                        loading={!listClassSelectData}
                         options={
-                          listClassData && listClassData.length > 0
-                            ? listClassData
+                          listClassSelectData && listClassSelectData.length > 0
+                            ? listClassSelectData
                             : [
                                 {
                                   id: 1,

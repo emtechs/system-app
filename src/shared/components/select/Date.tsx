@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CardDateAction } from "../card/CardDateAction";
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { CalendarDashCommon } from "../calendar";
+import { CalendarSelect } from "../calendar";
 
 export const SelectDate = () => {
   const [open, setOpen] = useState(false);
@@ -13,7 +13,7 @@ export const SelectDate = () => {
       <Dialog open={open}>
         <DialogTitle>Selecione uma Data</DialogTitle>
         <DialogContent>
-          <CalendarDashCommon onClick={handleClose} />
+          <CalendarSelect onClick={handleClose} />
         </DialogContent>
       </Dialog>
     </>

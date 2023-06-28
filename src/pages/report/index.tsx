@@ -1,6 +1,5 @@
 import {
   Box,
-  Breadcrumbs,
   Button,
   Card,
   CardContent,
@@ -13,16 +12,14 @@ import {
   Stepper,
 } from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
-import { useAuthContext, useDrawerContext } from "../../shared/contexts";
-import { LinkRouter } from "../../shared/components";
-import { School, Summarize } from "@mui/icons-material";
+import { useAuthContext } from "../../shared/contexts";
+import { Summarize } from "@mui/icons-material";
 import { Navigate } from "react-router-dom";
 import { FormContainer } from "react-hook-form-mui";
 import { useState } from "react";
 
 export const ReportPage = () => {
   const { schoolData } = useAuthContext();
-  const { handleClickButtonTools } = useDrawerContext();
   const [activeStep, setActiveStep] = useState(0);
 
   if (!schoolData) return <Navigate to="/" />;
@@ -49,27 +46,11 @@ export const ReportPage = () => {
   return (
     <LayoutBasePage
       title={
-        <Breadcrumbs aria-label="breadcrumb">
-          <LinkRouter
-            underline="none"
-            color="inherit"
-            to="/"
-            onClick={handleClickButtonTools}
-          >
-            <Chip
-              clickable
-              color="primary"
-              variant="outlined"
-              label={schoolData.name}
-              icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-            />
-          </LinkRouter>
-          <Chip
-            label="Relatório"
-            color="primary"
-            icon={<Summarize sx={{ mr: 0.5 }} fontSize="inherit" />}
-          />
-        </Breadcrumbs>
+        <Chip
+          label="Relatório"
+          color="primary"
+          icon={<Summarize sx={{ mr: 0.5 }} fontSize="inherit" />}
+        />
       }
     >
       <Box my={1} mx={2} component={Paper} variant="outlined">

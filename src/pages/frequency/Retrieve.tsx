@@ -1,9 +1,7 @@
 import {
   Box,
-  Breadcrumbs,
   Button,
   Checkbox,
-  Chip,
   FormControlLabel,
   TableCell,
   TableRow,
@@ -13,21 +11,14 @@ import {
   DialogFinishFrequency,
   DialogMissed,
   DialogRemoveMissed,
-  LinkRouter,
   TableBase,
   Tools,
 } from "../../shared/components";
 import {
-  useAuthContext,
-  useDrawerContext,
   useFrequencyContext,
   usePaginationContext,
 } from "../../shared/contexts";
-import {
-  iFrequencyBase,
-  iFrequencyStudentsBase,
-  iheadCell,
-} from "../../shared/interfaces";
+import { iFrequencyStudentsBase, iheadCell } from "../../shared/interfaces";
 import { ChangeEvent, useEffect, useState } from "react";
 import { apiFrequency } from "../../shared/services";
 import dayjs from "dayjs";
@@ -39,12 +30,7 @@ import {
   defineBgColorFrequency,
   statusFrequencyPtBr,
 } from "../../shared/scripts";
-import {
-  Checklist,
-  EventAvailable,
-  School,
-  Workspaces,
-} from "@mui/icons-material";
+import { Checklist } from "@mui/icons-material";
 dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
 
@@ -107,12 +93,12 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
 export const RetrieveFrequencyPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const { schoolData } = useAuthContext();
-  const { handleClickButtonTools } = useDrawerContext();
+  // const { schoolData } = useAuthContext();
+  // const { handleClickButtonTools } = useDrawerContext();
   const { dataStudents, setDataStudents, alterStudents, setAlterStudents } =
     useFrequencyContext();
   const { setIsLoading, query, setTotal, setSteps } = usePaginationContext();
-  const [dataFrequency, setDataFrequency] = useState<iFrequencyBase>();
+  // const [dataFrequency, setDataFrequency] = useState<iFrequencyBase>();
   const [isAlter, setIsAlter] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(!open);
@@ -147,7 +133,7 @@ export const RetrieveFrequencyPage = () => {
       apiFrequency
         .students(id, queryData)
         .then((res) => {
-          setDataFrequency(res.frequency);
+          // setDataFrequency(res.frequency);
           setDataStudents(res.result);
         })
         .finally(() => setIsLoading(false));
@@ -158,41 +144,26 @@ export const RetrieveFrequencyPage = () => {
     return <Navigate to={"/frequency/create"} />;
   }
 
+  // const title = [
+  //   <LinkRouter underline="none" color="inherit" to="/frequency/create">
+  //     <Chip
+  //       clickable
+  //       color="primary"
+  //       variant="outlined"
+  //       label={dataFrequency?.class.class.name}
+  //       icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
+  //     />
+  //   </LinkRouter>,
+  //   <Chip
+  //     label={dataFrequency?.date}
+  //     color="primary"
+  //     icon={<EventAvailable sx={{ mr: 0.5 }} fontSize="inherit" />}
+  //   />,
+  // ];
+
   return (
     <>
       <LayoutBasePage
-        title={
-          <Breadcrumbs aria-label="breadcrumb">
-            <LinkRouter
-              underline="none"
-              color="inherit"
-              to="/"
-              onClick={handleClickButtonTools}
-            >
-              <Chip
-                clickable
-                color="primary"
-                variant="outlined"
-                label={schoolData?.name}
-                icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-              />
-            </LinkRouter>
-            <LinkRouter underline="none" color="inherit" to="/frequency/create">
-              <Chip
-                clickable
-                color="primary"
-                variant="outlined"
-                label={dataFrequency?.class.class.name}
-                icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
-              />
-            </LinkRouter>
-            <Chip
-              label={dataFrequency?.date}
-              color="primary"
-              icon={<EventAvailable sx={{ mr: 0.5 }} fontSize="inherit" />}
-            />
-          </Breadcrumbs>
-        }
         tools={
           <Tools
             finish={
