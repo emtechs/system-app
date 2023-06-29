@@ -45,7 +45,7 @@ export const CreateFrequencyAdm = () => {
   }, [classWithSchoolSelect, schoolSelect, monthData, yearData]);
 
   return (
-    <LayoutBasePage title="Nova Frequência" isSchool>
+    <LayoutBasePage title="Nova Frequência">
       <Box my={1} mx={2} component={Paper} variant="outlined">
         <Card>
           <CardContent>

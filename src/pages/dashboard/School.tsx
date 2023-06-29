@@ -1,13 +1,17 @@
 import { Box, Card, CardContent, Grid, Paper } from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
-import { CalendarDashCommon, GridDashSchool } from "../../shared/components";
-import { useAppThemeContext } from "../../shared/contexts/ThemeContext";
+import {
+  CalendarDashCommon,
+  GridDashSchool,
+  TitleSchoolDash,
+} from "../../shared/components";
+import { useAppThemeContext } from "../../shared/contexts";
 
 export const DashboardSchool = () => {
   const { theme } = useAppThemeContext();
 
   return (
-    <LayoutBasePage>
+    <LayoutBasePage title={<TitleSchoolDash />}>
       <Box my={1} mx={2} component={Paper} variant="outlined">
         <Card>
           <CardContent>

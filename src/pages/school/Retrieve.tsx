@@ -1,5 +1,6 @@
 import {
   Button,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
@@ -12,19 +13,24 @@ import {
 } from "@mui/material";
 import {
   useAppThemeContext,
+  useAuthContext,
   useDrawerContext,
   usePaginationContext,
   useSchoolContext,
 } from "../../shared/contexts";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { iSchoolServer, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
-import { RemoveDone } from "@mui/icons-material";
-import { TableBase, Tools } from "../../shared/components";
+import { RemoveDone, School } from "@mui/icons-material";
+import {
+  TableBase,
+  TitleSchoolAdminPages,
+  Tools,
+} from "../../shared/components";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { rolePtBr } from "../../shared/scripts";
-import { LayoutSchoolPage } from "./Layout";
 import { useDebounce } from "../../shared/hooks";
+import { LayoutBasePage } from "../../shared/layouts";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Nome Completo" },
@@ -64,12 +70,12 @@ const CardServer = ({ school_id, schoolServer }: iCardServerProps) => {
 export const RetrieveSchoolPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const orderData = searchParams.get("order");
   const { debounce } = useDebounce();
+  const { schoolData } = useAuthContext();
   const { mdDown } = useAppThemeContext();
-  const { updateSchool, schoolSelect } = useSchoolContext();
-  const { setIsLoading, by, order, take, skip, setCount, setOrder } =
-    usePaginationContext();
+  const { updateSchool, schoolSelect, labelSchool, schoolRetrieve } =
+    useSchoolContext();
+  const { setIsLoading, setCount, defineQuery } = usePaginationContext();
   const [serversData, setServersData] = useState<iSchoolServer[]>();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState<string>();
@@ -79,52 +85,53 @@ export const RetrieveSchoolPage = () => {
   let school_id = "";
   if (id) {
     school_id = id;
-  } else if (schoolSelect) school_id = schoolSelect.id;
+  } else if (schoolData) school_id = schoolData.id;
+
+  const getServers = useCallback((school_id: string, query: string) => {
+    setIsLoading(true);
+    apiUsingNow
+      .get<{ total: number; result: iSchoolServer[] }>(
+        `schools/${school_id}/server${query}`
+      )
+      .then((res) => {
+        setServersData(res.data.result);
+        setCount(res.data.total);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  useEffect(() => {
+    if (id) schoolRetrieve(id);
+  }, [id]);
 
   useEffect(() => {
     if (school_id) {
-      let query = `?by=${by}&is_active=true`;
-      if (order) {
-        query += `&order=${order}`;
-      } else if (orderData) {
-        setOrder(orderData);
-        query += `&order=${orderData}`;
-      }
-      if (take) query += `&take=${take}`;
-      if (skip) query += `&skip=${skip}`;
+      let query = defineQuery() + "&is_active=true";
       if (search) {
         query += `&name=${search}`;
-        setIsLoading(true);
         debounce(() => {
-          apiUsingNow
-            .get<{ total: number; result: iSchoolServer[] }>(
-              `schools/${school_id}/server${query}`
-            )
-            .then((res) => {
-              setServersData(res.data.result);
-              setCount(res.data.total);
-            })
-            .finally(() => setIsLoading(false));
+          getServers(school_id, query);
         });
       } else {
-        setIsLoading(true);
-        apiUsingNow
-          .get<{ total: number; result: iSchoolServer[] }>(
-            `schools/${school_id}/server${query}`
-          )
-          .then((res) => {
-            setServersData(res.data.result);
-            setCount(res.data.total);
-          })
-          .finally(() => setIsLoading(false));
+        getServers(school_id, query);
       }
     }
-  }, [school_id, take, skip, order, by, search]);
+  }, [school_id, defineQuery, search]);
 
   return (
     <>
-      <LayoutSchoolPage
-        title="Listagem de Servidores da Escola"
+      <LayoutBasePage
+        title={
+          <TitleSchoolAdminPages
+            breadcrumbs={[
+              <Chip
+                label={labelSchool()}
+                color="primary"
+                icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+              />,
+            ]}
+          />
+        }
         tools={
           <Tools
             back="/school/list"
@@ -154,7 +161,6 @@ export const RetrieveSchoolPage = () => {
             }
           />
         }
-        isSchool
       >
         <TableBase headCells={headCells}>
           {serversData?.map((el) => (
@@ -165,7 +171,7 @@ export const RetrieveSchoolPage = () => {
             />
           ))}
         </TableBase>
-      </LayoutSchoolPage>
+      </LayoutBasePage>
       {schoolSelect && (
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Desativar Escola</DialogTitle>

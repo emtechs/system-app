@@ -69,10 +69,7 @@ export const ListStudentPage = () => {
   }, [yearData, isInfreq, defineQuery]);
 
   return (
-    <LayoutBasePage
-      title={"Listagem de Alunos"}
-      tools={<Tools isHome isFreq />}
-    >
+    <LayoutBasePage title={"Listagem de Alunos"} tools={<Tools isHome />}>
       <TableBase headCells={headCells}>
         {data?.map((classStudent) => (
           <CardStudent

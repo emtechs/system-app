@@ -1,29 +1,55 @@
 import { useSearchParams } from "react-router-dom";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Grid, Paper, Typography } from "@mui/material";
-import { useSchoolContext, useUserContext } from "../../shared/contexts";
-import { ValidateCPF } from "../../shared/components";
+import { Box, Chip, Grid, Paper, Typography } from "@mui/material";
+import {
+  useAuthContext,
+  useSchoolContext,
+  useUserContext,
+} from "../../shared/contexts";
+import {
+  TitleRetrieveSchoolAdminPages,
+  ValidateCPF,
+} from "../../shared/components";
 import { schoolUpdateDirectorSchema } from "../../shared/schemas";
-import { LayoutSchoolPage } from "./Layout";
+import { LayoutBasePage } from "../../shared/layouts";
+import { useEffect } from "react";
+import { Person } from "@mui/icons-material";
 
 export const DefineDiretPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
+  const { schoolData } = useAuthContext();
   const { updateAllUser } = useUserContext();
-  const { updateSchool, schoolSelect } = useSchoolContext();
+  const { updateSchool, schoolRetrieve } = useSchoolContext();
   let school_id = "";
   if (id) {
     school_id = id;
-  } else if (schoolSelect) school_id = schoolSelect.id;
+  } else if (schoolData) school_id = schoolData.id;
+
+  useEffect(() => {
+    if (id) schoolRetrieve(id);
+  }, [id]);
 
   return (
-    <LayoutSchoolPage title="Definir Diretor" isSchool>
+    <LayoutBasePage
+      title={
+        <TitleRetrieveSchoolAdminPages
+          breadcrumbs={[
+            <Chip
+              label="Diretor"
+              color="primary"
+              icon={<Person sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />,
+          ]}
+        />
+      }
+    >
       <FormContainer
         onSuccess={(data) => {
-          if (schoolSelect?.director) {
+          if (schoolData?.director) {
             updateAllUser(
-              schoolSelect.director.id,
+              schoolData.director.id,
               {
                 is_active: false,
                 role: "SERV",
@@ -31,7 +57,7 @@ export const DefineDiretPage = () => {
               true
             );
           }
-          const back = id ? `/school?id=${id}&order=name` : "/";
+          const back = id ? `/school?id=${id}` : "/school/list";
           updateSchool(data, school_id, "diretor", back);
         }}
         resolver={zodResolver(schoolUpdateDirectorSchema)}
@@ -44,7 +70,7 @@ export const DefineDiretPage = () => {
           variant="outlined"
         >
           <Grid container direction="column" p={2} spacing={2}>
-            {schoolSelect?.director && (
+            {schoolData && (
               <Grid container item direction="row" justifyContent="center">
                 <Grid
                   item
@@ -55,11 +81,13 @@ export const DefineDiretPage = () => {
                   display="flex"
                   justifyContent="center"
                 >
-                  <Box>
-                    <Typography>Diretor Atual</Typography>
-                    <Typography>Nome: {schoolSelect.director.name}</Typography>
-                    <Typography>CPF: {schoolSelect.director.cpf}</Typography>
-                  </Box>
+                  {schoolData.director && (
+                    <Box>
+                      <Typography>Diretor Atual</Typography>
+                      <Typography>Nome: {schoolData.director.name}</Typography>
+                      <Typography>CPF: {schoolData.director.cpf}</Typography>
+                    </Box>
+                  )}
                 </Grid>
               </Grid>
             )}
@@ -86,6 +114,6 @@ export const DefineDiretPage = () => {
           </Grid>
         </Box>
       </FormContainer>
-    </LayoutSchoolPage>
+    </LayoutBasePage>
   );
 };

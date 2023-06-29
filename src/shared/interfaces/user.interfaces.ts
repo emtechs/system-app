@@ -37,6 +37,12 @@ export interface iUserDash {
   countNotClass: number;
 }
 
+export interface iDiretor {
+  id: string;
+  name: string;
+  cpf: string;
+}
+
 export type iUserAdmRequest = z.infer<typeof createAdmSchema>;
 
 export type iUserDirectorRequest = z.infer<typeof createDirectorSchema>;

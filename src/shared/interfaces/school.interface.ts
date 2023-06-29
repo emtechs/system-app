@@ -6,15 +6,7 @@ import {
   studentCreateSchema,
   studentImportSchema,
 } from "../schemas";
-import { iClassWithSchoolDash } from "./class.interfaces";
-import { iDash, iRole } from "./user.interfaces";
-import { iStudentDash } from "./student.interface";
-
-export interface iDirector {
-  id: string;
-  name: string;
-  cpf: string;
-}
+import { iDash, iDiretor, iRole } from "./user.interfaces";
 
 export interface iDashSchool {
   frequencies: number;
@@ -27,11 +19,21 @@ export interface iDashSchool {
 
 export interface iSchool {
   id: string;
+  label: string;
   name: string;
-  is_active: boolean;
-  created_at: Date;
-  infreq: number;
-  director?: iDirector;
+  director?: iDiretor;
+}
+
+export interface iSchoolClass {
+  id: string;
+  label: string;
+  name: string;
+  director: iDiretor;
+  classes: number;
+  students: number;
+  frequencies: number;
+  servers: number;
+  infrequency: number;
 }
 
 interface iServer {
@@ -44,30 +46,6 @@ export interface iSchoolServer {
   role: iRole;
   dash: iDash;
   server: iServer;
-}
-
-export interface iSchoolList {
-  id: string;
-  name: string;
-  director: string;
-  classes: number;
-  students: number;
-  frequencies: number;
-  infrequency: number;
-}
-
-export interface iSchoolDash extends iSchool {
-  infrequency: number;
-  total_students: number;
-  classes: iClassWithSchoolDash[];
-}
-
-export interface iSchoolWithStudents extends iSchoolDash {
-  students: iStudentDash[];
-}
-
-export interface iSchoolSelect extends iSchool {
-  label: string;
 }
 
 export interface iWorkSchool {

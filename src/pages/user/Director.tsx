@@ -10,27 +10,19 @@ import { createDirectorSchema } from "../../shared/schemas";
 import { Box, Grid, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
-import { iSchool, iSchoolSelect } from "../../shared/interfaces";
+import { iSchool } from "../../shared/interfaces";
 import { LayoutUserPage } from "./Layout";
 
 export const CreateDirectorPage = () => {
   const { setLoading } = useAppThemeContext();
   const { createDirector } = useUserContext();
-  const [schoolDataSelect, setSchoolDataSelect] = useState<iSchoolSelect[]>();
+  const [schoolDataSelect, setSchoolDataSelect] = useState<iSchool[]>();
 
   useEffect(() => {
     setLoading(true);
     apiUsingNow
       .get<{ result: iSchool[] }>("schools?is_director=true&is_active=true")
-      .then((res) => {
-        if (res.data) {
-          setSchoolDataSelect(
-            res.data.result.map((school) => {
-              return { ...school, label: school.name };
-            })
-          );
-        }
-      })
+      .then((res) => setSchoolDataSelect(res.data.result))
       .finally(() => setLoading(false));
   }, []);
 

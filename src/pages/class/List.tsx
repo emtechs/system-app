@@ -97,7 +97,6 @@ export const ListClassPage = () => {
       tools={
         <Tools
           isHome
-          isFreq
           isSearch
           search={search}
           setSearch={(text) => setSearch(text)}

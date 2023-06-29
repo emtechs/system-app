@@ -1,23 +1,45 @@
 import { useSearchParams } from "react-router-dom";
-import { Box, Grid, Paper } from "@mui/material";
+import { Box, Chip, Grid, Paper } from "@mui/material";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSchoolContext } from "../../shared/contexts";
-import { ValidateCPF } from "../../shared/components";
+import { useAuthContext, useSchoolContext } from "../../shared/contexts";
+import {
+  TitleRetrieveSchoolAdminPages,
+  ValidateCPF,
+} from "../../shared/components";
 import { serverCreateSchema } from "../../shared/schemas";
-import { LayoutSchoolPage } from "./Layout";
+import { LayoutBasePage } from "../../shared/layouts";
+import { PersonAdd } from "@mui/icons-material";
+import { useEffect } from "react";
 
 export const CreateServerPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const { createServer, schoolSelect } = useSchoolContext();
+  const { schoolData } = useAuthContext();
+  const { createServer, schoolRetrieve } = useSchoolContext();
   let school_id = "";
   if (id) {
     school_id = id;
-  } else if (schoolSelect) school_id = schoolSelect.id;
+  } else if (schoolData) school_id = schoolData.id;
+
+  useEffect(() => {
+    if (id) schoolRetrieve(id);
+  }, [id]);
 
   return (
-    <LayoutSchoolPage title="Adicionar Servidor" isSchool>
+    <LayoutBasePage
+      title={
+        <TitleRetrieveSchoolAdminPages
+          breadcrumbs={[
+            <Chip
+              label="Servidor"
+              color="primary"
+              icon={<PersonAdd sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />,
+          ]}
+        />
+      }
+    >
       <FormContainer
         onSuccess={(data) => {
           const back = id ? `/school?id=${id}&order=name` : undefined;
@@ -51,6 +73,6 @@ export const CreateServerPage = () => {
           </Grid>
         </Box>
       </FormContainer>
-    </LayoutSchoolPage>
+    </LayoutBasePage>
   );
 };

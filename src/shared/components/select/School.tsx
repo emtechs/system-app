@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuthContext, usePaginationContext } from "../../contexts";
 import { BaseSchool, ListBase, Loading } from "./structure";
-import { iSchoolSelect, iWorkSchool } from "../../interfaces";
+import { iSchool, iWorkSchool } from "../../interfaces";
 import { apiUser } from "../../services";
 
 export const SelectSchool = () => {
   const { schoolData, setSchoolData } = useAuthContext();
   const { query, setSteps } = usePaginationContext();
-  const [listSchoolSelect, setListSchoolSelect] = useState<iSchoolSelect[]>();
+  const [listSchoolSelect, setListSchoolSelect] = useState<iSchool[]>();
   const [listData, setListData] = useState<iWorkSchool[]>();
   const [loading, setLoading] = useState(true);
 

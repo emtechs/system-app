@@ -1,21 +1,12 @@
 import { AddBox, ArrowBack, Home } from "@mui/icons-material";
-import {
-  Box,
-  Checkbox,
-  FormControlLabel,
-  Paper,
-  TextField,
-} from "@mui/material";
-import {
-  useAppThemeContext,
-  useDrawerContext,
-  useFrequencyContext,
-} from "../../contexts";
-import { ChangeEvent, ReactNode } from "react";
+import { Box, Paper, TextField } from "@mui/material";
+import { useAppThemeContext, useDrawerContext } from "../../contexts";
+import { ReactNode, useMemo } from "react";
 import { Dest } from "./Dest";
 import { SchoolTools } from "./School";
 import { UserTools } from "./User";
 import { useSearchParams } from "react-router-dom";
+import { Reset } from "./Reset";
 
 interface iToolsProps {
   back?: string;
@@ -32,8 +23,11 @@ interface iToolsProps {
   isSearch?: boolean;
   search?: string;
   setSearch?: (text: string) => void;
-  isFreq?: boolean;
+  isInfreq?: boolean;
+  infreq?: string;
+  setInfreq?: (text: string) => void;
   finish?: ReactNode;
+  onClickReset?: () => void;
 }
 
 export const Tools = ({
@@ -51,8 +45,11 @@ export const Tools = ({
   isSearch,
   search = "",
   setSearch,
-  isFreq,
+  isInfreq,
+  infreq = "",
+  setInfreq,
   finish,
+  onClickReset,
 }: iToolsProps) => {
   const [searchParams] = useSearchParams();
   const backclick = searchParams.get("back_click");
@@ -65,9 +62,7 @@ export const Tools = ({
     handleClickFrequency,
     handleClickStudent,
   } = useDrawerContext();
-  const { isInfreq, setIsInfreq } = useFrequencyContext();
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
-    setIsInfreq(event.target.checked);
+
   let onClickBack;
 
   if (backclick) {
@@ -89,6 +84,11 @@ export const Tools = ({
         break;
     }
   }
+
+  const disabled = useMemo(() => {
+    if (search.length > 0 || infreq.length > 0) return false;
+    return true;
+  }, [search, infreq]);
 
   return (
     <Box
@@ -146,20 +146,21 @@ export const Tools = ({
           onChange={(e) => setSearch?.(e.target.value)}
         />
       )}
-      <Box flex={1} display="flex" justifyContent="end">
-        {isFreq && (
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={isInfreq}
-                onChange={handleChange}
-                inputProps={{ "aria-label": "controlled" }}
-              />
-            }
-            label="Infrequência"
-          />
+      <Box flex={1} display="flex" justifyContent="end" gap={1}>
+        {isInfreq && (
+          <Box width={theme.spacing(16)}>
+            <TextField
+              size="small"
+              value={infreq}
+              type="number"
+              placeholder="Infrequência"
+              fullWidth
+              onChange={(e) => setInfreq?.(e.target.value)}
+            />
+          </Box>
         )}
         {finish}
+        {onClickReset && <Reset onClick={onClickReset} disabled={disabled} />}
       </Box>
     </Box>
   );

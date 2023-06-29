@@ -164,6 +164,7 @@ export const RetrieveFrequencyPage = () => {
   return (
     <>
       <LayoutBasePage
+        title=""
         tools={
           <Tools
             finish={

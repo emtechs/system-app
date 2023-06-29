@@ -1,39 +1,23 @@
 import { Breadcrumbs, Chip } from "@mui/material";
 import {
   useAppThemeContext,
-  useAuthContext,
   useDrawerContext,
+  useSchoolContext,
 } from "../../contexts";
-import { iChildren } from "../../interfaces";
 import { LinkRouter } from "../link";
 import { Home, School } from "@mui/icons-material";
-import { useLocation } from "react-router-dom";
-import { useCallback } from "react";
-import { adaptName } from "../../scripts";
 
-export const Title = ({ children }: iChildren) => {
-  const { mdDown } = useAppThemeContext();
-  const { schoolData, setSchoolData } = useAuthContext();
+export const TitleSchoolDashAdmin = () => {
+  const { labelSchool } = useSchoolContext();
   const { handleClickButtonTools } = useDrawerContext();
-  const location = useLocation();
 
-  const label = useCallback(() => {
-    if (schoolData) {
-      if (mdDown) return adaptName(schoolData.name);
-      return schoolData.name;
-    }
-    return "";
-  }, [schoolData, mdDown]);
-
-  return location.pathname === "/" ? (
+  return (
     <Breadcrumbs aria-label="breadcrumb">
       <LinkRouter
         underline="none"
         color="inherit"
         to="/"
-        onClick={() => {
-          setSchoolData(undefined);
-        }}
+        onClick={handleClickButtonTools}
       >
         <Chip
           clickable
@@ -43,15 +27,28 @@ export const Title = ({ children }: iChildren) => {
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </LinkRouter>
-      {schoolData && (
-        <Chip
-          label={label()}
-          color="primary"
-          icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-        />
-      )}
+      <Chip
+        color="primary"
+        variant="filled"
+        label={labelSchool()}
+        icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+      />
     </Breadcrumbs>
-  ) : (
+  );
+};
+
+interface iTitleSchoolDashAdminPagesProps {
+  breadcrumbs: JSX.Element[];
+}
+
+export const TitleSchoolDashAdminPages = ({
+  breadcrumbs,
+}: iTitleSchoolDashAdminPagesProps) => {
+  const { mdDown } = useAppThemeContext();
+  const { labelSchool } = useSchoolContext();
+  const { handleClickButtonTools } = useDrawerContext();
+
+  return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
       <LinkRouter
         underline="none"
@@ -63,11 +60,20 @@ export const Title = ({ children }: iChildren) => {
           clickable
           color="primary"
           variant="outlined"
-          label={label()}
+          label="Página Inicial"
+          icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
+        />
+      </LinkRouter>
+      <LinkRouter underline="none" color="inherit" to="/school">
+        <Chip
+          clickable
+          color="primary"
+          variant="outlined"
+          label={labelSchool()}
           icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </LinkRouter>
-      {children}
+      {breadcrumbs}
     </Breadcrumbs>
   );
 };

@@ -12,9 +12,9 @@ import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { TableBase, Tools } from "../../shared/components";
 import { Chip, TableCell, TableRow } from "@mui/material";
 import { defineBgColorInfrequency } from "../../shared/scripts";
-import { LayoutSchoolPage } from "./Layout";
 import { useDebounce } from "../../shared/hooks";
 import { Workspaces } from "@mui/icons-material";
+import { LayoutBasePage } from "../../shared/layouts";
 
 interface iCardClassProps {
   el: iClassSchoolList;
@@ -112,7 +112,7 @@ export const ListClassSchoolPage = () => {
     return <Navigate to="/" />;
 
   return (
-    <LayoutSchoolPage
+    <LayoutBasePage
       title={
         <Chip
           label="Turmas"
@@ -130,7 +130,6 @@ export const ListClassSchoolPage = () => {
           isSearch
           search={search}
           setSearch={(text) => setSearch(text)}
-          isFreq
         />
       }
     >
@@ -139,6 +138,6 @@ export const ListClassSchoolPage = () => {
           <CardClass key={index} el={el} />
         ))}
       </TableBase>
-    </LayoutSchoolPage>
+    </LayoutBasePage>
   );
 };

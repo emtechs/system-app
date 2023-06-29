@@ -21,7 +21,6 @@ export const DefineSchoolsPage = () => {
   return (
     <LayoutBasePage
       title="Definir Escola"
-      isSchool
       tools={
         <Tools
           back={back}

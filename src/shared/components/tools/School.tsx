@@ -6,7 +6,6 @@ import {
   Person,
   PersonAdd,
   School,
-  Workspaces,
 } from "@mui/icons-material";
 import {
   Button,
@@ -98,14 +97,6 @@ export const SchoolTools = ({ school_id }: iSchoolToolsProps) => {
               <Edit />
             </ListItemIcon>
             Editar
-          </MenuItem>
-        </Link>
-        <Link to={"/school/class?id=" + school_id + "&order=name"}>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Workspaces />
-            </ListItemIcon>
-            Turmas
           </MenuItem>
         </Link>
       </Menu>

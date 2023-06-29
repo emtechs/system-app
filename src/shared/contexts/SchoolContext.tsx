@@ -17,7 +17,9 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
-import { apiSchool, apiUser } from "../services";
+import { apiSchool, apiUser, apiUsingNow } from "../services";
+import { useAuthContext } from "./AuthContext";
+import { adaptName } from "../scripts";
 
 interface iSchoolContextData {
   createSchool: (data: iSchoolRequest) => Promise<void>;
@@ -42,17 +44,38 @@ interface iSchoolContextData {
   setUpdateSchoolData: Dispatch<SetStateAction<iSchool | undefined>>;
   updateServerData: iWorkSchool | undefined;
   setUpdateServerData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
+  schoolRetrieve: (id: string) => void;
+  labelSchool: () => string;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
 
 export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
-  const { setLoading, handleSucess, handleError } = useAppThemeContext();
+  const { setLoading, handleSucess, handleError, mdDown } =
+    useAppThemeContext();
+  const { schoolData, setSchoolData } = useAuthContext();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
   const [updateSchoolData, setUpdateSchoolData] = useState<iSchool>();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
+
+  const schoolRetrieve = useCallback((id: string) => {
+    setLoading(true);
+    apiUsingNow
+      .get<iSchool>(`schools/${id}`)
+      .then((res) => setSchoolData(res.data))
+      .catch(() => navigate("/"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const labelSchool = useCallback(() => {
+    if (schoolData) {
+      if (mdDown) return adaptName(schoolData.name);
+      return schoolData.name;
+    }
+    return "";
+  }, [schoolData, mdDown]);
 
   const handleCreateSchool = useCallback(async (data: iSchoolRequest) => {
     try {
@@ -164,6 +187,8 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setUpdateSchoolData,
         updateServerData,
         setUpdateServerData,
+        labelSchool,
+        schoolRetrieve,
       }}
     >
       {children}

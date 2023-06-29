@@ -90,7 +90,7 @@ export const CreateFrequencyCommon = () => {
   // );
 
   return (
-    <LayoutBasePage>
+    <LayoutBasePage title="">
       <Box my={1} mx={2} component={Paper} variant="outlined">
         <Card>
           <CardContent>

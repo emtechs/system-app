@@ -1,22 +1,42 @@
-import { useSchoolContext } from "../../shared/contexts";
+import { useAuthContext, useSchoolContext } from "../../shared/contexts";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schoolUpdateSchema } from "../../shared/schemas";
-import { Box, Button, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Chip, Grid, Paper, Typography } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
-import { LayoutSchoolPage } from "./Layout";
+import { LayoutBasePage } from "../../shared/layouts";
+import { TitleRetrieveSchoolAdminPages } from "../../shared/components";
+import { Edit } from "@mui/icons-material";
+import { useEffect } from "react";
 
 export const EditSchoolPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const { updateSchool, schoolSelect } = useSchoolContext();
+  const { schoolData } = useAuthContext();
+  const { updateSchool, schoolRetrieve } = useSchoolContext();
   let school_id = "";
   if (id) {
     school_id = id;
-  } else if (schoolSelect) school_id = schoolSelect.id;
+  } else if (schoolData) school_id = schoolData.id;
+
+  useEffect(() => {
+    if (id) schoolRetrieve(id);
+  }, [id]);
 
   return (
-    <LayoutSchoolPage title="Editar Escola" isSchool>
+    <LayoutBasePage
+      title={
+        <TitleRetrieveSchoolAdminPages
+          breadcrumbs={[
+            <Chip
+              label="Editar"
+              color="primary"
+              icon={<Edit sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />,
+          ]}
+        />
+      }
+    >
       <FormContainer
         onSuccess={(data) => {
           const back = id ? `/school?id=${id}&order=name` : "/";
@@ -32,7 +52,7 @@ export const EditSchoolPage = () => {
           variant="outlined"
         >
           <Grid container direction="column" p={2} spacing={2}>
-            {schoolSelect && (
+            {schoolData && (
               <Grid container item direction="row" justifyContent="center">
                 <Grid
                   item
@@ -45,7 +65,7 @@ export const EditSchoolPage = () => {
                 >
                   <Box>
                     <Typography>Informações Atuais</Typography>
-                    <Typography>Nome da Escola: {schoolSelect.name}</Typography>
+                    <Typography>Nome da Escola: {schoolData.name}</Typography>
                   </Box>
                 </Grid>
               </Grid>
@@ -70,6 +90,6 @@ export const EditSchoolPage = () => {
           </Grid>
         </Box>
       </FormContainer>
-    </LayoutSchoolPage>
+    </LayoutBasePage>
   );
 };

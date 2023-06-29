@@ -17,8 +17,8 @@ import { useEffect, useState } from "react";
 import { iSchool, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { TableBase, Tools } from "../../shared/components";
-import { LayoutSchoolPage } from "./Layout";
 import { useDebounce } from "../../shared/hooks";
+import { LayoutBasePage } from "../../shared/layouts";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Escola" },
@@ -113,7 +113,7 @@ export const ActiveSchoolPage = () => {
   }, [yearData, updateSchoolData, defineQuery, search]);
 
   return (
-    <LayoutSchoolPage
+    <LayoutBasePage
       title="Listagem de Escolas Inativas"
       tools={
         <Tools
@@ -129,6 +129,6 @@ export const ActiveSchoolPage = () => {
           <CardSchool key={el.id} school={el} />
         ))}
       </TableBase>
-    </LayoutSchoolPage>
+    </LayoutBasePage>
   );
 };

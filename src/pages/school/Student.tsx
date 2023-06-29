@@ -12,8 +12,8 @@ import { TableBase, Tools } from "../../shared/components";
 import { Chip, TableCell, TableRow } from "@mui/material";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 import { useDebounce } from "../../shared/hooks";
-import { LayoutSchoolPage } from "./Layout";
 import { Group } from "@mui/icons-material";
+import { LayoutBasePage } from "../../shared/layouts";
 
 interface iCardStudentProps {
   student: iStudentWithSchool;
@@ -127,7 +127,7 @@ export const ListStundetSchoolPage = () => {
     return <Navigate to="/" />;
 
   return (
-    <LayoutSchoolPage
+    <LayoutBasePage
       title={
         <Chip
           label="Alunos"
@@ -140,7 +140,6 @@ export const ListStundetSchoolPage = () => {
           isBack={!!back}
           back={back ? back : undefined}
           isNew={dashData === "ADMIN"}
-          isFreq
           isSearch
           search={search}
           setSearch={(text) => setSearch(text)}
@@ -152,6 +151,6 @@ export const ListStundetSchoolPage = () => {
           <CardStudent key={student.id} student={student} />
         ))}
       </TableBase>
-    </LayoutSchoolPage>
+    </LayoutBasePage>
   );
 };

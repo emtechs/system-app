@@ -1,15 +1,25 @@
-import { Box, Button, Grid, Paper } from "@mui/material";
+import { Box, Button, Chip, Grid, Paper } from "@mui/material";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSchoolContext } from "../../shared/contexts";
 import { schoolCreateSchema } from "../../shared/schemas";
-import { LayoutSchoolPage } from "./Layout";
+import { LayoutBasePage } from "../../shared/layouts";
+import { TitleSchoolAdminPages } from "../../shared/components";
+import { AddBox } from "@mui/icons-material";
 
 export const CreateSchoolPage = () => {
   const { createSchool } = useSchoolContext();
 
+  const breadcrumbs = [
+    <Chip
+      label="Nova Escola"
+      color="primary"
+      icon={<AddBox sx={{ mr: 0.5 }} fontSize="inherit" />}
+    />,
+  ];
+
   return (
-    <LayoutSchoolPage title="Nova Escola">
+    <LayoutBasePage title={<TitleSchoolAdminPages breadcrumbs={breadcrumbs} />}>
       <FormContainer
         onSuccess={createSchool}
         resolver={zodResolver(schoolCreateSchema)}
@@ -42,6 +52,6 @@ export const CreateSchoolPage = () => {
           </Grid>
         </Box>
       </FormContainer>
-    </LayoutSchoolPage>
+    </LayoutBasePage>
   );
 };
