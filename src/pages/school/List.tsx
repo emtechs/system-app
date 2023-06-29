@@ -2,7 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Chip, TableCell, TableRow } from "@mui/material";
 import { TableBase, TitleAdminDashPages, Tools } from "../../shared/components";
-import { useAuthContext, usePaginationContext } from "../../shared/contexts";
+import {
+  useAuthContext,
+  usePaginationContext,
+  useSchoolContext,
+} from "../../shared/contexts";
 import { iSchool, iheadCell } from "../../shared/interfaces";
 import { apiSchool } from "../../shared/services";
 import { useDebounce } from "../../shared/hooks";
@@ -38,6 +42,7 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
 export const ListSchoolPage = () => {
   const { debounce } = useDebounce();
   const { yearData } = useAuthContext();
+  const { is_director, setDirector } = useSchoolContext();
   const { setCount, setIsLoading, defineQuery } = usePaginationContext();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [search, setSearch] = useState<string>();
@@ -55,7 +60,7 @@ export const ListSchoolPage = () => {
 
   useEffect(() => {
     if (yearData) {
-      let query = defineQuery() + "&is_active=true";
+      let query = defineQuery() + is_director() + "&is_active=true";
       if (search) {
         query += `&name=${search}`;
         debounce(() => {
@@ -63,7 +68,7 @@ export const ListSchoolPage = () => {
         });
       } else getSchool(query);
     }
-  }, [yearData, defineQuery, search]);
+  }, [yearData, defineQuery, is_director, search]);
 
   const breadcrumbs = [
     <Chip
@@ -83,10 +88,12 @@ export const ListSchoolPage = () => {
           isSearch
           search={search}
           setSearch={(text) => setSearch(text)}
+          isDirector
           destNew="/school/create?back=/school/list"
           titleNew="Nova"
           onClickReset={() => {
             setSearch(undefined);
+            setDirector([true, true]);
           }}
         />
       }

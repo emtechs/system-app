@@ -46,6 +46,9 @@ interface iSchoolContextData {
   setUpdateServerData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
   schoolRetrieve: (id: string) => void;
   labelSchool: () => string;
+  director: boolean[];
+  setDirector: Dispatch<SetStateAction<boolean[]>>;
+  is_director: () => "" | "&is_director=true" | "&is_director=false";
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -59,6 +62,15 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
   const [updateSchoolData, setUpdateSchoolData] = useState<iSchool>();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
+  const [director, setDirector] = useState([true, true]);
+
+  const is_director = useCallback(() => {
+    if (director[0] !== director[1]) {
+      if (director[0]) return "&is_director=true";
+      if (director[1]) return "&is_director=false";
+    }
+    return "";
+  }, [director]);
 
   const schoolRetrieve = useCallback((id: string) => {
     setLoading(true);
@@ -189,6 +201,9 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setUpdateServerData,
         labelSchool,
         schoolRetrieve,
+        director,
+        setDirector,
+        is_director,
       }}
     >
       {children}

@@ -1,7 +1,19 @@
-import { AddBox, ArrowBack, Home } from "@mui/icons-material";
-import { Box, Paper, TextField } from "@mui/material";
-import { useAppThemeContext, useDrawerContext } from "../../contexts";
-import { ReactNode, useMemo } from "react";
+import { AddBox, ArrowBack, Home, Person, PersonOff } from "@mui/icons-material";
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  Menu,
+  MenuItem,
+  Paper,
+  TextField,
+} from "@mui/material";
+import {
+  useAppThemeContext,
+  useDrawerContext,
+  useSchoolContext,
+} from "../../contexts";
+import { ChangeEvent, MouseEvent, ReactNode, useMemo, useState } from "react";
 import { Dest } from "./Dest";
 import { SchoolTools } from "./School";
 import { UserTools } from "./User";
@@ -23,6 +35,7 @@ interface iToolsProps {
   isSearch?: boolean;
   search?: string;
   setSearch?: (text: string) => void;
+  isDirector?: boolean;
   isInfreq?: boolean;
   infreq?: string;
   setInfreq?: (text: string) => void;
@@ -45,6 +58,7 @@ export const Tools = ({
   isSearch,
   search = "",
   setSearch,
+  isDirector,
   isInfreq,
   infreq = "",
   setInfreq,
@@ -62,6 +76,26 @@ export const Tools = ({
     handleClickFrequency,
     handleClickStudent,
   } = useDrawerContext();
+  const { director, setDirector, is_director } = useSchoolContext();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleChange1 = (event: ChangeEvent<HTMLInputElement>) => {
+    setDirector([event.target.checked, event.target.checked]);
+  };
+
+  const handleChange2 = (event: ChangeEvent<HTMLInputElement>) => {
+    setDirector([event.target.checked, director[1]]);
+  };
+
+  const handleChange3 = (event: ChangeEvent<HTMLInputElement>) => {
+    setDirector([director[0], event.target.checked]);
+  };
 
   let onClickBack;
 
@@ -86,9 +120,10 @@ export const Tools = ({
   }
 
   const disabled = useMemo(() => {
-    if (search.length > 0 || infreq.length > 0) return false;
+    if (search.length > 0 || infreq.length > 0 || is_director().length > 0)
+      return false;
     return true;
-  }, [search, infreq]);
+  }, [search, infreq, is_director]);
 
   return (
     <Box
@@ -158,6 +193,51 @@ export const Tools = ({
               onChange={(e) => setInfreq?.(e.target.value)}
             />
           </Box>
+        )}
+        {isDirector && (
+          <>
+            <FormControlLabel
+              label="Diretor"
+              control={
+                <Checkbox
+                  id="basic-button"
+                  aria-controls={open ? "basic-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  checked={director[0] && director[1]}
+                  indeterminate={director[0] !== director[1]}
+                  onChange={handleChange1}
+                  onClick={handleClick}
+                />
+              }
+            />
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem>
+                <FormControlLabel
+                  label={<Person />}
+                  control={
+                    <Checkbox checked={director[0]} onChange={handleChange2} />
+                  }
+                />
+              </MenuItem>
+              <MenuItem>
+                <FormControlLabel
+                  label={<PersonOff />}
+                  control={
+                    <Checkbox checked={director[1]} onChange={handleChange3} />
+                  }
+                />
+              </MenuItem>
+            </Menu>
+          </>
         )}
         {finish}
         {onClickReset && <Reset onClick={onClickReset} disabled={disabled} />}
