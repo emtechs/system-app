@@ -35,7 +35,7 @@ export const GridDashSchoolAdmin = ({ school }: iGridDashSchoolAdminProps) => {
         >
           <Box mx={2} width={theme.spacing(45)} maxWidth="90%">
             <Card>
-              {school.director.name.length > 0 ? (
+              {school.director ? (
                 <Link to="/school/server">
                   <CardActionArea>
                     <CardContent

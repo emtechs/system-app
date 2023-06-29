@@ -24,11 +24,7 @@ export interface iSchool {
   director?: iDiretor;
 }
 
-export interface iSchoolClass {
-  id: string;
-  label: string;
-  name: string;
-  director: iDiretor;
+export interface iSchoolClass extends iSchool {
   classes: number;
   students: number;
   frequencies: number;
@@ -36,10 +32,10 @@ export interface iSchoolClass {
   infrequency: number;
 }
 
-interface iServer {
-  id: string;
-  name: string;
-  cpf: string;
+export interface iWorkSchool {
+  dash: iDash;
+  role: iRole;
+  school: iSchool;
 }
 
 export interface iSchoolServer {
@@ -48,10 +44,10 @@ export interface iSchoolServer {
   server: iServer;
 }
 
-export interface iWorkSchool {
-  dash: iDash;
-  role: iRole;
-  school: iSchool;
+interface iServer {
+  id: string;
+  name: string;
+  cpf: string;
 }
 
 export interface iWithSchool {

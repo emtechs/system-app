@@ -36,7 +36,7 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
       }}
     >
       <TableCell>{school.name}</TableCell>
-      <TableCell>{school.director.name}</TableCell>
+      <TableCell>{school.director?.name}</TableCell>
       <TableCell align="right">{school.classes}</TableCell>
       <TableCell align="right">{school.students}</TableCell>
       <TableCell align="right">{school.frequencies}</TableCell>
