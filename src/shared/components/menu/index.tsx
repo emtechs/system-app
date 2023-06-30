@@ -8,20 +8,23 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
+import { FirstPage, Logout, Person } from "@mui/icons-material";
+import { useLocation, Link } from "react-router-dom";
+import {
+  useAppThemeContext,
+  useAuthContext,
+  useDrawerContext,
+} from "../../contexts";
 import { iChildren } from "../../interfaces";
-import { Options } from "./options";
-import { useAuthContext, useDrawerContext } from "../../contexts";
 import { adaptName } from "../../scripts";
-import { Logout, Person } from "@mui/icons-material";
+import { Options } from "./options";
 
 export const Menu = ({ children }: iChildren) => {
-  const theme = useTheme();
-  const smDown = useMediaQuery(theme.breakpoints.down("sm"));
-  const { isDrawerOpen, toggleDrawerOpen } = useDrawerContext();
-  const { userData, logout } = useAuthContext();
+  const location = useLocation();
+  const { theme, smDown } = useAppThemeContext();
+  const { isDrawerOpen, toggleDrawerOpen, handleClick } = useDrawerContext();
+  const { userData, logout, dashData } = useAuthContext();
   const user = {
     name: adaptName(userData?.name ? userData?.name : ""),
   };
@@ -77,6 +80,17 @@ export const Menu = ({ children }: iChildren) => {
           </Box>
           <Box>
             <List component="nav">
+              {location.pathname.includes("/home/school") &&
+                dashData === "ADMIN" && (
+                  <Link to="/">
+                    <ListItemButton onClick={handleClick}>
+                      <ListItemIcon>
+                        <FirstPage />
+                      </ListItemIcon>
+                      <ListItemText primary="Voltar" />
+                    </ListItemButton>
+                  </Link>
+                )}
               <ListItemButton onClick={logout}>
                 <ListItemIcon>
                   <Logout />

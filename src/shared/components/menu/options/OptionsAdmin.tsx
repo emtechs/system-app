@@ -1,8 +1,3 @@
-import { Class } from "./Class";
-import { Frequency } from "./Frequency";
-import { Import } from "./Import";
-import { Student } from "./Student";
-import { useDrawerContext } from "../../../contexts";
 import {
   AccountBox,
   Checklist,
@@ -13,10 +8,14 @@ import {
   School,
   Workspaces,
 } from "@mui/icons-material";
-import { Profile } from "./Profile";
+import { useLocation } from "react-router-dom";
+import { useDrawerContext } from "../../../contexts";
+import { Class, Frequency, Import, Profile, Student } from "../components";
 import { ListItemLinkOpen, OtherListItemLink } from "../item";
+import { OptionsSchoolHome } from "./OptionsSchoolHome";
 
 export const OptionsAdmin = () => {
+  const location = useLocation();
   const {
     handleClick,
     handleClickClass,
@@ -30,7 +29,10 @@ export const OptionsAdmin = () => {
     openProfile,
     openStudent,
   } = useDrawerContext();
-  return (
+
+  return location.pathname.includes("/home/school") ? (
+    <OptionsSchoolHome />
+  ) : (
     <>
       <OtherListItemLink
         onClick={handleClick}

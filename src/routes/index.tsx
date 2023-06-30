@@ -52,7 +52,7 @@ const AppRoutes = () => {
             element={<ImportStudentPage back="/student" />}
           />
           <Route path="/school" element={<SchoolPage />} />
-          <Route path="/school/dash" element={<DashboardSchoolAdmin />} />
+          <Route path="/home/school" element={<DashboardSchoolAdmin />} />
         </Route>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/report" element={<ReportPage />} />

@@ -1,3 +1,4 @@
+import { useDrawerContext } from "../../../contexts";
 import {
   AccountBox,
   Groups,
@@ -6,11 +7,13 @@ import {
   Summarize,
   Workspaces,
 } from "@mui/icons-material";
-import { useDrawerContext } from "../../../contexts";
+import { Profile } from "../components/Profile";
 import { ListItemLinkOpen, OtherListItemLink } from "../item";
-import { Class, Profile, Student, User } from "../components";
+import { User } from "../components/User";
+import { Class } from "../components/Class";
+import { Student } from "../components/Student";
 
-export const OptionsSchool = () => {
+export const OptionsSchoolHome = () => {
   const {
     handleClick,
     handleClickUser,
@@ -28,6 +31,7 @@ export const OptionsSchool = () => {
         onClick={handleClick}
         icon={<Home />}
         label="Página Inicial"
+        to="/home/school"
       />
       <ListItemLinkOpen
         onClick={handleClickUser}

@@ -71,7 +71,7 @@ export const SchoolTools = () => {
         }}
       >
         {isHome && (
-          <Link to="/school/dash">
+          <Link to="/home/school">
             <MenuItem onClick={handleClose}>
               <ListItemIcon>
                 <Home />

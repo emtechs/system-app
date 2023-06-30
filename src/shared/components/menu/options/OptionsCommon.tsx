@@ -1,5 +1,3 @@
-import { Frequency } from "./Frequency";
-import { useAppThemeContext, useDrawerContext } from "../../../contexts";
 import {
   AccountBox,
   Checklist,
@@ -7,9 +5,9 @@ import {
   School as SchoolIcon,
   Summarize,
 } from "@mui/icons-material";
-import { Profile } from "./Profile";
+import { useAppThemeContext, useDrawerContext } from "../../../contexts";
 import { ListItemLinkOpen, OtherListItemLink } from "../item";
-import { School } from "./School";
+import { Frequency, Profile, School } from "../components";
 
 export const OptionsCommon = () => {
   const { mdDown } = useAppThemeContext();
