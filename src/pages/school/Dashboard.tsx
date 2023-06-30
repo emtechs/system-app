@@ -1,18 +1,61 @@
-import { Box, Card, CardContent, Grid, Paper } from "@mui/material";
+import {
+  Box,
+  Breadcrumbs,
+  Card,
+  CardContent,
+  Chip,
+  Grid,
+  Paper,
+} from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
 import {
   CalendarDashCommon,
   GridDashSchoolAdmin,
-  TitleSchoolDashAdmin,
+  LinkRouter,
 } from "../../shared/components";
-import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
+import {
+  useAppThemeContext,
+  useAuthContext,
+  useDrawerContext,
+  useSchoolContext,
+} from "../../shared/contexts";
+import { Home, School } from "@mui/icons-material";
 
 export const DashboardSchoolAdmin = () => {
   const { theme } = useAppThemeContext();
-  const { schoolClassSelect } = useSchoolContext();
+  const { schoolDataAdmin } = useAuthContext();
+  const { labelSchoolDataAdmin } = useSchoolContext();
+  const { handleClickButtonTools } = useDrawerContext();
 
   return (
-    <LayoutBasePage title={<TitleSchoolDashAdmin />}>
+    <LayoutBasePage
+      title={
+        <Breadcrumbs aria-label="breadcrumb">
+          <LinkRouter
+            underline="none"
+            color="inherit"
+            to="/home/school"
+            onClick={handleClickButtonTools}
+          >
+            <Chip
+              clickable
+              color="primary"
+              variant="outlined"
+              label="Página Inicial"
+              icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </LinkRouter>
+          {schoolDataAdmin && (
+            <Chip
+              color="primary"
+              variant="filled"
+              label={labelSchoolDataAdmin()}
+              icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          )}
+        </Breadcrumbs>
+      }
+    >
       <Box my={1} mx={2} component={Paper} variant="outlined">
         <Card>
           <CardContent>
@@ -35,9 +78,7 @@ export const DashboardSchoolAdmin = () => {
                     <CalendarDashCommon />
                   </Box>
                 </Grid>
-                {schoolClassSelect && (
-                  <GridDashSchoolAdmin school={schoolClassSelect} />
-                )}
+                <GridDashSchoolAdmin />
               </Grid>
             </Grid>
           </CardContent>

@@ -32,7 +32,7 @@ export const adaptName = (name: string) => {
 };
 
 export const adaptNameLabel = (name: string) => {
-  if (name.length > 20) {
+  if (name.length > 15) {
     const displayName = name.split(" ");
     let name4 = "";
     if (displayName[4]) {

@@ -8,7 +8,7 @@ import { LinkRouter } from "../link";
 import { Home, School } from "@mui/icons-material";
 
 export const TitleSchoolDashAdmin = () => {
-  const { labelSchool } = useSchoolContext();
+  const { labelSchoolDataAdmin } = useSchoolContext();
   const { handleClickButtonTools } = useDrawerContext();
 
   return (
@@ -30,7 +30,7 @@ export const TitleSchoolDashAdmin = () => {
       <Chip
         color="primary"
         variant="filled"
-        label={labelSchool()}
+        label={labelSchoolDataAdmin()}
         icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
       />
     </Breadcrumbs>
@@ -45,7 +45,7 @@ export const TitleSchoolDashAdminPages = ({
   breadcrumbs,
 }: iTitleSchoolDashAdminPagesProps) => {
   const { mdDown } = useAppThemeContext();
-  const { labelSchool } = useSchoolContext();
+  const { labelSchoolDataAdmin } = useSchoolContext();
   const { handleClickButtonTools } = useDrawerContext();
 
   return (
@@ -69,7 +69,7 @@ export const TitleSchoolDashAdminPages = ({
           clickable
           color="primary"
           variant="outlined"
-          label={labelSchool()}
+          label={labelSchoolDataAdmin()}
           icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </LinkRouter>

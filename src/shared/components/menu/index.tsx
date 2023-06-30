@@ -9,7 +9,7 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { FirstPage, Logout, Person } from "@mui/icons-material";
+import { Dashboard, FirstPage, Logout, Person } from "@mui/icons-material";
 import { useLocation, Link } from "react-router-dom";
 import {
   useAppThemeContext,
@@ -80,17 +80,26 @@ export const Menu = ({ children }: iChildren) => {
           </Box>
           <Box>
             <List component="nav">
-              {location.pathname.includes("/home/school") &&
-                dashData === "ADMIN" && (
-                  <Link to="/">
-                    <ListItemButton onClick={handleClick}>
-                      <ListItemIcon>
-                        <FirstPage />
-                      </ListItemIcon>
-                      <ListItemText primary="Voltar" />
-                    </ListItemButton>
-                  </Link>
-                )}
+              {dashData === "ADMIN" &&
+              location.pathname.includes("/home/school") ? (
+                <Link to="/">
+                  <ListItemButton onClick={handleClick}>
+                    <ListItemIcon>
+                      <FirstPage />
+                    </ListItemIcon>
+                    <ListItemText primary="Voltar" />
+                  </ListItemButton>
+                </Link>
+              ) : (
+                <Link to="/home/school">
+                  <ListItemButton onClick={handleClick}>
+                    <ListItemIcon>
+                      <Dashboard />
+                    </ListItemIcon>
+                    <ListItemText primary="Painel Escola" />
+                  </ListItemButton>
+                </Link>
+              )}
               <ListItemButton onClick={logout}>
                 <ListItemIcon>
                   <Logout />

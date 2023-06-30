@@ -15,6 +15,7 @@ import {
   iRecoveryPasswordRequest,
   iRecoveryRequest,
   iSchool,
+  iSchoolClass,
   iUser,
   iYear,
 } from "../interfaces";
@@ -46,6 +47,8 @@ interface iAuthContextData {
   yearData: iYear | undefined;
   schoolData: iSchool | undefined;
   setSchoolData: Dispatch<SetStateAction<iSchool | undefined>>;
+  schoolDataAdmin: iSchoolClass | undefined;
+  setSchoolDataAdmin: Dispatch<SetStateAction<iSchoolClass | undefined>>;
 }
 
 const AuthContext = createContext({} as iAuthContextData);
@@ -60,6 +63,7 @@ export const AuthProvider = ({ children }: iChildren) => {
   const [dashData, setDashData] = useState<iDash>();
   const [yearData, setYearData] = useState<iYear>();
   const [schoolData, setSchoolData] = useState<iSchool>();
+  const [schoolDataAdmin, setSchoolDataAdmin] = useState<iSchoolClass>();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("@EMTechs:token");
@@ -166,6 +170,7 @@ export const AuthProvider = ({ children }: iChildren) => {
     localStorage.removeItem("@EMTechs:token");
     setAccessToken(undefined);
     setSchoolData(undefined);
+    setSchoolDataAdmin(undefined);
     setUserData(undefined);
     setDashData(undefined);
     setAnchorEl(null);
@@ -191,6 +196,8 @@ export const AuthProvider = ({ children }: iChildren) => {
         yearData,
         schoolData,
         setSchoolData,
+        schoolDataAdmin,
+        setSchoolDataAdmin,
       }}
     >
       {children}

@@ -4,3 +4,4 @@ export * from "./Cpf";
 export * from "./Frequency";
 export * from "./Login";
 export * from "./School";
+export * from "./SchoolAdmin";

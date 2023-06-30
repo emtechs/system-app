@@ -29,7 +29,7 @@ export const RetrieveSchoolPage = ({ id }: iRetrieveSchoolPageProps) => {
   const { schoolData } = useAuthContext();
   const { defineQuery, query } = usePaginationContext();
   const {
-    labelSchool,
+    labelSchoolData,
     serversData,
     getServers,
     handleOpenActive,
@@ -107,7 +107,7 @@ export const RetrieveSchoolPage = ({ id }: iRetrieveSchoolPageProps) => {
               />
             </LinkRouter>
             <Chip
-              label={labelSchool()}
+              label={labelSchoolData()}
               color="primary"
               icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
             />

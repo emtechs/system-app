@@ -53,7 +53,7 @@ export const TitleRetrieveSchoolAdminPages = ({
 }: iTitleSchoolAdminPagesProps) => {
   const { mdDown } = useAppThemeContext();
   const { schoolData } = useAuthContext();
-  const { labelSchool } = useSchoolContext();
+  const { labelSchoolData } = useSchoolContext();
   const { handleClickButtonTools } = useDrawerContext();
 
   return (
@@ -90,7 +90,7 @@ export const TitleRetrieveSchoolAdminPages = ({
           clickable
           color="primary"
           variant="outlined"
-          label={labelSchool()}
+          label={labelSchoolData()}
           icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </LinkRouter>

@@ -1,7 +1,6 @@
 import {
   iChildren,
   iSchool,
-  iSchoolClass,
   iSchoolImportRequest,
   iSchoolRequest,
   iSchoolServer,
@@ -25,6 +24,31 @@ import { adaptNameLabel } from "../scripts";
 import { usePaginationContext } from ".";
 
 interface iSchoolContextData {
+  schoolSelect: iSchool | undefined;
+  setSchoolSelect: Dispatch<SetStateAction<iSchool | undefined>>;
+  updateServerData: iWorkSchool | undefined;
+  setUpdateServerData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
+  listSchoolData: iSchool[] | undefined;
+  setListSchoolData: Dispatch<SetStateAction<iSchool[] | undefined>>;
+  serversData: iSchoolServer[] | undefined;
+  isHome: boolean;
+  director: boolean[];
+  setDirector: Dispatch<SetStateAction<boolean[]>>;
+  openActive: boolean;
+  openCreate: boolean;
+  openEdit: boolean;
+  openDirector: boolean;
+  handleOpenActive: () => void;
+  handleOpenCreate: () => void;
+  handleOpenEdit: () => void;
+  handleOpenDirector: () => void;
+  is_director: () => "" | "&is_director=true" | "&is_director=false";
+  labelSchoolData: () => string;
+  labelSchoolDataAdmin: () => string;
+  schoolDataRetrieve: (id: string) => void;
+  schoolDataAdminRetrieve: (id: string) => void;
+  getSchool: (query: string, take: number) => void;
+  getServers: (id: string, query: string, take: number) => void;
   createSchool: (data: iSchoolRequest) => Promise<void>;
   importSchool: (data: iSchoolImportRequest, back?: string) => Promise<void>;
   createServer: (data: iServerRequest, id: string) => Promise<void>;
@@ -36,31 +60,6 @@ interface iSchoolContextData {
     back?: string
   ) => Promise<void>;
   deleteServer: (school_id: string, server_id: string) => Promise<void>;
-  schoolSelect: iSchool | undefined;
-  setSchoolSelect: Dispatch<SetStateAction<iSchool | undefined>>;
-  schoolClassSelect: iSchoolClass | undefined;
-  listSchoolData: iSchool[] | undefined;
-  setListSchoolData: Dispatch<SetStateAction<iSchool[] | undefined>>;
-  updateServerData: iWorkSchool | undefined;
-  setUpdateServerData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
-  schoolRetrieve: (id: string) => void;
-  labelSchool: () => string;
-  isHome: boolean;
-  director: boolean[];
-  setDirector: Dispatch<SetStateAction<boolean[]>>;
-  is_director: () => "" | "&is_director=true" | "&is_director=false";
-  openActive: boolean;
-  handleOpenActive: () => void;
-  openCreate: boolean;
-  handleOpenCreate: () => void;
-  openEdit: boolean;
-  handleOpenEdit: () => void;
-  openDirector: boolean;
-  handleOpenDirector: () => void;
-  serversData: iSchoolServer[] | undefined;
-  getServers: (id: string, query: string, take: number) => void;
-  getSchool: (query: string, take: number) => void;
-  schoolClassRetrieve: (id: string) => void;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -69,12 +68,17 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError, mdDown } =
     useAppThemeContext();
-  const { schoolData, setSchoolData, yearData } = useAuthContext();
+  const {
+    setSchoolData,
+    yearData,
+    schoolData,
+    schoolDataAdmin,
+    setSchoolDataAdmin,
+  } = useAuthContext();
   const { setIsLoading, setCount, define_step } = usePaginationContext();
-  const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
-  const [schoolClassSelect, setSchoolClassSelect] = useState<iSchoolClass>();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
+  const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [serversData, setServersData] = useState<iSchoolServer[]>();
   const [isHome, setIsHome] = useState(false);
   const [director, setDirector] = useState([true, true]);
@@ -95,7 +99,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
     return "";
   }, [director]);
 
-  const labelSchool = useCallback(() => {
+  const labelSchoolData = useCallback(() => {
     if (schoolData) {
       if (mdDown) return adaptNameLabel(schoolData.name);
       return schoolData.name;
@@ -103,7 +107,15 @@ export const SchoolProvider = ({ children }: iChildren) => {
     return "";
   }, [schoolData, mdDown]);
 
-  const schoolRetrieve = useCallback((id: string) => {
+  const labelSchoolDataAdmin = useCallback(() => {
+    if (schoolDataAdmin) {
+      if (mdDown) return adaptNameLabel(schoolDataAdmin.name);
+      return schoolDataAdmin.name;
+    }
+    return "";
+  }, [schoolDataAdmin, mdDown]);
+
+  const schoolDataRetrieve = useCallback((id: string) => {
     setLoading(true);
     apiSchool
       .retrieve(id)
@@ -112,14 +124,14 @@ export const SchoolProvider = ({ children }: iChildren) => {
       .finally(() => setLoading(false));
   }, []);
 
-  const schoolClassRetrieve = useCallback(
+  const schoolDataAdminRetrieve = useCallback(
     (id: string) => {
       if (yearData) {
         setLoading(true);
         apiSchool
           .retrieveClass(id, yearData.id)
           .then((res) => {
-            setSchoolClassSelect(res);
+            setSchoolDataAdmin(res);
             setIsHome(true);
           })
           .catch(() => setIsHome(false))
@@ -280,36 +292,36 @@ export const SchoolProvider = ({ children }: iChildren) => {
   return (
     <SchoolContext.Provider
       value={{
-        createSchool: handleCreateSchool,
-        importSchool: handleImportSchool,
-        createServer: handleCreateServer,
-        updateSchool: handleUpdateSchool,
-        deleteServer: handleDeleteServer,
-        listSchoolData,
-        setListSchoolData,
-        schoolSelect,
-        setSchoolSelect,
-        updateServerData,
-        setUpdateServerData,
-        labelSchool,
-        schoolRetrieve,
         director,
-        setDirector,
-        is_director,
+        getSchool,
+        getServers,
+        handleOpenActive,
+        handleOpenCreate,
         handleOpenDirector,
         handleOpenEdit,
+        is_director,
+        isHome,
+        labelSchoolData,
+        labelSchoolDataAdmin,
+        listSchoolData,
+        openActive,
+        openCreate,
         openDirector,
         openEdit,
+        schoolDataAdminRetrieve,
+        schoolDataRetrieve,
+        schoolSelect,
         serversData,
-        getServers,
-        handleOpenCreate,
-        openCreate,
-        handleOpenActive,
-        openActive,
-        getSchool,
-        isHome,
-        schoolClassSelect,
-        schoolClassRetrieve,
+        setDirector,
+        setListSchoolData,
+        setSchoolSelect,
+        setUpdateServerData,
+        updateServerData,
+        createSchool: handleCreateSchool,
+        createServer: handleCreateServer,
+        deleteServer: handleDeleteServer,
+        updateSchool: handleUpdateSchool,
+        importSchool: handleImportSchool,
       }}
     >
       {children}

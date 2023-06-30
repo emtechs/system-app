@@ -10,7 +10,7 @@ import { Home, School } from "@mui/icons-material";
 
 export const TitleSchoolDash = () => {
   const { schoolData, setSchoolData } = useAuthContext();
-  const { labelSchool } = useSchoolContext();
+  const { labelSchoolData } = useSchoolContext();
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
@@ -32,7 +32,7 @@ export const TitleSchoolDash = () => {
       </LinkRouter>
       {schoolData && (
         <Chip
-          label={labelSchool()}
+          label={labelSchoolData()}
           color="primary"
           icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
@@ -49,7 +49,7 @@ export const TitleSchoolDashPages = ({
   breadcrumbs,
 }: iTitleSchoolDashPagesProps) => {
   const { mdDown } = useAppThemeContext();
-  const { labelSchool } = useSchoolContext();
+  const { labelSchoolData } = useSchoolContext();
   const { handleClickButtonTools } = useDrawerContext();
 
   return (
@@ -64,7 +64,7 @@ export const TitleSchoolDashPages = ({
           clickable
           color="primary"
           variant="outlined"
-          label={labelSchool()}
+          label={labelSchoolData()}
           icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </LinkRouter>
