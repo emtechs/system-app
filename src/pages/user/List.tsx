@@ -1,13 +1,18 @@
-import { TableCell, TableRow } from "@mui/material";
-import { usePaginationContext } from "../../shared/contexts";
+import {
+  useAppThemeContext,
+  useDrawerContext,
+  usePaginationContext,
+} from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { iUser, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
-import { TableBase, Tools } from "../../shared/components";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { rolePtBr } from "../../shared/scripts";
-import { LayoutUserPage } from "./Layout";
+import { LinkRouter, TableBase, Tools } from "../../shared/components";
+import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "../../shared/hooks";
+import { CardUser } from "./components/CardUser";
+import { Breadcrumbs, Chip } from "@mui/material";
+import { Home, People } from "@mui/icons-material";
+import { LayoutBasePage } from "../../shared/layouts";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Nome Completo" },
@@ -15,46 +20,19 @@ const headCells: iheadCell[] = [
   { numeric: false, label: "Função" },
 ];
 
-interface iCardUserProps {
-  user: iUser;
-}
-
-const CardUser = ({ user }: iCardUserProps) => {
-  const navigate = useNavigate();
-  return (
-    <TableRow
-      hover
-      sx={{ cursor: "pointer" }}
-      onClick={() => navigate(`/user?id=${user.id}&order=name`)}
-    >
-      <TableCell>{user.name}</TableCell>
-      <TableCell>{user.cpf}</TableCell>
-      <TableCell>{rolePtBr(user.role)}</TableCell>
-    </TableRow>
-  );
-};
-
 export const ListUserPage = () => {
   const [searchParams] = useSearchParams();
   const role = searchParams.get("role");
-  const orderData = searchParams.get("order");
   const { debounce } = useDebounce();
-  const { setCount, take, skip, order, setOrder, by, setIsLoading } =
-    usePaginationContext();
+  const { mdDown } = useAppThemeContext();
+  const { handleClickButtonTools } = useDrawerContext();
+  const { setCount, defineQuery, setIsLoading } = usePaginationContext();
   const [listUserData, setListUserData] = useState<iUser[]>();
   const [search, setSearch] = useState<string>();
 
   useEffect(() => {
-    let query = `?is_active=true&by=${by}`;
+    let query = defineQuery() + `&is_active=true`;
     if (role) query += `&role=${role}`;
-    if (order) {
-      query += `&order=${order}`;
-    } else if (orderData) {
-      setOrder(orderData);
-      query += `&order=${orderData}`;
-    }
-    if (take) query += `&take=${take}`;
-    if (skip) query += `&skip=${skip}`;
     if (search) {
       query += `&name=${search}`;
       setIsLoading(true);
@@ -77,11 +55,33 @@ export const ListUserPage = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [take, skip, orderData, order, by, search]);
+  }, [defineQuery, role, search]);
 
   return (
-    <LayoutUserPage
-      title="Listagem de Usuários"
+    <LayoutBasePage
+      title={
+        <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
+          <LinkRouter
+            underline="none"
+            color="inherit"
+            to="/"
+            onClick={handleClickButtonTools}
+          >
+            <Chip
+              clickable
+              color="primary"
+              variant="outlined"
+              label="Página Inicial"
+              icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </LinkRouter>
+          <Chip
+            label="Usuários"
+            color="primary"
+            icon={<People sx={{ mr: 0.5 }} fontSize="inherit" />}
+          />
+        </Breadcrumbs>
+      }
       tools={
         <Tools isHome isUser isSearch search={search} setSearch={setSearch} />
       }
@@ -91,6 +91,6 @@ export const ListUserPage = () => {
           <CardUser key={el.id} user={el} />
         ))}
       </TableBase>
-    </LayoutUserPage>
+    </LayoutBasePage>
   );
 };

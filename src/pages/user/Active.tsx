@@ -17,9 +17,9 @@ import { TableBase, Tools } from "../../shared/components";
 import { FormContainer, RadioButtonGroup } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { activeUserSchema } from "../../shared/schemas";
-import { LayoutUserPage } from "./Layout";
 import { useDebounce } from "../../shared/hooks";
 import { useSearchParams } from "react-router-dom";
+import { LayoutBasePage } from "../../shared/layouts";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Nome Completo" },
@@ -136,7 +136,7 @@ export const ActiveUserPage = () => {
   }, [updateUserData, take, skip, orderData, order, by, search]);
 
   return (
-    <LayoutUserPage
+    <LayoutBasePage
       title="Listagem de Usuários"
       tools={
         <Tools
@@ -153,6 +153,6 @@ export const ActiveUserPage = () => {
           <CardUser key={el.id} user={el} />
         ))}
       </TableBase>
-    </LayoutUserPage>
+    </LayoutBasePage>
   );
 };

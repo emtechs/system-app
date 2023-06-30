@@ -97,7 +97,7 @@ export const RetrieveFrequencyPage = () => {
   // const { handleClickButtonTools } = useDrawerContext();
   const { dataStudents, setDataStudents, alterStudents, setAlterStudents } =
     useFrequencyContext();
-  const { setIsLoading, query, setTotal, setSteps } = usePaginationContext();
+  const { setIsLoading, query, define_step } = usePaginationContext();
   // const [dataFrequency, setDataFrequency] = useState<iFrequencyBase>();
   const [isAlter, setIsAlter] = useState(false);
   const [open, setOpen] = useState(false);
@@ -120,10 +120,8 @@ export const RetrieveFrequencyPage = () => {
       apiFrequency
         .students(id, queryData)
         .then((res) => {
-          setTotal(res.total);
           setAlterStudents(res.result);
-          const arredSteps = Math.ceil(res.total / take);
-          setSteps(arredSteps === 1 ? 0 : arredSteps);
+          define_step(res.total, take);
         })
         .finally(() => setIsLoading(false));
     } else if (id) {

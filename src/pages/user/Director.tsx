@@ -11,7 +11,7 @@ import { Box, Grid, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
 import { iSchool } from "../../shared/interfaces";
-import { LayoutUserPage } from "./Layout";
+import { LayoutBasePage } from "../../shared/layouts";
 
 export const CreateDirectorPage = () => {
   const { setLoading } = useAppThemeContext();
@@ -27,7 +27,7 @@ export const CreateDirectorPage = () => {
   }, []);
 
   return (
-    <LayoutUserPage title="Novo Diretor">
+    <LayoutBasePage title="Novo Diretor">
       <FormContainer
         onSuccess={createDirector}
         resolver={zodResolver(createDirectorSchema)}
@@ -80,6 +80,6 @@ export const CreateDirectorPage = () => {
           </Grid>
         </Box>
       </FormContainer>
-    </LayoutUserPage>
+    </LayoutBasePage>
   );
 };

@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { apiSchool, apiUser } from "../services";
 import { useAuthContext } from "./AuthContext";
-import { adaptNameSchool } from "../scripts";
+import { adaptNameLabel } from "../scripts";
 import { usePaginationContext } from ".";
 
 interface iSchoolContextData {
@@ -70,8 +70,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const { setLoading, handleSucess, handleError, mdDown } =
     useAppThemeContext();
   const { schoolData, setSchoolData, yearData } = useAuthContext();
-  const { setIsLoading, setCount, setTotal, setSteps, setActiveStep } =
-    usePaginationContext();
+  const { setIsLoading, setCount, define_step } = usePaginationContext();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
   const [schoolClassSelect, setSchoolClassSelect] = useState<iSchoolClass>();
@@ -98,7 +97,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
 
   const labelSchool = useCallback(() => {
     if (schoolData) {
-      if (mdDown) return adaptNameSchool(schoolData.name);
+      if (mdDown) return adaptNameLabel(schoolData.name);
       return schoolData.name;
     }
     return "";
@@ -134,15 +133,12 @@ export const SchoolProvider = ({ children }: iChildren) => {
     (query: string, take: number) => {
       if (mdDown) {
         setIsLoading(true);
-        setActiveStep(0);
         apiSchool
           .list(query)
           .then((res) => {
-            setTotal(res.total);
             setListSchoolData(res.result);
             setCount(res.total);
-            const arredSteps = Math.ceil(res.total / take);
-            setSteps(arredSteps === 1 ? 0 : arredSteps);
+            define_step(res.total, take);
           })
           .finally(() => setIsLoading(false));
       } else {
@@ -163,15 +159,12 @@ export const SchoolProvider = ({ children }: iChildren) => {
     (id: string, query: string, take: number) => {
       if (mdDown) {
         setIsLoading(true);
-        setActiveStep(0);
         apiSchool
           .listServers(id, query)
           .then((res) => {
-            setTotal(res.total);
             setServersData(res.result);
             setCount(res.total);
-            const arredSteps = Math.ceil(res.total / take);
-            setSteps(arredSteps === 1 ? 0 : arredSteps);
+            define_step(res.total, take);
           })
           .finally(() => setIsLoading(false));
       } else {

@@ -6,7 +6,7 @@ import { apiUser } from "../../services";
 
 export const SelectSchool = () => {
   const { schoolData, setSchoolData } = useAuthContext();
-  const { query, setSteps } = usePaginationContext();
+  const { query, define_step } = usePaginationContext();
   const [listSchoolSelect, setListSchoolSelect] = useState<iSchool[]>();
   const [listData, setListData] = useState<iWorkSchool[]>();
   const [loading, setLoading] = useState(true);
@@ -14,15 +14,13 @@ export const SelectSchool = () => {
   useEffect(() => {
     const take = 3;
     const queryData = query(take) + "&is_active=true";
-
     setLoading(true);
     apiUser
       .schools(queryData)
       .then((res) => {
         setListSchoolSelect(res.schools);
         setListData(res.result);
-        const arredSteps = Math.ceil(res.total / take);
-        setSteps(arredSteps === 1 ? 0 : arredSteps);
+        define_step(res.total, take);
       })
       .finally(() => setLoading(false));
   }, [query]);

@@ -31,7 +31,7 @@ export const adaptName = (name: string) => {
   return name;
 };
 
-export const adaptNameSchool = (name: string) => {
+export const adaptNameLabel = (name: string) => {
   if (name.length > 20) {
     const displayName = name.split(" ");
     let name4 = "";

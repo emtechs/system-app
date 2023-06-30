@@ -14,6 +14,11 @@ const create = async (
   return response;
 };
 
+const retrieve = async (id: string): Promise<iUser> => {
+  const { data: response } = await apiUsingNow.get<iUser>(`users/${id}`);
+  return response;
+};
+
 const profile = async (token: string): Promise<iUser> => {
   const { data: response } = await apiUsingNow.get<iUser>("users/profile", {
     headers: { Authorization: `Bearer ${token}` },
@@ -42,4 +47,4 @@ const schools = async (query: string) => {
   return response;
 };
 
-export const apiUser = { create, profile, update, schools };
+export const apiUser = { create, profile, update, schools, retrieve };

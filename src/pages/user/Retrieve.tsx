@@ -1,28 +1,29 @@
 import {
+  Breadcrumbs,
   Button,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TableCell,
-  TableRow,
 } from "@mui/material";
 import {
+  useAppThemeContext,
   useDrawerContext,
   usePaginationContext,
   useSchoolContext,
   useUserContext,
 } from "../../shared/contexts";
 import { useEffect, useState } from "react";
-import { iUser, iWorkSchool, iheadCell } from "../../shared/interfaces";
+import { iWorkSchool, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
-import { RemoveDone, School } from "@mui/icons-material";
-import { TableBase, Tools } from "../../shared/components";
-import { Navigate, useSearchParams } from "react-router-dom";
-import { rolePtBr } from "../../shared/scripts";
-import { LayoutUserPage } from "./Layout";
+import { Home, People, Person, RemoveDone, School } from "@mui/icons-material";
+import { LinkRouter, TableBase, Tools } from "../../shared/components";
+import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "../../shared/hooks";
+import { LayoutBasePage } from "../../shared/layouts";
+import { CardWorkSchool } from "./components";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Escola" },
@@ -30,68 +31,21 @@ const headCells: iheadCell[] = [
   { numeric: false, label: "Tela" },
 ];
 
-interface iCardUserProps {
-  user?: iUser;
-  work: iWorkSchool;
+interface iRetrieveUserPageProps {
+  id: string;
 }
 
-const CardUser = ({ user, work }: iCardUserProps) => {
-  const { updateServerData, setUpdateServerData, deleteServer } =
-    useSchoolContext();
-  const [open, setOpen] = useState(false);
-  const handleClose = () => {
-    setOpen((oldOpen) => !oldOpen);
-    setUpdateServerData(work);
-  };
-
-  return (
-    <>
-      <TableRow hover sx={{ cursor: "pointer" }} onClick={handleClose}>
-        <TableCell>{work.school.name}</TableCell>
-        <TableCell>{rolePtBr(work.role)}</TableCell>
-        <TableCell>
-          {work.dash === "SCHOOL" ? "Escola" : "Frequência"}
-        </TableCell>
-      </TableRow>
-
-      {user && updateServerData && (
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Remover Usuário da Função</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Deseja continuar removendo o usúario {user.name.toUpperCase()} da
-              Função {rolePtBr(updateServerData.role).toUpperCase()} da Escola{" "}
-              {updateServerData.school.name}?
-            </DialogContentText>
-            <DialogActions>
-              <Button onClick={handleClose}>Cancelar</Button>
-              <Button
-                onClick={() => {
-                  deleteServer(updateServerData.school.id, user.id);
-                  setOpen(!open);
-                }}
-              >
-                Continuar
-              </Button>
-            </DialogActions>
-          </DialogContent>
-        </Dialog>
-      )}
-    </>
-  );
-};
-
-export const RetrieveUserPage = () => {
+export const RetrieveUserPage = ({ id }: iRetrieveUserPageProps) => {
   const [searchParams] = useSearchParams();
-  const id = searchParams.get("id");
   const school_id = searchParams.get("school_id");
   const orderData = searchParams.get("order");
   const { debounce } = useDebounce();
-  const { updateAllUser, updateUserData } = useUserContext();
+  const { mdDown } = useAppThemeContext();
+  const { updateAllUser, updateUserData, labelUser } = useUserContext();
   const { updateServerData } = useSchoolContext();
   const { setCount, take, skip, order, setOrder, by, setIsLoading } =
     usePaginationContext();
-  const { handleClickSchool } = useDrawerContext();
+  const { handleClickSchool, handleClickButtonTools } = useDrawerContext();
   const [retrieveUser, setRetrieveUser] = useState<iWorkSchool[]>();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState<string>();
@@ -138,17 +92,43 @@ export const RetrieveUserPage = () => {
     }
   }, [updateServerData, take, skip, orderData, order, by, search]);
 
-  if (!id) {
-    return <Navigate to="/user/list" />;
-  }
-
   return (
     <>
-      <LayoutUserPage
+      <LayoutBasePage
         title={
-          updateUserData?.name
-            ? updateUserData.name
-            : "Listagem de Funções do Usuários"
+          <Breadcrumbs
+            maxItems={mdDown ? 2 : undefined}
+            aria-label="breadcrumb"
+          >
+            <LinkRouter
+              underline="none"
+              color="inherit"
+              to="/"
+              onClick={handleClickButtonTools}
+            >
+              <Chip
+                clickable
+                color="primary"
+                variant="outlined"
+                label={mdDown ? "..." : "Página Inicial"}
+                icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
+              />
+            </LinkRouter>
+            <LinkRouter underline="none" color="inherit" to="/user">
+              <Chip
+                clickable
+                color="primary"
+                variant="outlined"
+                label={mdDown ? "..." : "Usuários"}
+                icon={<People sx={{ mr: 0.5 }} fontSize="inherit" />}
+              />
+            </LinkRouter>
+            <Chip
+              label={labelUser()}
+              color="primary"
+              icon={<Person sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </Breadcrumbs>
         }
         tools={
           <Tools
@@ -178,10 +158,14 @@ export const RetrieveUserPage = () => {
       >
         <TableBase headCells={headCells}>
           {retrieveUser?.map((el) => (
-            <CardUser key={el.school.id} user={updateUserData} work={el} />
+            <CardWorkSchool
+              key={el.school.id}
+              user={updateUserData}
+              work={el}
+            />
           ))}
         </TableBase>
-      </LayoutUserPage>
+      </LayoutBasePage>
       {updateUserData && (
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Desativar Usuário</DialogTitle>

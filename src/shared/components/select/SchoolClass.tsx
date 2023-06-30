@@ -13,7 +13,7 @@ import { Base, ListBase, Loading } from "./structure";
 export const SelectSchoolClass = () => {
   const { schoolData } = useAuthContext();
   const { classWithSchoolSelect, setClassWithSchoolSelect } = useClassContext();
-  const { query, setSteps } = usePaginationContext();
+  const { query, define_step } = usePaginationContext();
   const [listClassSelect, setListClassSelect] =
     useState<iClassWithSchoolSelect[]>();
   const [listData, setListData] = useState<iClassWithSchool[]>();
@@ -30,10 +30,9 @@ export const SelectSchoolClass = () => {
       apiClass
         .listWithSchool(schoolData.id, query(take))
         .then((res) => {
-          const arredSteps = Math.ceil(res.total / take);
-          setSteps(arredSteps === 1 ? 0 : arredSteps);
           setListClassSelect(res.classes);
           setListData(res.result);
+          define_step(res.total, take);
         })
         .finally(() => setLoading(false));
     }

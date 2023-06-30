@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppThemeContext, useAuthContext } from ".";
 import { FieldValues } from "react-hook-form";
 import { apiUser } from "../services";
+import { adaptNameLabel } from "../scripts";
 
 interface iUserContextData {
   createAdm: (data: iUserAdmRequest) => Promise<void>;
@@ -36,15 +37,36 @@ interface iUserContextData {
   ) => Promise<void>;
   updateUserData: iUser | undefined;
   setUpdateUserData: Dispatch<SetStateAction<iUser | undefined>>;
+  userRetrieve: (id: string) => void;
+  labelUser: () => string;
 }
 
 const UserContext = createContext({} as iUserContextData);
 
 export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
-  const { setLoading, handleSucess, handleError } = useAppThemeContext();
+  const { setLoading, handleSucess, handleError, mdDown } =
+    useAppThemeContext();
   const { setDashData, setUserData } = useAuthContext();
   const [updateUserData, setUpdateUserData] = useState<iUser>();
+  const [userSelect, setUserSelect] = useState<iUser>();
+
+  const userRetrieve = useCallback((id: string) => {
+    setLoading(true);
+    apiUser
+      .retrieve(id)
+      .then((res) => setUserSelect(res))
+      .catch(() => navigate("/"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const labelUser = useCallback(() => {
+    if (userSelect) {
+      if (mdDown) return adaptNameLabel(userSelect.name);
+      return userSelect.name;
+    }
+    return "";
+  }, [userSelect, mdDown]);
 
   const handleCreateUserAdm = useCallback(async (data: iUserAdmRequest) => {
     try {
@@ -175,6 +197,8 @@ export const UserProvider = ({ children }: iChildren) => {
         updateAllUser: handleUpdateAllUser,
         updateUserData,
         setUpdateUserData,
+        labelUser,
+        userRetrieve,
       }}
     >
       {children}

@@ -2,7 +2,6 @@ import { Class } from "./Class";
 import { Frequency } from "./Frequency";
 import { Import } from "./Import";
 import { Student } from "./Student";
-import { User } from "./User";
 import { useDrawerContext } from "../../../contexts";
 import {
   AccountBox,
@@ -25,13 +24,11 @@ export const OptionsAdmin = () => {
     handleClickImport,
     handleClickProfile,
     handleClickStudent,
-    handleClickUser,
     openClass,
     openFrequency,
     openImport,
     openProfile,
     openStudent,
-    openUser,
   } = useDrawerContext();
   return (
     <>
@@ -40,14 +37,12 @@ export const OptionsAdmin = () => {
         icon={<Home />}
         label="Página Inicial"
       />
-      <ListItemLinkOpen
-        onClick={handleClickUser}
-        open={openUser}
+      <OtherListItemLink
+        onClick={handleClick}
         icon={<People />}
         label="Usuários"
-      >
-        <User />
-      </ListItemLinkOpen>
+        to="/user"
+      />
       <OtherListItemLink
         onClick={handleClick}
         icon={<School />}

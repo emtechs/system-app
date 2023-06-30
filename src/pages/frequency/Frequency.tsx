@@ -86,7 +86,7 @@ export const FrequencyPage = () => {
   const { yearData, schoolData } = useAuthContext();
   const { dateData, monthData } = useCalendarContext();
   const { handleClickSchool } = useDrawerContext();
-  const { setSteps, setTotal, setIsLoading, defineQuery, query } =
+  const { setIsLoading, defineQuery, query, define_step } =
     usePaginationContext();
   const [infoSchool, setInfoSchool] = useState<iDashSchool>();
   const [listClassData, setListClassData] = useState<iClassDash[]>();
@@ -117,11 +117,9 @@ export const FrequencyPage = () => {
       apiClass
         .listDash(schoolData.id, yearData.id, queryData)
         .then((res) => {
-          setTotal(res.total);
           setListClassSelectData(res.classes);
           setListClassData(res.result);
-          const arredSteps = Math.ceil(res.total / take);
-          setSteps(arredSteps === 1 ? 0 : arredSteps);
+          define_step(res.total, take);
         })
         .finally(() => setIsLoading(false));
     }

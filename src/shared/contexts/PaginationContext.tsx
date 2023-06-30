@@ -11,7 +11,6 @@ import { iChildren } from "../interfaces";
 
 interface iPaginationContextData {
   steps: number;
-  setSteps: Dispatch<SetStateAction<number>>;
   activeStep: number;
   setActiveStep: Dispatch<SetStateAction<number>>;
   is_active: (is_default?: boolean) => "&is_active=true" | "&is_active=false";
@@ -24,7 +23,6 @@ interface iPaginationContextData {
   count: number;
   setCount: Dispatch<SetStateAction<number>>;
   total: number;
-  setTotal: Dispatch<SetStateAction<number>>;
   rowsPage: iRowsPage[] | undefined;
   take: number | undefined;
   setTake: Dispatch<SetStateAction<number | undefined>>;
@@ -50,6 +48,7 @@ interface iPaginationContextData {
   ) => string;
   handleNext: () => void;
   handleBack: () => void;
+  define_step: (total: number, take: number) => void;
 }
 
 type iRowsPage =
@@ -74,6 +73,13 @@ export const PaginationProvider = ({ children }: iChildren) => {
   const [by, setBy] = useState<"asc" | "desc">("asc");
   const [isLoading, setIsLoading] = useState(true);
   const [active, setActive] = useState(true);
+
+  const define_step = useCallback((total: number, take: number) => {
+    setTotal(total);
+    const arredSteps = Math.ceil(total / take);
+    setSteps(arredSteps === 1 ? 0 : arredSteps);
+    if (arredSteps === 1) setActiveStep(0);
+  }, []);
 
   const define_is_active = useCallback(
     (is_default?: boolean) => {
@@ -169,14 +175,12 @@ export const PaginationProvider = ({ children }: iChildren) => {
     <PaginationContext.Provider
       value={{
         steps,
-        setSteps,
         activeStep,
         setActiveStep,
         query,
         count,
         setCount,
         total,
-        setTotal,
         rowsPage,
         setTake,
         take,
@@ -195,6 +199,7 @@ export const PaginationProvider = ({ children }: iChildren) => {
         handleBack,
         handleNext,
         is_active: define_is_active,
+        define_step,
       }}
     >
       {children}

@@ -1,16 +1,12 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import {
   ActiveClassPage,
-  ActiveUserPage,
-  CreateAdmPage,
   CreateClassPage,
-  CreateDirectorPage,
   CreateFrequencyPage,
   CreateStudentAdmPage,
   DashboardPage,
   DashboardSchoolAdmin,
   DefineSchoolsPage,
-  DefineSecretPage,
   EditClassPage,
   EditPasswordPage,
   EditProfilePage,
@@ -23,20 +19,15 @@ import {
   ListFrequencyPage,
   ListStudentFrequencyPage,
   ListStudentPage,
-  ListUserPage,
   PasswordPage,
   ReportPage,
   RetrieveClassPage,
   RetrieveFrequencyPage,
-  RetrieveUserPage,
   SchoolPage,
   StudentFrequencyPage,
+  UserPage,
 } from "../pages";
-import {
-  ProtectedAdmin,
-  ProtectedAuth,
-  ProtectedSchool,
-} from "../shared/components";
+import { ProtectedAdmin, ProtectedAuth } from "../shared/components";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -45,13 +36,7 @@ const AppRoutes = () => {
       <Route path="/password/:userId/:token" element={<PasswordPage />} />
       <Route element={<ProtectedAuth />}>
         <Route element={<ProtectedAdmin />}>
-          <Route path="/user/create" element={<CreateAdmPage />} />
-          <Route
-            path="/user/create/director"
-            element={<CreateDirectorPage />}
-          />
-          <Route path="/user/define/secret" element={<DefineSecretPage />} />
-          <Route path="/user/active" element={<ActiveUserPage />} />
+          <Route path="/user" element={<UserPage />} />
           <Route path="/class/list" element={<ListClassPage />} />
           <Route path="/student/list" element={<ListStudentPage />} />
           <Route
@@ -68,10 +53,6 @@ const AppRoutes = () => {
           />
           <Route path="/school" element={<SchoolPage />} />
           <Route path="/school/dash" element={<DashboardSchoolAdmin />} />
-        </Route>
-        <Route element={<ProtectedSchool />}>
-          <Route path="/user/list" element={<ListUserPage />} />
-          <Route path="/user" element={<RetrieveUserPage />} />
         </Route>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/report" element={<ReportPage />} />

@@ -4,13 +4,13 @@ import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createAdmSchema } from "../../shared/schemas";
 import { Box, Grid, Paper } from "@mui/material";
-import { LayoutUserPage } from "./Layout";
+import { LayoutBasePage } from "../../shared/layouts";
 
 export const CreateAdmPage = () => {
   const { createAdm } = useUserContext();
 
   return (
-    <LayoutUserPage title="Novo Administrador">
+    <LayoutBasePage title="Novo Administrador">
       <FormContainer
         onSuccess={createAdm}
         resolver={zodResolver(createAdmSchema)}
@@ -41,6 +41,6 @@ export const CreateAdmPage = () => {
           </Grid>
         </Box>
       </FormContainer>
-    </LayoutUserPage>
+    </LayoutBasePage>
   );
 };
