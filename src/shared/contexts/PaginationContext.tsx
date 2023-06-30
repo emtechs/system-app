@@ -14,7 +14,13 @@ interface iPaginationContextData {
   setSteps: Dispatch<SetStateAction<number>>;
   activeStep: number;
   setActiveStep: Dispatch<SetStateAction<number>>;
-  query: (take?: number, date?: string, orderData?: string) => string;
+  is_active: (is_default?: boolean) => "&is_active=true" | "&is_active=false";
+  query: (
+    take?: number,
+    date?: string,
+    is_active?: boolean,
+    orderData?: string
+  ) => string;
   count: number;
   setCount: Dispatch<SetStateAction<number>>;
   total: number;
@@ -31,12 +37,15 @@ interface iPaginationContextData {
   setBy: Dispatch<SetStateAction<"asc" | "desc">>;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  active: boolean;
+  setActive: Dispatch<SetStateAction<boolean>>;
   defineQuery: (
     year_id?: string,
     school_id?: string,
     class_id?: string,
     date?: string,
     month?: string,
+    is_active?: boolean,
     orderData?: string
   ) => string;
   handleNext: () => void;
@@ -64,17 +73,27 @@ export const PaginationProvider = ({ children }: iChildren) => {
   const [order, setOrder] = useState<string | undefined>("name");
   const [by, setBy] = useState<"asc" | "desc">("asc");
   const [isLoading, setIsLoading] = useState(true);
+  const [active, setActive] = useState(true);
+
+  const define_is_active = useCallback(
+    (is_default?: boolean) => {
+      if (is_default) return "&is_active=true";
+      if (!active) return "&is_active=false";
+      return "&is_active=true";
+    },
+    [active]
+  );
 
   const query = useCallback(
-    (take?: number, date?: string, orderData?: string) => {
+    (take?: number, date?: string, is_active?: boolean, orderData?: string) => {
       orderData = orderData ? orderData : order;
-      let queryData = `?by=${by}`;
+      let queryData = `?by=${by}` + define_is_active(is_active);
       if (take) queryData += `&take=${take}&skip=${activeStep * take}`;
       if (orderData) queryData += `&order=${orderData}`;
       if (date) queryData += "&date=" + date;
       return queryData;
     },
-    [by, order, activeStep]
+    [by, order, define_is_active, activeStep]
   );
 
   const handleNext = () => {
@@ -127,10 +146,11 @@ export const PaginationProvider = ({ children }: iChildren) => {
       class_id?: string,
       date?: string,
       month?: string,
+      is_active?: boolean,
       orderData?: string
     ) => {
       orderData = orderData ? orderData : order;
-      let query = "?by=" + by;
+      let query = "?by=" + by + define_is_active(is_active);
       if (orderData) query += `&order=${orderData}`;
       if (take) query += "&take=" + take;
       if (skip) query += "&skip=" + skip;
@@ -142,7 +162,7 @@ export const PaginationProvider = ({ children }: iChildren) => {
 
       return query;
     },
-    [by, take, skip, order]
+    [by, take, skip, define_is_active, order]
   );
 
   return (
@@ -169,9 +189,12 @@ export const PaginationProvider = ({ children }: iChildren) => {
         setBy,
         isLoading,
         setIsLoading,
+        active,
+        setActive,
         defineQuery,
         handleBack,
         handleNext,
+        is_active: define_is_active,
       }}
     >
       {children}

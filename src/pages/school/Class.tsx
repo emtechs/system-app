@@ -125,7 +125,6 @@ export const ListClassSchoolPage = () => {
           isBack={dashData === "ADMIN"}
           back={"/school?id=" + school_id}
           isNew={dashData === "ADMIN"}
-          destNew={"/class/define/school?id=" + school_id}
           onClickNew={handleClickClass}
           isSearch
           search={search}

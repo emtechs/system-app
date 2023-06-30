@@ -22,7 +22,6 @@ export const GridDashAdmin = () => {
   const { setLoading } = useAppThemeContext();
   const { yearData } = useAuthContext();
   const {
-    handleClickSchool,
     handleClickClass,
     handleClickStudent,
     handleClickFrequency,
@@ -47,8 +46,7 @@ export const GridDashAdmin = () => {
           icon={<School fontSize="large" />}
           quant={userDashData.countSchool}
           info="Escolas"
-          dest="/school/list"
-          onClick={handleClickSchool}
+          dest="/school"
         />
         <GridDashContent
           icon={<Workspaces fontSize="large" />}

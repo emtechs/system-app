@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { iFrequencyStudentsBase } from "../../interfaces";
 import { useFrequencyContext } from "../../contexts";
-import { DialogBase } from "./DialogBase";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
+import { DialogBaseChildren } from "./DialogBaseChildren";
 
 interface iDialogRemoveMissedProps {
   open: boolean;
@@ -29,7 +29,7 @@ export const DialogRemoveMissed = ({
     onClose();
   };
   return (
-    <DialogBase
+    <DialogBaseChildren
       open={open}
       onClose={onClose}
       title="Retirar Falta"
@@ -45,6 +45,6 @@ export const DialogRemoveMissed = ({
           <Typography>Justificativa: {student.justification}</Typography>
         )}
       </Box>
-    </DialogBase>
+    </DialogBaseChildren>
   );
 };

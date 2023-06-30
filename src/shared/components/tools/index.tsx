@@ -1,4 +1,5 @@
-import { AddBox, ArrowBack, Home, Person, PersonOff } from "@mui/icons-material";
+import { ChangeEvent, MouseEvent, ReactNode, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Box,
   Checkbox,
@@ -9,16 +10,26 @@ import {
   TextField,
 } from "@mui/material";
 import {
+  AddBox,
+  ArrowBack,
+  ClearAll,
+  Home,
+  Person,
+  PersonOff,
+} from "@mui/icons-material";
+import {
   useAppThemeContext,
   useDrawerContext,
+  usePaginationContext,
   useSchoolContext,
 } from "../../contexts";
-import { ChangeEvent, MouseEvent, ReactNode, useMemo, useState } from "react";
-import { Dest } from "./Dest";
-import { SchoolTools } from "./School";
-import { UserTools } from "./User";
-import { useSearchParams } from "react-router-dom";
-import { Reset } from "./Reset";
+import {
+  ActiveButton,
+  CompBase,
+  Dest,
+  SchoolTools,
+  UserTools,
+} from "./components";
 
 interface iToolsProps {
   back?: string;
@@ -26,15 +37,15 @@ interface iToolsProps {
   isSingle?: boolean;
   isHome?: boolean;
   isUser?: boolean;
-  school_id?: string;
+  isSchool?: boolean;
   isNew?: boolean;
-  destNew?: string;
   titleNew?: string;
   iconNew?: ReactNode;
   onClickNew?: () => void;
   isSearch?: boolean;
   search?: string;
   setSearch?: (text: string) => void;
+  isActive?: boolean;
   isDirector?: boolean;
   isInfreq?: boolean;
   infreq?: string;
@@ -49,15 +60,15 @@ export const Tools = ({
   isSingle,
   isHome,
   isUser,
-  school_id,
+  isSchool,
   isNew,
-  destNew = "/",
   titleNew = "Novo",
   iconNew = <AddBox />,
   onClickNew,
   isSearch,
   search = "",
   setSearch,
+  isActive,
   isDirector,
   isInfreq,
   infreq = "",
@@ -68,6 +79,8 @@ export const Tools = ({
   const [searchParams] = useSearchParams();
   const backclick = searchParams.get("back_click");
   const { theme } = useAppThemeContext();
+  const { director, setDirector, is_director } = useSchoolContext();
+  const { is_active } = usePaginationContext();
   const {
     handleClickButtonTools,
     handleClickUser,
@@ -76,7 +89,6 @@ export const Tools = ({
     handleClickFrequency,
     handleClickStudent,
   } = useDrawerContext();
-  const { director, setDirector, is_director } = useSchoolContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -120,10 +132,15 @@ export const Tools = ({
   }
 
   const disabled = useMemo(() => {
-    if (search.length > 0 || infreq.length > 0 || is_director().length > 0)
+    if (
+      search.length > 0 ||
+      infreq.length > 0 ||
+      is_director().length > 0 ||
+      is_active() === "&is_active=false"
+    )
       return false;
     return true;
-  }, [search, infreq, is_director]);
+  }, [search, infreq, is_director, is_active]);
 
   return (
     <Box
@@ -162,17 +179,11 @@ export const Tools = ({
           isHome
         />
       )}
-      {isUser && <UserTools />}
-      {school_id && <SchoolTools school_id={school_id} />}
       {isNew && (
-        <Dest
-          to={destNew}
-          title={titleNew}
-          startIcon={iconNew}
-          isResp
-          onClick={onClickNew}
-        />
+        <CompBase title={titleNew} startIcon={iconNew} onClick={onClickNew} />
       )}
+      {isUser && <UserTools />}
+      {isSchool && <SchoolTools />}
       {isSearch && (
         <TextField
           size="small"
@@ -181,6 +192,7 @@ export const Tools = ({
           onChange={(e) => setSearch?.(e.target.value)}
         />
       )}
+      {isActive && <ActiveButton />}
       <Box flex={1} display="flex" justifyContent="end" gap={1}>
         {isInfreq && (
           <Box width={theme.spacing(16)}>
@@ -240,7 +252,14 @@ export const Tools = ({
           </>
         )}
         {finish}
-        {onClickReset && <Reset onClick={onClickReset} disabled={disabled} />}
+        {onClickReset && (
+          <CompBase
+            title="Limpar"
+            endIcon={<ClearAll />}
+            onClick={onClickReset}
+            disabled={disabled}
+          />
+        )}
       </Box>
     </Box>
   );

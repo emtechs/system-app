@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { iFrequencyWithInfreq } from "../../interfaces";
 import { useFrequencyContext } from "../../contexts";
-import { DialogBase } from "./DialogBase";
+import { DialogBaseChildren } from "./DialogBaseChildren";
 
 interface iDialogDeleteFrequencyProps {
   open: boolean;
@@ -21,7 +21,7 @@ export const DialogDeleteFrequency = ({
     onClose();
   };
   return (
-    <DialogBase
+    <DialogBaseChildren
       open={open}
       onClose={onClose}
       title="Excluir Frequência"
@@ -37,6 +37,6 @@ export const DialogDeleteFrequency = ({
         <Typography>Turma: {frequency.class.class.name}</Typography>
         <Typography>Escola: {frequency.class.school.name}</Typography>
       </Box>
-    </DialogBase>
+    </DialogBaseChildren>
   );
 };

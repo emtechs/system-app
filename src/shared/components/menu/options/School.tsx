@@ -1,6 +1,5 @@
 import {
   AddBox,
-  DoneAll,
   Edit,
   Group,
   Person,
@@ -40,7 +39,6 @@ export const School = () => {
       <ListItemLink icon={<Edit />} label="Editar" to="school/edit" />
       <ListItemLink icon={<Workspaces />} label="Turmas" to="school/class" />
       <ListItemLink icon={<SchoolTwoTone />} label="Listar" to="school/list" />
-      <ListItemLink icon={<DoneAll />} label="Ativar" to="school/active" />
     </List>
   );
 };

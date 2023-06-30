@@ -6,8 +6,9 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import { iChildren } from "../../interfaces";
 
-interface iDialogBaseProps {
+interface iDialogBaseProps extends iChildren {
   open: boolean;
   onClose: () => void;
   title: string;
@@ -16,9 +17,10 @@ interface iDialogBaseProps {
   actionTitle: string;
 }
 
-export const DialogBase = ({
+export const DialogBaseChildren = ({
   open,
   onClose,
+  children,
   title,
   description,
   action,
@@ -36,6 +38,7 @@ export const DialogBase = ({
         <DialogContentText id="alert-dialog-description">
           {description}
         </DialogContentText>
+        {children}
       </DialogContent>
       <DialogActions>
         <Button onClick={action}>{actionTitle}</Button>

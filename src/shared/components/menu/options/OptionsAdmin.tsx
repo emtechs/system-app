@@ -1,7 +1,6 @@
 import { Class } from "./Class";
 import { Frequency } from "./Frequency";
 import { Import } from "./Import";
-import { School } from "./School";
 import { Student } from "./Student";
 import { User } from "./User";
 import { useDrawerContext } from "../../../contexts";
@@ -12,7 +11,7 @@ import {
   Groups,
   Home,
   People,
-  School as SchoolIcon,
+  School,
   Workspaces,
 } from "@mui/icons-material";
 import { Profile } from "./Profile";
@@ -25,14 +24,12 @@ export const OptionsAdmin = () => {
     handleClickFrequency,
     handleClickImport,
     handleClickProfile,
-    handleClickSchool,
     handleClickStudent,
     handleClickUser,
     openClass,
     openFrequency,
     openImport,
     openProfile,
-    openSchool,
     openStudent,
     openUser,
   } = useDrawerContext();
@@ -51,14 +48,12 @@ export const OptionsAdmin = () => {
       >
         <User />
       </ListItemLinkOpen>
-      <ListItemLinkOpen
-        onClick={handleClickSchool}
-        open={openSchool}
-        icon={<SchoolIcon />}
+      <OtherListItemLink
+        onClick={handleClick}
+        icon={<School />}
         label="Escolas"
-      >
-        <School />
-      </ListItemLinkOpen>
+        to="/school"
+      />
       <ListItemLinkOpen
         onClick={handleClickClass}
         open={openClass}

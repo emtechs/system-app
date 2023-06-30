@@ -1,16 +1,4 @@
-import {
-  Button,
-  Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
-  TableCell,
-  TableRow,
-  Tooltip,
-} from "@mui/material";
+import { Breadcrumbs, Button, Chip, IconButton, Tooltip } from "@mui/material";
 import {
   useAppThemeContext,
   useAuthContext,
@@ -18,19 +6,13 @@ import {
   usePaginationContext,
   useSchoolContext,
 } from "../../shared/contexts";
-import { useCallback, useEffect, useState } from "react";
-import { iSchoolServer, iheadCell } from "../../shared/interfaces";
-import { apiUsingNow } from "../../shared/services";
-import { RemoveDone, School } from "@mui/icons-material";
-import {
-  TableBase,
-  TitleSchoolAdminPages,
-  Tools,
-} from "../../shared/components";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { rolePtBr } from "../../shared/scripts";
+import { useEffect, useState } from "react";
+import { iheadCell } from "../../shared/interfaces";
+import { Home, PersonAdd, RemoveDone, School } from "@mui/icons-material";
+import { LinkRouter, TableBase, Tools } from "../../shared/components";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
+import { Active, CardServer, Director, Edit } from "./components";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Nome Completo" },
@@ -39,111 +21,85 @@ const headCells: iheadCell[] = [
   { numeric: false, label: "Tela" },
 ];
 
-interface iCardServerProps {
-  school_id: string;
-  schoolServer: iSchoolServer;
+interface iRetrieveSchoolPageProps {
+  id: string;
 }
-const CardServer = ({ school_id, schoolServer }: iCardServerProps) => {
-  const navigate = useNavigate();
-  const { handleClickUser } = useDrawerContext();
-  return (
-    <TableRow
-      hover
-      sx={{ cursor: "pointer" }}
-      onClick={() => {
-        handleClickUser();
-        navigate(
-          `/user?id=${schoolServer.server.id}&school_id=${school_id}&order=name`
-        );
-      }}
-    >
-      <TableCell>{schoolServer.server.name}</TableCell>
-      <TableCell>{schoolServer.server.cpf}</TableCell>
-      <TableCell>{rolePtBr(schoolServer.role)}</TableCell>
-      <TableCell>
-        {schoolServer.dash === "SCHOOL" ? "Escola" : "Frequência"}
-      </TableCell>
-    </TableRow>
-  );
-};
 
-export const RetrieveSchoolPage = () => {
-  const [searchParams] = useSearchParams();
-  const id = searchParams.get("id");
+export const RetrieveSchoolPage = ({ id }: iRetrieveSchoolPageProps) => {
   const { debounce } = useDebounce();
-  const { schoolData } = useAuthContext();
   const { mdDown } = useAppThemeContext();
-  const { updateSchool, schoolSelect, labelSchool, schoolRetrieve } =
+  const { schoolData } = useAuthContext();
+  const { defineQuery } = usePaginationContext();
+  const { labelSchool, serversData, getServers, handleOpenActive } =
     useSchoolContext();
-  const { setIsLoading, setCount, defineQuery } = usePaginationContext();
-  const [serversData, setServersData] = useState<iSchoolServer[]>();
-  const [open, setOpen] = useState(false);
+  const { handleClickButtonTools } = useDrawerContext();
   const [search, setSearch] = useState<string>();
-  const handleClose = () => {
-    setOpen((oldOpen) => !oldOpen);
-  };
-  let school_id = "";
-  if (id) {
-    school_id = id;
-  } else if (schoolData) school_id = schoolData.id;
-
-  const getServers = useCallback((school_id: string, query: string) => {
-    setIsLoading(true);
-    apiUsingNow
-      .get<{ total: number; result: iSchoolServer[] }>(
-        `schools/${school_id}/server${query}`
-      )
-      .then((res) => {
-        setServersData(res.data.result);
-        setCount(res.data.total);
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
 
   useEffect(() => {
-    if (id) schoolRetrieve(id);
-  }, [id]);
-
-  useEffect(() => {
-    if (school_id) {
-      let query = defineQuery() + "&is_active=true";
-      if (search) {
-        query += `&name=${search}`;
-        debounce(() => {
-          getServers(school_id, query);
-        });
-      } else {
-        getServers(school_id, query);
-      }
+    let query = defineQuery();
+    if (search) {
+      query += `&name=${search}`;
+      debounce(() => {
+        getServers(id, query);
+      });
+    } else {
+      getServers(id, query);
     }
-  }, [school_id, defineQuery, search]);
+  }, [defineQuery, search]);
 
   return (
     <>
       <LayoutBasePage
         title={
-          <TitleSchoolAdminPages
-            breadcrumbs={[
+          <Breadcrumbs
+            maxItems={mdDown ? 2 : undefined}
+            aria-label="breadcrumb"
+          >
+            <LinkRouter
+              underline="none"
+              color="inherit"
+              to="/"
+              onClick={handleClickButtonTools}
+            >
               <Chip
-                label={labelSchool()}
+                clickable
                 color="primary"
+                variant="outlined"
+                label="Página Inicial"
+                icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
+              />
+            </LinkRouter>
+            <LinkRouter underline="none" color="inherit" to="/school">
+              <Chip
+                clickable
+                color="primary"
+                variant="outlined"
+                label="Escolas"
                 icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-              />,
-            ]}
-          />
+              />
+            </LinkRouter>
+            <Chip
+              label={labelSchool()}
+              color="primary"
+              icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </Breadcrumbs>
         }
         tools={
           <Tools
-            back="/school/list"
+            back="/school"
             isHome
-            school_id={school_id}
+            isNew
+            iconNew={<PersonAdd />}
+            titleNew="Servidor"
+            isSchool
             isSearch
             search={search}
             setSearch={(text) => setSearch(text)}
             finish={
               mdDown ? (
                 <Tooltip title="Desativar">
-                  <IconButton color="error" onClick={handleClose}>
+                  <IconButton color="error" onClick={handleOpenActive}>
                     <RemoveDone />
                   </IconButton>
                 </Tooltip>
@@ -152,7 +108,7 @@ export const RetrieveSchoolPage = () => {
                   variant="contained"
                   color="error"
                   disableElevation
-                  onClick={handleClose}
+                  onClick={handleOpenActive}
                   endIcon={<RemoveDone />}
                 >
                   Desativar
@@ -164,43 +120,13 @@ export const RetrieveSchoolPage = () => {
       >
         <TableBase headCells={headCells}>
           {serversData?.map((el) => (
-            <CardServer
-              key={el.server.id}
-              school_id={school_id}
-              schoolServer={el}
-            />
+            <CardServer key={el.server.id} school_id={id} schoolServer={el} />
           ))}
         </TableBase>
       </LayoutBasePage>
-      {schoolSelect && (
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Desativar Escola</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Deseja continuar desativando a escola{" "}
-              {schoolSelect.name.toUpperCase()}?
-            </DialogContentText>
-            <DialogActions>
-              <Button onClick={handleClose}>Cancelar</Button>
-              <Button
-                onClick={() => {
-                  updateSchool(
-                    {
-                      is_active: false,
-                    },
-                    schoolSelect.id,
-                    "estado",
-                    "/school/list"
-                  );
-                  setOpen(false);
-                }}
-              >
-                Continuar
-              </Button>
-            </DialogActions>
-          </DialogContent>
-        </Dialog>
-      )}
+      {schoolData && <Active school={schoolData} />}
+      {schoolData && <Edit school={schoolData} />}
+      {schoolData && <Director school={schoolData} />}
     </>
   );
 };

@@ -27,7 +27,7 @@ export const DashboardSchoolAdmin = () => {
     if (id && yearData) {
       setLoading(true);
       apiSchool
-        .retrieve(id, yearData.id)
+        .retrieveClass(id, yearData.id)
         .then((res) => {
           setSchoolClassData(res);
         })
@@ -62,7 +62,9 @@ export const DashboardSchoolAdmin = () => {
                     <CalendarDashCommon />
                   </Box>
                 </Grid>
-                {schoolClassData && <GridDashSchoolAdmin school={schoolClassData} />}
+                {schoolClassData && (
+                  <GridDashSchoolAdmin school={schoolClassData} />
+                )}
               </Grid>
             </Grid>
           </CardContent>

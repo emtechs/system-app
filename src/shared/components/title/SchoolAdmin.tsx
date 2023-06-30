@@ -34,7 +34,7 @@ export const TitleSchoolAdminPages = ({
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </LinkRouter>
-      <LinkRouter underline="none" color="inherit" to="/school/list">
+      <LinkRouter underline="none" color="inherit" to="/school">
         <Chip
           clickable
           color="primary"
@@ -72,7 +72,7 @@ export const TitleRetrieveSchoolAdminPages = ({
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </LinkRouter>
-      <LinkRouter underline="none" color="inherit" to="/school/list">
+      <LinkRouter underline="none" color="inherit" to="/school">
         <Chip
           clickable
           color="primary"

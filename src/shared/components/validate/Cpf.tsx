@@ -42,13 +42,16 @@ export const ValidateCPF = ({
       if (limitNumber.length === 11) {
         apiUsingNow
           .get<iUser>(`users/cpf/${limitNumber}` + query())
-          .then(() => {
+          .then((res) => {
+            if (director) setValue("name_diret", res.data.name);
+          })
+          .catch(() => {
             setError("cpf", {
               message: "Usuário já está cadastrado",
             });
             setValue("login", 1);
-          })
-          .catch(() => clearErrors("cpf"));
+            if (director) setValue("name_diret", "");
+          });
       } else {
         clearErrors("cpf");
       }

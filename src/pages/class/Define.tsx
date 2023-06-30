@@ -21,14 +21,7 @@ export const DefineSchoolsPage = () => {
   return (
     <LayoutBasePage
       title="Definir Escola"
-      tools={
-        <Tools
-          back={back}
-          isHome
-          isNew
-          destNew="/class/create?back_click=school"
-        />
-      }
+      tools={<Tools back={back} isHome isNew />}
     >
       <FormContainer
         onSuccess={(data) => {

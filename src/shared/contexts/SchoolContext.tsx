@@ -3,6 +3,7 @@ import {
   iSchool,
   iSchoolImportRequest,
   iSchoolRequest,
+  iSchoolServer,
   iServerRequest,
   iWorkSchool,
 } from "../interfaces";
@@ -17,9 +18,10 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
-import { apiSchool, apiUser, apiUsingNow } from "../services";
+import { apiSchool, apiUser } from "../services";
 import { useAuthContext } from "./AuthContext";
 import { adaptName } from "../scripts";
+import { usePaginationContext } from ".";
 
 interface iSchoolContextData {
   createSchool: (data: iSchoolRequest) => Promise<void>;
@@ -33,6 +35,7 @@ interface iSchoolContextData {
     data: FieldValues,
     id: string,
     type: "nome" | "diretor" | "estado",
+    query?: string,
     back?: string
   ) => Promise<void>;
   deleteServer: (school_id: string, server_id: string) => Promise<void>;
@@ -40,8 +43,6 @@ interface iSchoolContextData {
   setSchoolSelect: Dispatch<SetStateAction<iSchool | undefined>>;
   listSchoolData: iSchool[] | undefined;
   setListSchoolData: Dispatch<SetStateAction<iSchool[] | undefined>>;
-  updateSchoolData: iSchool | undefined;
-  setUpdateSchoolData: Dispatch<SetStateAction<iSchool | undefined>>;
   updateServerData: iWorkSchool | undefined;
   setUpdateServerData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
   schoolRetrieve: (id: string) => void;
@@ -49,6 +50,17 @@ interface iSchoolContextData {
   director: boolean[];
   setDirector: Dispatch<SetStateAction<boolean[]>>;
   is_director: () => "" | "&is_director=true" | "&is_director=false";
+  openActive: boolean;
+  handleOpenActive: () => void;
+  openCreate: boolean;
+  handleOpenCreate: () => void;
+  openEdit: boolean;
+  handleOpenEdit: () => void;
+  openDirector: boolean;
+  handleOpenDirector: () => void;
+  serversData: iSchoolServer[] | undefined;
+  getServers: (id: string, query: string) => void;
+  getSchool: (query: string) => void;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -58,11 +70,20 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const { setLoading, handleSucess, handleError, mdDown } =
     useAppThemeContext();
   const { schoolData, setSchoolData } = useAuthContext();
+  const { setIsLoading, setCount } = usePaginationContext();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
-  const [updateSchoolData, setUpdateSchoolData] = useState<iSchool>();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
+  const [serversData, setServersData] = useState<iSchoolServer[]>();
   const [director, setDirector] = useState([true, true]);
+  const [openActive, setOpenActive] = useState(false);
+  const [openCreate, setOpenCreate] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openDirector, setOpenDirector] = useState(false);
+  const handleOpenActive = () => setOpenActive(!openActive);
+  const handleOpenCreate = () => setOpenCreate(!openCreate);
+  const handleOpenEdit = () => setOpenEdit(!openEdit);
+  const handleOpenDirector = () => setOpenDirector(!openDirector);
 
   const is_director = useCallback(() => {
     if (director[0] !== director[1]) {
@@ -72,15 +93,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
     return "";
   }, [director]);
 
-  const schoolRetrieve = useCallback((id: string) => {
-    setLoading(true);
-    apiUsingNow
-      .get<iSchool>(`schools/${id}`)
-      .then((res) => setSchoolData(res.data))
-      .catch(() => navigate("/"))
-      .finally(() => setLoading(false));
-  }, []);
-
   const labelSchool = useCallback(() => {
     if (schoolData) {
       if (mdDown) return adaptName(schoolData.name);
@@ -89,12 +101,43 @@ export const SchoolProvider = ({ children }: iChildren) => {
     return "";
   }, [schoolData, mdDown]);
 
+  const schoolRetrieve = useCallback((id: string) => {
+    setLoading(true);
+    apiSchool
+      .retrieve(id)
+      .then((res) => setSchoolData(res))
+      .catch(() => navigate("/"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const getSchool = useCallback((query: string) => {
+    setIsLoading(true);
+    apiSchool
+      .list(query)
+      .then((res) => {
+        setListSchoolData(res.result);
+        setCount(res.total);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const getServers = useCallback((id: string, query: string) => {
+    setIsLoading(true);
+    apiSchool
+      .listServers(id, query)
+      .then((res) => {
+        setServersData(res.result);
+        setCount(res.total);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
   const handleCreateSchool = useCallback(async (data: iSchoolRequest) => {
     try {
       setLoading(true);
       const school = await apiSchool.create(data);
       handleSucess("A escola foi cadastrada com sucesso!");
-      navigate(`/school?id=${school.id}&order=name`);
+      navigate(`/school?id=${school.id}`);
     } catch {
       handleError(
         "No momento, não foi possível cadastrar a escola. Por favor, tente novamente mais tarde."
@@ -127,11 +170,14 @@ export const SchoolProvider = ({ children }: iChildren) => {
       data: FieldValues,
       id: string,
       type: "nome" | "diretor" | "estado",
+      query?: string,
       back?: string
     ) => {
       try {
         setLoading(true);
-        await apiSchool.update(data, id);
+        const school = await apiSchool.update(data, id, query);
+        setSchoolData(school);
+        if (type === "diretor") getServers(school.id, "");
         handleSucess(`Sucesso ao alterar o ${type} da Escola!`);
       } catch {
         handleError(
@@ -139,7 +185,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
         );
       } finally {
         setSchoolSelect(undefined);
-        setUpdateSchoolData(undefined);
         setLoading(false);
         if (back) navigate(back);
       }
@@ -195,8 +240,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setListSchoolData,
         schoolSelect,
         setSchoolSelect,
-        updateSchoolData,
-        setUpdateSchoolData,
         updateServerData,
         setUpdateServerData,
         labelSchool,
@@ -204,6 +247,17 @@ export const SchoolProvider = ({ children }: iChildren) => {
         director,
         setDirector,
         is_director,
+        handleOpenDirector,
+        handleOpenEdit,
+        openDirector,
+        openEdit,
+        serversData,
+        getServers,
+        handleOpenCreate,
+        openCreate,
+        handleOpenActive,
+        openActive,
+        getSchool,
       }}
     >
       {children}

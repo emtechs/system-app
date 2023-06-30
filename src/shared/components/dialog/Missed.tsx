@@ -1,12 +1,12 @@
 import { Box, Button, Typography } from "@mui/material";
 import { iFrequencyStudentsBase } from "../../interfaces";
 import { useFrequencyContext } from "../../contexts";
-import { DialogBase } from "./DialogBase";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { frequencyUpdateSchema } from "../../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { DialogBaseChildren } from "./DialogBaseChildren";
 
 interface iDialogMissedProps {
   open: boolean;
@@ -28,7 +28,7 @@ export const DialogMissed = ({
     onClose();
   };
   return (
-    <DialogBase
+    <DialogBaseChildren
       open={open}
       onClose={onClose}
       title="Informar Falta"
@@ -62,6 +62,6 @@ export const DialogMissed = ({
           </Button>
         </Box>
       </FormContainer>
-    </DialogBase>
+    </DialogBaseChildren>
   );
 };

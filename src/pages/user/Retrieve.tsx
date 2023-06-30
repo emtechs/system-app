@@ -157,7 +157,6 @@ export const RetrieveUserPage = () => {
             }
             isHome
             isNew
-            destNew={`/school/create/server?cpf=${updateUserData?.cpf}&name=${updateUserData?.name}&back_click=user&back=/user?id=${updateUserData?.id}&order=name`}
             iconNew={<School />}
             onClickNew={handleClickSchool}
             isSearch

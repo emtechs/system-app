@@ -31,7 +31,8 @@ export const EditClassPage = ({ back }: iPageProps) => {
       <BasePage isProfile back={back}>
         <FormContainer
           onSuccess={(data) => {
-            if (schoolSelect) updateSchool(data, schoolSelect.id, "nome", back);
+            if (schoolSelect)
+              updateSchool(data, schoolSelect.id, "nome", undefined, back);
           }}
           resolver={zodResolver(schoolUpdateSchema)}
         >

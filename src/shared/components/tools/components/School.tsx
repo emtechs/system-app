@@ -4,7 +4,6 @@ import {
   ExpandLess,
   ExpandMore,
   Person,
-  PersonAdd,
   School,
 } from "@mui/icons-material";
 import {
@@ -14,18 +13,12 @@ import {
   Menu,
   MenuItem,
   Tooltip,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { useAppThemeContext, useSchoolContext } from "../../../contexts";
 
-interface iSchoolToolsProps {
-  school_id: string;
-}
-
-export const SchoolTools = ({ school_id }: iSchoolToolsProps) => {
-  const theme = useTheme();
-  const mdDown = useMediaQuery(theme.breakpoints.down("md"));
+export const SchoolTools = () => {
+  const { mdDown } = useAppThemeContext();
+  const { handleOpenEdit, handleOpenDirector } = useSchoolContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -75,30 +68,28 @@ export const SchoolTools = ({ school_id }: iSchoolToolsProps) => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <Link to={"/school/define/diret?id=" + school_id}>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Person />
-            </ListItemIcon>
-            Diretor
-          </MenuItem>
-        </Link>
-        <Link to={"/school/create/server?id=" + school_id}>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <PersonAdd />
-            </ListItemIcon>
-            Servidor
-          </MenuItem>
-        </Link>
-        <Link to={"/school/edit?id=" + school_id}>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Edit />
-            </ListItemIcon>
-            Editar
-          </MenuItem>
-        </Link>
+        <MenuItem
+          onClick={() => {
+            handleOpenDirector();
+            handleClose();
+          }}
+        >
+          <ListItemIcon>
+            <Person />
+          </ListItemIcon>
+          Diretor
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleOpenEdit();
+            handleClose();
+          }}
+        >
+          <ListItemIcon>
+            <Edit />
+          </ListItemIcon>
+          Editar
+        </MenuItem>
       </Menu>
     </>
   );

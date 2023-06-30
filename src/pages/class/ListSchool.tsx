@@ -109,7 +109,6 @@ export const ListSchoolPage = () => {
           isSearch
           search={search}
           setSearch={(text) => setSearch(text)}
-          destNew="/school/create?back=/school/list"
           titleNew="Nova"
           isInfreq
           infreq={infreq}

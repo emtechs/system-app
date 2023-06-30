@@ -1,10 +1,10 @@
 import { TableCell, TableRow, useTheme } from "@mui/material";
 import { useDrawerContext, useFrequencyContext } from "../../contexts";
-import { DialogBase } from "./DialogBase";
 import { iFrequencyStudentsBase, iheadCell } from "../../interfaces";
 import { defineBgColorFrequency, statusFrequencyPtBr } from "../../scripts";
 import { Pagination } from "../pagination";
 import { TableBase } from "../table";
+import { DialogBaseChildren } from "./DialogBaseChildren";
 
 const headCells: iheadCell[] = [
   { order: "registry", numeric: false, label: "Matrícula" },
@@ -64,7 +64,7 @@ export const DialogFinishFrequency = ({
   };
 
   return (
-    <DialogBase
+    <DialogBaseChildren
       open={open}
       onClose={onClose}
       title="Conferência"
@@ -84,6 +84,6 @@ export const DialogFinishFrequency = ({
         ))}
       </TableBase>
       <Pagination />
-    </DialogBase>
+    </DialogBaseChildren>
   );
 };

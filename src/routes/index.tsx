@@ -1,42 +1,34 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import {
   ActiveClassPage,
-  ActiveSchoolPage,
   ActiveUserPage,
   CreateAdmPage,
   CreateClassPage,
   CreateDirectorPage,
   CreateFrequencyPage,
-  CreateSchoolPage,
-  CreateServerPage,
   CreateStudentAdmPage,
   DashboardPage,
-  DefineDiretPage,
   DefineSchoolsPage,
   DefineSecretPage,
   EditClassPage,
   EditPasswordPage,
   EditProfilePage,
-  EditSchoolPage,
   FrequencyOpenPage,
   FrequencyPage,
   ImportClassPage,
   ImportSchoolPage,
   ImportStudentPage,
   ListClassPage,
-  ListClassSchoolPage,
   ListFrequencyPage,
-  ListSchoolPage,
   ListStudentFrequencyPage,
   ListStudentPage,
-  ListStundetSchoolPage,
   ListUserPage,
   PasswordPage,
   ReportPage,
   RetrieveClassPage,
   RetrieveFrequencyPage,
-  RetrieveSchoolPage,
   RetrieveUserPage,
+  SchoolPage,
   StudentFrequencyPage,
 } from "../pages";
 import {
@@ -59,7 +51,6 @@ const AppRoutes = () => {
           />
           <Route path="/user/define/secret" element={<DefineSecretPage />} />
           <Route path="/user/active" element={<ActiveUserPage />} />
-          <Route path="/school/list" element={<ListSchoolPage />} />
           <Route path="/class/list" element={<ListClassPage />} />
           <Route path="/student/list" element={<ListStudentPage />} />
           <Route
@@ -74,19 +65,12 @@ const AppRoutes = () => {
             path="/import/student"
             element={<ImportStudentPage back="/student" />}
           />
+          <Route path="/school" element={<SchoolPage />} />
         </Route>
         <Route element={<ProtectedSchool />}>
           <Route path="/user/list" element={<ListUserPage />} />
           <Route path="/user" element={<RetrieveUserPage />} />
-          <Route path="/school" element={<RetrieveSchoolPage />} />
-          <Route path="/school/create" element={<CreateSchoolPage />} />
-          <Route path="/school/create/server" element={<CreateServerPage />} />
-          <Route path="/school/define/diret" element={<DefineDiretPage />} />
-          <Route path="/school/edit" element={<EditSchoolPage />} />
-          <Route path="/school/active" element={<ActiveSchoolPage />} />
         </Route>
-        <Route path="/school/class" element={<ListClassSchoolPage />} />
-        <Route path="/school/student" element={<ListStundetSchoolPage />} />
         <Route path="/" element={<DashboardPage />} />
         <Route path="/report" element={<ReportPage />} />
         <Route path="/class" element={<RetrieveClassPage />} />

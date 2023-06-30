@@ -21,6 +21,7 @@ export interface iSchool {
   id: string;
   label: string;
   name: string;
+  is_active: boolean;
   director?: iDiretor;
 }
 
