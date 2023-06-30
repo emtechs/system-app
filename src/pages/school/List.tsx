@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Breadcrumbs, Chip } from "@mui/material";
-import { LinkRouter, TableBase, Tools } from "../../shared/components";
+import {
+  LinkRouter,
+  Pagination,
+  TableBase,
+  Tools,
+} from "../../shared/components";
 import {
   useAppThemeContext,
-  useAuthContext,
   useDrawerContext,
   usePaginationContext,
   useSchoolContext,
@@ -22,7 +26,6 @@ const headCells: iheadCell[] = [
 export const ListSchoolPage = () => {
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
-  const { yearData } = useAuthContext();
   const {
     is_director,
     setDirector,
@@ -30,22 +33,33 @@ export const ListSchoolPage = () => {
     listSchoolData,
     getSchool,
   } = useSchoolContext();
-  const { defineQuery, setActive } = usePaginationContext();
+  const { query, defineQuery, setActive } = usePaginationContext();
   const { handleClickButtonTools } = useDrawerContext();
 
   const [search, setSearch] = useState<string>();
 
+  const queryData = useCallback(
+    (take: number) => {
+      let query_data = defineQuery() + is_director();
+      if (mdDown) {
+        query_data = query(take) + is_director();
+        return query_data;
+      }
+      return query_data;
+    },
+    [defineQuery, query, is_director, mdDown]
+  );
+
   useEffect(() => {
-    if (yearData) {
-      let query = defineQuery() + is_director();
-      if (search) {
-        query += `&name=${search}`;
-        debounce(() => {
-          getSchool(query);
-        });
-      } else getSchool(query);
-    }
-  }, [yearData, defineQuery, is_director, search]);
+    const take = 5;
+    let query = queryData(take);
+    if (search) {
+      query += `&name=${search}`;
+      debounce(() => {
+        getSchool(query, take);
+      });
+    } else getSchool(query, take);
+  }, [queryData, is_director, search]);
 
   return (
     <>
@@ -78,7 +92,6 @@ export const ListSchoolPage = () => {
         }
         tools={
           <Tools
-            isHome
             isNew
             onClickNew={handleOpenCreate}
             isSearch
@@ -95,11 +108,16 @@ export const ListSchoolPage = () => {
           />
         }
       >
-        <TableBase headCells={headCells} message="Nenhuma escola encotrada">
+        <TableBase
+          headCells={headCells}
+          message="Nenhuma escola encotrada"
+          is_pagination={mdDown ? false : undefined}
+        >
           {listSchoolData?.map((el) => (
             <CardSchool key={el.id} school={el} />
           ))}
         </TableBase>
+        {mdDown && <Pagination />}
       </LayoutBasePage>
       <Create />
     </>

@@ -14,8 +14,9 @@ import {
   ArrowBack,
   ClearAll,
   Home,
-  Person,
-  PersonOff,
+  ManageAccountsOutlined,
+  PersonOffOutlined,
+  PersonOutlined,
 } from "@mui/icons-material";
 import {
   useAppThemeContext,
@@ -78,7 +79,7 @@ export const Tools = ({
 }: iToolsProps) => {
   const [searchParams] = useSearchParams();
   const backclick = searchParams.get("back_click");
-  const { theme } = useAppThemeContext();
+  const { theme, mdDown } = useAppThemeContext();
   const { director, setDirector, is_director } = useSchoolContext();
   const { is_active } = usePaginationContext();
   const {
@@ -209,7 +210,9 @@ export const Tools = ({
         {isDirector && (
           <>
             <FormControlLabel
-              label="Diretor"
+              label={
+                mdDown ? <ManageAccountsOutlined color="primary" /> : "Diretor"
+              }
               control={
                 <Checkbox
                   id="basic-button"
@@ -234,7 +237,7 @@ export const Tools = ({
             >
               <MenuItem>
                 <FormControlLabel
-                  label={<Person />}
+                  label={<PersonOutlined color="primary" />}
                   control={
                     <Checkbox checked={director[0]} onChange={handleChange2} />
                   }
@@ -242,7 +245,7 @@ export const Tools = ({
               </MenuItem>
               <MenuItem>
                 <FormControlLabel
-                  label={<PersonOff />}
+                  label={<PersonOffOutlined color="primary" />}
                   control={
                     <Checkbox checked={director[1]} onChange={handleChange3} />
                   }

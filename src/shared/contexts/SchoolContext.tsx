@@ -60,7 +60,7 @@ interface iSchoolContextData {
   handleOpenDirector: () => void;
   serversData: iSchoolServer[] | undefined;
   getServers: (id: string, query: string) => void;
-  getSchool: (query: string) => void;
+  getSchool: (query: string, take: number) => void;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -70,7 +70,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const { setLoading, handleSucess, handleError, mdDown } =
     useAppThemeContext();
   const { schoolData, setSchoolData } = useAuthContext();
-  const { setIsLoading, setCount } = usePaginationContext();
+  const { setIsLoading, setCount, setTotal, setSteps } = usePaginationContext();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
@@ -110,16 +110,33 @@ export const SchoolProvider = ({ children }: iChildren) => {
       .finally(() => setLoading(false));
   }, []);
 
-  const getSchool = useCallback((query: string) => {
-    setIsLoading(true);
-    apiSchool
-      .list(query)
-      .then((res) => {
-        setListSchoolData(res.result);
-        setCount(res.total);
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
+  const getSchool = useCallback(
+    (query: string, take: number) => {
+      if (mdDown) {
+        setIsLoading(true);
+        apiSchool
+          .list(query)
+          .then((res) => {
+            setTotal(res.total);
+            setListSchoolData(res.result);
+            setCount(res.total);
+            const arredSteps = Math.ceil(res.total / take);
+            setSteps(arredSteps === 1 ? 0 : arredSteps);
+          })
+          .finally(() => setIsLoading(false));
+      } else {
+        setIsLoading(true);
+        apiSchool
+          .list(query)
+          .then((res) => {
+            setListSchoolData(res.result);
+            setCount(res.total);
+          })
+          .finally(() => setIsLoading(false));
+      }
+    },
+    [mdDown]
+  );
 
   const getServers = useCallback((id: string, query: string) => {
     setIsLoading(true);
