@@ -35,7 +35,6 @@ export const ListSchoolPage = () => {
   } = useSchoolContext();
   const { query, defineQuery, setActive } = usePaginationContext();
   const { handleClickButtonTools } = useDrawerContext();
-
   const [search, setSearch] = useState<string>();
 
   const queryData = useCallback(

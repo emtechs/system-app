@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { TableCell, TableRow } from "@mui/material";
 import { iSchoolServer } from "../../../shared/interfaces";
-import { useDrawerContext } from "../../../shared/contexts";
+import { useAppThemeContext, useDrawerContext } from "../../../shared/contexts";
 import { rolePtBr } from "../../../shared/scripts";
 
 interface iCardServerProps {
@@ -11,6 +11,7 @@ interface iCardServerProps {
 
 export const CardServer = ({ school_id, schoolServer }: iCardServerProps) => {
   const navigate = useNavigate();
+  const { mdDown } = useAppThemeContext();
   const { handleClickUser } = useDrawerContext();
   return (
     <TableRow
@@ -25,10 +26,12 @@ export const CardServer = ({ school_id, schoolServer }: iCardServerProps) => {
     >
       <TableCell>{schoolServer.server.name}</TableCell>
       <TableCell>{schoolServer.server.cpf}</TableCell>
-      <TableCell>{rolePtBr(schoolServer.role)}</TableCell>
-      <TableCell>
-        {schoolServer.dash === "SCHOOL" ? "Escola" : "Frequência"}
-      </TableCell>
+      {!mdDown && <TableCell>{rolePtBr(schoolServer.role)}</TableCell>}
+      {!mdDown && (
+        <TableCell>
+          {schoolServer.dash === "SCHOOL" ? "Escola" : "Frequência"}
+        </TableCell>
+      )}
     </TableRow>
   );
 };

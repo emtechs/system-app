@@ -59,7 +59,7 @@ interface iSchoolContextData {
   openDirector: boolean;
   handleOpenDirector: () => void;
   serversData: iSchoolServer[] | undefined;
-  getServers: (id: string, query: string) => void;
+  getServers: (id: string, query: string, take: number) => void;
   getSchool: (query: string, take: number) => void;
 }
 
@@ -70,7 +70,8 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const { setLoading, handleSucess, handleError, mdDown } =
     useAppThemeContext();
   const { schoolData, setSchoolData } = useAuthContext();
-  const { setIsLoading, setCount, setTotal, setSteps } = usePaginationContext();
+  const { setIsLoading, setCount, setTotal, setSteps, setActiveStep } =
+    usePaginationContext();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
@@ -114,6 +115,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
     (query: string, take: number) => {
       if (mdDown) {
         setIsLoading(true);
+        setActiveStep(0);
         apiSchool
           .list(query)
           .then((res) => {
@@ -138,16 +140,34 @@ export const SchoolProvider = ({ children }: iChildren) => {
     [mdDown]
   );
 
-  const getServers = useCallback((id: string, query: string) => {
-    setIsLoading(true);
-    apiSchool
-      .listServers(id, query)
-      .then((res) => {
-        setServersData(res.result);
-        setCount(res.total);
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
+  const getServers = useCallback(
+    (id: string, query: string, take: number) => {
+      if (mdDown) {
+        setIsLoading(true);
+        setActiveStep(0);
+        apiSchool
+          .listServers(id, query)
+          .then((res) => {
+            setTotal(res.total);
+            setServersData(res.result);
+            setCount(res.total);
+            const arredSteps = Math.ceil(res.total / take);
+            setSteps(arredSteps === 1 ? 0 : arredSteps);
+          })
+          .finally(() => setIsLoading(false));
+      } else {
+        setIsLoading(true);
+        apiSchool
+          .listServers(id, query)
+          .then((res) => {
+            setServersData(res.result);
+            setCount(res.total);
+          })
+          .finally(() => setIsLoading(false));
+      }
+    },
+    [mdDown]
+  );
 
   const handleCreateSchool = useCallback(async (data: iSchoolRequest) => {
     try {
@@ -194,7 +214,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setLoading(true);
         const school = await apiSchool.update(data, id, query);
         setSchoolData(school);
-        if (type === "diretor") getServers(school.id, "");
+        if (type === "diretor") getServers(school.id, "", 1);
         handleSucess(`Sucesso ao alterar o ${type} da Escola!`);
       } catch {
         handleError(

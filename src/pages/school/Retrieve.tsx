@@ -6,20 +6,18 @@ import {
   usePaginationContext,
   useSchoolContext,
 } from "../../shared/contexts";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { iheadCell } from "../../shared/interfaces";
 import { Home, PersonAdd, RemoveDone, School } from "@mui/icons-material";
-import { LinkRouter, TableBase, Tools } from "../../shared/components";
+import {
+  LinkRouter,
+  Pagination,
+  TableBase,
+  Tools,
+} from "../../shared/components";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
 import { Active, CardServer, Director, Edit } from "./components";
-
-const headCells: iheadCell[] = [
-  { order: "name", numeric: false, label: "Nome Completo" },
-  { numeric: false, label: "CPF" },
-  { numeric: false, label: "Função" },
-  { numeric: false, label: "Tela" },
-];
 
 interface iRetrieveSchoolPageProps {
   id: string;
@@ -29,23 +27,48 @@ export const RetrieveSchoolPage = ({ id }: iRetrieveSchoolPageProps) => {
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
   const { schoolData } = useAuthContext();
-  const { defineQuery } = usePaginationContext();
+  const { defineQuery, query } = usePaginationContext();
   const { labelSchool, serversData, getServers, handleOpenActive } =
     useSchoolContext();
   const { handleClickButtonTools } = useDrawerContext();
   const [search, setSearch] = useState<string>();
 
+  const queryData = useCallback(
+    (take: number) => {
+      let query_data = defineQuery();
+      if (mdDown) {
+        query_data = query(take);
+        return query_data;
+      }
+      return query_data;
+    },
+    [defineQuery, query, mdDown]
+  );
+
   useEffect(() => {
-    let query = defineQuery();
+    const take = 5;
+    let query = queryData(take);
     if (search) {
       query += `&name=${search}`;
       debounce(() => {
-        getServers(id, query);
+        getServers(id, query, take);
       });
     } else {
-      getServers(id, query);
+      getServers(id, query, take);
     }
-  }, [defineQuery, search]);
+  }, [queryData, search]);
+
+  const headCells: iheadCell[] = mdDown
+    ? [
+        { order: "name", numeric: false, label: "Nome Completo" },
+        { numeric: false, label: "CPF" },
+      ]
+    : [
+        { order: "name", numeric: false, label: "Nome Completo" },
+        { numeric: false, label: "CPF" },
+        { numeric: false, label: "Função" },
+        { numeric: false, label: "Tela" },
+      ];
 
   return (
     <>
@@ -65,7 +88,7 @@ export const RetrieveSchoolPage = ({ id }: iRetrieveSchoolPageProps) => {
                 clickable
                 color="primary"
                 variant="outlined"
-                label="Página Inicial"
+                label={mdDown ? "..." : "Página Inicial"}
                 icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
               />
             </LinkRouter>
@@ -74,7 +97,7 @@ export const RetrieveSchoolPage = ({ id }: iRetrieveSchoolPageProps) => {
                 clickable
                 color="primary"
                 variant="outlined"
-                label="Escolas"
+                label={mdDown ? "..." : "Escolas"}
                 icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
               />
             </LinkRouter>
@@ -88,7 +111,6 @@ export const RetrieveSchoolPage = ({ id }: iRetrieveSchoolPageProps) => {
         tools={
           <Tools
             back="/school"
-            isHome
             isNew
             iconNew={<PersonAdd />}
             titleNew="Servidor"
@@ -118,11 +140,15 @@ export const RetrieveSchoolPage = ({ id }: iRetrieveSchoolPageProps) => {
           />
         }
       >
-        <TableBase headCells={headCells}>
+        <TableBase
+          headCells={headCells}
+          is_pagination={mdDown ? false : undefined}
+        >
           {serversData?.map((el) => (
             <CardServer key={el.server.id} school_id={id} schoolServer={el} />
           ))}
         </TableBase>
+        {mdDown && <Pagination />}
       </LayoutBasePage>
       {schoolData && <Active school={schoolData} />}
       {schoolData && <Edit school={schoolData} />}
