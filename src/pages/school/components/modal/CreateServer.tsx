@@ -1,9 +1,9 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { ModalGeneral, ValidateCPF } from "../../../shared/components";
-import { useSchoolContext } from "../../../shared/contexts";
+import { ModalGeneral, ValidateCPF } from "../../../../shared/components";
+import { useSchoolContext } from "../../../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { iSchool } from "../../../shared/interfaces";
-import { serverCreateSchema } from "../../../shared/schemas";
+import { iSchool } from "../../../../shared/interfaces";
+import { serverCreateSchema } from "../../../../shared/schemas";
 
 interface iCreateServerProps {
   school: iSchool;

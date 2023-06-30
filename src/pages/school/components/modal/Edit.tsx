@@ -1,10 +1,10 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@mui/material";
-import { ModalGeneral } from "../../../shared/components";
-import { useSchoolContext } from "../../../shared/contexts";
-import { iSchool } from "../../../shared/interfaces";
-import { schoolUpdateSchema } from "../../../shared/schemas";
+import { ModalGeneral } from "../../../../shared/components";
+import { useSchoolContext } from "../../../../shared/contexts";
+import { iSchool } from "../../../../shared/interfaces";
+import { schoolUpdateSchema } from "../../../../shared/schemas";
 
 interface iEditProps {
   school: iSchool;

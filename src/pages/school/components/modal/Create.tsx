@@ -1,8 +1,8 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { ModalGeneral } from "../../../shared/components";
-import { useSchoolContext } from "../../../shared/contexts";
+import { ModalGeneral } from "../../../../shared/components";
+import { useSchoolContext } from "../../../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { schoolCreateSchema } from "../../../shared/schemas";
+import { schoolCreateSchema } from "../../../../shared/schemas";
 import { Button } from "@mui/material";
 
 export const Create = () => {

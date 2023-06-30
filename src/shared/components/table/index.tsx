@@ -6,18 +6,16 @@ import {
   TableCell,
   TableContainer,
   TableFooter,
-  TableHead,
   TableRow,
 } from "@mui/material";
-import { iTable } from "../../interfaces";
 import { usePaginationContext } from "../../contexts";
-import { TableSort } from "./Sort";
+import { iTable } from "../../interfaces";
 import { PaginationTable } from "../pagination";
+import { TableSort } from "./Sort";
 
 export const TableBase = ({
   message,
   children,
-  is_active,
   headCells,
   is_body = true,
   is_pagination = true,
@@ -32,12 +30,7 @@ export const TableBase = ({
         variant="outlined"
       >
         <Table>
-          <TableHead>
-            <TableRow>
-              {is_active && <TableCell></TableCell>}
-              <TableSort headCells={headCells} />
-            </TableRow>
-          </TableHead>
+          <TableSort headCells={headCells} />
           {is_body ? (
             <TableBody>{children}</TableBody>
           ) : isLoading ? (
@@ -67,9 +60,7 @@ export const TableBase = ({
           <TableFooter>
             {isLoading && (
               <TableRow>
-                <TableCell
-                  colSpan={is_active ? headCells.length + 1 : headCells.length}
-                >
+                <TableCell colSpan={headCells.length}>
                   <LinearProgress variant="indeterminate" />
                 </TableCell>
               </TableRow>

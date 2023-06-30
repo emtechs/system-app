@@ -7,17 +7,17 @@ import {
   useSchoolContext,
 } from "../../shared/contexts";
 import { useCallback, useEffect, useState } from "react";
-import { iheadCell } from "../../shared/interfaces";
 import { Home, PersonAdd, RemoveDone, School } from "@mui/icons-material";
-import {
-  LinkRouter,
-  Pagination,
-  TableBase,
-  Tools,
-} from "../../shared/components";
+import { LinkRouter, Tools } from "../../shared/components";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
-import { Active, CardServer, CreateServer, Director, Edit } from "./components";
+import {
+  Active,
+  CreateServer,
+  Director,
+  Edit,
+  TableServer,
+} from "./components";
 
 interface iRetrieveSchoolPageProps {
   id: string;
@@ -62,18 +62,6 @@ export const RetrieveSchoolPage = ({ id }: iRetrieveSchoolPageProps) => {
       getServers(id, query, take);
     }
   }, [queryData, search]);
-
-  const headCells: iheadCell[] = mdDown
-    ? [
-        { order: "name", numeric: false, label: "Nome Completo" },
-        { numeric: false, label: "CPF" },
-      ]
-    : [
-        { order: "name", numeric: false, label: "Nome Completo" },
-        { numeric: false, label: "CPF" },
-        { numeric: false, label: "Função" },
-        { numeric: false, label: "Tela" },
-      ];
 
   return (
     <>
@@ -146,15 +134,7 @@ export const RetrieveSchoolPage = ({ id }: iRetrieveSchoolPageProps) => {
           />
         }
       >
-        <TableBase
-          headCells={headCells}
-          is_pagination={mdDown ? false : undefined}
-        >
-          {serversData?.map((el) => (
-            <CardServer key={el.server.id} school_id={id} schoolServer={el} />
-          ))}
-        </TableBase>
-        {mdDown && <Pagination />}
+        {serversData && <TableServer school_id={id} servers={serversData} />}
       </LayoutBasePage>
       {schoolData && <CreateServer school={schoolData} />}
       {schoolData && <Active school={schoolData} />}

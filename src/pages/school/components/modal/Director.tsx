@@ -1,9 +1,9 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { ModalGeneral, ValidateCPF } from "../../../shared/components";
-import { useSchoolContext } from "../../../shared/contexts";
-import { iSchool } from "../../../shared/interfaces";
+import { ModalGeneral, ValidateCPF } from "../../../../shared/components";
+import { useSchoolContext } from "../../../../shared/contexts";
+import { iSchool } from "../../../../shared/interfaces";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { schoolUpdateDirectorSchema } from "../../../shared/schemas";
+import { schoolUpdateDirectorSchema } from "../../../../shared/schemas";
 import { Box, Typography } from "@mui/material";
 
 interface iDirectorProps {

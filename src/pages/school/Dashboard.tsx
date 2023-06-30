@@ -16,16 +16,14 @@ import {
 import {
   useAppThemeContext,
   useAuthContext,
-  useDrawerContext,
   useSchoolContext,
 } from "../../shared/contexts";
 import { Home, School } from "@mui/icons-material";
 
 export const DashboardSchoolAdmin = () => {
   const { theme } = useAppThemeContext();
-  const { schoolDataAdmin } = useAuthContext();
+  const { schoolDataAdmin, setSchoolDataAdmin } = useAuthContext();
   const { labelSchoolDataAdmin } = useSchoolContext();
-  const { handleClickButtonTools } = useDrawerContext();
 
   return (
     <LayoutBasePage
@@ -35,12 +33,12 @@ export const DashboardSchoolAdmin = () => {
             underline="none"
             color="inherit"
             to="/home/school"
-            onClick={handleClickButtonTools}
+            onClick={() => setSchoolDataAdmin(undefined)}
           >
             <Chip
-              clickable
+              clickable={schoolDataAdmin ? true : undefined}
               color="primary"
-              variant="outlined"
+              variant={schoolDataAdmin ? "outlined" : "filled"}
               label="Página Inicial"
               icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
             />

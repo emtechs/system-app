@@ -9,7 +9,7 @@ import {
 import { iChildren } from "../../../interfaces";
 import { PaginationList } from "../../pagination";
 import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
-import { CardSchoolAction } from "../../card";
+import { CardSchoolAdminAction } from "../../card";
 import { ValidateSchoolAdmin } from "../../validate";
 
 interface iBaseSchoolAdminProps extends iChildren {
@@ -28,7 +28,7 @@ export const BaseSchoolAdmin = ({
 }: iBaseSchoolAdminProps) => {
   return (
     <>
-      <CardSchoolAction onClick={onClick} />
+      <CardSchoolAdminAction onClick={onClick} />
       <Dialog open={open}>
         <DialogTitle>Selecione a Escola</DialogTitle>
         <List sx={{ p: 0 }}>

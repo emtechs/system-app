@@ -15,9 +15,8 @@ export const TitleAdminDash = () => {
         onClick={handleClickButtonTools}
       >
         <Chip
-          clickable
           color="primary"
-          variant="outlined"
+          variant="filled"
           label="Página Inicial"
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />

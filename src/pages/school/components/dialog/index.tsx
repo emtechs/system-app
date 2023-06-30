@@ -1,9 +1,9 @@
+import { DialogBase } from "../../../../shared/components";
 import {
   usePaginationContext,
   useSchoolContext,
-} from "../../../shared/contexts";
-import { iSchool } from "../../../shared/interfaces";
-import { DialogBase } from "../../../shared/components";
+} from "../../../../shared/contexts";
+import { iSchool } from "../../../../shared/interfaces";
 
 interface iActiveProps {
   school: iSchool;
