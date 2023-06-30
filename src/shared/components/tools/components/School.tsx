@@ -3,6 +3,7 @@ import {
   Edit,
   ExpandLess,
   ExpandMore,
+  Home,
   Person,
   School,
 } from "@mui/icons-material";
@@ -15,10 +16,11 @@ import {
   Tooltip,
 } from "@mui/material";
 import { useAppThemeContext, useSchoolContext } from "../../../contexts";
+import { Link } from "react-router-dom";
 
 export const SchoolTools = () => {
   const { mdDown } = useAppThemeContext();
-  const { handleOpenEdit, handleOpenDirector } = useSchoolContext();
+  const { handleOpenEdit, handleOpenDirector, isHome } = useSchoolContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -68,6 +70,16 @@ export const SchoolTools = () => {
           "aria-labelledby": "basic-button",
         }}
       >
+        {isHome && (
+          <Link to="/school/dash">
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <Home />
+              </ListItemIcon>
+              Início
+            </MenuItem>
+          </Link>
+        )}
         <MenuItem
           onClick={() => {
             handleOpenDirector();

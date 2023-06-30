@@ -1,6 +1,7 @@
 import {
   iChildren,
   iSchool,
+  iSchoolClass,
   iSchoolImportRequest,
   iSchoolRequest,
   iSchoolServer,
@@ -20,17 +21,13 @@ import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { apiSchool, apiUser } from "../services";
 import { useAuthContext } from "./AuthContext";
-import { adaptName } from "../scripts";
+import { adaptNameSchool } from "../scripts";
 import { usePaginationContext } from ".";
 
 interface iSchoolContextData {
   createSchool: (data: iSchoolRequest) => Promise<void>;
   importSchool: (data: iSchoolImportRequest, back?: string) => Promise<void>;
-  createServer: (
-    data: iServerRequest,
-    id: string,
-    back?: string
-  ) => Promise<void>;
+  createServer: (data: iServerRequest, id: string) => Promise<void>;
   updateSchool: (
     data: FieldValues,
     id: string,
@@ -41,12 +38,14 @@ interface iSchoolContextData {
   deleteServer: (school_id: string, server_id: string) => Promise<void>;
   schoolSelect: iSchool | undefined;
   setSchoolSelect: Dispatch<SetStateAction<iSchool | undefined>>;
+  schoolClassSelect: iSchoolClass | undefined;
   listSchoolData: iSchool[] | undefined;
   setListSchoolData: Dispatch<SetStateAction<iSchool[] | undefined>>;
   updateServerData: iWorkSchool | undefined;
   setUpdateServerData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
   schoolRetrieve: (id: string) => void;
   labelSchool: () => string;
+  isHome: boolean;
   director: boolean[];
   setDirector: Dispatch<SetStateAction<boolean[]>>;
   is_director: () => "" | "&is_director=true" | "&is_director=false";
@@ -61,6 +60,7 @@ interface iSchoolContextData {
   serversData: iSchoolServer[] | undefined;
   getServers: (id: string, query: string, take: number) => void;
   getSchool: (query: string, take: number) => void;
+  schoolClassRetrieve: (id: string) => void;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -69,13 +69,15 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError, mdDown } =
     useAppThemeContext();
-  const { schoolData, setSchoolData } = useAuthContext();
+  const { schoolData, setSchoolData, yearData } = useAuthContext();
   const { setIsLoading, setCount, setTotal, setSteps, setActiveStep } =
     usePaginationContext();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [schoolSelect, setSchoolSelect] = useState<iSchool>();
+  const [schoolClassSelect, setSchoolClassSelect] = useState<iSchoolClass>();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
   const [serversData, setServersData] = useState<iSchoolServer[]>();
+  const [isHome, setIsHome] = useState(false);
   const [director, setDirector] = useState([true, true]);
   const [openActive, setOpenActive] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
@@ -96,7 +98,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
 
   const labelSchool = useCallback(() => {
     if (schoolData) {
-      if (mdDown) return adaptName(schoolData.name);
+      if (mdDown) return adaptNameSchool(schoolData.name);
       return schoolData.name;
     }
     return "";
@@ -110,6 +112,23 @@ export const SchoolProvider = ({ children }: iChildren) => {
       .catch(() => navigate("/"))
       .finally(() => setLoading(false));
   }, []);
+
+  const schoolClassRetrieve = useCallback(
+    (id: string) => {
+      if (yearData) {
+        setLoading(true);
+        apiSchool
+          .retrieveClass(id, yearData.id)
+          .then((res) => {
+            setSchoolClassSelect(res);
+            setIsHome(true);
+          })
+          .catch(() => setIsHome(false))
+          .finally(() => setLoading(false));
+      }
+    },
+    [yearData]
+  );
 
   const getSchool = useCallback(
     (query: string, take: number) => {
@@ -230,13 +249,13 @@ export const SchoolProvider = ({ children }: iChildren) => {
   );
 
   const handleCreateServer = useCallback(
-    async (data: iServerRequest, id: string, back?: string) => {
+    async (data: iServerRequest, id: string) => {
       try {
         setLoading(true);
         const query = `?school_id=${id}`;
         await apiUser.create(data, query);
+        getServers(id, "", 1);
         handleSucess("Servidor cadastrado com sucesso!");
-        navigate(back ? back : "/");
       } catch {
         handleError("Não foi possível cadastrar o servidor no momento!");
       } finally {
@@ -295,6 +314,9 @@ export const SchoolProvider = ({ children }: iChildren) => {
         handleOpenActive,
         openActive,
         getSchool,
+        isHome,
+        schoolClassSelect,
+        schoolClassRetrieve,
       }}
     >
       {children}

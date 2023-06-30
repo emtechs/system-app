@@ -8,6 +8,7 @@ import {
   CreateFrequencyPage,
   CreateStudentAdmPage,
   DashboardPage,
+  DashboardSchoolAdmin,
   DefineSchoolsPage,
   DefineSecretPage,
   EditClassPage,
@@ -66,6 +67,7 @@ const AppRoutes = () => {
             element={<ImportStudentPage back="/student" />}
           />
           <Route path="/school" element={<SchoolPage />} />
+          <Route path="/school/dash" element={<DashboardSchoolAdmin />} />
         </Route>
         <Route element={<ProtectedSchool />}>
           <Route path="/user/list" element={<ListUserPage />} />

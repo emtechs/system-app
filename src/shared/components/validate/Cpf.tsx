@@ -25,7 +25,7 @@ export const ValidateCPF = ({
   const { isValid } = formState;
   const query = () => {
     if (director) return `?school_id=${school_id}&director=true`;
-    if (school_id) return `?school_id=${school_id}&allNotServ=true`;
+    if (school_id) return `?school_id=${school_id}`;
     if (allNotServ) return `?allNotServ=${allNotServ}`;
     if (cpfData) return `?allNotServ=true`;
     return "";
@@ -44,6 +44,7 @@ export const ValidateCPF = ({
           .get<iUser>(`users/cpf/${limitNumber}` + query())
           .then((res) => {
             if (director) setValue("name_diret", res.data.name);
+            if (school_id) setValue("name", res.data.name);
           })
           .catch(() => {
             setError("cpf", {
@@ -51,6 +52,7 @@ export const ValidateCPF = ({
             });
             setValue("login", 1);
             if (director) setValue("name_diret", "");
+            if (school_id) setValue("name", "");
           });
       } else {
         clearErrors("cpf");

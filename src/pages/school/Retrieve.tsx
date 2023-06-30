@@ -17,7 +17,7 @@ import {
 } from "../../shared/components";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
-import { Active, CardServer, Director, Edit } from "./components";
+import { Active, CardServer, CreateServer, Director, Edit } from "./components";
 
 interface iRetrieveSchoolPageProps {
   id: string;
@@ -28,8 +28,13 @@ export const RetrieveSchoolPage = ({ id }: iRetrieveSchoolPageProps) => {
   const { mdDown } = useAppThemeContext();
   const { schoolData } = useAuthContext();
   const { defineQuery, query } = usePaginationContext();
-  const { labelSchool, serversData, getServers, handleOpenActive } =
-    useSchoolContext();
+  const {
+    labelSchool,
+    serversData,
+    getServers,
+    handleOpenActive,
+    handleOpenCreate,
+  } = useSchoolContext();
   const { handleClickButtonTools } = useDrawerContext();
   const [search, setSearch] = useState<string>();
 
@@ -113,6 +118,7 @@ export const RetrieveSchoolPage = ({ id }: iRetrieveSchoolPageProps) => {
             back="/school"
             isNew
             iconNew={<PersonAdd />}
+            onClickNew={handleOpenCreate}
             titleNew="Servidor"
             isSchool
             isSearch
@@ -150,6 +156,7 @@ export const RetrieveSchoolPage = ({ id }: iRetrieveSchoolPageProps) => {
         </TableBase>
         {mdDown && <Pagination />}
       </LayoutBasePage>
+      {schoolData && <CreateServer school={schoolData} />}
       {schoolData && <Active school={schoolData} />}
       {schoolData && <Edit school={schoolData} />}
       {schoolData && <Director school={schoolData} />}

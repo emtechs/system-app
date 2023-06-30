@@ -25,21 +25,15 @@ export const Director = ({ school }: iDirectorProps) => {
         resolver={zodResolver(schoolUpdateDirectorSchema)}
       >
         {school?.director && (
-          <Box mb={1}>
+          <Box mb={2}>
             <Typography>Diretor Atual</Typography>
             <Typography>Nome: {school.director.name}</Typography>
             <Typography>CPF: {school.director.cpf}</Typography>
           </Box>
         )}
+        <TextFieldElement name="cpf" label="CPF" required fullWidth />
         <TextFieldElement
-          sx={{ my: 1 }}
-          name="cpf"
-          label="CPF"
-          required
-          fullWidth
-        />
-        <TextFieldElement
-          sx={{ mb: 1 }}
+          sx={{ my: 2 }}
           name="name_diret"
           label="Nome"
           required

@@ -7,10 +7,13 @@ import { ListSchoolPage } from "./List";
 export const SchoolPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const { schoolRetrieve } = useSchoolContext();
+  const { schoolRetrieve, schoolClassRetrieve } = useSchoolContext();
 
   useEffect(() => {
-    if (id) schoolRetrieve(id);
+    if (id) {
+      schoolRetrieve(id);
+      schoolClassRetrieve(id);
+    }
   }, [id]);
 
   if (id) return <RetrieveSchoolPage id={id} />;
