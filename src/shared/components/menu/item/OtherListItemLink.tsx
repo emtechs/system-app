@@ -21,7 +21,9 @@ export const OtherListItemLink = ({
       <ListItemButton
         autoFocus={true}
         onClick={onClick}
-        selected={location.pathname === to}
+        selected={
+          location.pathname === to || location.pathname.includes(to + "/")
+        }
       >
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText primary={label} />

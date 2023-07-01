@@ -136,9 +136,7 @@ export const ListStundetSchoolPage = () => {
       }
       tools={
         <Tools
-          isBack={!!back}
           back={back ? back : undefined}
-          isNew={dashData === "ADMIN"}
           isSearch
           search={search}
           setSearch={(text) => setSearch(text)}

@@ -6,7 +6,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { iChildren } from "../../interfaces";
+import { iChildren } from "../../../interfaces";
 
 interface iDialogBaseProps extends iChildren {
   open: boolean;

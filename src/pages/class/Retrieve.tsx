@@ -104,10 +104,8 @@ export const RetrieveClassPage = () => {
     <LayoutBasePage
       tools={
         <Tools
-          isBack={!!back}
           back={back ? back : undefined}
           isHome
-          isNew={dashData === "ADMIN"}
           isSearch
           search={search}
           setSearch={(text) => setSearch(text)}

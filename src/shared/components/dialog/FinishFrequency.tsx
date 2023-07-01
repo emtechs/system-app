@@ -5,9 +5,9 @@ import {
   useFrequencyContext,
 } from "../../contexts";
 import { iFrequencyStudentsBase, iheadCell } from "../../interfaces";
-import { Pagination } from "../pagination";
 import { TableBase } from "../table";
-import { DialogBaseChildren } from "./DialogBaseChildren";
+import { DialogBaseChildren } from "./structure";
+import { PaginationMobile } from "../pagination";
 
 const headCells: iheadCell[] = [
   { order: "registry", numeric: false, label: "Matrícula" },
@@ -87,7 +87,7 @@ export const DialogFinishFrequency = ({
           <CardFrequency key={el.id} student={el} />
         ))}
       </TableBase>
-      <Pagination />
+      <PaginationMobile />
     </DialogBaseChildren>
   );
 };

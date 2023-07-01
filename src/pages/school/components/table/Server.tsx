@@ -1,21 +1,18 @@
-import { useNavigate } from "react-router-dom";
 import { iSchoolServer, iheadCell } from "../../../../shared/interfaces";
 import {
   useAppThemeContext,
-  useDrawerContext,
+  useSchoolContext,
 } from "../../../../shared/contexts";
-import { Pagination, TableCell, TableRow } from "@mui/material";
-import { TableBase } from "../../../../shared/components";
+import { TableCell, TableRow } from "@mui/material";
+import { PaginationMobile, TableBase } from "../../../../shared/components";
 
 interface iTableServerProps {
-  servers: iSchoolServer[];
-  school_id: string;
+  servers?: iSchoolServer[];
 }
 
-export const TableServer = ({ servers, school_id }: iTableServerProps) => {
-  const navigate = useNavigate();
+export const TableServer = ({ servers }: iTableServerProps) => {
   const { mdDown, rolePtBr } = useAppThemeContext();
-  const { handleClickUser } = useDrawerContext();
+  const { clickRetrieveSchool } = useSchoolContext();
 
   const headCells: iheadCell[] = mdDown
     ? [
@@ -41,10 +38,7 @@ export const TableServer = ({ servers, school_id }: iTableServerProps) => {
             hover
             sx={{ cursor: "pointer" }}
             onClick={() => {
-              handleClickUser();
-              navigate(
-                `/user?id=${schoolServer.server.id}&school_id=${school_id}&order=name`
-              );
+              clickRetrieveSchool(schoolServer.server.id);
             }}
           >
             <TableCell>{schoolServer.server.name}</TableCell>
@@ -58,7 +52,7 @@ export const TableServer = ({ servers, school_id }: iTableServerProps) => {
           </TableRow>
         ))}
       </TableBase>
-      {mdDown && <Pagination />}
+      {mdDown && <PaginationMobile />}
     </>
   );
 };

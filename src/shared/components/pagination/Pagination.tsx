@@ -3,7 +3,7 @@ import { IconButton, MobileStepper } from "@mui/material";
 import { useAppThemeContext, usePaginationContext } from "../../contexts";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 
-export const Pagination = () => {
+export const PaginationMobile = () => {
   const { theme } = useAppThemeContext();
   const { steps, activeStep, handleNext, handleBack, setActiveStep } =
     usePaginationContext();

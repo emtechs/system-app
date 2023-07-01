@@ -4,7 +4,6 @@ import {
   useCalendarContext,
   useClassContext,
   useDrawerContext,
-  useSchoolContext,
 } from "../../../shared/contexts";
 import { Box, Card, CardContent, Grid, Paper } from "@mui/material";
 import { LayoutBasePage } from "../../../shared/layouts";
@@ -24,25 +23,24 @@ dayjs.extend(localizedFormat);
 
 export const CreateFrequencyAdm = () => {
   const { theme, setLoading } = useAppThemeContext();
-  const { yearData } = useAuthContext();
-  const { schoolSelect } = useSchoolContext();
+  const { yearData, schoolData } = useAuthContext();
   const { handleClickSchool } = useDrawerContext();
   const { monthData } = useCalendarContext();
   const { classWithSchoolSelect } = useClassContext();
   const [infoClass, setInfoClass] = useState<iDashClass>();
 
   useEffect(() => {
-    if (yearData && schoolSelect && classWithSchoolSelect && monthData) {
+    if (yearData && schoolData && classWithSchoolSelect && monthData) {
       const query = `?month=${monthData}`;
       setLoading(true);
       apiUsingNow
         .get<iDashClass>(
-          `classes/${classWithSchoolSelect.class.id}/${schoolSelect.id}/${yearData.id}/dash${query}`
+          `classes/${classWithSchoolSelect.class.id}/${schoolData.id}/${yearData.id}/dash${query}`
         )
         .then((res) => setInfoClass(res.data))
         .finally(() => setLoading(false));
     }
-  }, [classWithSchoolSelect, schoolSelect, monthData, yearData]);
+  }, [classWithSchoolSelect, schoolData, monthData, yearData]);
 
   return (
     <LayoutBasePage title="Nova Frequência">

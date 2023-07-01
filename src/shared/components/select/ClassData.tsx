@@ -3,7 +3,6 @@ import {
   useAppThemeContext,
   useAuthContext,
   useClassContext,
-  useSchoolContext,
 } from "../../contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../services";
@@ -32,16 +31,15 @@ interface iSelect extends iClassWithSchool {
 
 export const SelectClassData = () => {
   const { setLoading } = useAppThemeContext();
-  const { yearData } = useAuthContext();
-  const { schoolSelect } = useSchoolContext();
+  const { yearData, schoolData } = useAuthContext();
   const [data, setData] = useState<iSelect[]>();
 
   useEffect(() => {
-    if (schoolSelect) {
+    if (schoolData) {
       setLoading(true);
       apiUsingNow
         .get<{ result: iClassWithSchool[] }>(
-          `classes/school/${schoolSelect.id}?is_active=true&year_id=${yearData?.id}`
+          `classes/school/${schoolData.id}?is_active=true&year_id=${yearData?.id}`
         )
         .then((res) => {
           if (res.data.result) {
@@ -54,7 +52,7 @@ export const SelectClassData = () => {
         })
         .finally(() => setLoading(false));
     }
-  }, [schoolSelect]);
+  }, [schoolData]);
 
   return (
     <>

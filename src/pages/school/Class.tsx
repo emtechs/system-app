@@ -66,9 +66,7 @@ export const ListClassSchoolPage = () => {
       title={<TitleClass />}
       tools={
         <Tools
-          isBack={dashData === "ADMIN"}
           back={"/school?id=" + school_id}
-          isNew={dashData === "ADMIN"}
           onClickNew={handleClickClass}
           isSearch
           search={search}

@@ -6,7 +6,7 @@ import "dayjs/locale/pt-br";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { frequencyUpdateSchema } from "../../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DialogBaseChildren } from "./DialogBaseChildren";
+import { DialogBaseChildren } from "./structure";
 
 interface iDialogMissedProps {
   open: boolean;

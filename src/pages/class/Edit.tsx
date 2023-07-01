@@ -1,6 +1,6 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { iPageProps } from "../../shared/interfaces";
-import { useClassContext, useSchoolContext } from "../../shared/contexts";
+import { useClassContext } from "../../shared/contexts";
 import { useEffect } from "react";
 import { BasePage, BoxResp, SelectClass } from "../../shared/components";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 
 export const EditClassPage = ({ back }: iPageProps) => {
   const navigate = useNavigate();
-  const { updateSchool, schoolSelect } = useSchoolContext();
+  // const { updateSchool, schoolSelect } = useSchoolContext();
   const { classSelect, setClassSelect } = useClassContext();
 
   useEffect(() => {
@@ -30,10 +30,10 @@ export const EditClassPage = ({ back }: iPageProps) => {
     <>
       <BasePage isProfile back={back}>
         <FormContainer
-          onSuccess={(data) => {
-            if (schoolSelect)
-              updateSchool(data, schoolSelect.id, "nome", undefined, back);
-          }}
+          // onSuccess={(data) => {
+          //   if (schoolSelect)
+          //     updateSchool(data, schoolSelect.id, "nome", undefined, back);
+          // }}
           resolver={zodResolver(schoolUpdateSchema)}
         >
           <BoxResp isProfile>
@@ -41,7 +41,7 @@ export const EditClassPage = ({ back }: iPageProps) => {
               <Box>
                 <Typography>Informações Atuais</Typography>
                 <Typography>Nome da Turma: {classSelect.name}</Typography>
-                <Typography>Escola da Turma: {schoolSelect?.name}</Typography>
+                {/* <Typography>Escola da Turma: {schoolSelect?.name}</Typography> */}
               </Box>
             )}
 

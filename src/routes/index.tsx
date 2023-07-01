@@ -5,7 +5,6 @@ import {
   CreateFrequencyPage,
   CreateStudentAdmPage,
   DashboardPage,
-  DashboardSchoolAdmin,
   DefineSchoolsPage,
   EditClassPage,
   EditPasswordPage,
@@ -17,13 +16,16 @@ import {
   ImportStudentPage,
   ListClassPage,
   ListFrequencyPage,
+  ListSchoolPage,
   ListStudentFrequencyPage,
   ListStudentPage,
   PasswordPage,
   ReportPage,
   RetrieveClassPage,
   RetrieveFrequencyPage,
+  RetrieveSchoolPage,
   SchoolPage,
+  ServerSchoolPage,
   StudentFrequencyPage,
   UserPage,
 } from "../pages";
@@ -51,8 +53,10 @@ const AppRoutes = () => {
             path="/import/student"
             element={<ImportStudentPage back="/student" />}
           />
-          <Route path="/school" element={<SchoolPage />} />
-          <Route path="/home/school" element={<DashboardSchoolAdmin />} />
+          <Route path="/school" element={<ListSchoolPage />} />
+          <Route path="/school/:id" element={<RetrieveSchoolPage />} />
+          <Route path="/school/server/:id" element={<ServerSchoolPage />} />
+          <Route path="/home/school" element={<SchoolPage />} />
         </Route>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/report" element={<ReportPage />} />

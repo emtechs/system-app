@@ -47,4 +47,24 @@ const schools = async (query: string) => {
   return response;
 };
 
-export const apiUser = { create, profile, update, schools, retrieve };
+interface iSchoolsServer {
+  total: number;
+  result: iWorkSchool[];
+  user: iUser;
+}
+
+const schoolsServer = async (id: string, query: string) => {
+  const { data: response } = await apiUsingNow.get<iSchoolsServer>(
+    `users/${id}/server${query}`
+  );
+  return response;
+};
+
+export const apiUser = {
+  create,
+  profile,
+  update,
+  schools,
+  retrieve,
+  schoolsServer,
+};

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { Tools } from "../../shared/components";
 import {
   useAppThemeContext,
   usePaginationContext,
@@ -7,18 +6,18 @@ import {
 } from "../../shared/contexts";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
-import { Create, TableSchool, TitleSchool } from "./components";
+import {
+  Create,
+  TableSchool,
+  TitleListSchool,
+  ToolsListSchool,
+} from "./components";
 
 export const ListSchoolPage = () => {
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
-  const {
-    is_director,
-    setDirector,
-    handleOpenCreate,
-    listSchoolData,
-    getSchool,
-  } = useSchoolContext();
+  const { is_director, setDirector, listSchoolData, getSchool } =
+    useSchoolContext();
   const { query, defineQuery, setActive } = usePaginationContext();
   const [search, setSearch] = useState<string>();
 
@@ -45,29 +44,25 @@ export const ListSchoolPage = () => {
     } else getSchool(query, take);
   }, [queryData, is_director, search]);
 
+  const onClickReset = () => {
+    setSearch(undefined);
+    setDirector([true, true]);
+    setActive(true);
+  };
+
   return (
     <>
       <LayoutBasePage
-        title={<TitleSchool />}
+        title={<TitleListSchool />}
         tools={
-          <Tools
-            isNew
-            onClickNew={handleOpenCreate}
-            isSearch
+          <ToolsListSchool
             search={search}
             setSearch={(text) => setSearch(text)}
-            isDirector
-            isActive
-            titleNew="Nova"
-            onClickReset={() => {
-              setSearch(undefined);
-              setDirector([true, true]);
-              setActive(true);
-            }}
+            onClickReset={onClickReset}
           />
         }
       >
-        {listSchoolData && <TableSchool listSchool={listSchoolData} />}
+        <TableSchool listSchool={listSchoolData} />
       </LayoutBasePage>
       <Create />
     </>

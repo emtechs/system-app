@@ -1,22 +1,20 @@
-import { useNavigate } from "react-router-dom";
 import { iSchool, iheadCell } from "../../../../shared/interfaces";
 import {
   useAppThemeContext,
   useSchoolContext,
 } from "../../../../shared/contexts";
-import { Fragment, useState } from "react";
 import { TableCell, TableRow } from "@mui/material";
-import { Active } from "../dialog";
-import { Pagination, TableBase } from "../../../../shared/components";
+import { PaginationMobile, TableBase } from "../../../../shared/components";
+import { useState } from "react";
+import { DialogActiveSchool } from "../dialog";
 
 interface iTableSchoolProps {
-  listSchool: iSchool[];
+  listSchool?: iSchool[];
 }
 
 export const TableSchool = ({ listSchool }: iTableSchoolProps) => {
-  const navigate = useNavigate();
   const { mdDown } = useAppThemeContext();
-  const { handleOpenActive } = useSchoolContext();
+  const { handleOpenActive, clickListSchool } = useSchoolContext();
   const [data, setData] = useState<iSchool>();
 
   const headCells: iheadCell[] = [
@@ -31,26 +29,25 @@ export const TableSchool = ({ listSchool }: iTableSchoolProps) => {
         message="Nenhuma escola encotrada"
         is_pagination={mdDown ? false : undefined}
       >
-        {listSchool.map((school) => (
-          <Fragment key={school.id}>
-            <TableRow
-              hover
-              sx={{ cursor: "pointer" }}
-              onClick={() => {
-                if (!school.is_active) {
-                  setData(school);
-                  handleOpenActive();
-                } else navigate(`/school?id=${school.id}`);
-              }}
-            >
-              <TableCell>{school.name}</TableCell>
-              <TableCell>{school.director?.name}</TableCell>
-            </TableRow>
-            {data && <Active school={data} />}
-          </Fragment>
+        {listSchool?.map((school) => (
+          <TableRow
+            key={school.id}
+            hover
+            sx={{ cursor: "pointer" }}
+            onClick={() => {
+              if (!school.is_active) {
+                setData(school);
+                handleOpenActive();
+              } else clickListSchool(school.id);
+            }}
+          >
+            <TableCell>{school.name}</TableCell>
+            <TableCell>{school.director?.name}</TableCell>
+          </TableRow>
         ))}
       </TableBase>
-      {mdDown && <Pagination />}
+      {mdDown && <PaginationMobile />}
+      {data && <DialogActiveSchool school={data} />}
     </>
   );
 };

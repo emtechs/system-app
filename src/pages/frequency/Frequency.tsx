@@ -19,7 +19,7 @@ import {
 } from "../../shared/contexts";
 import {
   GridDashContent,
-  Pagination,
+  PaginationMobile,
   SelectDate,
   TableBase,
   ValidateFrequency,
@@ -198,7 +198,7 @@ export const FrequencyPage = () => {
                       />
                     ))}
                   </TableBase>
-                  <Pagination />
+                  <PaginationMobile />
                 </Grid>
                 <Grid container item direction="row" xs={12} md={5} spacing={2}>
                   <Grid item xs={12}>

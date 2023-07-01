@@ -47,8 +47,7 @@ export const AppThemeProvider = ({ children }: iChildren) => {
   const [severity, setSeverity] = useState<"success" | "error">("success");
   const [message, setMessage] = useState<string>();
 
-  const adaptName = useCallback((name: string, max?: number) => {
-    max = max ? max : 27;
+  const adaptName = useCallback((name: string, max = 27) => {
     if (name.length > max) {
       const displayName = name.split(" ");
       let name4 = "";

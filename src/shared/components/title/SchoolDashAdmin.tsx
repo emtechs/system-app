@@ -1,4 +1,4 @@
-import { Breadcrumbs, Chip } from "@mui/material";
+import { Breadcrumbs, Chip, Skeleton } from "@mui/material";
 import {
   useAppThemeContext,
   useDrawerContext,
@@ -8,7 +8,7 @@ import { LinkRouter } from "../link";
 import { Home, School } from "@mui/icons-material";
 
 export const TitleSchoolDashAdmin = () => {
-  const { labelSchoolDataAdmin } = useSchoolContext();
+  const { labelSchoolAdmin, loadingLabelSchool } = useSchoolContext();
   const { handleClickButtonTools } = useDrawerContext();
 
   return (
@@ -27,10 +27,11 @@ export const TitleSchoolDashAdmin = () => {
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </LinkRouter>
+
       <Chip
         color="primary"
         variant="filled"
-        label={labelSchoolDataAdmin()}
+        label={loadingLabelSchool ? <Skeleton width={100} /> : labelSchoolAdmin}
         icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
       />
     </Breadcrumbs>
@@ -45,7 +46,7 @@ export const TitleSchoolDashAdminPages = ({
   breadcrumbs,
 }: iTitleSchoolDashAdminPagesProps) => {
   const { mdDown } = useAppThemeContext();
-  const { labelSchoolDataAdmin } = useSchoolContext();
+  const { labelSchoolAdmin, loadingLabelSchool } = useSchoolContext();
   const { handleClickButtonTools } = useDrawerContext();
 
   return (
@@ -69,7 +70,9 @@ export const TitleSchoolDashAdminPages = ({
           clickable
           color="primary"
           variant="outlined"
-          label={labelSchoolDataAdmin()}
+          label={
+            loadingLabelSchool ? <Skeleton width={100} /> : labelSchoolAdmin
+          }
           icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </LinkRouter>

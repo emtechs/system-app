@@ -15,9 +15,10 @@ import {
   iUserPasswordRequest,
   iUserSecretRequest,
   iUserUpdateRequest,
+  iWorkSchool,
 } from "../interfaces";
 import { useNavigate } from "react-router-dom";
-import { useAppThemeContext, useAuthContext } from ".";
+import { useAppThemeContext, useAuthContext, usePaginationContext } from ".";
 import { FieldValues } from "react-hook-form";
 import { apiUser } from "../services";
 
@@ -37,8 +38,12 @@ interface iUserContextData {
   updateUserData: iUser | undefined;
   setUpdateUserData: Dispatch<SetStateAction<iUser | undefined>>;
   userRetrieve: (id: string) => void;
-  labelUser: () => string;
-  labelUserId: (id: string) => string;
+  getSchools: (id: string, query: string, take: number) => void;
+  listSchoolServerData: iWorkSchool[] | undefined;
+  setListSchoolServerData: Dispatch<SetStateAction<iWorkSchool[] | undefined>>;
+  labelUser: string;
+  userSelect: iUser | undefined;
+  loadingLabelUser: boolean;
 }
 
 const UserContext = createContext({} as iUserContextData);
@@ -48,41 +53,59 @@ export const UserProvider = ({ children }: iChildren) => {
   const { setLoading, handleSucess, handleError, mdDown, adaptName } =
     useAppThemeContext();
   const { setDashData, setUserData } = useAuthContext();
+  const { setIsLoading, setCount, define_step } = usePaginationContext();
+  const [loadingLabelUser, setLoadingLabelUser] = useState(true);
+  const [labelUser, setLabelUser] = useState("");
   const [updateUserData, setUpdateUserData] = useState<iUser>();
   const [userSelect, setUserSelect] = useState<iUser>();
+  const [listSchoolServerData, setListSchoolServerData] =
+    useState<iWorkSchool[]>();
 
-  const userRetrieve = useCallback((id: string) => {
-    setLoading(true);
-    apiUser
-      .retrieve(id)
-      .then((res) => setUserSelect(res))
-      .catch(() => navigate("/"))
-      .finally(() => setLoading(false));
-  }, []);
-
-  const labelUserId = useCallback(
+  const userRetrieve = useCallback(
     (id: string) => {
       let name = "";
-      setLoading(true);
+      setLoadingLabelUser(true);
       apiUser
         .retrieve(id)
-        .then((res) => (name = res.name))
-        .finally(() => setLoading(false));
-
-      if (mdDown) return adaptName(name, 15);
-
-      return name;
+        .then((res) => {
+          setUserSelect(res);
+          name = res.name;
+          if (mdDown) name = adaptName(name, 15);
+          setLabelUser(name);
+        })
+        .catch(() => navigate("/"))
+        .finally(() => setLoadingLabelUser(false));
     },
     [mdDown]
   );
 
-  const labelUser = useCallback(() => {
-    if (userSelect) {
-      if (mdDown) return adaptName(userSelect.name, 15);
-      return userSelect.name;
-    }
-    return "";
-  }, [userSelect, mdDown]);
+  const getSchools = useCallback(
+    (id: string, query: string, take: number) => {
+      if (mdDown) {
+        setIsLoading(true);
+        apiUser
+          .schoolsServer(id, query)
+          .then((res) => {
+            setListSchoolServerData(res.result);
+            setUserSelect(res.user);
+            setCount(res.total);
+            define_step(res.total, take);
+          })
+          .finally(() => setIsLoading(false));
+      } else {
+        setIsLoading(true);
+        apiUser
+          .schoolsServer(id, query)
+          .then((res) => {
+            setListSchoolServerData(res.result);
+            setUserSelect(res.user);
+            setCount(res.total);
+          })
+          .finally(() => setIsLoading(false));
+      }
+    },
+    [mdDown]
+  );
 
   const handleCreateUserAdm = useCallback(async (data: iUserAdmRequest) => {
     try {
@@ -215,7 +238,11 @@ export const UserProvider = ({ children }: iChildren) => {
         setUpdateUserData,
         labelUser,
         userRetrieve,
-        labelUserId,
+        getSchools,
+        listSchoolServerData,
+        userSelect,
+        setListSchoolServerData,
+        loadingLabelUser,
       }}
     >
       {children}

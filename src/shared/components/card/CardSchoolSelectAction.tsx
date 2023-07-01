@@ -1,5 +1,5 @@
 import { Box, Card, CardActionArea, useTheme } from "@mui/material";
-import { useSchoolContext } from "../../contexts";
+import { useAuthContext } from "../../contexts";
 import { CardSchoolContent } from "./CardSchoolContent";
 
 interface iCardSchoolActionProps {
@@ -8,12 +8,12 @@ interface iCardSchoolActionProps {
 
 export const CardSchoolSelectAction = ({ onClick }: iCardSchoolActionProps) => {
   const theme = useTheme();
-  const { schoolSelect } = useSchoolContext();
-  return schoolSelect ? (
+  const { schoolData } = useAuthContext();
+  return schoolData ? (
     <Box mx={2} width={theme.spacing(45)} maxWidth="90%">
       <Card>
         <CardActionArea onClick={onClick}>
-          <CardSchoolContent school={schoolSelect} />
+          <CardSchoolContent school={schoolData} />
         </CardActionArea>
       </Card>
     </Box>

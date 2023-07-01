@@ -3,7 +3,7 @@ import { iFrequencyStudentsBase } from "../../interfaces";
 import { useFrequencyContext } from "../../contexts";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
-import { DialogBaseChildren } from "./DialogBaseChildren";
+import { DialogBaseChildren } from "./structure";
 
 interface iDialogRemoveMissedProps {
   open: boolean;

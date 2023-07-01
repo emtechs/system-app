@@ -20,20 +20,20 @@ import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { apiSchool, apiUser } from "../services";
 import { useAuthContext } from "./AuthContext";
-import { usePaginationContext } from ".";
+import { usePaginationContext, useUserContext } from ".";
 
 interface iSchoolContextData {
-  schoolSelect: iSchool | undefined;
-  setSchoolSelect: Dispatch<SetStateAction<iSchool | undefined>>;
   updateServerData: iWorkSchool | undefined;
   setUpdateServerData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
   listSchoolData: iSchool[] | undefined;
   setListSchoolData: Dispatch<SetStateAction<iSchool[] | undefined>>;
   serversData: iSchoolServer[] | undefined;
+  setServersData: Dispatch<SetStateAction<iSchoolServer[] | undefined>>;
   isHome: boolean;
   director: boolean[];
   setDirector: Dispatch<SetStateAction<boolean[]>>;
   openActive: boolean;
+  setOpenActive: Dispatch<SetStateAction<boolean>>;
   openCreate: boolean;
   openEdit: boolean;
   openDirector: boolean;
@@ -42,8 +42,6 @@ interface iSchoolContextData {
   handleOpenEdit: () => void;
   handleOpenDirector: () => void;
   is_director: () => "" | "&is_director=true" | "&is_director=false";
-  labelSchoolData: () => string;
-  labelSchoolDataAdmin: () => string;
   schoolDataRetrieve: (id: string) => void;
   schoolDataAdminRetrieve: (id: string) => void;
   getSchool: (query: string, take: number) => void;
@@ -59,6 +57,11 @@ interface iSchoolContextData {
     back?: string
   ) => Promise<void>;
   deleteServer: (school_id: string, server_id: string) => Promise<void>;
+  labelSchool: string;
+  labelSchoolAdmin: string;
+  clickListSchool: (id: string) => void;
+  clickRetrieveSchool: (id: string) => void;
+  loadingLabelSchool: boolean;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -67,15 +70,11 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError, mdDown, adaptName } =
     useAppThemeContext();
-  const {
-    setSchoolData,
-    yearData,
-    schoolData,
-    schoolDataAdmin,
-    setSchoolDataAdmin,
-  } = useAuthContext();
-  const { setIsLoading, setCount, define_step } = usePaginationContext();
-  const [schoolSelect, setSchoolSelect] = useState<iSchool>();
+  const { setSchoolData, yearData, setSchoolDataAdmin } = useAuthContext();
+  const { getSchools, setListSchoolServerData, userRetrieve } =
+    useUserContext();
+  const { setIsLoading, setCount, define_step, setSkip, setPage } =
+    usePaginationContext();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [serversData, setServersData] = useState<iSchoolServer[]>();
@@ -85,6 +84,26 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [openCreate, setOpenCreate] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDirector, setOpenDirector] = useState(false);
+  const [loadingLabelSchool, setLoadingLabelSchool] = useState(true);
+  const [labelSchool, setLabelSchool] = useState("");
+  const [labelSchoolAdmin, setLabelSchoolAdmin] = useState("");
+
+  const clickListSchool = useCallback((id: string) => {
+    setPage(0);
+    setSkip(undefined);
+    setServersData(undefined);
+    schoolDataRetrieve(id);
+    navigate("/school/" + id);
+  }, []);
+
+  const clickRetrieveSchool = useCallback((id: string) => {
+    setPage(0);
+    setSkip(undefined);
+    setListSchoolServerData(undefined);
+    userRetrieve(id);
+    navigate("/school/server/" + id);
+  }, []);
+
   const handleOpenActive = () => setOpenActive(!openActive);
   const handleOpenCreate = () => setOpenCreate(!openCreate);
   const handleOpenEdit = () => setOpenEdit(!openEdit);
@@ -98,46 +117,43 @@ export const SchoolProvider = ({ children }: iChildren) => {
     return "";
   }, [director]);
 
-  const labelSchoolData = useCallback(() => {
-    if (schoolData) {
-      if (mdDown) return adaptName(schoolData.name, 15);
-      return schoolData.name;
-    }
-    return "";
-  }, [schoolData, mdDown]);
-
-  const labelSchoolDataAdmin = useCallback(() => {
-    if (schoolDataAdmin) {
-      if (mdDown) return adaptName(schoolDataAdmin.name, 15);
-      return schoolDataAdmin.name;
-    }
-    return "";
-  }, [schoolDataAdmin, mdDown]);
-
-  const schoolDataRetrieve = useCallback((id: string) => {
-    setLoading(true);
-    apiSchool
-      .retrieve(id)
-      .then((res) => setSchoolData(res))
-      .catch(() => navigate("/"))
-      .finally(() => setLoading(false));
-  }, []);
+  const schoolDataRetrieve = useCallback(
+    (id: string) => {
+      let name = "";
+      setLoadingLabelSchool(true);
+      apiSchool
+        .retrieve(id)
+        .then((res) => {
+          setSchoolData(res);
+          name = res.name;
+          if (mdDown) name = adaptName(name, 15);
+          setLabelSchool(name);
+        })
+        .catch(() => navigate("/"))
+        .finally(() => setLoadingLabelSchool(false));
+    },
+    [mdDown]
+  );
 
   const schoolDataAdminRetrieve = useCallback(
     (id: string) => {
       if (yearData) {
-        setLoading(true);
+        let name = "";
+        setLoadingLabelSchool(true);
         apiSchool
           .retrieveClass(id, yearData.id)
           .then((res) => {
             setSchoolDataAdmin(res);
             setIsHome(true);
+            name = res.name;
+            if (mdDown) name = adaptName(name, 15);
+            setLabelSchoolAdmin(name);
           })
           .catch(() => setIsHome(false))
-          .finally(() => setLoading(false));
+          .finally(() => setLoadingLabelSchool(false));
       }
     },
-    [yearData]
+    [yearData, mdDown]
   );
 
   const getSchool = useCallback(
@@ -197,7 +213,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
       setLoading(true);
       const school = await apiSchool.create(data);
       handleSucess("A escola foi cadastrada com sucesso!");
-      navigate(`/school?id=${school.id}`);
+      navigate("/school/" + school.id);
     } catch {
       handleError(
         "No momento, não foi possível cadastrar a escola. Por favor, tente novamente mais tarde."
@@ -244,7 +260,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
           `Não foi possível atualizar o ${type} da escola no momento!`
         );
       } finally {
-        setSchoolSelect(undefined);
         setLoading(false);
         if (back) navigate(back);
       }
@@ -263,7 +278,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
       } catch {
         handleError("Não foi possível cadastrar o servidor no momento!");
       } finally {
-        setSchoolSelect(undefined);
         setLoading(false);
       }
     },
@@ -275,6 +289,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         await apiSchool.deleteServer(school_id, server_id);
+        getSchools(server_id, "", 1);
         handleSucess("Usuário removido da função com sucesso!");
       } catch {
         handleError(
@@ -300,8 +315,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
         handleOpenEdit,
         is_director,
         isHome,
-        labelSchoolData,
-        labelSchoolDataAdmin,
         listSchoolData,
         openActive,
         openCreate,
@@ -309,11 +322,9 @@ export const SchoolProvider = ({ children }: iChildren) => {
         openEdit,
         schoolDataAdminRetrieve,
         schoolDataRetrieve,
-        schoolSelect,
         serversData,
         setDirector,
         setListSchoolData,
-        setSchoolSelect,
         setUpdateServerData,
         updateServerData,
         createSchool: handleCreateSchool,
@@ -321,6 +332,13 @@ export const SchoolProvider = ({ children }: iChildren) => {
         deleteServer: handleDeleteServer,
         updateSchool: handleUpdateSchool,
         importSchool: handleImportSchool,
+        labelSchool,
+        clickListSchool,
+        setOpenActive,
+        setServersData,
+        clickRetrieveSchool,
+        labelSchoolAdmin,
+        loadingLabelSchool,
       }}
     >
       {children}

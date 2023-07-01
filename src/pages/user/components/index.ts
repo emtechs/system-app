@@ -1,2 +1,2 @@
 export * from "./CardUser";
-export * from "./CardWorkSchool";
+export * from "./title";

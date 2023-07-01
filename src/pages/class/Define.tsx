@@ -19,10 +19,7 @@ export const DefineSchoolsPage = () => {
   const back = id ? `/school/class?id=${id}&order=name` : undefined;
 
   return (
-    <LayoutBasePage
-      title="Definir Escola"
-      tools={<Tools back={back} isHome isNew />}
-    >
+    <LayoutBasePage title="Definir Escola" tools={<Tools back={back} isHome />}>
       <FormContainer
         onSuccess={(data) => {
           if (yearData) createClassSchool(data, yearData.id, school_id, back);

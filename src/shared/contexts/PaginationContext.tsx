@@ -29,6 +29,7 @@ interface iPaginationContextData {
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
   skip: number | undefined;
+  setSkip: Dispatch<SetStateAction<number | undefined>>;
   order: string | undefined;
   setOrder: Dispatch<SetStateAction<string | undefined>>;
   by: "asc" | "desc";
@@ -200,6 +201,7 @@ export const PaginationProvider = ({ children }: iChildren) => {
         handleNext,
         is_active: define_is_active,
         define_step,
+        setSkip,
       }}
     >
       {children}

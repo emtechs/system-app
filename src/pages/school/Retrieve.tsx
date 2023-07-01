@@ -1,42 +1,43 @@
-import { Breadcrumbs, Button, Chip, IconButton, Tooltip } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
 import {
   useAppThemeContext,
   useAuthContext,
-  useDrawerContext,
   usePaginationContext,
   useSchoolContext,
 } from "../../shared/contexts";
-import { useCallback, useEffect, useState } from "react";
-import { Home, PersonAdd, RemoveDone, School } from "@mui/icons-material";
-import { LinkRouter, Tools } from "../../shared/components";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
+import { TableServer } from "./components/table";
 import {
-  Active,
   CreateServer,
+  DialogActiveSchool,
   Director,
   Edit,
-  TableServer,
+  TitleRetrieveSchool,
+  ToolsRetrieveSchool,
 } from "./components";
+import { useParams } from "react-router-dom";
 
-interface iRetrieveSchoolPageProps {
-  id: string;
-}
-
-export const RetrieveSchoolPage = ({ id }: iRetrieveSchoolPageProps) => {
+export const RetrieveSchoolPage = () => {
+  const { id } = useParams();
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
   const { schoolData } = useAuthContext();
   const { defineQuery, query } = usePaginationContext();
   const {
-    labelSchoolData,
     serversData,
     getServers,
-    handleOpenActive,
-    handleOpenCreate,
+    schoolDataRetrieve,
+    schoolDataAdminRetrieve,
   } = useSchoolContext();
-  const { handleClickButtonTools } = useDrawerContext();
   const [search, setSearch] = useState<string>();
+
+  useEffect(() => {
+    if (id) {
+      schoolDataRetrieve(id);
+      schoolDataAdminRetrieve(id);
+    }
+  }, [id]);
 
   const queryData = useCallback(
     (take: number) => {
@@ -51,93 +52,35 @@ export const RetrieveSchoolPage = ({ id }: iRetrieveSchoolPageProps) => {
   );
 
   useEffect(() => {
-    const take = 5;
-    let query = queryData(take);
-    if (search) {
-      query += `&name=${search}`;
-      debounce(() => {
+    if (id) {
+      const take = 5;
+      let query = queryData(take);
+      if (search) {
+        query += `&name=${search}`;
+        debounce(() => {
+          getServers(id, query, take);
+        });
+      } else {
         getServers(id, query, take);
-      });
-    } else {
-      getServers(id, query, take);
+      }
     }
-  }, [queryData, search]);
+  }, [id, queryData, search]);
 
   return (
     <>
       <LayoutBasePage
-        title={
-          <Breadcrumbs
-            maxItems={mdDown ? 2 : undefined}
-            aria-label="breadcrumb"
-          >
-            <LinkRouter
-              underline="none"
-              color="inherit"
-              to="/"
-              onClick={handleClickButtonTools}
-            >
-              <Chip
-                clickable
-                color="primary"
-                variant="outlined"
-                label={mdDown ? "..." : "Página Inicial"}
-                icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
-              />
-            </LinkRouter>
-            <LinkRouter underline="none" color="inherit" to="/school">
-              <Chip
-                clickable
-                color="primary"
-                variant="outlined"
-                label={mdDown ? "..." : "Escolas"}
-                icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-              />
-            </LinkRouter>
-            <Chip
-              label={labelSchoolData()}
-              color="primary"
-              icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-            />
-          </Breadcrumbs>
-        }
+        title={<TitleRetrieveSchool />}
         tools={
-          <Tools
-            back="/school"
-            isNew
-            iconNew={<PersonAdd />}
-            onClickNew={handleOpenCreate}
-            titleNew="Servidor"
-            isSchool
-            isSearch
+          <ToolsRetrieveSchool
             search={search}
             setSearch={(text) => setSearch(text)}
-            finish={
-              mdDown ? (
-                <Tooltip title="Desativar">
-                  <IconButton color="error" onClick={handleOpenActive}>
-                    <RemoveDone />
-                  </IconButton>
-                </Tooltip>
-              ) : (
-                <Button
-                  variant="contained"
-                  color="error"
-                  disableElevation
-                  onClick={handleOpenActive}
-                  endIcon={<RemoveDone />}
-                >
-                  Desativar
-                </Button>
-              )
-            }
           />
         }
       >
-        {serversData && <TableServer school_id={id} servers={serversData} />}
+        {id && <TableServer servers={serversData} />}
       </LayoutBasePage>
+      {schoolData && <DialogActiveSchool school={schoolData} />}
       {schoolData && <CreateServer school={schoolData} />}
-      {schoolData && <Active school={schoolData} />}
       {schoolData && <Edit school={schoolData} />}
       {schoolData && <Director school={schoolData} />}
     </>

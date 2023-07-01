@@ -1,14 +1,17 @@
-import { Breadcrumbs, Chip } from "@mui/material";
+import { Breadcrumbs, Chip, Skeleton } from "@mui/material";
 import {
   useAppThemeContext,
   useDrawerContext,
+  useUserContext,
 } from "../../../../shared/contexts";
 import { LinkRouter } from "../../../../shared/components";
-import { Home, School } from "@mui/icons-material";
+import { Home, People, Person } from "@mui/icons-material";
 
-export const TitleSchool = () => {
+export const TitleRetrieveUser = () => {
   const { mdDown } = useAppThemeContext();
+  const { labelUser, loadingLabelUser } = useUserContext();
   const { handleClickButtonTools } = useDrawerContext();
+
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
       <LinkRouter
@@ -21,14 +24,23 @@ export const TitleSchool = () => {
           clickable
           color="primary"
           variant="outlined"
-          label="Página Inicial"
+          label={mdDown ? "..." : "Página Inicial"}
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </LinkRouter>
+      <LinkRouter underline="none" color="inherit" to="/user">
+        <Chip
+          clickable
+          color="primary"
+          variant="outlined"
+          label={mdDown ? "..." : "Usuários"}
+          icon={<People sx={{ mr: 0.5 }} fontSize="inherit" />}
+        />
+      </LinkRouter>
       <Chip
-        label="Escolas"
+        label={loadingLabelUser ? <Skeleton width={100} /> : labelUser}
         color="primary"
-        icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+        icon={<Person sx={{ mr: 0.5 }} fontSize="inherit" />}
       />
     </Breadcrumbs>
   );

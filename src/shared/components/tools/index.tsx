@@ -1,5 +1,4 @@
 import { ChangeEvent, MouseEvent, ReactNode, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import {
   Box,
   Checkbox,
@@ -28,18 +27,18 @@ import {
   ActiveButton,
   CompBase,
   Dest,
+  HomeButton,
   SchoolTools,
   UserTools,
 } from "./components";
 
 interface iToolsProps {
   back?: string;
-  isBack?: boolean;
   isSingle?: boolean;
   isHome?: boolean;
+  toHome?: string;
   isUser?: boolean;
   isSchool?: boolean;
-  isNew?: boolean;
   titleNew?: string;
   iconNew?: ReactNode;
   onClickNew?: () => void;
@@ -56,13 +55,12 @@ interface iToolsProps {
 }
 
 export const Tools = ({
-  back = "/",
-  isBack,
+  back,
   isSingle,
   isHome,
+  toHome = "/",
   isUser,
   isSchool,
-  isNew,
   titleNew = "Novo",
   iconNew = <AddBox />,
   onClickNew,
@@ -77,19 +75,10 @@ export const Tools = ({
   finish,
   onClickReset,
 }: iToolsProps) => {
-  const [searchParams] = useSearchParams();
-  const backclick = searchParams.get("back_click");
   const { theme, mdDown } = useAppThemeContext();
   const { director, setDirector, is_director } = useSchoolContext();
   const { is_active } = usePaginationContext();
-  const {
-    handleClickButtonTools,
-    handleClickUser,
-    handleClickSchool,
-    handleClickClass,
-    handleClickFrequency,
-    handleClickStudent,
-  } = useDrawerContext();
+  const { handleClickButtonTools } = useDrawerContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -109,28 +98,6 @@ export const Tools = ({
   const handleChange3 = (event: ChangeEvent<HTMLInputElement>) => {
     setDirector([director[0], event.target.checked]);
   };
-
-  let onClickBack;
-
-  if (backclick) {
-    switch (backclick) {
-      case "user":
-        onClickBack = handleClickUser;
-        break;
-      case "school":
-        onClickBack = handleClickSchool;
-        break;
-      case "class":
-        onClickBack = handleClickClass;
-        break;
-      case "frequency":
-        onClickBack = handleClickFrequency;
-        break;
-      case "student":
-        onClickBack = handleClickStudent;
-        break;
-    }
-  }
 
   const disabled = useMemo(() => {
     if (
@@ -154,33 +121,19 @@ export const Tools = ({
       paddingX={2}
       component={Paper}
     >
-      {isBack && (
-        <Dest
-          to={back}
-          title="Voltar"
-          startIcon={<ArrowBack />}
-          onClick={onClickBack}
-          isResp
-        />
+      {back && (
+        <Dest to={back} title="Voltar" startIcon={<ArrowBack />} isResp />
       )}
       {isSingle && (
         <Dest
-          to="/"
+          to={toHome}
           title="Página Inicial"
           startIcon={<Home />}
           onClick={handleClickButtonTools}
         />
       )}
-      {isHome && (
-        <Dest
-          to="/"
-          title="Página Inicial"
-          startIcon={<Home />}
-          onClick={handleClickButtonTools}
-          isHome
-        />
-      )}
-      {isNew && (
+      {isHome && <HomeButton to={toHome} />}
+      {onClickNew && (
         <CompBase title={titleNew} startIcon={iconNew} onClick={onClickNew} />
       )}
       {isUser && <UserTools />}
