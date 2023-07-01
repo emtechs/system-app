@@ -1,11 +1,14 @@
-import { TableCell, TableRow, useTheme } from "@mui/material";
+import { TableCell, TableRow } from "@mui/material";
 import { TableBase, Tools } from "../../../shared/components";
-import { useAuthContext, usePaginationContext } from "../../../shared/contexts";
+import {
+  useAppThemeContext,
+  useAuthContext,
+  usePaginationContext,
+} from "../../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../../shared/services";
 import { iFrequency, iheadCell } from "../../../shared/interfaces";
 import { LayoutBasePage } from "../../../shared/layouts";
-import { defineBgColorInfrequency } from "../../../shared/scripts";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 const headCells: iheadCell[] = [
@@ -20,7 +23,7 @@ interface iCardFrequencyProps {
 }
 
 const CardFrequency = ({ freq }: iCardFrequencyProps) => {
-  const theme = useTheme();
+  const { defineBgColorInfrequency } = useAppThemeContext();
 
   return (
     <TableRow>
@@ -31,7 +34,7 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(freq.infrequency, theme),
+          bgcolor: defineBgColorInfrequency(freq.infrequency),
         }}
       >
         {String(freq.infrequency).replace(".", ",")}%

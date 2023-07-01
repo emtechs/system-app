@@ -1,6 +1,7 @@
 import { Navigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
+  useAppThemeContext,
   useAuthContext,
   useFrequencyContext,
   usePaginationContext,
@@ -9,8 +10,7 @@ import { apiUsingNow } from "../../shared/services";
 import { iStudentWithSchool, iheadCell } from "../../shared/interfaces";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TableBase, Tools } from "../../shared/components";
-import { TableCell, TableRow, useTheme } from "@mui/material";
-import { defineBgColorInfrequency } from "../../shared/scripts";
+import { TableCell, TableRow } from "@mui/material";
 import { useDebounce } from "../../shared/hooks";
 
 const headCells: iheadCell[] = [
@@ -28,7 +28,7 @@ interface iCardStudentProps {
 }
 
 const CardStudent = ({ student }: iCardStudentProps) => {
-  const theme = useTheme();
+  const { defineBgColorInfrequency } = useAppThemeContext();
   return (
     <TableRow>
       <TableCell align="right">{student.registry}</TableCell>
@@ -41,7 +41,7 @@ const CardStudent = ({ student }: iCardStudentProps) => {
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(student.infrequency, theme),
+          bgcolor: defineBgColorInfrequency(student.infrequency),
         }}
       >
         {String(student.infrequency).replace(".", ",")}%

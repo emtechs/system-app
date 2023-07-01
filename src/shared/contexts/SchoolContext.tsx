@@ -20,7 +20,6 @@ import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { apiSchool, apiUser } from "../services";
 import { useAuthContext } from "./AuthContext";
-import { adaptNameLabel } from "../scripts";
 import { usePaginationContext } from ".";
 
 interface iSchoolContextData {
@@ -66,7 +65,7 @@ const SchoolContext = createContext({} as iSchoolContextData);
 
 export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
-  const { setLoading, handleSucess, handleError, mdDown } =
+  const { setLoading, handleSucess, handleError, mdDown, adaptName } =
     useAppThemeContext();
   const {
     setSchoolData,
@@ -101,7 +100,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
 
   const labelSchoolData = useCallback(() => {
     if (schoolData) {
-      if (mdDown) return adaptNameLabel(schoolData.name);
+      if (mdDown) return adaptName(schoolData.name, 15);
       return schoolData.name;
     }
     return "";
@@ -109,7 +108,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
 
   const labelSchoolDataAdmin = useCallback(() => {
     if (schoolDataAdmin) {
-      if (mdDown) return adaptNameLabel(schoolDataAdmin.name);
+      if (mdDown) return adaptName(schoolDataAdmin.name, 15);
       return schoolDataAdmin.name;
     }
     return "";

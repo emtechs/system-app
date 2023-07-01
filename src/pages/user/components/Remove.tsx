@@ -1,7 +1,6 @@
-import { useSchoolContext } from "../../../shared/contexts";
+import { useAppThemeContext, useSchoolContext } from "../../../shared/contexts";
 import { iUser, iWorkSchool } from "../../../shared/interfaces";
 import { DialogBase } from "../../../shared/components";
-import { rolePtBr } from "../../../shared/scripts";
 
 interface iRemoveProps {
   user: iUser;
@@ -11,6 +10,7 @@ interface iRemoveProps {
 }
 
 export const Remove = ({ handleClose, open, work, user }: iRemoveProps) => {
+  const { rolePtBr } = useAppThemeContext();
   const { deleteServer } = useSchoolContext();
 
   return (

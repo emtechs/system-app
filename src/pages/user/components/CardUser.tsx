@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { iUser } from "../../../shared/interfaces";
 import { TableCell, TableRow } from "@mui/material";
-import { rolePtBr } from "../../../shared/scripts";
+import { useAppThemeContext } from "../../../shared/contexts";
 
 interface iCardUserProps {
   user: iUser;
@@ -9,6 +9,7 @@ interface iCardUserProps {
 
 export const CardUser = ({ user }: iCardUserProps) => {
   const navigate = useNavigate();
+  const { rolePtBr } = useAppThemeContext();
   return (
     <TableRow
       hover

@@ -10,7 +10,6 @@ import { apiUsingNow } from "../../shared/services";
 import { iStudentWithSchool, iheadCell } from "../../shared/interfaces";
 import { TableBase, Tools } from "../../shared/components";
 import { Chip, TableCell, TableRow } from "@mui/material";
-import { defineBgColorInfrequency } from "../../shared/scripts";
 import { useDebounce } from "../../shared/hooks";
 import { Group } from "@mui/icons-material";
 import { LayoutBasePage } from "../../shared/layouts";
@@ -21,7 +20,7 @@ interface iCardStudentProps {
 
 const CardStudent = ({ student }: iCardStudentProps) => {
   const navigate = useNavigate();
-  const { theme, mdDown } = useAppThemeContext();
+  const { mdDown, defineBgColorInfrequency } = useAppThemeContext();
   return (
     <TableRow
       hover
@@ -42,7 +41,7 @@ const CardStudent = ({ student }: iCardStudentProps) => {
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(student.infrequency, theme),
+          bgcolor: defineBgColorInfrequency(student.infrequency),
         }}
       >
         {String(student.infrequency).replace(".", ",")}%

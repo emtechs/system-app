@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { useSchoolContext } from "../../../shared/contexts";
+import { useAppThemeContext, useSchoolContext } from "../../../shared/contexts";
 import { iUser, iWorkSchool } from "../../../shared/interfaces";
 import { TableCell, TableRow } from "@mui/material";
 import { Remove } from "./Remove";
-import { rolePtBr } from "../../../shared/scripts";
 
 interface iCardUserProps {
   user?: iUser;
@@ -11,6 +10,7 @@ interface iCardUserProps {
 }
 
 export const CardWorkSchool = ({ user, work }: iCardUserProps) => {
+  const { rolePtBr } = useAppThemeContext();
   const { updateServerData, setUpdateServerData } = useSchoolContext();
   const [open, setOpen] = useState(false);
   const handleClose = () => {

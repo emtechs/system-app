@@ -1,13 +1,7 @@
-import {
-  Box,
-  Breadcrumbs,
-  Chip,
-  TableCell,
-  TableRow,
-  useTheme,
-} from "@mui/material";
+import { Box, Breadcrumbs, Chip, TableCell, TableRow } from "@mui/material";
 import { LinkRouter, TableBase } from "../../../shared/components";
 import {
+  useAppThemeContext,
   useAuthContext,
   useDrawerContext,
   useFrequencyContext,
@@ -22,10 +16,6 @@ import { useEffect, useState } from "react";
 import { apiFrequency } from "../../../shared/services";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { LayoutBasePage } from "../../../shared/layouts";
-import {
-  defineBgColorFrequency,
-  statusFrequencyPtBr,
-} from "../../../shared/scripts";
 import { EventAvailable, Group, School } from "@mui/icons-material";
 
 const headCells: iheadCell[] = [
@@ -40,7 +30,8 @@ interface iCardFrequencyProps {
 
 const CardFrequency = ({ student }: iCardFrequencyProps) => {
   const navigate = useNavigate();
-  const theme = useTheme();
+  const { theme, defineBgColorFrequency, statusFrequencyPtBr } =
+    useAppThemeContext();
 
   return (
     <TableRow
@@ -52,7 +43,7 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
       <TableCell>{student.student.name}</TableCell>
       <TableCell
         sx={{
-          bgcolor: defineBgColorFrequency(student.status, theme),
+          bgcolor: defineBgColorFrequency(student.status),
           color: theme.palette.secondary.contrastText,
         }}
       >

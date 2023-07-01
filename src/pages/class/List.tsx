@@ -1,5 +1,6 @@
 import { iClassSchoolList, iheadCell } from "../../shared/interfaces";
 import {
+  useAppThemeContext,
   useAuthContext,
   useFrequencyContext,
   usePaginationContext,
@@ -9,8 +10,7 @@ import { apiClass } from "../../shared/services";
 import { useNavigate } from "react-router-dom";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TableBase, Tools } from "../../shared/components";
-import { TableCell, TableRow, useTheme } from "@mui/material";
-import { defineBgColorInfrequency } from "../../shared/scripts";
+import { TableCell, TableRow } from "@mui/material";
 import { useDebounce } from "../../shared/hooks";
 
 const headCells: iheadCell[] = [
@@ -25,8 +25,8 @@ interface iCardClassProps {
   el: iClassSchoolList;
 }
 const CardClass = ({ el }: iCardClassProps) => {
-  const theme = useTheme();
   const navigate = useNavigate();
+  const { defineBgColorInfrequency } = useAppThemeContext();
   return (
     <TableRow
       hover
@@ -44,7 +44,7 @@ const CardClass = ({ el }: iCardClassProps) => {
       <TableCell
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(el.infrequency, theme),
+          bgcolor: defineBgColorInfrequency(el.infrequency),
         }}
       >
         {String(el.infrequency).replace(".", ",")}%

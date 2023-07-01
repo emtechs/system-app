@@ -5,7 +5,6 @@ import {
   useDrawerContext,
 } from "../../../../shared/contexts";
 import { Pagination, TableCell, TableRow } from "@mui/material";
-import { rolePtBr } from "../../../../shared/scripts";
 import { TableBase } from "../../../../shared/components";
 
 interface iTableServerProps {
@@ -15,7 +14,7 @@ interface iTableServerProps {
 
 export const TableServer = ({ servers, school_id }: iTableServerProps) => {
   const navigate = useNavigate();
-  const { mdDown } = useAppThemeContext();
+  const { mdDown, rolePtBr } = useAppThemeContext();
   const { handleClickUser } = useDrawerContext();
 
   const headCells: iheadCell[] = mdDown

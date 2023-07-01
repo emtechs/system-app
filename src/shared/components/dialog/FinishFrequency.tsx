@@ -1,7 +1,10 @@
-import { TableCell, TableRow, useTheme } from "@mui/material";
-import { useDrawerContext, useFrequencyContext } from "../../contexts";
+import { TableCell, TableRow } from "@mui/material";
+import {
+  useAppThemeContext,
+  useDrawerContext,
+  useFrequencyContext,
+} from "../../contexts";
 import { iFrequencyStudentsBase, iheadCell } from "../../interfaces";
-import { defineBgColorFrequency, statusFrequencyPtBr } from "../../scripts";
 import { Pagination } from "../pagination";
 import { TableBase } from "../table";
 import { DialogBaseChildren } from "./DialogBaseChildren";
@@ -17,7 +20,8 @@ interface iCardFrequencyProps {
 }
 
 const CardFrequency = ({ student }: iCardFrequencyProps) => {
-  const theme = useTheme();
+  const { theme, defineBgColorFrequency, statusFrequencyPtBr } =
+    useAppThemeContext();
 
   return (
     <TableRow>
@@ -25,7 +29,7 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
       <TableCell>{student.student.name}</TableCell>
       <TableCell
         sx={{
-          bgcolor: defineBgColorFrequency(student.status, theme),
+          bgcolor: defineBgColorFrequency(student.status),
           color: theme.palette.secondary.contrastText,
         }}
       >

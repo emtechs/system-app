@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Chip, TableCell, TableRow, useTheme } from "@mui/material";
+import { Chip, TableCell, TableRow } from "@mui/material";
 import { TableBase, TitleAdminDashPages, Tools } from "../../shared/components";
-import { useAuthContext, usePaginationContext } from "../../shared/contexts";
+import {
+  useAppThemeContext,
+  useAuthContext,
+  usePaginationContext,
+} from "../../shared/contexts";
 import { iSchoolClass, iheadCell } from "../../shared/interfaces";
 import { apiSchool } from "../../shared/services";
-import { defineBgColorInfrequency } from "../../shared/scripts";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
 import { SchoolTwoTone } from "@mui/icons-material";
@@ -24,8 +27,8 @@ interface iCardSchoolProps {
 }
 
 const CardSchool = ({ school }: iCardSchoolProps) => {
-  const theme = useTheme();
   const navigate = useNavigate();
+  const { defineBgColorInfrequency } = useAppThemeContext();
 
   return (
     <TableRow
@@ -44,7 +47,7 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(school.infrequency, theme),
+          bgcolor: defineBgColorInfrequency(school.infrequency),
         }}
       >
         {school.infrequency.toFixed(0)}%

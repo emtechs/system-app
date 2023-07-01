@@ -5,7 +5,6 @@ import {
   FormControlLabel,
   TableCell,
   TableRow,
-  useTheme,
 } from "@mui/material";
 import {
   DialogFinishFrequency,
@@ -15,6 +14,7 @@ import {
   Tools,
 } from "../../shared/components";
 import {
+  useAppThemeContext,
   useFrequencyContext,
   usePaginationContext,
 } from "../../shared/contexts";
@@ -26,10 +26,6 @@ import "dayjs/locale/pt-br";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Navigate, useSearchParams } from "react-router-dom";
 import { LayoutBasePage } from "../../shared/layouts";
-import {
-  defineBgColorFrequency,
-  statusFrequencyPtBr,
-} from "../../shared/scripts";
 import { Checklist } from "@mui/icons-material";
 dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
@@ -46,7 +42,8 @@ interface iCardFrequencyProps {
 }
 
 const CardFrequency = ({ student }: iCardFrequencyProps) => {
-  const theme = useTheme();
+  const { theme, defineBgColorFrequency, statusFrequencyPtBr } =
+    useAppThemeContext();
   const { studentData, setStudentData } = useFrequencyContext();
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(!open);
@@ -65,7 +62,7 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
         <TableCell>{student.student.name}</TableCell>
         <TableCell
           sx={{
-            bgcolor: defineBgColorFrequency(student.status, theme),
+            bgcolor: defineBgColorFrequency(student.status),
             color: theme.palette.secondary.contrastText,
           }}
         >

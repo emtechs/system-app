@@ -17,12 +17,11 @@ import {
   useDrawerContext,
 } from "../../contexts";
 import { iChildren } from "../../interfaces";
-import { adaptName } from "../../scripts";
 import { Options } from "./options";
 
 export const Menu = ({ children }: iChildren) => {
   const location = useLocation();
-  const { theme, smDown } = useAppThemeContext();
+  const { theme, smDown, adaptName } = useAppThemeContext();
   const { isDrawerOpen, toggleDrawerOpen, handleClick } = useDrawerContext();
   const { userData, logout, dashData } = useAuthContext();
   const user = {

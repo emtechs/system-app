@@ -1,5 +1,6 @@
 import { iClassStudent, iheadCell } from "../../shared/interfaces";
 import {
+  useAppThemeContext,
   useAuthContext,
   useFrequencyContext,
   usePaginationContext,
@@ -8,8 +9,7 @@ import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TableBase, Tools } from "../../shared/components";
-import { TableCell, TableRow, useTheme } from "@mui/material";
-import { defineBgColorInfrequency } from "../../shared/scripts";
+import { TableCell, TableRow } from "@mui/material";
 
 const headCells: iheadCell[] = [
   { order: "registry", numeric: false, label: "Matrícula" },
@@ -23,7 +23,7 @@ interface iCardStudentProps {
   classStudent: iClassStudent;
 }
 const CardStudent = ({ classStudent }: iCardStudentProps) => {
-  const theme = useTheme();
+  const { defineBgColorInfrequency } = useAppThemeContext();
 
   return (
     <TableRow>
@@ -36,7 +36,7 @@ const CardStudent = ({ classStudent }: iCardStudentProps) => {
       <TableCell
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(classStudent.student.infreq, theme),
+          bgcolor: defineBgColorInfrequency(classStudent.student.infreq),
         }}
       >
         {String(classStudent.student.infreq).replace(".", ",")}%

@@ -41,7 +41,7 @@ export const RetrieveUserPage = ({ id }: iRetrieveUserPageProps) => {
   const orderData = searchParams.get("order");
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
-  const { updateAllUser, updateUserData, labelUser } = useUserContext();
+  const { updateAllUser, updateUserData, labelUserId } = useUserContext();
   const { updateServerData } = useSchoolContext();
   const { setCount, take, skip, order, setOrder, by, setIsLoading } =
     usePaginationContext();
@@ -124,7 +124,7 @@ export const RetrieveUserPage = ({ id }: iRetrieveUserPageProps) => {
               />
             </LinkRouter>
             <Chip
-              label={labelUser()}
+              label={labelUserId(id)}
               color="primary"
               icon={<Person sx={{ mr: 0.5 }} fontSize="inherit" />}
             />

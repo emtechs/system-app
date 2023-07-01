@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../../shared/services";
 import { iFrequency, iheadCell } from "../../../shared/interfaces";
 import { LayoutBasePage } from "../../../shared/layouts";
-import { defineBgColorInfrequency } from "../../../shared/scripts";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { EventAvailable, List, School } from "@mui/icons-material";
 
@@ -21,7 +20,7 @@ interface iCardFrequencyProps {
 
 const CardFrequency = ({ freq, isDate }: iCardFrequencyProps) => {
   const navigate = useNavigate();
-  const { theme, mdDown } = useAppThemeContext();
+  const { mdDown, defineBgColorInfrequency } = useAppThemeContext();
 
   return (
     <TableRow
@@ -40,7 +39,7 @@ const CardFrequency = ({ freq, isDate }: iCardFrequencyProps) => {
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(freq.infrequency, theme),
+          bgcolor: defineBgColorInfrequency(freq.infrequency),
         }}
       >
         {String(freq.infrequency).replace(".", ",")}%

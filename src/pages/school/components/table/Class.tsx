@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "../../../../shared/contexts";
 import { iClassSchoolList, iheadCell } from "../../../../shared/interfaces";
 import { TableCell, TableRow } from "@mui/material";
-import { defineBgColorInfrequency } from "../../../../shared/scripts";
 import { TableBase } from "../../../../shared/components";
 
 interface iTableClassProps {
@@ -10,7 +9,7 @@ interface iTableClassProps {
 }
 
 export const TableClass = ({ data }: iTableClassProps) => {
-  const { theme, mdDown } = useAppThemeContext();
+  const { mdDown, defineBgColorInfrequency } = useAppThemeContext();
   const navigate = useNavigate();
 
   const headCells: iheadCell[] = mdDown
@@ -49,7 +48,7 @@ export const TableClass = ({ data }: iTableClassProps) => {
             align="right"
             sx={{
               color: "#fff",
-              bgcolor: defineBgColorInfrequency(el.infrequency, theme),
+              bgcolor: defineBgColorInfrequency(el.infrequency),
             }}
           >
             {String(el.infrequency).replace(".", ",")}%
