@@ -28,6 +28,10 @@ export const createDirectorSchema = z
   })
   .refine((fields) => (fields.password = fields.login.substring(0, 6)));
 
+export const defineServerSchema = z.object({
+  schools: z.object({ id: z.string().uuid() }).array(),
+});
+
 export const createSecretSchema = z
   .object({
     name: z

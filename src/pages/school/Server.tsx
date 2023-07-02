@@ -10,7 +10,11 @@ import {
 import { TableWorkSchool } from "../../shared/components";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
-import { TitleServerSchool, ToolsServerSchool } from "./components";
+import {
+  CreateSchoolServer,
+  TitleServerSchool,
+  ToolsServerSchool,
+} from "./components";
 
 export const ServerSchoolPage = () => {
   const { school_id, server_id } = useParams();
@@ -60,6 +64,7 @@ export const ServerSchoolPage = () => {
       tools={<ToolsServerSchool search={search} setSearch={setSearch} />}
     >
       <TableWorkSchool listSchool={listSchoolServerData} user={userSelect} />
+      {userSelect && <CreateSchoolServer server={userSelect} />}
     </LayoutBasePage>
   );
 };

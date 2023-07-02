@@ -7,6 +7,17 @@ const create = async (data: FieldValues): Promise<iSchool> => {
   return response;
 };
 
+const createServer = async (
+  data: FieldValues,
+  server_id: string
+): Promise<iSchool> => {
+  const { data: response } = await apiUsingNow.post<iSchool>(
+    "schools/" + server_id,
+    data
+  );
+  return response;
+};
+
 const impSchool = async (data: FormData): Promise<void> => {
   await apiUsingNow.post("imports/school", data);
 };
@@ -100,6 +111,7 @@ const retrieveClass = async (
 
 export const apiSchool = {
   create,
+  createServer,
   impSchool,
   update,
   updateInfreq,
