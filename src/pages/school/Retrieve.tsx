@@ -19,7 +19,7 @@ import {
 import { useParams } from "react-router-dom";
 
 export const RetrieveSchoolPage = () => {
-  const { id } = useParams();
+  const { school_id } = useParams();
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
   const { schoolData } = useAuthContext();
@@ -33,11 +33,11 @@ export const RetrieveSchoolPage = () => {
   const [search, setSearch] = useState<string>();
 
   useEffect(() => {
-    if (id) {
-      schoolDataRetrieve(id);
-      schoolDataAdminRetrieve(id);
+    if (school_id) {
+      schoolDataRetrieve(school_id);
+      schoolDataAdminRetrieve(school_id);
     }
-  }, [id]);
+  }, [school_id]);
 
   const queryData = useCallback(
     (take: number) => {
@@ -52,19 +52,19 @@ export const RetrieveSchoolPage = () => {
   );
 
   useEffect(() => {
-    if (id) {
+    if (school_id) {
       const take = 5;
       let query = queryData(take);
       if (search) {
         query += `&name=${search}`;
         debounce(() => {
-          getServers(id, query, take);
+          getServers(school_id, query, take);
         });
       } else {
-        getServers(id, query, take);
+        getServers(school_id, query, take);
       }
     }
-  }, [id, queryData, search]);
+  }, [school_id, queryData, search]);
 
   return (
     <>
@@ -77,7 +77,7 @@ export const RetrieveSchoolPage = () => {
           />
         }
       >
-        {id && <TableServer servers={serversData} />}
+        {school_id && <TableServer school_id={school_id} servers={serversData} />}
       </LayoutBasePage>
       {schoolData && <DialogActiveSchool school={schoolData} />}
       {schoolData && <CreateServer school={schoolData} />}

@@ -1,15 +1,15 @@
-import { Breadcrumbs, Chip, Skeleton } from "@mui/material";
+import { Breadcrumbs, Chip } from "@mui/material";
 import {
   useAppThemeContext,
+  useAuthContext,
   useDrawerContext,
-  useUserContext,
 } from "../../../../shared/contexts";
-import { LinkRouter } from "../../../../shared/components";
-import { Home, People, Person } from "@mui/icons-material";
+import { LabelUser, LinkRouter } from "../../../../shared/components";
+import { Home, People } from "@mui/icons-material";
 
 export const TitleRetrieveUser = () => {
   const { mdDown } = useAppThemeContext();
-  const { labelUser, loadingLabelUser } = useUserContext();
+  const { userSelect } = useAuthContext();
   const { handleClickButtonTools } = useDrawerContext();
 
   return (
@@ -37,11 +37,7 @@ export const TitleRetrieveUser = () => {
           icon={<People sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </LinkRouter>
-      <Chip
-        label={loadingLabelUser ? <Skeleton width={100} /> : labelUser}
-        color="primary"
-        icon={<Person sx={{ mr: 0.5 }} fontSize="inherit" />}
-      />
+      <LabelUser user={userSelect} />
     </Breadcrumbs>
   );
 };

@@ -2,7 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   useAppThemeContext,
+  useAuthContext,
   usePaginationContext,
+  useSchoolContext,
   useUserContext,
 } from "../../shared/contexts";
 import { TableWorkSchool } from "../../shared/components";
@@ -11,12 +13,19 @@ import { LayoutBasePage } from "../../shared/layouts";
 import { TitleServerSchool, ToolsServerSchool } from "./components";
 
 export const ServerSchoolPage = () => {
-  const { id } = useParams();
+  const { school_id, server_id } = useParams();
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
-  const { userSelect, getSchools, listSchoolServerData } = useUserContext();
+  const { userSelect } = useAuthContext();
+  const { schoolDataRetrieve } = useSchoolContext();
+  const { getSchools, listSchoolServerData, userRetrieve } = useUserContext();
   const { defineQuery, query } = usePaginationContext();
   const [search, setSearch] = useState<string>();
+
+  useEffect(() => {
+    if (school_id) schoolDataRetrieve(school_id);
+    if (server_id) userRetrieve(server_id);
+  }, [school_id, server_id]);
 
   const queryData = useCallback(
     (take: number) => {
@@ -31,19 +40,19 @@ export const ServerSchoolPage = () => {
   );
 
   useEffect(() => {
-    if (id) {
+    if (server_id) {
       const take = 5;
       let query = queryData(take);
       if (search) {
         query += `&name=${search}`;
         debounce(() => {
-          getSchools(id, query, take);
+          getSchools(server_id, query, take);
         });
       } else {
-        getSchools(id, query, take);
+        getSchools(server_id, query, take);
       }
     }
-  }, [id, queryData, search]);
+  }, [server_id, queryData, search]);
 
   return (
     <LayoutBasePage

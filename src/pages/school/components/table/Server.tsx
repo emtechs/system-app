@@ -5,13 +5,15 @@ import {
 } from "../../../../shared/contexts";
 import { TableCell, TableRow } from "@mui/material";
 import { PaginationMobile, TableBase } from "../../../../shared/components";
+import { rolePtBr } from "../../../../shared/scripts";
 
 interface iTableServerProps {
+  school_id: string;
   servers?: iSchoolServer[];
 }
 
-export const TableServer = ({ servers }: iTableServerProps) => {
-  const { mdDown, rolePtBr } = useAppThemeContext();
+export const TableServer = ({ school_id, servers }: iTableServerProps) => {
+  const { mdDown } = useAppThemeContext();
   const { clickRetrieveSchool } = useSchoolContext();
 
   const headCells: iheadCell[] = mdDown
@@ -38,7 +40,7 @@ export const TableServer = ({ servers }: iTableServerProps) => {
             hover
             sx={{ cursor: "pointer" }}
             onClick={() => {
-              clickRetrieveSchool(schoolServer.server.id);
+              clickRetrieveSchool(school_id, schoolServer.server.id);
             }}
           >
             <TableCell>{schoolServer.server.name}</TableCell>

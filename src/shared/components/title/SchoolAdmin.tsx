@@ -1,12 +1,12 @@
-import { Breadcrumbs, Chip, Skeleton } from "@mui/material";
+import { Breadcrumbs, Chip } from "@mui/material";
 import {
   useAppThemeContext,
   useAuthContext,
   useDrawerContext,
-  useSchoolContext,
 } from "../../contexts";
 import { LinkRouter } from "../link";
 import { Home, School } from "@mui/icons-material";
+import { LabelSchool } from "../label";
 
 interface iTitleSchoolAdminPagesProps {
   breadcrumbs: JSX.Element[];
@@ -53,7 +53,6 @@ export const TitleRetrieveSchoolAdminPages = ({
 }: iTitleSchoolAdminPagesProps) => {
   const { mdDown } = useAppThemeContext();
   const { schoolData } = useAuthContext();
-  const { labelSchool, loadingLabelSchool } = useSchoolContext();
   const { handleClickButtonTools } = useDrawerContext();
 
   return (
@@ -87,13 +86,7 @@ export const TitleRetrieveSchoolAdminPages = ({
         color="inherit"
         to={"/school?id=" + schoolData?.id}
       >
-        <Chip
-          clickable
-          color="primary"
-          variant="outlined"
-          label={loadingLabelSchool ? <Skeleton width={100} /> : labelSchool}
-          icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-        />
+        <LabelSchool clickable />
       </LinkRouter>
 
       {breadcrumbs}

@@ -12,6 +12,7 @@ import { apiSchool } from "../../shared/services";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
 import { SchoolTwoTone } from "@mui/icons-material";
+import { defineBgColorInfrequency } from "../../shared/scripts";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Escola" },
@@ -28,7 +29,7 @@ interface iCardSchoolProps {
 
 const CardSchool = ({ school }: iCardSchoolProps) => {
   const navigate = useNavigate();
-  const { defineBgColorInfrequency } = useAppThemeContext();
+  const { theme } = useAppThemeContext();
 
   return (
     <TableRow
@@ -47,7 +48,7 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(school.infrequency),
+          bgcolor: defineBgColorInfrequency(school.infrequency, theme),
         }}
       >
         {school.infrequency.toFixed(0)}%

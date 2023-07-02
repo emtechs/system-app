@@ -11,6 +11,7 @@ import { iFrequency, iheadCell } from "../../shared/interfaces";
 import { TableBase } from "../../shared/components";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Outbox } from "@mui/icons-material";
+import { defineBgColorInfrequency } from "../../shared/scripts";
 
 const headCells: iheadCell[] = [
   { order: "date", numeric: false, label: "Data" },
@@ -24,7 +25,7 @@ interface iCardFrequencyProps {
 }
 const CardFrequency = ({ freq }: iCardFrequencyProps) => {
   const navigate = useNavigate();
-  const { defineBgColorInfrequency } = useAppThemeContext();
+  const { theme } = useAppThemeContext();
 
   return (
     <TableRow
@@ -39,7 +40,7 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(freq.infrequency),
+          bgcolor: defineBgColorInfrequency(freq.infrequency, theme),
         }}
       >
         {String(freq.infrequency).replace(".", ",")}%

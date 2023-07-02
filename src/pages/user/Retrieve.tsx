@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import {
   useAppThemeContext,
+  useAuthContext,
   useDrawerContext,
   usePaginationContext,
   useUserContext,
@@ -29,13 +30,9 @@ export const RetrieveUserPage = ({ id }: iRetrieveUserPageProps) => {
   const school_id = searchParams.get("school_id");
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
-  const {
-    updateAllUser,
-    updateUserData,
-    getSchools,
-    listSchoolServerData,
-    userSelect,
-  } = useUserContext();
+  const { userSelect } = useAuthContext();
+  const { updateAllUser, updateUserData, getSchools, listSchoolServerData } =
+    useUserContext();
   const { defineQuery, query } = usePaginationContext();
   const { handleClickSchool } = useDrawerContext();
   const [open, setOpen] = useState(false);

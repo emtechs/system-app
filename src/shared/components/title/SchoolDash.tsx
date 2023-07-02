@@ -1,16 +1,15 @@
-import { Breadcrumbs, Chip, Skeleton } from "@mui/material";
+import { Breadcrumbs, Chip } from "@mui/material";
 import {
   useAppThemeContext,
   useAuthContext,
   useDrawerContext,
-  useSchoolContext,
 } from "../../contexts";
 import { LinkRouter } from "../link";
-import { Home, School } from "@mui/icons-material";
+import { Home } from "@mui/icons-material";
+import { LabelSchool } from "../label";
 
 export const TitleSchoolDash = () => {
-  const { setSchoolData } = useAuthContext();
-  const { labelSchool, loadingLabelSchool } = useSchoolContext();
+  const { schoolData, setSchoolData } = useAuthContext();
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
@@ -30,11 +29,7 @@ export const TitleSchoolDash = () => {
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </LinkRouter>
-      <Chip
-        label={loadingLabelSchool ? <Skeleton width={100} /> : labelSchool}
-        color="primary"
-        icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-      />
+      <LabelSchool school={schoolData} />
     </Breadcrumbs>
   );
 };
@@ -47,7 +42,7 @@ export const TitleSchoolDashPages = ({
   breadcrumbs,
 }: iTitleSchoolDashPagesProps) => {
   const { mdDown } = useAppThemeContext();
-  const { labelSchool, loadingLabelSchool } = useSchoolContext();
+  const { schoolData } = useAuthContext();
   const { handleClickButtonTools } = useDrawerContext();
 
   return (
@@ -58,13 +53,7 @@ export const TitleSchoolDashPages = ({
         to="/"
         onClick={handleClickButtonTools}
       >
-        <Chip
-          clickable
-          color="primary"
-          variant="outlined"
-          label={loadingLabelSchool ? <Skeleton width={100} /> : labelSchool}
-          icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-        />
+        <LabelSchool clickable school={schoolData} />
       </LinkRouter>
       {breadcrumbs}
     </Breadcrumbs>
