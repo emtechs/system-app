@@ -1,9 +1,9 @@
 import { MouseEvent, useState } from "react";
 import {
+  Dashboard,
   Edit,
   ExpandLess,
   ExpandMore,
-  Home,
   Person,
   School,
 } from "@mui/icons-material";
@@ -74,9 +74,9 @@ export const SchoolTools = () => {
           <Link to="/home/school">
             <MenuItem onClick={handleClose}>
               <ListItemIcon>
-                <Home />
+                <Dashboard />
               </ListItemIcon>
-              Início
+              Painel
             </MenuItem>
           </Link>
         )}

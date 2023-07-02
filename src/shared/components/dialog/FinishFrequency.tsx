@@ -6,7 +6,7 @@ import {
 } from "../../contexts";
 import { iFrequencyStudentsBase, iheadCell } from "../../interfaces";
 import { TableBase } from "../table";
-import { DialogBaseChildren } from "./structure";
+import { DialogBaseChildrenAction } from "./structure";
 import { PaginationMobile } from "../pagination";
 import { defineBgColorFrequency, statusFrequencyPtBr } from "../../scripts";
 
@@ -68,7 +68,7 @@ export const DialogFinishFrequency = ({
   };
 
   return (
-    <DialogBaseChildren
+    <DialogBaseChildrenAction
       open={open}
       onClose={onClose}
       title="Conferência"
@@ -88,6 +88,6 @@ export const DialogFinishFrequency = ({
         ))}
       </TableBase>
       <PaginationMobile />
-    </DialogBaseChildren>
+    </DialogBaseChildrenAction>
   );
 };

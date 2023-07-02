@@ -6,7 +6,7 @@ import "dayjs/locale/pt-br";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { frequencyUpdateSchema } from "../../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DialogBaseChildren } from "./structure";
+import { DialogBaseChildrenAction } from "./structure";
 
 interface iDialogMissedProps {
   open: boolean;
@@ -28,7 +28,7 @@ export const DialogMissed = ({
     onClose();
   };
   return (
-    <DialogBaseChildren
+    <DialogBaseChildrenAction
       open={open}
       onClose={onClose}
       title="Informar Falta"
@@ -62,6 +62,6 @@ export const DialogMissed = ({
           </Button>
         </Box>
       </FormContainer>
-    </DialogBaseChildren>
+    </DialogBaseChildrenAction>
   );
 };

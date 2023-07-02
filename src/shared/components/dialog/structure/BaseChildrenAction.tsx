@@ -1,25 +1,31 @@
 import {
+  Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
 import { iChildren } from "../../../interfaces";
 
-interface iDialogBaseChildrenProps extends iChildren {
+interface iDialogBaseChildrenActionProps extends iChildren {
   open: boolean;
   onClose: () => void;
   title: string;
   description: string;
+  action: () => void;
+  actionTitle: string;
 }
 
-export const DialogBaseChildren = ({
+export const DialogBaseChildrenAction = ({
   open,
   onClose,
   children,
   title,
   description,
-}: iDialogBaseChildrenProps) => {
+  action,
+  actionTitle,
+}: iDialogBaseChildrenActionProps) => {
   return (
     <Dialog
       open={open}
@@ -34,6 +40,12 @@ export const DialogBaseChildren = ({
         </DialogContentText>
         {children}
       </DialogContent>
+      <DialogActions>
+        <Button onClick={action}>{actionTitle}</Button>
+        <Button onClick={onClose} autoFocus>
+          Sair
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };

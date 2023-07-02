@@ -16,14 +16,14 @@ export const ServerSchoolPage = () => {
   const { school_id, server_id } = useParams();
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
-  const { userSelect } = useAuthContext();
+  const { userSelect, schoolData } = useAuthContext();
   const { schoolDataRetrieve } = useSchoolContext();
   const { getSchools, listSchoolServerData, userRetrieve } = useUserContext();
   const { defineQuery, query } = usePaginationContext();
   const [search, setSearch] = useState<string>();
 
   useEffect(() => {
-    if (school_id) schoolDataRetrieve(school_id);
+    if (school_id && !schoolData) schoolDataRetrieve(school_id);
     if (server_id) userRetrieve(server_id);
   }, [school_id, server_id]);
 
