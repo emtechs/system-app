@@ -7,6 +7,7 @@ import {
   iSchoolServerRequest,
   iServerRequest,
   iWorkSchool,
+  iYear,
 } from "../interfaces";
 import { FieldValues } from "react-hook-form";
 import {
@@ -30,18 +31,8 @@ interface iSchoolContextData {
   setListSchoolData: Dispatch<SetStateAction<iSchool[] | undefined>>;
   serversData: iSchoolServer[] | undefined;
   setServersData: Dispatch<SetStateAction<iSchoolServer[] | undefined>>;
-  isHome: boolean;
   director: boolean[];
   setDirector: Dispatch<SetStateAction<boolean[]>>;
-  openActive: boolean;
-  setOpenActive: Dispatch<SetStateAction<boolean>>;
-  openCreate: boolean;
-  openEdit: boolean;
-  openDirector: boolean;
-  handleOpenActive: () => void;
-  handleOpenCreate: () => void;
-  handleOpenEdit: () => void;
-  handleOpenDirector: () => void;
   is_director: () => "" | "&is_director=true" | "&is_director=false";
   schoolDataRetrieve: (id: string) => void;
   schoolDataAdminRetrieve: (id: string) => void;
@@ -65,6 +56,9 @@ interface iSchoolContextData {
   clickListSchool: (school_id: string) => void;
   clickRetrieveSchool: (school_id: string, server_id: string) => void;
   loadingSchool: boolean;
+  schoolId: string | undefined;
+  listYear: iYear[] | undefined;
+  disabled: boolean;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -80,13 +74,11 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [serversData, setServersData] = useState<iSchoolServer[]>();
-  const [isHome, setIsHome] = useState(false);
+  const [schoolId, setSchoolId] = useState<string>();
+  const [disabled, setDisabled] = useState(false);
   const [director, setDirector] = useState([true, true]);
-  const [openActive, setOpenActive] = useState(false);
-  const [openCreate, setOpenCreate] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
-  const [openDirector, setOpenDirector] = useState(false);
   const [loadingSchool, setLoadingSchool] = useState(true);
+  const [listYear, setListYear] = useState<iYear[]>();
 
   const clickListSchool = useCallback((school_id: string) => {
     setPage(0);
@@ -105,11 +97,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
     []
   );
 
-  const handleOpenActive = () => setOpenActive(!openActive);
-  const handleOpenCreate = () => setOpenCreate(!openCreate);
-  const handleOpenEdit = () => setOpenEdit(!openEdit);
-  const handleOpenDirector = () => setOpenDirector(!openDirector);
-
   const is_director = useCallback(() => {
     if (director[0] !== director[1]) {
       if (director[0]) return "&is_director=true";
@@ -120,11 +107,25 @@ export const SchoolProvider = ({ children }: iChildren) => {
 
   const schoolDataRetrieve = useCallback((id: string) => {
     setLoadingSchool(true);
+    setLoading(true);
     apiSchool
       .retrieve(id)
-      .then((res) => setSchoolData(res))
+      .then((res) => {
+        setSchoolData(res.school);
+        setListYear(res.years);
+        if (res.years.length > 0) {
+          setSchoolId(res.school.id);
+          setDisabled(false);
+        } else {
+          setSchoolId(undefined);
+          setDisabled(true);
+        }
+      })
       .catch(() => navigate("/"))
-      .finally(() => setLoadingSchool(false));
+      .finally(() => {
+        setLoadingSchool(false);
+        setLoading(false);
+      });
   }, []);
 
   const schoolDataAdminRetrieve = useCallback(
@@ -133,11 +134,8 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setLoadingSchool(true);
         apiSchool
           .retrieveClass(id, yearData.id)
-          .then((res) => {
-            setSchoolDataAdmin(res);
-            setIsHome(true);
-          })
-          .catch(() => setIsHome(false))
+          .then((res) => setSchoolDataAdmin(res))
+          .catch(() => navigate("/home/school"))
           .finally(() => setLoadingSchool(false));
       }
     },
@@ -315,17 +313,8 @@ export const SchoolProvider = ({ children }: iChildren) => {
         director,
         getSchool,
         getServers,
-        handleOpenActive,
-        handleOpenCreate,
-        handleOpenDirector,
-        handleOpenEdit,
         is_director,
-        isHome,
         listSchoolData,
-        openActive,
-        openCreate,
-        openDirector,
-        openEdit,
         schoolDataAdminRetrieve,
         schoolDataRetrieve,
         serversData,
@@ -339,11 +328,13 @@ export const SchoolProvider = ({ children }: iChildren) => {
         updateSchool: handleUpdateSchool,
         importSchool: handleImportSchool,
         clickListSchool,
-        setOpenActive,
         setServersData,
         clickRetrieveSchool,
         loadingSchool,
         createSchoolServer: handleCreateSchoolServer,
+        schoolId,
+        disabled,
+        listYear,
       }}
     >
       {children}

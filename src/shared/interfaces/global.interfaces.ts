@@ -4,6 +4,11 @@ export interface iChildren {
   children: ReactNode;
 }
 
+export interface iDialogBaseProps {
+  open: boolean;
+  onClose: () => void;
+}
+
 export interface iTable extends iChildren {
   headCells: iheadCell[];
   is_body?: boolean;

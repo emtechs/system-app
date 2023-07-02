@@ -1,24 +1,25 @@
 import { School } from "@mui/icons-material";
 import { Tools } from "../../../../shared/components";
-import { useAuthContext, useSchoolContext } from "../../../../shared/contexts";
+import { useAuthContext } from "../../../../shared/contexts";
 
 interface iToolsRetrieveSchoolProps {
   search?: string;
   setSearch: (text: string) => void;
+  onClickNew: () => void;
 }
 
 export const ToolsServerSchool = ({
   search,
   setSearch,
+  onClickNew,
 }: iToolsRetrieveSchoolProps) => {
   const { schoolData } = useAuthContext();
-  const { handleOpenCreate } = useSchoolContext();
   return (
     <Tools
       back={"/school/" + schoolData?.id}
       iconNew={<School />}
       titleNew="Nova"
-      onClickNew={handleOpenCreate}
+      onClickNew={onClickNew}
       isSearch
       search={search}
       setSearch={(text) => setSearch(text)}

@@ -6,19 +6,15 @@ import {
   DialogBaseChildren,
 } from "../../../../shared/components";
 import { useSchoolContext } from "../../../../shared/contexts";
-import { iSchool } from "../../../../shared/interfaces";
 import { schoolUpdateSchema } from "../../../../shared/schemas";
+import { iDialogSchoolProps } from "../../interface";
 
-interface iEditProps {
-  school: iSchool;
-}
-
-export const Edit = ({ school }: iEditProps) => {
-  const { openEdit, handleOpenEdit, updateSchool } = useSchoolContext();
+export const Edit = ({ onClose, open, school }: iDialogSchoolProps) => {
+  const { updateSchool } = useSchoolContext();
   return (
     <DialogBaseChildren
-      open={openEdit}
-      onClose={handleOpenEdit}
+      open={open}
+      onClose={onClose}
       title="Editar Escola"
       description=""
     >
@@ -28,7 +24,7 @@ export const Edit = ({ school }: iEditProps) => {
         }}
         onSuccess={(data) => {
           updateSchool(data, school.id, "nome");
-          handleOpenEdit();
+          onClose();
         }}
         resolver={zodResolver(schoolUpdateSchema)}
       >

@@ -5,21 +5,17 @@ import {
   ValidateCPF,
 } from "../../../../shared/components";
 import { useSchoolContext } from "../../../../shared/contexts";
-import { iSchool } from "../../../../shared/interfaces";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schoolUpdateDirectorSchema } from "../../../../shared/schemas";
 import { Box, Typography } from "@mui/material";
+import { iDialogSchoolProps } from "../../interface";
 
-interface iDirectorProps {
-  school: iSchool;
-}
-
-export const Director = ({ school }: iDirectorProps) => {
-  const { openDirector, handleOpenDirector, updateSchool } = useSchoolContext();
+export const Director = ({ onClose, open, school }: iDialogSchoolProps) => {
+  const { updateSchool } = useSchoolContext();
   return (
     <DialogBaseChildren
-      open={openDirector}
-      onClose={handleOpenDirector}
+      open={open}
+      onClose={onClose}
       title="Definir Diretor"
       description=""
     >
@@ -29,7 +25,7 @@ export const Director = ({ school }: iDirectorProps) => {
             ? `?director_id=${school.director.id}`
             : undefined;
           updateSchool(data, school.id, "diretor", query);
-          handleOpenDirector();
+          onClose();
         }}
         resolver={zodResolver(schoolUpdateDirectorSchema)}
       >

@@ -1,29 +1,52 @@
 import { PersonAdd } from "@mui/icons-material";
 import { Tools } from "../../../../shared/components";
-import { useSchoolContext } from "../../../../shared/contexts";
+import { useAuthContext } from "../../../../shared/contexts";
+import { iYear } from "../../../../shared/interfaces";
 
-export const ToolsRetrieveSchool = () => {
-  const { isHome } = useSchoolContext();
-  return <Tools back="/school" isSchool={isHome} />;
-};
-
-interface iToolsRetrieveSchoolServersProps {
+interface iToolsRetrieveSchoolProps {
   search?: string;
   setSearch: (text: string) => void;
+  year?: iYear;
+  onClickNew: () => void;
 }
+
+export const ToolsRetrieveSchool = () => {
+  return <Tools isSchool back="/school" />;
+};
 
 export const ToolsRetrieveSchoolServers = ({
   search,
   setSearch,
-}: iToolsRetrieveSchoolServersProps) => {
-  const { handleOpenCreate, isHome } = useSchoolContext();
+  onClickNew,
+}: iToolsRetrieveSchoolProps) => {
   return (
     <Tools
       back="/school"
+      isSchool
       iconNew={<PersonAdd />}
-      onClickNew={handleOpenCreate}
+      onClickNew={onClickNew}
       titleNew="Servidor"
-      isSchool={isHome}
+      isSearch
+      search={search}
+      setSearch={(text) => setSearch(text)}
+    />
+  );
+};
+
+export const ToolsRetrieveSchoolClasses = ({
+  search,
+  setSearch,
+  year,
+  onClickNew,
+}: iToolsRetrieveSchoolProps) => {
+  const { yearData } = useAuthContext();
+
+  return (
+    <Tools
+      back="/school"
+      isSchool
+      onClickNew={year === yearData ? onClickNew : undefined}
+      titleNew="Turma"
       isSearch
       search={search}
       setSearch={(text) => setSearch(text)}

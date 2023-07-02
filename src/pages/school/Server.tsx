@@ -25,6 +25,8 @@ export const ServerSchoolPage = () => {
   const { getSchools, listSchoolServerData, userRetrieve } = useUserContext();
   const { defineQuery, query } = usePaginationContext();
   const [search, setSearch] = useState<string>();
+  const [openCreate, setOpenCreate] = useState(false);
+  const handleOpenCreate = () => setOpenCreate(!openCreate);
 
   useEffect(() => {
     if (school_id && !schoolData) schoolDataRetrieve(school_id);
@@ -61,10 +63,22 @@ export const ServerSchoolPage = () => {
   return (
     <LayoutBasePage
       title={<TitleServerSchool />}
-      tools={<ToolsServerSchool search={search} setSearch={setSearch} />}
+      tools={
+        <ToolsServerSchool
+          onClickNew={handleOpenCreate}
+          search={search}
+          setSearch={setSearch}
+        />
+      }
     >
       <TableWorkSchool listSchool={listSchoolServerData} user={userSelect} />
-      {userSelect && <CreateSchoolServer server={userSelect} />}
+      {userSelect && (
+        <CreateSchoolServer
+          onClose={handleOpenCreate}
+          open={openCreate}
+          server={userSelect}
+        />
+      )}
     </LayoutBasePage>
   );
 };

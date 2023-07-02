@@ -3,20 +3,14 @@ import {
   usePaginationContext,
   useSchoolContext,
 } from "../../../../shared/contexts";
-import { iSchool } from "../../../../shared/interfaces";
+import { iDialogSchoolProps } from "../../interface";
 
-interface iDialogActiveSchoolProps {
-  school: iSchool;
-}
-
-export const DialogActiveSchool = ({ school }: iDialogActiveSchoolProps) => {
-  const {
-    openActive,
-    updateSchool,
-    handleOpenActive,
-    setServersData,
-    setOpenActive,
-  } = useSchoolContext();
+export const DialogActiveSchool = ({
+  onClose,
+  open,
+  school,
+}: iDialogSchoolProps) => {
+  const { updateSchool, setServersData } = useSchoolContext();
   const { setActive } = usePaginationContext();
   return (
     school && (
@@ -33,12 +27,12 @@ export const DialogActiveSchool = ({ school }: iDialogActiveSchoolProps) => {
           );
           if (!school.is_active) setServersData(undefined);
           setActive(true);
-          setOpenActive(false);
+          onClose();
         }}
         description={`a escola ${school.name.toUpperCase()}`}
         is_active={school.is_active}
-        onClose={handleOpenActive}
-        open={openActive}
+        onClose={onClose}
+        open={open}
         title="Escola"
       />
     )

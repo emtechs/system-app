@@ -1,22 +1,22 @@
 import { Tools } from "../../../../shared/components";
-import { useSchoolContext } from "../../../../shared/contexts";
 
 interface iToolsListSchoolProps {
   search?: string;
   setSearch: (text: string) => void;
   onClickReset: () => void;
+  onClickNew: () => void;
 }
 
 export const ToolsListSchool = ({
   onClickReset,
   search,
   setSearch,
+  onClickNew,
 }: iToolsListSchoolProps) => {
-  const { handleOpenCreate } = useSchoolContext();
   return (
     <Tools
       isHome
-      onClickNew={handleOpenCreate}
+      onClickNew={onClickNew}
       isSearch
       search={search}
       setSearch={setSearch}

@@ -76,7 +76,7 @@ export const Tools = ({
   onClickReset,
 }: iToolsProps) => {
   const { theme, mdDown } = useAppThemeContext();
-  const { director, setDirector, is_director } = useSchoolContext();
+  const { director, setDirector, is_director, schoolId } = useSchoolContext();
   const { is_active } = usePaginationContext();
   const { handleClickButtonTools } = useDrawerContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -137,8 +137,12 @@ export const Tools = ({
         <CompBase title={titleNew} startIcon={iconNew} onClick={onClickNew} />
       )}
       {isUser && <UserTools />}
-      {isSchool && (
-        <Dest title="Painel" to="/home/school" startIcon={<Dashboard />} />
+      {isSchool && schoolId && (
+        <Dest
+          title="Painel"
+          to={"/home/school?id=" + schoolId}
+          startIcon={<Dashboard />}
+        />
       )}
       {isSearch && (
         <TextField

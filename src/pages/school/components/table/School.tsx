@@ -14,8 +14,10 @@ interface iTableSchoolProps {
 
 export const TableSchool = ({ listSchool }: iTableSchoolProps) => {
   const { mdDown } = useAppThemeContext();
-  const { handleOpenActive, clickListSchool } = useSchoolContext();
+  const { clickListSchool } = useSchoolContext();
   const [data, setData] = useState<iSchool>();
+  const [openActive, setOpenActive] = useState(false);
+  const handleOpenActive = () => setOpenActive(!openActive);
 
   const headCells: iheadCell[] = [
     { order: "name", numeric: false, label: "Escola" },
@@ -47,7 +49,13 @@ export const TableSchool = ({ listSchool }: iTableSchoolProps) => {
         ))}
       </TableBase>
       {mdDown && <PaginationMobile />}
-      {data && <DialogActiveSchool school={data} />}
+      {data && (
+        <DialogActiveSchool
+          onClose={handleOpenActive}
+          open={openActive}
+          school={data}
+        />
+      )}
     </>
   );
 };

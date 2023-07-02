@@ -9,15 +9,22 @@ import { defineServerSchema } from "../../../../shared/schemas";
 import { Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../../../shared/services";
-import { iSchool, iUser } from "../../../../shared/interfaces";
+import {
+  iDialogBaseProps,
+  iSchool,
+  iUser,
+} from "../../../../shared/interfaces";
 
-interface iCreateSchoolServerProps {
+interface iCreateSchoolServerProps extends iDialogBaseProps {
   server: iUser;
 }
 
-export const CreateSchoolServer = ({ server }: iCreateSchoolServerProps) => {
-  const { openCreate, handleOpenCreate, createSchoolServer } =
-    useSchoolContext();
+export const CreateSchoolServer = ({
+  onClose,
+  open,
+  server,
+}: iCreateSchoolServerProps) => {
+  const { createSchoolServer } = useSchoolContext();
   const [schoolDataSelect, setSchoolDataSelect] = useState<iSchool[]>();
 
   useEffect(() => {
@@ -30,15 +37,15 @@ export const CreateSchoolServer = ({ server }: iCreateSchoolServerProps) => {
 
   return (
     <DialogBaseChildren
-      open={openCreate}
-      onClose={handleOpenCreate}
+      open={open}
+      onClose={onClose}
       title="Nova Escola"
       description=""
     >
       <FormContainer
         onSuccess={(data) => {
           createSchoolServer(data, server.id);
-          handleOpenCreate();
+          onClose();
         }}
         resolver={zodResolver(defineServerSchema)}
       >

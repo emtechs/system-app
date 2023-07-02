@@ -10,22 +10,24 @@ import { iSchool } from "../../../../shared/interfaces";
 import { serverCreateSchema } from "../../../../shared/schemas";
 
 interface iCreateServerProps {
+  open: boolean;
   school: iSchool;
+  onClose: () => void;
 }
 
-export const CreateServer = ({ school }: iCreateServerProps) => {
-  const { openCreate, handleOpenCreate, createServer } = useSchoolContext();
+export const CreateServer = ({ onClose, open, school }: iCreateServerProps) => {
+  const { createServer } = useSchoolContext();
   return (
     <DialogBaseChildren
-      open={openCreate}
-      onClose={handleOpenCreate}
+      open={open}
+      onClose={onClose}
       title="Novo Servidor"
       description=""
     >
       <FormContainer
         onSuccess={(data) => {
           createServer(data, school.id);
-          handleOpenCreate();
+          onClose();
         }}
         resolver={zodResolver(serverCreateSchema)}
       >

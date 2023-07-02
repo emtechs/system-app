@@ -14,12 +14,25 @@ import {
   LabelSchool,
   LinkRouter,
 } from "../../shared/components";
-import { useAppThemeContext, useAuthContext } from "../../shared/contexts";
+import {
+  useAppThemeContext,
+  useAuthContext,
+  useSchoolContext,
+} from "../../shared/contexts";
 import { Home } from "@mui/icons-material";
+import { useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
 
 export const SchoolPage = () => {
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
   const { theme } = useAppThemeContext();
   const { schoolDataAdmin, setSchoolDataAdmin } = useAuthContext();
+  const { schoolDataAdminRetrieve } = useSchoolContext();
+
+  useEffect(() => {
+    if (id) schoolDataAdminRetrieve(id);
+  }, [id]);
 
   return (
     <LayoutBasePage

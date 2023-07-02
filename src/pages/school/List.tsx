@@ -20,6 +20,8 @@ export const ListSchoolPage = () => {
     useSchoolContext();
   const { query, defineQuery, setActive } = usePaginationContext();
   const [search, setSearch] = useState<string>();
+  const [openCreateSchool, setOpenCreateSchool] = useState(false);
+  const handleOpenCreateSchool = () => setOpenCreateSchool(!openCreateSchool);
 
   const queryData = useCallback(
     (take: number) => {
@@ -59,12 +61,13 @@ export const ListSchoolPage = () => {
             search={search}
             setSearch={(text) => setSearch(text)}
             onClickReset={onClickReset}
+            onClickNew={handleOpenCreateSchool}
           />
         }
       >
         <TableSchool listSchool={listSchoolData} />
       </LayoutBasePage>
-      <Create />
+      <Create open={openCreateSchool} onClose={handleOpenCreateSchool} />
     </>
   );
 };

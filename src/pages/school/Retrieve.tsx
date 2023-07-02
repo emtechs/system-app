@@ -15,6 +15,7 @@ import {
   Edit,
   TitleRetrieveSchool,
   ToolsRetrieveSchool,
+  ToolsRetrieveSchoolClasses,
   ToolsRetrieveSchoolServers,
   ViewRetrieveSchool,
 } from "./components";
@@ -24,34 +25,51 @@ import {
   Checklist,
   Groups,
   People,
+  Percent,
   School,
   Workspaces,
 } from "@mui/icons-material";
+import { iYear } from "../../shared/interfaces";
 
 export const RetrieveSchoolPage = () => {
   const { school_id } = useParams();
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
-  const { schoolData } = useAuthContext();
+  const { schoolData, yearData } = useAuthContext();
   const { defineQuery, query } = usePaginationContext();
-  const {
-    serversData,
-    getServers,
-    schoolDataRetrieve,
-    schoolDataAdminRetrieve,
-  } = useSchoolContext();
+  const { serversData, getServers, schoolDataRetrieve, disabled, listYear } =
+    useSchoolContext();
   const [search, setSearch] = useState<string>();
   const [value, setValue] = useState(0);
+  const [valueVert, setValueVert] = useState(0);
+  const [years, setYears] = useState<iYear[]>();
+  const [openActive, setOpenActive] = useState(false);
+  const [openCreateClass, setOpenCreateClass] = useState(false);
+  const [openCreateServer, setOpenCreateServer] = useState(false);
+  const [openDirector, setOpenDirector] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const handleOpenActive = () => setOpenActive(!openActive);
+  const handleOpenCreateClass = () => setOpenCreateClass(!openCreateClass);
+  const handleOpenCreateServer = () => setOpenCreateServer(!openCreateServer);
+  const handleOpenDirector = () => setOpenDirector(!openDirector);
+  const handleOpenEdit = () => setOpenEdit(!openEdit);
+
+  useEffect(() => {
+    if (disabled && yearData) {
+      setYears([yearData]);
+    } else if (listYear) setYears(listYear);
+  }, [yearData, listYear, disabled]);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
+  const handleChangeVert = (_event: React.SyntheticEvent, newValue: number) => {
+    setValueVert(newValue);
+  };
+
   useEffect(() => {
-    if (school_id) {
-      schoolDataRetrieve(school_id);
-      schoolDataAdminRetrieve(school_id);
-    }
+    if (school_id) schoolDataRetrieve(school_id);
   }, [school_id]);
 
   const queryData = useCallback(
@@ -86,15 +104,44 @@ export const RetrieveSchoolPage = () => {
     <ToolsRetrieveSchoolServers
       search={search}
       setSearch={(text) => setSearch(text)}
+      onClickNew={handleOpenCreateServer}
+    />,
+    <ToolsRetrieveSchoolClasses
+      search={search}
+      setSearch={(text) => setSearch(text)}
+      year={years ? years[valueVert] : undefined}
+      onClickNew={handleOpenCreateClass}
     />,
   ];
 
   const views = [
-    <ViewRetrieveSchool />,
+    <ViewRetrieveSchool
+      handleOpenActive={handleOpenActive}
+      handleOpenDirector={handleOpenDirector}
+      handleOpenEdit={handleOpenEdit}
+    />,
     <TableServer
       school_id={school_id ? school_id : ""}
       servers={serversData}
     />,
+    <Box
+      sx={{
+        flexGrow: 1,
+        display: "flex",
+      }}
+    >
+      <Tabs
+        orientation="vertical"
+        variant="scrollable"
+        value={valueVert}
+        onChange={handleChangeVert}
+        sx={{ borderRight: 1, borderColor: "divider" }}
+      >
+        {years?.map((el) => (
+          <Tab key={el.id} label={el.year} />
+        ))}
+      </Tabs>
+    </Box>,
   ];
 
   return (
@@ -110,16 +157,37 @@ export const RetrieveSchoolPage = () => {
             <Tab icon={<School />} label="Escola" />
             <Tab icon={<People />} label="Servidores" />
             <Tab icon={<Workspaces />} label="Turmas" />
-            <Tab icon={<Groups />} label="Alunos" />
-            <Tab icon={<Checklist />} label="Frequências" />
+            <Tab icon={<Groups />} label="Alunos" disabled={disabled} />
+            <Tab icon={<Checklist />} label="Frequências" disabled={disabled} />
+            <Tab icon={<Percent />} label="Infrequência" disabled={disabled} />
           </Tabs>
         </Box>
         {views[value]}
       </LayoutBasePage>
-      {schoolData && <DialogActiveSchool school={schoolData} />}
-      {schoolData && <CreateServer school={schoolData} />}
-      {schoolData && <Edit school={schoolData} />}
-      {schoolData && <Director school={schoolData} />}
+      {schoolData && (
+        <DialogActiveSchool
+          onClose={handleOpenActive}
+          open={openActive}
+          school={schoolData}
+        />
+      )}
+      {schoolData && (
+        <CreateServer
+          onClose={handleOpenCreateServer}
+          open={openCreateServer}
+          school={schoolData}
+        />
+      )}
+      {schoolData && (
+        <Edit onClose={handleOpenEdit} open={openEdit} school={schoolData} />
+      )}
+      {schoolData && (
+        <Director
+          open={openDirector}
+          onClose={handleOpenDirector}
+          school={schoolData}
+        />
+      )}
     </>
   );
 };

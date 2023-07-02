@@ -7,20 +7,21 @@ import { useSchoolContext } from "../../../../shared/contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schoolCreateSchema } from "../../../../shared/schemas";
 import { Button } from "@mui/material";
+import { iDialogBaseProps } from "../../../../shared/interfaces";
 
-export const Create = () => {
-  const { openCreate, handleOpenCreate, createSchool } = useSchoolContext();
+export const Create = ({ onClose, open }: iDialogBaseProps) => {
+  const { createSchool } = useSchoolContext();
   return (
     <DialogBaseChildren
-      open={openCreate}
-      onClose={handleOpenCreate}
+      open={open}
+      onClose={onClose}
       title="Nova Escola"
       description=""
     >
       <FormContainer
         onSuccess={(data) => {
           createSchool(data);
-          handleOpenCreate();
+          onClose();
         }}
         resolver={zodResolver(schoolCreateSchema)}
       >

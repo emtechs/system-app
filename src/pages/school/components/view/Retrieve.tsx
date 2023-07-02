@@ -12,14 +12,19 @@ import {
 import { useAuthContext, useSchoolContext } from "../../../../shared/contexts";
 import { Edit, ExpandMore, Person, RemoveDone } from "@mui/icons-material";
 
-export const ViewRetrieveSchool = () => {
+interface iViewRetrieveSchoolProps {
+  handleOpenEdit: () => void;
+  handleOpenDirector: () => void;
+  handleOpenActive: () => void;
+}
+
+export const ViewRetrieveSchool = ({
+  handleOpenEdit,
+  handleOpenDirector,
+  handleOpenActive,
+}: iViewRetrieveSchoolProps) => {
   const { schoolData } = useAuthContext();
-  const {
-    loadingSchool,
-    handleOpenActive,
-    handleOpenEdit,
-    handleOpenDirector,
-  } = useSchoolContext();
+  const { loadingSchool } = useSchoolContext();
   return (
     <Card>
       <CardContent>
