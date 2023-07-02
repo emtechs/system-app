@@ -3,7 +3,7 @@ import { iFrequencyStudentsBase } from "../../interfaces";
 import { useFrequencyContext } from "../../contexts";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
-import { DialogBaseChildren } from "./structure";
+import { DialogBaseChildrenAction } from "./structure";
 
 interface iDialogRemoveMissedProps {
   open: boolean;
@@ -29,7 +29,7 @@ export const DialogRemoveMissed = ({
     onClose();
   };
   return (
-    <DialogBaseChildren
+    <DialogBaseChildrenAction
       open={open}
       onClose={onClose}
       title="Retirar Falta"
@@ -45,6 +45,6 @@ export const DialogRemoveMissed = ({
           <Typography>Justificativa: {student.justification}</Typography>
         )}
       </Box>
-    </DialogBaseChildren>
+    </DialogBaseChildrenAction>
   );
 };

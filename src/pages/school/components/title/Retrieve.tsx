@@ -1,15 +1,15 @@
-import { Breadcrumbs, Chip, Skeleton } from "@mui/material";
+import { Breadcrumbs, Chip } from "@mui/material";
 import { Home, School } from "@mui/icons-material";
 import {
   useAppThemeContext,
+  useAuthContext,
   useDrawerContext,
-  useSchoolContext,
 } from "../../../../shared/contexts";
-import { LinkRouter } from "../../../../shared/components";
+import { LabelSchool, LinkRouter } from "../../../../shared/components";
 
 export const TitleRetrieveSchool = () => {
   const { mdDown } = useAppThemeContext();
-  const { labelSchool, loadingLabelSchool } = useSchoolContext();
+  const { schoolData } = useAuthContext();
   const { handleClickButtonTools } = useDrawerContext();
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
@@ -36,11 +36,7 @@ export const TitleRetrieveSchool = () => {
           icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </LinkRouter>
-      <Chip
-        label={loadingLabelSchool ? <Skeleton width={100} /> : labelSchool}
-        color="primary"
-        icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-      />
+      <LabelSchool school={schoolData} />
     </Breadcrumbs>
   );
 };

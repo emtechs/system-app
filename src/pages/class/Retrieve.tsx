@@ -12,6 +12,7 @@ import { LayoutBasePage } from "../../shared/layouts";
 import { TableBase, Tools } from "../../shared/components";
 import { TableCell, TableRow } from "@mui/material";
 import { useDebounce } from "../../shared/hooks";
+import { defineBgColorInfrequency } from "../../shared/scripts";
 
 const headCells: iheadCell[] = [
   { order: "registry", numeric: true, label: "Matrícula" },
@@ -28,7 +29,7 @@ interface iCardStudentProps {
 }
 
 const CardStudent = ({ student }: iCardStudentProps) => {
-  const { defineBgColorInfrequency } = useAppThemeContext();
+  const { theme } = useAppThemeContext();
   return (
     <TableRow>
       <TableCell align="right">{student.registry}</TableCell>
@@ -41,7 +42,7 @@ const CardStudent = ({ student }: iCardStudentProps) => {
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(student.infrequency),
+          bgcolor: defineBgColorInfrequency(student.infrequency, theme),
         }}
       >
         {String(student.infrequency).replace(".", ",")}%

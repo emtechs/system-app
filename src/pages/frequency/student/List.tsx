@@ -17,6 +17,10 @@ import { apiFrequency } from "../../../shared/services";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { LayoutBasePage } from "../../../shared/layouts";
 import { EventAvailable, Group, School } from "@mui/icons-material";
+import {
+  defineBgColorFrequency,
+  statusFrequencyPtBr,
+} from "../../../shared/scripts";
 
 const headCells: iheadCell[] = [
   { order: "registry", numeric: false, label: "Matrícula" },
@@ -30,8 +34,7 @@ interface iCardFrequencyProps {
 
 const CardFrequency = ({ student }: iCardFrequencyProps) => {
   const navigate = useNavigate();
-  const { theme, defineBgColorFrequency, statusFrequencyPtBr } =
-    useAppThemeContext();
+  const { theme } = useAppThemeContext();
 
   return (
     <TableRow
@@ -43,7 +46,7 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
       <TableCell>{student.student.name}</TableCell>
       <TableCell
         sx={{
-          bgcolor: defineBgColorFrequency(student.status),
+          bgcolor: defineBgColorFrequency(student.status, theme),
           color: theme.palette.secondary.contrastText,
         }}
       >

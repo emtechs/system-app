@@ -35,6 +35,7 @@ import {
 } from "@mui/icons-material";
 import { Navigate } from "react-router-dom";
 import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
+import { defineBgColorInfrequency } from "../../shared/scripts";
 
 interface iCardClassDashProps {
   classDash: iClassDash;
@@ -43,7 +44,7 @@ interface iCardClassDashProps {
 }
 
 const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
-  const { mdDown, defineBgColorInfrequency } = useAppThemeContext();
+  const { mdDown, theme } = useAppThemeContext();
   const { createFrequency } = useFrequencyContext();
   return (
     <TableRow
@@ -71,7 +72,7 @@ const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(classDash.infrequency),
+          bgcolor: defineBgColorInfrequency(classDash.infrequency, theme),
         }}
       >
         {classDash.infrequency.toFixed(0)}%

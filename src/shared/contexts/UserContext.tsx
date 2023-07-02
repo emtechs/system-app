@@ -41,43 +41,30 @@ interface iUserContextData {
   getSchools: (id: string, query: string, take: number) => void;
   listSchoolServerData: iWorkSchool[] | undefined;
   setListSchoolServerData: Dispatch<SetStateAction<iWorkSchool[] | undefined>>;
-  labelUser: string;
-  userSelect: iUser | undefined;
-  loadingLabelUser: boolean;
+  loadingUser: boolean;
 }
 
 const UserContext = createContext({} as iUserContextData);
 
 export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
-  const { setLoading, handleSucess, handleError, mdDown, adaptName } =
+  const { setLoading, handleSucess, handleError, mdDown } =
     useAppThemeContext();
-  const { setDashData, setUserData } = useAuthContext();
+  const { setDashData, setUserData, setUserSelect } = useAuthContext();
   const { setIsLoading, setCount, define_step } = usePaginationContext();
-  const [loadingLabelUser, setLoadingLabelUser] = useState(true);
-  const [labelUser, setLabelUser] = useState("");
   const [updateUserData, setUpdateUserData] = useState<iUser>();
-  const [userSelect, setUserSelect] = useState<iUser>();
   const [listSchoolServerData, setListSchoolServerData] =
     useState<iWorkSchool[]>();
+  const [loadingUser, setLoadingUser] = useState(true);
 
-  const userRetrieve = useCallback(
-    (id: string) => {
-      let name = "";
-      setLoadingLabelUser(true);
-      apiUser
-        .retrieve(id)
-        .then((res) => {
-          setUserSelect(res);
-          name = res.name;
-          if (mdDown) name = adaptName(name, 15);
-          setLabelUser(name);
-        })
-        .catch(() => navigate("/"))
-        .finally(() => setLoadingLabelUser(false));
-    },
-    [mdDown]
-  );
+  const userRetrieve = useCallback((id: string) => {
+    setLoadingUser(true);
+    apiUser
+      .retrieve(id)
+      .then((res) => setUserSelect(res))
+      .catch(() => navigate("/"))
+      .finally(() => setLoadingUser(false));
+  }, []);
 
   const getSchools = useCallback(
     (id: string, query: string, take: number) => {
@@ -236,13 +223,11 @@ export const UserProvider = ({ children }: iChildren) => {
         updateAllUser: handleUpdateAllUser,
         updateUserData,
         setUpdateUserData,
-        labelUser,
         userRetrieve,
         getSchools,
         listSchoolServerData,
-        userSelect,
         setListSchoolServerData,
-        loadingLabelUser,
+        loadingUser,
       }}
     >
       {children}

@@ -15,7 +15,7 @@ import {
   ThemeProvider,
   useMediaQuery,
 } from "@mui/material";
-import { iChildren, iRole, iStatusStudent } from "../interfaces";
+import { iChildren } from "../interfaces";
 import { Theme } from "../themes";
 
 interface iThemeContextProps {
@@ -25,15 +25,6 @@ interface iThemeContextProps {
   setLoading: Dispatch<SetStateAction<boolean>>;
   handleSucess: (msg: string) => void;
   handleError: (msg: string) => void;
-  adaptName: (name: string, max?: number) => string;
-  defineBgColorFrequency: (status: iStatusStudent) => string;
-  defineBgColorInfrequency: (infreq: number) => string;
-  statusFrequencyPtBr: (
-    status: iStatusStudent
-  ) => "Presente" | "Faltou" | "Justificou";
-  rolePtBr: (
-    role: iRole
-  ) => "Administrador" | "Diretor de Escola" | "Secretário" | "Servidor";
 }
 
 const ThemeContext = createContext({} as iThemeContextProps);
@@ -46,89 +37,6 @@ export const AppThemeProvider = ({ children }: iChildren) => {
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState<"success" | "error">("success");
   const [message, setMessage] = useState<string>();
-
-  const adaptName = useCallback((name: string, max = 27) => {
-    if (name.length > max) {
-      const displayName = name.split(" ");
-      let name4 = "";
-      if (displayName[4]) {
-        name4 = " " + displayName[4];
-      }
-      if (displayName[3].length < 3) {
-        return (
-          displayName[0] +
-          " " +
-          displayName[1] +
-          " " +
-          displayName[2][0] +
-          "." +
-          name4
-        );
-      }
-      return (
-        displayName[0] +
-        " " +
-        displayName[1] +
-        " " +
-        displayName[2] +
-        " " +
-        displayName[3][0] +
-        "." +
-        name4
-      );
-    }
-    return name;
-  }, []);
-
-  const defineBgColorFrequency = useCallback((status: iStatusStudent) => {
-    switch (status) {
-      case "PRESENTED":
-        return theme.palette.success.dark;
-
-      case "MISSED":
-        return theme.palette.error.dark;
-
-      case "JUSTIFIED":
-        return theme.palette.warning.dark;
-    }
-  }, []);
-
-  const defineBgColorInfrequency = useCallback((infreq: number) => {
-    if (infreq <= 30) return theme.palette.success.dark;
-
-    if (infreq <= 65) return theme.palette.warning.dark;
-
-    return theme.palette.error.dark;
-  }, []);
-
-  const rolePtBr = useCallback((role: iRole) => {
-    switch (role) {
-      case "ADMIN":
-        return "Administrador";
-
-      case "DIRET":
-        return "Diretor de Escola";
-
-      case "SECRET":
-        return "Secretário";
-
-      case "SERV":
-        return "Servidor";
-    }
-  }, []);
-
-  const statusFrequencyPtBr = useCallback((status: iStatusStudent) => {
-    switch (status) {
-      case "PRESENTED":
-        return "Presente";
-
-      case "MISSED":
-        return "Faltou";
-
-      case "JUSTIFIED":
-        return "Justificou";
-    }
-  }, []);
 
   const handleSucess = useCallback((msg: string) => {
     setMessage(msg);
@@ -165,11 +73,6 @@ export const AppThemeProvider = ({ children }: iChildren) => {
         setLoading,
         smDown,
         theme,
-        adaptName,
-        defineBgColorFrequency,
-        defineBgColorInfrequency,
-        statusFrequencyPtBr,
-        rolePtBr,
       }}
     >
       <ThemeProvider theme={theme}>

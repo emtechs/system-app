@@ -12,6 +12,7 @@ import { LayoutBasePage } from "../../shared/layouts";
 import { TableBase, Tools } from "../../shared/components";
 import { TableCell, TableRow } from "@mui/material";
 import { useDebounce } from "../../shared/hooks";
+import { defineBgColorInfrequency } from "../../shared/scripts";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Turma" },
@@ -26,7 +27,8 @@ interface iCardClassProps {
 }
 const CardClass = ({ el }: iCardClassProps) => {
   const navigate = useNavigate();
-  const { defineBgColorInfrequency } = useAppThemeContext();
+  const { theme } = useAppThemeContext();
+
   return (
     <TableRow
       hover
@@ -44,7 +46,7 @@ const CardClass = ({ el }: iCardClassProps) => {
       <TableCell
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(el.infrequency),
+          bgcolor: defineBgColorInfrequency(el.infrequency, theme),
         }}
       >
         {String(el.infrequency).replace(".", ",")}%

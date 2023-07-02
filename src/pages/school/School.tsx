@@ -6,25 +6,20 @@ import {
   Chip,
   Grid,
   Paper,
-  Skeleton,
 } from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
 import {
   CalendarDashCommon,
   GridDashSchoolAdmin,
+  LabelSchool,
   LinkRouter,
 } from "../../shared/components";
-import {
-  useAppThemeContext,
-  useAuthContext,
-  useSchoolContext,
-} from "../../shared/contexts";
-import { Home, School } from "@mui/icons-material";
+import { useAppThemeContext, useAuthContext } from "../../shared/contexts";
+import { Home } from "@mui/icons-material";
 
 export const SchoolPage = () => {
   const { theme } = useAppThemeContext();
-  const { setSchoolDataAdmin } = useAuthContext();
-  const { labelSchoolAdmin, loadingLabelSchool } = useSchoolContext();
+  const { schoolDataAdmin, setSchoolDataAdmin } = useAuthContext();
 
   return (
     <LayoutBasePage
@@ -37,22 +32,14 @@ export const SchoolPage = () => {
             onClick={() => setSchoolDataAdmin(undefined)}
           >
             <Chip
-              clickable={loadingLabelSchool ? undefined : true}
+              clickable={schoolDataAdmin ? true : undefined}
               color="primary"
-              variant={loadingLabelSchool ? "filled" : "outlined"}
+              variant={schoolDataAdmin ? "outlined" : "filled"}
               label="Página Inicial"
               icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
             />
           </LinkRouter>
-
-          <Chip
-            color="primary"
-            variant="filled"
-            label={
-              loadingLabelSchool ? <Skeleton width={100} /> : labelSchoolAdmin
-            }
-            icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-          />
+          <LabelSchool school={schoolDataAdmin} />
         </Breadcrumbs>
       }
     >

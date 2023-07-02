@@ -57,22 +57,19 @@ interface iSchoolContextData {
     back?: string
   ) => Promise<void>;
   deleteServer: (school_id: string, server_id: string) => Promise<void>;
-  labelSchool: string;
-  labelSchoolAdmin: string;
-  clickListSchool: (id: string) => void;
-  clickRetrieveSchool: (id: string) => void;
-  loadingLabelSchool: boolean;
+  clickListSchool: (school_id: string) => void;
+  clickRetrieveSchool: (school_id: string, server_id: string) => void;
+  loadingSchool: boolean;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
 
 export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
-  const { setLoading, handleSucess, handleError, mdDown, adaptName } =
+  const { setLoading, handleSucess, handleError, mdDown } =
     useAppThemeContext();
   const { setSchoolData, yearData, setSchoolDataAdmin } = useAuthContext();
-  const { getSchools, setListSchoolServerData, userRetrieve } =
-    useUserContext();
+  const { getSchools, setListSchoolServerData } = useUserContext();
   const { setIsLoading, setCount, define_step, setSkip, setPage } =
     usePaginationContext();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
@@ -84,25 +81,24 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [openCreate, setOpenCreate] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDirector, setOpenDirector] = useState(false);
-  const [loadingLabelSchool, setLoadingLabelSchool] = useState(true);
-  const [labelSchool, setLabelSchool] = useState("");
-  const [labelSchoolAdmin, setLabelSchoolAdmin] = useState("");
+  const [loadingSchool, setLoadingSchool] = useState(true);
 
-  const clickListSchool = useCallback((id: string) => {
+  const clickListSchool = useCallback((school_id: string) => {
     setPage(0);
     setSkip(undefined);
     setServersData(undefined);
-    schoolDataRetrieve(id);
-    navigate("/school/" + id);
+    navigate("/school/" + school_id);
   }, []);
 
-  const clickRetrieveSchool = useCallback((id: string) => {
-    setPage(0);
-    setSkip(undefined);
-    setListSchoolServerData(undefined);
-    userRetrieve(id);
-    navigate("/school/server/" + id);
-  }, []);
+  const clickRetrieveSchool = useCallback(
+    (school_id: string, server_id: string) => {
+      setPage(0);
+      setSkip(undefined);
+      setListSchoolServerData(undefined);
+      navigate("/school/" + school_id + "/server/" + server_id);
+    },
+    []
+  );
 
   const handleOpenActive = () => setOpenActive(!openActive);
   const handleOpenCreate = () => setOpenCreate(!openCreate);
@@ -117,43 +113,30 @@ export const SchoolProvider = ({ children }: iChildren) => {
     return "";
   }, [director]);
 
-  const schoolDataRetrieve = useCallback(
-    (id: string) => {
-      let name = "";
-      setLoadingLabelSchool(true);
-      apiSchool
-        .retrieve(id)
-        .then((res) => {
-          setSchoolData(res);
-          name = res.name;
-          if (mdDown) name = adaptName(name, 15);
-          setLabelSchool(name);
-        })
-        .catch(() => navigate("/"))
-        .finally(() => setLoadingLabelSchool(false));
-    },
-    [mdDown]
-  );
+  const schoolDataRetrieve = useCallback((id: string) => {
+    setLoadingSchool(true);
+    apiSchool
+      .retrieve(id)
+      .then((res) => setSchoolData(res))
+      .catch(() => navigate("/"))
+      .finally(() => setLoadingSchool(false));
+  }, []);
 
   const schoolDataAdminRetrieve = useCallback(
     (id: string) => {
       if (yearData) {
-        let name = "";
-        setLoadingLabelSchool(true);
+        setLoadingSchool(true);
         apiSchool
           .retrieveClass(id, yearData.id)
           .then((res) => {
             setSchoolDataAdmin(res);
             setIsHome(true);
-            name = res.name;
-            if (mdDown) name = adaptName(name, 15);
-            setLabelSchoolAdmin(name);
           })
           .catch(() => setIsHome(false))
-          .finally(() => setLoadingLabelSchool(false));
+          .finally(() => setLoadingSchool(false));
       }
     },
-    [yearData, mdDown]
+    [yearData]
   );
 
   const getSchool = useCallback(
@@ -332,13 +315,11 @@ export const SchoolProvider = ({ children }: iChildren) => {
         deleteServer: handleDeleteServer,
         updateSchool: handleUpdateSchool,
         importSchool: handleImportSchool,
-        labelSchool,
         clickListSchool,
         setOpenActive,
         setServersData,
         clickRetrieveSchool,
-        labelSchoolAdmin,
-        loadingLabelSchool,
+        loadingSchool,
       }}
     >
       {children}

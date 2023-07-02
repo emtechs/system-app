@@ -1,5 +1,9 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { ModalGeneral, ValidateCPF } from "../../../../shared/components";
+import {
+  BaseContentChildren,
+  DialogBaseChildren,
+  ValidateCPF,
+} from "../../../../shared/components";
 import { useSchoolContext } from "../../../../shared/contexts";
 import { iSchool } from "../../../../shared/interfaces";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,7 +17,12 @@ interface iDirectorProps {
 export const Director = ({ school }: iDirectorProps) => {
   const { openDirector, handleOpenDirector, updateSchool } = useSchoolContext();
   return (
-    <ModalGeneral open={openDirector} handleClose={handleOpenDirector}>
+    <DialogBaseChildren
+      open={openDirector}
+      onClose={handleOpenDirector}
+      title="Definir Diretor"
+      description=""
+    >
       <FormContainer
         onSuccess={(data) => {
           const query = school.director
@@ -24,23 +33,19 @@ export const Director = ({ school }: iDirectorProps) => {
         }}
         resolver={zodResolver(schoolUpdateDirectorSchema)}
       >
-        {school?.director && (
-          <Box mb={2}>
-            <Typography>Diretor Atual</Typography>
-            <Typography>Nome: {school.director.name}</Typography>
-            <Typography>CPF: {school.director.cpf}</Typography>
-          </Box>
-        )}
-        <TextFieldElement name="cpf" label="CPF" required fullWidth />
-        <TextFieldElement
-          sx={{ my: 2 }}
-          name="name_diret"
-          label="Nome"
-          required
-          fullWidth
-        />
-        <ValidateCPF director school_id={school.id} />
+        <BaseContentChildren>
+          {school?.director && (
+            <Box>
+              <Typography>Diretor Atual</Typography>
+              <Typography>Nome: {school.director.name}</Typography>
+              <Typography>CPF: {school.director.cpf}</Typography>
+            </Box>
+          )}
+          <TextFieldElement name="cpf" label="CPF" required fullWidth />
+          <TextFieldElement name="name_diret" label="Nome" required fullWidth />
+          <ValidateCPF director school_id={school.id} />
+        </BaseContentChildren>
       </FormContainer>
-    </ModalGeneral>
+    </DialogBaseChildren>
   );
 };

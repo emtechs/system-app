@@ -10,6 +10,7 @@ import { apiUsingNow } from "../../../shared/services";
 import { iFrequency, iheadCell } from "../../../shared/interfaces";
 import { LayoutBasePage } from "../../../shared/layouts";
 import { useSearchParams } from "react-router-dom";
+import { defineBgColorInfrequency } from "../../../shared/scripts";
 
 const headCells: iheadCell[] = [
   { order: "date", numeric: false, label: "Data" },
@@ -24,7 +25,7 @@ interface iCardFrequencyProps {
 }
 
 const CardFrequency = ({ freq }: iCardFrequencyProps) => {
-  const { defineBgColorInfrequency } = useAppThemeContext();
+  const { theme } = useAppThemeContext();
 
   return (
     <TableRow>
@@ -36,7 +37,7 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(freq.infrequency),
+          bgcolor: defineBgColorInfrequency(freq.infrequency, theme),
         }}
       >
         {String(freq.infrequency).replace(".", ",")}%

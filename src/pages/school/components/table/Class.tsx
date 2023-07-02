@@ -3,13 +3,14 @@ import { useAppThemeContext } from "../../../../shared/contexts";
 import { iClassSchoolList, iheadCell } from "../../../../shared/interfaces";
 import { TableCell, TableRow } from "@mui/material";
 import { TableBase } from "../../../../shared/components";
+import { defineBgColorInfrequency } from "../../../../shared/scripts";
 
 interface iTableClassProps {
   data: iClassSchoolList[];
 }
 
 export const TableClass = ({ data }: iTableClassProps) => {
-  const { mdDown, defineBgColorInfrequency } = useAppThemeContext();
+  const { mdDown, theme } = useAppThemeContext();
   const navigate = useNavigate();
 
   const headCells: iheadCell[] = mdDown
@@ -48,7 +49,7 @@ export const TableClass = ({ data }: iTableClassProps) => {
             align="right"
             sx={{
               color: "#fff",
-              bgcolor: defineBgColorInfrequency(el.infrequency),
+              bgcolor: defineBgColorInfrequency(el.infrequency, theme),
             }}
           >
             {String(el.infrequency).replace(".", ",")}%

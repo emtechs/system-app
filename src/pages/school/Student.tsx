@@ -13,6 +13,7 @@ import { Chip, TableCell, TableRow } from "@mui/material";
 import { useDebounce } from "../../shared/hooks";
 import { Group } from "@mui/icons-material";
 import { LayoutBasePage } from "../../shared/layouts";
+import { defineBgColorInfrequency } from "../../shared/scripts";
 
 interface iCardStudentProps {
   student: iStudentWithSchool;
@@ -20,7 +21,7 @@ interface iCardStudentProps {
 
 const CardStudent = ({ student }: iCardStudentProps) => {
   const navigate = useNavigate();
-  const { mdDown, defineBgColorInfrequency } = useAppThemeContext();
+  const { mdDown, theme } = useAppThemeContext();
   return (
     <TableRow
       hover
@@ -41,7 +42,7 @@ const CardStudent = ({ student }: iCardStudentProps) => {
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(student.infrequency),
+          bgcolor: defineBgColorInfrequency(student.infrequency, theme),
         }}
       >
         {String(student.infrequency).replace(".", ",")}%

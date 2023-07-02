@@ -10,6 +10,7 @@ import { apiUsingNow } from "../../shared/services";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TableBase, Tools } from "../../shared/components";
 import { TableCell, TableRow } from "@mui/material";
+import { defineBgColorInfrequency } from "../../shared/scripts";
 
 const headCells: iheadCell[] = [
   { order: "registry", numeric: false, label: "Matrícula" },
@@ -23,7 +24,7 @@ interface iCardStudentProps {
   classStudent: iClassStudent;
 }
 const CardStudent = ({ classStudent }: iCardStudentProps) => {
-  const { defineBgColorInfrequency } = useAppThemeContext();
+  const { theme } = useAppThemeContext();
 
   return (
     <TableRow>
@@ -36,7 +37,7 @@ const CardStudent = ({ classStudent }: iCardStudentProps) => {
       <TableCell
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(classStudent.student.infreq),
+          bgcolor: defineBgColorInfrequency(classStudent.student.infreq, theme),
         }}
       >
         {String(classStudent.student.infreq).replace(".", ",")}%

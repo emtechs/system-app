@@ -1,13 +1,14 @@
 import { Avatar, CardContent, Typography } from "@mui/material";
 import { iSchool } from "../../interfaces";
 import { useAppThemeContext } from "../../contexts";
+import { adaptName } from "../../scripts";
 
 interface iCardSchoolContentProps {
   school: iSchool;
 }
 
 export const CardSchoolContent = ({ school }: iCardSchoolContentProps) => {
-  const { theme, adaptName } = useAppThemeContext();
+  const { theme } = useAppThemeContext();
   return (
     <CardContent
       sx={{

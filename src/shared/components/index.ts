@@ -8,6 +8,7 @@ export * from "./first";
 export * from "./glossary";
 export * from "./gridDash";
 export * from "./inputFile";
+export * from "./label";
 export * from "./link";
 export * from "./login";
 export * from "./menu";

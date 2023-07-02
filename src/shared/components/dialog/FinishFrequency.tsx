@@ -6,8 +6,9 @@ import {
 } from "../../contexts";
 import { iFrequencyStudentsBase, iheadCell } from "../../interfaces";
 import { TableBase } from "../table";
-import { DialogBaseChildren } from "./structure";
+import { DialogBaseChildrenAction } from "./structure";
 import { PaginationMobile } from "../pagination";
+import { defineBgColorFrequency, statusFrequencyPtBr } from "../../scripts";
 
 const headCells: iheadCell[] = [
   { order: "registry", numeric: false, label: "Matrícula" },
@@ -20,8 +21,7 @@ interface iCardFrequencyProps {
 }
 
 const CardFrequency = ({ student }: iCardFrequencyProps) => {
-  const { theme, defineBgColorFrequency, statusFrequencyPtBr } =
-    useAppThemeContext();
+  const { theme } = useAppThemeContext();
 
   return (
     <TableRow>
@@ -29,7 +29,7 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
       <TableCell>{student.student.name}</TableCell>
       <TableCell
         sx={{
-          bgcolor: defineBgColorFrequency(student.status),
+          bgcolor: defineBgColorFrequency(student.status, theme),
           color: theme.palette.secondary.contrastText,
         }}
       >
@@ -68,7 +68,7 @@ export const DialogFinishFrequency = ({
   };
 
   return (
-    <DialogBaseChildren
+    <DialogBaseChildrenAction
       open={open}
       onClose={onClose}
       title="Conferência"
@@ -88,6 +88,6 @@ export const DialogFinishFrequency = ({
         ))}
       </TableBase>
       <PaginationMobile />
-    </DialogBaseChildren>
+    </DialogBaseChildrenAction>
   );
 };

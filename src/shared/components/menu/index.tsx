@@ -18,14 +18,15 @@ import {
 } from "../../contexts";
 import { iChildren } from "../../interfaces";
 import { Options } from "./options";
+import { adaptName } from "../../scripts";
 
 export const Menu = ({ children }: iChildren) => {
   const location = useLocation();
-  const { theme, smDown, adaptName } = useAppThemeContext();
+  const { theme, smDown } = useAppThemeContext();
   const { isDrawerOpen, toggleDrawerOpen, handleClick } = useDrawerContext();
   const { userData, logout, dashData } = useAuthContext();
   const user = {
-    name: adaptName(userData?.name ? userData?.name : ""),
+    name: adaptName(userData?.name),
   };
 
   return (

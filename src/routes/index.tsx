@@ -54,8 +54,11 @@ const AppRoutes = () => {
             element={<ImportStudentPage back="/student" />}
           />
           <Route path="/school" element={<ListSchoolPage />} />
-          <Route path="/school/:id" element={<RetrieveSchoolPage />} />
-          <Route path="/school/server/:id" element={<ServerSchoolPage />} />
+          <Route path="/school/:school_id" element={<RetrieveSchoolPage />} />
+          <Route
+            path="/school/:school_id/server/:server_id"
+            element={<ServerSchoolPage />}
+          />
           <Route path="/home/school" element={<SchoolPage />} />
         </Route>
         <Route path="/" element={<DashboardPage />} />

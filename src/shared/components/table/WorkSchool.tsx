@@ -1,14 +1,15 @@
 import { useState } from "react";
 import {
   useAppThemeContext,
+  useAuthContext,
   useSchoolContext,
-  useUserContext,
 } from "../../contexts";
 import { iUser, iWorkSchool, iheadCell } from "../../interfaces";
 import { TableBase } from "./structure";
 import { TableCell, TableRow } from "@mui/material";
 import { PaginationMobile } from "../pagination";
 import { RemoveUser } from "../dialog";
+import { rolePtBr } from "../../scripts";
 
 interface iTableWorkSchoolProps {
   listSchool?: iWorkSchool[];
@@ -16,9 +17,9 @@ interface iTableWorkSchoolProps {
 }
 
 export const TableWorkSchool = ({ listSchool }: iTableWorkSchoolProps) => {
-  const { mdDown, rolePtBr } = useAppThemeContext();
+  const { mdDown } = useAppThemeContext();
+  const { userSelect } = useAuthContext();
   const { updateServerData, setUpdateServerData } = useSchoolContext();
-  const { userSelect } = useUserContext();
   const [open, setOpen] = useState(false);
   const handleClose = (work: iWorkSchool) => {
     setOpen((oldOpen) => !oldOpen);

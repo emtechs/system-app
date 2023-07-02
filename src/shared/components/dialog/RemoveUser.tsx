@@ -1,5 +1,6 @@
-import { useAppThemeContext, useSchoolContext } from "../../contexts";
+import { useSchoolContext } from "../../contexts";
 import { iUser, iWorkSchool } from "../../interfaces";
+import { rolePtBr } from "../../scripts";
 import { DialogBase } from "./structure";
 
 interface iRemoveProps {
@@ -10,7 +11,6 @@ interface iRemoveProps {
 }
 
 export const RemoveUser = ({ handleClose, open, work, user }: iRemoveProps) => {
-  const { rolePtBr } = useAppThemeContext();
   const { deleteServer } = useSchoolContext();
 
   return (
