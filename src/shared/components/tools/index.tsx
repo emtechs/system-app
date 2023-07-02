@@ -12,6 +12,7 @@ import {
   AddBox,
   ArrowBack,
   ClearAll,
+  Dashboard,
   Home,
   ManageAccountsOutlined,
   PersonOffOutlined,
@@ -28,7 +29,6 @@ import {
   CompBase,
   Dest,
   HomeButton,
-  SchoolTools,
   UserTools,
 } from "./components";
 
@@ -137,7 +137,9 @@ export const Tools = ({
         <CompBase title={titleNew} startIcon={iconNew} onClick={onClickNew} />
       )}
       {isUser && <UserTools />}
-      {isSchool && <SchoolTools />}
+      {isSchool && (
+        <Dest title="Painel" to="/home/school" startIcon={<Dashboard />} />
+      )}
       {isSearch && (
         <TextField
           size="small"

@@ -15,8 +15,18 @@ import {
   Edit,
   TitleRetrieveSchool,
   ToolsRetrieveSchool,
+  ToolsRetrieveSchoolServers,
+  ViewRetrieveSchool,
 } from "./components";
 import { useParams } from "react-router-dom";
+import { Box, Tab, Tabs } from "@mui/material";
+import {
+  Checklist,
+  Groups,
+  People,
+  School,
+  Workspaces,
+} from "@mui/icons-material";
 
 export const RetrieveSchoolPage = () => {
   const { school_id } = useParams();
@@ -31,6 +41,11 @@ export const RetrieveSchoolPage = () => {
     schoolDataAdminRetrieve,
   } = useSchoolContext();
   const [search, setSearch] = useState<string>();
+  const [value, setValue] = useState(0);
+
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   useEffect(() => {
     if (school_id) {
@@ -66,18 +81,40 @@ export const RetrieveSchoolPage = () => {
     }
   }, [school_id, queryData, search]);
 
+  const tools = [
+    <ToolsRetrieveSchool />,
+    <ToolsRetrieveSchoolServers
+      search={search}
+      setSearch={(text) => setSearch(text)}
+    />,
+  ];
+
+  const views = [
+    <ViewRetrieveSchool />,
+    <TableServer
+      school_id={school_id ? school_id : ""}
+      servers={serversData}
+    />,
+  ];
+
   return (
     <>
-      <LayoutBasePage
-        title={<TitleRetrieveSchool />}
-        tools={
-          <ToolsRetrieveSchool
-            search={search}
-            setSearch={(text) => setSearch(text)}
-          />
-        }
-      >
-        {school_id && <TableServer school_id={school_id} servers={serversData} />}
+      <LayoutBasePage title={<TitleRetrieveSchool />} tools={tools[value]}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            variant="scrollable"
+            scrollButtons="auto"
+          >
+            <Tab icon={<School />} label="Escola" />
+            <Tab icon={<People />} label="Servidores" />
+            <Tab icon={<Workspaces />} label="Turmas" />
+            <Tab icon={<Groups />} label="Alunos" />
+            <Tab icon={<Checklist />} label="Frequências" />
+          </Tabs>
+        </Box>
+        {views[value]}
       </LayoutBasePage>
       {schoolData && <DialogActiveSchool school={schoolData} />}
       {schoolData && <CreateServer school={schoolData} />}
