@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "../../../../shared/contexts";
 import { iClassSchoolList, iheadCell } from "../../../../shared/interfaces";
-import { TableCell, TableRow } from "@mui/material";
-import { TableBase } from "../../../../shared/components";
+import { Box, TableCell, TableRow } from "@mui/material";
+import { PaginationMobile, TableBase } from "../../../../shared/components";
 import { defineBgColorInfrequency } from "../../../../shared/scripts";
 
 interface iTableClassProps {
-  data: iClassSchoolList[];
+  data?: iClassSchoolList[];
 }
 
 export const TableClass = ({ data }: iTableClassProps) => {
@@ -26,36 +26,40 @@ export const TableClass = ({ data }: iTableClassProps) => {
       ];
 
   return (
-    <TableBase headCells={headCells}>
-      {data.map((el, index) => (
-        <TableRow
-          key={index}
-          hover
-          sx={{ cursor: "pointer" }}
-          onClick={() => {
-            navigate(
-              `/school/student?class_id=${el.class.id}&back=/school/class`
-            );
-          }}
-        >
-          <TableCell>{el.class.name}</TableCell>
-          {!mdDown && (
-            <>
-              <TableCell align="right">{el._count.students}</TableCell>
-              <TableCell align="right">{el._count.frequencies}</TableCell>
-            </>
-          )}
-          <TableCell
-            align="right"
-            sx={{
-              color: "#fff",
-              bgcolor: defineBgColorInfrequency(el.infrequency, theme),
+    <Box flex={1}>
+      <TableBase
+        headCells={headCells}
+        is_pagination={mdDown ? false : undefined}
+      >
+        {data?.map((el) => (
+          <TableRow
+            key={el.id}
+            hover
+            sx={{ cursor: "pointer" }}
+            onClick={() => {
+              navigate(`/school/student?class_id=${el.id}&back=/school/class`);
             }}
           >
-            {String(el.infrequency).replace(".", ",")}%
-          </TableCell>
-        </TableRow>
-      ))}
-    </TableBase>
+            <TableCell>{el.name}</TableCell>
+            {!mdDown && (
+              <>
+                <TableCell align="right">{el.students}</TableCell>
+                <TableCell align="right">{el.frequencies}</TableCell>
+              </>
+            )}
+            <TableCell
+              align="right"
+              sx={{
+                color: "#fff",
+                bgcolor: defineBgColorInfrequency(el.infrequency, theme),
+              }}
+            >
+              {String(el.infrequency).replace(".", ",")}%
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBase>
+      {mdDown && <PaginationMobile />}
+    </Box>
   );
 };

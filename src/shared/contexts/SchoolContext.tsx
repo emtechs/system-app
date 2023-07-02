@@ -1,6 +1,8 @@
 import {
   iChildren,
+  iClassSchoolList,
   iSchool,
+  iSchoolClassRequest,
   iSchoolImportRequest,
   iSchoolRequest,
   iSchoolServer,
@@ -20,7 +22,7 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
-import { apiSchool, apiUser } from "../services";
+import { apiClass, apiSchool, apiUser } from "../services";
 import { useAuthContext } from "./AuthContext";
 import { usePaginationContext, useUserContext } from ".";
 
@@ -40,6 +42,11 @@ interface iSchoolContextData {
   getServers: (id: string, query: string, take: number) => void;
   createSchool: (data: iSchoolRequest) => Promise<void>;
   importSchool: (data: iSchoolImportRequest, back?: string) => Promise<void>;
+  createSchoolClass: (
+    data: iSchoolClassRequest,
+    school_id: string,
+    year_id: string
+  ) => Promise<void>;
   createServer: (data: iServerRequest, id: string) => Promise<void>;
   createSchoolServer: (
     data: iSchoolServerRequest,
@@ -59,6 +66,8 @@ interface iSchoolContextData {
   schoolId: string | undefined;
   listYear: iYear[] | undefined;
   disabled: boolean;
+  getClasses: (id: string, query: string, take: number) => void;
+  listClassData: iClassSchoolList[] | undefined;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -73,6 +82,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
     usePaginationContext();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
+  const [listClassData, setListClassData] = useState<iClassSchoolList[]>();
   const [serversData, setServersData] = useState<iSchoolServer[]>();
   const [schoolId, setSchoolId] = useState<string>();
   const [disabled, setDisabled] = useState(false);
@@ -194,6 +204,32 @@ export const SchoolProvider = ({ children }: iChildren) => {
     [mdDown]
   );
 
+  const getClasses = useCallback(
+    (id: string, query: string, take: number) => {
+      if (mdDown) {
+        setIsLoading(true);
+        apiClass
+          .listWithSchool(id, query)
+          .then((res) => {
+            setListClassData(res.result);
+            setCount(res.total);
+            define_step(res.total, take);
+          })
+          .finally(() => setIsLoading(false));
+      } else {
+        setIsLoading(true);
+        apiClass
+          .listWithSchool(id, query)
+          .then((res) => {
+            setListClassData(res.result);
+            setCount(res.total);
+          })
+          .finally(() => setIsLoading(false));
+      }
+    },
+    [mdDown]
+  );
+
   const handleCreateSchool = useCallback(async (data: iSchoolRequest) => {
     try {
       setLoading(true);
@@ -219,6 +255,24 @@ export const SchoolProvider = ({ children }: iChildren) => {
       } catch {
         handleError(
           "No momento, não foi possível cadastrar o servidor na escola. Por favor, tente novamente mais tarde."
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
+  const handleCreateSchoolClass = useCallback(
+    async (data: iSchoolClassRequest, school_id: string, year_id: string) => {
+      try {
+        setLoading(true);
+        await apiSchool.createClass(data, school_id, year_id);
+        handleSucess("A turma foi cadastrada com sucesso na escola!");
+        getClasses(school_id, `?year_id=${year_id}`, 1);
+      } catch {
+        handleError(
+          "No momento, não foi possível cadastrar a turma na escola. Por favor, tente novamente mais tarde."
         );
       } finally {
         setLoading(false);
@@ -335,6 +389,9 @@ export const SchoolProvider = ({ children }: iChildren) => {
         schoolId,
         disabled,
         listYear,
+        createSchoolClass: handleCreateSchoolClass,
+        getClasses,
+        listClassData,
       }}
     >
       {children}

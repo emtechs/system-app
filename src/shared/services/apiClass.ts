@@ -5,8 +5,6 @@ import {
   iClassDash,
   iClassSchoolList,
   iClassSchoolRequest,
-  iClassWithSchool,
-  iClassWithSchoolSelect,
 } from "../interfaces";
 
 const create = async (data: FieldValues): Promise<iClass> => {
@@ -52,9 +50,9 @@ const listSchool = async (
 };
 
 interface iListWithSchool {
-  classes: iClassWithSchoolSelect[];
+  classes: iClassSchoolList[];
   total: number;
-  result: iClassWithSchool[];
+  result: iClassSchoolList[];
 }
 
 const listWithSchool = async (school_id: string, query: string) => {

@@ -7,6 +7,14 @@ import { iYear } from "./calendar.interfaces";
 export interface iClass {
   id: string;
   name: string;
+  label: string;
+  is_active: boolean;
+}
+
+export interface iClassSchoolList extends iClass {
+  students: number;
+  frequencies: number;
+  infrequency: number;
 }
 
 export interface iDashClass {
@@ -59,10 +67,6 @@ export interface iClassFreq {
   school: iWithSchool;
   year: iYear;
   infrequency: number;
-}
-
-export interface iClassSchoolList extends iClassFreq {
-  _count: { frequencies: number; students: number };
 }
 
 export interface iClassWithSchoolDash {

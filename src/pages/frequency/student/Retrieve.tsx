@@ -19,7 +19,6 @@ import {
   CalendarStudent,
   GridDashContent,
   LinkRouter,
-  SelectSchoolClass,
 } from "../../../shared/components";
 import { iDashClass } from "../../../shared/interfaces";
 import { useEffect, useState } from "react";
@@ -115,7 +114,7 @@ export const StudentFrequencyPage = () => {
                 </Grid>
                 <Grid container item direction="row" xs={12} md={5} spacing={2}>
                   <Grid item xs={12}>
-                    <SelectSchoolClass />
+                    {/* <SelectSchoolClass /> */}
                   </Grid>
                   {infoClass && (
                     <>

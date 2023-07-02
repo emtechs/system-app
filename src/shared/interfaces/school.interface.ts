@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   defineServerSchema,
+  schoolClassCreateSchema,
   schoolCreateSchema,
   schoolImportSchema,
   serverCreateSchema,
@@ -60,6 +61,8 @@ export interface iWithSchool {
 export type iServerRequest = z.infer<typeof serverCreateSchema>;
 
 export type iSchoolRequest = z.infer<typeof schoolCreateSchema>;
+
+export type iSchoolClassRequest = z.infer<typeof schoolClassCreateSchema>;
 
 export type iSchoolServerRequest = z.infer<typeof defineServerSchema>;
 

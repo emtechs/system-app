@@ -7,6 +7,10 @@ export const schoolCreateSchema = z.object({
     .nonempty("Nome da Escola obrigatório"),
 });
 
+export const schoolClassCreateSchema = z.object({
+  classes: z.object({ id: z.string().uuid() }).array(),
+});
+
 export const schoolImportSchema = z.object({
   file: csvSchema,
 });

@@ -45,7 +45,7 @@ export const ToolsRetrieveSchoolClasses = ({
     <Tools
       back="/school"
       isSchool
-      onClickNew={year === yearData ? onClickNew : undefined}
+      onClickNew={year?.id === yearData?.id ? onClickNew : undefined}
       titleNew="Turma"
       isSearch
       search={search}

@@ -142,6 +142,7 @@ export const Tools = ({
           title="Painel"
           to={"/home/school?id=" + schoolId}
           startIcon={<Dashboard />}
+          isResp
         />
       )}
       {isSearch && (

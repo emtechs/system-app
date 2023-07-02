@@ -7,12 +7,14 @@ import {
 } from "../../shared/contexts";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
-import { TableServer } from "./components/table";
 import {
+  CreateSchoolClass,
   CreateServer,
   DialogActiveSchool,
   Director,
   Edit,
+  TableClass,
+  TableServer,
   TitleRetrieveSchool,
   ToolsRetrieveSchool,
   ToolsRetrieveSchoolClasses,
@@ -37,8 +39,15 @@ export const RetrieveSchoolPage = () => {
   const { mdDown } = useAppThemeContext();
   const { schoolData, yearData } = useAuthContext();
   const { defineQuery, query } = usePaginationContext();
-  const { serversData, getServers, schoolDataRetrieve, disabled, listYear } =
-    useSchoolContext();
+  const {
+    serversData,
+    getServers,
+    schoolDataRetrieve,
+    disabled,
+    listYear,
+    getClasses,
+    listClassData,
+  } = useSchoolContext();
   const [search, setSearch] = useState<string>();
   const [value, setValue] = useState(0);
   const [valueVert, setValueVert] = useState(0);
@@ -85,6 +94,21 @@ export const RetrieveSchoolPage = () => {
   );
 
   useEffect(() => {
+    if (school_id && value === 2 && years) {
+      const take = 5;
+      let query = queryData(take) + `&year_id=${years[valueVert].id}`;
+      if (search) {
+        query += `&name=${search}`;
+        debounce(() => {
+          getClasses(school_id, query, take);
+        });
+      } else {
+        getClasses(school_id, query, take);
+      }
+    }
+  }, [school_id, value, queryData, search, years, valueVert]);
+
+  useEffect(() => {
     if (school_id) {
       const take = 5;
       let query = queryData(take);
@@ -124,12 +148,7 @@ export const RetrieveSchoolPage = () => {
       school_id={school_id ? school_id : ""}
       servers={serversData}
     />,
-    <Box
-      sx={{
-        flexGrow: 1,
-        display: "flex",
-      }}
-    >
+    <Box display="flex">
       <Tabs
         orientation="vertical"
         variant="scrollable"
@@ -141,6 +160,7 @@ export const RetrieveSchoolPage = () => {
           <Tab key={el.id} label={el.year} />
         ))}
       </Tabs>
+      {<TableClass data={listClassData} />}
     </Box>,
   ];
 
@@ -186,6 +206,14 @@ export const RetrieveSchoolPage = () => {
           open={openDirector}
           onClose={handleOpenDirector}
           school={schoolData}
+        />
+      )}
+      {schoolData && yearData && (
+        <CreateSchoolClass
+          open={openCreateClass}
+          onClose={handleOpenCreateClass}
+          school={schoolData}
+          year={yearData}
         />
       )}
     </>
