@@ -1,10 +1,9 @@
-import { Breadcrumbs, Chip } from "@mui/material";
+import { Breadcrumbs, Chip, Link } from "@mui/material";
 import {
   useAppThemeContext,
   useAuthContext,
   useDrawerContext,
 } from "../../contexts";
-import { LinkRouter } from "../link";
 import { Home } from "@mui/icons-material";
 import { LabelSchool } from "../label";
 
@@ -13,10 +12,10 @@ export const TitleSchoolDash = () => {
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
-      <LinkRouter
+      <Link
         underline="none"
         color="inherit"
-        to="/"
+        href="/"
         onClick={() => {
           setSchoolData(undefined);
         }}
@@ -28,7 +27,7 @@ export const TitleSchoolDash = () => {
           label="Página Inicial"
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
-      </LinkRouter>
+      </Link>
       <LabelSchool school={schoolData} />
     </Breadcrumbs>
   );
@@ -47,14 +46,14 @@ export const TitleSchoolDashPages = ({
 
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
-      <LinkRouter
+      <Link
         underline="none"
         color="inherit"
-        to="/"
+        href="/"
         onClick={handleClickButtonTools}
       >
         <LabelSchool clickable school={schoolData} />
-      </LinkRouter>
+      </Link>
       {breadcrumbs}
     </Breadcrumbs>
   );

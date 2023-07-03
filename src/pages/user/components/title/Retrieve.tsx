@@ -1,10 +1,10 @@
-import { Breadcrumbs, Chip } from "@mui/material";
+import { Breadcrumbs, Chip, Link } from "@mui/material";
 import {
   useAppThemeContext,
   useAuthContext,
   useDrawerContext,
 } from "../../../../shared/contexts";
-import { LabelUser, LinkRouter } from "../../../../shared/components";
+import { LabelUser } from "../../../../shared/components";
 import { Home, People } from "@mui/icons-material";
 
 export const TitleRetrieveUser = () => {
@@ -14,10 +14,10 @@ export const TitleRetrieveUser = () => {
 
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
-      <LinkRouter
+      <Link
         underline="none"
         color="inherit"
-        to="/"
+        href="/"
         onClick={handleClickButtonTools}
       >
         <Chip
@@ -27,8 +27,8 @@ export const TitleRetrieveUser = () => {
           label={mdDown ? "..." : "Página Inicial"}
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
-      </LinkRouter>
-      <LinkRouter underline="none" color="inherit" to="/user">
+      </Link>
+      <Link underline="none" color="inherit" href="/user">
         <Chip
           clickable
           color="primary"
@@ -36,7 +36,7 @@ export const TitleRetrieveUser = () => {
           label={mdDown ? "..." : "Usuários"}
           icon={<People sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
-      </LinkRouter>
+      </Link>
       <LabelUser user={userSelect} />
     </Breadcrumbs>
   );

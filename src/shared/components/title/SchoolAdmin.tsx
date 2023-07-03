@@ -1,10 +1,9 @@
-import { Breadcrumbs, Chip } from "@mui/material";
+import { Breadcrumbs, Chip, Link } from "@mui/material";
 import {
   useAppThemeContext,
   useAuthContext,
   useDrawerContext,
 } from "../../contexts";
-import { LinkRouter } from "../link";
 import { Home, School } from "@mui/icons-material";
 import { LabelSchool } from "../label";
 
@@ -20,10 +19,10 @@ export const TitleSchoolAdminPages = ({
 
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
-      <LinkRouter
+      <Link
         underline="none"
         color="inherit"
-        to="/"
+        href="/"
         onClick={handleClickButtonTools}
       >
         <Chip
@@ -33,8 +32,8 @@ export const TitleSchoolAdminPages = ({
           label="Página Inicial"
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
-      </LinkRouter>
-      <LinkRouter underline="none" color="inherit" to="/school">
+      </Link>
+      <Link underline="none" color="inherit" href="/school">
         <Chip
           clickable
           color="primary"
@@ -42,7 +41,7 @@ export const TitleSchoolAdminPages = ({
           label="Escolas"
           icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
-      </LinkRouter>
+      </Link>
       {breadcrumbs}
     </Breadcrumbs>
   );
@@ -57,10 +56,10 @@ export const TitleRetrieveSchoolAdminPages = ({
 
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
-      <LinkRouter
+      <Link
         underline="none"
         color="inherit"
-        to="/"
+        href="/"
         onClick={handleClickButtonTools}
       >
         <Chip
@@ -70,8 +69,8 @@ export const TitleRetrieveSchoolAdminPages = ({
           label="Página Inicial"
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
-      </LinkRouter>
-      <LinkRouter underline="none" color="inherit" to="/school">
+      </Link>
+      <Link underline="none" color="inherit" href="/school">
         <Chip
           clickable
           color="primary"
@@ -79,15 +78,15 @@ export const TitleRetrieveSchoolAdminPages = ({
           label="Escolas"
           icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
-      </LinkRouter>
+      </Link>
 
-      <LinkRouter
+      <Link
         underline="none"
         color="inherit"
-        to={"/school?id=" + schoolData?.id}
+        href={"/school?id=" + schoolData?.id}
       >
         <LabelSchool clickable />
-      </LinkRouter>
+      </Link>
 
       {breadcrumbs}
     </Breadcrumbs>

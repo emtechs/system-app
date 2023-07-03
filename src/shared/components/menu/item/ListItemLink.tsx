@@ -5,7 +5,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { ReactNode } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useDrawerContext } from "../../../contexts";
 
 interface iListItemLinkProps {
@@ -21,16 +21,15 @@ export const ListItemLink = ({ icon, label, to }: iListItemLinkProps) => {
   const normalizeTo = to.split("?")[0];
 
   return (
-    <Link to={to}>
-      <ListItemButton
-        autoFocus={true}
-        onClick={handleClickButton}
-        selected={location.pathname === `/${normalizeTo}`}
-        sx={{ pl: theme.spacing(4) }}
-      >
-        <ListItemIcon>{icon}</ListItemIcon>
-        <ListItemText primary={label} />
-      </ListItemButton>
-    </Link>
+    <ListItemButton
+      autoFocus={true}
+      onClick={handleClickButton}
+      selected={location.pathname === `/${normalizeTo}`}
+      sx={{ pl: theme.spacing(4) }}
+      href={to}
+    >
+      <ListItemIcon>{icon}</ListItemIcon>
+      <ListItemText primary={label} />
+    </ListItemButton>
   );
 };

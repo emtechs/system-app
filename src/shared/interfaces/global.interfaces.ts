@@ -11,6 +11,7 @@ export interface iDialogBaseProps {
 
 export interface iButtonBaseProps {
   title: string;
+  href?: string;
   startIcon?: ReactNode;
   endIcon?: ReactNode;
   onClick?: () => void;

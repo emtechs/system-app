@@ -1,11 +1,11 @@
-import { Breadcrumbs, Chip } from "@mui/material";
+import { Breadcrumbs, Chip, Link } from "@mui/material";
 import { Home, School } from "@mui/icons-material";
 import {
   useAppThemeContext,
   useAuthContext,
   useDrawerContext,
 } from "../../../../shared/contexts";
-import { LabelSchool, LinkRouter } from "../../../../shared/components";
+import { LabelSchool } from "../../../../shared/components";
 
 export const TitleRetrieveSchool = () => {
   const { mdDown } = useAppThemeContext();
@@ -13,10 +13,10 @@ export const TitleRetrieveSchool = () => {
   const { handleClickButtonTools } = useDrawerContext();
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
-      <LinkRouter
+      <Link
         underline="none"
         color="inherit"
-        to="/"
+        href="/"
         onClick={handleClickButtonTools}
       >
         <Chip
@@ -26,8 +26,8 @@ export const TitleRetrieveSchool = () => {
           label={mdDown ? "..." : "Página Inicial"}
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
-      </LinkRouter>
-      <LinkRouter underline="none" color="inherit" to="/school">
+      </Link>
+      <Link underline="none" color="inherit" href="/school">
         <Chip
           clickable
           color="primary"
@@ -35,7 +35,7 @@ export const TitleRetrieveSchool = () => {
           label={mdDown ? "..." : "Escolas"}
           icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
-      </LinkRouter>
+      </Link>
       <LabelSchool school={schoolData} />
     </Breadcrumbs>
   );

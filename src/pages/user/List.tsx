@@ -6,11 +6,11 @@ import {
 import { useEffect, useState } from "react";
 import { iUser, iheadCell } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
-import { LinkRouter, TableBase, Tools } from "../../shared/components";
+import { TableBase, Tools } from "../../shared/components";
 import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "../../shared/hooks";
 import { CardUser } from "./components/CardUser";
-import { Breadcrumbs, Chip } from "@mui/material";
+import { Breadcrumbs, Chip, Link } from "@mui/material";
 import { Home, People } from "@mui/icons-material";
 import { LayoutBasePage } from "../../shared/layouts";
 
@@ -61,10 +61,10 @@ export const ListUserPage = () => {
     <LayoutBasePage
       title={
         <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
-          <LinkRouter
+          <Link
             underline="none"
             color="inherit"
-            to="/"
+            href="/"
             onClick={handleClickButtonTools}
           >
             <Chip
@@ -74,7 +74,7 @@ export const ListUserPage = () => {
               label="Página Inicial"
               icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
             />
-          </LinkRouter>
+          </Link>
           <Chip
             label="Usuários"
             color="primary"

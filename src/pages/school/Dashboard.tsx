@@ -5,6 +5,7 @@ import {
   CardContent,
   Chip,
   Grid,
+  Link,
   Paper,
 } from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
@@ -12,7 +13,6 @@ import {
   CalendarDashCommon,
   GridDashSchoolAdmin,
   LabelSchool,
-  LinkRouter,
 } from "../../shared/components";
 import {
   useAppThemeContext,
@@ -38,10 +38,10 @@ export const DashboardSchoolPage = () => {
     <LayoutBasePage
       title={
         <Breadcrumbs aria-label="breadcrumb">
-          <LinkRouter
+          <Link
             underline="none"
             color="inherit"
-            to="/home/school"
+            href="/home/school"
             onClick={() => setSchoolDataAdmin(undefined)}
           >
             <Chip
@@ -51,7 +51,7 @@ export const DashboardSchoolPage = () => {
               label="Página Inicial"
               icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
             />
-          </LinkRouter>
+          </Link>
           <LabelSchool school={schoolDataAdmin} />
         </Breadcrumbs>
       }

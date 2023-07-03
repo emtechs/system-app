@@ -4,6 +4,7 @@ import { iButtonBaseProps } from "../../interfaces";
 
 export const ButtonMdDown = ({
   title,
+  href,
   endIcon,
   onClick,
   startIcon,
@@ -11,9 +12,11 @@ export const ButtonMdDown = ({
 }: iButtonBaseProps) => {
   const { mdDown } = useAppThemeContext();
 
+  const to = href ? { href } : undefined;
+
   return mdDown ? (
     <Tooltip title={title}>
-      <IconButton color={color} onClick={onClick}>
+      <IconButton color={color} onClick={onClick} {...to}>
         {startIcon && startIcon}
         {endIcon && endIcon}
       </IconButton>
@@ -26,6 +29,7 @@ export const ButtonMdDown = ({
       startIcon={startIcon}
       endIcon={endIcon}
       onClick={onClick}
+      {...to}
     >
       {title}
     </Button>

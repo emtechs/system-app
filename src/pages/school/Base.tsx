@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { Box, Tab, Tabs } from "@mui/material";
 import {
   Checklist,
@@ -25,16 +24,26 @@ export const BaseRetrieveSchoolPage = ({
     <>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={defineValue()} variant="scrollable" scrollButtons="auto">
-          <Link to={"/school/" + id}>
-            <Tab icon={<School />} label="Escola" />
-          </Link>
-          <Link to={"/school/" + id + "/server"}>
-            <Tab icon={<People />} label="Servidores" />
-          </Link>
-          <Tab icon={<Workspaces />} label="Turmas" />
-          <Tab icon={<Groups />} label="Alunos" disabled={disabled} />
-          <Tab icon={<Checklist />} label="Frequências" disabled={disabled} />
-          <Tab icon={<Percent />} label="Infrequência" disabled={disabled} />
+          <Tab href={"/school/" + id} icon={<School />} label="Escola" />
+          <Tab
+            href={"/school/" + id + "/server"}
+            icon={<People />}
+            label="Servidores"
+          />
+          <Tab href="" icon={<Workspaces />} label="Turmas" />
+          <Tab href="" icon={<Groups />} label="Alunos" disabled={disabled} />
+          <Tab
+            href=""
+            icon={<Checklist />}
+            label="Frequências"
+            disabled={disabled}
+          />
+          <Tab
+            href=""
+            icon={<Percent />}
+            label="Infrequência"
+            disabled={disabled}
+          />
         </Tabs>
       </Box>
       {children}

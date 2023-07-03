@@ -10,7 +10,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { Link } from "react-router-dom";
 
 export const UserTools = () => {
   const theme = useTheme();
@@ -64,22 +63,22 @@ export const UserTools = () => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <Link to="/user/create?back=/user/list">
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <PersonAdd />
-            </ListItemIcon>
-            Administrador
-          </MenuItem>
-        </Link>
-        <Link to="/user/create/director?back=/user/list">
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <PersonAdd />
-            </ListItemIcon>
-            Diretor
-          </MenuItem>
-        </Link>
+        <MenuItem href="/user/create?back=/user/list" onClick={handleClose}>
+          <ListItemIcon>
+            <PersonAdd />
+          </ListItemIcon>
+          Administrador
+        </MenuItem>
+
+        <MenuItem
+          href="/user/create/director?back=/user/list"
+          onClick={handleClose}
+        >
+          <ListItemIcon>
+            <PersonAdd />
+          </ListItemIcon>
+          Diretor
+        </MenuItem>
       </Menu>
     </>
   );

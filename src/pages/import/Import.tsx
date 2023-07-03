@@ -1,6 +1,5 @@
-import { Card, CardContent, Typography } from "@mui/material";
+import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
 import { BasePage } from "../../shared/components";
-import { Link } from "react-router-dom";
 import { Groups } from "@mui/icons-material";
 
 export const Import = () => {
@@ -16,12 +15,12 @@ export const Import = () => {
           alignItems: "center",
         }}
       >
-        <Link to="/import/student/all">
+        <CardActionArea href="/import/student/all">
           <CardContent sx={{ display: "flex", gap: 2 }}>
             <Groups />
             <Typography>Importar Alunos</Typography>
           </CardContent>
-        </Link>
+        </CardActionArea>
       </Card>
     </BasePage>
   );

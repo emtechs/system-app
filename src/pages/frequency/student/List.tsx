@@ -1,5 +1,12 @@
-import { Box, Breadcrumbs, Chip, TableCell, TableRow } from "@mui/material";
-import { LinkRouter, TableBase } from "../../../shared/components";
+import {
+  Box,
+  Breadcrumbs,
+  Chip,
+  Link,
+  TableCell,
+  TableRow,
+} from "@mui/material";
+import { TableBase } from "../../../shared/components";
 import {
   useAppThemeContext,
   useAuthContext,
@@ -92,10 +99,10 @@ export const ListStudentFrequencyPage = () => {
     <LayoutBasePage
       title={
         <Breadcrumbs aria-label="breadcrumb">
-          <LinkRouter
+          <Link
             underline="none"
             color="inherit"
-            to="/"
+            href="/"
             onClick={handleClickButtonTools}
           >
             <Chip
@@ -105,9 +112,9 @@ export const ListStudentFrequencyPage = () => {
               label={schoolData?.name}
               icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
             />
-          </LinkRouter>
+          </Link>
           {dataFrequency && (
-            <LinkRouter underline="none" color="inherit" to="/frequency/list">
+            <Link underline="none" color="inherit" href="/frequency/list">
               <Chip
                 clickable
                 color="primary"
@@ -115,7 +122,7 @@ export const ListStudentFrequencyPage = () => {
                 label={dataFrequency.date}
                 icon={<EventAvailable sx={{ mr: 0.5 }} fontSize="inherit" />}
               />
-            </LinkRouter>
+            </Link>
           )}
           <Chip
             label="Alunos"

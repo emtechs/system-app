@@ -1,6 +1,5 @@
-import { Breadcrumbs, Chip } from "@mui/material";
+import { Breadcrumbs, Chip, Link } from "@mui/material";
 import { useAppThemeContext, useDrawerContext } from "../../contexts";
-import { LinkRouter } from "../link";
 import { Home } from "@mui/icons-material";
 
 export const TitleAdminDash = () => {
@@ -8,10 +7,10 @@ export const TitleAdminDash = () => {
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
-      <LinkRouter
+      <Link
         underline="none"
         color="inherit"
-        to="/"
+        href="/"
         onClick={handleClickButtonTools}
       >
         <Chip
@@ -20,7 +19,7 @@ export const TitleAdminDash = () => {
           label="Página Inicial"
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
-      </LinkRouter>
+      </Link>
     </Breadcrumbs>
   );
 };
@@ -37,10 +36,10 @@ export const TitleAdminDashPages = ({
 
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
-      <LinkRouter
+      <Link
         underline="none"
         color="inherit"
-        to="/"
+        href="/"
         onClick={handleClickButtonTools}
       >
         <Chip
@@ -50,7 +49,7 @@ export const TitleAdminDashPages = ({
           label="Página Inicial"
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
-      </LinkRouter>
+      </Link>
       {breadcrumbs}
     </Breadcrumbs>
   );

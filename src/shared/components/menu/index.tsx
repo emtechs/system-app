@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Dashboard, FirstPage, Logout, Person } from "@mui/icons-material";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import {
   useAppThemeContext,
   useAuthContext,
@@ -82,23 +82,19 @@ export const Menu = ({ children }: iChildren) => {
             <List component="nav">
               {dashData === "ADMIN" &&
               location.pathname.includes("/home/school") ? (
-                <Link to="/">
-                  <ListItemButton onClick={handleClick}>
-                    <ListItemIcon>
-                      <FirstPage />
-                    </ListItemIcon>
-                    <ListItemText primary="Voltar" />
-                  </ListItemButton>
-                </Link>
+                <ListItemButton href="/" onClick={handleClick}>
+                  <ListItemIcon>
+                    <FirstPage />
+                  </ListItemIcon>
+                  <ListItemText primary="Voltar" />
+                </ListItemButton>
               ) : (
-                <Link to="/home/school">
-                  <ListItemButton onClick={handleClick}>
-                    <ListItemIcon>
-                      <Dashboard />
-                    </ListItemIcon>
-                    <ListItemText primary="Painel Escola" />
-                  </ListItemButton>
-                </Link>
+                <ListItemButton href="/home/school" onClick={handleClick}>
+                  <ListItemIcon>
+                    <Dashboard />
+                  </ListItemIcon>
+                  <ListItemText primary="Painel Escola" />
+                </ListItemButton>
               )}
               <ListItemButton onClick={logout}>
                 <ListItemIcon>

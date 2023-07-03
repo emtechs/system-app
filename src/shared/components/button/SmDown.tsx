@@ -4,6 +4,7 @@ import { iButtonBaseProps } from "../../interfaces";
 
 export const ButtonSmDown = ({
   title,
+  href,
   startIcon,
   endIcon,
   onClick,
@@ -11,9 +12,11 @@ export const ButtonSmDown = ({
 }: iButtonBaseProps) => {
   const { smDown } = useAppThemeContext();
 
+  const to = href ? { href } : undefined;
+
   return smDown ? (
     <Tooltip title={title}>
-      <IconButton color={color} onClick={onClick}>
+      <IconButton color={color} onClick={onClick} {...to}>
         {startIcon && startIcon}
         {endIcon && endIcon}
       </IconButton>
@@ -26,6 +29,7 @@ export const ButtonSmDown = ({
       startIcon={startIcon}
       endIcon={endIcon}
       onClick={onClick}
+      {...to}
     >
       {title}
     </Button>

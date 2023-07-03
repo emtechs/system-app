@@ -13,7 +13,7 @@ import {
   RemoveUser,
   TableBase,
 } from "../../../shared/components";
-import { TableCell, TableRow, Tooltip } from "@mui/material";
+import { TableCell, TableRow } from "@mui/material";
 import { iSchoolServer, iheadCell } from "../../../shared/interfaces";
 import { rolePtBr } from "../../../shared/scripts";
 import { apiSchool } from "../../../shared/services";
@@ -105,9 +105,6 @@ export const ViewSchoolServer = () => {
         {data?.map((schoolServer) => (
           <TableRow
             key={schoolServer.server.id}
-            title="Remover"
-            placement="left"
-            component={Tooltip}
             hover
             sx={{ cursor: "pointer" }}
             onClick={() => {

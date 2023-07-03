@@ -12,14 +12,11 @@ import {
   CardContent,
   Chip,
   Grid,
+  Link,
   Paper,
 } from "@mui/material";
 import { LayoutBasePage } from "../../../shared/layouts";
-import {
-  CalendarStudent,
-  GridDashContent,
-  LinkRouter,
-} from "../../../shared/components";
+import { CalendarStudent, GridDashContent } from "../../../shared/components";
 import { iDashClass } from "../../../shared/interfaces";
 import { useEffect, useState } from "react";
 import {
@@ -68,10 +65,10 @@ export const StudentFrequencyPage = () => {
     <LayoutBasePage
       title={
         <Breadcrumbs aria-label="breadcrumb">
-          <LinkRouter
+          <Link
             underline="none"
             color="inherit"
-            to="/"
+            href="/"
             onClick={handleClickButtonTools}
           >
             <Chip
@@ -81,7 +78,7 @@ export const StudentFrequencyPage = () => {
               label={schoolData?.name}
               icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
             />
-          </LinkRouter>
+          </Link>
           <Chip
             label="Alunos"
             color="primary"

@@ -8,7 +8,6 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { Link } from "react-router-dom";
 
 interface iGridDashContentProps {
   icon: ReactNode;
@@ -30,33 +29,31 @@ export const GridDashContent = ({
   return (
     <Grid item xs={4}>
       <Card>
-        <Link to={dest}>
-          <CardActionArea onClick={onClick}>
-            <CardContent>
-              <Box
+        <CardActionArea href={dest} onClick={onClick}>
+          <CardContent>
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              gap={0.5}
+            >
+              {icon}
+              <Typography sx={{ fontSize: theme.spacing(4) }}>
+                {quant}
+              </Typography>
+              <Typography
+                component="div"
                 display="flex"
-                flexDirection="column"
+                textAlign="center"
                 alignItems="center"
-                gap={0.5}
+                height={30}
+                fontSize={theme.spacing(1.6)}
               >
-                {icon}
-                <Typography sx={{ fontSize: theme.spacing(4) }}>
-                  {quant}
-                </Typography>
-                <Typography
-                  component="div"
-                  display="flex"
-                  textAlign="center"
-                  alignItems="center"
-                  height={30}
-                  fontSize={theme.spacing(1.6)}
-                >
-                  {info}
-                </Typography>
-              </Box>
-            </CardContent>
-          </CardActionArea>
-        </Link>
+                {info}
+              </Typography>
+            </Box>
+          </CardContent>
+        </CardActionArea>
       </Card>
     </Grid>
   );
