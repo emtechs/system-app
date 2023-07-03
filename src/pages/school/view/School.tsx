@@ -7,7 +7,7 @@ import {
 } from "../../../shared/contexts";
 import { useDebounce } from "../../../shared/hooks";
 import { iSchool, iheadCell } from "../../../shared/interfaces";
-import { TableCell, TableRow } from "@mui/material";
+import { TableCell, TableRow, Tooltip } from "@mui/material";
 import {
   DialogActiveSchool,
   DialogCreateSchool,
@@ -16,6 +16,7 @@ import {
 } from "../../../shared/components";
 import { useNavigate } from "react-router-dom";
 import { apiSchool } from "../../../shared/services";
+import { Info } from "@mui/icons-material";
 
 export const ViewSchool = () => {
   const navigate = useNavigate();
@@ -92,6 +93,9 @@ export const ViewSchool = () => {
         {data?.map((school) => (
           <TableRow
             key={school.id}
+            title={!school.is_active ? "Ativar" : ""}
+            placement="left"
+            component={Tooltip}
             hover
             sx={{ cursor: "pointer" }}
             onClick={() => {
