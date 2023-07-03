@@ -1,6 +1,6 @@
 import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
-import { iSchool, iUser, iWorkSchool } from "../interfaces";
+import { iSchool, iSchoolServer, iUser, iWorkSchool } from "../interfaces";
 
 const create = async (
   data: FieldValues,
@@ -9,6 +9,17 @@ const create = async (
   const query = queryData ? queryData : "";
   const { data: response } = await apiUsingNow.post<iUser>(
     "users" + query,
+    data
+  );
+  return response;
+};
+
+const createServer = async (
+  data: FieldValues,
+  school_id: string
+): Promise<iSchoolServer> => {
+  const { data: response } = await apiUsingNow.post<iSchoolServer>(
+    `users?school_id=${school_id}`,
     data
   );
   return response;
@@ -62,6 +73,7 @@ const schoolsServer = async (id: string, query: string) => {
 
 export const apiUser = {
   create,
+  createServer,
   profile,
   update,
   schools,

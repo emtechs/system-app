@@ -1,19 +1,16 @@
-import { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { useAppThemeContext } from "../../contexts";
+import { iButtonBaseProps } from "../../interfaces";
+import { ButtonMdDown } from "./MdDown";
 import { Button, IconButton, Tooltip } from "@mui/material";
-import { useAppThemeContext } from "../../../contexts";
 
-interface iDestProps {
+interface iButtonDestProps extends iButtonBaseProps {
   to: string;
-  title: string;
-  startIcon?: ReactNode;
-  endIcon?: ReactNode;
-  onClick?: () => void;
   isResp?: boolean;
   isHome?: boolean;
 }
 
-export const Dest = ({
+export const ButtonDest = ({
   to,
   title,
   startIcon,
@@ -21,30 +18,18 @@ export const Dest = ({
   onClick,
   isResp,
   isHome,
-}: iDestProps) => {
-  const { mdDown, smDown } = useAppThemeContext();
+}: iButtonDestProps) => {
+  const { smDown } = useAppThemeContext();
 
   return (
     <Link to={to}>
       {isResp ? (
-        mdDown ? (
-          <Tooltip title={title}>
-            <IconButton color="primary" onClick={onClick}>
-              {startIcon && startIcon}
-              {endIcon && endIcon}
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Button
-            variant="contained"
-            disableElevation
-            startIcon={startIcon}
-            endIcon={endIcon}
-            onClick={onClick}
-          >
-            {title}
-          </Button>
-        )
+        <ButtonMdDown
+          title={title}
+          startIcon={startIcon}
+          endIcon={endIcon}
+          onClick={onClick}
+        />
       ) : isHome ? (
         smDown && (
           <Tooltip title={title}>

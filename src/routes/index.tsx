@@ -5,6 +5,7 @@ import {
   CreateFrequencyPage,
   CreateStudentAdmPage,
   DashboardPage,
+  DashboardSchoolPage,
   DefineSchoolsPage,
   EditClassPage,
   EditPasswordPage,
@@ -15,23 +16,23 @@ import {
   ImportSchoolPage,
   ImportStudentPage,
   ListFrequencyPage,
-  ListSchoolPage,
   ListStudentFrequencyPage,
   ListStudentPage,
   PasswordPage,
   ReportPage,
   RetrieveClassPage,
   RetrieveFrequencyPage,
-  RetrieveSchoolPage,
   SchoolPage,
-  ServerSchoolPage,
   StudentFrequencyPage,
   UserPage,
+  ViewSchoolData,
+  ViewSchoolServer,
 } from "../pages";
 import { ProtectedAdmin, ProtectedAuth } from "../shared/components";
 
 const AppRoutes = () => {
   const location = useLocation();
+
   return (
     <Routes location={location} key={location.pathname}>
       <Route path="/password/:userId/:token" element={<PasswordPage />} />
@@ -52,13 +53,11 @@ const AppRoutes = () => {
             path="/import/student"
             element={<ImportStudentPage back="/student" />}
           />
-          <Route path="/school" element={<ListSchoolPage />} />
-          <Route path="/school/:school_id" element={<RetrieveSchoolPage />} />
-          <Route
-            path="/school/:school_id/server/:server_id"
-            element={<ServerSchoolPage />}
-          />
-          <Route path="/home/school" element={<SchoolPage />} />
+          <Route path="/school" element={<SchoolPage />}>
+            <Route path=":school_id" element={<ViewSchoolData />} />
+            <Route path=":school_id/server" element={<ViewSchoolServer />} />
+          </Route>
+          <Route path="/home/school" element={<DashboardSchoolPage />} />
         </Route>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/report" element={<ReportPage />} />

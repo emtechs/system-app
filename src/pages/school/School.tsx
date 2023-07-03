@@ -1,89 +1,67 @@
-import {
-  Box,
-  Breadcrumbs,
-  Card,
-  CardContent,
-  Chip,
-  Grid,
-  Paper,
-} from "@mui/material";
+import { useEffect } from "react";
+import { Outlet, useParams } from "react-router-dom";
+import { useAuthContext, useSchoolContext } from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
 import {
-  CalendarDashCommon,
-  GridDashSchoolAdmin,
-  LabelSchool,
-  LinkRouter,
-} from "../../shared/components";
-import {
-  useAppThemeContext,
-  useAuthContext,
-  useSchoolContext,
-} from "../../shared/contexts";
-import { Home } from "@mui/icons-material";
-import { useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
+  TitleRetrieveSchool,
+  TitleSchool,
+  ToolsRetrieveSchoolClasses,
+  ToolsSchool,
+  ToolsSchoolData,
+  ToolsSchoolServer,
+} from "./components";
+import { ViewSchool } from "./view";
+import { BaseRetrieveSchoolPage } from "./Base";
 
 export const SchoolPage = () => {
-  const [searchParams] = useSearchParams();
-  const id = searchParams.get("id");
-  const { theme } = useAppThemeContext();
-  const { schoolDataAdmin, setSchoolDataAdmin } = useAuthContext();
-  const { schoolDataAdminRetrieve } = useSchoolContext();
+  const { school_id } = useParams();
+  const { schoolData } = useAuthContext();
+  const {
+    search,
+    setSearch,
+    handleOpenCreate,
+    years,
+    valueVert,
+    schoolDataRetrieve,
+    defineValue,
+  } = useSchoolContext();
 
   useEffect(() => {
-    if (id) schoolDataAdminRetrieve(id);
-  }, [id]);
+    if (school_id) {
+      if (schoolData?.id !== school_id) schoolDataRetrieve(school_id);
+    }
+  }, [school_id]);
+
+  let title = <TitleSchool />;
+
+  let tools = <ToolsSchool />;
+
+  const toolsRetrieve = [
+    <ToolsSchoolData />,
+    <ToolsSchoolServer />,
+    <ToolsRetrieveSchoolClasses
+      search={search}
+      setSearch={(text) => setSearch(text)}
+      year={years ? years[valueVert] : undefined}
+      onClickNew={handleOpenCreate}
+    />,
+  ];
+
+  let view = <ViewSchool />;
+
+  if (school_id) {
+    title = <TitleRetrieveSchool />;
+    tools = toolsRetrieve[defineValue()];
+    view = (
+      <BaseRetrieveSchoolPage id={school_id}>
+        <Outlet />
+      </BaseRetrieveSchoolPage>
+    );
+  }
 
   return (
-    <LayoutBasePage
-      title={
-        <Breadcrumbs aria-label="breadcrumb">
-          <LinkRouter
-            underline="none"
-            color="inherit"
-            to="/home/school"
-            onClick={() => setSchoolDataAdmin(undefined)}
-          >
-            <Chip
-              clickable={schoolDataAdmin ? true : undefined}
-              color="primary"
-              variant={schoolDataAdmin ? "outlined" : "filled"}
-              label="Página Inicial"
-              icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
-            />
-          </LinkRouter>
-          <LabelSchool school={schoolDataAdmin} />
-        </Breadcrumbs>
-      }
-    >
-      <Box my={1} mx={2} component={Paper} variant="outlined">
-        <Card>
-          <CardContent>
-            <Grid container direction="column" p={2} spacing={2}>
-              <Grid
-                container
-                item
-                direction="row"
-                justifyContent="center"
-                spacing={2}
-              >
-                <Grid item xs={12} md={7}>
-                  <Box
-                    fontFamily={theme.typography.fontFamily}
-                    width="100%"
-                    display="flex"
-                    flexDirection="column"
-                    gap={1}
-                  >
-                    <CalendarDashCommon />
-                  </Box>
-                </Grid>
-                <GridDashSchoolAdmin />
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Box>
+    <LayoutBasePage title={title} tools={tools}>
+      {view}
     </LayoutBasePage>
   );
 };

@@ -6,7 +6,7 @@ import {
 import { LinkRouter } from "../../../../shared/components";
 import { Home, School } from "@mui/icons-material";
 
-export const TitleListSchool = () => {
+export const TitleSchool = () => {
   const { mdDown } = useAppThemeContext();
   const { handleClickButtonTools } = useDrawerContext();
   return (

@@ -1,20 +1,17 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import { useSchoolContext } from "../../contexts";
+import { iDialogSchoolProps } from "../../interfaces";
+import { BaseContentChildren, DialogBaseChildren } from "./structure";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { schoolUpdateSchema } from "../../schemas";
 import { Button } from "@mui/material";
-import {
-  BaseContentChildren,
-  DialogBaseChildren,
-} from "../../../../shared/components";
-import { useSchoolContext } from "../../../../shared/contexts";
-import { schoolUpdateSchema } from "../../../../shared/schemas";
-import { iDialogSchoolProps } from "../../interface";
 
-export const Edit = ({ onClose, open, school }: iDialogSchoolProps) => {
-  const { updateSchool } = useSchoolContext();
+export const DialogEditSchool = ({ school }: iDialogSchoolProps) => {
+  const { updateSchool, openEdit, handleOpenEdit } = useSchoolContext();
   return (
     <DialogBaseChildren
-      open={open}
-      onClose={onClose}
+      open={openEdit}
+      onClose={handleOpenEdit}
       title="Editar Escola"
       description=""
     >
@@ -24,7 +21,7 @@ export const Edit = ({ onClose, open, school }: iDialogSchoolProps) => {
         }}
         onSuccess={(data) => {
           updateSchool(data, school.id, "nome");
-          onClose();
+          handleOpenEdit();
         }}
         resolver={zodResolver(schoolUpdateSchema)}
       >

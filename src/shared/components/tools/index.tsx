@@ -24,13 +24,8 @@ import {
   usePaginationContext,
   useSchoolContext,
 } from "../../contexts";
-import {
-  ActiveButton,
-  CompBase,
-  Dest,
-  HomeButton,
-  UserTools,
-} from "./components";
+import { ActiveButton, CompBase, HomeButton, UserTools } from "./components";
+import { ButtonDest } from "../button";
 
 interface iToolsProps {
   back?: string;
@@ -122,10 +117,10 @@ export const Tools = ({
       component={Paper}
     >
       {back && (
-        <Dest to={back} title="Voltar" startIcon={<ArrowBack />} isResp />
+        <ButtonDest to={back} title="Voltar" startIcon={<ArrowBack />} isResp />
       )}
       {isSingle && (
-        <Dest
+        <ButtonDest
           to={toHome}
           title="Página Inicial"
           startIcon={<Home />}
@@ -138,7 +133,7 @@ export const Tools = ({
       )}
       {isUser && <UserTools />}
       {isSchool && schoolId && (
-        <Dest
+        <ButtonDest
           title="Painel"
           to={"/home/school?id=" + schoolId}
           startIcon={<Dashboard />}

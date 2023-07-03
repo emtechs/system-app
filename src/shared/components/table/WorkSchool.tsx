@@ -1,14 +1,14 @@
-import { useState } from "react";
+// import { useState } from "react";
 import {
   useAppThemeContext,
-  useAuthContext,
-  useSchoolContext,
+  // useAuthContext,
+  // useSchoolContext,
 } from "../../contexts";
 import { iUser, iWorkSchool, iheadCell } from "../../interfaces";
 import { TableBase } from "./structure";
 import { TableCell, TableRow } from "@mui/material";
 import { PaginationMobile } from "../pagination";
-import { RemoveUser } from "../dialog";
+// import { RemoveUser } from "../dialog";
 import { rolePtBr } from "../../scripts";
 
 interface iTableWorkSchoolProps {
@@ -18,13 +18,13 @@ interface iTableWorkSchoolProps {
 
 export const TableWorkSchool = ({ listSchool }: iTableWorkSchoolProps) => {
   const { mdDown } = useAppThemeContext();
-  const { userSelect } = useAuthContext();
-  const { updateServerData, setUpdateServerData } = useSchoolContext();
-  const [open, setOpen] = useState(false);
-  const handleClose = (work: iWorkSchool) => {
-    setOpen((oldOpen) => !oldOpen);
-    setUpdateServerData(work);
-  };
+  // const { userSelect } = useAuthContext();
+  // const { updateServerData, setUpdateServerData } = useSchoolContext();
+  // const [open, setOpen] = useState(false);
+  // const handleClose = (work: iWorkSchool) => {
+  //   setOpen((oldOpen) => !oldOpen);
+  //   setUpdateServerData(work);
+  // };
 
   const headCells: iheadCell[] = [
     { order: "name", numeric: false, label: "Escola" },
@@ -44,7 +44,7 @@ export const TableWorkSchool = ({ listSchool }: iTableWorkSchoolProps) => {
             key={work.school.id}
             hover
             sx={{ cursor: "pointer" }}
-            onClick={() => handleClose(work)}
+            // onClick={() => handleClose(work)}
           >
             <TableCell>{work.school.name}</TableCell>
             <TableCell>{rolePtBr(work.role)}</TableCell>
@@ -55,14 +55,14 @@ export const TableWorkSchool = ({ listSchool }: iTableWorkSchoolProps) => {
         ))}
       </TableBase>
       {mdDown && <PaginationMobile />}
-      {userSelect && updateServerData && (
+      {/* {userSelect && updateServerData && (
         <RemoveUser
           open={open}
           handleClose={() => setOpen((oldOpen) => !oldOpen)}
           user={userSelect}
           work={updateServerData}
         />
-      )}
+      )} */}
     </>
   );
 };

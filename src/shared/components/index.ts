@@ -1,6 +1,7 @@
 export * from "./autoComplete";
 export * from "./basePage";
 export * from "./boxResp";
+export * from "./button";
 export * from "./calendar";
 export * from "./card";
 export * from "./dialog";

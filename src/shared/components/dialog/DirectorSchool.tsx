@@ -1,21 +1,18 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import {
-  BaseContentChildren,
-  DialogBaseChildren,
-  ValidateCPF,
-} from "../../../../shared/components";
-import { useSchoolContext } from "../../../../shared/contexts";
+import { useSchoolContext } from "../../contexts";
+import { iDialogSchoolProps } from "../../interfaces";
+import { BaseContentChildren, DialogBaseChildren } from "./structure";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { schoolUpdateDirectorSchema } from "../../../../shared/schemas";
+import { schoolUpdateDirectorSchema } from "../../schemas";
 import { Box, Typography } from "@mui/material";
-import { iDialogSchoolProps } from "../../interface";
+import { ValidateCPF } from "../validate";
 
-export const Director = ({ onClose, open, school }: iDialogSchoolProps) => {
-  const { updateSchool } = useSchoolContext();
+export const DialogDirectorSchool = ({ school }: iDialogSchoolProps) => {
+  const { updateSchool, openDirector, handleOpenDirector } = useSchoolContext();
   return (
     <DialogBaseChildren
-      open={open}
-      onClose={onClose}
+      open={openDirector}
+      onClose={handleOpenDirector}
       title="Definir Diretor"
       description=""
     >
@@ -25,7 +22,7 @@ export const Director = ({ onClose, open, school }: iDialogSchoolProps) => {
             ? `?director_id=${school.director.id}`
             : undefined;
           updateSchool(data, school.id, "diretor", query);
-          onClose();
+          handleOpenDirector();
         }}
         resolver={zodResolver(schoolUpdateDirectorSchema)}
       >

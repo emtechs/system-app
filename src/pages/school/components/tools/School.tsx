@@ -1,19 +1,21 @@
-import { PersonAdd } from "@mui/icons-material";
 import { Tools } from "../../../../shared/components";
 import { useSchoolContext } from "../../../../shared/contexts";
 
-export const ToolsSchoolServer = () => {
-  const { handleOpenCreate, search, setSearch } = useSchoolContext();
+export const ToolsSchool = () => {
+  const { handleOpenCreate, onClickReset, search, setSearch } =
+    useSchoolContext();
+
   return (
     <Tools
-      back="/school"
-      isSchool
-      iconNew={<PersonAdd />}
+      isHome
       onClickNew={handleOpenCreate}
-      titleNew="Servidor"
       isSearch
       search={search}
       setSearch={setSearch}
+      isDirector
+      isActive
+      titleNew="Nova"
+      onClickReset={onClickReset}
     />
   );
 };

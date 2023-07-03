@@ -1,4 +1,3 @@
-export * from "./List";
-export * from "./Retrieve";
+export * from "./Dashboard";
 export * from "./School";
-export * from "./Server";
+export * from "./view";

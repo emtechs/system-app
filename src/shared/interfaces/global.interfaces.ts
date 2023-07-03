@@ -9,6 +9,21 @@ export interface iDialogBaseProps {
   onClose: () => void;
 }
 
+export interface iButtonBaseProps {
+  title: string;
+  startIcon?: ReactNode;
+  endIcon?: ReactNode;
+  onClick?: () => void;
+  color?:
+    | "primary"
+    | "inherit"
+    | "secondary"
+    | "error"
+    | "info"
+    | "success"
+    | "warning";
+}
+
 export interface iTable extends iChildren {
   headCells: iheadCell[];
   is_body?: boolean;

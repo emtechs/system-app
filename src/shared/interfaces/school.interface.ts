@@ -10,6 +10,10 @@ import {
 } from "../schemas";
 import { iDash, iDiretor, iRole } from "./user.interfaces";
 
+export interface iDialogSchoolProps {
+  school: iSchool;
+}
+
 export interface iDashSchool {
   frequencies: number;
   day_infreq?: number;

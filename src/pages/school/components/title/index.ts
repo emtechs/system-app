@@ -1,4 +1,4 @@
 export * from "./Class";
-export * from "./List";
+export * from "./School";
 export * from "./Retrieve";
 export * from "./Server";

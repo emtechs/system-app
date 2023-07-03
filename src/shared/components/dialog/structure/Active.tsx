@@ -1,4 +1,4 @@
-import { DialogBase } from "./structure";
+import { DialogBase } from "./Base";
 
 interface iDialogActiveProps {
   is_active: boolean;
