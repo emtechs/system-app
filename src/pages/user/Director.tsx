@@ -1,5 +1,5 @@
 import { ValidateCPF } from "../../shared/components";
-import { useAppThemeContext, useUserContext } from "../../shared/contexts";
+import { useAppThemeContext } from "../../shared/contexts";
 import {
   AutocompleteElement,
   FormContainer,
@@ -15,7 +15,7 @@ import { LayoutBasePage } from "../../shared/layouts";
 
 export const CreateDirectorPage = () => {
   const { setLoading } = useAppThemeContext();
-  const { createDirector } = useUserContext();
+  // const { createDirector } = useUserContext();
   const [schoolDataSelect, setSchoolDataSelect] = useState<iSchool[]>();
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export const CreateDirectorPage = () => {
   return (
     <LayoutBasePage title="Novo Diretor">
       <FormContainer
-        onSuccess={createDirector}
+        // onSuccess={createDirector}
         resolver={zodResolver(createDirectorSchema)}
       >
         <Box

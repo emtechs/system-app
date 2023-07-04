@@ -9,6 +9,11 @@ export interface iDialogBaseProps {
   onClose: () => void;
 }
 
+export interface iSelectBase {
+  id: string;
+  label: string;
+}
+
 export interface iButtonBaseProps {
   title: string;
   href?: string;

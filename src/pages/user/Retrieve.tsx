@@ -21,11 +21,7 @@ import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TitleRetrieveUser } from "./components";
 
-interface iRetrieveUserPageProps {
-  id: string;
-}
-
-export const RetrieveUserPage = ({ id }: iRetrieveUserPageProps) => {
+export const RetrieveUserPage = () => {
   const [searchParams] = useSearchParams();
   const school_id = searchParams.get("school_id");
   const { debounce } = useDebounce();
@@ -55,19 +51,17 @@ export const RetrieveUserPage = ({ id }: iRetrieveUserPageProps) => {
   );
 
   useEffect(() => {
-    if (id) {
-      const take = 5;
-      let query = queryData(take);
-      if (search) {
-        query += `&name=${search}`;
-        debounce(() => {
-          getSchools(id, query, take);
-        });
-      } else {
-        getSchools(id, query, take);
-      }
+    const take = 5;
+    let query = queryData(take);
+    if (search) {
+      query += `&name=${search}`;
+      debounce(() => {
+        getSchools("", query, take);
+      });
+    } else {
+      getSchools("", query, take);
     }
-  }, [id, queryData, search]);
+  }, [queryData, search]);
 
   return (
     <>

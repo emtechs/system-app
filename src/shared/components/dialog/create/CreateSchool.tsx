@@ -1,22 +1,21 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { BaseContentChildren, DialogBaseChildren } from "./structure";
+import { BaseContentChildren, DialogBaseChildren } from "../structure";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { schoolCreateSchema } from "../../schemas";
+import { schoolCreateSchema } from "../../../schemas";
 import { Button } from "@mui/material";
-import { iSchoolRequest } from "../../interfaces";
+import { iSchoolRequest } from "../../../interfaces";
 import { useCallback } from "react";
-import { useAppThemeContext, useDialogContext } from "../../contexts";
+import { useAppThemeContext, useDialogContext } from "../../../contexts";
 import { useNavigate } from "react-router-dom";
-import { apiSchool } from "../../services";
+import { apiSchool } from "../../../services";
 
 export const DialogCreateSchool = () => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { handleOpenCreate, openCreate, setOpenCreate } = useDialogContext();
+  const { handleOpenCreate, openCreate } = useDialogContext();
 
   const createSchool = useCallback(async (data: iSchoolRequest) => {
     try {
-      setOpenCreate(false);
       setLoading(true);
       const school = await apiSchool.create(data);
       handleSucess("A escola foi cadastrada com sucesso!");
@@ -38,7 +37,10 @@ export const DialogCreateSchool = () => {
       description=""
     >
       <FormContainer
-        onSuccess={createSchool}
+        onSuccess={(data) => {
+          handleOpenCreate();
+          createSchool(data);
+        }}
         resolver={zodResolver(schoolCreateSchema)}
       >
         <BaseContentChildren>

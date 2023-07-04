@@ -1,16 +1,9 @@
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  useState,
-} from "react";
+import { createContext, useContext, useState } from "react";
 import { iChildren } from "../interfaces";
 
 interface iDialogContextData {
   openActive: boolean;
   openCreate: boolean;
-  setOpenCreate: Dispatch<SetStateAction<boolean>>;
   openDirector: boolean;
   openEdit: boolean;
   handleOpenActive: () => void;
@@ -43,7 +36,6 @@ export const DialogProvider = ({ children }: iChildren) => {
         openCreate,
         openDirector,
         openEdit,
-        setOpenCreate,
       }}
     >
       {children}

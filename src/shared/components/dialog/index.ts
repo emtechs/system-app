@@ -1,6 +1,4 @@
 export * from "./ActiveSchool";
-export * from "./CreateSchool";
-export * from "./CreateServer";
 export * from "./DeleteFrequency";
 export * from "./DirectorSchool";
 export * from "./EditSchool";
@@ -9,4 +7,5 @@ export * from "./Missed";
 export * from "./RemoveMissed";
 export * from "./RemoveUser";
 export * from "./RetrieveFrequency";
+export * from "./create";
 export * from "./structure";

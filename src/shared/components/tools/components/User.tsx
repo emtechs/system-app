@@ -7,13 +7,12 @@ import {
   Menu,
   MenuItem,
   Tooltip,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
+import { useAppThemeContext, useDialogContext } from "../../../contexts";
 
 export const UserTools = () => {
-  const theme = useTheme();
-  const mdDown = useMediaQuery(theme.breakpoints.down("md"));
+  const { mdDown } = useAppThemeContext();
+  const { handleOpenCreate, handleOpenDirector } = useDialogContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -26,7 +25,7 @@ export const UserTools = () => {
   return (
     <>
       {mdDown ? (
-        <Tooltip title="Escola">
+        <Tooltip title="Novo">
           <IconButton
             id="basic-button"
             aria-controls={open ? "basic-menu" : undefined}
@@ -63,7 +62,12 @@ export const UserTools = () => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem href="/user/create?back=/user/list" onClick={handleClose}>
+        <MenuItem
+          onClick={() => {
+            handleOpenCreate();
+            handleClose();
+          }}
+        >
           <ListItemIcon>
             <PersonAdd />
           </ListItemIcon>
@@ -71,8 +75,10 @@ export const UserTools = () => {
         </MenuItem>
 
         <MenuItem
-          href="/user/create/director?back=/user/list"
-          onClick={handleClose}
+          onClick={() => {
+            handleOpenDirector();
+            handleClose();
+          }}
         >
           <ListItemIcon>
             <PersonAdd />

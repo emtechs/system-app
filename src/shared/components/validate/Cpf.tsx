@@ -3,7 +3,6 @@ import { useFormContext } from "react-hook-form-mui";
 import { apiUsingNow } from "../../services";
 import { iUser } from "../../interfaces";
 import { Button } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
 
 interface iValidateCPFProps {
   school_id?: string;
@@ -16,24 +15,19 @@ export const ValidateCPF = ({
   allNotServ,
   director,
 }: iValidateCPFProps) => {
-  const [searchParams] = useSearchParams();
-  const cpfData = searchParams.get("cpf");
-  const nameData = searchParams.get("name");
   const { setValue, watch, setError, clearErrors, formState } =
     useFormContext();
   const cpf = watch("cpf");
   const { isValid } = formState;
   const query = () => {
-    if (director) return `?school_id=${school_id}&director=true`;
+    if (director) return `?director=true`;
+    if (director && school_id) return `?school_id=${school_id}&director=true`;
     if (school_id) return `?school_id=${school_id}`;
-    if (allNotServ) return `?allNotServ=${allNotServ}`;
-    if (cpfData) return `?allNotServ=true`;
+    if (allNotServ) return "?allNotServ=true";
     return "";
   };
 
   useEffect(() => {
-    if (cpfData) setValue("cpf", cpfData);
-    if (nameData) setValue("name", nameData);
     if (typeof cpf === "string") {
       const notNumber = cpf.replace(/\D/g, "");
       setValue("cpf", notNumber);
@@ -43,16 +37,18 @@ export const ValidateCPF = ({
         apiUsingNow
           .get<iUser>(`users/cpf/${limitNumber}` + query())
           .then((res) => {
-            if (director) setValue("name_diret", res.data.name);
-            if (school_id) setValue("name", res.data.name);
+            if (director && school_id) {
+              setValue("name_diret", res.data.name);
+            } else setValue("name", res.data.name);
           })
           .catch(() => {
             setError("cpf", {
               message: "Usuário já está cadastrado",
             });
             setValue("login", 1);
-            if (director) setValue("name_diret", "");
-            if (school_id) setValue("name", "");
+            if (director && school_id) {
+              setValue("name_diret", "");
+            } else setValue("name", "");
           });
       } else {
         clearErrors("cpf");
@@ -64,7 +60,7 @@ export const ValidateCPF = ({
       setValue("cpf", value);
       setValue("login", limitNumber);
     }
-  }, [cpf, cpfData, nameData]);
+  }, [cpf]);
   return (
     <Button variant="contained" type="submit" disabled={!isValid} fullWidth>
       Salvar

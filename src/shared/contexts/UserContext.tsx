@@ -8,9 +8,8 @@ import {
 } from "react";
 import {
   iChildren,
+  iSelectBase,
   iUser,
-  iUserAdmRequest,
-  iUserDirectorRequest,
   iUserFirstRequest,
   iUserPasswordRequest,
   iUserSecretRequest,
@@ -23,8 +22,6 @@ import { FieldValues } from "react-hook-form";
 import { apiUser } from "../services";
 
 interface iUserContextData {
-  createAdm: (data: iUserAdmRequest) => Promise<void>;
-  createDirector: (data: iUserDirectorRequest) => Promise<void>;
   createSecret: (data: iUserSecretRequest, back?: string) => Promise<void>;
   editPassword: (id: string, data: iUserPasswordRequest) => Promise<void>;
   first: (id: string, data: iUserFirstRequest) => Promise<void>;
@@ -42,12 +39,17 @@ interface iUserContextData {
   listSchoolServerData: iWorkSchool[] | undefined;
   setListSchoolServerData: Dispatch<SetStateAction<iWorkSchool[] | undefined>>;
   loadingUser: boolean;
+  search: string | undefined;
+  setSearch: Dispatch<SetStateAction<string | undefined>>;
+  rolesData: iSelectBase[] | undefined;
+  setRolesData: Dispatch<SetStateAction<iSelectBase[] | undefined>>;
 }
 
 const UserContext = createContext({} as iUserContextData);
 
 export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
+
   const { setLoading, handleSucess, handleError, mdDown } =
     useAppThemeContext();
   const { setDashData, setUserData, setUserSelect } = useAuthContext();
@@ -56,6 +58,8 @@ export const UserProvider = ({ children }: iChildren) => {
   const [listSchoolServerData, setListSchoolServerData] =
     useState<iWorkSchool[]>();
   const [loadingUser, setLoadingUser] = useState(true);
+  const [search, setSearch] = useState<string>();
+  const [rolesData, setRolesData] = useState<iSelectBase[]>();
 
   const userRetrieve = useCallback((id: string) => {
     setLoadingUser(true);
@@ -92,35 +96,6 @@ export const UserProvider = ({ children }: iChildren) => {
       }
     },
     [mdDown]
-  );
-
-  const handleCreateUserAdm = useCallback(async (data: iUserAdmRequest) => {
-    try {
-      setLoading(true);
-      await apiUser.create(data);
-      handleSucess("Administrador cadastrado com sucesso!");
-    } catch {
-      handleError("Não foi possível cadastrar o administrador no momento!");
-    } finally {
-      setLoading(false);
-      navigate("/");
-    }
-  }, []);
-
-  const handleCreateDirector = useCallback(
-    async (data: iUserDirectorRequest) => {
-      try {
-        setLoading(true);
-        await apiUser.create(data);
-        handleSucess("Diretor cadastrado com sucesso!");
-        navigate("/");
-      } catch {
-        handleError("Não foi possível cadastrar o Diretor no momento!");
-      } finally {
-        setLoading(false);
-      }
-    },
-    []
   );
 
   const handleCreateUserSecret = useCallback(
@@ -214,8 +189,6 @@ export const UserProvider = ({ children }: iChildren) => {
   return (
     <UserContext.Provider
       value={{
-        createAdm: handleCreateUserAdm,
-        createDirector: handleCreateDirector,
         createSecret: handleCreateUserSecret,
         first: handleFirstUser,
         updateUser: handleUpdateUser,
@@ -228,6 +201,10 @@ export const UserProvider = ({ children }: iChildren) => {
         listSchoolServerData,
         setListSchoolServerData,
         loadingUser,
+        search,
+        setSearch,
+        rolesData,
+        setRolesData,
       }}
     >
       {children}

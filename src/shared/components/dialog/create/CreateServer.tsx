@@ -1,12 +1,12 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { useAppThemeContext, useDialogContext } from "../../contexts";
+import { useAppThemeContext, useDialogContext } from "../../../contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { iDialogSchoolProps, iServerRequest } from "../../interfaces";
-import { serverCreateSchema } from "../../schemas";
+import { iDialogSchoolProps, iServerRequest } from "../../../interfaces";
+import { serverCreateSchema } from "../../../schemas";
 import { useCallback } from "react";
-import { apiUser } from "../../services";
-import { BaseContentChildren, DialogBaseChildren } from "./structure";
-import { ValidateCPF } from "../validate";
+import { apiUser } from "../../../services";
+import { BaseContentChildren, DialogBaseChildren } from "../structure";
+import { ValidateCPF } from "../../validate";
 
 interface iDialogCreateServerProps extends iDialogSchoolProps {
   getServers: (id: string, query: string, take: number) => void;
@@ -17,11 +17,10 @@ export const DialogCreateServer = ({
   school,
 }: iDialogCreateServerProps) => {
   const { setLoading, handleError, handleSucess } = useAppThemeContext();
-  const { openCreate, handleOpenCreate, setOpenCreate } = useDialogContext();
+  const { openCreate, handleOpenCreate } = useDialogContext();
 
   const createServer = useCallback(async (data: iServerRequest, id: string) => {
     try {
-      setOpenCreate(false);
       setLoading(true);
       await apiUser.createServer(data, id);
       handleSucess("Servidor cadastrado com sucesso!");
@@ -42,6 +41,7 @@ export const DialogCreateServer = ({
     >
       <FormContainer
         onSuccess={(data) => {
+          handleOpenCreate();
           createServer(data, school.id);
         }}
         resolver={zodResolver(serverCreateSchema)}

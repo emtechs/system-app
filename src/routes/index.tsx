@@ -23,6 +23,7 @@ import {
   RetrieveClassPage,
   RetrieveFrequencyPage,
   RetrieveSchoolPage,
+  RetrieveUserPage,
   SchoolPage,
   StudentFrequencyPage,
   UserPage,
@@ -38,7 +39,7 @@ const AppRoutes = () => {
       <Route element={<ProtectedAuth />}>
         <Route element={<ProtectedAdmin />}>
           <Route path="/user" element={<UserPage />} />
-          {/* <Route path="/class/list" element={<ListClassPage />} /> */}
+          <Route path="/user/:user_id" element={<RetrieveUserPage />} />
           <Route path="/student/list" element={<ListStudentPage />} />
           <Route
             path="/import/school"
