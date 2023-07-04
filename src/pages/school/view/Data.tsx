@@ -8,7 +8,7 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
-import { useAuthContext, useSchoolContext } from "../../../shared/contexts";
+import { useDialogContext, useSchoolContext } from "../../../shared/contexts";
 import { Edit, ExpandMore, Person, RemoveDone } from "@mui/icons-material";
 import {
   ButtonSmDown,
@@ -18,13 +18,9 @@ import {
 } from "../../../shared/components";
 
 export const ViewSchoolData = () => {
-  const { schoolData } = useAuthContext();
-  const {
-    loadingSchool,
-    handleOpenEdit,
-    handleOpenDirector,
-    handleOpenActive,
-  } = useSchoolContext();
+  const { handleOpenActive, handleOpenDirector, handleOpenEdit } =
+    useDialogContext();
+  const { loadingSchool, schoolRetrieve } = useSchoolContext();
   return (
     <>
       <Card>
@@ -38,11 +34,13 @@ export const ViewSchoolData = () => {
               {loadingSchool ? (
                 <Skeleton width={300} />
               ) : (
-                <Typography>{schoolData?.name}</Typography>
+                <Typography>{schoolRetrieve?.name}</Typography>
               )}
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>Diretor(a): {schoolData?.director?.name}</Typography>
+              <Typography>
+                Diretor(a): {schoolRetrieve?.director?.name}
+              </Typography>
             </AccordionDetails>
           </Accordion>
         </CardContent>
@@ -65,9 +63,9 @@ export const ViewSchoolData = () => {
           />
         </CardActions>
       </Card>
-      {schoolData && <DialogEditSchool school={schoolData} />}
-      {schoolData && <DialogDirectorSchool school={schoolData} />}
-      {schoolData && <DialogActiveSchool school={schoolData} />}
+      {schoolRetrieve && <DialogEditSchool school={schoolRetrieve} />}
+      {schoolRetrieve && <DialogDirectorSchool school={schoolRetrieve} />}
+      {schoolRetrieve && <DialogActiveSchool school={schoolRetrieve} />}
     </>
   );
 };

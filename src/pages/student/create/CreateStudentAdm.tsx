@@ -1,11 +1,6 @@
 import { useAuthContext, useStudentContext } from "../../../shared/contexts";
 import { iPageProps } from "../../../shared/interfaces";
-import {
-  BasePage,
-  BoxResp,
-  SelectClass,
-  SelectSchool,
-} from "../../../shared/components";
+import { BoxResp, SelectClass, SelectSchool } from "../../../shared/components";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { studentCreateSchema } from "../../../shared/schemas";
@@ -16,7 +11,7 @@ export const CreateStudentAdmPage = ({ back }: iPageProps) => {
   const { yearData } = useAuthContext();
 
   return (
-    <BasePage isProfile back={back}>
+    <>
       <FormContainer
         onSuccess={(data) => {
           if (yearData) createStudent(data, yearData.id, back);
@@ -38,6 +33,6 @@ export const CreateStudentAdmPage = ({ back }: iPageProps) => {
           </Button>
         </BoxResp>
       </FormContainer>
-    </BasePage>
+    </>
   );
 };

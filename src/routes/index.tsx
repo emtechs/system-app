@@ -22,11 +22,10 @@ import {
   ReportPage,
   RetrieveClassPage,
   RetrieveFrequencyPage,
+  RetrieveSchoolPage,
   SchoolPage,
   StudentFrequencyPage,
   UserPage,
-  ViewSchoolData,
-  ViewSchoolServer,
 } from "../pages";
 import { ProtectedAdmin, ProtectedAuth } from "../shared/components";
 
@@ -53,10 +52,8 @@ const AppRoutes = () => {
             path="/import/student"
             element={<ImportStudentPage back="/student" />}
           />
-          <Route path="/school" element={<SchoolPage />}>
-            <Route path=":school_id" element={<ViewSchoolData />} />
-            <Route path=":school_id/server" element={<ViewSchoolServer />} />
-          </Route>
+          <Route path="/school" element={<SchoolPage />} />
+          <Route path="/school/:school_id" element={<RetrieveSchoolPage />} />
           <Route path="/home/school" element={<DashboardSchoolPage />} />
         </Route>
         <Route path="/" element={<DashboardPage />} />

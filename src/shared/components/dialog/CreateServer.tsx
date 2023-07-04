@@ -1,5 +1,5 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { useAppThemeContext, useSchoolContext } from "../../contexts";
+import { useAppThemeContext, useDialogContext } from "../../contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { iDialogSchoolProps, iServerRequest } from "../../interfaces";
 import { serverCreateSchema } from "../../schemas";
@@ -17,7 +17,7 @@ export const DialogCreateServer = ({
   school,
 }: iDialogCreateServerProps) => {
   const { setLoading, handleError, handleSucess } = useAppThemeContext();
-  const { openCreate, handleOpenCreate, setOpenCreate } = useSchoolContext();
+  const { openCreate, handleOpenCreate, setOpenCreate } = useDialogContext();
 
   const createServer = useCallback(async (data: iServerRequest, id: string) => {
     try {

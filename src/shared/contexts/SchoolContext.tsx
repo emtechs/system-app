@@ -1,6 +1,7 @@
 import {
   iChildren,
   iClassSchoolList,
+  iSchool,
   iSchoolClassRequest,
   iSchoolImportRequest,
   iSchoolServerRequest,
@@ -16,7 +17,7 @@ import {
   useContext,
   useState,
 } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { apiClass, apiSchool } from "../services";
 import { useAuthContext } from "./AuthContext";
@@ -51,70 +52,39 @@ interface iSchoolContextData {
   loadingSchool: boolean;
   schoolId: string | undefined;
   listYear: iYear[] | undefined;
-  disabled: boolean;
   getClasses: (id: string, query: string, take: number) => void;
   listClassData: iClassSchoolList[] | undefined;
+  onClickReset: () => void;
   search: string | undefined;
   setSearch: Dispatch<SetStateAction<string | undefined>>;
-  openActive: boolean;
-  openCreate: boolean;
-  setOpenCreate: Dispatch<SetStateAction<boolean>>;
-  openDirector: boolean;
-  openEdit: boolean;
-  handleOpenActive: () => void;
-  handleOpenCreate: () => void;
-  handleOpenDirector: () => void;
-  handleOpenEdit: () => void;
-  valueVert: number;
-  setValueVert: Dispatch<SetStateAction<number>>;
-  years: iYear[] | undefined;
-  setYears: Dispatch<SetStateAction<iYear[] | undefined>>;
-  defineValue: () => number;
-  onClickReset: () => void;
+  schoolRetrieve: iSchool | undefined;
+  setSchoolRetrieve: Dispatch<SetStateAction<iSchool | undefined>>;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
 
 export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { setLoading, handleSucess, handleError, mdDown } =
     useAppThemeContext();
-  const { setSchoolData, yearData, setSchoolDataAdmin } = useAuthContext();
+  const { yearData, setSchoolDataAdmin } = useAuthContext();
   const { getSchools, setListSchoolServerData } = useUserContext();
   const { setIsLoading, setCount, define_step, setSkip, setPage, setActive } =
     usePaginationContext();
+  const [schoolRetrieve, setSchoolRetrieve] = useState<iSchool>();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
   const [listClassData, setListClassData] = useState<iClassSchoolList[]>();
   const [schoolId, setSchoolId] = useState<string>();
-  const [disabled, setDisabled] = useState(false);
   const [director, setDirector] = useState([true, true]);
   const [loadingSchool, setLoadingSchool] = useState(false);
   const [listYear, setListYear] = useState<iYear[]>();
   const [search, setSearch] = useState<string>();
-  const [openActive, setOpenActive] = useState(false);
-  const [openCreate, setOpenCreate] = useState(false);
-  const [openDirector, setOpenDirector] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
-  const [valueVert, setValueVert] = useState(0);
-  const [years, setYears] = useState<iYear[]>();
-  const handleOpenActive = () => setOpenActive(!openActive);
-  const handleOpenCreate = () => setOpenCreate(!openCreate);
-  const handleOpenDirector = () => setOpenDirector(!openDirector);
-  const handleOpenEdit = () => setOpenEdit(!openEdit);
 
   const onClickReset = useCallback(() => {
-    setSearch(undefined);
     setDirector([true, true]);
     setActive(true);
+    setSearch(undefined);
   }, []);
-
-  const defineValue = useCallback(() => {
-    let value = 0;
-
-    if (location.pathname.includes("/server")) value = 1;
-    return value;
-  }, [location]);
 
   const clickRetrieveSchool = useCallback(
     (school_id: string, server_id: string) => {
@@ -140,15 +110,11 @@ export const SchoolProvider = ({ children }: iChildren) => {
     apiSchool
       .retrieve(id)
       .then((res) => {
-        setSchoolData(res.school);
+        setSchoolRetrieve(res.school);
         setListYear(res.years);
         if (res.years.length > 0) {
           setSchoolId(res.school.id);
-          setDisabled(false);
-        } else {
-          setSchoolId(undefined);
-          setDisabled(true);
-        }
+        } else setSchoolId(undefined);
       })
       .catch(() => navigate("/"))
       .finally(() => {
@@ -262,7 +228,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         const school = await apiSchool.update(data, id, query);
-        setSchoolData(school);
+        setSchoolRetrieve(school);
         handleSucess(`Sucesso ao alterar o ${type} da Escola!`);
       } catch {
         handleError(
@@ -292,28 +258,15 @@ export const SchoolProvider = ({ children }: iChildren) => {
         loadingSchool,
         createSchoolServer: handleCreateSchoolServer,
         schoolId,
-        disabled,
         listYear,
         createSchoolClass: handleCreateSchoolClass,
         getClasses,
         listClassData,
-        handleOpenActive,
-        handleOpenCreate,
-        handleOpenDirector,
-        handleOpenEdit,
-        openActive,
-        openCreate,
-        openDirector,
-        openEdit,
+        onClickReset,
         search,
         setSearch,
-        setValueVert,
-        setYears,
-        valueVert,
-        years,
-        defineValue,
-        setOpenCreate,
-        onClickReset,
+        schoolRetrieve,
+        setSchoolRetrieve,
       }}
     >
       {children}

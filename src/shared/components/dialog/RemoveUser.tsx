@@ -1,5 +1,9 @@
 import { useCallback } from "react";
-import { useAppThemeContext, useSchoolContext } from "../../contexts";
+import {
+  useAppThemeContext,
+  useDialogContext,
+  useSchoolContext,
+} from "../../contexts";
 import { iSchool, iSchoolServer } from "../../interfaces";
 import { rolePtBr } from "../../scripts";
 import { DialogBase } from "./structure";
@@ -8,19 +12,12 @@ import { apiSchool } from "../../services";
 interface iRemoveProps {
   work: iSchoolServer;
   school: iSchool;
-  open: boolean;
-  handleClose: () => void;
   getServers: (id: string, query: string, take: number) => void;
 }
 
-export const RemoveUser = ({
-  handleClose,
-  open,
-  school,
-  work,
-  getServers,
-}: iRemoveProps) => {
+export const RemoveUser = ({ school, work, getServers }: iRemoveProps) => {
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
+  const { openActive, handleOpenActive } = useDialogContext();
   const { schoolDataRetrieve } = useSchoolContext();
 
   const deleteServer = useCallback(
@@ -42,14 +39,14 @@ export const RemoveUser = ({
 
   return (
     <DialogBase
-      open={open}
-      onClose={handleClose}
+      open={openActive}
+      onClose={handleOpenActive}
       title="Remover Usuário da Função"
       description={`Deseja continuar removendo o usúario ${work.server.name.toUpperCase()} da
       Função ${rolePtBr(work.role).toUpperCase()} da Escola ${school.name}?`}
       action={() => {
         deleteServer(school.id, work.server.id);
-        handleClose();
+        handleOpenActive();
       }}
       actionTitle="Continuar"
     />

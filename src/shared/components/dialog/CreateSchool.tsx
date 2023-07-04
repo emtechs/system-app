@@ -5,14 +5,14 @@ import { schoolCreateSchema } from "../../schemas";
 import { Button } from "@mui/material";
 import { iSchoolRequest } from "../../interfaces";
 import { useCallback } from "react";
-import { useAppThemeContext, useSchoolContext } from "../../contexts";
+import { useAppThemeContext, useDialogContext } from "../../contexts";
 import { useNavigate } from "react-router-dom";
 import { apiSchool } from "../../services";
 
 export const DialogCreateSchool = () => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { openCreate, handleOpenCreate, setOpenCreate } = useSchoolContext();
+  const { handleOpenCreate, openCreate, setOpenCreate } = useDialogContext();
 
   const createSchool = useCallback(async (data: iSchoolRequest) => {
     try {

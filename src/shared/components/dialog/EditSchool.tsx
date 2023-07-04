@@ -1,5 +1,5 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { useSchoolContext } from "../../contexts";
+import { useDialogContext, useSchoolContext } from "../../contexts";
 import { iDialogSchoolProps } from "../../interfaces";
 import { BaseContentChildren, DialogBaseChildren } from "./structure";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +7,8 @@ import { schoolUpdateSchema } from "../../schemas";
 import { Button } from "@mui/material";
 
 export const DialogEditSchool = ({ school }: iDialogSchoolProps) => {
-  const { updateSchool, openEdit, handleOpenEdit } = useSchoolContext();
+  const { handleOpenEdit, openEdit } = useDialogContext();
+  const { updateSchool } = useSchoolContext();
   return (
     <DialogBaseChildren
       open={openEdit}

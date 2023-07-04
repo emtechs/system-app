@@ -2,7 +2,7 @@ import { Navigate, useParams } from "react-router-dom";
 import { useDebounce } from "../../../shared/hooks";
 import {
   useAppThemeContext,
-  useAuthContext,
+  useDialogContext,
   usePaginationContext,
   useSchoolContext,
 } from "../../../shared/contexts";
@@ -22,10 +22,10 @@ export const ViewSchoolServer = () => {
   const { school_id } = useParams();
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
-  const { schoolData } = useAuthContext();
+  const { handleOpenActive } = useDialogContext();
   const { defineQuery, query, setIsLoading, setCount, define_step } =
     usePaginationContext();
-  const { search, handleOpenActive, openActive } = useSchoolContext();
+  const { search, schoolRetrieve } = useSchoolContext();
   const [data, setData] = useState<iSchoolServer[]>();
   const [work, setWork] = useState<iSchoolServer>();
 
@@ -124,14 +124,12 @@ export const ViewSchoolServer = () => {
         ))}
       </TableBase>
       {mdDown && <PaginationMobile />}
-      {schoolData && (
-        <DialogCreateServer school={schoolData} getServers={getServers} />
+      {schoolRetrieve && (
+        <DialogCreateServer school={schoolRetrieve} getServers={getServers} />
       )}
-      {schoolData && work && (
+      {schoolRetrieve && work && (
         <RemoveUser
-          open={openActive}
-          handleClose={handleOpenActive}
-          school={schoolData}
+          school={schoolRetrieve}
           work={work}
           getServers={getServers}
         />

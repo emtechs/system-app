@@ -1,10 +1,10 @@
-import { useSchoolContext } from "../../contexts";
+import { useDialogContext, useSchoolContext } from "../../contexts";
 import { iDialogSchoolProps } from "../../interfaces";
 import { DialogActive } from "./structure";
 
 export const DialogActiveSchool = ({ school }: iDialogSchoolProps) => {
-  const { updateSchool, openActive, handleOpenActive, onClickReset } =
-    useSchoolContext();
+  const { handleOpenActive, openActive } = useDialogContext();
+  const { updateSchool, onClickReset } = useSchoolContext();
   return (
     school && (
       <DialogActive

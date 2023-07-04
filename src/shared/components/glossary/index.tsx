@@ -8,21 +8,17 @@ import {
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { iChildren } from "../../interfaces";
-import { useModalContext } from "../../contexts";
 
 interface iGlossaryProps extends iChildren {
-  onClose?: () => void;
-  open?: boolean;
+  onClose: () => void;
+  open: boolean;
 }
 
 export const Glossary = ({ onClose, open, children }: iGlossaryProps) => {
   const theme = useTheme();
-  const { openGlossary, handleOpenGlossary } = useModalContext();
-  if (open === undefined) {
-    open = openGlossary;
-  }
+
   return (
-    <Dialog onClose={onClose ? onClose : handleOpenGlossary} open={open}>
+    <Dialog onClose={onClose} open={open}>
       <DialogTitle
         bgcolor={theme.palette.secondary.main}
         color={theme.palette.secondary.contrastText}
@@ -31,7 +27,7 @@ export const Glossary = ({ onClose, open, children }: iGlossaryProps) => {
         Glossário
         <IconButton
           aria-label="close"
-          onClick={onClose ? onClose : handleOpenGlossary}
+          onClick={onClose}
           sx={{
             position: "absolute",
             right: 8,

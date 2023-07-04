@@ -26,6 +26,7 @@ export const DialogBaseChildren = ({
       onClose={onClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
+      fullWidth
     >
       <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
       <DialogContent>

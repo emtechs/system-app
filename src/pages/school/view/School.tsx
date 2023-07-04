@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   useAppThemeContext,
-  useAuthContext,
+  useDialogContext,
   usePaginationContext,
   useSchoolContext,
 } from "../../../shared/contexts";
@@ -21,12 +21,12 @@ export const ViewSchool = () => {
   const navigate = useNavigate();
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
-  const { schoolData, setSchoolData } = useAuthContext();
-  const { is_director, search, handleOpenActive, onClickReset } =
-    useSchoolContext();
+  const { handleOpenActive } = useDialogContext();
+  const { search, is_director, onClickReset } = useSchoolContext();
   const { query, defineQuery, setIsLoading, define_step, setCount } =
     usePaginationContext();
-  const [data, setData] = useState<iSchool[]>();
+  const [listData, setListData] = useState<iSchool[]>();
+  const [data, setData] = useState<iSchool>();
 
   const getSchools = useCallback(
     (query: string, take: number) => {
@@ -35,7 +35,7 @@ export const ViewSchool = () => {
         apiSchool
           .list(query)
           .then((res) => {
-            setData(res.result);
+            setListData(res.result);
             setCount(res.total);
             define_step(res.total, take);
           })
@@ -45,7 +45,7 @@ export const ViewSchool = () => {
         apiSchool
           .list(query)
           .then((res) => {
-            setData(res.result);
+            setListData(res.result);
             setCount(res.total);
           })
           .finally(() => setIsLoading(false));
@@ -89,14 +89,14 @@ export const ViewSchool = () => {
         message="Nenhuma escola encotrada"
         is_pagination={mdDown ? false : undefined}
       >
-        {data?.map((school) => (
+        {listData?.map((school) => (
           <TableRow
             key={school.id}
             hover
             sx={{ cursor: "pointer" }}
             onClick={() => {
               if (!school.is_active) {
-                setSchoolData(school);
+                setData(school);
                 handleOpenActive();
               } else {
                 onClickReset();
@@ -111,7 +111,7 @@ export const ViewSchool = () => {
       </TableBase>
       {mdDown && <PaginationMobile />}
       <DialogCreateSchool />
-      {schoolData && <DialogActiveSchool school={schoolData} />}
+      {data && <DialogActiveSchool school={data} />}
     </>
   );
 };

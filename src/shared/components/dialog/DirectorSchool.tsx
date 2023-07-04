@@ -1,5 +1,5 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { useSchoolContext } from "../../contexts";
+import { useDialogContext, useSchoolContext } from "../../contexts";
 import { iDialogSchoolProps } from "../../interfaces";
 import { BaseContentChildren, DialogBaseChildren } from "./structure";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,7 +8,8 @@ import { Box, Typography } from "@mui/material";
 import { ValidateCPF } from "../validate";
 
 export const DialogDirectorSchool = ({ school }: iDialogSchoolProps) => {
-  const { updateSchool, openDirector, handleOpenDirector } = useSchoolContext();
+  const { handleOpenDirector, openDirector } = useDialogContext();
+  const { updateSchool } = useSchoolContext();
   return (
     <DialogBaseChildren
       open={openDirector}

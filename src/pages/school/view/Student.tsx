@@ -5,15 +5,15 @@ import {
   useAuthContext,
   useFrequencyContext,
   usePaginationContext,
-} from "../../shared/contexts";
-import { apiUsingNow } from "../../shared/services";
-import { iStudentWithSchool, iheadCell } from "../../shared/interfaces";
-import { TableBase, Tools } from "../../shared/components";
+} from "../../../shared/contexts";
+import { apiUsingNow } from "../../../shared/services";
+import { iStudentWithSchool, iheadCell } from "../../../shared/interfaces";
+import { TableBase, Tools } from "../../../shared/components";
 import { Chip, TableCell, TableRow } from "@mui/material";
-import { useDebounce } from "../../shared/hooks";
+import { useDebounce } from "../../../shared/hooks";
 import { Group } from "@mui/icons-material";
-import { LayoutBasePage } from "../../shared/layouts";
-import { defineBgColorInfrequency } from "../../shared/scripts";
+import { LayoutBasePage } from "../../../shared/layouts";
+import { defineBgColorInfrequency } from "../../../shared/scripts";
 
 interface iCardStudentProps {
   student: iStudentWithSchool;
