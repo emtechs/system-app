@@ -29,7 +29,7 @@ interface iSchoolContextData {
   director: boolean[];
   setDirector: Dispatch<SetStateAction<boolean[]>>;
   is_director: () => "" | "&is_director=true" | "&is_director=false";
-  schoolDataRetrieve: (id: string) => void;
+  schoolDataRetrieve: (id: string, query: string) => void;
   schoolDataAdminRetrieve: (id: string) => void;
   importSchool: (data: iSchoolImportRequest, back?: string) => Promise<void>;
   createSchoolClass: (
@@ -50,7 +50,6 @@ interface iSchoolContextData {
   ) => Promise<void>;
   clickRetrieveSchool: (school_id: string, server_id: string) => void;
   loadingSchool: boolean;
-  schoolId: string | undefined;
   listYear: iYear[] | undefined;
   getClasses: (id: string, query: string, take: number) => void;
   listClassData: iClassSchoolList[] | undefined;
@@ -74,7 +73,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [schoolRetrieve, setSchoolRetrieve] = useState<iSchool>();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
   const [listClassData, setListClassData] = useState<iClassSchoolList[]>();
-  const [schoolId, setSchoolId] = useState<string>();
   const [director, setDirector] = useState([true, true]);
   const [loadingSchool, setLoadingSchool] = useState(false);
   const [listYear, setListYear] = useState<iYear[]>();
@@ -104,17 +102,14 @@ export const SchoolProvider = ({ children }: iChildren) => {
     return "";
   }, [director]);
 
-  const schoolDataRetrieve = useCallback((id: string) => {
+  const schoolDataRetrieve = useCallback((id: string, query: string) => {
     setLoadingSchool(true);
     setLoading(true);
     apiSchool
-      .retrieve(id)
+      .retrieve(id, query)
       .then((res) => {
         setSchoolRetrieve(res.school);
         setListYear(res.years);
-        if (res.years.length > 0) {
-          setSchoolId(res.school.id);
-        } else setSchoolId(undefined);
       })
       .catch(() => navigate("/"))
       .finally(() => {
@@ -257,7 +252,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
         clickRetrieveSchool,
         loadingSchool,
         createSchoolServer: handleCreateSchoolServer,
-        schoolId,
         listYear,
         createSchoolClass: handleCreateSchoolClass,
         getClasses,

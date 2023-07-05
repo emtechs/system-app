@@ -12,7 +12,6 @@ import {
   AddBox,
   ArrowBack,
   ClearAll,
-  Dashboard,
   Home,
   ManageAccountsOutlined,
   PersonOffOutlined,
@@ -33,7 +32,6 @@ interface iToolsProps {
   isHome?: boolean;
   toHome?: string;
   isUser?: boolean;
-  isSchool?: boolean;
   titleNew?: string;
   iconNew?: ReactNode;
   onClickNew?: () => void;
@@ -55,7 +53,6 @@ export const Tools = ({
   isHome,
   toHome = "/",
   isUser,
-  isSchool,
   titleNew = "Novo",
   iconNew = <AddBox />,
   onClickNew,
@@ -71,7 +68,7 @@ export const Tools = ({
   onClickReset,
 }: iToolsProps) => {
   const { theme, mdDown } = useAppThemeContext();
-  const { director, setDirector, is_director, schoolId } = useSchoolContext();
+  const { director, setDirector, is_director } = useSchoolContext();
   const { is_active } = usePaginationContext();
   const { handleClickButtonTools } = useDrawerContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -132,14 +129,6 @@ export const Tools = ({
         <CompBase title={titleNew} startIcon={iconNew} onClick={onClickNew} />
       )}
       {isUser && <UserTools />}
-      {isSchool && schoolId && (
-        <ButtonDest
-          title="Painel"
-          to={"/home/school?id=" + schoolId}
-          startIcon={<Dashboard />}
-          isResp
-        />
-      )}
       {isSearch && (
         <TextField
           size="small"

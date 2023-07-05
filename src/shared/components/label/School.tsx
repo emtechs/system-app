@@ -2,7 +2,7 @@ import { Chip, Skeleton } from "@mui/material";
 import { useAppThemeContext, useSchoolContext } from "../../contexts";
 import { iSchool } from "../../interfaces";
 import { School } from "@mui/icons-material";
-import { adaptNameLabel } from "../../scripts";
+import { adaptNameSchool } from "../../scripts";
 
 interface iLabelSchoolProps {
   school?: iSchool;
@@ -22,7 +22,7 @@ export const LabelSchool = ({ school, clickable }: iLabelSchoolProps) => {
         loadingSchool ? (
           <Skeleton width={100} />
         ) : mdDown ? (
-          adaptNameLabel(school?.name)
+          adaptNameSchool(school?.name, 15)
         ) : (
           school?.name
         )

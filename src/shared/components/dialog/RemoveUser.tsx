@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import {
   useAppThemeContext,
+  useAuthContext,
   useDialogContext,
   useSchoolContext,
 } from "../../contexts";
@@ -18,6 +19,7 @@ interface iRemoveProps {
 export const RemoveUser = ({ school, work, getServers }: iRemoveProps) => {
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const { openActive, handleOpenActive } = useDialogContext();
+  const { yearData } = useAuthContext();
   const { schoolDataRetrieve } = useSchoolContext();
 
   const deleteServer = useCallback(
@@ -27,7 +29,8 @@ export const RemoveUser = ({ school, work, getServers }: iRemoveProps) => {
         await apiSchool.deleteServer(school_id, server_id);
         handleSucess("Usuário removido da função com sucesso!");
         getServers(school_id, "", 1);
-        if (work.role === "DIRET") schoolDataRetrieve(school_id);
+        if (work.role === "DIRET" && yearData)
+          schoolDataRetrieve(school_id, `?year_id=${yearData.id}`);
       } catch {
         handleError("Não foi possível remover o usuário da função no momento!");
       } finally {
