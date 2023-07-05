@@ -64,10 +64,10 @@ export const ToolsSchool = ({
   const { theme, mdDown } = useAppThemeContext();
   const { handleOpenCreate } = useDialogContext();
   const {
+    schoolRetrieve,
     director,
     setDirector,
     is_director,
-    schoolId,
     onClickReset,
     search,
     setSearch,
@@ -127,10 +127,10 @@ export const ToolsSchool = ({
         />
       )}
       {isUser && <UserTools />}
-      {schoolId && (
+      {schoolRetrieve?.is_class && (
         <ButtonDest
           title="Painel"
-          to={"/home/school?id=" + schoolId}
+          to={"/home/school?id=" + schoolRetrieve.id}
           startIcon={<Dashboard />}
           isResp
         />

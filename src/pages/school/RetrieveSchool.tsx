@@ -11,7 +11,11 @@ import {
   School,
   Workspaces,
 } from "@mui/icons-material";
-import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
+import {
+  useAppThemeContext,
+  useAuthContext,
+  useSchoolContext,
+} from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
 import { LabelSchool, ToolsSchool } from "../../shared/components";
 import { ViewSchoolData, ViewSchoolServer } from "./view";
@@ -21,7 +25,8 @@ export const RetrieveSchoolPage = () => {
   const { school_id } = useParams();
   const viewData = searchParams.get("view");
   const { mdDown } = useAppThemeContext();
-  const { schoolDataRetrieve, schoolRetrieve, schoolId } = useSchoolContext();
+  const { yearData } = useAuthContext();
+  const { schoolDataRetrieve, schoolRetrieve } = useSchoolContext();
 
   const defineValue = useCallback(() => {
     let value = 0;
@@ -40,10 +45,11 @@ export const RetrieveSchoolPage = () => {
   }, [viewData]);
 
   useEffect(() => {
-    if (school_id) {
-      if (schoolRetrieve?.id !== school_id) schoolDataRetrieve(school_id);
+    if (school_id && yearData) {
+      if (schoolRetrieve?.id !== school_id)
+        schoolDataRetrieve(school_id, `?year_id=${yearData.id}`);
     }
-  }, [school_id]);
+  }, [school_id, yearData]);
 
   const tools = [
     <ToolsSchool back="/school" />,
@@ -103,19 +109,19 @@ export const RetrieveSchoolPage = () => {
             href={"/school/" + school_id + "?view=student"}
             icon={<Groups />}
             label="Alunos"
-            disabled={schoolId ? false : true}
+            disabled={schoolRetrieve?.is_class ? false : true}
           />
           <Tab
             href={"/school/" + school_id + "?view=frequency"}
             icon={<Checklist />}
             label="Frequências"
-            disabled={schoolId ? false : true}
+            disabled={schoolRetrieve?.is_class ? false : true}
           />
           <Tab
             href={"/school/" + school_id + "?view=infrequency"}
             icon={<Percent />}
             label="Infrequência"
-            disabled={schoolId ? false : true}
+            disabled={schoolRetrieve?.is_class ? false : true}
           />
         </Tabs>
       </Box>

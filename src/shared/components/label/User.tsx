@@ -2,7 +2,7 @@ import { Chip, Skeleton } from "@mui/material";
 import { useAppThemeContext, useUserContext } from "../../contexts";
 import { iUser } from "../../interfaces";
 import { Person } from "@mui/icons-material";
-import { adaptNameLabel } from "../../scripts";
+import { adaptName } from "../../scripts";
 
 interface iLabelUserProps {
   user?: iUser;
@@ -22,7 +22,7 @@ export const LabelUser = ({ user, clickable }: iLabelUserProps) => {
         loadingUser ? (
           <Skeleton width={100} />
         ) : mdDown ? (
-          adaptNameLabel(user?.name)
+          adaptName(user?.name)
         ) : (
           user?.name
         )

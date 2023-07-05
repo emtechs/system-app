@@ -109,9 +109,12 @@ interface iRetrieveReturn {
   years: iYear[];
 }
 
-const retrieve = async (id: string): Promise<iRetrieveReturn> => {
+const retrieve = async (
+  id: string,
+  query: string
+): Promise<iRetrieveReturn> => {
   const { data: response } = await apiUsingNow.get<iRetrieveReturn>(
-    `schools/${id}`
+    `schools/${id}${query}`
   );
 
   return response;

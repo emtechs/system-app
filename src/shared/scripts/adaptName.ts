@@ -1,40 +1,43 @@
-export const adaptName = (name = "") => {
-  if (name.length > 27) {
-    const displayName = name.split(" ");
-    let name4 = "";
-    if (displayName[4]) {
-      name4 = " " + displayName[4];
-    }
-    if (displayName[3].length < 3) {
-      return (
-        displayName[0] +
-        " " +
-        displayName[1] +
-        " " +
-        displayName[2][0] +
-        "." +
-        name4
-      );
-    }
-    return (
-      displayName[0] +
-      " " +
-      displayName[1] +
-      " " +
-      displayName[2] +
-      " " +
-      displayName[3][0] +
-      "." +
-      name4
-    );
-  }
-  return name;
-};
+export const adaptName = (name = "", max = 30) => {
+  let nameDisplay = "";
 
-export const adaptNameLabel = (name = "") => {
+  let lengthName = 0;
+
   const displayName = name.split(" ");
 
-  if (displayName.length === 0) return displayName;
+  displayName.forEach((el, index) => {
+    lengthName += el.length;
+    if (index === 0) {
+      nameDisplay = el;
+    } else if (index === 1 && el.length < 4) {
+      nameDisplay += ` ${el}`;
+    } else if (index === 3) {
+      nameDisplay += ` ${el[0]}.`;
+    } else if (lengthName < max) {
+      if (el.length > 3) nameDisplay += ` ${el}`;
+    } else if (el.length > 3) nameDisplay += ` ${el[0]}.`;
+  });
 
-  return [...displayName].shift() + " " + [...displayName].pop();
+  return nameDisplay;
+};
+
+export const adaptNameSchool = (name = "", max = 30) => {
+  let nameDisplay = "";
+
+  let lengthName = 0;
+
+  const displayName = name.split(" ");
+
+  displayName.forEach((el, index) => {
+    lengthName += el.length;
+    if (index === 0) {
+      nameDisplay = el;
+    } else if (index === 1) {
+      nameDisplay += ` ${el[0]}.`;
+    } else if (lengthName < max) {
+      if (el.length > 3) nameDisplay += ` ${el}`;
+    } else if (el.length > 3) nameDisplay += ` ${el[0]}.`;
+  });
+
+  return nameDisplay;
 };
