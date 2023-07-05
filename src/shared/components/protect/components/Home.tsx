@@ -25,7 +25,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useAppThemeContext, useAuthContext } from "../../../contexts";
-import { iChildren, iSchool } from "../../../interfaces";
+import { iChildren, iSchoolClass } from "../../../interfaces";
 import {
   AccountBox,
   Edit,
@@ -48,13 +48,13 @@ export const HomeNotAdmin = ({ children }: iChildren) => {
   const [search, setSearch] = useState("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [schoolsData, setSchoolsData] = useState<iSchool[]>();
+  const [schoolsData, setSchoolsData] = useState<iSchoolClass[]>();
 
   useEffect(() => {
     if (yearData) {
       apiUser
-        .schools(`?year_id=${yearData.id}`)
-        .then((res) => setSchoolsData(res.schools));
+        .schoolsClass(yearData.id, "")
+        .then((res) => setSchoolsData(res.result));
     }
   }, [yearData]);
 
@@ -260,11 +260,20 @@ export const HomeNotAdmin = ({ children }: iChildren) => {
                           />
                           <CardContent>
                             <Box display="flex" flexDirection="column">
-                              <Typography variant="caption">
+                              <Typography fontWeight="bolder" variant="caption">
                                 {el.name}
                               </Typography>
                               <Typography variant="caption">
-                                {el.director?.name}
+                                Turmas: {el.classes}
+                              </Typography>
+                              <Typography variant="caption">
+                                Estudantes: {el.students}
+                              </Typography>
+                              <Typography variant="caption">
+                                Frequências: {el.frequencies}
+                              </Typography>
+                              <Typography variant="caption">
+                                Infrequência: {el.infrequency.toFixed(0)}%
                               </Typography>
                             </Box>
                           </CardContent>

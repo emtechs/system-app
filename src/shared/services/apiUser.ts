@@ -2,6 +2,7 @@ import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
 import {
   iSchool,
+  iSchoolClass,
   iSchoolServer,
   iSelectBase,
   iUser,
@@ -77,6 +78,18 @@ const schools = async (query: string) => {
   return response;
 };
 
+interface iSchoolClassReturn {
+  total: number;
+  result: iSchoolClass[];
+}
+
+const schoolsClass = async (year_id: string, query: string) => {
+  const { data: response } = await apiUsingNow.get<iSchoolClassReturn>(
+    `users/schools/${year_id}${query}`
+  );
+  return response;
+};
+
 interface iSchoolsServer {
   total: number;
   result: iWorkSchool[];
@@ -98,5 +111,6 @@ export const apiUser = {
   schools,
   retrieve,
   schoolsServer,
+  schoolsClass,
   list,
 };
