@@ -14,45 +14,37 @@ import {
   GridDashSchoolAdmin,
   LabelSchool,
 } from "../../shared/components";
-import {
-  useAppThemeContext,
-  useAuthContext,
-  useSchoolContext,
-} from "../../shared/contexts";
+import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
 import { Home } from "@mui/icons-material";
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 
 export const DashboardSchoolAdminPage = () => {
-  const [searchParams] = useSearchParams();
-  const id = searchParams.get("id");
+  const { school_id } = useParams();
   const { theme } = useAppThemeContext();
-  const { schoolDataAdmin, setSchoolDataAdmin } = useAuthContext();
-  const { schoolDataAdminRetrieve } = useSchoolContext();
+  const { schoolAdminRetrieve, schoolDataAdminRetrieve } = useSchoolContext();
 
   useEffect(() => {
-    if (id) schoolDataAdminRetrieve(id);
-  }, [id]);
+    if (school_id) {
+      if (schoolAdminRetrieve?.id !== school_id)
+        schoolDataAdminRetrieve(school_id);
+    }
+  }, [school_id]);
 
   return (
     <LayoutBasePage
       title={
         <Breadcrumbs aria-label="breadcrumb">
-          <Link
-            underline="none"
-            color="inherit"
-            href="/home/school"
-            onClick={() => setSchoolDataAdmin(undefined)}
-          >
+          <Link underline="none" color="inherit" href="/home/school">
             <Chip
-              clickable={schoolDataAdmin ? true : undefined}
+              clickable
               color="primary"
-              variant={schoolDataAdmin ? "outlined" : "filled"}
+              variant="outlined"
               label="Página Inicial"
               icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
             />
           </Link>
-          <LabelSchool school={schoolDataAdmin} />
+          <LabelSchool school={schoolAdminRetrieve} />
         </Breadcrumbs>
       }
     >

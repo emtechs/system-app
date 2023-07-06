@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form-mui";
-import { useAuthContext } from "../../contexts";
 import { iSchool } from "../../interfaces";
+import { useNavigate } from "react-router-dom";
 
 export const ValidateSchool = () => {
+  const navigate = useNavigate();
   const { watch } = useFormContext();
-  const { setSchoolData } = useAuthContext();
   const school: iSchool = watch("school");
 
   useEffect(() => {
-    setSchoolData(school);
+    if (school) navigate("/" + school.id);
   }, [school]);
 
   return <></>;

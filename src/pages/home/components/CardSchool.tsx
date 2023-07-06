@@ -13,13 +13,16 @@ import { adaptName, adaptNameSchool } from "../../../shared/scripts";
 
 interface iCardSchoolProps {
   school: iSchoolClass;
+  isHome?: boolean;
 }
 
-export const CardSchool = ({ school }: iCardSchoolProps) => {
+export const CardSchool = ({ school, isHome }: iCardSchoolProps) => {
   const { theme, mdDown } = useAppThemeContext();
   return (
     <Card>
-      <CardActionArea>
+      <CardActionArea
+        href={isHome ? "/home/school/" + school.id : "/" + school.id}
+      >
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: theme.palette.primary.main }}>

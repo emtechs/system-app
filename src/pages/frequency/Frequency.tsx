@@ -16,6 +16,7 @@ import {
   useDrawerContext,
   useFrequencyContext,
   usePaginationContext,
+  useSchoolContext,
 } from "../../shared/contexts";
 import {
   GridDashContent,
@@ -83,7 +84,8 @@ const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
 
 export const FrequencyPage = () => {
   const { setLoading, mdDown } = useAppThemeContext();
-  const { yearData, schoolData } = useAuthContext();
+  const { yearData } = useAuthContext();
+  const { schoolRetrieve } = useSchoolContext();
   const { dateData, monthData } = useCalendarContext();
   const { handleClickSchool } = useDrawerContext();
   const { setIsLoading, defineQuery, query, define_step } =
@@ -110,12 +112,12 @@ export const FrequencyPage = () => {
   }, [dateData]);
 
   useEffect(() => {
-    if (schoolData && yearData) {
+    if (schoolRetrieve && yearData) {
       const take = 4;
       const queryData = query(take, date());
       setIsLoading(true);
       apiClass
-        .listDash(schoolData.id, yearData.id, queryData)
+        .listDash(schoolRetrieve.id, yearData.id, queryData)
         .then((res) => {
           setListClassSelectData(res.classes);
           setListClassData(res.result);
@@ -123,22 +125,22 @@ export const FrequencyPage = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [date, schoolData, yearData, query]);
+  }, [date, schoolRetrieve, yearData, query]);
 
   useEffect(() => {
-    if (schoolData && yearData) {
+    if (schoolRetrieve && yearData) {
       const query = defineQuery(undefined, undefined, undefined, date());
       setLoading(true);
       apiUsingNow
         .get<iDashSchool>(
-          `schools/${schoolData.id}/dash/${yearData.id}${query}`
+          `schools/${schoolRetrieve.id}/dash/${yearData.id}${query}`
         )
         .then((res) => setInfoSchool(res.data))
         .finally(() => setLoading(false));
     }
-  }, [date, schoolData, yearData, defineQuery]);
+  }, [date, schoolRetrieve, yearData, defineQuery]);
 
-  if (!schoolData) return <Navigate to="/" />;
+  if (!schoolRetrieve) return <Navigate to="/" />;
 
   return (
     <LayoutBasePage

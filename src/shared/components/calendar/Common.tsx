@@ -5,6 +5,7 @@ import {
   useCalendarContext,
   useDrawerContext,
   usePaginationContext,
+  useSchoolContext,
 } from "../../contexts";
 import { CalendarBase } from "./Base";
 import { apiUsingNow } from "../../services";
@@ -22,7 +23,8 @@ interface iCalendarDashCommonProps {
 export const CalendarDashCommon = ({ onClick }: iCalendarDashCommonProps) => {
   const navigate = useNavigate();
   const { setLoading } = useAppThemeContext();
-  const { yearData, schoolData } = useAuthContext();
+  const { yearData } = useAuthContext();
+  const { schoolRetrieve } = useSchoolContext();
   const { monthData, setEventData, setDateData } = useCalendarContext();
   const { handleClickFrequency } = useDrawerContext();
   const { defineQuery } = usePaginationContext();
@@ -32,10 +34,10 @@ export const CalendarDashCommon = ({ onClick }: iCalendarDashCommonProps) => {
   }, []);
 
   useEffect(() => {
-    if (yearData && schoolData && monthData) {
+    if (yearData && schoolRetrieve && monthData) {
       const query = defineQuery(
         undefined,
-        schoolData.id,
+        schoolRetrieve.id,
         undefined,
         undefined,
         monthData
@@ -46,7 +48,7 @@ export const CalendarDashCommon = ({ onClick }: iCalendarDashCommonProps) => {
         .then((res) => setEventData(res.data))
         .finally(() => setLoading(false));
     }
-  }, [schoolData, monthData, yearData, defineQuery]);
+  }, [schoolRetrieve, monthData, yearData, defineQuery]);
 
   return (
     <CalendarBase

@@ -1,17 +1,20 @@
-import { Box, Card, useTheme } from "@mui/material";
-import { useAuthContext } from "../../contexts";
+import { Box, Card } from "@mui/material";
+import { useAppThemeContext } from "../../contexts";
 import { CardSchoolContent } from "./CardSchoolContent";
+import { iSchool } from "../../interfaces";
 
-export const CardSchool = () => {
-  const theme = useTheme();
-  const { schoolData } = useAuthContext();
-  return schoolData ? (
+interface iCardSchoolProps {
+  school: iSchool;
+}
+
+export const CardSchool = ({ school }: iCardSchoolProps) => {
+  const { theme } = useAppThemeContext();
+
+  return (
     <Box mx={2} width={theme.spacing(45)} maxWidth="90%">
       <Card>
-        <CardSchoolContent school={schoolData} />
+        <CardSchoolContent school={school} />
       </Card>
     </Box>
-  ) : (
-    <></>
   );
 };

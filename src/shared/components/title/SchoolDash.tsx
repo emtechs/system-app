@@ -3,23 +3,17 @@ import {
   useAppThemeContext,
   useAuthContext,
   useDrawerContext,
+  useSchoolContext,
 } from "../../contexts";
 import { Home } from "@mui/icons-material";
 import { LabelSchool } from "../label";
 
 export const TitleSchoolDash = () => {
-  const { schoolData, setSchoolData } = useAuthContext();
+  const { schoolRetrieve } = useSchoolContext();
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
-      <Link
-        underline="none"
-        color="inherit"
-        href="/"
-        onClick={() => {
-          setSchoolData(undefined);
-        }}
-      >
+      <Link underline="none" color="inherit" href="/">
         <Chip
           clickable
           color="primary"
@@ -28,7 +22,7 @@ export const TitleSchoolDash = () => {
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </Link>
-      <LabelSchool school={schoolData} />
+      <LabelSchool school={schoolRetrieve} />
     </Breadcrumbs>
   );
 };

@@ -23,7 +23,11 @@ import { School as SchoolIcon } from "@mui/icons-material";
 import { DialogSchool } from "./DialogSchool";
 import { CardSchool } from "./CardSchool";
 
-export const School = () => {
+interface iSchoolProps {
+  isHome?: boolean;
+}
+
+export const School = ({ isHome }: iSchoolProps) => {
   const { debounce } = useDebounce();
   const { mdDown, theme } = useAppThemeContext();
   const { yearData } = useAuthContext();
@@ -108,7 +112,7 @@ export const School = () => {
               ) : (
                 schoolsData?.map((el) => (
                   <Grid key={el.id} item xs={6} md={4}>
-                    <CardSchool school={el} />
+                    <CardSchool school={el} isHome={isHome} />
                   </Grid>
                 ))
               )}
@@ -117,7 +121,7 @@ export const School = () => {
           <PaginationMobile />
         </Box>
       </Grid>
-      <DialogSchool open={open} onClose={onClose} />
+      <DialogSchool open={open} onClose={onClose} isHome={isHome} />
     </>
   );
 };

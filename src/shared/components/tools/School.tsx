@@ -130,7 +130,7 @@ export const ToolsSchool = ({
       {schoolRetrieve?.is_class && (
         <ButtonDest
           title="Painel"
-          to={"/home/school?id=" + schoolRetrieve.id}
+          to={"/home/school/" + schoolRetrieve.id}
           startIcon={<Dashboard />}
           isResp
         />

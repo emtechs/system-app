@@ -2,6 +2,7 @@ import {
   iChildren,
   iClassSchoolList,
   iSchool,
+  iSchoolClass,
   iSchoolClassRequest,
   iSchoolImportRequest,
   iSchoolServerRequest,
@@ -58,6 +59,8 @@ interface iSchoolContextData {
   setSearch: Dispatch<SetStateAction<string | undefined>>;
   schoolRetrieve: iSchool | undefined;
   setSchoolRetrieve: Dispatch<SetStateAction<iSchool | undefined>>;
+  schoolAdminRetrieve: iSchoolClass | undefined;
+  setSchoolAdminRetrieve: Dispatch<SetStateAction<iSchoolClass | undefined>>;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -66,11 +69,13 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError, mdDown } =
     useAppThemeContext();
-  const { yearData, setSchoolDataAdmin } = useAuthContext();
+  const { yearData } = useAuthContext();
   const { getSchools, setListSchoolServerData } = useUserContext();
   const { setIsLoading, setCount, define_step, setSkip, setPage, setActive } =
     usePaginationContext();
   const [schoolRetrieve, setSchoolRetrieve] = useState<iSchool>();
+  const [schoolAdminRetrieve, setSchoolAdminRetrieve] =
+    useState<iSchoolClass>();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
   const [listClassData, setListClassData] = useState<iClassSchoolList[]>();
   const [director, setDirector] = useState([true, true]);
@@ -124,7 +129,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setLoadingSchool(true);
         apiSchool
           .retrieveClass(id, yearData.id)
-          .then((res) => setSchoolDataAdmin(res))
+          .then((res) => setSchoolAdminRetrieve(res))
           .catch(() => navigate("/home/school"))
           .finally(() => setLoadingSchool(false));
       }
@@ -261,6 +266,8 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setSearch,
         schoolRetrieve,
         setSchoolRetrieve,
+        schoolAdminRetrieve,
+        setSchoolAdminRetrieve,
       }}
     >
       {children}

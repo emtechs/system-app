@@ -12,7 +12,11 @@ import {
   ListItemText,
 } from "@mui/material";
 import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
-import { PaginationList } from "../../../shared/components";
+import {
+  PaginationList,
+  ValidateSchool,
+  ValidateSchoolAdmin,
+} from "../../../shared/components";
 import {
   useAppThemeContext,
   useAuthContext,
@@ -25,9 +29,10 @@ import { apiUser } from "../../../shared/services";
 interface iDialogSchoolProps {
   open: boolean;
   onClose: () => void;
+  isHome?: boolean;
 }
 
-export const DialogSchool = ({ onClose, open }: iDialogSchoolProps) => {
+export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
   const { theme } = useAppThemeContext();
   const { yearData } = useAuthContext();
   const { query, define_step } = usePaginationContext();
@@ -75,6 +80,7 @@ export const DialogSchool = ({ onClose, open }: iDialogSchoolProps) => {
                 }
                 textFieldProps={{ fullWidth: true }}
               />
+              {isHome ? <ValidateSchoolAdmin /> : <ValidateSchool />}
             </FormContainer>
           </Box>
         </ListItem>
@@ -88,7 +94,11 @@ export const DialogSchool = ({ onClose, open }: iDialogSchoolProps) => {
         ) : (
           listData?.map((el) => (
             <ListItem key={el.school.id} disableGutters>
-              <ListItemButton href="/">
+              <ListItemButton
+                href={
+                  isHome ? "/home/school/" + el.school.id : "/" + el.school.id
+                }
+              >
                 <ListItemAvatar>
                   <Avatar
                     sx={{

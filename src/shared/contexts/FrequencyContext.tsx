@@ -13,7 +13,7 @@ import {
   iFrequencyWithInfreq,
 } from "../interfaces";
 import { useNavigate } from "react-router-dom";
-import { useAppThemeContext, usePaginationContext } from ".";
+import { useAppThemeContext, usePaginationContext, useSchoolContext } from ".";
 import { FieldValues } from "react-hook-form";
 import { apiFrequency } from "../services";
 
@@ -49,6 +49,7 @@ const FrequencyContext = createContext({} as iFrequencyContextData);
 export const FrequencyProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
+  const { schoolRetrieve } = useSchoolContext();
   const { defineQuery } = usePaginationContext();
   const [frequencyData, setFrequencyData] = useState<iFrequency>();
   const [studentData, setStudentData] = useState<iFrequencyStudentsBase>();
@@ -81,7 +82,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
         } else {
           handleSucess("Frequência realizada com sucesso!");
         }
-        navigate("/");
+        navigate("/" + schoolRetrieve?.id);
       } catch {
         if (isOpen) {
           handleSucess("Não foi possível reabrir a frequência no momento!");

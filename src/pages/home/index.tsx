@@ -24,7 +24,7 @@ export const HomePage = ({ isHome }: iHomePageProps) => {
             direction={mdDown ? "column" : "row"}
             spacing={mdDown ? 2 : 5}
           >
-            <School />
+            <School isHome={isHome} />
             <User user={userData} />
           </Grid>
         </Container>
