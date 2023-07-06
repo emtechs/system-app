@@ -1,96 +1,139 @@
 import { iClassSchoolList, iheadCell } from "../../../shared/interfaces";
 import {
   useAppThemeContext,
-  useFrequencyContext,
   usePaginationContext,
   useSchoolContext,
 } from "../../../shared/contexts";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { apiClass } from "../../../shared/services";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useDebounce } from "../../../shared/hooks";
-import { Box, TableCell, TableRow } from "@mui/material";
+import { Box, Tab, TableCell, TableRow, Tabs } from "@mui/material";
 import { PaginationMobile, TableBase } from "../../../shared/components";
 import { defineBgColorInfrequency } from "../../../shared/scripts";
 
 export const ViewSchoolClass = () => {
-  const { school_id, year_id } = useParams();
+  const [searchParams] = useSearchParams();
+  const { school_id } = useParams();
+  const year_id = searchParams.get("year_id");
   const { debounce } = useDebounce();
   const { mdDown, theme } = useAppThemeContext();
-  const { search } = useSchoolContext();
-  const { isInfreq } = useFrequencyContext();
-  const { setCount, setIsLoading, defineQuery } = usePaginationContext();
+  const { search, listYear } = useSchoolContext();
+  const { setCount, setIsLoading, defineQuery, define_step, query } =
+    usePaginationContext();
   const [data, setData] = useState<iClassSchoolList[]>();
 
-  useEffect(() => {
-    if (school_id && year_id) {
-      let query = defineQuery(undefined, school_id) + "&is_active=true";
-      if (isInfreq) query += "&infreq=31";
-      if (search) {
-        query += `&name=${search}`;
+  const getClasses = useCallback(
+    (school_id_data: string, query: string, take: number) => {
+      if (mdDown) {
         setIsLoading(true);
-        debounce(() => {
-          apiClass
-            .listSchool(year_id, query)
-            .then((res) => {
-              setData(res.result);
-              setCount(res.total);
-            })
-            .finally(() => setIsLoading(false));
-        });
+        apiClass
+          .listWithSchool(school_id_data, query)
+          .then((res) => {
+            setData(res.result);
+            setCount(res.total);
+            define_step(res.total, take);
+          })
+          .finally(() => setIsLoading(false));
       } else {
         setIsLoading(true);
         apiClass
-          .listSchool(year_id, query)
+          .listWithSchool(school_id_data, query)
           .then((res) => {
             setData(res.result);
             setCount(res.total);
           })
           .finally(() => setIsLoading(false));
       }
+    },
+    [mdDown]
+  );
+
+  const queryData = useCallback(
+    (take: number) => {
+      if (year_id) {
+        let query_data = defineQuery(year_id);
+        if (mdDown) {
+          query_data = query(take, year_id);
+          return query_data;
+        }
+        return query_data;
+      }
+      return "";
+    },
+    [defineQuery, query, mdDown, year_id]
+  );
+
+  useEffect(() => {
+    if (school_id) {
+      const take = 5;
+      let query = queryData(take);
+      if (search) {
+        query += `&name=${search}`;
+        debounce(() => {
+          getClasses(school_id, query, take);
+        });
+      } else getClasses(school_id, query, take);
     }
-  }, [school_id, year_id, isInfreq, defineQuery, search]);
+  }, [queryData, search, school_id]);
 
   const headCells: iheadCell[] = mdDown
     ? [
         { order: "name", numeric: false, label: "Turma" },
-        { order: "infreq", numeric: true, label: "Infrequência" },
+        { numeric: true, label: "Infrequência" },
       ]
     : [
         { order: "name", numeric: false, label: "Turma" },
         { numeric: true, label: "Alunos" },
         { numeric: true, label: "Frequências" },
-        { order: "infreq", numeric: true, label: "Infrequência" },
+        { numeric: true, label: "Infrequência" },
       ];
 
   return (
-    <Box flex={1}>
-      <TableBase
-        headCells={headCells}
-        is_pagination={mdDown ? false : undefined}
+    <Box display="flex" justifyContent="space-between">
+      <Tabs
+        orientation="vertical"
+        variant="scrollable"
+        value={year_id}
+        sx={{ borderRight: 1, borderColor: "divider" }}
       >
-        {data?.map((el) => (
-          <TableRow key={el.id}>
-            <TableCell>{el.name}</TableCell>
-            {!mdDown && (
-              <>
-                <TableCell align="right">{el.students}</TableCell>
-                <TableCell align="right">{el.frequencies}</TableCell>
-              </>
-            )}
-            <TableCell
-              align="right"
-              sx={{
-                color: "#fff",
-                bgcolor: defineBgColorInfrequency(el.infrequency, theme),
-              }}
-            >
-              {el.infrequency.toFixed(0)}%
-            </TableCell>
-          </TableRow>
+        {listYear?.map((el) => (
+          <Tab
+            key={el.id}
+            label={el.year}
+            href={"/school/" + school_id + "?view=class&year_id=" + el.id}
+            value={el.id}
+          />
         ))}
-      </TableBase>
-      {mdDown && <PaginationMobile />}
+      </Tabs>
+      <Box flex={1}>
+        <TableBase
+          headCells={headCells}
+          is_pagination={mdDown ? false : undefined}
+        >
+          {data?.map((el) => (
+            <TableRow key={el.id}>
+              <TableCell>{el.name}</TableCell>
+              {!mdDown && (
+                <>
+                  <TableCell align="right">{el.students}</TableCell>
+                  <TableCell align="right">{el.frequencies}</TableCell>
+                </>
+              )}
+              <TableCell
+                align="right"
+                sx={{
+                  color: "#fff",
+                  bgcolor: defineBgColorInfrequency(el.infrequency, theme),
+                }}
+              >
+                {el.infrequency.toFixed(0)}%
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBase>
+        {mdDown && <PaginationMobile />}
+      </Box>
     </Box>
   );
 };

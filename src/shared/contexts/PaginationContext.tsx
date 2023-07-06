@@ -16,6 +16,9 @@ interface iPaginationContextData {
   is_active: (is_default?: boolean) => "&is_active=true" | "&is_active=false";
   query: (
     take?: number,
+    year_id?: string,
+    school_id?: string,
+    class_id?: string,
     date?: string,
     is_active?: boolean,
     orderData?: string
@@ -92,11 +95,22 @@ export const PaginationProvider = ({ children }: iChildren) => {
   );
 
   const query = useCallback(
-    (take?: number, date?: string, is_active?: boolean, orderData?: string) => {
+    (
+      take?: number,
+      year_id?: string,
+      school_id?: string,
+      class_id?: string,
+      date?: string,
+      is_active?: boolean,
+      orderData?: string
+    ) => {
       orderData = orderData ? orderData : order;
       let queryData = `?by=${by}` + define_is_active(is_active);
       if (take) queryData += `&take=${take}&skip=${activeStep * take}`;
       if (orderData) queryData += `&order=${orderData}`;
+      if (year_id) queryData += "&year_id=" + year_id;
+      if (school_id) queryData += "&school_id=" + school_id;
+      if (class_id) queryData += "&class_id=" + class_id;
       if (date) queryData += "&date=" + date;
       return queryData;
     },

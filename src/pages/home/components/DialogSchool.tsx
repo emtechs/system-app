@@ -43,7 +43,7 @@ export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
   useEffect(() => {
     if (yearData) {
       const take = 3;
-      const queryData = query(take) + `&year_id=${yearData.id}`;
+      const queryData = query(take, yearData.id);
       setLoading(true);
       apiUser
         .schools(queryData)

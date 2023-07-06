@@ -107,21 +107,33 @@ export const SchoolProvider = ({ children }: iChildren) => {
     return "";
   }, [director]);
 
-  const schoolDataRetrieve = useCallback((id: string, query: string) => {
-    setLoadingSchool(true);
-    setLoading(true);
-    apiSchool
-      .retrieve(id, query)
-      .then((res) => {
-        setSchoolRetrieve(res.school);
-        setListYear(res.years);
-      })
-      .catch(() => navigate("/"))
-      .finally(() => {
-        setLoadingSchool(false);
-        setLoading(false);
-      });
-  }, []);
+  const schoolDataRetrieve = useCallback(
+    (id: string, query: string) => {
+      if (yearData) {
+        setLoadingSchool(true);
+        setLoading(true);
+        apiSchool
+          .retrieve(id, query)
+          .then((res) => {
+            setSchoolRetrieve(res.school);
+            if (res.school.is_dash) {
+              setListYear(res.years);
+            } else {
+              setListYear([yearData]);
+            }
+          })
+          .catch(() => navigate("/"))
+          .finally(() => {
+            setLoadingSchool(false);
+            setLoading(false);
+          });
+        apiSchool
+          .retrieveClass(id, yearData.id)
+          .then((res) => setSchoolAdminRetrieve(res));
+      }
+    },
+    [yearData]
+  );
 
   const schoolDataAdminRetrieve = useCallback(
     (id: string) => {

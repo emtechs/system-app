@@ -114,7 +114,7 @@ export const FrequencyPage = () => {
   useEffect(() => {
     if (schoolRetrieve && yearData) {
       const take = 4;
-      const queryData = query(take, date());
+      const queryData = query(take, undefined, undefined, undefined, date());
       setIsLoading(true);
       apiClass
         .listDash(schoolRetrieve.id, yearData.id, queryData)
