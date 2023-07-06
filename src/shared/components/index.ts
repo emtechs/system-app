@@ -7,6 +7,7 @@ export * from "./card";
 export * from "./dialog";
 export * from "./glossary";
 export * from "./gridDash";
+export * from "./header";
 export * from "./inputFile";
 export * from "./label";
 export * from "./menu";

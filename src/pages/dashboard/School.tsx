@@ -7,7 +7,7 @@ import {
 } from "../../shared/components";
 import { useAppThemeContext } from "../../shared/contexts";
 
-export const DashboardSchool = () => {
+export const DashboardSchoolPage = () => {
   const { theme } = useAppThemeContext();
 
   return (

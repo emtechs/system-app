@@ -1,10 +1,13 @@
 import { Box, Card, CardContent, Grid, Paper } from "@mui/material";
-import { LayoutBasePage } from "../../shared/layouts";
+import {
+  CalendarDashAdmin,
+  GridDashAdmin,
+  TitleAdminDash,
+} from "../../shared/components";
 import { useAppThemeContext } from "../../shared/contexts";
-import { CalendarDashAdmin, TitleAdminDash } from "../../shared/components";
-import { GridDashAdmin } from "../../shared/components/gridDash";
+import { LayoutBasePage } from "../../shared/layouts";
 
-export const DashboardAdmin = () => {
+export const HomePageAdmin = () => {
   const { theme } = useAppThemeContext();
   return (
     <LayoutBasePage title={<TitleAdminDash />}>

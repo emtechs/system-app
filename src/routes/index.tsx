@@ -4,7 +4,7 @@ import {
   CreateClassPage,
   CreateFrequencyPage,
   CreateStudentAdmPage,
-  DashboardPage,
+  DashboardSchoolAdminPage,
   DashboardSchoolPage,
   DefineSchoolsPage,
   EditClassPage,
@@ -12,6 +12,7 @@ import {
   EditProfilePage,
   FrequencyOpenPage,
   FrequencyPage,
+  HomePage,
   ImportClassPage,
   ImportSchoolPage,
   ImportStudentPage,
@@ -55,9 +56,10 @@ const AppRoutes = () => {
           />
           <Route path="/school" element={<SchoolPage />} />
           <Route path="/school/:school_id" element={<RetrieveSchoolPage />} />
-          <Route path="/home/school" element={<DashboardSchoolPage />} />
+          <Route path="/home/school" element={<DashboardSchoolAdminPage />} />
         </Route>
-        <Route path="/" element={<DashboardPage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/:school_id" element={<DashboardSchoolPage />} />
         <Route path="/report" element={<ReportPage />} />
         <Route path="/class" element={<RetrieveClassPage />} />
         <Route

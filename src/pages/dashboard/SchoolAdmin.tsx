@@ -23,7 +23,7 @@ import { Home } from "@mui/icons-material";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 
-export const DashboardSchoolPage = () => {
+export const DashboardSchoolAdminPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const { theme } = useAppThemeContext();
