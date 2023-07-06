@@ -29,7 +29,7 @@ export interface iSchool {
   name: string;
   is_active: boolean;
   director?: iDiretor;
-  is_class: boolean;
+  is_dash: boolean;
 }
 
 export interface iSchoolClass extends iSchool {

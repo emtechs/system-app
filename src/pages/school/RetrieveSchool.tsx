@@ -109,19 +109,19 @@ export const RetrieveSchoolPage = () => {
             href={"/school/" + school_id + "?view=student"}
             icon={<Groups />}
             label="Alunos"
-            disabled={schoolRetrieve?.is_class ? false : true}
+            disabled={schoolRetrieve?.is_dash ? false : true}
           />
           <Tab
             href={"/school/" + school_id + "?view=frequency"}
             icon={<Checklist />}
             label="Frequências"
-            disabled={schoolRetrieve?.is_class ? false : true}
+            disabled={schoolRetrieve?.is_dash ? false : true}
           />
           <Tab
             href={"/school/" + school_id + "?view=infrequency"}
             icon={<Percent />}
             label="Infrequência"
-            disabled={schoolRetrieve?.is_class ? false : true}
+            disabled={schoolRetrieve?.is_dash ? false : true}
           />
         </Tabs>
       </Box>

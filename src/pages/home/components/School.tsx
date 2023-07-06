@@ -15,7 +15,7 @@ import {
   usePaginationContext,
 } from "../../../shared/contexts";
 import { useDebounce } from "../../../shared/hooks";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { iSchoolClass } from "../../../shared/interfaces";
 import { apiUser } from "../../../shared/services";
 import { PaginationMobile } from "../../../shared/components";
@@ -29,7 +29,7 @@ interface iSchoolProps {
 
 export const School = ({ isHome }: iSchoolProps) => {
   const { debounce } = useDebounce();
-  const { mdDown, theme } = useAppThemeContext();
+  const { smDown, mdDown, theme } = useAppThemeContext();
   const { yearData } = useAuthContext();
   const { define_step, query } = usePaginationContext();
   const [loading, setLoading] = useState(false);
@@ -55,8 +55,15 @@ export const School = ({ isHome }: iSchoolProps) => {
     [yearData]
   );
 
+  const take = useMemo(() => {
+    if (smDown) {
+      return 1;
+    } else if (mdDown) return 2;
+
+    return 3;
+  }, [smDown, mdDown]);
+
   useEffect(() => {
-    const take = mdDown ? 4 : 3;
     let queryData = query(take);
     if (search) {
       queryData += `&name=${search}`;
@@ -64,7 +71,7 @@ export const School = ({ isHome }: iSchoolProps) => {
         getSchools(queryData, take);
       });
     } else getSchools(queryData, take);
-  }, [query, search, mdDown]);
+  }, [query, search, take]);
 
   return (
     <>
@@ -111,7 +118,7 @@ export const School = ({ isHome }: iSchoolProps) => {
                 </Grid>
               ) : (
                 schoolsData?.map((el) => (
-                  <Grid key={el.id} item xs={6} md={4}>
+                  <Grid key={el.id} item xs={12} sm={6} md={4}>
                     <CardSchool school={el} isHome={isHome} />
                   </Grid>
                 ))

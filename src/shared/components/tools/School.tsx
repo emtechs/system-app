@@ -127,7 +127,7 @@ export const ToolsSchool = ({
         />
       )}
       {isUser && <UserTools />}
-      {schoolRetrieve?.is_class && (
+      {schoolRetrieve?.is_dash && (
         <ButtonDest
           title="Painel"
           to={"/home/school/" + schoolRetrieve.id}
