@@ -2,6 +2,7 @@ import {
   Edit,
   ExpandLess,
   ExpandMore,
+  Home,
   Logout,
   Password,
   Person,
@@ -16,6 +17,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useAuthContext } from "../../../../contexts";
+import { useNavigate } from "react-router-dom";
 
 interface iMenuBaseProps {
   anchorEl: HTMLElement | null;
@@ -23,6 +25,7 @@ interface iMenuBaseProps {
   label: string;
   open: boolean;
   onClick: () => void;
+  isHome?: boolean;
 }
 
 export const MenuUserMdDown = ({
@@ -31,7 +34,9 @@ export const MenuUserMdDown = ({
   label,
   onClick,
   open,
+  isHome,
 }: iMenuBaseProps) => {
+  const navigate = useNavigate();
   const { logout } = useAuthContext();
   return (
     <Menu
@@ -49,6 +54,19 @@ export const MenuUserMdDown = ({
       open={Boolean(anchorEl)}
       onClose={handleClose}
     >
+      {isHome && (
+        <MenuItem
+          onClick={() => {
+            navigate("/");
+            handleClose();
+          }}
+        >
+          <ListItemIcon>
+            <Home />
+          </ListItemIcon>
+          <ListItemText primary="Início" />
+        </MenuItem>
+      )}
       <MenuItem onClick={onClick}>
         <ListItemIcon>
           <Person />

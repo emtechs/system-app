@@ -4,7 +4,6 @@ import {
   CreateClassPage,
   CreateFrequencyPage,
   CreateStudentAdmPage,
-  DashboardSchoolAdminPage,
   DashboardSchoolPage,
   DefineSchoolsPage,
   EditClassPage,
@@ -56,7 +55,7 @@ const AppRoutes = () => {
           />
           <Route path="/school" element={<SchoolPage />} />
           <Route path="/school/:school_id" element={<RetrieveSchoolPage />} />
-          <Route path="/home/school" element={<DashboardSchoolAdminPage />} />
+          <Route path="/home/school" element={<HomePage isHome />} />
         </Route>
         <Route path="/" element={<HomePage />} />
         <Route path="/:school_id" element={<DashboardSchoolPage />} />

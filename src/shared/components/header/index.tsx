@@ -10,11 +10,15 @@ import {
 } from "@mui/material";
 import { MouseEvent, useMemo, useState } from "react";
 import { useAppThemeContext, useAuthContext } from "../../contexts";
-import { Logout, Menu, Person } from "@mui/icons-material";
+import { Home, Logout, Menu, Person } from "@mui/icons-material";
 import { MenuUser, MenuUserMdDown } from "./components";
 import { adaptName } from "../../scripts";
 
-export const Header = () => {
+interface iHeaderProps {
+  isHome?: boolean;
+}
+
+export const Header = ({ isHome }: iHeaderProps) => {
   const { mdDown } = useAppThemeContext();
   const { logout, userData } = useAuthContext();
   const [open, setOpen] = useState(true);
@@ -46,7 +50,7 @@ export const Header = () => {
           <Toolbar disableGutters>
             {!mdDown && (
               <Box ml={2} mr={2} height={80}>
-                <img style={{ height: "100%" }} src="header.webp" />
+                <img style={{ height: "100%" }} src="/header.webp" />
               </Box>
             )}
             <Box
@@ -60,6 +64,17 @@ export const Header = () => {
               {!mdDown && (
                 <Box display="flex" gap={1}>
                   <>
+                    {isHome && (
+                      <Button
+                        color="secondary"
+                        variant="contained"
+                        disableElevation
+                        startIcon={<Home />}
+                        href="/"
+                      >
+                        Início
+                      </Button>
+                    )}
                     <Button
                       color="secondary"
                       variant="contained"
@@ -69,7 +84,6 @@ export const Header = () => {
                     >
                       {name}
                     </Button>
-
                     <MenuUser
                       anchorEl={anchorElUser}
                       handleClose={handleCloseMenuUser}
@@ -108,6 +122,7 @@ export const Header = () => {
           onClick={onClick}
           handleClose={handleCloseMenu}
           label={name}
+          isHome={isHome}
         />
       )}
     </>
