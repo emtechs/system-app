@@ -19,12 +19,8 @@ import {
 } from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
 import { LabelSchool, ToolsSchool } from "../../shared/components";
-import {
-  ViewSchoolClass,
-  ViewSchoolData,
-  ViewSchoolServer,
-  ViewSchoolStudent,
-} from "./view";
+import { ViewSchoolClass, ViewSchoolData, ViewSchoolStudent } from "./view";
+import { ViewUser } from "../../shared/views";
 
 export const RetrieveSchoolPage = () => {
   const [searchParams] = useSearchParams();
@@ -32,7 +28,7 @@ export const RetrieveSchoolPage = () => {
   const viewData = searchParams.get("view");
   const { mdDown } = useAppThemeContext();
   const { yearData } = useAuthContext();
-  const { schoolDataRetrieve, schoolRetrieve } = useSchoolContext();
+  const { schoolDataRetrieve, schoolRetrieve, search } = useSchoolContext();
   const { setOrder, setBy, setPage } = usePaginationContext();
 
   const handleView = () => {
@@ -84,7 +80,7 @@ export const RetrieveSchoolPage = () => {
 
   const view = [
     <ViewSchoolData />,
-    <ViewSchoolServer />,
+    <ViewUser search={search} school_id={school_id} />,
     <ViewSchoolClass />,
     <ViewSchoolStudent />,
   ];

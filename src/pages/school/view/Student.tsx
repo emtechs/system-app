@@ -84,10 +84,7 @@ export const ViewSchoolStudent = () => {
     : [
         { order: "registry", numeric: true, label: "Matrícula" },
         { order: "name", numeric: false, label: "Aluno" },
-        { numeric: true, label: "Presenças" },
-        { numeric: true, label: "Justificadas" },
-        { numeric: true, label: "Faltas" },
-        { numeric: true, label: "Frequências" },
+        { numeric: false, label: "Turma" },
         { numeric: true, label: "Infrequência" },
       ];
 
@@ -119,10 +116,7 @@ export const ViewSchoolStudent = () => {
               <TableCell>{el.name}</TableCell>
               {!mdDown && (
                 <>
-                  <TableCell align="right">{el.presented}</TableCell>
-                  <TableCell align="right">{el.justified}</TableCell>
-                  <TableCell align="right">{el.missed}</TableCell>
-                  <TableCell align="right">{el.total_frequencies}</TableCell>
+                  <TableCell>{el.class.name}</TableCell>
                 </>
               )}
               <TableCell

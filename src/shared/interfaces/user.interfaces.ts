@@ -7,7 +7,7 @@ import {
   userPasswordSchema,
   userUpdateSchema,
 } from "../schemas";
-import { iSchool, iWorkSchool } from "./school.interface";
+import { iWorkSchool } from "./school.interface";
 
 export type iRole = "ADMIN" | "SERV" | "DIRET" | "SECRET";
 
@@ -24,8 +24,7 @@ export interface iUser {
   is_active: boolean;
   is_first_access: boolean;
   created_at: Date;
-  director_school: iSchool;
-  work_school: iWorkSchool[];
+  work_school: iWorkSchool;
 }
 
 export interface iUserDash {

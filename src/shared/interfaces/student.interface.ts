@@ -5,11 +5,21 @@ export interface iStudent {
   name: string;
   registry: string;
   created_at: Date;
-  presented: number;
-  justified: number;
-  missed: number;
-  total_frequencies: number;
   infrequency: number;
+  frequencies: {
+    presented: number;
+    justified: number;
+    missed: number;
+    total: number;
+  };
+  class: {
+    id: string;
+    name: string;
+  };
+  school: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface iStudentClass {

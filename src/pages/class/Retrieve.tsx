@@ -34,10 +34,10 @@ const CardStudent = ({ student }: iCardStudentProps) => {
     <TableRow>
       <TableCell align="right">{student.registry}</TableCell>
       <TableCell>{student.name}</TableCell>
-      <TableCell align="right">{student.presented}</TableCell>
-      <TableCell align="right">{student.justified}</TableCell>
-      <TableCell align="right">{student.missed}</TableCell>
-      <TableCell align="right">{student.total_frequencies}</TableCell>
+      <TableCell align="right">{student.frequencies.presented}</TableCell>
+      <TableCell align="right">{student.frequencies.justified}</TableCell>
+      <TableCell align="right">{student.frequencies.missed}</TableCell>
+      <TableCell align="right">{student.frequencies.total}</TableCell>
       <TableCell
         align="right"
         sx={{

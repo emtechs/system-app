@@ -1,20 +1,21 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { useAppThemeContext, useDialogContext } from "../../../contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { iDialogSchoolProps, iServerRequest } from "../../../interfaces";
+import { iServerRequest } from "../../../interfaces";
 import { serverCreateSchema } from "../../../schemas";
 import { useCallback } from "react";
 import { apiUser } from "../../../services";
 import { BaseContentChildren, DialogBaseChildren } from "../structure";
 import { ValidateCPF } from "../../validate";
 
-interface iDialogCreateServerProps extends iDialogSchoolProps {
-  getServers: (id: string, query: string, take: number) => void;
+interface iDialogCreateServerProps {
+  school_id: string;
+  getUsers: (query: string, take: number) => void;
 }
 
 export const DialogCreateServer = ({
-  getServers,
-  school,
+  getUsers,
+  school_id,
 }: iDialogCreateServerProps) => {
   const { setLoading, handleError, handleSucess } = useAppThemeContext();
   const { openCreate, handleOpenCreate } = useDialogContext();
@@ -24,7 +25,7 @@ export const DialogCreateServer = ({
       setLoading(true);
       await apiUser.createServer(data, id);
       handleSucess("Servidor cadastrado com sucesso!");
-      getServers(id, "", 1);
+      getUsers(`?school_id=${id}`, 1);
     } catch {
       handleError("Não foi possível cadastrar o servidor no momento!");
     } finally {
@@ -42,14 +43,14 @@ export const DialogCreateServer = ({
       <FormContainer
         onSuccess={(data) => {
           handleOpenCreate();
-          createServer(data, school.id);
+          createServer(data, school_id);
         }}
         resolver={zodResolver(serverCreateSchema)}
       >
         <BaseContentChildren>
           <TextFieldElement name="cpf" label="CPF" required fullWidth />
           <TextFieldElement name="name" label="Nome" required fullWidth />
-          <ValidateCPF school_id={school.id} />
+          <ValidateCPF school_id={school_id} />
         </BaseContentChildren>
       </FormContainer>
     </DialogBaseChildren>

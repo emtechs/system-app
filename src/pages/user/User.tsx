@@ -2,14 +2,14 @@ import { Breadcrumbs, Chip, Link } from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
 import { Home, People } from "@mui/icons-material";
 import { ToolsUser } from "../../shared/components";
-import { ViewUser } from "./view";
 import { useCallback, useMemo } from "react";
 import { usePaginationContext, useUserContext } from "../../shared/contexts";
 import { useSearchParams } from "react-router-dom";
+import { ViewUser } from "../../shared/views";
 
 export const UserPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { setSearch } = useUserContext();
+  const { search, setSearch } = useUserContext();
   const { setActive } = usePaginationContext();
 
   const role = useMemo(() => {
@@ -59,7 +59,7 @@ export const UserPage = () => {
         />
       }
     >
-      <ViewUser role={role} />
+      <ViewUser search={search} role={role} />
     </LayoutBasePage>
   );
 };
