@@ -30,8 +30,7 @@ interface iSchoolContextData {
   director: boolean[];
   setDirector: Dispatch<SetStateAction<boolean[]>>;
   is_director: () => "" | "&is_director=true" | "&is_director=false";
-  schoolDataRetrieve: (id: string, query: string) => void;
-  schoolDataAdminRetrieve: (id: string) => void;
+  schoolDataRetrieve: (id: string) => void;
   importSchool: (data: iSchoolImportRequest, back?: string) => Promise<void>;
   createSchoolClass: (
     data: iSchoolClassRequest,
@@ -108,14 +107,15 @@ export const SchoolProvider = ({ children }: iChildren) => {
   }, [director]);
 
   const schoolDataRetrieve = useCallback(
-    (id: string, query: string) => {
+    (id: string) => {
       if (yearData) {
         setLoadingSchool(true);
         setLoading(true);
         apiSchool
-          .retrieve(id, query)
+          .retrieve(id, `?year_id=${yearData.id}`)
           .then((res) => {
             setSchoolRetrieve(res.school);
+            setSchoolAdminRetrieve(res.schoolClass);
             if (res.school.is_dash) {
               setListYear(res.years);
             } else {
@@ -127,23 +127,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
             setLoadingSchool(false);
             setLoading(false);
           });
-        apiSchool
-          .retrieveClass(id, yearData.id)
-          .then((res) => setSchoolAdminRetrieve(res));
-      }
-    },
-    [yearData]
-  );
-
-  const schoolDataAdminRetrieve = useCallback(
-    (id: string) => {
-      if (yearData) {
-        setLoadingSchool(true);
-        apiSchool
-          .retrieveClass(id, yearData.id)
-          .then((res) => setSchoolAdminRetrieve(res))
-          .catch(() => navigate("/home/school"))
-          .finally(() => setLoadingSchool(false));
       }
     },
     [yearData]
@@ -259,7 +242,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
       value={{
         director,
         is_director,
-        schoolDataAdminRetrieve,
         schoolDataRetrieve,
         setDirector,
         setUpdateServerData,

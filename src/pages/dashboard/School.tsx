@@ -5,26 +5,20 @@ import {
   GridDashSchool,
   TitleSchoolDash,
 } from "../../shared/components";
-import {
-  useAppThemeContext,
-  useAuthContext,
-  useSchoolContext,
-} from "../../shared/contexts";
+import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 export const DashboardSchoolPage = () => {
   const { school_id } = useParams();
   const { theme } = useAppThemeContext();
-  const { yearData } = useAuthContext();
   const { schoolRetrieve, schoolDataRetrieve } = useSchoolContext();
 
   useEffect(() => {
-    if (school_id && yearData) {
-      if (schoolRetrieve?.id !== school_id)
-        schoolDataRetrieve(school_id, `?year_id=${yearData.id}`);
+    if (school_id) {
+      if (schoolRetrieve?.id !== school_id) schoolDataRetrieve(school_id);
     }
-  }, [school_id, yearData]);
+  }, [school_id]);
 
   return (
     <LayoutBasePage title={<TitleSchoolDash />}>

@@ -1,23 +1,23 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuthContext, usePaginationContext } from "../../contexts";
 import { BaseSchoolAdmin, ListBase, Loading } from "./structure";
-import { iSchoolClass } from "../../interfaces";
+import { iSchool, iSchoolClass } from "../../interfaces";
 import { apiSchool } from "../../services";
 
 export const SelectSchoolAdmin = () => {
   const { yearData, schoolDataAdmin, setSchoolDataAdmin } = useAuthContext();
   const { query, define_step } = usePaginationContext();
-  const [listSchoolSelect, setListSchoolSelect] = useState<iSchoolClass[]>();
+  const [listSchoolSelect, setListSchoolSelect] = useState<iSchool[]>();
   const [listData, setListData] = useState<iSchoolClass[]>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (yearData) {
       const take = 3;
-      const queryData = query(take);
+      const queryData = query(take, yearData.id);
       setLoading(true);
       apiSchool
-        .listClass(yearData.id, queryData)
+        .listClass(queryData)
         .then((res) => {
           setListSchoolSelect(res.schools);
           setListData(res.result);
@@ -34,10 +34,7 @@ export const SelectSchoolAdmin = () => {
     return schoolDataAdmin ? false : true;
   }, [listSchoolSelect, schoolDataAdmin]);
 
-  const handleOpenDialog = useCallback(
-    () => setSchoolDataAdmin(undefined),
-    []
-  );
+  const handleOpenDialog = useCallback(() => setSchoolDataAdmin(undefined), []);
 
   return (
     <BaseSchoolAdmin

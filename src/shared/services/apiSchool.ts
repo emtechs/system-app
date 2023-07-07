@@ -72,17 +72,14 @@ const list = async (query: string): Promise<iList> => {
 };
 
 interface iListClass {
-  schools: iSchoolClass[];
+  schools: iSchool[];
   total: number;
   result: iSchoolClass[];
 }
 
-const listClass = async (
-  year_id: string,
-  query: string
-): Promise<iListClass> => {
+const listClass = async (query: string): Promise<iListClass> => {
   const { data: response } = await apiUsingNow.get<iListClass>(
-    `schools/list/${year_id}${query}`
+    `schools${query}`
   );
 
   return response;
@@ -107,6 +104,7 @@ const listServers = async (
 interface iRetrieveReturn {
   school: iSchool;
   years: iYear[];
+  schoolClass: iSchoolClass;
 }
 
 const retrieve = async (
@@ -115,17 +113,6 @@ const retrieve = async (
 ): Promise<iRetrieveReturn> => {
   const { data: response } = await apiUsingNow.get<iRetrieveReturn>(
     `schools/${id}${query}`
-  );
-
-  return response;
-};
-
-const retrieveClass = async (
-  id: string,
-  year_id: string
-): Promise<iSchoolClass> => {
-  const { data: response } = await apiUsingNow.get<iSchoolClass>(
-    `schools/${id}/year/${year_id}`
   );
 
   return response;
@@ -143,5 +130,4 @@ export const apiSchool = {
   listClass,
   listServers,
   retrieve,
-  retrieveClass,
 };

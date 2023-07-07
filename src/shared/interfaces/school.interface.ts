@@ -46,6 +46,12 @@ export interface iWorkSchool {
   school: iSchool;
 }
 
+export interface iWorkSchoolClass {
+  dash: iDash;
+  role: iRole;
+  school: iSchoolClass;
+}
+
 export interface iSchoolServer {
   role: iRole;
   dash: iDash;

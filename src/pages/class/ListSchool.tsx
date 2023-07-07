@@ -65,10 +65,10 @@ export const ListSchoolPage = () => {
   const [search, setSearch] = useState<string>();
   const [infreq, setInfreq] = useState<string>();
 
-  const getSchool = useCallback((year_id: string, query: string) => {
+  const getSchool = useCallback((query: string) => {
     setIsLoading(true);
     apiSchool
-      .listClass(year_id, query)
+      .listClass(query)
       .then((res) => {
         setListSchoolData(res.result);
         setCount(res.total);
@@ -78,20 +78,20 @@ export const ListSchoolPage = () => {
 
   useEffect(() => {
     if (yearData) {
-      let query = defineQuery();
+      let query = defineQuery(yearData.id);
       if (search) {
         query += `&name=${search}`;
         if (infreq) query += `&infreq=${infreq}`;
         debounce(() => {
-          getSchool(yearData.id, query);
+          getSchool(query);
         });
       } else if (infreq) {
         query += `&infreq=${infreq}`;
         if (search) query += `&name=${search}`;
         debounce(() => {
-          getSchool(yearData.id, query);
+          getSchool(query);
         });
-      } else getSchool(yearData.id, query);
+      } else getSchool(query);
     }
   }, [yearData, defineQuery, search, infreq]);
 

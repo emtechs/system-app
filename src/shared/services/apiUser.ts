@@ -2,11 +2,11 @@ import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
 import {
   iSchool,
-  iSchoolClass,
   iSchoolServer,
   iSelectBase,
   iUser,
   iWorkSchool,
+  iWorkSchoolClass,
 } from "../interfaces";
 
 const create = async (
@@ -79,13 +79,14 @@ const schools = async (query: string) => {
 };
 
 interface iSchoolClassReturn {
+  schools: iSchool[];
   total: number;
-  result: iSchoolClass[];
+  result: iWorkSchoolClass[];
 }
 
-const schoolsClass = async (year_id: string, query: string) => {
+const schoolsClass = async (query: string) => {
   const { data: response } = await apiUsingNow.get<iSchoolClassReturn>(
-    `users/schools/${year_id}${query}`
+    `users/schools${query}`
   );
   return response;
 };

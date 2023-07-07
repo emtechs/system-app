@@ -22,12 +22,11 @@ import { useEffect } from "react";
 export const DashboardSchoolAdminPage = () => {
   const { school_id } = useParams();
   const { theme } = useAppThemeContext();
-  const { schoolAdminRetrieve, schoolDataAdminRetrieve } = useSchoolContext();
+  const { schoolAdminRetrieve, schoolDataRetrieve } = useSchoolContext();
 
   useEffect(() => {
     if (school_id) {
-      if (schoolAdminRetrieve?.id !== school_id)
-        schoolDataAdminRetrieve(school_id);
+      if (schoolAdminRetrieve?.id !== school_id) schoolDataRetrieve(school_id);
     }
   }, [school_id]);
 

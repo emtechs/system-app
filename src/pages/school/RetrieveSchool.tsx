@@ -59,11 +59,10 @@ export const RetrieveSchoolPage = () => {
   }, [viewData]);
 
   useEffect(() => {
-    if (school_id && yearData) {
-      if (schoolRetrieve?.id !== school_id)
-        schoolDataRetrieve(school_id, `?year_id=${yearData.id}`);
+    if (school_id) {
+      if (schoolRetrieve?.id !== school_id) schoolDataRetrieve(school_id);
     }
-  }, [school_id, yearData]);
+  }, [school_id]);
 
   const tools = [
     <ToolsSchool back="/school" />,
