@@ -1,18 +1,18 @@
-import { useParams, useSearchParams } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { iClassSchoolList, iheadCell } from "../interfaces";
 import {
   useAppThemeContext,
   usePaginationContext,
   useSchoolContext,
-} from "../../../shared/contexts";
-import { apiStudent } from "../../../shared/services";
-import { iStudent, iheadCell } from "../../../shared/interfaces";
-import { PaginationMobile, TableBase } from "../../../shared/components";
+} from "../contexts";
+import { useCallback, useEffect, useState } from "react";
+import { apiClass } from "../services";
+import { useParams, useSearchParams } from "react-router-dom";
+import { useDebounce } from "../hooks";
 import { Box, Tab, TableCell, TableRow, Tabs } from "@mui/material";
-import { useDebounce } from "../../../shared/hooks";
-import { defineBgColorInfrequency } from "../../../shared/scripts";
+import { PaginationMobile, TableBase } from "../components";
+import { defineBgColorInfrequency } from "../scripts";
 
-export const ViewSchoolStudent = () => {
+export const ViewClass = () => {
   const [searchParams] = useSearchParams();
   const { school_id } = useParams();
   const year_id = searchParams.get("year_id");
@@ -21,14 +21,14 @@ export const ViewSchoolStudent = () => {
   const { search, listYear } = useSchoolContext();
   const { setCount, setIsLoading, defineQuery, define_step, query } =
     usePaginationContext();
-  const [data, setData] = useState<iStudent[]>();
+  const [data, setData] = useState<iClassSchoolList[]>();
 
-  const getStudents = useCallback(
-    (query: string, take: number) => {
+  const getClasses = useCallback(
+    (school_id_data: string, query: string, take: number) => {
       if (mdDown) {
         setIsLoading(true);
-        apiStudent
-          .list(query)
+        apiClass
+          .listWithSchool(school_id_data, query)
           .then((res) => {
             setData(res.result);
             setCount(res.total);
@@ -37,8 +37,8 @@ export const ViewSchoolStudent = () => {
           .finally(() => setIsLoading(false));
       } else {
         setIsLoading(true);
-        apiStudent
-          .list(query)
+        apiClass
+          .listWithSchool(school_id_data, query)
           .then((res) => {
             setData(res.result);
             setCount(res.total);
@@ -51,40 +51,41 @@ export const ViewSchoolStudent = () => {
 
   const queryData = useCallback(
     (take: number) => {
-      if (year_id && school_id) {
-        let query_data = defineQuery(year_id, school_id);
+      if (year_id) {
+        let query_data = defineQuery(year_id);
         if (mdDown) {
-          query_data = query(take, year_id, school_id);
+          query_data = query(take, year_id);
           return query_data;
         }
         return query_data;
       }
       return "";
     },
-    [defineQuery, query, mdDown, year_id, school_id]
+    [defineQuery, query, mdDown, year_id]
   );
 
   useEffect(() => {
-    const take = 5;
-    let query = queryData(take);
-    if (search) {
-      query += `&name=${search}`;
-      debounce(() => {
-        getStudents(query, take);
-      });
-    } else getStudents(query, take);
-  }, [queryData, search]);
+    if (school_id) {
+      const take = 5;
+      let query = queryData(take);
+      if (search) {
+        query += `&name=${search}`;
+        debounce(() => {
+          getClasses(school_id, query, take);
+        });
+      } else getClasses(school_id, query, take);
+    }
+  }, [queryData, search, school_id]);
 
   const headCells: iheadCell[] = mdDown
     ? [
-        { order: "registry", numeric: true, label: "Matrícula" },
-        { order: "name", numeric: false, label: "Aluno" },
+        { order: "name", numeric: false, label: "Turma" },
         { numeric: true, label: "Infrequência" },
       ]
     : [
-        { order: "registry", numeric: true, label: "Matrícula" },
-        { order: "name", numeric: false, label: "Aluno" },
-        { numeric: false, label: "Turma" },
+        { order: "name", numeric: false, label: "Turma" },
+        { numeric: true, label: "Alunos" },
+        { numeric: true, label: "Frequências" },
         { numeric: true, label: "Infrequência" },
       ];
 
@@ -100,7 +101,7 @@ export const ViewSchoolStudent = () => {
           <Tab
             key={el.id}
             label={el.year}
-            href={"/school/" + school_id + "?view=student&year_id=" + el.id}
+            href={"/school/" + school_id + "?view=class&year_id=" + el.id}
             value={el.id}
           />
         ))}
@@ -112,11 +113,11 @@ export const ViewSchoolStudent = () => {
         >
           {data?.map((el) => (
             <TableRow key={el.id}>
-              <TableCell align="right">{el.registry}</TableCell>
               <TableCell>{el.name}</TableCell>
               {!mdDown && (
                 <>
-                  <TableCell>{el.class.name}</TableCell>
+                  <TableCell align="right">{el.students}</TableCell>
+                  <TableCell align="right">{el.frequencies}</TableCell>
                 </>
               )}
               <TableCell

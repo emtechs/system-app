@@ -19,8 +19,12 @@ import {
 } from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
 import { LabelSchool, ToolsSchool } from "../../shared/components";
-import { ViewSchoolClass, ViewSchoolData, ViewSchoolStudent } from "./view";
-import { ViewUser } from "../../shared/views";
+import {
+  ViewClass,
+  ViewSchoolData,
+  ViewStudent,
+  ViewUser,
+} from "../../shared/views";
 
 export const RetrieveSchoolPage = () => {
   const [searchParams] = useSearchParams();
@@ -64,7 +68,7 @@ export const RetrieveSchoolPage = () => {
         break;
 
       case "class":
-        setView(<ViewSchoolClass />);
+        setView(<ViewClass />);
         setTools(
           <ToolsSchool back="/school" isNew titleNew="Turma" isSearch />
         );
@@ -73,7 +77,7 @@ export const RetrieveSchoolPage = () => {
         break;
 
       case "student":
-        setView(<ViewSchoolStudent />);
+        setView(<ViewStudent />);
         setTools(
           <ToolsSchool back="/school" isNew titleNew="Aluno" isSearch />
         );

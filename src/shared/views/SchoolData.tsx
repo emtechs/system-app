@@ -8,14 +8,14 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
-import { useDialogContext, useSchoolContext } from "../../../shared/contexts";
+import { useDialogContext, useSchoolContext } from "../contexts";
 import { Edit, ExpandMore, Person, RemoveDone } from "@mui/icons-material";
 import {
   ButtonSmDown,
   DialogActiveSchool,
   DialogDirectorSchool,
   DialogEditSchool,
-} from "../../../shared/components";
+} from "../components";
 
 export const ViewSchoolData = () => {
   const { handleOpenActive, handleOpenDirector, handleOpenEdit } =
