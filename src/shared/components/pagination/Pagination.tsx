@@ -3,7 +3,13 @@ import { IconButton, MobileStepper } from "@mui/material";
 import { useAppThemeContext, usePaginationContext } from "../../contexts";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 
-export const PaginationMobile = () => {
+interface iPaginationMobileProps {
+  variant?: "progress" | "text" | "dots";
+}
+
+export const PaginationMobile = ({
+  variant = "dots",
+}: iPaginationMobileProps) => {
   const { theme } = useAppThemeContext();
   const { steps, activeStep, handleNext, handleBack, setActiveStep } =
     usePaginationContext();
@@ -14,7 +20,7 @@ export const PaginationMobile = () => {
 
   return steps > 0 ? (
     <MobileStepper
-      variant="dots"
+      variant={variant}
       steps={steps}
       position="static"
       activeStep={activeStep}

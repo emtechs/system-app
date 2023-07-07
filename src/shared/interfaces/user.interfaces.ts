@@ -13,6 +13,10 @@ export type iRole = "ADMIN" | "SERV" | "DIRET" | "SECRET";
 
 export type iDash = "COMMON" | "SCHOOL" | "ORGAN" | "ADMIN";
 
+export interface iDialogUserProps {
+  user: iUser;
+}
+
 export interface iUser {
   id: string;
   login: string;

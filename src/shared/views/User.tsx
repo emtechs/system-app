@@ -5,17 +5,9 @@ import {
   useUserContext,
 } from "../contexts";
 import { useDebounce } from "../hooks";
-import { iUser, iViewBaseProps, iheadCell } from "../interfaces";
+import { iUser, iViewBaseProps } from "../interfaces";
 import { apiUser } from "../services";
-import {
-  DialogCreateAdmin,
-  DialogCreateServer,
-  PaginationMobile,
-  TableBase,
-} from "../components";
-import { TableCell, TableRow } from "@mui/material";
-import { rolePtBr } from "../scripts";
-import { useNavigate } from "react-router-dom";
+import { TableServer, TableUser } from "../components";
 
 interface iViewUserProps extends iViewBaseProps {
   school_id?: string;
@@ -23,7 +15,6 @@ interface iViewUserProps extends iViewBaseProps {
 }
 
 export const ViewUser = ({ search, school_id, role }: iViewUserProps) => {
-  const navigate = useNavigate();
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
   const { setRolesData } = useUserContext();
@@ -56,7 +47,7 @@ export const ViewUser = ({ search, school_id, role }: iViewUserProps) => {
           .finally(() => setIsLoading(false));
       }
     },
-    [mdDown]
+    [define_step, mdDown, setCount, setIsLoading, setRolesData]
   );
 
   const queryData = useCallback(
@@ -83,92 +74,18 @@ export const ViewUser = ({ search, school_id, role }: iViewUserProps) => {
     } else {
       getUsers(query, take);
     }
-  }, [queryData, search]);
+  }, [debounce, getUsers, queryData, search]);
 
-  const headCells: iheadCell[] = useMemo(() => {
-    if (mdDown)
-      return [
-        { order: "name", numeric: false, label: "Nome Completo" },
-        { numeric: false, label: "CPF" },
-      ];
+  const table = useMemo(() => {
+    if (data) {
+      if (school_id)
+        return (
+          <TableServer data={data} getUsers={getUsers} school_id={school_id} />
+        );
+      return <TableUser data={data} />;
+    }
+    return <></>;
+  }, [data, getUsers, school_id]);
 
-    if (school_id)
-      return [
-        { order: "name", numeric: false, label: "Nome Completo" },
-        { numeric: false, label: "CPF" },
-        { numeric: false, label: "Função" },
-        { numeric: false, label: "Tela" },
-      ];
-
-    return [
-      { order: "name", numeric: false, label: "Nome Completo" },
-      { numeric: false, label: "CPF" },
-      { numeric: false, label: "Função" },
-    ];
-  }, [mdDown, school_id]);
-
-  const view = useMemo(() => {
-    if (school_id)
-      return (
-        <>
-          <TableBase
-            headCells={headCells}
-            is_pagination={mdDown ? false : undefined}
-          >
-            {data?.map((user) => (
-              <TableRow
-                key={user.id}
-                hover
-                sx={{ cursor: "pointer" }}
-                onClick={() => {
-                  navigate("/user/" + user.id + "?school_id=" + school_id);
-                }}
-              >
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.cpf}</TableCell>
-                {!mdDown && (
-                  <TableCell>{rolePtBr(user.work_school.role)}</TableCell>
-                )}
-                {!mdDown && (
-                  <TableCell>
-                    {user.work_school.dash === "SCHOOL"
-                      ? "Escola"
-                      : "Frequência"}
-                  </TableCell>
-                )}
-              </TableRow>
-            ))}
-          </TableBase>
-          {mdDown && <PaginationMobile />}
-          <DialogCreateServer school_id={school_id} getUsers={getUsers} />
-        </>
-      );
-    return (
-      <>
-        <TableBase
-          headCells={headCells}
-          is_pagination={mdDown ? false : undefined}
-        >
-          {data?.map((user) => (
-            <TableRow
-              key={user.id}
-              hover
-              sx={{ cursor: "pointer" }}
-              onClick={() => {
-                navigate("/user/" + user.id);
-              }}
-            >
-              <TableCell>{user.name}</TableCell>
-              <TableCell>{user.cpf}</TableCell>
-              {!mdDown && <TableCell>{rolePtBr(user.role)}</TableCell>}
-            </TableRow>
-          ))}
-        </TableBase>
-        {mdDown && <PaginationMobile />}
-        <DialogCreateAdmin />
-      </>
-    );
-  }, [headCells, mdDown, data, school_id]);
-
-  return view;
+  return table;
 };

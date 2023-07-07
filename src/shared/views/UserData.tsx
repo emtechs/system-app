@@ -31,12 +31,18 @@ export const ViewUserData = () => {
               )}
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>Diretor(a): {userRetrieve?.name}</Typography>
+              <Typography>CPF: {userRetrieve?.cpf}</Typography>
+              <Typography>E-mail: {userRetrieve?.email}</Typography>
             </AccordionDetails>
           </Accordion>
         </CardContent>
         <CardActions>
-          <Button variant="contained" color="error" disableElevation endIcon={<RemoveDone />}>
+          <Button
+            variant="contained"
+            color="error"
+            disableElevation
+            endIcon={<RemoveDone />}
+          >
             Desativar
           </Button>
         </CardActions>
