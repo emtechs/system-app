@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { frequencyCreateSchema } from "../schemas";
-import { iClassFreq } from "./class.interfaces";
 import { iStudent } from "./student.interface";
 
 export type iFrequencyRequest = z.infer<typeof frequencyCreateSchema>;
@@ -22,7 +21,15 @@ export interface iFrequencyBase {
   created_at: Date;
   finished_at: number;
   infrequency: number;
-  class: iClassFreq;
+  total_students: number;
+  school: {
+    id: string;
+    name: string;
+  };
+  class: {
+    id: string;
+    name: string;
+  };
 }
 
 interface iFrequencyInfreqBase extends iFrequencyBase {

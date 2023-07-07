@@ -1,6 +1,5 @@
 import {
   iChildren,
-  iClassSchoolList,
   iSchool,
   iSchoolClass,
   iSchoolClassRequest,
@@ -20,7 +19,7 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
-import { apiClass, apiSchool } from "../services";
+import { apiSchool } from "../services";
 import { useAuthContext } from "./AuthContext";
 import { usePaginationContext } from "./PaginationContext";
 
@@ -51,8 +50,6 @@ interface iSchoolContextData {
   clickRetrieveSchool: (school_id: string, server_id: string) => void;
   loadingSchool: boolean;
   listYear: iYear[] | undefined;
-  getClasses: (id: string, query: string, take: number) => void;
-  listClassData: iClassSchoolList[] | undefined;
   onClickReset: () => void;
   search: string | undefined;
   setSearch: Dispatch<SetStateAction<string | undefined>>;
@@ -66,16 +63,13 @@ const SchoolContext = createContext({} as iSchoolContextData);
 
 export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
-  const { setLoading, handleSucess, handleError, mdDown } =
-    useAppThemeContext();
+  const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const { yearData } = useAuthContext();
-  const { setIsLoading, setCount, define_step, setSkip, setPage, setActive } =
-    usePaginationContext();
+  const { setSkip, setPage, setActive } = usePaginationContext();
   const [schoolRetrieve, setSchoolRetrieve] = useState<iSchool>();
   const [schoolAdminRetrieve, setSchoolAdminRetrieve] =
     useState<iSchoolClass>();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
-  const [listClassData, setListClassData] = useState<iClassSchoolList[]>();
   const [director, setDirector] = useState([true, true]);
   const [loadingSchool, setLoadingSchool] = useState(false);
   const [listYear, setListYear] = useState<iYear[]>();
@@ -130,32 +124,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
     [yearData]
   );
 
-  const getClasses = useCallback(
-    (id: string, query: string, take: number) => {
-      if (mdDown) {
-        setIsLoading(true);
-        apiClass
-          .listWithSchool(id, query)
-          .then((res) => {
-            setListClassData(res.result);
-            setCount(res.total);
-            define_step(res.total, take);
-          })
-          .finally(() => setIsLoading(false));
-      } else {
-        setIsLoading(true);
-        apiClass
-          .listWithSchool(id, query)
-          .then((res) => {
-            setListClassData(res.result);
-            setCount(res.total);
-          })
-          .finally(() => setIsLoading(false));
-      }
-    },
-    [mdDown]
-  );
-
   const handleCreateSchoolServer = useCallback(
     async (data: iSchoolServerRequest, server_id: string) => {
       try {
@@ -179,7 +147,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setLoading(true);
         await apiSchool.createClass(data, school_id, year_id);
         handleSucess("A turma foi cadastrada com sucesso na escola!");
-        getClasses(school_id, `?year_id=${year_id}`, 1);
       } catch {
         handleError(
           "No momento, não foi possível cadastrar a turma na escola. Por favor, tente novamente mais tarde."
@@ -250,8 +217,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
         createSchoolServer: handleCreateSchoolServer,
         listYear,
         createSchoolClass: handleCreateSchoolClass,
-        getClasses,
-        listClassData,
         onClickReset,
         search,
         setSearch,

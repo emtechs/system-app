@@ -1,19 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Box, Tab, Tabs } from "@mui/material";
-import {
-  Checklist,
-  Groups,
-  Percent,
-  Person,
-  School,
-  Workspaces,
-} from "@mui/icons-material";
-import {
-  useAuthContext,
-  usePaginationContext,
-  useUserContext,
-} from "../../shared/contexts";
+import { Checklist, Person, School } from "@mui/icons-material";
+import { usePaginationContext, useUserContext } from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TitleServer, TitleUser, ToolsUser } from "../../shared/components";
 import { ViewSchool, ViewUserData } from "../../shared/views";
@@ -23,7 +12,6 @@ export const RetrieveUserPage = () => {
   const { user_id } = useParams();
   const viewData = searchParams.get("view");
   const school_id = searchParams.get("school_id");
-  const { yearData } = useAuthContext();
   const { userDataRetrieve, userRetrieve, search } = useUserContext();
   const { setOrder, setBy, setPage } = usePaginationContext();
   const [view, setView] = useState(<ViewUserData />);
@@ -66,31 +54,10 @@ export const RetrieveUserPage = () => {
         handleView();
         break;
 
-      case "class":
-        setView(<ViewUserData />);
-        setTools(<ToolsUser back={back} />);
-        setValue(0);
-        handleView();
-        break;
-
-      case "student":
-        setView(<ViewUserData />);
-        setTools(<ToolsUser back={back} />);
-        setValue(0);
-        handleView();
-        break;
-
       case "frequency":
         setView(<ViewUserData />);
         setTools(<ToolsUser back={back} />);
-        setValue(0);
-        handleView();
-        break;
-
-      case "infrequency":
-        setView(<ViewUserData />);
-        setTools(<ToolsUser back={back} />);
-        setValue(0);
+        setValue(2);
         handleView();
         break;
 
@@ -113,24 +80,9 @@ export const RetrieveUserPage = () => {
             disabled={userRetrieve?.role === "ADMIN" ? true : false}
           />
           <Tab
-            href={href + "class&year_id=" + yearData?.id}
-            icon={<Workspaces />}
-            label="Turmas"
-          />
-          <Tab
-            href={href + "student&year_id=" + yearData?.id}
-            icon={<Groups />}
-            label="Alunos"
-          />
-          <Tab
             href={href + "frequency"}
             icon={<Checklist />}
             label="Frequências"
-          />
-          <Tab
-            href={href + "infrequency"}
-            icon={<Percent />}
-            label="Infrequência"
           />
         </Tabs>
       </Box>

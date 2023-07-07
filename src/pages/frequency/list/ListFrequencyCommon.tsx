@@ -30,7 +30,7 @@ const CardFrequency = ({ freq, isDate }: iCardFrequencyProps) => {
       sx={{ cursor: "pointer" }}
     >
       {isDate && <TableCell>{freq.date}</TableCell>}
-      <TableCell>{freq.class.class.name}</TableCell>
+      <TableCell>{freq.class.name}</TableCell>
       {!isDate ? (
         <TableCell align="right">{freq._count.students}</TableCell>
       ) : (

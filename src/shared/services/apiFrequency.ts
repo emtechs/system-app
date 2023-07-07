@@ -66,6 +66,18 @@ const students = async (
   return response;
 };
 
+interface iList {
+  total: number;
+  result: iFrequencyBase[];
+}
+
+const list = async (query: string): Promise<iList> => {
+  const { data: response } = await apiUsingNow.get<iList>(
+    `frequencies${query}`
+  );
+  return response;
+};
+
 export const apiFrequency = {
   create,
   update,
@@ -73,4 +85,5 @@ export const apiFrequency = {
   updateFreqStudent,
   destroy,
   students,
+  list,
 };

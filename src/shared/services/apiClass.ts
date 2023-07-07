@@ -38,26 +38,9 @@ interface ilistSchoolReturn {
   result: iClassSchoolList[];
 }
 
-const listSchool = async (
-  year_id: string,
-  query: string
-): Promise<ilistSchoolReturn> => {
+const listSchool = async (query: string): Promise<ilistSchoolReturn> => {
   const { data: response } = await apiUsingNow.get<ilistSchoolReturn>(
-    `classes/year/${year_id}${query}`
-  );
-
-  return response;
-};
-
-interface iListWithSchool {
-  classes: iClassSchoolList[];
-  total: number;
-  result: iClassSchoolList[];
-}
-
-const listWithSchool = async (school_id: string, query: string) => {
-  const { data: response } = await apiUsingNow.get<iListWithSchool>(
-    `classes/school/${school_id}${query}`
+    `classes/school${query}`
   );
 
   return response;
@@ -83,6 +66,5 @@ export const apiClass = {
   impClass,
   updateSchool,
   listSchool,
-  listWithSchool,
   listDash,
 };

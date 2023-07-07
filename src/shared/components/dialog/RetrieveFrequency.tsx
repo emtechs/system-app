@@ -34,8 +34,8 @@ export const DialogRetrieveFrequency = ({
     >
       <Box display="flex" flexDirection="column" gap={1} mt={1}>
         <Typography>Data: {frequency.date}</Typography>
-        <Typography>Turma: {frequency.class.class.name}</Typography>
-        <Typography>Escola: {frequency.class.school.name}</Typography>
+        <Typography>Turma: {frequency.class.name}</Typography>
+        <Typography>Escola: {frequency.school.name}</Typography>
       </Box>
     </DialogBaseChildrenAction>
   );

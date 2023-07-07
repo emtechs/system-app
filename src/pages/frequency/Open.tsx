@@ -34,7 +34,7 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
       onClick={() => navigate(`/frequency/realize?id=${freq.id}`)}
     >
       <TableCell>{freq.date}</TableCell>
-      <TableCell>{freq.class.class.name}</TableCell>
+      <TableCell>{freq.class.name}</TableCell>
       <TableCell align="right">{freq._count.students}</TableCell>
       <TableCell
         align="right"

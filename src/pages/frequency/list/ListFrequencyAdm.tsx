@@ -29,7 +29,7 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
   return (
     <TableRow>
       <TableCell>{freq.date}</TableCell>
-      <TableCell>{freq.class.class.name}</TableCell>
+      <TableCell>{freq.class.name}</TableCell>
       <TableCell align="right">{freq._count.students}</TableCell>
       <TableCell
         align="right"

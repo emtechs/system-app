@@ -25,6 +25,7 @@ import {
   ViewStudent,
   ViewUser,
 } from "../../shared/views";
+import { ViewFrequency } from "../../shared/views/Frequency";
 
 export const RetrieveSchoolPage = () => {
   const [searchParams] = useSearchParams();
@@ -86,7 +87,7 @@ export const RetrieveSchoolPage = () => {
         break;
 
       case "frequency":
-        setView(<ViewSchoolData />);
+        setView(<ViewFrequency />);
         setTools(<ToolsSchool back="/school" />);
         setValue(4);
         handleView();
@@ -157,7 +158,9 @@ export const RetrieveSchoolPage = () => {
             disabled={schoolRetrieve?.is_dash ? false : true}
           />
           <Tab
-            href={"/school/" + school_id + "?view=frequency"}
+            href={
+              "/school/" + school_id + "?view=frequency&year_id=" + yearData?.id
+            }
             icon={<Checklist />}
             label="Frequências"
             disabled={schoolRetrieve?.is_dash ? false : true}
