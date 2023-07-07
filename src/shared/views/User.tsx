@@ -6,7 +6,7 @@ import {
   useUserContext,
 } from "../contexts";
 import { useDebounce } from "../hooks";
-import { iUser, iheadCell } from "../interfaces";
+import { iUser, iViewBaseProps, iheadCell } from "../interfaces";
 import { apiUser } from "../services";
 import {
   DialogCreateAdmin,
@@ -18,9 +18,8 @@ import {
 import { TableCell, TableRow } from "@mui/material";
 import { rolePtBr } from "../scripts";
 
-interface iViewUserProps {
+interface iViewUserProps extends iViewBaseProps {
   school_id?: string;
-  search?: string;
   role?: string;
 }
 

@@ -20,6 +20,8 @@ import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TitleRetrieveUser } from "./components";
+import { apiSchool } from "../../shared/services";
+import { iSchool } from "../../shared/interfaces";
 
 export const RetrieveUserPage = () => {
   const [searchParams] = useSearchParams();
@@ -27,16 +29,43 @@ export const RetrieveUserPage = () => {
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
   const { userSelect } = useAuthContext();
-  const { updateAllUser, updateUserData, getSchools, listSchoolServerData } =
-    useUserContext();
-  const { defineQuery, query } = usePaginationContext();
+  const { updateAllUser, updateUserData } = useUserContext();
+  const { defineQuery, query, setIsLoading, setCount, define_step } =
+    usePaginationContext();
   const { handleClickSchool } = useDrawerContext();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState<string>();
+  const [listData, setListData] = useState<iSchool[]>();
 
   const handleClose = () => {
     setOpen((oldOpen) => !oldOpen);
   };
+
+  const getSchools = useCallback(
+    (query: string, take: number) => {
+      if (mdDown) {
+        setIsLoading(true);
+        apiSchool
+          .list(query)
+          .then((res) => {
+            setListData(res.result);
+            setCount(res.total);
+            define_step(res.total, take);
+          })
+          .finally(() => setIsLoading(false));
+      } else {
+        setIsLoading(true);
+        apiSchool
+          .list(query)
+          .then((res) => {
+            setListData(res.result);
+            setCount(res.total);
+          })
+          .finally(() => setIsLoading(false));
+      }
+    },
+    [mdDown]
+  );
 
   const queryData = useCallback(
     (take: number) => {
@@ -56,10 +85,10 @@ export const RetrieveUserPage = () => {
     if (search) {
       query += `&name=${search}`;
       debounce(() => {
-        getSchools("", query, take);
+        getSchools(query, take);
       });
     } else {
-      getSchools("", query, take);
+      getSchools(query, take);
     }
   }, [queryData, search]);
 
@@ -92,7 +121,7 @@ export const RetrieveUserPage = () => {
           />
         }
       >
-        <TableWorkSchool listSchool={listSchoolServerData} user={userSelect} />
+        <TableWorkSchool listSchool={listData} user={userSelect} />
       </LayoutBasePage>
       {updateUserData && (
         <Dialog open={open} onClose={handleClose}>

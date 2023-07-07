@@ -4,7 +4,7 @@ import {
   // useAuthContext,
   // useSchoolContext,
 } from "../../contexts";
-import { iUser, iWorkSchool, iheadCell } from "../../interfaces";
+import { iSchool, iUser, iheadCell } from "../../interfaces";
 import { TableBase } from "./structure";
 import { TableCell, TableRow } from "@mui/material";
 import { PaginationMobile } from "../pagination";
@@ -12,7 +12,7 @@ import { PaginationMobile } from "../pagination";
 import { rolePtBr } from "../../scripts";
 
 interface iTableWorkSchoolProps {
-  listSchool?: iWorkSchool[];
+  listSchool?: iSchool[];
   user?: iUser;
 }
 
@@ -41,15 +41,15 @@ export const TableWorkSchool = ({ listSchool }: iTableWorkSchoolProps) => {
       >
         {listSchool?.map((work) => (
           <TableRow
-            key={work.school.id}
+            key={work.id}
             hover
             sx={{ cursor: "pointer" }}
             // onClick={() => handleClose(work)}
           >
-            <TableCell>{work.school.name}</TableCell>
-            <TableCell>{rolePtBr(work.role)}</TableCell>
+            <TableCell>{work.name}</TableCell>
+            <TableCell>{rolePtBr(work.server.role)}</TableCell>
             <TableCell>
-              {work.dash === "SCHOOL" ? "Escola" : "Frequência"}
+              {work.server.dash === "SCHOOL" ? "Escola" : "Frequência"}
             </TableCell>
           </TableRow>
         ))}

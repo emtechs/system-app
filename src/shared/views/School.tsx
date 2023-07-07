@@ -1,28 +1,35 @@
-import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDebounce } from "../hooks";
 import {
   useAppThemeContext,
   useDialogContext,
   usePaginationContext,
-  useSchoolContext,
-} from "../../../shared/contexts";
-import { useDebounce } from "../../../shared/hooks";
-import { iSchool, iheadCell } from "../../../shared/interfaces";
-import { TableCell, TableRow } from "@mui/material";
+} from "../contexts";
+import { iSchool, iViewBaseProps, iheadCell } from "../interfaces";
+import { useCallback, useEffect, useState } from "react";
+import { apiSchool } from "../services";
 import {
   DialogActiveSchool,
   DialogCreateSchool,
   PaginationMobile,
   TableBase,
-} from "../../../shared/components";
-import { useNavigate } from "react-router-dom";
-import { apiSchool } from "../../../shared/services";
+} from "../components";
+import { TableCell, TableRow } from "@mui/material";
 
-export const ViewSchool = () => {
+interface iViewSchoolProps extends iViewBaseProps {
+  is_director?: () => "" | "&is_director=true" | "&is_director=false";
+  onClickReset?: () => void;
+}
+
+export const ViewSchool = ({
+  is_director,
+  onClickReset,
+  search,
+}: iViewSchoolProps) => {
   const navigate = useNavigate();
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
   const { handleOpenActive } = useDialogContext();
-  const { search, is_director, onClickReset } = useSchoolContext();
   const { query, defineQuery, setIsLoading, define_step, setCount } =
     usePaginationContext();
   const [listData, setListData] = useState<iSchool[]>();
@@ -56,26 +63,27 @@ export const ViewSchool = () => {
 
   const queryData = useCallback(
     (take: number) => {
-      let query_data = defineQuery() + is_director();
+      let query_data = defineQuery();
       if (mdDown) {
-        query_data = query(take) + is_director();
+        query_data = query(take);
         return query_data;
       }
       return query_data;
     },
-    [defineQuery, query, is_director, mdDown]
+    [defineQuery, query, mdDown]
   );
 
   useEffect(() => {
     const take = 5;
     let query = queryData(take);
+    if (is_director) query += is_director();
     if (search) {
       query += `&name=${search}`;
       debounce(() => {
         getSchools(query, take);
       });
     } else getSchools(query, take);
-  }, [queryData, search]);
+  }, [queryData, search, is_director]);
 
   const headCells: iheadCell[] = [
     { order: "name", numeric: false, label: "Escola" },
@@ -99,7 +107,7 @@ export const ViewSchool = () => {
                 setData(school);
                 handleOpenActive();
               } else {
-                onClickReset();
+                if (onClickReset) onClickReset();
                 navigate("/school/" + school.id);
               }
             }}

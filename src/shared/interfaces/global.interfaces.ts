@@ -14,6 +14,10 @@ export interface iSelectBase {
   label: string;
 }
 
+export interface iViewBaseProps {
+  search?: string;
+}
+
 export interface iButtonBaseProps {
   title: string;
   href?: string;

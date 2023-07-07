@@ -8,7 +8,7 @@ import {
   studentCreateSchema,
   studentImportSchema,
 } from "../schemas";
-import { iDash, iDiretor, iRole } from "./user.interfaces";
+import { iDash, iDiretor, iRole, iServer } from "./user.interfaces";
 
 export interface iDialogSchoolProps {
   school: iSchool;
@@ -28,8 +28,9 @@ export interface iSchool {
   label: string;
   name: string;
   is_active: boolean;
-  director?: iDiretor;
   is_dash: boolean;
+  director?: iDiretor;
+  server: iServer;
 }
 
 export interface iSchoolClass extends iSchool {
@@ -56,12 +57,6 @@ export interface iSchoolServer {
   role: iRole;
   dash: iDash;
   server: iServer;
-}
-
-interface iServer {
-  id: string;
-  name: string;
-  cpf: string;
 }
 
 export interface iWithSchool {

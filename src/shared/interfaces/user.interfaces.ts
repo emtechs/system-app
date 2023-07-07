@@ -42,6 +42,11 @@ export interface iDiretor {
   cpf: string;
 }
 
+export interface iServer extends iDiretor {
+  role: iRole;
+  dash: iDash;
+}
+
 export type iUserAdmRequest = z.infer<typeof createAdmSchema>;
 
 export type iUserDirectorRequest = z.infer<typeof createDirectorSchema>;

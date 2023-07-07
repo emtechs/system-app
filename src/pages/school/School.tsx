@@ -2,9 +2,11 @@ import { Breadcrumbs, Chip, Link } from "@mui/material";
 import { Home, School } from "@mui/icons-material";
 import { ToolsSchool } from "../../shared/components";
 import { LayoutBasePage } from "../../shared/layouts";
-import { ViewSchool } from "./view";
+import { ViewSchool } from "../../shared/views";
+import { useSchoolContext } from "../../shared/contexts";
 
 export const SchoolPage = () => {
+  const { is_director, onClickReset, search } = useSchoolContext();
   return (
     <LayoutBasePage
       title={
@@ -37,7 +39,11 @@ export const SchoolPage = () => {
         />
       }
     >
-      <ViewSchool />
+      <ViewSchool
+        is_director={is_director}
+        onClickReset={onClickReset}
+        search={search}
+      />
     </LayoutBasePage>
   );
 };

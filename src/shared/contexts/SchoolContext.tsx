@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { apiClass, apiSchool } from "../services";
 import { useAuthContext } from "./AuthContext";
-import { usePaginationContext, useUserContext } from ".";
+import { usePaginationContext } from "./PaginationContext";
 
 interface iSchoolContextData {
   updateServerData: iWorkSchool | undefined;
@@ -69,7 +69,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const { setLoading, handleSucess, handleError, mdDown } =
     useAppThemeContext();
   const { yearData } = useAuthContext();
-  const { getSchools, setListSchoolServerData } = useUserContext();
   const { setIsLoading, setCount, define_step, setSkip, setPage, setActive } =
     usePaginationContext();
   const [schoolRetrieve, setSchoolRetrieve] = useState<iSchool>();
@@ -92,7 +91,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
     (school_id: string, server_id: string) => {
       setPage(0);
       setSkip(undefined);
-      setListSchoolServerData(undefined);
       navigate("/school/" + school_id + "/server/" + server_id);
     },
     []
@@ -164,7 +162,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setLoading(true);
         await apiSchool.createServer(data, server_id);
         handleSucess("O servidor foi cadastrada com sucesso na escola!");
-        getSchools(server_id, "", 1);
       } catch {
         handleError(
           "No momento, não foi possível cadastrar o servidor na escola. Por favor, tente novamente mais tarde."

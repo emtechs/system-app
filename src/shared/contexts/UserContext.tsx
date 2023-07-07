@@ -14,12 +14,12 @@ import {
   iUserPasswordRequest,
   iUserSecretRequest,
   iUserUpdateRequest,
-  iWorkSchool,
 } from "../interfaces";
 import { useNavigate } from "react-router-dom";
-import { useAppThemeContext, useAuthContext, usePaginationContext } from ".";
 import { FieldValues } from "react-hook-form";
 import { apiUser } from "../services";
+import { useAppThemeContext } from "./ThemeContext";
+import { useAuthContext } from "./AuthContext";
 
 interface iUserContextData {
   createSecret: (data: iUserSecretRequest, back?: string) => Promise<void>;
@@ -35,9 +35,6 @@ interface iUserContextData {
   updateUserData: iUser | undefined;
   setUpdateUserData: Dispatch<SetStateAction<iUser | undefined>>;
   userRetrieve: (id: string) => void;
-  getSchools: (id: string, query: string, take: number) => void;
-  listSchoolServerData: iWorkSchool[] | undefined;
-  setListSchoolServerData: Dispatch<SetStateAction<iWorkSchool[] | undefined>>;
   loadingUser: boolean;
   search: string | undefined;
   setSearch: Dispatch<SetStateAction<string | undefined>>;
@@ -49,14 +46,9 @@ const UserContext = createContext({} as iUserContextData);
 
 export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
-
-  const { setLoading, handleSucess, handleError, mdDown } =
-    useAppThemeContext();
+  const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const { setDashData, setUserData, setUserSelect } = useAuthContext();
-  const { setIsLoading, setCount, define_step } = usePaginationContext();
   const [updateUserData, setUpdateUserData] = useState<iUser>();
-  const [listSchoolServerData, setListSchoolServerData] =
-    useState<iWorkSchool[]>();
   const [loadingUser, setLoadingUser] = useState(true);
   const [search, setSearch] = useState<string>();
   const [rolesData, setRolesData] = useState<iSelectBase[]>();
@@ -69,34 +61,6 @@ export const UserProvider = ({ children }: iChildren) => {
       .catch(() => navigate("/"))
       .finally(() => setLoadingUser(false));
   }, []);
-
-  const getSchools = useCallback(
-    (id: string, query: string, take: number) => {
-      if (mdDown) {
-        setIsLoading(true);
-        apiUser
-          .schoolsServer(id, query)
-          .then((res) => {
-            setListSchoolServerData(res.result);
-            setUserSelect(res.user);
-            setCount(res.total);
-            define_step(res.total, take);
-          })
-          .finally(() => setIsLoading(false));
-      } else {
-        setIsLoading(true);
-        apiUser
-          .schoolsServer(id, query)
-          .then((res) => {
-            setListSchoolServerData(res.result);
-            setUserSelect(res.user);
-            setCount(res.total);
-          })
-          .finally(() => setIsLoading(false));
-      }
-    },
-    [mdDown]
-  );
 
   const handleCreateUserSecret = useCallback(
     async (data: iUserSecretRequest, back?: string) => {
@@ -197,9 +161,6 @@ export const UserProvider = ({ children }: iChildren) => {
         updateUserData,
         setUpdateUserData,
         userRetrieve,
-        getSchools,
-        listSchoolServerData,
-        setListSchoolServerData,
         loadingUser,
         search,
         setSearch,
