@@ -10,6 +10,16 @@ const create = async (data: FieldValues, id: string): Promise<iStudent> => {
   return response;
 };
 
+interface iList {
+  total: number;
+  result: iStudent[];
+}
+
+const list = async (query: string): Promise<iList> => {
+  const { data: response } = await apiUsingNow.get<iList>(`students${query}`);
+  return response;
+};
+
 const update = async (data: FieldValues, id: string): Promise<iStudent> => {
   const { data: response } = await apiUsingNow.patch<iStudent>(
     `students/${id}`,
@@ -44,4 +54,5 @@ export const apiStudent = {
   updateInfreq,
   impStudent,
   impStudentAll,
+  list,
 };

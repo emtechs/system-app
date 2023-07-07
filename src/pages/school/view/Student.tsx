@@ -1,74 +1,85 @@
-import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
 import {
   useAppThemeContext,
-  useAuthContext,
-  useFrequencyContext,
   usePaginationContext,
+  useSchoolContext,
 } from "../../../shared/contexts";
-import { apiUsingNow } from "../../../shared/services";
-import { iStudentWithSchool, iheadCell } from "../../../shared/interfaces";
-import { TableBase, Tools } from "../../../shared/components";
-import { Chip, TableCell, TableRow } from "@mui/material";
+import { apiStudent } from "../../../shared/services";
+import { iStudent, iheadCell } from "../../../shared/interfaces";
+import { PaginationMobile, TableBase } from "../../../shared/components";
+import { Box, Tab, TableCell, TableRow, Tabs } from "@mui/material";
 import { useDebounce } from "../../../shared/hooks";
-import { Group } from "@mui/icons-material";
-import { LayoutBasePage } from "../../../shared/layouts";
 import { defineBgColorInfrequency } from "../../../shared/scripts";
 
-interface iCardStudentProps {
-  student: iStudentWithSchool;
-}
-
-const CardStudent = ({ student }: iCardStudentProps) => {
-  const navigate = useNavigate();
-  const { mdDown, theme } = useAppThemeContext();
-  return (
-    <TableRow
-      hover
-      onClick={() => navigate(`/frequency/student?id=${student.id}`)}
-      sx={{ cursor: "pointer" }}
-    >
-      <TableCell align="right">{student.registry}</TableCell>
-      <TableCell>{student.name}</TableCell>
-      {!mdDown && (
-        <>
-          <TableCell align="right">{student.presented}</TableCell>
-          <TableCell align="right">{student.justified}</TableCell>
-          <TableCell align="right">{student.missed}</TableCell>
-          <TableCell align="right">{student.total_frequencies}</TableCell>
-        </>
-      )}
-      <TableCell
-        align="right"
-        sx={{
-          color: "#fff",
-          bgcolor: defineBgColorInfrequency(student.infrequency, theme),
-        }}
-      >
-        {String(student.infrequency).replace(".", ",")}%
-      </TableCell>
-    </TableRow>
-  );
-};
-
-export const ListStundetSchoolPage = () => {
+export const ViewSchoolStudent = () => {
   const [searchParams] = useSearchParams();
-  const id = searchParams.get("id");
-  const class_id = searchParams.get("class_id");
-  const back = searchParams.get("back");
+  const { school_id } = useParams();
+  const year_id = searchParams.get("year_id");
   const { debounce } = useDebounce();
-  const { mdDown } = useAppThemeContext();
-  const { yearData, dashData, schoolData } = useAuthContext();
-  const { isInfreq } = useFrequencyContext();
-  const { setIsLoading, defineQuery, setCount } = usePaginationContext();
-  const [data, setData] = useState<iStudentWithSchool[]>();
-  const [search, setSearch] = useState<string>();
+  const { mdDown, theme } = useAppThemeContext();
+  const { search, listYear } = useSchoolContext();
+  const { setCount, setIsLoading, defineQuery, define_step, query } =
+    usePaginationContext();
+  const [data, setData] = useState<iStudent[]>();
+
+  const getStudents = useCallback(
+    (query: string, take: number) => {
+      if (mdDown) {
+        setIsLoading(true);
+        apiStudent
+          .list(query)
+          .then((res) => {
+            setData(res.result);
+            setCount(res.total);
+            define_step(res.total, take);
+          })
+          .finally(() => setIsLoading(false));
+      } else {
+        setIsLoading(true);
+        apiStudent
+          .list(query)
+          .then((res) => {
+            setData(res.result);
+            setCount(res.total);
+          })
+          .finally(() => setIsLoading(false));
+      }
+    },
+    [mdDown]
+  );
+
+  const queryData = useCallback(
+    (take: number) => {
+      if (year_id && school_id) {
+        let query_data = defineQuery(year_id, school_id);
+        if (mdDown) {
+          query_data = query(take, year_id, school_id);
+          return query_data;
+        }
+        return query_data;
+      }
+      return "";
+    },
+    [defineQuery, query, mdDown, year_id, school_id]
+  );
+
+  useEffect(() => {
+    const take = 5;
+    let query = queryData(take);
+    if (search) {
+      query += `&name=${search}`;
+      debounce(() => {
+        getStudents(query, take);
+      });
+    } else getStudents(query, take);
+  }, [queryData, search]);
 
   const headCells: iheadCell[] = mdDown
     ? [
         { order: "registry", numeric: true, label: "Matrícula" },
         { order: "name", numeric: false, label: "Aluno" },
-        { order: "infreq", numeric: true, label: "Infrequência" },
+        { numeric: true, label: "Infrequência" },
       ]
     : [
         { order: "registry", numeric: true, label: "Matrícula" },
@@ -77,78 +88,57 @@ export const ListStundetSchoolPage = () => {
         { numeric: true, label: "Justificadas" },
         { numeric: true, label: "Faltas" },
         { numeric: true, label: "Frequências" },
-        { order: "infreq", numeric: true, label: "Infrequência" },
+        { numeric: true, label: "Infrequência" },
       ];
 
-  let school_id = "";
-  if (id) {
-    school_id = id;
-  } else if (schoolData) school_id = schoolData.id;
-
-  useEffect(() => {
-    if (yearData) {
-      let query = defineQuery(
-        undefined,
-        school_id,
-        class_id ? class_id : undefined
-      );
-      query += "&is_infreq=true";
-      if (isInfreq) query += "&infreq=31";
-      if (search) {
-        query += `&name=${search}`;
-        setIsLoading(true);
-        debounce(() => {
-          apiUsingNow
-            .get<{ total: number; result: iStudentWithSchool[] }>(
-              `classes/student/${yearData.id}${query}`
-            )
-            .then((res) => {
-              setCount(res.data.total);
-              setData(res.data.result);
-            })
-            .finally(() => setIsLoading(false));
-        });
-      } else {
-        setIsLoading(true);
-        apiUsingNow
-          .get<{ total: number; result: iStudentWithSchool[] }>(
-            `classes/student/${yearData.id}${query}`
-          )
-          .then((res) => {
-            setCount(res.data.total);
-            setData(res.data.result);
-          })
-          .finally(() => setIsLoading(false));
-      }
-    }
-  }, [yearData, school_id, isInfreq, defineQuery, search, class_id]);
-
-  if (dashData !== "ADMIN" && school_id.length === 0)
-    return <Navigate to="/" />;
-
   return (
-    <LayoutBasePage
-      title={
-        <Chip
-          label="Alunos"
-          color="primary"
-          icon={<Group sx={{ mr: 0.5 }} fontSize="inherit" />}
-        />
-      }
-      tools={
-        <Tools
-          back={back ? back : undefined}
-          isSearch
-          search={search}
-          setSearch={(text) => setSearch(text)}
-        />
-      }
-    >
-      <TableBase headCells={headCells}>
-        {data?.map((student) => (
-          <CardStudent key={student.id} student={student} />
+    <Box display="flex" justifyContent="space-between">
+      <Tabs
+        orientation="vertical"
+        variant="scrollable"
+        value={year_id}
+        sx={{ borderRight: 1, borderColor: "divider" }}
+      >
+        {listYear?.map((el) => (
+          <Tab
+            key={el.id}
+            label={el.year}
+            href={"/school/" + school_id + "?view=student&year_id=" + el.id}
+            value={el.id}
+          />
         ))}
-      </TableBase>
-    </LayoutBasePage>
+      </Tabs>
+      <Box flex={1}>
+        <TableBase
+          headCells={headCells}
+          is_pagination={mdDown ? false : undefined}
+        >
+          {data?.map((el) => (
+            <TableRow key={el.id}>
+              <TableCell align="right">{el.registry}</TableCell>
+              <TableCell>{el.name}</TableCell>
+              {!mdDown && (
+                <>
+                  <TableCell align="right">{el.presented}</TableCell>
+                  <TableCell align="right">{el.justified}</TableCell>
+                  <TableCell align="right">{el.missed}</TableCell>
+                  <TableCell align="right">{el.total_frequencies}</TableCell>
+                </>
+              )}
+              <TableCell
+                align="right"
+                sx={{
+                  color: "#fff",
+                  bgcolor: defineBgColorInfrequency(el.infrequency, theme),
+                }}
+              >
+                {el.infrequency.toFixed(0)}%
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBase>
+        {mdDown && <PaginationMobile />}
+      </Box>
+    </Box>
   );
 };

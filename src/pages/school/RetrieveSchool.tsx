@@ -19,7 +19,12 @@ import {
 } from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
 import { LabelSchool, ToolsSchool } from "../../shared/components";
-import { ViewSchoolClass, ViewSchoolData, ViewSchoolServer } from "./view";
+import {
+  ViewSchoolClass,
+  ViewSchoolData,
+  ViewSchoolServer,
+  ViewSchoolStudent,
+} from "./view";
 
 export const RetrieveSchoolPage = () => {
   const [searchParams] = useSearchParams();
@@ -74,9 +79,15 @@ export const RetrieveSchoolPage = () => {
       isSearch
     />,
     <ToolsSchool back="/school" isNew titleNew="Turma" isSearch />,
+    <ToolsSchool back="/school" isNew titleNew="Aluno" isSearch />,
   ];
 
-  const view = [<ViewSchoolData />, <ViewSchoolServer />, <ViewSchoolClass />];
+  const view = [
+    <ViewSchoolData />,
+    <ViewSchoolServer />,
+    <ViewSchoolClass />,
+    <ViewSchoolStudent />,
+  ];
 
   return (
     <LayoutBasePage
@@ -121,7 +132,9 @@ export const RetrieveSchoolPage = () => {
             label="Turmas"
           />
           <Tab
-            href={"/school/" + school_id + "?view=student"}
+            href={
+              "/school/" + school_id + "?view=student&year_id=" + yearData?.id
+            }
             icon={<Groups />}
             label="Alunos"
             disabled={schoolRetrieve?.is_dash ? false : true}

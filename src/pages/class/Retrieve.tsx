@@ -7,7 +7,7 @@ import {
   usePaginationContext,
 } from "../../shared/contexts";
 import { apiUsingNow } from "../../shared/services";
-import { iStudentWithSchool, iheadCell } from "../../shared/interfaces";
+import { iStudent, iheadCell } from "../../shared/interfaces";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TableBase, Tools } from "../../shared/components";
 import { TableCell, TableRow } from "@mui/material";
@@ -25,7 +25,7 @@ const headCells: iheadCell[] = [
 ];
 
 interface iCardStudentProps {
-  student: iStudentWithSchool;
+  student: iStudent;
 }
 
 const CardStudent = ({ student }: iCardStudentProps) => {
@@ -60,7 +60,7 @@ export const RetrieveClassPage = () => {
   const { yearData, dashData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
   const { setIsLoading, defineQuery, setCount } = usePaginationContext();
-  const [data, setData] = useState<iStudentWithSchool[]>();
+  const [data, setData] = useState<iStudent[]>();
   const [search, setSearch] = useState<string>();
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export const RetrieveClassPage = () => {
         setIsLoading(true);
         debounce(() => {
           apiUsingNow
-            .get<{ total: number; result: iStudentWithSchool[] }>(
+            .get<{ total: number; result: iStudent[] }>(
               `classes/student/${yearData.id}${query}`
             )
             .then((res) => {
@@ -85,7 +85,7 @@ export const RetrieveClassPage = () => {
       } else {
         setIsLoading(true);
         apiUsingNow
-          .get<{ total: number; result: iStudentWithSchool[] }>(
+          .get<{ total: number; result: iStudent[] }>(
             `classes/student/${yearData.id}${query}`
           )
           .then((res) => {

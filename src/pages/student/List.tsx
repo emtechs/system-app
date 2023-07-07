@@ -1,4 +1,4 @@
-import { iClassStudent, iheadCell } from "../../shared/interfaces";
+import { iStudent, iheadCell } from "../../shared/interfaces";
 import {
   useAppThemeContext,
   useAuthContext,
@@ -21,26 +21,26 @@ const headCells: iheadCell[] = [
 ];
 
 interface iCardStudentProps {
-  classStudent: iClassStudent;
+  classStudent: iStudent;
 }
 const CardStudent = ({ classStudent }: iCardStudentProps) => {
   const { theme } = useAppThemeContext();
 
   return (
     <TableRow>
-      <TableCell>{classStudent.student.registry}</TableCell>
-      <TableCell>{classStudent.student.name}</TableCell>
+      <TableCell>{classStudent.registry}</TableCell>
+      <TableCell>{classStudent.name}</TableCell>
 
-      <TableCell>{classStudent.class.class.name}</TableCell>
-      <TableCell>{classStudent.class.school.name}</TableCell>
+      {/* <TableCell>{classStudent.class.class.name}</TableCell>
+      <TableCell>{classStudent.class.school.name}</TableCell> */}
 
       <TableCell
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(classStudent.student.infreq, theme),
+          bgcolor: defineBgColorInfrequency(classStudent.infrequency, theme),
         }}
       >
-        {String(classStudent.student.infreq).replace(".", ",")}%
+        {String(classStudent.infrequency).replace(".", ",")}%
       </TableCell>
     </TableRow>
   );
@@ -50,7 +50,7 @@ export const ListStudentPage = () => {
   const { yearData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
   const { setCount, setIsLoading, defineQuery } = usePaginationContext();
-  const [data, setData] = useState<iClassStudent[]>();
+  const [data, setData] = useState<iStudent[]>();
 
   useEffect(() => {
     if (yearData) {
@@ -58,7 +58,7 @@ export const ListStudentPage = () => {
       if (isInfreq) query += "&infreq=31";
       setIsLoading(true);
       apiUsingNow
-        .get<{ total: number; result: iClassStudent[] }>(
+        .get<{ total: number; result: iStudent[] }>(
           `classes/student/${yearData.id}${query}`
         )
         .then((res) => {
@@ -74,7 +74,7 @@ export const ListStudentPage = () => {
       <TableBase headCells={headCells}>
         {data?.map((classStudent) => (
           <CardStudent
-            key={classStudent.student.id}
+            key={classStudent.id}
             classStudent={classStudent}
           />
         ))}
