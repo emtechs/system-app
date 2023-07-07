@@ -176,6 +176,7 @@ export const AuthProvider = ({ children }: iChildren) => {
     setUserData(undefined);
     setDashData(undefined);
     handleClick();
+    navigate("/");
   }, []);
 
   const isAuthenticated = useMemo(() => !!accessToken, [accessToken]);
