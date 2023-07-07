@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   useAppThemeContext,
-  useDialogContext,
   usePaginationContext,
   useUserContext,
 } from "../contexts";
@@ -12,11 +11,11 @@ import {
   DialogCreateAdmin,
   DialogCreateServer,
   PaginationMobile,
-  RemoveUser,
   TableBase,
 } from "../components";
 import { TableCell, TableRow } from "@mui/material";
 import { rolePtBr } from "../scripts";
+import { useNavigate } from "react-router-dom";
 
 interface iViewUserProps extends iViewBaseProps {
   school_id?: string;
@@ -24,14 +23,13 @@ interface iViewUserProps extends iViewBaseProps {
 }
 
 export const ViewUser = ({ search, school_id, role }: iViewUserProps) => {
+  const navigate = useNavigate();
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
   const { setRolesData } = useUserContext();
-  const { handleOpenActive } = useDialogContext();
   const { defineQuery, query, setIsLoading, setCount, define_step } =
     usePaginationContext();
   const [data, setData] = useState<iUser[]>();
-  const [work, setWork] = useState<iUser>();
 
   const getUsers = useCallback(
     (query: string, take: number) => {
@@ -109,47 +107,68 @@ export const ViewUser = ({ search, school_id, role }: iViewUserProps) => {
     ];
   }, [mdDown, school_id]);
 
-  return (
-    <>
-      <TableBase
-        headCells={headCells}
-        is_pagination={mdDown ? false : undefined}
-      >
-        {data?.map((user) => (
-          <TableRow
-            key={user.id}
-            hover
-            sx={{ cursor: "pointer" }}
-            onClick={() => {
-              if (school_id) {
-                setWork(user);
-                handleOpenActive();
-              }
-            }}
+  const view = useMemo(() => {
+    if (school_id)
+      return (
+        <>
+          <TableBase
+            headCells={headCells}
+            is_pagination={mdDown ? false : undefined}
           >
-            <TableCell>{user.name}</TableCell>
-            <TableCell>{user.cpf}</TableCell>
-            {!mdDown && (
-              <TableCell>
-                {school_id
-                  ? rolePtBr(user.work_school.role)
-                  : rolePtBr(user.role)}
-              </TableCell>
-            )}
-            {!mdDown && school_id && (
-              <TableCell>
-                {user.work_school.dash === "SCHOOL" ? "Escola" : "Frequência"}
-              </TableCell>
-            )}
-          </TableRow>
-        ))}
-      </TableBase>
-      {mdDown && <PaginationMobile />}
-      {school_id && (
-        <DialogCreateServer school_id={school_id} getUsers={getUsers} />
-      )}
-      {school_id && work && <RemoveUser user={work} getUsers={getUsers} />}
-      {!school_id && <DialogCreateAdmin />}
-    </>
-  );
+            {data?.map((user) => (
+              <TableRow
+                key={user.id}
+                hover
+                sx={{ cursor: "pointer" }}
+                onClick={() => {
+                  navigate("/user/" + user.id + "?school_id=" + school_id);
+                }}
+              >
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.cpf}</TableCell>
+                {!mdDown && (
+                  <TableCell>{rolePtBr(user.work_school.role)}</TableCell>
+                )}
+                {!mdDown && (
+                  <TableCell>
+                    {user.work_school.dash === "SCHOOL"
+                      ? "Escola"
+                      : "Frequência"}
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
+          </TableBase>
+          {mdDown && <PaginationMobile />}
+          <DialogCreateServer school_id={school_id} getUsers={getUsers} />
+        </>
+      );
+    return (
+      <>
+        <TableBase
+          headCells={headCells}
+          is_pagination={mdDown ? false : undefined}
+        >
+          {data?.map((user) => (
+            <TableRow
+              key={user.id}
+              hover
+              sx={{ cursor: "pointer" }}
+              onClick={() => {
+                navigate("/user/" + user.id);
+              }}
+            >
+              <TableCell>{user.name}</TableCell>
+              <TableCell>{user.cpf}</TableCell>
+              {!mdDown && <TableCell>{rolePtBr(user.role)}</TableCell>}
+            </TableRow>
+          ))}
+        </TableBase>
+        {mdDown && <PaginationMobile />}
+        <DialogCreateAdmin />
+      </>
+    );
+  }, [headCells, mdDown, data, school_id]);
+
+  return view;
 };

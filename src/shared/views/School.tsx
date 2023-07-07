@@ -6,7 +6,7 @@ import {
   usePaginationContext,
 } from "../contexts";
 import { iSchool, iViewBaseProps, iheadCell } from "../interfaces";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiSchool } from "../services";
 import {
   DialogActiveSchool,
@@ -15,16 +15,19 @@ import {
   TableBase,
 } from "../components";
 import { TableCell, TableRow } from "@mui/material";
+import { rolePtBr } from "../scripts";
 
 interface iViewSchoolProps extends iViewBaseProps {
   is_director?: () => "" | "&is_director=true" | "&is_director=false";
   onClickReset?: () => void;
+  server_id?: string;
 }
 
 export const ViewSchool = ({
   is_director,
   onClickReset,
   search,
+  server_id,
 }: iViewSchoolProps) => {
   const navigate = useNavigate();
   const { debounce } = useDebounce();
@@ -77,21 +80,48 @@ export const ViewSchool = ({
     const take = 5;
     let query = queryData(take);
     if (is_director) query += is_director();
+    if (server_id) query += `&server_id=${server_id}`;
     if (search) {
       query += `&name=${search}`;
       debounce(() => {
         getSchools(query, take);
       });
     } else getSchools(query, take);
-  }, [queryData, search, is_director]);
+  }, [queryData, search, is_director, server_id]);
 
-  const headCells: iheadCell[] = [
-    { order: "name", numeric: false, label: "Escola" },
-    { order: "director_name", numeric: false, label: "Diretor" },
-  ];
+  const headCells: iheadCell[] = useMemo(() => {
+    if (server_id)
+      return [
+        { order: "name", numeric: false, label: "Escola" },
+        { numeric: false, label: "Função" },
+        { numeric: false, label: "Tela" },
+      ];
+    return [
+      { order: "name", numeric: false, label: "Escola" },
+      { order: "director_name", numeric: false, label: "Diretor" },
+    ];
+  }, [server_id]);
 
-  return (
-    <>
+  const table = useMemo(() => {
+    if (server_id)
+      return (
+        <TableBase
+          headCells={headCells}
+          message="Nenhuma escola encotrada"
+          is_pagination={mdDown ? false : undefined}
+        >
+          {listData?.map((school) => (
+            <TableRow key={school.id} hover sx={{ cursor: "pointer" }}>
+              <TableCell>{school.name}</TableCell>
+              <TableCell>{rolePtBr(school.server.role)}</TableCell>
+              <TableCell>
+                {school.server.dash === "SCHOOL" ? "Escola" : "Frequência"}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBase>
+      );
+    return (
       <TableBase
         headCells={headCells}
         message="Nenhuma escola encotrada"
@@ -117,6 +147,12 @@ export const ViewSchool = ({
           </TableRow>
         ))}
       </TableBase>
+    );
+  }, [server_id, headCells, mdDown, listData]);
+
+  return (
+    <>
+      {table}
       {mdDown && <PaginationMobile />}
       <DialogCreateSchool />
       {data && <DialogActiveSchool school={data} />}

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Box, Breadcrumbs, Chip, Link, Tab, Tabs } from "@mui/material";
 import {
@@ -30,34 +30,9 @@ export const RetrieveSchoolPage = () => {
   const { yearData } = useAuthContext();
   const { schoolDataRetrieve, schoolRetrieve, search } = useSchoolContext();
   const { setOrder, setBy, setPage } = usePaginationContext();
-
-  const handleView = () => {
-    setPage(0);
-    setOrder("name");
-    setBy("asc");
-  };
-
-  const value = useMemo(() => {
-    switch (viewData) {
-      case "server":
-        handleView();
-        return 1;
-      case "class":
-        handleView();
-        return 2;
-      case "student":
-        handleView();
-        return 3;
-      case "frequency":
-        handleView();
-        return 4;
-      case "infrequency":
-        handleView();
-        return 5;
-      default:
-        return 0;
-    }
-  }, [viewData]);
+  const [view, setView] = useState(<ViewSchoolData />);
+  const [tools, setTools] = useState(<ToolsSchool back="/school" />);
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
     if (school_id) {
@@ -65,25 +40,67 @@ export const RetrieveSchoolPage = () => {
     }
   }, [school_id]);
 
-  const tools = [
-    <ToolsSchool back="/school" />,
-    <ToolsSchool
-      back="/school"
-      iconNew={<PersonAdd />}
-      isNew
-      titleNew="Servidor"
-      isSearch
-    />,
-    <ToolsSchool back="/school" isNew titleNew="Turma" isSearch />,
-    <ToolsSchool back="/school" isNew titleNew="Aluno" isSearch />,
-  ];
+  const handleView = () => {
+    setPage(0);
+    setOrder("name");
+    setBy("asc");
+  };
 
-  const view = [
-    <ViewSchoolData />,
-    <ViewUser search={search} school_id={school_id} />,
-    <ViewSchoolClass />,
-    <ViewSchoolStudent />,
-  ];
+  useEffect(() => {
+    switch (viewData) {
+      case "server":
+        setView(<ViewUser search={search} school_id={school_id} />);
+        setTools(
+          <ToolsSchool
+            back="/school"
+            iconNew={<PersonAdd />}
+            isNew
+            titleNew="Servidor"
+            isSearch
+          />
+        );
+        setValue(1);
+        handleView();
+        break;
+
+      case "class":
+        setView(<ViewSchoolClass />);
+        setTools(
+          <ToolsSchool back="/school" isNew titleNew="Turma" isSearch />
+        );
+        setValue(2);
+        handleView();
+        break;
+
+      case "student":
+        setView(<ViewSchoolStudent />);
+        setTools(
+          <ToolsSchool back="/school" isNew titleNew="Aluno" isSearch />
+        );
+        setValue(3);
+        handleView();
+        break;
+
+      case "frequency":
+        setView(<ViewSchoolData />);
+        setTools(<ToolsSchool back="/school" />);
+        setValue(4);
+        handleView();
+        break;
+
+      case "infrequency":
+        setView(<ViewSchoolData />);
+        setTools(<ToolsSchool back="/school" />);
+        setValue(5);
+        handleView();
+        break;
+
+      default:
+        setView(<ViewSchoolData />);
+        setTools(<ToolsSchool back="/school" />);
+        setValue(0);
+    }
+  }, [viewData, school_id, search]);
 
   return (
     <LayoutBasePage
@@ -110,7 +127,7 @@ export const RetrieveSchoolPage = () => {
           <LabelSchool school={schoolRetrieve} />
         </Breadcrumbs>
       }
-      tools={tools[value]}
+      tools={tools}
     >
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} variant="scrollable" scrollButtons="auto">
@@ -149,7 +166,7 @@ export const RetrieveSchoolPage = () => {
           />
         </Tabs>
       </Box>
-      {view[value]}
+      {view}
     </LayoutBasePage>
   );
 };

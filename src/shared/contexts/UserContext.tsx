@@ -34,12 +34,14 @@ interface iUserContextData {
   ) => Promise<void>;
   updateUserData: iUser | undefined;
   setUpdateUserData: Dispatch<SetStateAction<iUser | undefined>>;
-  userRetrieve: (id: string) => void;
+  userDataRetrieve: (id: string) => void;
   loadingUser: boolean;
   search: string | undefined;
   setSearch: Dispatch<SetStateAction<string | undefined>>;
   rolesData: iSelectBase[] | undefined;
   setRolesData: Dispatch<SetStateAction<iSelectBase[] | undefined>>;
+  userRetrieve: iUser | undefined;
+  setUserRetrieve: Dispatch<SetStateAction<iUser | undefined>>;
 }
 
 const UserContext = createContext({} as iUserContextData);
@@ -47,17 +49,18 @@ const UserContext = createContext({} as iUserContextData);
 export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { setDashData, setUserData, setUserSelect } = useAuthContext();
+  const { setDashData, setUserData } = useAuthContext();
   const [updateUserData, setUpdateUserData] = useState<iUser>();
   const [loadingUser, setLoadingUser] = useState(true);
   const [search, setSearch] = useState<string>();
   const [rolesData, setRolesData] = useState<iSelectBase[]>();
+  const [userRetrieve, setUserRetrieve] = useState<iUser>();
 
-  const userRetrieve = useCallback((id: string) => {
+  const userDataRetrieve = useCallback((id: string) => {
     setLoadingUser(true);
     apiUser
       .retrieve(id)
-      .then((res) => setUserSelect(res))
+      .then((res) => setUserRetrieve(res))
       .catch(() => navigate("/"))
       .finally(() => setLoadingUser(false));
   }, []);
@@ -166,6 +169,8 @@ export const UserProvider = ({ children }: iChildren) => {
         setSearch,
         rolesData,
         setRolesData,
+        setUserRetrieve,
+        userDataRetrieve,
       }}
     >
       {children}

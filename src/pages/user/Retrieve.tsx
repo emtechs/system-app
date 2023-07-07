@@ -1,158 +1,140 @@
+import { useEffect, useMemo, useState } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
+import { Box, Tab, Tabs } from "@mui/material";
 import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@mui/material";
+  Checklist,
+  Groups,
+  Percent,
+  Person,
+  School,
+  Workspaces,
+} from "@mui/icons-material";
 import {
-  useAppThemeContext,
   useAuthContext,
-  useDrawerContext,
   usePaginationContext,
   useUserContext,
 } from "../../shared/contexts";
-import { useCallback, useEffect, useState } from "react";
-import { RemoveDone, School } from "@mui/icons-material";
-import { TableWorkSchool, Tools } from "../../shared/components";
-import { useSearchParams } from "react-router-dom";
-import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
-import { TitleRetrieveUser } from "./components";
-import { apiSchool } from "../../shared/services";
-import { iSchool } from "../../shared/interfaces";
+import { TitleServer, TitleUser, ToolsUser } from "../../shared/components";
+import { ViewSchool, ViewUserData } from "../../shared/views";
 
 export const RetrieveUserPage = () => {
   const [searchParams] = useSearchParams();
+  const { user_id } = useParams();
+  const viewData = searchParams.get("view");
   const school_id = searchParams.get("school_id");
-  const { debounce } = useDebounce();
-  const { mdDown } = useAppThemeContext();
-  const { userSelect } = useAuthContext();
-  const { updateAllUser, updateUserData } = useUserContext();
-  const { defineQuery, query, setIsLoading, setCount, define_step } =
-    usePaginationContext();
-  const { handleClickSchool } = useDrawerContext();
-  const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState<string>();
-  const [listData, setListData] = useState<iSchool[]>();
+  const { yearData } = useAuthContext();
+  const { userDataRetrieve, userRetrieve, search } = useUserContext();
+  const { setOrder, setBy, setPage } = usePaginationContext();
+  const [view, setView] = useState(<ViewUserData />);
+  const [tools, setTools] = useState(<ToolsUser back="/user" />);
+  const [value, setValue] = useState(0);
 
-  const handleClose = () => {
-    setOpen((oldOpen) => !oldOpen);
-  };
+  const href = useMemo(() => {
+    if (school_id) return `/user/${user_id}?school_id=${school_id}&view=`;
+    return `/user/${user_id}?view=`;
+  }, [user_id, school_id]);
 
-  const getSchools = useCallback(
-    (query: string, take: number) => {
-      if (mdDown) {
-        setIsLoading(true);
-        apiSchool
-          .list(query)
-          .then((res) => {
-            setListData(res.result);
-            setCount(res.total);
-            define_step(res.total, take);
-          })
-          .finally(() => setIsLoading(false));
-      } else {
-        setIsLoading(true);
-        apiSchool
-          .list(query)
-          .then((res) => {
-            setListData(res.result);
-            setCount(res.total);
-          })
-          .finally(() => setIsLoading(false));
-      }
-    },
-    [mdDown]
-  );
-
-  const queryData = useCallback(
-    (take: number) => {
-      let query_data = defineQuery();
-      if (mdDown) {
-        query_data = query(take);
-        return query_data;
-      }
-      return query_data;
-    },
-    [defineQuery, query, mdDown]
-  );
+  const back = useMemo(() => {
+    if (school_id) return `/school/${school_id}`;
+    return "/user";
+  }, [school_id]);
 
   useEffect(() => {
-    const take = 5;
-    let query = queryData(take);
-    if (search) {
-      query += `&name=${search}`;
-      debounce(() => {
-        getSchools(query, take);
-      });
-    } else {
-      getSchools(query, take);
+    if (user_id) {
+      if (userRetrieve?.id !== user_id) userDataRetrieve(user_id);
     }
-  }, [queryData, search]);
+  }, [user_id]);
+
+  const handleView = () => {
+    setPage(0);
+    setOrder("name");
+    setBy("asc");
+  };
+
+  const title = useMemo(() => {
+    if (school_id) return <TitleServer />;
+    return <TitleUser />;
+  }, [school_id]);
+
+  useEffect(() => {
+    switch (viewData) {
+      case "school":
+        setView(<ViewSchool search={search} server_id={user_id} />);
+        setTools(<ToolsUser back={back} isSearch />);
+        setValue(1);
+        handleView();
+        break;
+
+      case "class":
+        setView(<ViewUserData />);
+        setTools(<ToolsUser back={back} />);
+        setValue(0);
+        handleView();
+        break;
+
+      case "student":
+        setView(<ViewUserData />);
+        setTools(<ToolsUser back={back} />);
+        setValue(0);
+        handleView();
+        break;
+
+      case "frequency":
+        setView(<ViewUserData />);
+        setTools(<ToolsUser back={back} />);
+        setValue(0);
+        handleView();
+        break;
+
+      case "infrequency":
+        setView(<ViewUserData />);
+        setTools(<ToolsUser back={back} />);
+        setValue(0);
+        handleView();
+        break;
+
+      default:
+        setView(<ViewUserData />);
+        setTools(<ToolsUser back={back} />);
+        setValue(0);
+    }
+  }, [viewData, search, school_id, user_id, back]);
 
   return (
-    <>
-      <LayoutBasePage
-        title={<TitleRetrieveUser />}
-        tools={
-          <Tools
-            back={
-              school_id ? `/school?id=${school_id}&order=name` : "/user/list"
-            }
-            isHome
-            iconNew={<School />}
-            onClickNew={handleClickSchool}
-            isSearch
-            search={search}
-            setSearch={setSearch}
-            finish={
-              <Button
-                variant="contained"
-                color="error"
-                disableElevation
-                onClick={handleClose}
-                endIcon={<RemoveDone />}
-              >
-                Desativar
-              </Button>
-            }
+    <LayoutBasePage title={title} tools={tools}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs value={value} variant="scrollable" scrollButtons="auto">
+          <Tab href={href} icon={<Person />} label="Usuário" />
+          <Tab
+            href={href + "school"}
+            icon={<School />}
+            label="Escolas"
+            disabled={userRetrieve?.role === "ADMIN" ? true : false}
           />
-        }
-      >
-        <TableWorkSchool listSchool={listData} user={userSelect} />
-      </LayoutBasePage>
-      {updateUserData && (
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Desativar Usuário</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Deseja continuar desativando o usúario{" "}
-              {updateUserData.name.toUpperCase()}?
-            </DialogContentText>
-            <DialogActions>
-              <Button onClick={handleClose}>Cancelar</Button>
-              <Button
-                onClick={() => {
-                  updateAllUser(
-                    updateUserData.id,
-                    {
-                      role: "SERV",
-                      is_active: false,
-                    },
-                    false,
-                    "/user/list"
-                  );
-                  setOpen(!open);
-                }}
-              >
-                Continuar
-              </Button>
-            </DialogActions>
-          </DialogContent>
-        </Dialog>
-      )}
-    </>
+          <Tab
+            href={href + "class&year_id=" + yearData?.id}
+            icon={<Workspaces />}
+            label="Turmas"
+          />
+          <Tab
+            href={href + "student&year_id=" + yearData?.id}
+            icon={<Groups />}
+            label="Alunos"
+          />
+          <Tab
+            href={href + "frequency"}
+            icon={<Checklist />}
+            label="Frequências"
+          />
+          <Tab
+            href={href + "infrequency"}
+            icon={<Percent />}
+            label="Infrequência"
+          />
+        </Tabs>
+      </Box>
+      {view}
+    </LayoutBasePage>
   );
 };

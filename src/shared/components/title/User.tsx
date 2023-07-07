@@ -1,25 +1,14 @@
 import { Breadcrumbs, Chip, Link } from "@mui/material";
-import {
-  useAppThemeContext,
-  useDrawerContext,
-  useUserContext,
-} from "../../../../shared/contexts";
-import { LabelUser } from "../../../../shared/components";
+import { useAppThemeContext, useUserContext } from "../../contexts";
 import { Home, People } from "@mui/icons-material";
+import { LabelUser } from "../label";
 
-export const TitleRetrieveUser = () => {
+export const TitleUser = () => {
   const { mdDown } = useAppThemeContext();
   const { userRetrieve } = useUserContext();
-  const { handleClickButtonTools } = useDrawerContext();
-
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
-      <Link
-        underline="none"
-        color="inherit"
-        href="/"
-        onClick={handleClickButtonTools}
-      >
+      <Link underline="none" color="inherit" href="/">
         <Chip
           clickable
           color="primary"
