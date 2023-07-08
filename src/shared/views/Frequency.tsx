@@ -1,24 +1,30 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "../hooks";
-import {
-  useAppThemeContext,
-  usePaginationContext,
-  useSchoolContext,
-} from "../contexts";
-import { useCallback, useEffect, useState } from "react";
-import { iFrequencyBase, iheadCell } from "../interfaces";
+import { useAppThemeContext, usePaginationContext } from "../contexts";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { iFrequencyBase, iViewBaseProps, iYear } from "../interfaces";
 import { apiFrequency } from "../services";
-import { Box, Tab, TableCell, TableRow, Tabs } from "@mui/material";
-import { PaginationMobile, TableBase } from "../components";
-import { defineBgColorInfrequency } from "../scripts";
+import { Box, Tab, Tabs } from "@mui/material";
+import { TableFrequencySchool, TableFrequencyUser } from "./tables";
 
-export const ViewFrequency = () => {
+interface iViewFrequency extends iViewBaseProps {
+  listYear?: iYear[];
+  school_id?: string;
+  user_id?: string;
+  table_def: "user" | "school";
+}
+
+export const ViewFrequency = ({
+  search,
+  listYear,
+  school_id,
+  user_id,
+  table_def,
+}: iViewFrequency) => {
   const [searchParams] = useSearchParams();
-  const { school_id } = useParams();
   const year_id = searchParams.get("year_id");
   const { debounce } = useDebounce();
-  const { mdDown, theme } = useAppThemeContext();
-  const { search, listYear } = useSchoolContext();
+  const { mdDown } = useAppThemeContext();
   const { setCount, setIsLoading, defineQuery, define_step, query } =
     usePaginationContext();
   const [data, setData] = useState<iFrequencyBase[]>();
@@ -51,7 +57,7 @@ export const ViewFrequency = () => {
 
   const queryData = useCallback(
     (take: number) => {
-      if (year_id && school_id) {
+      if (year_id) {
         let query_data = defineQuery(year_id, school_id);
         if (mdDown) {
           query_data = query(take, year_id, school_id);
@@ -61,26 +67,33 @@ export const ViewFrequency = () => {
       }
       return "";
     },
-    [defineQuery, query, mdDown, year_id, school_id]
+    [year_id, defineQuery, school_id, mdDown, query]
   );
 
   useEffect(() => {
     const take = 5;
     let query = queryData(take);
+    if (user_id) query += `&user_id=${user_id}`;
     if (search) {
       query += `&name=${search}`;
       debounce(() => {
         getFrequencies(query, take);
       });
     } else getFrequencies(query, take);
-  }, [queryData, search]);
+  }, [queryData, search, user_id]);
 
-  const headCells: iheadCell[] = [
-    { order: "date", numeric: false, label: "Data" },
-    { order: "name", numeric: false, label: "Turma" },
-    { numeric: true, label: "Alunos" },
-    { order: "infreq", numeric: true, label: "Infrequência" },
-  ];
+  const table = useMemo(() => {
+    if (data) {
+      switch (table_def) {
+        case "school":
+          return <TableFrequencySchool data={data} />;
+
+        case "user":
+          return <TableFrequencyUser data={data} />;
+      }
+    }
+    return <></>;
+  }, [data, table_def]);
 
   return (
     <Box display="flex" justifyContent="space-between">
@@ -99,30 +112,7 @@ export const ViewFrequency = () => {
           />
         ))}
       </Tabs>
-      <Box flex={1}>
-        <TableBase
-          headCells={headCells}
-          is_pagination={mdDown ? false : undefined}
-        >
-          {data?.map((el) => (
-            <TableRow key={el.id}>
-              <TableCell>{el.date}</TableCell>
-              <TableCell>{el.class.name}</TableCell>
-              <TableCell align="right">{el.total_students}</TableCell>
-              <TableCell
-                align="right"
-                sx={{
-                  color: "#fff",
-                  bgcolor: defineBgColorInfrequency(el.infrequency, theme),
-                }}
-              >
-                {el.infrequency.toFixed(0)}%
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBase>
-        {mdDown && <PaginationMobile />}
-      </Box>
+      <Box flex={1}>{table}</Box>
     </Box>
   );
 };

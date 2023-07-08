@@ -26,11 +26,8 @@ interface iPaginationContextData {
   count: number;
   setCount: Dispatch<SetStateAction<number>>;
   total: number;
-  rowsPage: iRowsPage[] | undefined;
   take: number | undefined;
   setTake: Dispatch<SetStateAction<number | undefined>>;
-  page: number;
-  setPage: Dispatch<SetStateAction<number>>;
   skip: number | undefined;
   setSkip: Dispatch<SetStateAction<number | undefined>>;
   order: string | undefined;
@@ -55,13 +52,6 @@ interface iPaginationContextData {
   define_step: (total: number, take: number) => void;
 }
 
-type iRowsPage =
-  | number
-  | {
-      value: number;
-      label: string;
-    };
-
 const PaginationContext = createContext({} as iPaginationContextData);
 
 export const PaginationProvider = ({ children }: iChildren) => {
@@ -69,8 +59,7 @@ export const PaginationProvider = ({ children }: iChildren) => {
   const [activeStep, setActiveStep] = useState(0);
   const [count, setCount] = useState(0);
   const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(0);
-  const [rowsPage, setrowsPage] = useState<iRowsPage[]>();
+  const [rowsPage, setrowsPage] = useState<any[]>();
   const [take, setTake] = useState<number>();
   const [skip, setSkip] = useState<number>();
   const [order, setOrder] = useState<string | undefined>("name");
@@ -79,6 +68,7 @@ export const PaginationProvider = ({ children }: iChildren) => {
   const [active, setActive] = useState(true);
 
   const define_step = useCallback((total: number, take: number) => {
+    setTake(take);
     setTotal(total);
     const arredSteps = Math.ceil(total / take);
     setSteps(arredSteps === 1 ? 0 : arredSteps);
@@ -130,35 +120,25 @@ export const PaginationProvider = ({ children }: iChildren) => {
   };
 
   useEffect(() => {
+    if (count < 5) {
+      setrowsPage([{ label: "Todos", value: -1 }]);
+    }
     if (count < 10) {
-      setTake(undefined);
       setrowsPage([{ label: "Todos", value: -1 }]);
     }
     if (count < 20) {
-      setTake(10);
       setrowsPage([10, { label: "Todos", value: -1 }]);
     }
     if (count < 30) {
-      setTake(10);
       setrowsPage([10, 20, { label: "Todos", value: -1 }]);
     }
     if (count < 40) {
-      setTake(10);
       setrowsPage([10, 20, 30, { label: "Todos", value: -1 }]);
     }
     if (count > 45) {
-      setTake(10);
       setrowsPage([10, 20, 30, 40]);
     }
   }, [count]);
-
-  useEffect(() => {
-    if (page === 0) {
-      setSkip(undefined);
-    } else if (take) {
-      setSkip(page * take);
-    }
-  }, [page, take]);
 
   const defineQuery = useCallback(
     (
@@ -196,11 +176,8 @@ export const PaginationProvider = ({ children }: iChildren) => {
         count,
         setCount,
         total,
-        rowsPage,
         setTake,
         take,
-        page,
-        setPage,
         skip,
         order,
         setOrder,

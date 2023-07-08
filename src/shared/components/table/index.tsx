@@ -8,9 +8,9 @@ import {
   TableFooter,
   TableRow,
 } from "@mui/material";
-import { usePaginationContext } from "../../../contexts";
-import { iTable } from "../../../interfaces";
-import { PaginationTable } from "../../pagination";
+import { usePaginationContext } from "../../contexts";
+import { iTable } from "../../interfaces";
+import { PaginationMobile } from "../pagination";
 import { TableSort } from "./Sort";
 
 export const TableBase = ({
@@ -68,7 +68,7 @@ export const TableBase = ({
           </TableFooter>
         </Table>
       </TableContainer>
-      {is_pagination && <PaginationTable />}
+      {is_pagination && <PaginationMobile />}
     </>
   );
 };

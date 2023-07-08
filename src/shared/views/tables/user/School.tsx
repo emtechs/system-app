@@ -1,18 +1,26 @@
 import { useMemo } from "react";
-import { useAppThemeContext } from "../../contexts";
-import { iUser, iheadCell } from "../../interfaces";
-import { TableBase } from "./structure";
-import { TableCell, TableRow } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { rolePtBr } from "../../scripts";
-import { PaginationMobile } from "../pagination";
-import { DialogCreateAdmin } from "../dialog";
+import { TableCell, TableRow } from "@mui/material";
+import {
+  DialogCreateServer,
+  PaginationMobile,
+  TableBase,
+} from "../../../components";
+import { useAppThemeContext } from "../../../contexts";
+import { iUser, iheadCell } from "../../../interfaces";
+import { rolePtBr } from "../../../scripts";
 
-interface iTableUserProps {
+interface iTableUserSchoolProps {
   data: iUser[];
+  school_id: string;
+  getUsers: (query: string, take: number) => void;
 }
 
-export const TableUser = ({ data }: iTableUserProps) => {
+export const TableUserSchool = ({
+  data,
+  school_id,
+  getUsers,
+}: iTableUserSchoolProps) => {
   const navigate = useNavigate();
   const { mdDown } = useAppThemeContext();
 
@@ -27,6 +35,7 @@ export const TableUser = ({ data }: iTableUserProps) => {
       { order: "name", numeric: false, label: "Nome Completo" },
       { numeric: false, label: "CPF" },
       { numeric: false, label: "Função" },
+      { numeric: false, label: "Tela" },
     ];
   }, [mdDown]);
 
@@ -42,17 +51,24 @@ export const TableUser = ({ data }: iTableUserProps) => {
             hover
             sx={{ cursor: "pointer" }}
             onClick={() => {
-              navigate("/user/" + user.id);
+              navigate("/user/" + user.id + "?school_id=" + school_id);
             }}
           >
             <TableCell>{user.name}</TableCell>
             <TableCell>{user.cpf}</TableCell>
-            {!mdDown && <TableCell>{rolePtBr(user.role)}</TableCell>}
+            {!mdDown && (
+              <TableCell>{rolePtBr(user.work_school.role)}</TableCell>
+            )}
+            {!mdDown && (
+              <TableCell>
+                {user.work_school.dash === "SCHOOL" ? "Escola" : "Frequência"}
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBase>
       {mdDown && <PaginationMobile />}
-      <DialogCreateAdmin />
+      <DialogCreateServer school_id={school_id} getUsers={getUsers} />
     </>
   );
 };

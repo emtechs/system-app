@@ -7,6 +7,7 @@ import {
   iUser,
   iWorkSchool,
   iWorkSchoolClass,
+  iYear,
 } from "../interfaces";
 
 const create = async (
@@ -32,13 +33,18 @@ const createServer = async (
   return response;
 };
 
-const retrieve = async (id: string): Promise<iUser> => {
-  const { data: response } = await apiUsingNow.get<iUser>(`users/${id}`);
+interface iRetrieve {
+  user: iUser;
+  years: iYear[];
+}
+
+const retrieve = async (id: string): Promise<iRetrieve> => {
+  const { data: response } = await apiUsingNow.get<iRetrieve>(`users/${id}`);
   return response;
 };
 
-const profile = async (token: string): Promise<iUser> => {
-  const { data: response } = await apiUsingNow.get<iUser>("users/profile", {
+const profile = async (token: string): Promise<iRetrieve> => {
+  const { data: response } = await apiUsingNow.get<iRetrieve>("users/profile", {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response;

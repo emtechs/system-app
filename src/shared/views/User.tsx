@@ -7,7 +7,7 @@ import {
 import { useDebounce } from "../hooks";
 import { iUser, iViewBaseProps } from "../interfaces";
 import { apiUser } from "../services";
-import { TableServer, TableUser } from "../components";
+import { TableUser, TableUserSchool } from "./tables";
 
 interface iViewUserProps extends iViewBaseProps {
   school_id?: string;
@@ -16,51 +16,34 @@ interface iViewUserProps extends iViewBaseProps {
 
 export const ViewUser = ({ search, school_id, role }: iViewUserProps) => {
   const { debounce } = useDebounce();
-  const { mdDown } = useAppThemeContext();
   const { setRolesData } = useUserContext();
-  const { defineQuery, query, setIsLoading, setCount, define_step } =
-    usePaginationContext();
+  const { query, setIsLoading, setCount, define_step } = usePaginationContext();
   const [data, setData] = useState<iUser[]>();
 
   const getUsers = useCallback(
     (query: string, take: number) => {
-      if (mdDown) {
-        setIsLoading(true);
-        apiUser
-          .list(query)
-          .then((res) => {
-            setData(res.result);
-            setRolesData(res.roles);
-            setCount(res.total);
-            define_step(res.total, take);
-          })
-          .finally(() => setIsLoading(false));
-      } else {
-        setIsLoading(true);
-        apiUser
-          .list(query)
-          .then((res) => {
-            setData(res.result);
-            setRolesData(res.roles);
-            setCount(res.total);
-          })
-          .finally(() => setIsLoading(false));
-      }
+      setIsLoading(true);
+      apiUser
+        .list(query)
+        .then((res) => {
+          setData(res.result);
+          setRolesData(res.roles);
+          setCount(res.total);
+          define_step(res.total, take);
+        })
+        .finally(() => setIsLoading(false));
     },
-    [define_step, mdDown, setCount, setIsLoading, setRolesData]
+    [define_step, setCount, setIsLoading, setRolesData]
   );
 
   const queryData = useCallback(
     (take: number) => {
-      let query_data = defineQuery(undefined, school_id);
+      let query_data = query(take, undefined, school_id);
       if (role) query_data += `&role=${role}`;
-      if (mdDown) {
-        query_data = query(take, undefined, school_id);
-        return query_data;
-      }
+
       return query_data;
     },
-    [defineQuery, query, mdDown, school_id, role]
+    [query, school_id, role]
   );
 
   useEffect(() => {
@@ -80,7 +63,11 @@ export const ViewUser = ({ search, school_id, role }: iViewUserProps) => {
     if (data) {
       if (school_id)
         return (
-          <TableServer data={data} getUsers={getUsers} school_id={school_id} />
+          <TableUserSchool
+            data={data}
+            getUsers={getUsers}
+            school_id={school_id}
+          />
         );
       return <TableUser data={data} />;
     }

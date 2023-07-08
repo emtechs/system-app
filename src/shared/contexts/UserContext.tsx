@@ -14,6 +14,7 @@ import {
   iUserPasswordRequest,
   iUserSecretRequest,
   iUserUpdateRequest,
+  iYear,
 } from "../interfaces";
 import { useNavigate } from "react-router-dom";
 import { FieldValues } from "react-hook-form";
@@ -42,6 +43,7 @@ interface iUserContextData {
   setRolesData: Dispatch<SetStateAction<iSelectBase[] | undefined>>;
   userRetrieve: iUser | undefined;
   setUserRetrieve: Dispatch<SetStateAction<iUser | undefined>>;
+  listYear: iYear[] | undefined;
 }
 
 const UserContext = createContext({} as iUserContextData);
@@ -55,12 +57,16 @@ export const UserProvider = ({ children }: iChildren) => {
   const [search, setSearch] = useState<string>();
   const [rolesData, setRolesData] = useState<iSelectBase[]>();
   const [userRetrieve, setUserRetrieve] = useState<iUser>();
+  const [listYear, setListYear] = useState<iYear[]>();
 
   const userDataRetrieve = useCallback((id: string) => {
     setLoadingUser(true);
     apiUser
       .retrieve(id)
-      .then((res) => setUserRetrieve(res))
+      .then((res) => {
+        setUserRetrieve(res.user);
+        setListYear(res.years);
+      })
       .catch(() => navigate("/"))
       .finally(() => setLoadingUser(false));
   }, []);
@@ -171,6 +177,7 @@ export const UserProvider = ({ children }: iChildren) => {
         setRolesData,
         setUserRetrieve,
         userDataRetrieve,
+        listYear,
       }}
     >
       {children}

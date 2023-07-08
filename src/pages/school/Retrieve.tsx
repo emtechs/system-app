@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Box, Breadcrumbs, Chip, Link, Tab, Tabs } from "@mui/material";
 import {
@@ -21,11 +21,12 @@ import { LayoutBasePage } from "../../shared/layouts";
 import { LabelSchool, ToolsSchool } from "../../shared/components";
 import {
   ViewClass,
+  ViewFrequency,
+  ViewInfrequency,
   ViewSchoolData,
   ViewStudent,
   ViewUser,
 } from "../../shared/views";
-import { ViewFrequency } from "../../shared/views/Frequency";
 
 export const RetrieveSchoolPage = () => {
   const [searchParams] = useSearchParams();
@@ -33,7 +34,8 @@ export const RetrieveSchoolPage = () => {
   const viewData = searchParams.get("view");
   const { mdDown } = useAppThemeContext();
   const { yearData } = useAuthContext();
-  const { schoolDataRetrieve, schoolRetrieve, search } = useSchoolContext();
+  const { schoolDataRetrieve, schoolRetrieve, search, periods, listYear } =
+    useSchoolContext();
   const { setOrder, setBy, setPage } = usePaginationContext();
   const [view, setView] = useState(<ViewSchoolData />);
   const [tools, setTools] = useState(<ToolsSchool back="/school" />);
@@ -87,14 +89,21 @@ export const RetrieveSchoolPage = () => {
         break;
 
       case "frequency":
-        setView(<ViewFrequency />);
+        setView(
+          <ViewFrequency
+            listYear={listYear}
+            school_id={school_id}
+            search={search}
+            table_def="school"
+          />
+        );
         setTools(<ToolsSchool back="/school" />);
         setValue(4);
         handleView();
         break;
 
       case "infrequency":
-        setView(<ViewSchoolData />);
+        setView(<ViewInfrequency />);
         setTools(<ToolsSchool back="/school" />);
         setValue(5);
         handleView();
@@ -105,7 +114,22 @@ export const RetrieveSchoolPage = () => {
         setTools(<ToolsSchool back="/school" />);
         setValue(0);
     }
-  }, [viewData, school_id, search]);
+  }, [viewData, school_id, search, listYear, handleView]);
+
+  const href = useCallback(
+    (view?: string, isYear?: boolean, isPeriod?: boolean) => {
+      let href_base = `/school/${school_id}`;
+
+      if (view) href_base += `?view=${view}`;
+
+      if (isYear) href_base += `&year_id=${yearData?.id}`;
+
+      if (isPeriod && periods) href_base += `&period=${periods[0].id}`;
+
+      return href_base;
+    },
+    [school_id, yearData, periods]
+  );
 
   return (
     <LayoutBasePage
@@ -136,37 +160,27 @@ export const RetrieveSchoolPage = () => {
     >
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} variant="scrollable" scrollButtons="auto">
-          <Tab href={"/school/" + school_id} icon={<School />} label="Escola" />
+          <Tab href={href()} icon={<School />} label="Escola" />
+          <Tab href={href("server")} icon={<People />} label="Servidores" />
           <Tab
-            href={"/school/" + school_id + "?view=server"}
-            icon={<People />}
-            label="Servidores"
-          />
-          <Tab
-            href={
-              "/school/" + school_id + "?view=class&year_id=" + yearData?.id
-            }
+            href={href("class", true)}
             icon={<Workspaces />}
             label="Turmas"
           />
           <Tab
-            href={
-              "/school/" + school_id + "?view=student&year_id=" + yearData?.id
-            }
+            href={href("student", true)}
             icon={<Groups />}
             label="Alunos"
             disabled={schoolRetrieve?.is_dash ? false : true}
           />
           <Tab
-            href={
-              "/school/" + school_id + "?view=frequency&year_id=" + yearData?.id
-            }
+            href={href("frequency", true)}
             icon={<Checklist />}
             label="Frequências"
             disabled={schoolRetrieve?.is_dash ? false : true}
           />
           <Tab
-            href={"/school/" + school_id + "?view=infrequency"}
+            href={href("infrequency", true, true)}
             icon={<Percent />}
             label="Infrequência"
             disabled={schoolRetrieve?.is_dash ? false : true}

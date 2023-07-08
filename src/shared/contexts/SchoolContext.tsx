@@ -5,6 +5,7 @@ import {
   iSchoolClassRequest,
   iSchoolImportRequest,
   iSchoolServerRequest,
+  iSelectBase,
   iWorkSchool,
   iYear,
 } from "../interfaces";
@@ -57,6 +58,7 @@ interface iSchoolContextData {
   setSchoolRetrieve: Dispatch<SetStateAction<iSchool | undefined>>;
   schoolAdminRetrieve: iSchoolClass | undefined;
   setSchoolAdminRetrieve: Dispatch<SetStateAction<iSchoolClass | undefined>>;
+  periods: iSelectBase[] | undefined;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -73,6 +75,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [director, setDirector] = useState([true, true]);
   const [loadingSchool, setLoadingSchool] = useState(false);
   const [listYear, setListYear] = useState<iYear[]>();
+  const [periods, setPeriods] = useState<iSelectBase[]>();
   const [search, setSearch] = useState<string>();
 
   const onClickReset = useCallback(() => {
@@ -108,6 +111,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
           .then((res) => {
             setSchoolRetrieve(res.school);
             setSchoolAdminRetrieve(res.schoolClass);
+            setPeriods(res.periods);
             if (res.school.is_dash) {
               setListYear(res.years);
             } else {
@@ -224,6 +228,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setSchoolRetrieve,
         schoolAdminRetrieve,
         setSchoolAdminRetrieve,
+        periods,
       }}
     >
       {children}

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { TableCell, TableHead, TableRow, TableSortLabel } from "@mui/material";
-import { usePaginationContext } from "../../../contexts";
-import { iheadCell } from "../../../interfaces";
+import { usePaginationContext } from "../../contexts";
+import { iheadCell } from "../../interfaces";
 
 interface iSortProps {
   headCells: iheadCell[];

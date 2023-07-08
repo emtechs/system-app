@@ -75,3 +75,42 @@ export interface iFrequencyStudentsWithInfreq {
   frequencies: number;
   infrequency: number;
 }
+
+export interface iInfrequency {
+  id: string;
+  name: string;
+  date_initial: Date;
+  date_final: Date;
+  value: number;
+  frequencies: number;
+  absences: number;
+  justified: number;
+  presences: number;
+}
+
+type SortFrequencyHistory = "RELEASED" | "CHANGED" | "APPROVED";
+
+type StatusFrequencyHistory = "ACCEPTED" | "IN_ANALYSIS" | "REFUSED";
+
+export interface iFrequencyHistory {
+  id: string;
+  sort: SortFrequencyHistory;
+  status: StatusFrequencyHistory;
+  status_student: iStatusStudent;
+  justification?: string;
+  created_at: number;
+  date: string;
+  student: {
+    id: string;
+    name: string;
+    registry: string;
+  };
+  school: {
+    id: string;
+    name: string;
+  };
+  class: {
+    id: string;
+    name: string;
+  };
+}
