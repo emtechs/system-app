@@ -1,5 +1,5 @@
 import { KeyboardArrowDown } from "@mui/icons-material";
-import { Box, Typography } from "@mui/material";
+import { Box, Skeleton, Typography } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { usePaginationContext } from "../../contexts";
 import { useMemo, useState } from "react";
@@ -30,9 +30,16 @@ export const PaginationTable = ({ onClick }: iPaginationTableProps) => {
       p={2}
       gap={2}
     >
-      <Typography>
-        {total}/{count}
-      </Typography>
+      {isLoading ? (
+        <Typography>
+          <Skeleton width={50} />
+        </Typography>
+      ) : (
+        <Typography>
+          {total}/{count}
+        </Typography>
+      )}
+      <Typography></Typography>
       <LoadingButton
         variant="contained"
         disableElevation
