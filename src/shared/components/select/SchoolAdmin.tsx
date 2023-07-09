@@ -6,22 +6,20 @@ import { apiSchool } from "../../services";
 
 export const SelectSchoolAdmin = () => {
   const { yearData, schoolDataAdmin, setSchoolDataAdmin } = useAuthContext();
-  const { query, define_step } = usePaginationContext();
+  const { query } = usePaginationContext();
   const [listSchoolSelect, setListSchoolSelect] = useState<iSchool[]>();
   const [listData, setListData] = useState<iSchoolClass[]>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (yearData) {
-      const take = 3;
-      const queryData = query(take, yearData.id);
+      const queryData = query(yearData.id);
       setLoading(true);
       apiSchool
         .listClass(queryData)
         .then((res) => {
           setListSchoolSelect(res.schools);
           setListData(res.result);
-          define_step(res.total, take);
         })
         .finally(() => setLoading(false));
     }

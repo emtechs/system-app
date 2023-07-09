@@ -35,22 +35,20 @@ interface iDialogSchoolProps {
 export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
   const { theme } = useAppThemeContext();
   const { yearData } = useAuthContext();
-  const { query, define_step } = usePaginationContext();
+  const { query } = usePaginationContext();
   const [listSchoolSelect, setListSchoolSelect] = useState<iSchool[]>();
   const [listData, setListData] = useState<iWorkSchool[]>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (yearData) {
-      const take = 3;
-      const queryData = query(take, yearData.id);
+      const queryData = query(yearData.id);
       setLoading(true);
       apiUser
         .schools(queryData)
         .then((res) => {
           setListSchoolSelect(res.schools);
           setListData(res.result);
-          define_step(res.total, take);
         })
         .finally(() => setLoading(false));
     }

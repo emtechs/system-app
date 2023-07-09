@@ -1,5 +1,5 @@
 import { TableCell, TableRow } from "@mui/material";
-import { PaginationMobile, TableBase } from "../../../components";
+import { TableBase } from "../../../components";
 import { useAppThemeContext } from "../../../contexts";
 import { iFrequencyBase, iheadCell } from "../../../interfaces";
 import { defineBgColorInfrequency } from "../../../scripts";
@@ -9,7 +9,7 @@ interface iTableFrequencyUserProps {
 }
 
 export const TableFrequencyUser = ({ data }: iTableFrequencyUserProps) => {
-  const { mdDown, theme } = useAppThemeContext();
+  const { theme } = useAppThemeContext();
   const headCells: iheadCell[] = [
     { order: "date", numeric: false, label: "Data" },
     { numeric: false, label: "Escola" },
@@ -19,30 +19,24 @@ export const TableFrequencyUser = ({ data }: iTableFrequencyUserProps) => {
   ];
 
   return (
-    <>
-      <TableBase
-        headCells={headCells}
-        is_pagination={mdDown ? false : undefined}
-      >
-        {data.map((el) => (
-          <TableRow key={el.id}>
-            <TableCell>{el.date}</TableCell>
-            <TableCell>{el.school.name}</TableCell>
-            <TableCell>{el.class.name}</TableCell>
-            <TableCell align="right">{el.total_students}</TableCell>
-            <TableCell
-              align="right"
-              sx={{
-                color: "#fff",
-                bgcolor: defineBgColorInfrequency(el.infrequency, theme),
-              }}
-            >
-              {el.infrequency.toFixed(0)}%
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBase>
-      {mdDown && <PaginationMobile />}
-    </>
+    <TableBase headCells={headCells}>
+      {data.map((el) => (
+        <TableRow key={el.id}>
+          <TableCell>{el.date}</TableCell>
+          <TableCell>{el.school.name}</TableCell>
+          <TableCell>{el.class.name}</TableCell>
+          <TableCell align="right">{el.total_students}</TableCell>
+          <TableCell
+            align="right"
+            sx={{
+              color: "#fff",
+              bgcolor: defineBgColorInfrequency(el.infrequency, theme),
+            }}
+          >
+            {el.infrequency.toFixed(0)}%
+          </TableCell>
+        </TableRow>
+      ))}
+    </TableBase>
   );
 };

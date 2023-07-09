@@ -13,7 +13,7 @@ import {
   iFrequencyWithInfreq,
 } from "../interfaces";
 import { useNavigate } from "react-router-dom";
-import { useAppThemeContext, usePaginationContext, useSchoolContext } from ".";
+import { useAppThemeContext, useSchoolContext } from ".";
 import { FieldValues } from "react-hook-form";
 import { apiFrequency } from "../services";
 
@@ -50,7 +50,6 @@ export const FrequencyProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const { schoolRetrieve } = useSchoolContext();
-  const { defineQuery } = usePaginationContext();
   const [frequencyData, setFrequencyData] = useState<iFrequency>();
   const [studentData, setStudentData] = useState<iFrequencyStudentsBase>();
   const [retrieveFreq, setRetrieveFreq] = useState<iFrequencyWithInfreq>();
@@ -103,10 +102,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         const { frequency_id } = await apiFrequency.updateFreqStudent(data, id);
-        const students = await apiFrequency.students(
-          frequency_id,
-          defineQuery()
-        );
+        const students = await apiFrequency.students(frequency_id, "");
         setDataStudents(students.result);
       } catch {
         handleError("Não foi possível cadastrar a falta no momento!");

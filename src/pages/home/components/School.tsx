@@ -18,7 +18,6 @@ import { useDebounce } from "../../../shared/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { iWorkSchoolClass } from "../../../shared/interfaces";
 import { apiUser } from "../../../shared/services";
-import { PaginationMobile } from "../../../shared/components";
 import { School as SchoolIcon } from "@mui/icons-material";
 import { DialogSchool } from "./DialogSchool";
 import { CardSchool } from "./CardSchool";
@@ -31,7 +30,7 @@ export const School = ({ isHome }: iSchoolProps) => {
   const { debounce } = useDebounce();
   const { smDown, mdDown, theme } = useAppThemeContext();
   const { yearData } = useAuthContext();
-  const { define_step, query } = usePaginationContext();
+  const { query } = usePaginationContext();
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [schoolsData, setSchoolsData] = useState<iWorkSchoolClass[]>();
@@ -39,13 +38,12 @@ export const School = ({ isHome }: iSchoolProps) => {
 
   const onClose = () => setOpen(!open);
 
-  const getSchools = useCallback((query: string, take: number) => {
+  const getSchools = useCallback((query: string) => {
     setLoading(true);
     apiUser
       .schoolsClass(query)
       .then((res) => {
         setSchoolsData(res.result);
-        define_step(res.total, take);
       })
       .finally(() => setLoading(false));
   }, []);
@@ -60,13 +58,13 @@ export const School = ({ isHome }: iSchoolProps) => {
 
   useEffect(() => {
     if (yearData) {
-      let queryData = query(take, yearData.id);
+      let queryData = query(yearData.id);
       if (search) {
         queryData += `&name=${search}`;
         debounce(() => {
-          getSchools(queryData, take);
+          getSchools(queryData);
         });
-      } else getSchools(queryData, take);
+      } else getSchools(queryData);
     }
   }, [query, search, take, yearData]);
 
@@ -122,7 +120,6 @@ export const School = ({ isHome }: iSchoolProps) => {
               )}
             </Grid>
           </Box>
-          <PaginationMobile />
         </Box>
       </Grid>
       <DialogSchool open={open} onClose={onClose} isHome={isHome} />

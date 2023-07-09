@@ -18,7 +18,6 @@ import { FormContainer, RadioButtonGroup } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { activeUserSchema } from "../../shared/schemas";
 import { useDebounce } from "../../shared/hooks";
-import { useSearchParams } from "react-router-dom";
 import { LayoutBasePage } from "../../shared/layouts";
 
 const headCells: iheadCell[] = [
@@ -92,31 +91,20 @@ const CardUser = ({ user }: iCardUserProps) => {
 };
 
 export const ActiveUserPage = () => {
-  const [searchParams] = useSearchParams();
-  const orderData = searchParams.get("order");
   const { debounce } = useDebounce();
-  const { updateUserData } = useUserContext();
-  const { setCount, take, skip, order, setOrder, by, setIsLoading } =
-    usePaginationContext();
+  const { setCount, setIsLoading, query } = usePaginationContext();
   const [listUserData, setListUserData] = useState<iUser[]>();
   const [search, setSearch] = useState<string>();
 
   useEffect(() => {
-    let query = `?is_active=false&by=${by}`;
-    if (order) {
-      query += `&order=${order}`;
-    } else if (orderData) {
-      setOrder(orderData);
-      query += `&order=${orderData}`;
-    }
-    if (take) query += `&take=${take}`;
-    if (skip) query += `&skip=${skip}`;
+    let query_data = query() + `&is_active=false`;
+
     if (search) {
-      query += `&name=${search}`;
+      query_data += `&name=${search}`;
       setIsLoading(true);
       debounce(() => {
         apiUsingNow
-          .get<{ total: number; result: iUser[] }>(`users${query}`)
+          .get<{ total: number; result: iUser[] }>(`users${query_data}`)
           .then((res) => {
             setListUserData(res.data.result);
             setCount(res.data.total);
@@ -126,14 +114,14 @@ export const ActiveUserPage = () => {
     } else {
       setIsLoading(true);
       apiUsingNow
-        .get<{ total: number; result: iUser[] }>(`users${query}`)
+        .get<{ total: number; result: iUser[] }>(`users${query_data}`)
         .then((res) => {
           setListUserData(res.data.result);
           setCount(res.data.total);
         })
         .finally(() => setIsLoading(false));
     }
-  }, [updateUserData, take, skip, orderData, order, by, search]);
+  }, [search, query]);
 
   return (
     <LayoutBasePage

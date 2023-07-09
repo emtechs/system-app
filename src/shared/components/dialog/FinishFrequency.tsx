@@ -7,7 +7,6 @@ import {
 import { iFrequencyStudentsBase, iheadCell } from "../../interfaces";
 import { TableBase } from "../table";
 import { DialogBaseChildrenAction } from "./structure";
-import { PaginationMobile } from "../pagination";
 import { defineBgColorFrequency, statusFrequencyPtBr } from "../../scripts";
 
 const headCells: iheadCell[] = [
@@ -80,14 +79,12 @@ export const DialogFinishFrequency = ({
     >
       <TableBase
         headCells={headCells}
-        is_pagination={false}
         message="Todos os alunos estão presentes."
       >
         {students.map((el) => (
           <CardFrequency key={el.id} student={el} />
         ))}
       </TableBase>
-      <PaginationMobile />
     </DialogBaseChildrenAction>
   );
 };

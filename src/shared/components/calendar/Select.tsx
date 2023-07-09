@@ -26,7 +26,7 @@ export const CalendarSelect = ({ onClick }: iCalendarSelectProps) => {
   const { yearData, schoolData } = useAuthContext();
   const { monthData, setEventData, setDateData } = useCalendarContext();
   const { handleClickFrequency } = useDrawerContext();
-  const { defineQuery } = usePaginationContext();
+  const { query } = usePaginationContext();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export const CalendarSelect = ({ onClick }: iCalendarSelectProps) => {
 
   useEffect(() => {
     if (yearData && schoolData && monthData) {
-      const query = defineQuery(
+      const query_data = query(
         undefined,
         schoolData.id,
         undefined,
@@ -44,11 +44,11 @@ export const CalendarSelect = ({ onClick }: iCalendarSelectProps) => {
       );
       setLoading(true);
       apiUsingNow
-        .get<iCalendar[]>(`calendar/${yearData.id}${query}`)
+        .get<iCalendar[]>(`calendar/${yearData.id}${query_data}`)
         .then((res) => setEventData(res.data))
         .finally(() => setLoading(false));
     }
-  }, [schoolData, monthData, yearData, defineQuery]);
+  }, [schoolData, monthData, yearData, query]);
 
   return (
     <>

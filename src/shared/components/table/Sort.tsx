@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { TableCell, TableHead, TableRow, TableSortLabel } from "@mui/material";
 import { usePaginationContext } from "../../contexts";
 import { iheadCell } from "../../interfaces";
@@ -15,10 +14,6 @@ export const TableSort = ({ headCells }: iSortProps) => {
     setOrder(property);
     setBy(isAsc ? "desc" : "asc");
   };
-
-  useEffect(() => {
-    return setOrder("name");
-  }, []);
 
   return (
     <TableHead>

@@ -60,7 +60,7 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
 export const ListSchoolPage = () => {
   const { debounce } = useDebounce();
   const { yearData } = useAuthContext();
-  const { setCount, setIsLoading, defineQuery } = usePaginationContext();
+  const { setCount, setIsLoading, query } = usePaginationContext();
   const [listSchoolData, setListSchoolData] = useState<iSchoolClass[]>();
   const [search, setSearch] = useState<string>();
   const [infreq, setInfreq] = useState<string>();
@@ -78,22 +78,22 @@ export const ListSchoolPage = () => {
 
   useEffect(() => {
     if (yearData) {
-      let query = defineQuery(yearData.id);
+      let query_data = query(yearData.id);
       if (search) {
-        query += `&name=${search}`;
-        if (infreq) query += `&infreq=${infreq}`;
+        query_data += `&name=${search}`;
+        if (infreq) query_data += `&infreq=${infreq}`;
         debounce(() => {
-          getSchool(query);
+          getSchool(query_data);
         });
       } else if (infreq) {
-        query += `&infreq=${infreq}`;
-        if (search) query += `&name=${search}`;
+        query_data += `&infreq=${infreq}`;
+        if (search) query_data += `&name=${search}`;
         debounce(() => {
-          getSchool(query);
+          getSchool(query_data);
         });
-      } else getSchool(query);
+      } else getSchool(query_data);
     }
-  }, [yearData, defineQuery, search, infreq]);
+  }, [yearData, query, search, infreq]);
 
   const breadcrumbs = [
     <Chip

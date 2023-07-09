@@ -52,17 +52,18 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
 export const FrequencyOpenPage = () => {
   const navigate = useNavigate();
   const { yearData, schoolData } = useAuthContext();
-  const { setCount, take, skip, setIsLoading, defineQuery } =
-    usePaginationContext();
+  const { setCount, setIsLoading, query } = usePaginationContext();
   const [data, setData] = useState<iFrequency[]>();
 
   useEffect(() => {
     if (yearData && schoolData) {
-      let query = defineQuery(yearData.id, schoolData.id);
-      query += "&status=OPENED";
+      let query_data = query(yearData.id, schoolData.id);
+      query_data += "&status=OPENED";
       setIsLoading(true);
       apiUsingNow
-        .get<{ total: number; result: iFrequency[] }>(`frequencies${query}`)
+        .get<{ total: number; result: iFrequency[] }>(
+          `frequencies${query_data}`
+        )
         .then((res) => {
           setCount(res.data.total);
           setData(res.data.result);
@@ -70,7 +71,7 @@ export const FrequencyOpenPage = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [yearData, schoolData, take, skip]);
+  }, [yearData, schoolData, query]);
 
   if (!schoolData) return <Navigate to="/" />;
 

@@ -50,25 +50,26 @@ export const ListFrequencyClosedAdm = () => {
   const [searchParams] = useSearchParams();
   const date = searchParams.get("date");
   const { yearData } = useAuthContext();
-  const { setCount, take, skip, setIsLoading, defineQuery } =
-    usePaginationContext();
+  const { setCount, setIsLoading, query } = usePaginationContext();
   const [data, setData] = useState<iFrequency[]>();
 
   useEffect(() => {
     if (yearData) {
-      let query = defineQuery(yearData.id);
-      query += "&status=CLOSED";
-      if (date) query += `&date=${date}`;
+      let query_data = query(yearData.id);
+      query_data += "&status=CLOSED";
+      if (date) query_data += `&date=${date}`;
       setIsLoading(true);
       apiUsingNow
-        .get<{ total: number; result: iFrequency[] }>(`frequencies${query}`)
+        .get<{ total: number; result: iFrequency[] }>(
+          `frequencies${query_data}`
+        )
         .then((res) => {
           setCount(res.data.total);
           setData(res.data.result);
         })
         .finally(() => setIsLoading(false));
     }
-  }, [yearData, take, skip, date]);
+  }, [yearData, date]);
   return (
     <LayoutBasePage
       title={`Frequências Realizadas ${date ? "- " + date : ""}`}

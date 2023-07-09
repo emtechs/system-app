@@ -97,7 +97,7 @@ export const RetrieveFrequencyPage = () => {
   // const { handleClickButtonTools } = useDrawerContext();
   const { dataStudents, setDataStudents, alterStudents, setAlterStudents } =
     useFrequencyContext();
-  const { setIsLoading, query, define_step } = usePaginationContext();
+  const { setIsLoading, query } = usePaginationContext();
   // const [dataFrequency, setDataFrequency] = useState<iFrequencyBase>();
   const [isAlter, setIsAlter] = useState(false);
   const [open, setOpen] = useState(false);
@@ -113,15 +113,13 @@ export const RetrieveFrequencyPage = () => {
 
   useEffect(() => {
     if (id && open) {
-      const take = 3;
-      let queryData = query(take);
+      let queryData = query();
       queryData += "&isNot_presented=true";
       setIsLoading(true);
       apiFrequency
         .students(id, queryData)
         .then((res) => {
           setAlterStudents(res.result);
-          define_step(res.total, take);
         })
         .finally(() => setIsLoading(false));
     } else if (id) {
@@ -190,11 +188,7 @@ export const RetrieveFrequencyPage = () => {
           />
         }
       >
-        <TableBase
-          headCells={headCells}
-          is_pagination={false}
-          is_message={false}
-        >
+        <TableBase headCells={headCells} is_pagination={false}>
           {dataStudents?.map((el) => (
             <CardFrequency key={el.id} student={el} />
           ))}

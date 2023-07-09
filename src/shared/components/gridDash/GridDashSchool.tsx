@@ -25,22 +25,22 @@ export const GridDashSchool = () => {
   const { schoolRetrieve } = useSchoolContext();
   const { handleClickFrequency, handleClickSchool } = useDrawerContext();
   const { setDateData } = useCalendarContext();
-  const { defineQuery } = usePaginationContext();
+  const { query } = usePaginationContext();
   const [infoSchool, setInfoSchool] = useState<iDashSchool>();
 
   useEffect(() => {
     if (schoolRetrieve && yearData) {
       const date = dayjs().format("DD/MM/YYYY");
-      const query = defineQuery(undefined, undefined, undefined, date);
+      const query_data = query(undefined, undefined, undefined, date);
       setLoading(true);
       apiUsingNow
         .get<iDashSchool>(
-          `schools/${schoolRetrieve.id}/dash/${yearData.id}${query}`
+          `schools/${schoolRetrieve.id}/dash/${yearData.id}${query_data}`
         )
         .then((res) => setInfoSchool(res.data))
         .finally(() => setLoading(false));
     }
-  }, [schoolRetrieve, yearData, defineQuery]);
+  }, [schoolRetrieve, yearData, query]);
 
   return (
     <Grid container item direction="row" xs={12} md={5} spacing={2}>

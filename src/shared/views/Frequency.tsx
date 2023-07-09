@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "../hooks";
-import { useAppThemeContext, usePaginationContext } from "../contexts";
+import { usePaginationContext } from "../contexts";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { iFrequencyBase, iViewBaseProps, iYear } from "../interfaces";
 import { apiFrequency } from "../services";
@@ -24,63 +24,32 @@ export const ViewFrequency = ({
   const [searchParams] = useSearchParams();
   const year_id = searchParams.get("year_id");
   const { debounce } = useDebounce();
-  const { mdDown } = useAppThemeContext();
-  const { setCount, setIsLoading, defineQuery, define_step, query } =
-    usePaginationContext();
+  const { setCount, setIsLoading, query } = usePaginationContext();
   const [data, setData] = useState<iFrequencyBase[]>();
 
-  const getFrequencies = useCallback(
-    (query: string, take: number) => {
-      if (mdDown) {
-        setIsLoading(true);
-        apiFrequency
-          .list(query)
-          .then((res) => {
-            setData(res.result);
-            setCount(res.total);
-            define_step(res.total, take);
-          })
-          .finally(() => setIsLoading(false));
-      } else {
-        setIsLoading(true);
-        apiFrequency
-          .list(query)
-          .then((res) => {
-            setData(res.result);
-            setCount(res.total);
-          })
-          .finally(() => setIsLoading(false));
-      }
-    },
-    [mdDown]
-  );
-
-  const queryData = useCallback(
-    (take: number) => {
-      if (year_id) {
-        let query_data = defineQuery(year_id, school_id);
-        if (mdDown) {
-          query_data = query(take, year_id, school_id);
-          return query_data;
-        }
-        return query_data;
-      }
-      return "";
-    },
-    [year_id, defineQuery, school_id, mdDown, query]
-  );
+  const getFrequencies = useCallback((query: string) => {
+    setIsLoading(true);
+    apiFrequency
+      .list(query)
+      .then((res) => {
+        setData(res.result);
+        setCount(res.total);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
 
   useEffect(() => {
-    const take = 5;
-    let query = queryData(take);
-    if (user_id) query += `&user_id=${user_id}`;
-    if (search) {
-      query += `&name=${search}`;
-      debounce(() => {
-        getFrequencies(query, take);
-      });
-    } else getFrequencies(query, take);
-  }, [queryData, search, user_id]);
+    if (year_id) {
+      let query_data = query(year_id, school_id);
+      if (user_id) query_data += `&user_id=${user_id}`;
+      if (search) {
+        query_data += `&name=${search}`;
+        debounce(() => {
+          getFrequencies(query_data);
+        });
+      } else getFrequencies(query_data);
+    }
+  }, [query, search, user_id]);
 
   const table = useMemo(() => {
     if (data) {

@@ -9,7 +9,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { iInfrequency, iheadCell } from "../interfaces";
 import { apiFrequency } from "../services";
 import { Box, Tab, TableCell, TableRow, Tabs } from "@mui/material";
-import { PaginationMobile, TableBase } from "../components";
+import { TableBase } from "../components";
 import { defineBgColorInfrequency } from "../scripts";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
@@ -23,64 +23,34 @@ export const ViewInfrequency = () => {
   const year_id = searchParams.get("year_id");
   const period = searchParams.get("period");
   const { debounce } = useDebounce();
-  const { mdDown, theme } = useAppThemeContext();
+  const { theme } = useAppThemeContext();
   const { search, listYear, periods } = useSchoolContext();
-  const { setCount, setIsLoading, defineQuery, define_step, query } =
-    usePaginationContext();
+  const { setCount, setIsLoading, query } = usePaginationContext();
   const [data, setData] = useState<iInfrequency[]>();
 
-  const getFrequencies = useCallback(
-    (query: string, take: number) => {
-      if (mdDown) {
-        setIsLoading(true);
-        apiFrequency
-          .infrequency(query)
-          .then((res) => {
-            setData(res.result);
-            setCount(res.total);
-            define_step(res.total, take);
-          })
-          .finally(() => setIsLoading(false));
-      } else {
-        setIsLoading(true);
-        apiFrequency
-          .infrequency(query)
-          .then((res) => {
-            setData(res.result);
-            setCount(res.total);
-          })
-          .finally(() => setIsLoading(false));
-      }
-    },
-    [mdDown]
-  );
-
-  const queryData = useCallback(
-    (take: number) => {
-      if (year_id && school_id) {
-        let query_data = defineQuery(year_id, school_id);
-        if (mdDown) {
-          query_data = query(take, year_id, school_id);
-          return query_data;
-        }
-        return query_data;
-      }
-      return "";
-    },
-    [defineQuery, query, mdDown, year_id, school_id]
-  );
+  const getFrequencies = useCallback((query: string) => {
+    setIsLoading(true);
+    apiFrequency
+      .infrequency(query)
+      .then((res) => {
+        setData(res.result);
+        setCount(res.total);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
 
   useEffect(() => {
-    const take = 5;
-    let query = queryData(take);
-    if (period) query += `&category=${period}`;
-    if (search) {
-      query += `&name=${search}`;
-      debounce(() => {
-        getFrequencies(query, take);
-      });
-    } else getFrequencies(query, take);
-  }, [queryData, search, period]);
+    if (year_id && school_id) {
+      let query_data = query(year_id, school_id);
+      if (period) query_data += `&category=${period}`;
+      if (search) {
+        query_data += `&name=${search}`;
+        debounce(() => {
+          getFrequencies(query_data);
+        });
+      } else getFrequencies(query_data);
+    }
+  }, [search, period, year_id, school_id, query]);
 
   const headCells: iheadCell[] = [
     { numeric: false, label: "Nome" },
@@ -123,10 +93,7 @@ export const ViewInfrequency = () => {
             ))}
           </Tabs>
         </Box>
-        <TableBase
-          headCells={headCells}
-          is_pagination={mdDown ? false : undefined}
-        >
+        <TableBase headCells={headCells}>
           {data?.map((el) => (
             <TableRow key={el.id}>
               <TableCell>{el.name}</TableCell>
@@ -150,7 +117,6 @@ export const ViewInfrequency = () => {
             </TableRow>
           ))}
         </TableBase>
-        {mdDown && <PaginationMobile />}
       </Box>
     </Box>
   );

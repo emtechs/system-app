@@ -13,8 +13,7 @@ interface iViewUserProps extends iViewBaseProps {
 export const ViewUser = ({ search, school_id, role }: iViewUserProps) => {
   const { debounce } = useDebounce();
   const { setRolesData } = useUserContext();
-  const { defineQuery, setIsLoading, setCount, query_table } =
-    usePaginationContext();
+  const { setIsLoading, setCount, query } = usePaginationContext();
   const [data, setData] = useState<iUser[]>();
 
   const getUsers = useCallback((query: string) => {
@@ -30,7 +29,7 @@ export const ViewUser = ({ search, school_id, role }: iViewUserProps) => {
   }, []);
 
   useEffect(() => {
-    let query_data = query_table(undefined, school_id);
+    let query_data = query(undefined, school_id);
     if (role) query_data += `&role=${role}`;
     if (search) {
       query_data += `&name=${search}`;
@@ -40,7 +39,7 @@ export const ViewUser = ({ search, school_id, role }: iViewUserProps) => {
     } else {
       getUsers(query_data);
     }
-  }, [query_table, role, school_id, search]);
+  }, [query, role, school_id, search]);
 
   const table = useMemo(() => {
     if (data) {

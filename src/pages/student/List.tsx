@@ -49,17 +49,17 @@ const CardStudent = ({ classStudent }: iCardStudentProps) => {
 export const ListStudentPage = () => {
   const { yearData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
-  const { setCount, setIsLoading, defineQuery } = usePaginationContext();
+  const { setCount, setIsLoading, query } = usePaginationContext();
   const [data, setData] = useState<iStudent[]>();
 
   useEffect(() => {
     if (yearData) {
-      let query = defineQuery();
-      if (isInfreq) query += "&infreq=31";
+      let query_data = query();
+      if (isInfreq) query_data += "&infreq=31";
       setIsLoading(true);
       apiUsingNow
         .get<{ total: number; result: iStudent[] }>(
-          `classes/student/${yearData.id}${query}`
+          `classes/student/${yearData.id}${query_data}`
         )
         .then((res) => {
           setData(res.data.result);
@@ -67,16 +67,13 @@ export const ListStudentPage = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [yearData, isInfreq, defineQuery]);
+  }, [yearData, isInfreq, query]);
 
   return (
     <LayoutBasePage title={"Listagem de Alunos"} tools={<Tools isHome />}>
       <TableBase headCells={headCells}>
         {data?.map((classStudent) => (
-          <CardStudent
-            key={classStudent.id}
-            classStudent={classStudent}
-          />
+          <CardStudent key={classStudent.id} classStudent={classStudent} />
         ))}
       </TableBase>
     </LayoutBasePage>

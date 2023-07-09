@@ -1,88 +1,49 @@
-import { ChangeEvent, useMemo } from "react";
-import {
-  Box,
-  FormControl,
-  MenuItem,
-  Pagination,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from "@mui/material";
-import { useAppThemeContext, usePaginationContext } from "../../contexts";
+import { KeyboardArrowDown } from "@mui/icons-material";
+import { Box, Typography } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { usePaginationContext } from "../../contexts";
+import { useMemo, useState } from "react";
 
-export const PaginationTable = () => {
-  const { smDown } = useAppThemeContext();
-  const { steps_table, setSkip, take, setTake, count, rowsPage, page, setPage } =
-    usePaginationContext();
+interface iPaginationTableProps {
+  onClick: () => void;
+}
 
-  const handleChange = (event: SelectChangeEvent) => {
-    if (event.target.value === "Todos") {
-      setTake(undefined);
-      setSkip(undefined);
-    } else {
-      setTake(+event.target.value);
+export const PaginationTable = ({ onClick }: iPaginationTableProps) => {
+  const { page, take, count, isLoading } = usePaginationContext();
+  const [disabled, setDisabled] = useState(false);
+
+  const total = useMemo(() => {
+    const base = page * take;
+    if (base > count) {
+      setDisabled(true);
+      return count;
     }
-  };
-
-  const page_def = useMemo(() => {
-    if (page > steps_table) {
-      setSkip((steps_table - 1) * (take ? take : 0));
-      return steps_table;
-    }
-    setSkip((page - 1) * (take ? take : 0));
-    return page;
-  }, [page, setSkip, steps_table, take]);
-
-  const handleChangePage = (_event: ChangeEvent<unknown>, value: number) =>
-    setPage(value);
-
-  const justifyContent = useMemo(() => {
-    if (smDown) return "center";
-
-    if (steps_table === 0) return "flex-start";
-
-    return "flex-end";
-  }, [smDown, steps_table]);
+    setDisabled(false);
+    return base;
+  }, [count, page, take]);
 
   return (
     <Box
       display="flex"
       alignItems="center"
-      justifyContent={justifyContent}
-      mx={smDown ? undefined : 2}
-      p={1}
-      mb={1}
+      justifyContent="center"
+      p={2}
+      gap={2}
     >
-      {!smDown && count > 5 && (
-        <>
-          <Typography variant="subtitle2">Linhas por página:</Typography>
-          <FormControl size="small" sx={{ m: 1, minWidth: 80 }}>
-            <Select
-              size="small"
-              value={take ? String(take) : "Todos"}
-              onChange={handleChange}
-              displayEmpty
-              inputProps={{ "aria-label": "Without label" }}
-            >
-              {rowsPage?.map((el) => (
-                <MenuItem key={el} value={el === "Todos" ? count : el}>
-                  {el}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </>
-      )}
-      {steps_table > 0 && (
-        <Pagination
-          count={steps_table}
-          page={page_def}
-          onChange={handleChangePage}
-          showFirstButton
-          showLastButton
-          color="primary"
-        />
-      )}
+      <Typography>
+        {total}/{count}
+      </Typography>
+      <LoadingButton
+        variant="contained"
+        disableElevation
+        loading={isLoading}
+        loadingPosition="end"
+        endIcon={<KeyboardArrowDown />}
+        disabled={disabled}
+        onClick={onClick}
+      >
+        Carregar mais
+      </LoadingButton>
     </Box>
   );
 };

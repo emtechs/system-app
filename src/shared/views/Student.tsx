@@ -9,7 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 import { iStudent, iheadCell } from "../interfaces";
 import { apiStudent } from "../services";
 import { Box, Tab, TableCell, TableRow, Tabs } from "@mui/material";
-import { PaginationMobile, TableBase } from "../components";
+import { TableBase } from "../components";
 import { defineBgColorInfrequency } from "../scripts";
 
 export const ViewStudent = () => {
@@ -19,61 +19,31 @@ export const ViewStudent = () => {
   const { debounce } = useDebounce();
   const { mdDown, theme } = useAppThemeContext();
   const { search, listYear } = useSchoolContext();
-  const { setCount, setIsLoading, defineQuery, define_step, query } =
-    usePaginationContext();
+  const { setCount, setIsLoading, query } = usePaginationContext();
   const [data, setData] = useState<iStudent[]>();
 
-  const getStudents = useCallback(
-    (query: string, take: number) => {
-      if (mdDown) {
-        setIsLoading(true);
-        apiStudent
-          .list(query)
-          .then((res) => {
-            setData(res.result);
-            setCount(res.total);
-            define_step(res.total, take);
-          })
-          .finally(() => setIsLoading(false));
-      } else {
-        setIsLoading(true);
-        apiStudent
-          .list(query)
-          .then((res) => {
-            setData(res.result);
-            setCount(res.total);
-          })
-          .finally(() => setIsLoading(false));
-      }
-    },
-    [mdDown]
-  );
-
-  const queryData = useCallback(
-    (take: number) => {
-      if (year_id && school_id) {
-        let query_data = defineQuery(year_id, school_id);
-        if (mdDown) {
-          query_data = query(take, year_id, school_id);
-          return query_data;
-        }
-        return query_data;
-      }
-      return "";
-    },
-    [defineQuery, query, mdDown, year_id, school_id]
-  );
+  const getStudents = useCallback((query: string) => {
+    setIsLoading(true);
+    apiStudent
+      .list(query)
+      .then((res) => {
+        setData(res.result);
+        setCount(res.total);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
 
   useEffect(() => {
-    const take = 5;
-    let query = queryData(take);
-    if (search) {
-      query += `&name=${search}`;
-      debounce(() => {
-        getStudents(query, take);
-      });
-    } else getStudents(query, take);
-  }, [queryData, search]);
+    if (year_id && school_id) {
+      let query_data = query(year_id, school_id);
+      if (search) {
+        query_data += `&name=${search}`;
+        debounce(() => {
+          getStudents(query_data);
+        });
+      } else getStudents(query_data);
+    }
+  }, [query, school_id, search, year_id]);
 
   const headCells: iheadCell[] = mdDown
     ? [
@@ -106,10 +76,7 @@ export const ViewStudent = () => {
         ))}
       </Tabs>
       <Box flex={1}>
-        <TableBase
-          headCells={headCells}
-          is_pagination={mdDown ? false : undefined}
-        >
+        <TableBase headCells={headCells}>
           {data?.map((el) => (
             <TableRow key={el.id}>
               <TableCell align="right">{el.registry}</TableCell>
@@ -131,7 +98,6 @@ export const ViewStudent = () => {
             </TableRow>
           ))}
         </TableBase>
-        {mdDown && <PaginationMobile />}
       </Box>
     </Box>
   );
