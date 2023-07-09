@@ -18,62 +18,37 @@ export const ViewFrequencyHistory = () => {
   const { debounce } = useDebounce();
   const { mdDown } = useAppThemeContext();
   const { search, userRetrieve, listYear } = useUserContext();
-  const { setCount, setIsLoading, defineQuery, define_step, query } =
+  const { setCount, setIsLoading, defineQuery, initial_step } =
     usePaginationContext();
   const [data, setData] = useState<iFrequencyHistory[]>();
 
   const getFrequencies = useCallback(
-    (query: string, take: number) => {
-      if (mdDown) {
-        setIsLoading(true);
-        apiFrequency
-          .history(query)
-          .then((res) => {
-            setData(res.result);
-            setCount(res.total);
-            define_step(res.total, take);
-          })
-          .finally(() => setIsLoading(false));
-      } else {
-        setIsLoading(true);
-        apiFrequency
-          .history(query)
-          .then((res) => {
-            setData(res.result);
-            setCount(res.total);
-          })
-          .finally(() => setIsLoading(false));
-      }
+    (query: string) => {
+      setIsLoading(true);
+      apiFrequency
+        .history(query)
+        .then((res) => {
+          setData(res.result);
+          setCount(res.total);
+          initial_step(res.total);
+        })
+        .finally(() => setIsLoading(false));
     },
-    [mdDown]
-  );
-
-  const queryData = useCallback(
-    (take: number) => {
-      if (year_id) {
-        let query_data = defineQuery(year_id);
-        if (mdDown) {
-          query_data = query(take, year_id);
-          return query_data;
-        }
-        return query_data;
-      }
-      return "";
-    },
-    [year_id, defineQuery, mdDown, query]
+    [initial_step, setCount, setIsLoading]
   );
 
   useEffect(() => {
-    const take = 5;
-    let query = queryData(take);
-    if (userRetrieve) query += `&user_id=${userRetrieve.id}`;
-    if (search) {
-      query += `&name=${search}`;
-      debounce(() => {
-        getFrequencies(query, take);
-      });
-    } else getFrequencies(query, take);
-  }, [queryData, search, userRetrieve]);
+    if (year_id) {
+      let query = defineQuery(year_id);
+      if (userRetrieve) query += `&user_id=${userRetrieve.id}`;
+      if (search) {
+        query += `&name=${search}`;
+        debounce(() => {
+          getFrequencies(query);
+        });
+      } else getFrequencies(query);
+    }
+  }, [debounce, defineQuery, getFrequencies, search, userRetrieve, year_id]);
 
   const headCells: iheadCell[] = [
     { numeric: false, label: "Data" },

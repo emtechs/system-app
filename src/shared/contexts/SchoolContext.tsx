@@ -67,7 +67,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const { yearData } = useAuthContext();
-  const { setSkip, setPage, setActive } = usePaginationContext();
+  const { setSkip, setActive } = usePaginationContext();
   const [schoolRetrieve, setSchoolRetrieve] = useState<iSchool>();
   const [schoolAdminRetrieve, setSchoolAdminRetrieve] =
     useState<iSchoolClass>();
@@ -86,7 +86,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
 
   const clickRetrieveSchool = useCallback(
     (school_id: string, server_id: string) => {
-      setPage(0);
       setSkip(undefined);
       navigate("/school/" + school_id + "/server/" + server_id);
     },

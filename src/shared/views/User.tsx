@@ -1,9 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  useAppThemeContext,
-  usePaginationContext,
-  useUserContext,
-} from "../contexts";
+import { usePaginationContext, useUserContext } from "../contexts";
 import { useDebounce } from "../hooks";
 import { iUser, iViewBaseProps } from "../interfaces";
 import { apiUser } from "../services";
@@ -17,47 +13,34 @@ interface iViewUserProps extends iViewBaseProps {
 export const ViewUser = ({ search, school_id, role }: iViewUserProps) => {
   const { debounce } = useDebounce();
   const { setRolesData } = useUserContext();
-  const { query, setIsLoading, setCount, define_step } = usePaginationContext();
+  const { defineQuery, setIsLoading, setCount, query_table } =
+    usePaginationContext();
   const [data, setData] = useState<iUser[]>();
 
-  const getUsers = useCallback(
-    (query: string, take: number) => {
-      setIsLoading(true);
-      apiUser
-        .list(query)
-        .then((res) => {
-          setData(res.result);
-          setRolesData(res.roles);
-          setCount(res.total);
-          define_step(res.total, take);
-        })
-        .finally(() => setIsLoading(false));
-    },
-    [define_step, setCount, setIsLoading, setRolesData]
-  );
-
-  const queryData = useCallback(
-    (take: number) => {
-      let query_data = query(take, undefined, school_id);
-      if (role) query_data += `&role=${role}`;
-
-      return query_data;
-    },
-    [query, school_id, role]
-  );
+  const getUsers = useCallback((query: string) => {
+    setIsLoading(true);
+    apiUser
+      .list(query)
+      .then((res) => {
+        setData(res.result);
+        setRolesData(res.roles);
+        setCount(res.total);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
 
   useEffect(() => {
-    const take = 5;
-    let query = queryData(take);
+    let query_data = query_table(undefined, school_id);
+    if (role) query_data += `&role=${role}`;
     if (search) {
-      query += `&name=${search}`;
+      query_data += `&name=${search}`;
       debounce(() => {
-        getUsers(query, take);
+        getUsers(query_data);
       });
     } else {
-      getUsers(query, take);
+      getUsers(query_data);
     }
-  }, [debounce, getUsers, queryData, search]);
+  }, [query_table, role, school_id, search]);
 
   const table = useMemo(() => {
     if (data) {

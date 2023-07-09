@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { iChildren } from "../interfaces";
@@ -26,8 +27,11 @@ interface iPaginationContextData {
   count: number;
   setCount: Dispatch<SetStateAction<number>>;
   total: number;
+  rowsPage: string[] | undefined;
   take: number | undefined;
   setTake: Dispatch<SetStateAction<number | undefined>>;
+  page: number;
+  setPage: Dispatch<SetStateAction<number>>;
   skip: number | undefined;
   setSkip: Dispatch<SetStateAction<number | undefined>>;
   order: string | undefined;
@@ -50,6 +54,16 @@ interface iPaginationContextData {
   handleNext: () => void;
   handleBack: () => void;
   define_step: (total: number, take: number) => void;
+  steps_table: number;
+  query_table: (
+    year_id?: string,
+    school_id?: string,
+    class_id?: string,
+    date?: string,
+    month?: string,
+    is_active?: boolean,
+    orderData?: string
+  ) => string;
 }
 
 const PaginationContext = createContext({} as iPaginationContextData);
@@ -59,7 +73,8 @@ export const PaginationProvider = ({ children }: iChildren) => {
   const [activeStep, setActiveStep] = useState(0);
   const [count, setCount] = useState(0);
   const [total, setTotal] = useState(0);
-  const [rowsPage, setrowsPage] = useState<any[]>();
+  const [page, setPage] = useState(1);
+  const [rowsPage, setrowsPage] = useState<string[]>();
   const [take, setTake] = useState<number>();
   const [skip, setSkip] = useState<number>();
   const [order, setOrder] = useState<string | undefined>("name");
@@ -67,8 +82,19 @@ export const PaginationProvider = ({ children }: iChildren) => {
   const [isLoading, setIsLoading] = useState(true);
   const [active, setActive] = useState(true);
 
+  const steps_table = useMemo(() => {
+    if (take) {
+      const arredSteps = Math.ceil(count / take);
+      if (arredSteps === 1) {
+        setSkip(undefined);
+        setPage(1);
+      }
+      return arredSteps === 1 ? 0 : arredSteps;
+    }
+    return 0;
+  }, [count, take]);
+
   const define_step = useCallback((total: number, take: number) => {
-    setTake(take);
     setTotal(total);
     const arredSteps = Math.ceil(total / take);
     setSteps(arredSteps === 1 ? 0 : arredSteps);
@@ -120,25 +146,60 @@ export const PaginationProvider = ({ children }: iChildren) => {
   };
 
   useEffect(() => {
-    if (count < 5) {
-      setrowsPage([{ label: "Todos", value: -1 }]);
-    }
     if (count < 10) {
-      setrowsPage([{ label: "Todos", value: -1 }]);
+      setrowsPage(["5", "Todos"]);
     }
     if (count < 20) {
-      setrowsPage([10, { label: "Todos", value: -1 }]);
+      setrowsPage(["5", "10", "Todos"]);
     }
     if (count < 30) {
-      setrowsPage([10, 20, { label: "Todos", value: -1 }]);
+      setrowsPage(["5", "10", "20", "Todos"]);
     }
     if (count < 40) {
-      setrowsPage([10, 20, 30, { label: "Todos", value: -1 }]);
+      setrowsPage(["5", "10", "20", "30", "Todos"]);
     }
     if (count > 45) {
-      setrowsPage([10, 20, 30, 40]);
+      setrowsPage(["5", "10", "20", "30", "40"]);
     }
   }, [count]);
+
+  const pag_table = useMemo(() => {
+    let data = "";
+
+    if (take) {
+      data += "&take=" + take;
+    } else {
+      setTake(5);
+      data += "&take=5";
+    }
+    if (skip) data += "&skip=" + skip;
+
+    return data;
+  }, [skip, take]);
+
+  const query_table = useCallback(
+    (
+      year_id?: string,
+      school_id?: string,
+      class_id?: string,
+      date?: string,
+      month?: string,
+      is_active?: boolean,
+      orderData?: string
+    ) => {
+      orderData = orderData ? orderData : order;
+      let query = "?by=" + by + define_is_active(is_active) + pag_table;
+      if (orderData) query += `&order=${orderData}`;
+      if (year_id) query += "&year_id=" + year_id;
+      if (school_id) query += "&school_id=" + school_id;
+      if (class_id) query += "&class_id=" + class_id;
+      if (date) query += "&date=" + date;
+      if (month) query += "&month=" + month;
+
+      return query;
+    },
+    [order, by, define_is_active, pag_table]
+  );
 
   const defineQuery = useCallback(
     (
@@ -176,6 +237,7 @@ export const PaginationProvider = ({ children }: iChildren) => {
         count,
         setCount,
         total,
+        rowsPage,
         setTake,
         take,
         skip,
@@ -193,6 +255,10 @@ export const PaginationProvider = ({ children }: iChildren) => {
         is_active: define_is_active,
         define_step,
         setSkip,
+        page,
+        setPage,
+        steps_table,
+        query_table,
       }}
     >
       {children}

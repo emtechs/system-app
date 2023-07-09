@@ -10,18 +10,11 @@ import {
 } from "@mui/material";
 import { usePaginationContext } from "../../contexts";
 import { iTable } from "../../interfaces";
-import { PaginationMobile } from "../pagination";
+import { PaginationTable } from "../pagination";
 import { TableSort } from "./Sort";
 
-export const TableBase = ({
-  message,
-  children,
-  headCells,
-  is_body = true,
-  is_pagination = true,
-  is_message = true,
-}: iTable) => {
-  const { isLoading, count, total } = usePaginationContext();
+export const TableBase = ({ message, children, headCells }: iTable) => {
+  const { isLoading, count } = usePaginationContext();
   return (
     <>
       <TableContainer
@@ -31,31 +24,11 @@ export const TableBase = ({
       >
         <Table>
           <TableSort headCells={headCells} />
-          {is_body ? (
-            <TableBody>{children}</TableBody>
-          ) : isLoading ? (
-            <></>
-          ) : (
-            <TableBody>{children}</TableBody>
-          )}
-          {is_message ? (
-            is_pagination ? (
-              count === 0 &&
-              !isLoading && (
-                <caption>
-                  {message ? message : "Nenhum registro encontrado."}
-                </caption>
-              )
-            ) : (
-              total === 0 &&
-              !isLoading && (
-                <caption>
-                  {message ? message : "Nenhum registro encontrado."}
-                </caption>
-              )
-            )
-          ) : (
-            <></>
+          {isLoading ? <></> : <TableBody>{children}</TableBody>}
+          {count === 0 && !isLoading && (
+            <caption>
+              {message ? message : "Nenhum registro encontrado."}
+            </caption>
           )}
           <TableFooter>
             {isLoading && (
@@ -68,7 +41,7 @@ export const TableBase = ({
           </TableFooter>
         </Table>
       </TableContainer>
-      {is_pagination && <PaginationMobile />}
+      <PaginationTable />
     </>
   );
 };

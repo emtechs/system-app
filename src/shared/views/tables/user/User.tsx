@@ -30,10 +30,7 @@ export const TableUser = ({ data }: iTableUserProps) => {
 
   return (
     <>
-      <TableBase
-        headCells={headCells}
-        is_pagination={mdDown ? false : undefined}
-      >
+      <TableBase headCells={headCells}>
         {data.map((user) => (
           <TableRow
             key={user.id}

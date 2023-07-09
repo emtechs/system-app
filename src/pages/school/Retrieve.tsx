@@ -36,7 +36,7 @@ export const RetrieveSchoolPage = () => {
   const { yearData } = useAuthContext();
   const { schoolDataRetrieve, schoolRetrieve, search, periods, listYear } =
     useSchoolContext();
-  const { setOrder, setBy, setPage } = usePaginationContext();
+  const { setOrder, setBy } = usePaginationContext();
   const [view, setView] = useState(<ViewSchoolData />);
   const [tools, setTools] = useState(<ToolsSchool back="/school" />);
   const [value, setValue] = useState(0);
@@ -48,7 +48,6 @@ export const RetrieveSchoolPage = () => {
   }, [school_id]);
 
   const handleView = () => {
-    setPage(0);
     setOrder("name");
     setBy("asc");
   };

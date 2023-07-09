@@ -23,7 +23,7 @@ export const RetrieveUserPage = () => {
   const school_id = searchParams.get("school_id");
   const { yearData } = useAuthContext();
   const { userDataRetrieve, userRetrieve, search, listYear } = useUserContext();
-  const { setOrder, setBy, setPage } = usePaginationContext();
+  const { setOrder, setBy } = usePaginationContext();
   const [view, setView] = useState(<ViewUserData />);
   const [tools, setTools] = useState(<ToolsUser back="/user" />);
   const [value, setValue] = useState(0);
@@ -52,7 +52,6 @@ export const RetrieveUserPage = () => {
   }, [user_id]);
 
   const handleView = () => {
-    setPage(0);
     setOrder("name");
     setBy("asc");
   };

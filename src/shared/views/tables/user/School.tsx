@@ -1,11 +1,7 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { TableCell, TableRow } from "@mui/material";
-import {
-  DialogCreateServer,
-  PaginationMobile,
-  TableBase,
-} from "../../../components";
+import { DialogCreateServer, TableBase } from "../../../components";
 import { useAppThemeContext } from "../../../contexts";
 import { iUser, iheadCell } from "../../../interfaces";
 import { rolePtBr } from "../../../scripts";
@@ -41,10 +37,7 @@ export const TableUserSchool = ({
 
   return (
     <>
-      <TableBase
-        headCells={headCells}
-        is_pagination={mdDown ? false : undefined}
-      >
+      <TableBase headCells={headCells}>
         {data.map((user) => (
           <TableRow
             key={user.id}
@@ -67,7 +60,6 @@ export const TableUserSchool = ({
           </TableRow>
         ))}
       </TableBase>
-      {mdDown && <PaginationMobile />}
       <DialogCreateServer school_id={school_id} getUsers={getUsers} />
     </>
   );
