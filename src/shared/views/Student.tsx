@@ -1,92 +1,88 @@
 import { useParams, useSearchParams } from "react-router-dom";
 import { useDebounce } from "../hooks";
-import {
-  useAppThemeContext,
-  usePaginationContext,
-  useSchoolContext,
-} from "../contexts";
-import { useCallback, useEffect, useState } from "react";
-import { iStudent, iheadCell } from "../interfaces";
+import { usePaginationContext, useSchoolContext } from "../contexts";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { iStudent } from "../interfaces";
 import { apiStudent } from "../services";
-import { Box, Tab, TableCell, TableRow, Tabs } from "@mui/material";
-import { PaginationMobile, TableBase } from "../components";
-import { defineBgColorInfrequency } from "../scripts";
+import { Box, Tab, Tabs } from "@mui/material";
+import { PaginationTable } from "../components";
+import sortArray from "sort-array";
+import { TableStudentSchool } from "./tables";
 
 export const ViewStudent = () => {
   const [searchParams] = useSearchParams();
   const { school_id } = useParams();
-  const year_id = searchParams.get("year_id");
+  const year_id = searchParams.get("year_id") || undefined;
   const { debounce } = useDebounce();
-  const { mdDown, theme } = useAppThemeContext();
   const { search, listYear } = useSchoolContext();
-  const { setCount, setIsLoading, defineQuery, define_step, query } =
-    usePaginationContext();
+  const {
+    setCount,
+    setIsLoading,
+    query,
+    setFace,
+    handleFace,
+    face,
+    order,
+    by,
+    query_page,
+  } = usePaginationContext();
   const [data, setData] = useState<iStudent[]>();
 
-  const getStudents = useCallback(
-    (query: string, take: number) => {
-      if (mdDown) {
-        setIsLoading(true);
-        apiStudent
-          .list(query)
-          .then((res) => {
-            setData(res.result);
-            setCount(res.total);
-            define_step(res.total, take);
-          })
-          .finally(() => setIsLoading(false));
-      } else {
-        setIsLoading(true);
-        apiStudent
-          .list(query)
-          .then((res) => {
-            setData(res.result);
-            setCount(res.total);
-          })
-          .finally(() => setIsLoading(false));
-      }
+  const getStudents = useCallback((query: string, isPage?: boolean) => {
+    setIsLoading(true);
+    if (isPage) {
+      apiStudent
+        .list(query)
+        .then((res) => setData((old) => old?.concat(res.result)))
+        .finally(() => setIsLoading(false));
+    } else {
+      apiStudent
+        .list(query)
+        .then((res) => {
+          setFace(1);
+          setData(res.result);
+          setCount(res.total);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, []);
+
+  const define_query = useCallback(
+    (comp: string) => {
+      const query_data =
+        query(year_id, school_id) + comp + "&order=name" + query_page();
+      return query_data;
     },
-    [mdDown]
+    [query, query_page, school_id, year_id]
   );
 
-  const queryData = useCallback(
-    (take: number) => {
-      if (year_id && school_id) {
-        let query_data = defineQuery(year_id, school_id);
-        if (mdDown) {
-          query_data = query(take, year_id, school_id);
-          return query_data;
-        }
-        return query_data;
-      }
-      return "";
-    },
-    [defineQuery, query, mdDown, year_id, school_id]
-  );
+  const onClick = () => getStudents(define_query(handleFace(face)), true);
 
   useEffect(() => {
-    const take = 5;
-    let query = queryData(take);
+    let query_data = "";
     if (search) {
-      query += `&name=${search}`;
+      query_data += `&name=${search}`;
       debounce(() => {
-        getStudents(query, take);
+        getStudents(define_query(query_data));
       });
-    } else getStudents(query, take);
-  }, [queryData, search]);
+    } else getStudents(define_query(query_data));
+  }, [define_query, search]);
 
-  const headCells: iheadCell[] = mdDown
-    ? [
-        { order: "registry", numeric: true, label: "Matrícula" },
-        { order: "name", numeric: false, label: "Aluno" },
-        { numeric: true, label: "Infrequência" },
-      ]
-    : [
-        { order: "registry", numeric: true, label: "Matrícula" },
-        { order: "name", numeric: false, label: "Aluno" },
-        { numeric: false, label: "Turma" },
-        { numeric: true, label: "Infrequência" },
-      ];
+  const table = useMemo(() => {
+    let students: iStudent[];
+    if (data) {
+      students = sortArray<iStudent>(data, { by: order, order: by });
+      if (order === "class_name")
+        students = sortArray<iStudent>(data, {
+          by: order,
+          order: by,
+          computed: { class_name: (row) => row.class.name },
+        });
+
+      return <TableStudentSchool data={students} />;
+    }
+    return <></>;
+  }, [by, data, order]);
 
   return (
     <Box display="flex" justifyContent="space-between">
@@ -106,32 +102,8 @@ export const ViewStudent = () => {
         ))}
       </Tabs>
       <Box flex={1}>
-        <TableBase
-          headCells={headCells}
-          is_pagination={mdDown ? false : undefined}
-        >
-          {data?.map((el) => (
-            <TableRow key={el.id}>
-              <TableCell align="right">{el.registry}</TableCell>
-              <TableCell>{el.name}</TableCell>
-              {!mdDown && (
-                <>
-                  <TableCell>{el.class.name}</TableCell>
-                </>
-              )}
-              <TableCell
-                align="right"
-                sx={{
-                  color: "#fff",
-                  bgcolor: defineBgColorInfrequency(el.infrequency, theme),
-                }}
-              >
-                {el.infrequency.toFixed(0)}%
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBase>
-        {mdDown && <PaginationMobile />}
+        {table}
+        <PaginationTable onClick={onClick} />
       </Box>
     </Box>
   );

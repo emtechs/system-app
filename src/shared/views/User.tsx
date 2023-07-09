@@ -1,91 +1,97 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  useAppThemeContext,
-  usePaginationContext,
-  useUserContext,
-} from "../contexts";
+import { usePaginationContext, useUserContext } from "../contexts";
 import { useDebounce } from "../hooks";
 import { iUser, iViewBaseProps } from "../interfaces";
 import { apiUser } from "../services";
-import { TableServer, TableUser } from "../components";
+import { TableUser, TableUserSchool } from "./tables";
+import { PaginationTable } from "../components";
+import sortArray from "sort-array";
 
 interface iViewUserProps extends iViewBaseProps {
   school_id?: string;
-  role?: string;
 }
 
-export const ViewUser = ({ search, school_id, role }: iViewUserProps) => {
+export const ViewUser = ({ search, school_id }: iViewUserProps) => {
   const { debounce } = useDebounce();
-  const { mdDown } = useAppThemeContext();
-  const { setRolesData } = useUserContext();
-  const { defineQuery, query, setIsLoading, setCount, define_step } =
-    usePaginationContext();
+  const { setRolesData, role } = useUserContext();
+  const {
+    setIsLoading,
+    setCount,
+    query,
+    setFace,
+    handleFace,
+    face,
+    order,
+    by,
+    query_page,
+  } = usePaginationContext();
   const [data, setData] = useState<iUser[]>();
 
-  const getUsers = useCallback(
-    (query: string, take: number) => {
-      if (mdDown) {
-        setIsLoading(true);
-        apiUser
-          .list(query)
-          .then((res) => {
-            setData(res.result);
-            setRolesData(res.roles);
-            setCount(res.total);
-            define_step(res.total, take);
-          })
-          .finally(() => setIsLoading(false));
-      } else {
-        setIsLoading(true);
-        apiUser
-          .list(query)
-          .then((res) => {
-            setData(res.result);
-            setRolesData(res.roles);
-            setCount(res.total);
-          })
-          .finally(() => setIsLoading(false));
-      }
-    },
-    [define_step, mdDown, setCount, setIsLoading, setRolesData]
-  );
+  const getUsers = useCallback((query: string, isPage?: boolean) => {
+    setIsLoading(true);
+    if (isPage) {
+      apiUser
+        .list(query)
+        .then((res) => setData((old) => old?.concat(res.result)))
+        .finally(() => setIsLoading(false));
+    } else {
+      apiUser
+        .list(query)
+        .then((res) => {
+          setFace(1);
+          setData(res.result);
+          setRolesData(res.roles);
+          setCount(res.total);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, []);
 
-  const queryData = useCallback(
-    (take: number) => {
-      let query_data = defineQuery(undefined, school_id);
+  const define_query = useCallback(
+    (comp: string) => {
+      let query_data =
+        query(undefined, school_id) + comp + "&order=name" + query_page();
       if (role) query_data += `&role=${role}`;
-      if (mdDown) {
-        query_data = query(take, undefined, school_id);
-        return query_data;
-      }
       return query_data;
     },
-    [defineQuery, query, mdDown, school_id, role]
+    [query, query_page, role, school_id]
   );
 
+  const onClick = () => getUsers(define_query(handleFace(face)), true);
+
   useEffect(() => {
-    const take = 5;
-    let query = queryData(take);
+    let query_data = "";
     if (search) {
-      query += `&name=${search}`;
+      query_data += `&name=${search}`;
       debounce(() => {
-        getUsers(query, take);
+        getUsers(define_query(query_data));
       });
     } else {
-      getUsers(query, take);
+      getUsers(define_query(query_data));
     }
-  }, [debounce, getUsers, queryData, search]);
+  }, [debounce, define_query, getUsers, search]);
 
   const table = useMemo(() => {
+    let users: iUser[];
     if (data) {
+      users = sortArray<iUser>(data, { by: order, order: by });
       if (school_id)
         return (
-          <TableServer data={data} getUsers={getUsers} school_id={school_id} />
+          <TableUserSchool
+            data={users}
+            getUsers={getUsers}
+            school_id={school_id}
+          />
         );
-      return <TableUser data={data} />;
+      return <TableUser data={users} />;
     }
     return <></>;
-  }, [data, getUsers, school_id]);
+  }, [by, data, getUsers, order, school_id]);
 
-  return table;
+  return (
+    <>
+      {table}
+      <PaginationTable onClick={onClick} />
+    </>
+  );
 };

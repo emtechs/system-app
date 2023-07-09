@@ -1,24 +1,22 @@
 import { useMemo } from "react";
-import { iUser, iheadCell } from "../../interfaces";
-import { useAppThemeContext } from "../../contexts";
-import { TableBase } from "./structure";
-import { TableCell, TableRow } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { rolePtBr } from "../../scripts";
-import { PaginationMobile } from "../pagination";
-import { DialogCreateServer } from "../dialog";
+import { TableCell, TableRow } from "@mui/material";
+import { DialogCreateServer, TableBase } from "../../../components";
+import { useAppThemeContext } from "../../../contexts";
+import { iUser, iheadCell } from "../../../interfaces";
+import { rolePtBr } from "../../../scripts";
 
-interface iTableServerProps {
+interface iTableUserSchoolProps {
   data: iUser[];
   school_id: string;
-  getUsers: (query: string, take: number) => void;
+  getUsers: (query: string, isPage?: boolean) => void;
 }
 
-export const TableServer = ({
+export const TableUserSchool = ({
   data,
   school_id,
   getUsers,
-}: iTableServerProps) => {
+}: iTableUserSchoolProps) => {
   const navigate = useNavigate();
   const { mdDown } = useAppThemeContext();
 
@@ -39,10 +37,7 @@ export const TableServer = ({
 
   return (
     <>
-      <TableBase
-        headCells={headCells}
-        is_pagination={mdDown ? false : undefined}
-      >
+      <TableBase headCells={headCells}>
         {data.map((user) => (
           <TableRow
             key={user.id}
@@ -65,7 +60,6 @@ export const TableServer = ({
           </TableRow>
         ))}
       </TableBase>
-      {mdDown && <PaginationMobile />}
       <DialogCreateServer school_id={school_id} getUsers={getUsers} />
     </>
   );

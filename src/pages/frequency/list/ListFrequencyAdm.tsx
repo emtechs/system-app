@@ -50,22 +50,23 @@ export const ListFrequencyAdm = () => {
   const date = searchParams.get("date");
   const status = searchParams.get("status");
   const { yearData } = useAuthContext();
-  const { setCount, take, skip, setIsLoading, defineQuery } =
-    usePaginationContext();
+  const { setCount, setIsLoading, query } = usePaginationContext();
   const [data, setData] = useState<iFrequency[]>();
 
   useEffect(() => {
     if (yearData) {
-      let query = defineQuery(yearData.id);
+      let query_data = query(yearData.id);
       if (status) {
-        query += "&status=" + status;
+        query_data += "&status=" + status;
       } else {
-        query += "&status=CLOSED";
+        query_data += "&status=CLOSED";
       }
-      if (date) query += `&date=${date}`;
+      if (date) query_data += `&date=${date}`;
       setIsLoading(true);
       apiUsingNow
-        .get<{ total: number; result: iFrequency[] }>(`frequencies${query}`)
+        .get<{ total: number; result: iFrequency[] }>(
+          `frequencies${query_data}`
+        )
         .then((res) => {
           setCount(res.data.total);
           setData(res.data.result);
@@ -73,7 +74,7 @@ export const ListFrequencyAdm = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [yearData, take, skip, date, status]);
+  }, [yearData, date, status]);
   return (
     <LayoutBasePage
       title={`Frequências Realizadas ${date ? "- " + date : ""}`}

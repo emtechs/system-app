@@ -69,7 +69,7 @@ export const ListStudentFrequencyPage = () => {
   const { schoolData } = useAuthContext();
   const { dataStudents, setDataStudents } = useFrequencyContext();
   const { handleClickButtonTools } = useDrawerContext();
-  const { setIsLoading, defineQuery, setCount } = usePaginationContext();
+  const { setIsLoading, query, setCount } = usePaginationContext();
   const [dataFrequency, setDataFrequency] = useState<iFrequencyBase>();
 
   useEffect(() => {
@@ -78,7 +78,7 @@ export const ListStudentFrequencyPage = () => {
 
   useEffect(() => {
     if (id) {
-      const queryData = defineQuery();
+      const queryData = query();
       setIsLoading(true);
       apiFrequency
         .students(id, queryData)
@@ -89,7 +89,7 @@ export const ListStudentFrequencyPage = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [id, open, defineQuery]);
+  }, [id, open, query]);
 
   if (!id) {
     return <Navigate to={"/frequency/list"} />;

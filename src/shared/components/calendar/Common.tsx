@@ -27,7 +27,7 @@ export const CalendarDashCommon = ({ onClick }: iCalendarDashCommonProps) => {
   const { schoolRetrieve } = useSchoolContext();
   const { monthData, setEventData, setDateData } = useCalendarContext();
   const { handleClickFrequency } = useDrawerContext();
-  const { defineQuery } = usePaginationContext();
+  const { query } = usePaginationContext();
 
   useEffect(() => {
     setEventData(undefined);
@@ -35,7 +35,7 @@ export const CalendarDashCommon = ({ onClick }: iCalendarDashCommonProps) => {
 
   useEffect(() => {
     if (yearData && schoolRetrieve && monthData) {
-      const query = defineQuery(
+      const query_data = query(
         undefined,
         schoolRetrieve.id,
         undefined,
@@ -44,11 +44,11 @@ export const CalendarDashCommon = ({ onClick }: iCalendarDashCommonProps) => {
       );
       setLoading(true);
       apiUsingNow
-        .get<iCalendar[]>(`calendar/${yearData.id}${query}`)
+        .get<iCalendar[]>(`calendar/${yearData.id}${query_data}`)
         .then((res) => setEventData(res.data))
         .finally(() => setLoading(false));
     }
-  }, [schoolRetrieve, monthData, yearData, defineQuery]);
+  }, [schoolRetrieve, monthData, yearData, query]);
 
   return (
     <CalendarBase

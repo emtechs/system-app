@@ -57,8 +57,7 @@ export const ListFrequencyCommon = () => {
   const { mdDown } = useAppThemeContext();
   const { yearData, schoolData } = useAuthContext();
   const { handleClickButtonTools } = useDrawerContext();
-  const { setCount, take, skip, setIsLoading, defineQuery } =
-    usePaginationContext();
+  const { setCount, setIsLoading, query } = usePaginationContext();
   const [data, setData] = useState<iFrequency[]>();
 
   const headCells: iheadCell[] = !date
@@ -82,16 +81,18 @@ export const ListFrequencyCommon = () => {
 
   useEffect(() => {
     if (yearData && schoolData) {
-      let query = defineQuery(yearData.id, schoolData.id);
+      let query_data = query(yearData.id, schoolData.id);
       if (status) {
-        query += "&status=" + status;
+        query_data += "&status=" + status;
       } else {
-        query += "&status=CLOSED";
+        query_data += "&status=CLOSED";
       }
-      if (date) query += `&date=${date}`;
+      if (date) query_data += `&date=${date}`;
       setIsLoading(true);
       apiUsingNow
-        .get<{ total: number; result: iFrequency[] }>(`frequencies${query}`)
+        .get<{ total: number; result: iFrequency[] }>(
+          `frequencies${query_data}`
+        )
         .then((res) => {
           setCount(res.data.total);
           setData(res.data.result);
@@ -99,7 +100,7 @@ export const ListFrequencyCommon = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [yearData, schoolData, take, skip, date, status, defineQuery]);
+  }, [yearData, schoolData, date, status, query]);
 
   if (!schoolData) return <Navigate to="/" />;
 

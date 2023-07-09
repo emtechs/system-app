@@ -6,7 +6,7 @@ import { ViewSchool } from "../../shared/views";
 import { useSchoolContext } from "../../shared/contexts";
 
 export const SchoolPage = () => {
-  const { is_director, onClickReset, search } = useSchoolContext();
+  const { is_director, search } = useSchoolContext();
   return (
     <LayoutBasePage
       title={
@@ -39,11 +39,7 @@ export const SchoolPage = () => {
         />
       }
     >
-      <ViewSchool
-        is_director={is_director}
-        onClickReset={onClickReset}
-        search={search}
-      />
+      <ViewSchool is_director={is_director} search={search} />
     </LayoutBasePage>
   );
 };

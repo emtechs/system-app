@@ -95,7 +95,7 @@ export const Tools = ({
     if (
       search.length > 0 ||
       infreq.length > 0 ||
-      is_director().length > 0 ||
+      is_director.length > 0 ||
       is_active() === "&is_active=false"
     )
       return false;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Box, Breadcrumbs, Chip, Link, Tab, Tabs } from "@mui/material";
 import {
@@ -14,18 +14,18 @@ import {
 import {
   useAppThemeContext,
   useAuthContext,
-  usePaginationContext,
   useSchoolContext,
 } from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
 import { LabelSchool, ToolsSchool } from "../../shared/components";
 import {
   ViewClass,
+  ViewFrequency,
+  ViewInfrequency,
   ViewSchoolData,
   ViewStudent,
   ViewUser,
 } from "../../shared/views";
-import { ViewFrequency } from "../../shared/views/Frequency";
 
 export const RetrieveSchoolPage = () => {
   const [searchParams] = useSearchParams();
@@ -33,8 +33,8 @@ export const RetrieveSchoolPage = () => {
   const viewData = searchParams.get("view");
   const { mdDown } = useAppThemeContext();
   const { yearData } = useAuthContext();
-  const { schoolDataRetrieve, schoolRetrieve, search } = useSchoolContext();
-  const { setOrder, setBy, setPage } = usePaginationContext();
+  const { schoolDataRetrieve, schoolRetrieve, search, periods, listYear } =
+    useSchoolContext();
   const [view, setView] = useState(<ViewSchoolData />);
   const [tools, setTools] = useState(<ToolsSchool back="/school" />);
   const [value, setValue] = useState(0);
@@ -44,12 +44,6 @@ export const RetrieveSchoolPage = () => {
       if (schoolRetrieve?.id !== school_id) schoolDataRetrieve(school_id);
     }
   }, [school_id]);
-
-  const handleView = () => {
-    setPage(0);
-    setOrder("name");
-    setBy("asc");
-  };
 
   useEffect(() => {
     switch (viewData) {
@@ -62,50 +56,68 @@ export const RetrieveSchoolPage = () => {
             isNew
             titleNew="Servidor"
             isSearch
+            isDash
           />
         );
         setValue(1);
-        handleView();
         break;
 
       case "class":
         setView(<ViewClass />);
         setTools(
-          <ToolsSchool back="/school" isNew titleNew="Turma" isSearch />
+          <ToolsSchool back="/school" isNew titleNew="Turma" isDash isSearch />
         );
         setValue(2);
-        handleView();
         break;
 
       case "student":
         setView(<ViewStudent />);
         setTools(
-          <ToolsSchool back="/school" isNew titleNew="Aluno" isSearch />
+          <ToolsSchool back="/school" isNew titleNew="Aluno" isDash isSearch />
         );
         setValue(3);
-        handleView();
         break;
 
       case "frequency":
-        setView(<ViewFrequency />);
-        setTools(<ToolsSchool back="/school" />);
+        setView(
+          <ViewFrequency
+            listYear={listYear}
+            school_id={school_id}
+            search={search}
+            table_def="school"
+          />
+        );
+        setTools(<ToolsSchool isDash back="/school" />);
         setValue(4);
-        handleView();
         break;
 
       case "infrequency":
-        setView(<ViewSchoolData />);
-        setTools(<ToolsSchool back="/school" />);
+        setView(<ViewInfrequency />);
+        setTools(<ToolsSchool isDash back="/school" />);
         setValue(5);
-        handleView();
         break;
 
       default:
         setView(<ViewSchoolData />);
-        setTools(<ToolsSchool back="/school" />);
+        setTools(<ToolsSchool isDash back="/school" />);
         setValue(0);
     }
-  }, [viewData, school_id, search]);
+  }, [viewData, school_id, search, listYear]);
+
+  const href = useCallback(
+    (view?: string, isYear?: boolean, isPeriod?: boolean) => {
+      let href_base = `/school/${school_id}`;
+
+      if (view) href_base += `?view=${view}`;
+
+      if (isYear) href_base += `&year_id=${yearData?.id}`;
+
+      if (isPeriod && periods) href_base += `&period=${periods[0].id}`;
+
+      return href_base;
+    },
+    [school_id, yearData, periods]
+  );
 
   return (
     <LayoutBasePage
@@ -136,37 +148,27 @@ export const RetrieveSchoolPage = () => {
     >
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} variant="scrollable" scrollButtons="auto">
-          <Tab href={"/school/" + school_id} icon={<School />} label="Escola" />
+          <Tab href={href()} icon={<School />} label="Escola" />
+          <Tab href={href("server")} icon={<People />} label="Servidores" />
           <Tab
-            href={"/school/" + school_id + "?view=server"}
-            icon={<People />}
-            label="Servidores"
-          />
-          <Tab
-            href={
-              "/school/" + school_id + "?view=class&year_id=" + yearData?.id
-            }
+            href={href("class", true)}
             icon={<Workspaces />}
             label="Turmas"
           />
           <Tab
-            href={
-              "/school/" + school_id + "?view=student&year_id=" + yearData?.id
-            }
+            href={href("student", true)}
             icon={<Groups />}
             label="Alunos"
             disabled={schoolRetrieve?.is_dash ? false : true}
           />
           <Tab
-            href={
-              "/school/" + school_id + "?view=frequency&year_id=" + yearData?.id
-            }
+            href={href("frequency", true)}
             icon={<Checklist />}
             label="Frequências"
             disabled={schoolRetrieve?.is_dash ? false : true}
           />
           <Tab
-            href={"/school/" + school_id + "?view=infrequency"}
+            href={href("infrequency", true, true)}
             icon={<Percent />}
             label="Infrequência"
             disabled={schoolRetrieve?.is_dash ? false : true}

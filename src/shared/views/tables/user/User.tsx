@@ -1,12 +1,10 @@
 import { useMemo } from "react";
-import { useAppThemeContext } from "../../contexts";
-import { iUser, iheadCell } from "../../interfaces";
-import { TableBase } from "./structure";
-import { TableCell, TableRow } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { rolePtBr } from "../../scripts";
-import { PaginationMobile } from "../pagination";
-import { DialogCreateAdmin } from "../dialog";
+import { TableCell, TableRow } from "@mui/material";
+import { DialogCreateAdmin, TableBase } from "../../../components";
+import { useAppThemeContext, useUserContext } from "../../../contexts";
+import { iUser, iheadCell } from "../../../interfaces";
+import { rolePtBr } from "../../../scripts";
 
 interface iTableUserProps {
   data: iUser[];
@@ -15,6 +13,7 @@ interface iTableUserProps {
 export const TableUser = ({ data }: iTableUserProps) => {
   const navigate = useNavigate();
   const { mdDown } = useAppThemeContext();
+  const { onClickReset } = useUserContext();
 
   const headCells: iheadCell[] = useMemo(() => {
     if (mdDown)
@@ -26,22 +25,20 @@ export const TableUser = ({ data }: iTableUserProps) => {
     return [
       { order: "name", numeric: false, label: "Nome Completo" },
       { numeric: false, label: "CPF" },
-      { numeric: false, label: "Função" },
+      { order: "role", numeric: false, label: "Função" },
     ];
   }, [mdDown]);
 
   return (
     <>
-      <TableBase
-        headCells={headCells}
-        is_pagination={mdDown ? false : undefined}
-      >
+      <TableBase headCells={headCells}>
         {data.map((user) => (
           <TableRow
             key={user.id}
             hover
             sx={{ cursor: "pointer" }}
             onClick={() => {
+              onClickReset();
               navigate("/user/" + user.id);
             }}
           >
@@ -51,7 +48,6 @@ export const TableUser = ({ data }: iTableUserProps) => {
           </TableRow>
         ))}
       </TableBase>
-      {mdDown && <PaginationMobile />}
       <DialogCreateAdmin />
     </>
   );

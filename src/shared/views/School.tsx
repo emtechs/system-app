@@ -1,161 +1,98 @@
-import { useNavigate } from "react-router-dom";
+import sortArray from "sort-array";
 import { useDebounce } from "../hooks";
-import {
-  useAppThemeContext,
-  useDialogContext,
-  usePaginationContext,
-} from "../contexts";
-import { iSchool, iViewBaseProps, iheadCell } from "../interfaces";
+import { usePaginationContext } from "../contexts";
+import { iSchool, iViewBaseProps } from "../interfaces";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiSchool } from "../services";
-import {
-  DialogActiveSchool,
-  DialogCreateSchool,
-  PaginationMobile,
-  TableBase,
-} from "../components";
-import { TableCell, TableRow } from "@mui/material";
-import { rolePtBr } from "../scripts";
+import { PaginationTable } from "../components";
+import { TableSchool, TableSchoolUser } from "./tables";
 
 interface iViewSchoolProps extends iViewBaseProps {
-  is_director?: () => "" | "&is_director=true" | "&is_director=false";
-  onClickReset?: () => void;
+  is_director?: "" | "&is_director=true" | "&is_director=false";
   server_id?: string;
 }
 
 export const ViewSchool = ({
   is_director,
-  onClickReset,
   search,
   server_id,
 }: iViewSchoolProps) => {
-  const navigate = useNavigate();
   const { debounce } = useDebounce();
-  const { mdDown } = useAppThemeContext();
-  const { handleOpenActive } = useDialogContext();
-  const { query, defineQuery, setIsLoading, define_step, setCount } =
-    usePaginationContext();
+  const {
+    query,
+    setIsLoading,
+    setCount,
+    handleFace,
+    face,
+    order,
+    by,
+    setFace,
+    query_page,
+  } = usePaginationContext();
   const [listData, setListData] = useState<iSchool[]>();
-  const [data, setData] = useState<iSchool>();
 
-  const getSchools = useCallback(
-    (query: string, take: number) => {
-      if (mdDown) {
-        setIsLoading(true);
-        apiSchool
-          .list(query)
-          .then((res) => {
-            setListData(res.result);
-            setCount(res.total);
-            define_step(res.total, take);
-          })
-          .finally(() => setIsLoading(false));
-      } else {
-        setIsLoading(true);
-        apiSchool
-          .list(query)
-          .then((res) => {
-            setListData(res.result);
-            setCount(res.total);
-          })
-          .finally(() => setIsLoading(false));
-      }
-    },
-    [mdDown]
-  );
+  const getSchools = useCallback((query: string, isPage?: boolean) => {
+    setIsLoading(true);
+    if (isPage) {
+      apiSchool
+        .list(query)
+        .then((res) => setListData((old) => old?.concat(res.result)))
+        .finally(() => setIsLoading(false));
+    } else {
+      apiSchool
+        .list(query)
+        .then((res) => {
+          setFace(1);
+          setListData(res.result);
+          setCount(res.total);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, []);
 
-  const queryData = useCallback(
-    (take: number) => {
-      let query_data = defineQuery();
-      if (mdDown) {
-        query_data = query(take);
-        return query_data;
-      }
+  const define_query = useCallback(
+    (comp: string) => {
+      let query_data = query() + comp + "&order=name" + query_page();
+      if (is_director) query_data += is_director;
+      if (server_id) query_data += `&server_id=${server_id}`;
       return query_data;
     },
-    [defineQuery, query, mdDown]
+    [is_director, query, query_page, server_id]
   );
 
-  useEffect(() => {
-    const take = 5;
-    let query = queryData(take);
-    if (is_director) query += is_director();
-    if (server_id) query += `&server_id=${server_id}`;
-    if (search) {
-      query += `&name=${search}`;
-      debounce(() => {
-        getSchools(query, take);
-      });
-    } else getSchools(query, take);
-  }, [queryData, search, is_director, server_id]);
+  const onClick = () => getSchools(define_query(handleFace(face)), true);
 
-  const headCells: iheadCell[] = useMemo(() => {
-    if (server_id)
-      return [
-        { order: "name", numeric: false, label: "Escola" },
-        { numeric: false, label: "Função" },
-        { numeric: false, label: "Tela" },
-      ];
-    return [
-      { order: "name", numeric: false, label: "Escola" },
-      { order: "director_name", numeric: false, label: "Diretor" },
-    ];
-  }, [server_id]);
+  useEffect(() => {
+    let query_data = "";
+    if (search) {
+      query_data += `&name=${search}`;
+      debounce(() => {
+        getSchools(define_query(query_data));
+      });
+    } else getSchools(define_query(query_data));
+  }, [debounce, define_query, getSchools, search]);
 
   const table = useMemo(() => {
-    if (server_id)
-      return (
-        <TableBase
-          headCells={headCells}
-          message="Nenhuma escola encotrada"
-          is_pagination={mdDown ? false : undefined}
-        >
-          {listData?.map((school) => (
-            <TableRow key={school.id} hover sx={{ cursor: "pointer" }}>
-              <TableCell>{school.name}</TableCell>
-              <TableCell>{rolePtBr(school.server.role)}</TableCell>
-              <TableCell>
-                {school.server.dash === "SCHOOL" ? "Escola" : "Frequência"}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBase>
-      );
-    return (
-      <TableBase
-        headCells={headCells}
-        message="Nenhuma escola encotrada"
-        is_pagination={mdDown ? false : undefined}
-      >
-        {listData?.map((school) => (
-          <TableRow
-            key={school.id}
-            hover
-            sx={{ cursor: "pointer" }}
-            onClick={() => {
-              if (!school.is_active) {
-                setData(school);
-                handleOpenActive();
-              } else {
-                if (onClickReset) onClickReset();
-                navigate("/school/" + school.id);
-              }
-            }}
-          >
-            <TableCell>{school.name}</TableCell>
-            <TableCell>{school.director?.name}</TableCell>
-          </TableRow>
-        ))}
-      </TableBase>
-    );
-  }, [server_id, headCells, mdDown, listData]);
+    let schools: iSchool[];
+
+    if (listData) {
+      schools = sortArray<iSchool>(listData, { by: order, order: by });
+      if (order === "director_name")
+        schools = sortArray<iSchool>(listData, {
+          by: order,
+          order: by,
+          computed: { director_name: (row) => row.director?.name },
+        });
+      if (server_id) return <TableSchoolUser data={schools} />;
+      return <TableSchool data={schools} />;
+    }
+    return <></>;
+  }, [by, listData, order, server_id]);
 
   return (
     <>
       {table}
-      {mdDown && <PaginationMobile />}
-      <DialogCreateSchool />
-      {data && <DialogActiveSchool school={data} />}
+      <PaginationTable onClick={onClick} />
     </>
   );
 };

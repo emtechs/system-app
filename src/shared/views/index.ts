@@ -1,4 +1,7 @@
 export * from "./Class";
+export * from "./Frequency";
+export * from "./FrequencyHistory";
+export * from "./Infrequency";
 export * from "./School";
 export * from "./SchoolData";
 export * from "./Student";

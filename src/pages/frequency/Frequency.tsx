@@ -20,7 +20,6 @@ import {
 } from "../../shared/contexts";
 import {
   GridDashContent,
-  PaginationMobile,
   SelectDate,
   TableBase,
   ValidateFrequency,
@@ -88,8 +87,7 @@ export const FrequencyPage = () => {
   const { schoolRetrieve } = useSchoolContext();
   const { dateData, monthData } = useCalendarContext();
   const { handleClickSchool } = useDrawerContext();
-  const { setIsLoading, defineQuery, query, define_step } =
-    usePaginationContext();
+  const { setIsLoading, query } = usePaginationContext();
   const [infoSchool, setInfoSchool] = useState<iDashSchool>();
   const [listClassData, setListClassData] = useState<iClassDash[]>();
   const [listClassSelectData, setListClassSelectData] =
@@ -113,15 +111,13 @@ export const FrequencyPage = () => {
 
   useEffect(() => {
     if (schoolRetrieve && yearData) {
-      const take = 4;
-      const queryData = query(take, undefined, undefined, undefined, date());
+      const queryData = query(undefined, undefined, undefined, date());
       setIsLoading(true);
       apiClass
         .listDash(schoolRetrieve.id, yearData.id, queryData)
         .then((res) => {
           setListClassSelectData(res.classes);
           setListClassData(res.result);
-          define_step(res.total, take);
         })
         .finally(() => setIsLoading(false));
     }
@@ -129,16 +125,16 @@ export const FrequencyPage = () => {
 
   useEffect(() => {
     if (schoolRetrieve && yearData) {
-      const query = defineQuery(undefined, undefined, undefined, date());
+      const queryData = query(undefined, undefined, undefined, date());
       setLoading(true);
       apiUsingNow
         .get<iDashSchool>(
-          `schools/${schoolRetrieve.id}/dash/${yearData.id}${query}`
+          `schools/${schoolRetrieve.id}/dash/${yearData.id}${queryData}`
         )
         .then((res) => setInfoSchool(res.data))
         .finally(() => setLoading(false));
     }
-  }, [date, schoolRetrieve, yearData, defineQuery]);
+  }, [date, schoolRetrieve, yearData]);
 
   if (!schoolRetrieve) return <Navigate to="/" />;
 
@@ -188,8 +184,6 @@ export const FrequencyPage = () => {
                   </Box>
                   <TableBase
                     message="Todas as frequências do dia já foram registradas."
-                    is_body={false}
-                    is_pagination={false}
                     headCells={headCells}
                   >
                     {listClassData?.map((el) => (
@@ -201,7 +195,6 @@ export const FrequencyPage = () => {
                       />
                     ))}
                   </TableBase>
-                  <PaginationMobile />
                 </Grid>
                 <Grid container item direction="row" xs={12} md={5} spacing={2}>
                   <Grid item xs={12}>

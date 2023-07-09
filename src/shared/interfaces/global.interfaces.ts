@@ -36,9 +36,6 @@ export interface iButtonBaseProps {
 
 export interface iTable extends iChildren {
   headCells: iheadCell[];
-  is_body?: boolean;
-  is_pagination?: boolean;
-  is_message?: boolean;
   message?: string;
 }
 

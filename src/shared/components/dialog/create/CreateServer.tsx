@@ -10,7 +10,7 @@ import { ValidateCPF } from "../../validate";
 
 interface iDialogCreateServerProps {
   school_id: string;
-  getUsers: (query: string, take: number) => void;
+  getUsers: (query: string, isPage?: boolean) => void;
 }
 
 export const DialogCreateServer = ({
@@ -25,7 +25,7 @@ export const DialogCreateServer = ({
       setLoading(true);
       await apiUser.createServer(data, id);
       handleSucess("Servidor cadastrado com sucesso!");
-      getUsers(`?school_id=${id}`, 1);
+      getUsers(`?school_id=${id}`);
     } catch {
       handleError("Não foi possível cadastrar o servidor no momento!");
     } finally {

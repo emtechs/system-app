@@ -2,7 +2,9 @@ import { FieldValues } from "react-hook-form";
 import {
   iFrequency,
   iFrequencyBase,
+  iFrequencyHistory,
   iFrequencyStudentsBase,
+  iInfrequency,
 } from "../interfaces";
 import { apiUsingNow } from "./api";
 
@@ -78,6 +80,30 @@ const list = async (query: string): Promise<iList> => {
   return response;
 };
 
+interface iInfrequencyReturn {
+  result: iInfrequency[];
+  total: number;
+}
+
+const infrequency = async (query: string): Promise<iInfrequencyReturn> => {
+  const { data: response } = await apiUsingNow.get<iInfrequencyReturn>(
+    `frequencies/infrequency${query}`
+  );
+  return response;
+};
+
+interface iHistoryReturn {
+  result: iFrequencyHistory[];
+  total: number;
+}
+
+const history = async (query: string): Promise<iHistoryReturn> => {
+  const { data: response } = await apiUsingNow.get<iHistoryReturn>(
+    `frequencies/history${query}`
+  );
+  return response;
+};
+
 export const apiFrequency = {
   create,
   update,
@@ -86,4 +112,6 @@ export const apiFrequency = {
   destroy,
   students,
   list,
+  infrequency,
+  history,
 };

@@ -31,9 +31,7 @@ interface iToolsUserProps {
   isActive?: boolean;
   finish?: ReactNode;
   isRole?: boolean;
-  role?: string;
-  handleRole?: (texto: string) => void;
-  onClickReset?: () => void;
+  isReset?: boolean;
 }
 
 export const ToolsUser = ({
@@ -48,26 +46,20 @@ export const ToolsUser = ({
   isActive,
   finish,
   isRole,
-  role = "",
-  onClickReset,
-  handleRole,
+  isReset,
 }: iToolsUserProps) => {
   const { theme } = useAppThemeContext();
   const { handleOpenCreate } = useDialogContext();
-  const { search, setSearch, rolesData } = useUserContext();
+  const { search, setSearch, rolesData, setRole, onClickReset, role } =
+    useUserContext();
   const { is_active } = usePaginationContext();
 
   const handleChange = (event: SelectChangeEvent) => {
-    handleRole?.(event.target.value as string);
+    setRole(event.target.value as string);
   };
 
   const disabled = useMemo(() => {
-    if (
-      search ||
-      is_active() === "&is_active=false" ||
-      (role && role.length > 0)
-    )
-      return false;
+    if (search || is_active() === "&is_active=false" || role) return false;
     return true;
   }, [search, is_active, role]);
 
@@ -125,7 +117,7 @@ export const ToolsUser = ({
           </Box>
         )}
         {finish}
-        {onClickReset && (
+        {isReset && (
           <CompBase
             title="Limpar"
             endIcon={<ClearAll />}

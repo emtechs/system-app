@@ -14,12 +14,14 @@ import {
   iUserPasswordRequest,
   iUserSecretRequest,
   iUserUpdateRequest,
+  iYear,
 } from "../interfaces";
 import { useNavigate } from "react-router-dom";
 import { FieldValues } from "react-hook-form";
 import { apiUser } from "../services";
 import { useAppThemeContext } from "./ThemeContext";
 import { useAuthContext } from "./AuthContext";
+import { usePaginationContext } from "./PaginationContext";
 
 interface iUserContextData {
   createSecret: (data: iUserSecretRequest, back?: string) => Promise<void>;
@@ -42,6 +44,10 @@ interface iUserContextData {
   setRolesData: Dispatch<SetStateAction<iSelectBase[] | undefined>>;
   userRetrieve: iUser | undefined;
   setUserRetrieve: Dispatch<SetStateAction<iUser | undefined>>;
+  listYear: iYear[] | undefined;
+  role: string | undefined;
+  setRole: Dispatch<SetStateAction<string | undefined>>;
+  onClickReset: () => void;
 }
 
 const UserContext = createContext({} as iUserContextData);
@@ -50,17 +56,29 @@ export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const { setDashData, setUserData } = useAuthContext();
+  const { setActive } = usePaginationContext();
   const [updateUserData, setUpdateUserData] = useState<iUser>();
   const [loadingUser, setLoadingUser] = useState(true);
   const [search, setSearch] = useState<string>();
   const [rolesData, setRolesData] = useState<iSelectBase[]>();
   const [userRetrieve, setUserRetrieve] = useState<iUser>();
+  const [listYear, setListYear] = useState<iYear[]>();
+  const [role, setRole] = useState<string>();
+
+  const onClickReset = useCallback(() => {
+    setActive(true);
+    setSearch(undefined);
+    setRole(undefined);
+  }, []);
 
   const userDataRetrieve = useCallback((id: string) => {
     setLoadingUser(true);
     apiUser
       .retrieve(id)
-      .then((res) => setUserRetrieve(res))
+      .then((res) => {
+        setUserRetrieve(res.user);
+        setListYear(res.years);
+      })
       .catch(() => navigate("/"))
       .finally(() => setLoadingUser(false));
   }, []);
@@ -171,6 +189,10 @@ export const UserProvider = ({ children }: iChildren) => {
         setRolesData,
         setUserRetrieve,
         userDataRetrieve,
+        listYear,
+        role,
+        setRole,
+        onClickReset,
       }}
     >
       {children}

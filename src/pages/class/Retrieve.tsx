@@ -59,22 +59,22 @@ export const RetrieveClassPage = () => {
   const { debounce } = useDebounce();
   const { yearData, dashData } = useAuthContext();
   const { isInfreq } = useFrequencyContext();
-  const { setIsLoading, defineQuery, setCount } = usePaginationContext();
+  const { setIsLoading, query, setCount } = usePaginationContext();
   const [data, setData] = useState<iStudent[]>();
   const [search, setSearch] = useState<string>();
 
   useEffect(() => {
     if (yearData && school_id && id) {
-      let query = defineQuery(undefined, school_id, id);
-      query += "&is_infreq=true";
-      if (isInfreq) query += "&infreq=31";
+      let query_data = query(undefined, school_id, id);
+      query_data += "&is_infreq=true";
+      if (isInfreq) query_data += "&infreq=31";
       if (search) {
-        query += `&name=${search}`;
+        query_data += `&name=${search}`;
         setIsLoading(true);
         debounce(() => {
           apiUsingNow
             .get<{ total: number; result: iStudent[] }>(
-              `classes/student/${yearData.id}${query}`
+              `classes/student/${yearData.id}${query_data}`
             )
             .then((res) => {
               setCount(res.data.total);
@@ -95,7 +95,7 @@ export const RetrieveClassPage = () => {
           .finally(() => setIsLoading(false));
       }
     }
-  }, [yearData, id, school_id, isInfreq, defineQuery, search]);
+  }, [yearData, id, school_id, isInfreq, query, search]);
 
   if (!id && dashData !== "ADMIN") {
     return <Navigate to="/school/class" />;

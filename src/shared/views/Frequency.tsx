@@ -1,86 +1,106 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "../hooks";
-import {
-  useAppThemeContext,
-  usePaginationContext,
-  useSchoolContext,
-} from "../contexts";
-import { useCallback, useEffect, useState } from "react";
-import { iFrequencyBase, iheadCell } from "../interfaces";
+import { usePaginationContext } from "../contexts";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { iFrequencyBase, iViewBaseProps, iYear } from "../interfaces";
 import { apiFrequency } from "../services";
-import { Box, Tab, TableCell, TableRow, Tabs } from "@mui/material";
-import { PaginationMobile, TableBase } from "../components";
-import { defineBgColorInfrequency } from "../scripts";
+import { Box, Tab, Tabs } from "@mui/material";
+import { TableFrequencySchool, TableFrequencyUser } from "./tables";
+import { PaginationTable } from "../components";
+import sortArray from "sort-array";
 
-export const ViewFrequency = () => {
+interface iViewFrequency extends iViewBaseProps {
+  listYear?: iYear[];
+  school_id?: string;
+  user_id?: string;
+  table_def: "user" | "school";
+}
+
+export const ViewFrequency = ({
+  search,
+  listYear,
+  school_id,
+  user_id,
+  table_def,
+}: iViewFrequency) => {
   const [searchParams] = useSearchParams();
-  const { school_id } = useParams();
-  const year_id = searchParams.get("year_id");
+  const year_id = searchParams.get("year_id") || undefined;
   const { debounce } = useDebounce();
-  const { mdDown, theme } = useAppThemeContext();
-  const { search, listYear } = useSchoolContext();
-  const { setCount, setIsLoading, defineQuery, define_step, query } =
-    usePaginationContext();
+  const {
+    setCount,
+    setIsLoading,
+    query,
+    setFace,
+    face,
+    handleFace,
+    order,
+    by,
+    query_page,
+  } = usePaginationContext();
   const [data, setData] = useState<iFrequencyBase[]>();
 
-  const getFrequencies = useCallback(
-    (query: string, take: number) => {
-      if (mdDown) {
-        setIsLoading(true);
-        apiFrequency
-          .list(query)
-          .then((res) => {
-            setData(res.result);
-            setCount(res.total);
-            define_step(res.total, take);
-          })
-          .finally(() => setIsLoading(false));
-      } else {
-        setIsLoading(true);
-        apiFrequency
-          .list(query)
-          .then((res) => {
-            setData(res.result);
-            setCount(res.total);
-          })
-          .finally(() => setIsLoading(false));
-      }
+  const getFrequencies = useCallback((query: string, isPage?: boolean) => {
+    setIsLoading(true);
+    if (isPage) {
+      apiFrequency
+        .list(query)
+        .then((res) => setData((old) => old?.concat(res.result)))
+        .finally(() => setIsLoading(false));
+    } else {
+      apiFrequency
+        .list(query)
+        .then((res) => {
+          setFace(1);
+          setData(res.result);
+          setCount(res.total);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, []);
+
+  const define_query = useCallback(
+    (comp: string) => {
+      let query_data =
+        query(year_id, school_id) + comp + "&order=date" + query_page();
+      if (user_id) query_data += `&user_id=${user_id}`;
+      return query_data;
     },
-    [mdDown]
+    [query, query_page, school_id, user_id, year_id]
   );
 
-  const queryData = useCallback(
-    (take: number) => {
-      if (year_id && school_id) {
-        let query_data = defineQuery(year_id, school_id);
-        if (mdDown) {
-          query_data = query(take, year_id, school_id);
-          return query_data;
-        }
-        return query_data;
-      }
-      return "";
-    },
-    [defineQuery, query, mdDown, year_id, school_id]
-  );
+  const onClick = () => getFrequencies(define_query(handleFace(face)), true);
 
   useEffect(() => {
-    const take = 5;
-    let query = queryData(take);
+    let query_data = "";
     if (search) {
-      query += `&name=${search}`;
+      query_data += `&name=${search}`;
       debounce(() => {
-        getFrequencies(query, take);
+        getFrequencies(define_query(query_data));
       });
-    } else getFrequencies(query, take);
-  }, [queryData, search]);
+    } else getFrequencies(define_query(query_data));
+  }, [define_query, search]);
 
-  const headCells: iheadCell[] = [
-    { order: "date", numeric: false, label: "Data" },
-    { order: "name", numeric: false, label: "Turma" },
-    { numeric: true, label: "Alunos" },
-    { order: "infreq", numeric: true, label: "Infrequência" },
-  ];
+  const table = useMemo(() => {
+    let frequencies: iFrequencyBase[];
+    if (data) {
+      frequencies = sortArray<iFrequencyBase>(data, { by: order, order: by });
+      if (order === "class_name")
+        frequencies = sortArray<iFrequencyBase>(data, {
+          by: order,
+          order: by,
+          computed: { class_name: (row) => row.class.name },
+        });
+
+      switch (table_def) {
+        case "school":
+          return <TableFrequencySchool data={frequencies} />;
+
+        case "user":
+          return <TableFrequencyUser data={frequencies} />;
+      }
+    }
+    return <></>;
+  }, [by, data, order, table_def]);
 
   return (
     <Box display="flex" justifyContent="space-between">
@@ -100,28 +120,8 @@ export const ViewFrequency = () => {
         ))}
       </Tabs>
       <Box flex={1}>
-        <TableBase
-          headCells={headCells}
-          is_pagination={mdDown ? false : undefined}
-        >
-          {data?.map((el) => (
-            <TableRow key={el.id}>
-              <TableCell>{el.date}</TableCell>
-              <TableCell>{el.class.name}</TableCell>
-              <TableCell align="right">{el.total_students}</TableCell>
-              <TableCell
-                align="right"
-                sx={{
-                  color: "#fff",
-                  bgcolor: defineBgColorInfrequency(el.infrequency, theme),
-                }}
-              >
-                {el.infrequency.toFixed(0)}%
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBase>
-        {mdDown && <PaginationMobile />}
+        {table}
+        <PaginationTable onClick={onClick} />
       </Box>
     </Box>
   );
