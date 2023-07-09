@@ -16,6 +16,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useMemo,
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +30,7 @@ interface iSchoolContextData {
   setUpdateServerData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
   director: boolean[];
   setDirector: Dispatch<SetStateAction<boolean[]>>;
-  is_director: () => "" | "&is_director=true" | "&is_director=false";
+  is_director: "" | "&is_director=true" | "&is_director=false";
   schoolDataRetrieve: (id: string) => void;
   importSchool: (data: iSchoolImportRequest, back?: string) => Promise<void>;
   createSchoolClass: (
@@ -91,7 +92,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
     []
   );
 
-  const is_director = useCallback(() => {
+  const is_director = useMemo(() => {
     if (director[0] !== director[1]) {
       if (director[0]) return "&is_director=true";
       if (director[1]) return "&is_director=false";

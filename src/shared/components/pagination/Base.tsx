@@ -2,14 +2,14 @@ import { Box, Pagination } from "@mui/material";
 import { usePaginationContext } from "../../contexts";
 
 export const PaginationBase = () => {
-  const { steps, page_def, handleChange } = usePaginationContext();
+  const { steps, page, handleChange } = usePaginationContext();
 
   return (
     steps > 0 && (
       <Box display="flex" justifyContent="center" p={2}>
         <Pagination
           count={steps}
-          page={page_def}
+          page={page}
           onChange={handleChange}
           showFirstButton
           showLastButton

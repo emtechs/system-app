@@ -35,14 +35,16 @@ interface iDialogSchoolProps {
 export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
   const { theme } = useAppThemeContext();
   const { yearData } = useAuthContext();
-  const { query } = usePaginationContext();
+  const { query, query_page } = usePaginationContext();
   const [listSchoolSelect, setListSchoolSelect] = useState<iSchool[]>();
   const [listData, setListData] = useState<iWorkSchool[]>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (yearData) {
-      const queryData = query(yearData.id);
+      const take = 3;
+      const queryData =
+        query(yearData.id) + "&order=name" + query_page(take, true);
       setLoading(true);
       apiUser
         .schools(queryData)
@@ -52,7 +54,7 @@ export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
         })
         .finally(() => setLoading(false));
     }
-  }, [query, yearData]);
+  }, [query, query_page, yearData]);
 
   return (
     <Dialog open={open} onClose={onClose}>

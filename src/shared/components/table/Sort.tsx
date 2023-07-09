@@ -11,7 +11,7 @@ export const TableSort = ({ headCells }: iSortProps) => {
 
   const createSortHandler = (property?: string) => () => {
     const isAsc = order === property && by === "asc";
-    setOrder(property);
+    setOrder(property ? property : "");
     setBy(isAsc ? "desc" : "asc");
   };
 

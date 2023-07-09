@@ -12,9 +12,9 @@ export const TableFrequencySchool = ({ data }: iTableFrequencySchoolProps) => {
   const { theme } = useAppThemeContext();
   const headCells: iheadCell[] = [
     { order: "date", numeric: false, label: "Data" },
-    { order: "name", numeric: false, label: "Turma" },
+    { order: "class_name", numeric: false, label: "Turma" },
     { numeric: true, label: "Alunos" },
-    { order: "infreq", numeric: true, label: "Infrequência" },
+    { order: "infrequency", numeric: true, label: "Infrequência" },
   ];
 
   return (

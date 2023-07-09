@@ -15,7 +15,7 @@ export const TableFrequencyUser = ({ data }: iTableFrequencyUserProps) => {
     { numeric: false, label: "Escola" },
     { numeric: false, label: "Turma" },
     { numeric: true, label: "Alunos" },
-    { order: "infreq", numeric: true, label: "Infrequência" },
+    { order: "infrequency", numeric: true, label: "Infrequência" },
   ];
 
   return (

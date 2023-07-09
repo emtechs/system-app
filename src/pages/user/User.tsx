@@ -2,29 +2,19 @@ import { Breadcrumbs, Chip, Link } from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
 import { Home, People } from "@mui/icons-material";
 import { ToolsUser } from "../../shared/components";
-import { useCallback, useMemo } from "react";
-import { usePaginationContext, useUserContext } from "../../shared/contexts";
+import { useEffect } from "react";
+import { useUserContext } from "../../shared/contexts";
 import { useSearchParams } from "react-router-dom";
 import { ViewUser } from "../../shared/views";
 
 export const UserPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { search, setSearch } = useUserContext();
-  const { setActive } = usePaginationContext();
+  const [searchParams] = useSearchParams();
+  const roleData = searchParams.get("role");
+  const { search, setRole } = useUserContext();
 
-  const role = useMemo(() => {
-    return searchParams.get("role") || "";
-  }, [searchParams]);
-
-  const handleRole = useCallback((texto: string) => {
-    setSearchParams({ role: texto }, { replace: true });
-  }, []);
-
-  const onClickReset = useCallback(() => {
-    setActive(true);
-    setSearch(undefined);
-    setSearchParams({ role: "" }, { replace: true });
-  }, []);
+  useEffect(() => {
+    if (roleData) setRole(roleData);
+  }, [roleData]);
 
   return (
     <LayoutBasePage
@@ -46,20 +36,9 @@ export const UserPage = () => {
           />
         </Breadcrumbs>
       }
-      tools={
-        <ToolsUser
-          isHome
-          isUser
-          isActive
-          isSearch
-          isRole
-          role={role}
-          handleRole={handleRole}
-          onClickReset={onClickReset}
-        />
-      }
+      tools={<ToolsUser isHome isUser isActive isSearch isRole isReset />}
     >
-      <ViewUser search={search} role={role} />
+      <ViewUser search={search} />
     </LayoutBasePage>
   );
 };

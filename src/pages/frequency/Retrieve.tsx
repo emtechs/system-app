@@ -188,7 +188,7 @@ export const RetrieveFrequencyPage = () => {
           />
         }
       >
-        <TableBase headCells={headCells} is_pagination={false}>
+        <TableBase headCells={headCells}>
           {dataStudents?.map((el) => (
             <CardFrequency key={el.id} student={el} />
           ))}

@@ -9,18 +9,18 @@ interface iPaginationTableProps {
 }
 
 export const PaginationTable = ({ onClick }: iPaginationTableProps) => {
-  const { page, take, count, isLoading } = usePaginationContext();
+  const { face, take, count, isLoading } = usePaginationContext();
   const [disabled, setDisabled] = useState(false);
 
   const total = useMemo(() => {
-    const base = page * take;
+    const base = face * take;
     if (base > count) {
       setDisabled(true);
       return count;
     }
     setDisabled(false);
     return base;
-  }, [count, page, take]);
+  }, [count, face, take]);
 
   return (
     <Box

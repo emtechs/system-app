@@ -14,7 +14,6 @@ import {
 import {
   useAppThemeContext,
   useAuthContext,
-  usePaginationContext,
   useSchoolContext,
 } from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
@@ -36,7 +35,6 @@ export const RetrieveSchoolPage = () => {
   const { yearData } = useAuthContext();
   const { schoolDataRetrieve, schoolRetrieve, search, periods, listYear } =
     useSchoolContext();
-  const { setOrder, setBy } = usePaginationContext();
   const [view, setView] = useState(<ViewSchoolData />);
   const [tools, setTools] = useState(<ToolsSchool back="/school" />);
   const [value, setValue] = useState(0);
@@ -46,11 +44,6 @@ export const RetrieveSchoolPage = () => {
       if (schoolRetrieve?.id !== school_id) schoolDataRetrieve(school_id);
     }
   }, [school_id]);
-
-  const handleView = () => {
-    setOrder("name");
-    setBy("asc");
-  };
 
   useEffect(() => {
     switch (viewData) {
@@ -63,28 +56,26 @@ export const RetrieveSchoolPage = () => {
             isNew
             titleNew="Servidor"
             isSearch
+            isDash
           />
         );
         setValue(1);
-        handleView();
         break;
 
       case "class":
         setView(<ViewClass />);
         setTools(
-          <ToolsSchool back="/school" isNew titleNew="Turma" isSearch />
+          <ToolsSchool back="/school" isNew titleNew="Turma" isDash isSearch />
         );
         setValue(2);
-        handleView();
         break;
 
       case "student":
         setView(<ViewStudent />);
         setTools(
-          <ToolsSchool back="/school" isNew titleNew="Aluno" isSearch />
+          <ToolsSchool back="/school" isNew titleNew="Aluno" isDash isSearch />
         );
         setValue(3);
-        handleView();
         break;
 
       case "frequency":
@@ -96,24 +87,22 @@ export const RetrieveSchoolPage = () => {
             table_def="school"
           />
         );
-        setTools(<ToolsSchool back="/school" />);
+        setTools(<ToolsSchool isDash back="/school" />);
         setValue(4);
-        handleView();
         break;
 
       case "infrequency":
         setView(<ViewInfrequency />);
-        setTools(<ToolsSchool back="/school" />);
+        setTools(<ToolsSchool isDash back="/school" />);
         setValue(5);
-        handleView();
         break;
 
       default:
         setView(<ViewSchoolData />);
-        setTools(<ToolsSchool back="/school" />);
+        setTools(<ToolsSchool isDash back="/school" />);
         setValue(0);
     }
-  }, [viewData, school_id, search, listYear, handleView]);
+  }, [viewData, school_id, search, listYear]);
 
   const href = useCallback(
     (view?: string, isYear?: boolean, isPeriod?: boolean) => {

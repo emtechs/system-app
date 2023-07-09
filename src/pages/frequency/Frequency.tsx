@@ -184,7 +184,6 @@ export const FrequencyPage = () => {
                   </Box>
                   <TableBase
                     message="Todas as frequências do dia já foram registradas."
-                    is_pagination={false}
                     headCells={headCells}
                   >
                     {listClassData?.map((el) => (

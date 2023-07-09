@@ -2,11 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Box, Tab, Tabs } from "@mui/material";
 import { Checklist, History, Person, School } from "@mui/icons-material";
-import {
-  useAuthContext,
-  usePaginationContext,
-  useUserContext,
-} from "../../shared/contexts";
+import { useAuthContext, useUserContext } from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TitleServer, TitleUser, ToolsUser } from "../../shared/components";
 import {
@@ -23,7 +19,6 @@ export const RetrieveUserPage = () => {
   const school_id = searchParams.get("school_id");
   const { yearData } = useAuthContext();
   const { userDataRetrieve, userRetrieve, search, listYear } = useUserContext();
-  const { setOrder, setBy } = usePaginationContext();
   const [view, setView] = useState(<ViewUserData />);
   const [tools, setTools] = useState(<ToolsUser back="/user" />);
   const [value, setValue] = useState(0);
@@ -51,11 +46,6 @@ export const RetrieveUserPage = () => {
     }
   }, [user_id]);
 
-  const handleView = () => {
-    setOrder("name");
-    setBy("asc");
-  };
-
   const title = useMemo(() => {
     if (school_id) return <TitleServer />;
     return <TitleUser />;
@@ -67,7 +57,6 @@ export const RetrieveUserPage = () => {
         setView(<ViewSchool search={search} server_id={user_id} />);
         setTools(<ToolsUser back={back} isNew titleNew="Nova" isSearch />);
         setValue(1);
-        handleView();
         break;
 
       case "frequency":
@@ -82,14 +71,12 @@ export const RetrieveUserPage = () => {
         );
         setTools(<ToolsUser back={back} />);
         setValue(2);
-        handleView();
         break;
 
       case "history":
         setView(<ViewFrequencyHistory />);
         setTools(<ToolsUser back={back} />);
         setValue(3);
-        handleView();
         break;
 
       default:

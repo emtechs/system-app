@@ -16,8 +16,8 @@ interface iPaginationContextData {
   is_active: (is_default?: boolean) => "&is_active=true" | "&is_active=false";
   count: number;
   setCount: Dispatch<SetStateAction<number>>;
-  order: string | undefined;
-  setOrder: Dispatch<SetStateAction<string | undefined>>;
+  order: string;
+  setOrder: Dispatch<SetStateAction<string>>;
   by: "asc" | "desc";
   setBy: Dispatch<SetStateAction<"asc" | "desc">>;
   isLoading: boolean;
@@ -30,45 +30,51 @@ interface iPaginationContextData {
     class_id?: string,
     date?: string,
     month?: string,
-    is_active?: boolean,
-    orderData?: string
+    is_active?: boolean
   ) => string;
   handleChange: (_event: ChangeEvent<unknown>, value: number) => void;
-  page_def: number;
-  take: 5 | 10;
-  handlePage: (page_data: number) => string;
+  handleFace: (face_data: number) => string;
   page: number;
+  take: number;
+  face: number;
+  setFace: Dispatch<SetStateAction<number>>;
+  query_page: (take_data?: number, isSkip?: boolean) => string;
 }
 
 const PaginationContext = createContext({} as iPaginationContextData);
 
 export const PaginationProvider = ({ children }: iChildren) => {
   const { mdDown } = useAppThemeContext();
+  const [take, setTake] = useState(10);
+  const [skip, setSkip] = useState<string>();
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
-  const [order, setOrder] = useState<string>();
+  const [face, setFace] = useState(1);
+  const [order, setOrder] = useState<string>("");
   const [by, setBy] = useState<"asc" | "desc">("asc");
   const [isLoading, setIsLoading] = useState(true);
   const [active, setActive] = useState(true);
 
-  const handleChange = (_event: ChangeEvent<unknown>, value: number) =>
-    setPage(value);
-
-  const take = useMemo(() => {
-    if (mdDown) return 5;
-    return 10;
-  }, [mdDown]);
+  const define_take = useCallback(
+    (take_data?: number) => {
+      if (take_data) {
+        setTake(take_data);
+        return `&take=${take_data}`;
+      }
+      if (mdDown) {
+        setTake(5);
+        return `&take=${5}`;
+      }
+      setTake(10);
+      return `&take=${10}`;
+    },
+    [mdDown]
+  );
 
   const steps = useMemo(() => {
     const arredSteps = Math.ceil(count / take);
     return arredSteps === 1 ? 0 : arredSteps;
   }, [count, take]);
-
-  const page_def = useMemo(() => {
-    if (page > steps) return steps;
-
-    return page;
-  }, [page, steps]);
 
   const define_is_active = useCallback(
     (is_default?: boolean) => {
@@ -79,17 +85,34 @@ export const PaginationProvider = ({ children }: iChildren) => {
     [active]
   );
 
-  const handlePage = useCallback(
-    (page_data: number) => {
-      if (page_data > steps || page_data === steps) {
+  const handleChange = useCallback(
+    (_event: ChangeEvent<unknown>, value: number) => {
+      if (value > steps || value === steps) {
         setPage(steps);
+        if (steps === 0) {
+          setSkip(undefined);
+        } else {
+          setSkip(`&skip=${(steps - 1) * take}`);
+        }
+      } else {
+        setPage(value);
+        setSkip(`&skip=${(value - 1) * take}`);
+      }
+    },
+    [steps, take]
+  );
+
+  const handleFace = useCallback(
+    (face_data: number) => {
+      if (face_data > steps || face_data === steps) {
+        setFace(steps);
         if (steps === 0) {
           return "";
         }
         return `&skip=${(steps - 1) * take}`;
       }
-      setPage(page_data + 1);
-      return `&skip=${page_data * take}`;
+      setFace(face_data + 1);
+      return `&skip=${face_data * take}`;
     },
     [steps, take]
   );
@@ -109,11 +132,20 @@ export const PaginationProvider = ({ children }: iChildren) => {
       if (class_id) query += "&class_id=" + class_id;
       if (date) query += "&date=" + date;
       if (month) query += "&month=" + month;
-      if (take) query += "&take=" + take;
 
       return query;
     },
-    [define_is_active, take]
+    [define_is_active]
+  );
+
+  const define_query_page = useCallback(
+    (take_data?: number, isSkip?: boolean) => {
+      let query = define_take(take_data);
+      if (isSkip && skip) query += skip;
+
+      return query;
+    },
+    [define_take, skip]
   );
 
   return (
@@ -132,11 +164,13 @@ export const PaginationProvider = ({ children }: iChildren) => {
         setActive,
         is_active: define_is_active,
         handleChange,
-        page_def,
         query: define_query,
         take,
-        handlePage,
         page,
+        face,
+        handleFace,
+        setFace,
+        query_page: define_query_page,
       }}
     >
       {children}

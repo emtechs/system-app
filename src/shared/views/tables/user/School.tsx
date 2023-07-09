@@ -9,7 +9,7 @@ import { rolePtBr } from "../../../scripts";
 interface iTableUserSchoolProps {
   data: iUser[];
   school_id: string;
-  getUsers: (query: string, take: number) => void;
+  getUsers: (query: string, isPage?: boolean) => void;
 }
 
 export const TableUserSchool = ({

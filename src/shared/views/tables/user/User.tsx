@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { TableCell, TableRow } from "@mui/material";
 import { DialogCreateAdmin, TableBase } from "../../../components";
-import { useAppThemeContext } from "../../../contexts";
+import { useAppThemeContext, useUserContext } from "../../../contexts";
 import { iUser, iheadCell } from "../../../interfaces";
 import { rolePtBr } from "../../../scripts";
 
@@ -13,6 +13,7 @@ interface iTableUserProps {
 export const TableUser = ({ data }: iTableUserProps) => {
   const navigate = useNavigate();
   const { mdDown } = useAppThemeContext();
+  const { onClickReset } = useUserContext();
 
   const headCells: iheadCell[] = useMemo(() => {
     if (mdDown)
@@ -24,7 +25,7 @@ export const TableUser = ({ data }: iTableUserProps) => {
     return [
       { order: "name", numeric: false, label: "Nome Completo" },
       { numeric: false, label: "CPF" },
-      { numeric: false, label: "Função" },
+      { order: "role", numeric: false, label: "Função" },
     ];
   }, [mdDown]);
 
@@ -37,6 +38,7 @@ export const TableUser = ({ data }: iTableUserProps) => {
             hover
             sx={{ cursor: "pointer" }}
             onClick={() => {
+              onClickReset();
               navigate("/user/" + user.id);
             }}
           >

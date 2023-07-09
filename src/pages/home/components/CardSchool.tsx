@@ -50,7 +50,8 @@ export const CardSchool = ({ school, isHome }: iCardSchoolProps) => {
               Frequências: {school.frequencies}
             </Typography>
             <Typography variant="caption">
-              Infrequência: {school.infrequency.toFixed(0)}%
+              Infrequência:{" "}
+              {school.infrequency ? school.infrequency.toFixed(0) + "%" : "0%"}
             </Typography>
           </Box>
         </CardContent>

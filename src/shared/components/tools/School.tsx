@@ -42,6 +42,7 @@ interface iToolsSchoolProps {
   setInfreq?: (text: string) => void;
   finish?: ReactNode;
   isReset?: boolean;
+  isDash?: boolean;
 }
 
 export const ToolsSchool = ({
@@ -60,6 +61,7 @@ export const ToolsSchool = ({
   setInfreq,
   finish,
   isReset,
+  isDash,
 }: iToolsSchoolProps) => {
   const { theme, mdDown } = useAppThemeContext();
   const { handleOpenCreate } = useDialogContext();
@@ -97,12 +99,12 @@ export const ToolsSchool = ({
     if (
       search ||
       infreq.length > 0 ||
-      is_director().length > 0 ||
+      is_director.length > 0 ||
       is_active() === "&is_active=false"
     )
       return false;
     return true;
-  }, [search, infreq, is_director, is_active]);
+  }, [search, infreq.length, is_director.length, is_active]);
 
   return (
     <Box
@@ -127,7 +129,7 @@ export const ToolsSchool = ({
         />
       )}
       {isUser && <UserTools />}
-      {schoolRetrieve?.is_dash && (
+      {isDash && schoolRetrieve?.is_dash && (
         <ButtonDest
           title="Painel"
           to={"/home/school/" + schoolRetrieve.id}
