@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { usePaginationContext, useUserContext } from "../contexts";
+import { usePaginationContext } from "../contexts";
 import { useDebounce } from "../hooks";
 import { iUser, iViewBaseProps } from "../interfaces";
 import { apiUser } from "../services";
@@ -9,11 +9,11 @@ import sortArray from "sort-array";
 
 interface iViewUserProps extends iViewBaseProps {
   school_id?: string;
+  role?: string;
 }
 
-export const ViewUser = ({ search, school_id }: iViewUserProps) => {
+export const ViewUser = ({ search, school_id, role }: iViewUserProps) => {
   const { debounce } = useDebounce();
-  const { setRolesData, role } = useUserContext();
   const {
     setIsLoading,
     setCount,
@@ -40,7 +40,6 @@ export const ViewUser = ({ search, school_id }: iViewUserProps) => {
         .then((res) => {
           setFace(1);
           setData(res.result);
-          setRolesData(res.roles);
           setCount(res.total);
         })
         .finally(() => setIsLoading(false));

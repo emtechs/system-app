@@ -1,16 +1,12 @@
 import { Breadcrumbs, Chip, Link } from "@mui/material";
-import {
-  useAppThemeContext,
-  useSchoolContext,
-  useUserContext,
-} from "../../contexts";
-import { Home } from "@mui/icons-material";
-import { LabelSchool, LabelUser } from "../label";
+import { Home, People } from "@mui/icons-material";
+import { useAppThemeContext, useUserContext } from "../../../contexts";
+import { LabelUser } from "../../label";
 
-export const TitleServer = () => {
+export const TitleUserRetrievePage = () => {
   const { mdDown } = useAppThemeContext();
-  const { schoolRetrieve } = useSchoolContext();
   const { userRetrieve } = useUserContext();
+
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
       <Link underline="none" color="inherit" href="/">
@@ -22,12 +18,14 @@ export const TitleServer = () => {
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </Link>
-      <Link
-        underline="none"
-        color="inherit"
-        href={"/school/" + schoolRetrieve?.id}
-      >
-        <LabelSchool clickable school={schoolRetrieve} />
+      <Link underline="none" color="inherit" href="/user">
+        <Chip
+          clickable
+          color="primary"
+          variant="outlined"
+          label={mdDown ? "..." : "Usuários"}
+          icon={<People sx={{ mr: 0.5 }} fontSize="inherit" />}
+        />
       </Link>
       <LabelUser user={userRetrieve} />
     </Breadcrumbs>

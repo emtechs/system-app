@@ -9,11 +9,12 @@ export interface iClass {
   name: string;
   label: string;
   is_active: boolean;
+  schools: number;
+  students: number;
+  frequencies: number;
 }
 
 export interface iClassSchoolList extends iClass {
-  students: number;
-  frequencies: number;
   infrequency: number;
   school: {
     id: string;

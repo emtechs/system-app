@@ -5,6 +5,8 @@ import {
   iClassDash,
   iClassSchoolList,
   iClassSchoolRequest,
+  iSelectBase,
+  iYear,
 } from "../interfaces";
 
 const create = async (data: FieldValues): Promise<iClass> => {
@@ -74,6 +76,18 @@ const listDash = async (school_id: string, year_id: string, query: string) => {
   return response;
 };
 
+interface iRetrieve {
+  class: iClass;
+  years: iYear[];
+  periods: iSelectBase[];
+}
+
+const retrieve = async (id: string) => {
+  const { data: response } = await apiUsingNow.get<iRetrieve>(`classes/${id}`);
+
+  return response;
+};
+
 export const apiClass = {
   create,
   createSchool,
@@ -82,4 +96,5 @@ export const apiClass = {
   listSchool,
   listDash,
   list,
+  retrieve,
 };

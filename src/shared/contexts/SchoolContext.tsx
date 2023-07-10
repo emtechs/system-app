@@ -24,6 +24,7 @@ import { useAppThemeContext } from "./ThemeContext";
 import { apiSchool } from "../services";
 import { useAuthContext } from "./AuthContext";
 import { usePaginationContext } from "./PaginationContext";
+import sortArray from "sort-array";
 
 interface iSchoolContextData {
   updateServerData: iWorkSchool | undefined;
@@ -110,7 +111,9 @@ export const SchoolProvider = ({ children }: iChildren) => {
           .then((res) => {
             setSchoolRetrieve(res.school);
             setSchoolAdminRetrieve(res.schoolClass);
-            setPeriods(res.periods);
+            setPeriods(
+              sortArray<iSelectBase>(res.periods, { by: "label", order: "asc" })
+            );
             if (res.school.is_dash) {
               setListYear(res.years);
             } else {

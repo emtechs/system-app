@@ -21,7 +21,6 @@ import {
 } from "../interfaces";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
-import { useDrawerContext } from "./DrawerContext";
 import { apiAuth, apiCalendar, apiUser, apiUsingNow } from "../services";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
@@ -55,7 +54,6 @@ const AuthContext = createContext({} as iAuthContextData);
 export const AuthProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { handleClick } = useDrawerContext();
   const [accessToken, setAccessToken] = useState<string>();
   const [userData, setUserData] = useState<iUser>();
   const [dashData, setDashData] = useState<iDash>();
@@ -171,7 +169,6 @@ export const AuthProvider = ({ children }: iChildren) => {
     setSchoolDataAdmin(undefined);
     setUserData(undefined);
     setDashData(undefined);
-    handleClick();
     navigate("/");
   }, []);
 

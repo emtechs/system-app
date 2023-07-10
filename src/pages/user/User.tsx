@@ -1,25 +1,20 @@
 import { LayoutBasePage } from "../../shared/layouts";
 import { TitleUserPage, ToolsUser } from "../../shared/components";
-import { useEffect } from "react";
 import { useUserContext } from "../../shared/contexts";
-import { useSearchParams } from "react-router-dom";
 import { ViewUser } from "../../shared/views";
+import { useSearchParams } from "react-router-dom";
 
 export const UserPage = () => {
   const [searchParams] = useSearchParams();
-  const roleData = searchParams.get("role");
-  const { search, setRole } = useUserContext();
-
-  useEffect(() => {
-    if (roleData) setRole(roleData);
-  }, [roleData]);
+  const role = searchParams.get("role") || undefined;
+  const { search } = useUserContext();
 
   return (
     <LayoutBasePage
       title={<TitleUserPage />}
-      tools={<ToolsUser isHome isUser isActive isSearch isRole isReset />}
+      tools={<ToolsUser isHome isUser isActive isSearch isReset />}
     >
-      <ViewUser search={search} />
+      <ViewUser search={search} role={role} />
     </LayoutBasePage>
   );
 };

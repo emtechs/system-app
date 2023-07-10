@@ -14,11 +14,15 @@ import {
   iClassSelect,
   iClassWithSchool,
   iSchoolImportRequest,
+  iSelectBase,
+  iYear,
 } from "../interfaces";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { FieldValues } from "react-hook-form";
 import { apiClass } from "../services";
+import { useAuthContext } from "./AuthContext";
+import sortArray from "sort-array";
 
 interface iClassContextData {
   createClass: (data: iClassRequest, back?: string) => Promise<void>;
@@ -40,6 +44,13 @@ interface iClassContextData {
   setClassWithSchoolSelect: Dispatch<
     SetStateAction<iClassWithSchool | undefined>
   >;
+  classDataRetrieve: (id: string) => void;
+  classRetrieve: iClass | undefined;
+  loadingClass: boolean;
+  listYear: iYear[] | undefined;
+  periods: iSelectBase[] | undefined;
+  search: string | undefined;
+  setSearch: Dispatch<SetStateAction<string | undefined>>;
 }
 
 const ClassContext = createContext({} as iClassContextData);
@@ -47,11 +58,43 @@ const ClassContext = createContext({} as iClassContextData);
 export const ClassProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
+  const { yearData } = useAuthContext();
   const [classDataSelect, setClassDataSelect] = useState<iClassSelect[]>();
   const [listClassData, setListClassData] = useState<iClass[]>();
   const [classSelect, setClassSelect] = useState<iClass>();
   const [classWithSchoolSelect, setClassWithSchoolSelect] =
     useState<iClassWithSchool>();
+  const [classRetrieve, setClassRetrieve] = useState<iClass>();
+  const [loadingClass, setLoadingClass] = useState(false);
+  const [listYear, setListYear] = useState<iYear[]>();
+  const [periods, setPeriods] = useState<iSelectBase[]>();
+  const [search, setSearch] = useState<string>();
+
+  const classDataRetrieve = useCallback(
+    (id: string) => {
+      setLoadingClass(true);
+      setLoading(true);
+      apiClass
+        .retrieve(id)
+        .then((res) => {
+          setClassRetrieve(res.class);
+          setPeriods(
+            sortArray<iSelectBase>(res.periods, { by: "label", order: "asc" })
+          );
+          if (res.years.length > 0) {
+            setListYear(res.years);
+          } else {
+            if (yearData) setListYear([yearData]);
+          }
+        })
+        .catch(() => navigate("/"))
+        .finally(() => {
+          setLoadingClass(false);
+          setLoading(false);
+        });
+    },
+    [yearData]
+  );
 
   const handleCreateClass = useCallback(
     async (data: iClassRequest, back?: string) => {
@@ -138,6 +181,13 @@ export const ClassProvider = ({ children }: iChildren) => {
         setClassDataSelect,
         classWithSchoolSelect,
         setClassWithSchoolSelect,
+        classDataRetrieve,
+        classRetrieve,
+        listYear,
+        loadingClass,
+        periods,
+        search,
+        setSearch,
       }}
     >
       {children}

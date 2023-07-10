@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, SyntheticEvent } from "react";
 
 export interface iChildren {
   children: ReactNode;
@@ -7,6 +7,11 @@ export interface iChildren {
 export interface iDialogBaseProps {
   open: boolean;
   onClose: () => void;
+}
+
+export interface iTabsBaseProps {
+  value: string;
+  handleChange: (_event: SyntheticEvent, newValue: string) => void;
 }
 
 export interface iSelectBase {

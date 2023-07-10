@@ -8,7 +8,6 @@ import {
 } from "react";
 import {
   iChildren,
-  iSelectBase,
   iUser,
   iUserFirstRequest,
   iUserPasswordRequest,
@@ -40,13 +39,9 @@ interface iUserContextData {
   loadingUser: boolean;
   search: string | undefined;
   setSearch: Dispatch<SetStateAction<string | undefined>>;
-  rolesData: iSelectBase[] | undefined;
-  setRolesData: Dispatch<SetStateAction<iSelectBase[] | undefined>>;
   userRetrieve: iUser | undefined;
   setUserRetrieve: Dispatch<SetStateAction<iUser | undefined>>;
   listYear: iYear[] | undefined;
-  role: string | undefined;
-  setRole: Dispatch<SetStateAction<string | undefined>>;
   onClickReset: () => void;
 }
 
@@ -60,15 +55,12 @@ export const UserProvider = ({ children }: iChildren) => {
   const [updateUserData, setUpdateUserData] = useState<iUser>();
   const [loadingUser, setLoadingUser] = useState(true);
   const [search, setSearch] = useState<string>();
-  const [rolesData, setRolesData] = useState<iSelectBase[]>();
   const [userRetrieve, setUserRetrieve] = useState<iUser>();
   const [listYear, setListYear] = useState<iYear[]>();
-  const [role, setRole] = useState<string>();
 
   const onClickReset = useCallback(() => {
     setActive(true);
     setSearch(undefined);
-    setRole(undefined);
   }, []);
 
   const userDataRetrieve = useCallback((id: string) => {
@@ -185,13 +177,9 @@ export const UserProvider = ({ children }: iChildren) => {
         loadingUser,
         search,
         setSearch,
-        rolesData,
-        setRolesData,
         setUserRetrieve,
         userDataRetrieve,
         listYear,
-        role,
-        setRole,
         onClickReset,
       }}
     >

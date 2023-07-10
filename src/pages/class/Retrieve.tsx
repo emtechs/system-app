@@ -1,124 +1,149 @@
-import { Navigate, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
+import { Box, Breadcrumbs, Chip, Link, Tab, Tabs } from "@mui/material";
+import {
+  Checklist,
+  Groups,
+  Home,
+  Percent,
+  School,
+  Workspaces,
+} from "@mui/icons-material";
 import {
   useAppThemeContext,
   useAuthContext,
-  useFrequencyContext,
-  usePaginationContext,
+  useClassContext,
 } from "../../shared/contexts";
-import { apiUsingNow } from "../../shared/services";
-import { iStudent, iheadCell } from "../../shared/interfaces";
 import { LayoutBasePage } from "../../shared/layouts";
-import { TableBase, Tools } from "../../shared/components";
-import { TableCell, TableRow } from "@mui/material";
-import { useDebounce } from "../../shared/hooks";
-import { defineBgColorInfrequency } from "../../shared/scripts";
-
-const headCells: iheadCell[] = [
-  { order: "registry", numeric: true, label: "Matrícula" },
-  { order: "name", numeric: false, label: "Aluno" },
-  { numeric: true, label: "Presenças" },
-  { numeric: true, label: "Justificadas" },
-  { numeric: true, label: "Faltas" },
-  { numeric: true, label: "Frequências" },
-  { order: "infreq", numeric: true, label: "Infrequência" },
-];
-
-interface iCardStudentProps {
-  student: iStudent;
-}
-
-const CardStudent = ({ student }: iCardStudentProps) => {
-  const { theme } = useAppThemeContext();
-  return (
-    <TableRow>
-      <TableCell align="right">{student.registry}</TableCell>
-      <TableCell>{student.name}</TableCell>
-      <TableCell align="right">{student.frequencies.presented}</TableCell>
-      <TableCell align="right">{student.frequencies.justified}</TableCell>
-      <TableCell align="right">{student.frequencies.missed}</TableCell>
-      <TableCell align="right">{student.frequencies.total}</TableCell>
-      <TableCell
-        align="right"
-        sx={{
-          color: "#fff",
-          bgcolor: defineBgColorInfrequency(student.infrequency, theme),
-        }}
-      >
-        {String(student.infrequency).replace(".", ",")}%
-      </TableCell>
-    </TableRow>
-  );
-};
+import { LabelClass, ToolsSchool } from "../../shared/components";
+import {
+  ViewClassData,
+  ViewFrequency,
+  ViewInfrequency,
+  ViewSchoolData,
+  ViewStudent,
+} from "../../shared/views";
 
 export const RetrieveClassPage = () => {
   const [searchParams] = useSearchParams();
-  const id = searchParams.get("id");
-  const school_id = searchParams.get("school_id");
-  const back = searchParams.get("back");
-  const { debounce } = useDebounce();
-  const { yearData, dashData } = useAuthContext();
-  const { isInfreq } = useFrequencyContext();
-  const { setIsLoading, query, setCount } = usePaginationContext();
-  const [data, setData] = useState<iStudent[]>();
-  const [search, setSearch] = useState<string>();
+  const { class_id } = useParams();
+  const viewData = searchParams.get("view");
+  const { mdDown } = useAppThemeContext();
+  const { yearData } = useAuthContext();
+  const { classRetrieve, classDataRetrieve, search, listYear, periods } =
+    useClassContext();
+  const [view, setView] = useState(<ViewSchoolData />);
+  const [tools, setTools] = useState(<ToolsSchool back="/school" />);
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
-    if (yearData && school_id && id) {
-      let query_data = query(undefined, school_id, id);
-      query_data += "&is_infreq=true";
-      if (isInfreq) query_data += "&infreq=31";
-      if (search) {
-        query_data += `&name=${search}`;
-        setIsLoading(true);
-        debounce(() => {
-          apiUsingNow
-            .get<{ total: number; result: iStudent[] }>(
-              `classes/student/${yearData.id}${query_data}`
-            )
-            .then((res) => {
-              setCount(res.data.total);
-              setData(res.data.result);
-            })
-            .finally(() => setIsLoading(false));
-        });
-      } else {
-        setIsLoading(true);
-        apiUsingNow
-          .get<{ total: number; result: iStudent[] }>(
-            `classes/student/${yearData.id}${query}`
-          )
-          .then((res) => {
-            setCount(res.data.total);
-            setData(res.data.result);
-          })
-          .finally(() => setIsLoading(false));
-      }
+    if (class_id) {
+      if (classRetrieve?.id !== class_id) classDataRetrieve(class_id);
     }
-  }, [yearData, id, school_id, isInfreq, query, search]);
+  }, [class_id]);
 
-  if (!id && dashData !== "ADMIN") {
-    return <Navigate to="/school/class" />;
-  }
+  useEffect(() => {
+    switch (viewData) {
+      case "student":
+        setView(<ViewStudent />);
+        setTools(
+          <ToolsSchool back="/school" isNew titleNew="Aluno" isDash isSearch />
+        );
+        setValue(3);
+        break;
+
+      case "frequency":
+        setView(
+          <ViewFrequency
+            listYear={listYear}
+            search={search}
+            table_def="school"
+          />
+        );
+        setTools(<ToolsSchool isDash back="/school" />);
+        setValue(4);
+        break;
+
+      case "infrequency":
+        setView(<ViewInfrequency />);
+        setTools(<ToolsSchool isDash back="/school" />);
+        setValue(5);
+        break;
+
+      default:
+        setView(<ViewClassData />);
+        setTools(<ToolsSchool isDash back="/school" />);
+        setValue(0);
+    }
+  }, [viewData, search, listYear]);
+
+  const href = useCallback(
+    (view?: string, isYear?: boolean, isPeriod?: boolean) => {
+      let href_base = `/class/${class_id}`;
+
+      if (view) href_base += `?view=${view}`;
+
+      if (isYear) href_base += `&year_id=${yearData?.id}`;
+
+      if (isPeriod && periods) href_base += `&period=${periods[0].id}`;
+
+      return href_base;
+    },
+    [class_id, periods, yearData]
+  );
 
   return (
     <LayoutBasePage
-      tools={
-        <Tools
-          back={back ? back : undefined}
-          isHome
-          isSearch
-          search={search}
-          setSearch={(text) => setSearch(text)}
-        />
+      title={
+        <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
+          <Link underline="none" color="inherit" href="/">
+            <Chip
+              clickable
+              color="primary"
+              variant="outlined"
+              label={mdDown ? "..." : "Página Inicial"}
+              icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </Link>
+          <Link underline="none" color="inherit" href="/school">
+            <Chip
+              clickable
+              color="primary"
+              variant="outlined"
+              label={mdDown ? "..." : "Turmas"}
+              icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </Link>
+          <LabelClass classData={classRetrieve} />
+        </Breadcrumbs>
       }
-      title="Listagem de Alunos"
+      tools={tools}
     >
-      <TableBase headCells={headCells}>
-        {data?.map((student) => (
-          <CardStudent key={student.id} student={student} />
-        ))}
-      </TableBase>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs value={value} variant="scrollable" scrollButtons="auto">
+          <Tab href={href()} icon={<Workspaces />} label="Turma" />
+          <Tab href={href("class", true)} icon={<School />} label="Escolas" />
+          <Tab
+            href={href("student", true)}
+            icon={<Groups />}
+            label="Alunos"
+            disabled={classRetrieve?.schools === 0}
+          />
+          <Tab
+            href={href("frequency", true)}
+            icon={<Checklist />}
+            label="Frequências"
+            disabled={classRetrieve?.schools === 0}
+          />
+          <Tab
+            href={href("infrequency", true, true)}
+            icon={<Percent />}
+            label="Infrequência"
+            disabled={classRetrieve?.schools === 0}
+          />
+        </Tabs>
+      </Box>
+      {view}
     </LayoutBasePage>
   );
 };
