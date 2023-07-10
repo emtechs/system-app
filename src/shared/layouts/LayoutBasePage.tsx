@@ -2,8 +2,8 @@ import { Box, IconButton } from "@mui/material";
 import { iChildren } from "../interfaces";
 import { Menu } from "@mui/icons-material";
 import { useAppThemeContext, useDrawerContext } from "../contexts";
-import { ReactNode } from "react";
-import { MenuDrawer } from "../components";
+import { ReactNode, useRef } from "react";
+import { ButtonTop, MenuDrawer } from "../components";
 
 interface iLayoutBasePageProps extends iChildren {
   title: ReactNode;
@@ -17,6 +17,8 @@ export const LayoutBasePage = ({
 }: iLayoutBasePageProps) => {
   const { theme, smDown, mdDown } = useAppThemeContext();
   const { toggleDrawerOpen } = useDrawerContext();
+
+  const elem = useRef<HTMLElement>(null);
 
   return (
     <>
@@ -45,8 +47,9 @@ export const LayoutBasePage = ({
             {title}
           </Box>
           {tools && <Box>{tools}</Box>}
-          <Box flex={1} overflow="auto">
+          <Box ref={elem} flex={1} overflow="auto">
             {children}
+            <ButtonTop elem={elem} />
           </Box>
         </Box>
       </Box>

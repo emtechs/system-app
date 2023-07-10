@@ -35,7 +35,6 @@ interface iPaginationContextData {
   handleChange: (_event: ChangeEvent<unknown>, value: number) => void;
   handleFace: (face_data: number) => string;
   page: number;
-  take: number;
   face: number;
   setFace: Dispatch<SetStateAction<number>>;
   query_page: (take_data?: number, isSkip?: boolean) => string;
@@ -165,7 +164,6 @@ export const PaginationProvider = ({ children }: iChildren) => {
         is_active: define_is_active,
         handleChange,
         query: define_query,
-        take,
         page,
         face,
         handleFace,

@@ -91,7 +91,7 @@ export const ViewUser = ({ search, school_id }: iViewUserProps) => {
   return (
     <>
       {table}
-      <PaginationTable onClick={onClick} />
+      <PaginationTable total={data ? data.length : 0} onClick={onClick} />
     </>
   );
 };

@@ -103,7 +103,7 @@ export const ViewStudent = () => {
       </Tabs>
       <Box flex={1}>
         {table}
-        <PaginationTable onClick={onClick} />
+        <PaginationTable total={data ? data.length : 0} onClick={onClick} />
       </Box>
     </Box>
   );

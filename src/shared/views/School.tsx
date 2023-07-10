@@ -1,8 +1,8 @@
 import sortArray from "sort-array";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDebounce } from "../hooks";
 import { usePaginationContext } from "../contexts";
 import { iSchool, iViewBaseProps } from "../interfaces";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiSchool } from "../services";
 import { PaginationTable } from "../components";
 import { TableSchool, TableSchoolUser } from "./tables";
@@ -31,16 +31,16 @@ export const ViewSchool = ({
   } = usePaginationContext();
   const [listData, setListData] = useState<iSchool[]>();
 
-  const getSchools = useCallback((query: string, isPage?: boolean) => {
+  const getSchools = useCallback((query_schools: string, isPage?: boolean) => {
     setIsLoading(true);
     if (isPage) {
       apiSchool
-        .list(query)
+        .list(query_schools)
         .then((res) => setListData((old) => old?.concat(res.result)))
         .finally(() => setIsLoading(false));
     } else {
       apiSchool
-        .list(query)
+        .list(query_schools)
         .then((res) => {
           setFace(1);
           setListData(res.result);
@@ -72,27 +72,35 @@ export const ViewSchool = ({
     } else getSchools(define_query(query_data));
   }, [debounce, define_query, getSchools, search]);
 
-  const table = useMemo(() => {
-    let schools: iSchool[];
-
+  const listSchool = useMemo(() => {
     if (listData) {
-      schools = sortArray<iSchool>(listData, { by: order, order: by });
       if (order === "director_name")
-        schools = sortArray<iSchool>(listData, {
+        return sortArray<iSchool>(listData, {
           by: order,
           order: by,
           computed: { director_name: (row) => row.director?.name },
         });
-      if (server_id) return <TableSchoolUser data={schools} />;
-      return <TableSchool data={schools} />;
+
+      return sortArray<iSchool>(listData, { by: order, order: by });
+    }
+  }, [by, listData, order]);
+
+  const table = useMemo(() => {
+    if (listSchool) {
+      if (server_id) return <TableSchoolUser data={listSchool} />;
+
+      return <TableSchool data={listSchool} />;
     }
     return <></>;
-  }, [by, listData, order, server_id]);
+  }, [listSchool, server_id]);
 
   return (
     <>
       {table}
-      <PaginationTable onClick={onClick} />
+      <PaginationTable
+        total={listData ? listData.length : 0}
+        onClick={onClick}
+      />
     </>
   );
 };
