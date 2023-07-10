@@ -15,7 +15,6 @@ import { Student } from "../components/Student";
 
 export const OptionsSchoolHome = () => {
   const {
-    handleClick,
     handleClickUser,
     handleClickClass,
     handleClickStudent,
@@ -28,7 +27,6 @@ export const OptionsSchoolHome = () => {
   return (
     <>
       <OtherListItemLink
-        onClick={handleClick}
         icon={<Home />}
         label="Página Inicial"
         to="/home/school"
@@ -57,12 +55,7 @@ export const OptionsSchoolHome = () => {
       >
         <Student />
       </ListItemLinkOpen>
-      <OtherListItemLink
-        onClick={handleClick}
-        icon={<Summarize />}
-        label="Relatório"
-        to="/report"
-      />
+      <OtherListItemLink icon={<Summarize />} label="Relatório" to="/report" />
       <ListItemLinkOpen
         onClick={handleClickProfile}
         open={openProfile}

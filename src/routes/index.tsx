@@ -1,13 +1,10 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import {
-  ActiveClassPage,
-  CreateClassPage,
+  ClassPage,
   CreateFrequencyPage,
   CreateStudentAdmPage,
   DashboardSchoolAdminPage,
   DashboardSchoolPage,
-  DefineSchoolsPage,
-  EditClassPage,
   EditPasswordPage,
   EditProfilePage,
   FrequencyOpenPage,
@@ -65,17 +62,8 @@ const AppRoutes = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/:school_id" element={<DashboardSchoolPage />} />
         <Route path="/report" element={<ReportPage />} />
-        <Route path="/class" element={<RetrieveClassPage />} />
-        <Route
-          path="/class/create"
-          element={<CreateClassPage back="/class" />}
-        />
-        <Route path="/class/define/school" element={<DefineSchoolsPage />} />
-        <Route path="/class/edit" element={<EditClassPage back="/class" />} />
-        <Route
-          path="/class/active"
-          element={<ActiveClassPage back="/class" />}
-        />
+        <Route path="/class" element={<ClassPage />} />
+        <Route path="/class/:class_id" element={<RetrieveClassPage />} />
         <Route
           path="/student/create"
           element={<CreateStudentAdmPage back="/student" />}

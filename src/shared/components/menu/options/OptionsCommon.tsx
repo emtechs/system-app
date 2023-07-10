@@ -12,7 +12,6 @@ import { Frequency, Profile, School } from "../components";
 export const OptionsCommon = () => {
   const { mdDown } = useAppThemeContext();
   const {
-    handleClick,
     handleClickSchool,
     handleClickFrequency,
     handleClickProfile,
@@ -22,11 +21,7 @@ export const OptionsCommon = () => {
   } = useDrawerContext();
   return (
     <>
-      <OtherListItemLink
-        onClick={handleClick}
-        icon={<Home />}
-        label="Página Inicial"
-      />
+      <OtherListItemLink icon={<Home />} label="Página Inicial" />
       <ListItemLinkOpen
         onClick={handleClickSchool}
         open={openSchool}
@@ -45,7 +40,6 @@ export const OptionsCommon = () => {
       </ListItemLinkOpen>
       {!mdDown && (
         <OtherListItemLink
-          onClick={handleClick}
           icon={<Summarize />}
           label="Relatório"
           to="/report"

@@ -19,7 +19,7 @@ import {
 import { LayoutBasePage } from "../../shared/layouts";
 import { LabelSchool, ToolsSchool } from "../../shared/components";
 import {
-  ViewClass,
+  ViewClassYear,
   ViewFrequency,
   ViewInfrequency,
   ViewSchoolData,
@@ -63,7 +63,7 @@ export const RetrieveSchoolPage = () => {
         break;
 
       case "class":
-        setView(<ViewClass />);
+        setView(<ViewClassYear />);
         setTools(
           <ToolsSchool back="/school" isNew titleNew="Turma" isDash isSearch />
         );

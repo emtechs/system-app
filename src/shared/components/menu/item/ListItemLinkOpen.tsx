@@ -10,6 +10,7 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 interface iListItemLinkOpenProps extends iChildren, iOtherListItemLinkProps {
   open: boolean;
+  onClick: () => void;
 }
 
 export const ListItemLinkOpen = ({

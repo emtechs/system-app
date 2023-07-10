@@ -33,6 +33,20 @@ const updateSchool = async (data: FieldValues): Promise<iClass> => {
   return response;
 };
 
+interface ilistReturn {
+  classes: iClass[];
+  total: number;
+  result: iClass[];
+}
+
+const list = async (query: string): Promise<ilistReturn> => {
+  const { data: response } = await apiUsingNow.get<ilistReturn>(
+    `classes${query}`
+  );
+
+  return response;
+};
+
 interface ilistSchoolReturn {
   total: number;
   result: iClassSchoolList[];
@@ -67,4 +81,5 @@ export const apiClass = {
   updateSchool,
   listSchool,
   listDash,
+  list,
 };

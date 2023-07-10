@@ -75,27 +75,26 @@ export const ViewSchool = ({
     } else getSchools(define_query(query_data));
   }, [debounce, define_query, getSchools, search]);
 
-  const listSchool = useMemo(() => {
+  const table = useMemo(() => {
+    let listSchool: iSchool[];
+
     if (listData) {
       if (order === "director_name")
-        return sortArray<iSchool>(listData, {
+        listSchool = sortArray<iSchool>(listData, {
           by: order,
           order: by,
           computed: { director_name: (row) => row.director?.name },
         });
 
-      return sortArray<iSchool>(listData, { by: order, order: by });
-    }
-  }, [by, listData, order]);
+      listSchool = sortArray<iSchool>(listData, { by: order, order: by });
 
-  const table = useMemo(() => {
-    if (listSchool) {
       if (server_id) return <TableSchoolUser data={listSchool} />;
 
       return <TableSchool data={listSchool} />;
     }
+
     return <></>;
-  }, [listSchool, server_id]);
+  }, [by, listData, order, server_id]);
 
   return (
     <>

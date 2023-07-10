@@ -1,7 +1,7 @@
 import { Breadcrumbs, Chip, Link } from "@mui/material";
-import { Home, People } from "@mui/icons-material";
+import { Home, School } from "@mui/icons-material";
 
-export const TitleUserPage = () => {
+export const TitleSchoolPage = () => {
   return (
     <Breadcrumbs aria-label="breadcrumb">
       <Link underline="none" color="inherit" href="/">
@@ -14,9 +14,9 @@ export const TitleUserPage = () => {
         />
       </Link>
       <Chip
-        label="Usuários"
+        label="Escolas"
         color="primary"
-        icon={<People sx={{ mr: 0.5 }} fontSize="inherit" />}
+        icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
       />
     </Breadcrumbs>
   );

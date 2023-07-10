@@ -12,7 +12,6 @@ import { Class, Profile, Student, User } from "../components";
 
 export const OptionsSchool = () => {
   const {
-    handleClick,
     handleClickUser,
     handleClickClass,
     handleClickStudent,
@@ -24,11 +23,7 @@ export const OptionsSchool = () => {
   } = useDrawerContext();
   return (
     <>
-      <OtherListItemLink
-        onClick={handleClick}
-        icon={<Home />}
-        label="Página Inicial"
-      />
+      <OtherListItemLink icon={<Home />} label="Página Inicial" />
       <ListItemLinkOpen
         onClick={handleClickUser}
         open={openUser}
@@ -53,12 +48,7 @@ export const OptionsSchool = () => {
       >
         <Student />
       </ListItemLinkOpen>
-      <OtherListItemLink
-        onClick={handleClick}
-        icon={<Summarize />}
-        label="Relatório"
-        to="/report"
-      />
+      <OtherListItemLink icon={<Summarize />} label="Relatório" to="/report" />
       <ListItemLinkOpen
         onClick={handleClickProfile}
         open={openProfile}

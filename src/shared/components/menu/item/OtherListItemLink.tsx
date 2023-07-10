@@ -1,25 +1,25 @@
 import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ReactNode } from "react";
 import { useLocation } from "react-router-dom";
+import { useDrawerContext } from "../../../contexts";
 
 export interface iOtherListItemLinkProps {
   icon: ReactNode;
   label: string;
-  onClick: () => void;
   to?: string;
 }
 
 export const OtherListItemLink = ({
   icon,
   label,
-  onClick,
   to = "/",
 }: iOtherListItemLinkProps) => {
   const location = useLocation();
+  const { handleClickButton } = useDrawerContext();
   return (
     <ListItemButton
       autoFocus={true}
-      onClick={onClick}
+      onClick={handleClickButton}
       selected={
         location.pathname === to || location.pathname.includes(to + "/")
       }

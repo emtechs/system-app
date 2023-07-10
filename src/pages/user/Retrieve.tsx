@@ -8,7 +8,11 @@ import {
   useUserContext,
 } from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
-import { TitleServer, TitleUser, ToolsUser } from "../../shared/components";
+import {
+  TitleServer,
+  TitleUserRetrievePage,
+  ToolsUser,
+} from "../../shared/components";
 import {
   ViewFrequency,
   ViewFrequencyHistory,
@@ -54,7 +58,7 @@ export const RetrieveUserPage = () => {
 
   const title = useMemo(() => {
     if (school_id) return <TitleServer />;
-    return <TitleUser />;
+    return <TitleUserRetrievePage />;
   }, [school_id]);
 
   useEffect(() => {
@@ -113,11 +117,13 @@ export const RetrieveUserPage = () => {
             href={href("frequency", true)}
             icon={<Checklist />}
             label="Frequências"
+            disabled={userRetrieve?.frequencies === 0}
           />
           <Tab
             href={href("history", true)}
             icon={<History />}
             label="Histórico"
+            disabled={userRetrieve?.frequencies === 0}
           />
         </Tabs>
       </Box>

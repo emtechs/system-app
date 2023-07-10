@@ -28,6 +28,7 @@ export interface iUser {
   is_active: boolean;
   is_first_access: boolean;
   created_at: Date;
+  frequencies: number;
   work_school: iWorkSchool;
 }
 

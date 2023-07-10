@@ -10,20 +10,17 @@ import {
 } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
 import { useDrawerContext } from "../../../contexts";
-import { Class, Frequency, Import, Profile, Student } from "../components";
+import { Frequency, Import, Profile, Student } from "../components";
 import { ListItemLinkOpen, OtherListItemLink } from "../item";
 import { OptionsSchoolHome } from "./OptionsSchoolHome";
 
 export const OptionsAdmin = () => {
   const location = useLocation();
   const {
-    handleClick,
-    handleClickClass,
     handleClickFrequency,
     handleClickImport,
     handleClickProfile,
     handleClickStudent,
-    openClass,
     openFrequency,
     openImport,
     openProfile,
@@ -34,31 +31,10 @@ export const OptionsAdmin = () => {
     <OptionsSchoolHome />
   ) : (
     <>
-      <OtherListItemLink
-        onClick={handleClick}
-        icon={<Home />}
-        label="Página Inicial"
-      />
-      <OtherListItemLink
-        onClick={handleClick}
-        icon={<People />}
-        label="Usuários"
-        to="/user"
-      />
-      <OtherListItemLink
-        onClick={handleClick}
-        icon={<School />}
-        label="Escolas"
-        to="/school"
-      />
-      <ListItemLinkOpen
-        onClick={handleClickClass}
-        open={openClass}
-        icon={<Workspaces />}
-        label="Turmas"
-      >
-        <Class />
-      </ListItemLinkOpen>
+      <OtherListItemLink icon={<Home />} label="Página Inicial" />
+      <OtherListItemLink icon={<People />} label="Usuários" to="/user" />
+      <OtherListItemLink icon={<School />} label="Escolas" to="/school" />
+      <OtherListItemLink icon={<Workspaces />} label="Turmas" to="/class" />
       <ListItemLinkOpen
         onClick={handleClickStudent}
         open={openStudent}
