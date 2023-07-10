@@ -2,7 +2,11 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Box, Tab, Tabs } from "@mui/material";
 import { Checklist, History, Person, School } from "@mui/icons-material";
-import { useAuthContext, useUserContext } from "../../shared/contexts";
+import {
+  useAuthContext,
+  useSchoolContext,
+  useUserContext,
+} from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TitleServer, TitleUser, ToolsUser } from "../../shared/components";
 import {
@@ -16,9 +20,10 @@ export const RetrieveUserPage = () => {
   const [searchParams] = useSearchParams();
   const { user_id } = useParams();
   const viewData = searchParams.get("view");
-  const school_id = searchParams.get("school_id");
+  const school_id = searchParams.get("school_id") || undefined;
   const { yearData } = useAuthContext();
   const { userDataRetrieve, userRetrieve, search, listYear } = useUserContext();
+  const { schoolDataRetrieve } = useSchoolContext();
   const [view, setView] = useState(<ViewUserData />);
   const [tools, setTools] = useState(<ToolsUser back="/user" />);
   const [value, setValue] = useState(0);
@@ -44,7 +49,8 @@ export const RetrieveUserPage = () => {
     if (user_id) {
       if (userRetrieve?.id !== user_id) userDataRetrieve(user_id);
     }
-  }, [user_id]);
+    if (school_id) schoolDataRetrieve(school_id);
+  }, [school_id, user_id]);
 
   const title = useMemo(() => {
     if (school_id) return <TitleServer />;
@@ -54,7 +60,13 @@ export const RetrieveUserPage = () => {
   useEffect(() => {
     switch (viewData) {
       case "school":
-        setView(<ViewSchool search={search} server_id={user_id} />);
+        setView(
+          <ViewSchool
+            search={search}
+            server_id={user_id}
+            school_id={school_id}
+          />
+        );
         setTools(<ToolsUser back={back} isNew titleNew="Nova" isSearch />);
         setValue(1);
         break;

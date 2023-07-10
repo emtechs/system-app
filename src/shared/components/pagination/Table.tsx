@@ -12,33 +12,34 @@ export const PaginationTable = ({ onClick, total }: iPaginationTableProps) => {
   const { count, isLoading } = usePaginationContext();
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      p={2}
-      gap={2}
-    >
-      {isLoading ? (
-        <Typography>
-          <Skeleton width={50} />
-        </Typography>
-      ) : (
-        <Typography>
-          {total}/{count}
-        </Typography>
-      )}
-      <LoadingButton
-        variant="contained"
-        disableElevation
-        loading={isLoading}
-        loadingPosition="end"
-        endIcon={<KeyboardArrowDown />}
-        disabled={count === total}
-        onClick={onClick}
+    count !== total && (
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        p={2}
+        gap={2}
       >
-        Carregar mais
-      </LoadingButton>
-    </Box>
+        {isLoading ? (
+          <Typography>
+            <Skeleton width={50} />
+          </Typography>
+        ) : (
+          <Typography>
+            {total}/{count}
+          </Typography>
+        )}
+        <LoadingButton
+          variant="contained"
+          disableElevation
+          loading={isLoading}
+          loadingPosition="end"
+          endIcon={<KeyboardArrowDown />}
+          onClick={onClick}
+        >
+          Carregar mais
+        </LoadingButton>
+      </Box>
+    )
   );
 };

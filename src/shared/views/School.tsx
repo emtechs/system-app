@@ -10,12 +10,14 @@ import { TableSchool, TableSchoolUser } from "./tables";
 interface iViewSchoolProps extends iViewBaseProps {
   is_director?: "" | "&is_director=true" | "&is_director=false";
   server_id?: string;
+  school_id?: string;
 }
 
 export const ViewSchool = ({
   is_director,
   search,
   server_id,
+  school_id,
 }: iViewSchoolProps) => {
   const { debounce } = useDebounce();
   const {
@@ -52,12 +54,13 @@ export const ViewSchool = ({
 
   const define_query = useCallback(
     (comp: string) => {
-      let query_data = query() + comp + "&order=name" + query_page();
+      let query_data =
+        query(undefined, school_id) + comp + "&order=name" + query_page();
       if (is_director) query_data += is_director;
       if (server_id) query_data += `&server_id=${server_id}`;
       return query_data;
     },
-    [is_director, query, query_page, server_id]
+    [is_director, query, query_page, school_id, server_id]
   );
 
   const onClick = () => getSchools(define_query(handleFace(face)), true);
