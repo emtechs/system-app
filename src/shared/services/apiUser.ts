@@ -3,7 +3,6 @@ import { apiUsingNow } from "./api";
 import {
   iSchool,
   iSchoolServer,
-  iSelectBase,
   iUser,
   iWorkSchool,
   iWorkSchoolClass,
@@ -53,7 +52,6 @@ const profile = async (token: string): Promise<iRetrieve> => {
 interface iListReturn {
   total: number;
   result: iUser[];
-  roles: iSelectBase[];
 }
 
 const list = async (query: string): Promise<iListReturn> => {
