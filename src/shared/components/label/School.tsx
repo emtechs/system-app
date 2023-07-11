@@ -19,7 +19,7 @@ export const LabelSchool = ({ clickable }: iLabelBaseProps) => {
     <Link
       underline="none"
       color="inherit"
-      href={"/school?id=" + schoolRetrieve?.id}
+      href={"/school/" + schoolRetrieve?.id}
     >
       <Chip
         clickable

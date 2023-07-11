@@ -7,7 +7,7 @@ import {
   useAuthContext,
   usePaginationContext,
 } from "../../shared/contexts";
-import { iSchoolClass, iheadCell } from "../../shared/interfaces";
+import { iSchool, iheadCell } from "../../shared/interfaces";
 import { apiSchool } from "../../shared/services";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
@@ -24,7 +24,7 @@ const headCells: iheadCell[] = [
 ];
 
 interface iCardSchoolProps {
-  school: iSchoolClass;
+  school: iSchool;
 }
 
 const CardSchool = ({ school }: iCardSchoolProps) => {
@@ -60,15 +60,14 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
 export const ListSchoolPage = () => {
   const { debounce } = useDebounce();
   const { yearData } = useAuthContext();
-  const { setCount, setIsLoading, query } = usePaginationContext();
-  const [listSchoolData, setListSchoolData] = useState<iSchoolClass[]>();
-  const [search, setSearch] = useState<string>();
+  const { setCount, setIsLoading, query, search } = usePaginationContext();
+  const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [infreq, setInfreq] = useState<string>();
 
   const getSchool = useCallback((query: string) => {
     setIsLoading(true);
     apiSchool
-      .listClass(query)
+      .list(query)
       .then((res) => {
         setListSchoolData(res.result);
         setCount(res.total);
@@ -110,16 +109,10 @@ export const ListSchoolPage = () => {
         <Tools
           isHome
           isSearch
-          search={search}
-          setSearch={(text) => setSearch(text)}
           titleNew="Nova"
           isInfreq
           infreq={infreq}
           setInfreq={(text) => setInfreq(text)}
-          onClickReset={() => {
-            setSearch(undefined);
-            setInfreq(undefined);
-          }}
         />
       }
     >

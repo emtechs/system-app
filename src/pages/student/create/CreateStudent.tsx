@@ -1,4 +1,4 @@
-import { useAuthContext, useStudentContext } from "../../../shared/contexts";
+import { useSchoolContext, useStudentContext } from "../../../shared/contexts";
 import { BoxResp, SelectClass } from "../../../shared/components";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,14 +6,14 @@ import { studentCreateSchema } from "../../../shared/schemas";
 import { Button } from "@mui/material";
 
 export const CreateStudentPage = () => {
-  const { schoolData } = useAuthContext();
+  const { schoolRetrieve } = useSchoolContext();
   const { createStudent } = useStudentContext();
 
   return (
     <>
       <FormContainer
         onSuccess={(data) => {
-          if (schoolData) createStudent(data, schoolData.id);
+          if (schoolRetrieve) createStudent(data, schoolRetrieve.id);
         }}
         resolver={zodResolver(studentCreateSchema)}
       >

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuthContext, useStudentContext } from "../../shared/contexts";
+import { useSchoolContext, useStudentContext } from "../../shared/contexts";
 import { iPageProps } from "../../shared/interfaces";
 import {
   BasePage,
@@ -14,7 +14,7 @@ import { studentImportSchema } from "../../shared/schemas";
 import { Button } from "@mui/material";
 
 export const ImportStudentPage = ({ back }: iPageProps) => {
-  const { schoolData } = useAuthContext();
+  const { schoolRetrieve } = useSchoolContext();
   const { importStudent } = useStudentContext();
   const urlToDownload = "/students.csv";
   const [download, setDownload] = useState("");
@@ -24,7 +24,7 @@ export const ImportStudentPage = ({ back }: iPageProps) => {
     <BasePage isProfile back={back}>
       <FormContainer
         onSuccess={(data) => {
-          if (schoolData) importStudent(data, schoolData.id, back);
+          if (schoolRetrieve) importStudent(data, schoolRetrieve.id, back);
         }}
         resolver={zodResolver(studentImportSchema)}
       >

@@ -5,6 +5,7 @@ import {
   useAuthContext,
   useDrawerContext,
   usePaginationContext,
+  useSchoolContext,
 } from "../../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../../shared/services";
@@ -55,7 +56,8 @@ export const ListFrequencyCommon = () => {
   const date = searchParams.get("date");
   const status = searchParams.get("status");
   const { mdDown } = useAppThemeContext();
-  const { yearData, schoolData } = useAuthContext();
+  const { yearData } = useAuthContext();
+  const { schoolRetrieve } = useSchoolContext();
   const { handleClickButtonTools } = useDrawerContext();
   const { setCount, setIsLoading, query } = usePaginationContext();
   const [data, setData] = useState<iFrequency[]>();
@@ -80,8 +82,8 @@ export const ListFrequencyCommon = () => {
       ];
 
   useEffect(() => {
-    if (yearData && schoolData) {
-      let query_data = query(yearData.id, schoolData.id);
+    if (yearData && schoolRetrieve) {
+      let query_data = query(yearData.id, schoolRetrieve.id);
       if (status) {
         query_data += "&status=" + status;
       } else {
@@ -100,9 +102,9 @@ export const ListFrequencyCommon = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [yearData, schoolData, date, status, query]);
+  }, [yearData, schoolRetrieve, date, status, query]);
 
-  if (!schoolData) return <Navigate to="/" />;
+  if (!schoolRetrieve) return <Navigate to="/" />;
 
   return (
     <LayoutBasePage
@@ -118,7 +120,7 @@ export const ListFrequencyCommon = () => {
               clickable
               color="primary"
               variant="outlined"
-              label={schoolData.name}
+              label={schoolRetrieve.name}
               icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
             />
           </Link>

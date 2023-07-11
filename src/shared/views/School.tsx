@@ -5,7 +5,7 @@ import { usePaginationContext } from "../contexts";
 import { iSchool } from "../interfaces";
 import { apiSchool } from "../services";
 import { PaginationTable } from "../components";
-import { TableSchool, TableSchoolUser } from "./tables";
+import { TableSchool, TableSchoolClass, TableSchoolUser } from "./tables";
 
 interface iViewSchoolProps {
   server_id?: string;
@@ -95,11 +95,13 @@ export const ViewSchool = ({
 
       if (server_id) return <TableSchoolUser data={listSchool} />;
 
+      if (class_id) return <TableSchoolClass data={listSchool} />;
+
       return <TableSchool data={listSchool} />;
     }
 
     return <></>;
-  }, [by, listData, order, server_id]);
+  }, [by, class_id, listData, order, server_id]);
 
   return (
     <>

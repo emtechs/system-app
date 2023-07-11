@@ -12,17 +12,17 @@ import {
   Stepper,
 } from "@mui/material";
 import { LayoutBasePage } from "../../shared/layouts";
-import { useAuthContext } from "../../shared/contexts";
+import { useSchoolContext } from "../../shared/contexts";
 import { Summarize } from "@mui/icons-material";
 import { Navigate } from "react-router-dom";
 import { FormContainer } from "react-hook-form-mui";
 import { useState } from "react";
 
 export const ReportPage = () => {
-  const { schoolData } = useAuthContext();
+  const { schoolRetrieve } = useSchoolContext();
   const [activeStep, setActiveStep] = useState(0);
 
-  if (!schoolData) return <Navigate to="/" />;
+  if (!schoolRetrieve) return <Navigate to="/" />;
 
   const steps = [
     {

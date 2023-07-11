@@ -42,7 +42,7 @@ export const TabsSchoolRetrievePage = ({
         <Tab
           icon={<Percent />}
           label="Infrequência"
-          disabled={schoolRetrieve?.is_dash ? false : true}
+          disabled={schoolRetrieve?.frequencies === 0}
           value="infrequency"
         />
       </Tabs>

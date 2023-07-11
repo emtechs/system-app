@@ -2,14 +2,12 @@ import { Breadcrumbs, Chip, Link } from "@mui/material";
 import {
   useAppThemeContext,
   useDrawerContext,
-  useUserContext,
 } from "../../../../shared/contexts";
 import { LabelUser } from "../../../../shared/components";
 import { Home, People } from "@mui/icons-material";
 
 export const TitleRetrieveUser = () => {
   const { mdDown } = useAppThemeContext();
-  const { userRetrieve } = useUserContext();
   const { handleClickButtonTools } = useDrawerContext();
 
   return (
@@ -37,7 +35,7 @@ export const TitleRetrieveUser = () => {
           icon={<People sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </Link>
-      <LabelUser user={userRetrieve} />
+      <LabelUser />
     </Breadcrumbs>
   );
 };

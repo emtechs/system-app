@@ -5,6 +5,7 @@ import {
   useCalendarContext,
   useClassContext,
   useFrequencyContext,
+  useSchoolContext,
 } from "../../contexts";
 import { CalendarBase } from "./Base";
 import { apiUsingNow } from "../../services";
@@ -13,41 +14,42 @@ import { iCalendar } from "../../interfaces";
 export const CalendarFrequency = () => {
   const { setLoading } = useAppThemeContext();
   const { createFrequency } = useFrequencyContext();
-  const { yearData, schoolData } = useAuthContext();
+  const { yearData } = useAuthContext();
+  const { schoolRetrieve } = useSchoolContext();
   const { classWithSchoolSelect } = useClassContext();
   const { monthData, setEventData } = useCalendarContext();
   const frequency = useMemo(() => {
-    if (classWithSchoolSelect && schoolData && yearData) {
+    if (classWithSchoolSelect && schoolRetrieve && yearData) {
       const students = classWithSchoolSelect.students.map((el) => {
         return { student_id: el.student.id };
       });
 
       return {
         class_id: classWithSchoolSelect.class.id,
-        school_id: schoolData.id,
+        school_id: schoolRetrieve.id,
         year_id: yearData.id,
         students,
       };
     }
     return undefined;
-  }, [classWithSchoolSelect, schoolData, yearData]);
+  }, [classWithSchoolSelect, schoolRetrieve, yearData]);
 
   useEffect(() => {
     setEventData(undefined);
   }, []);
 
   useEffect(() => {
-    if (yearData && schoolData && classWithSchoolSelect && monthData) {
+    if (yearData && schoolRetrieve && classWithSchoolSelect && monthData) {
       const query = `?month=${monthData}`;
       setLoading(true);
       apiUsingNow
         .get<iCalendar[]>(
-          `calendar/frequency/${yearData.id}/${schoolData.id}/${classWithSchoolSelect.class.id}${query}`
+          `calendar/frequency/${yearData.id}/${schoolRetrieve.id}/${classWithSchoolSelect.class.id}${query}`
         )
         .then((res) => setEventData(res.data))
         .finally(() => setLoading(false));
     }
-  }, [classWithSchoolSelect, schoolData, monthData, yearData]);
+  }, [classWithSchoolSelect, schoolRetrieve, monthData, yearData]);
 
   return (
     <CalendarBase

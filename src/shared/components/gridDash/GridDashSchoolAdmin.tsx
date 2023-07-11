@@ -10,11 +10,11 @@ import "dayjs/locale/pt-br";
 dayjs.extend(localizedFormat);
 
 export const GridDashSchoolAdmin = () => {
-  const { schoolAdminRetrieve } = useSchoolContext();
+  const { schoolRetrieve } = useSchoolContext();
   const { handleClickFrequency } = useDrawerContext();
 
   return (
-    schoolAdminRetrieve && (
+    schoolRetrieve && (
       <Grid container item direction="row" xs={12} md={5} spacing={2}>
         <Grid item xs={12}>
           <Box
@@ -27,34 +27,32 @@ export const GridDashSchoolAdmin = () => {
             <Typography variant="h6" textAlign="center">
               {dayjs().format("dddd, LL")}
             </Typography>
-            <CardSchool school={schoolAdminRetrieve} />
+            <CardSchool school={schoolRetrieve} />
           </Box>
         </Grid>
         <>
           <GridDashContent
             icon={<Group fontSize="large" />}
-            quant={schoolAdminRetrieve.students}
-            info={schoolAdminRetrieve.students === 1 ? "Aluno" : "Alunos"}
+            quant={schoolRetrieve.students}
+            info={schoolRetrieve.students === 1 ? "Aluno" : "Alunos"}
             dest="/school/student"
           />
           <GridDashContent
             icon={<Checklist fontSize="large" />}
             quant={
-              schoolAdminRetrieve.frequencies === 0
+              schoolRetrieve.frequencies === 0
                 ? "-"
-                : schoolAdminRetrieve.frequencies
+                : schoolRetrieve.frequencies
             }
             info={
-              schoolAdminRetrieve.frequencies === 1
-                ? "Frequência"
-                : "Frequências"
+              schoolRetrieve.frequencies === 1 ? "Frequência" : "Frequências"
             }
             dest="/frequency/list"
             onClick={handleClickFrequency}
           />
           <GridDashContent
             icon={<School fontSize="large" />}
-            quant={schoolAdminRetrieve.infrequency.toFixed(0) + "%"}
+            quant={schoolRetrieve.infrequency.toFixed(0) + "%"}
             info="Infrequência"
             dest="/school/class"
           />

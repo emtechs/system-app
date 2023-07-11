@@ -6,6 +6,7 @@ import {
   useAppThemeContext,
   useAuthContext,
   usePaginationContext,
+  useSchoolContext,
 } from "../../shared/contexts";
 import { iFrequency, iheadCell } from "../../shared/interfaces";
 import { TableBase } from "../../shared/components";
@@ -51,13 +52,14 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
 
 export const FrequencyOpenPage = () => {
   const navigate = useNavigate();
-  const { yearData, schoolData } = useAuthContext();
+  const { yearData } = useAuthContext();
+  const { schoolRetrieve } = useSchoolContext();
   const { setCount, setIsLoading, query } = usePaginationContext();
   const [data, setData] = useState<iFrequency[]>();
 
   useEffect(() => {
-    if (yearData && schoolData) {
-      let query_data = query(yearData.id, schoolData.id);
+    if (yearData && schoolRetrieve) {
+      let query_data = query(yearData.id, schoolRetrieve.id);
       query_data += "&status=OPENED";
       setIsLoading(true);
       apiUsingNow
@@ -71,9 +73,9 @@ export const FrequencyOpenPage = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [yearData, schoolData, query]);
+  }, [yearData, schoolRetrieve, query]);
 
-  if (!schoolData) return <Navigate to="/" />;
+  if (!schoolRetrieve) return <Navigate to="/" />;
 
   return (
     <LayoutBasePage

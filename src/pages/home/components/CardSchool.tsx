@@ -8,11 +8,11 @@ import {
   Typography,
 } from "@mui/material";
 import { useAppThemeContext } from "../../../shared/contexts";
-import { iSchoolClass } from "../../../shared/interfaces";
+import { iSchool } from "../../../shared/interfaces";
 import { adaptName, adaptNameSchool } from "../../../shared/scripts";
 
 interface iCardSchoolProps {
-  school: iSchoolClass;
+  school: iSchool;
   isHome?: boolean;
 }
 

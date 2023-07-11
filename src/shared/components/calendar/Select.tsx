@@ -5,6 +5,7 @@ import {
   useCalendarContext,
   useDrawerContext,
   usePaginationContext,
+  useSchoolContext,
 } from "../../contexts";
 import { CalendarBase } from "./Base";
 import { apiUsingNow } from "../../services";
@@ -23,7 +24,8 @@ interface iCalendarSelectProps {
 export const CalendarSelect = ({ onClick }: iCalendarSelectProps) => {
   const navigate = useNavigate();
   const { theme } = useAppThemeContext();
-  const { yearData, schoolData } = useAuthContext();
+  const { yearData } = useAuthContext();
+  const { schoolRetrieve } = useSchoolContext();
   const { monthData, setEventData, setDateData } = useCalendarContext();
   const { handleClickFrequency } = useDrawerContext();
   const { query } = usePaginationContext();
@@ -34,10 +36,10 @@ export const CalendarSelect = ({ onClick }: iCalendarSelectProps) => {
   }, []);
 
   useEffect(() => {
-    if (yearData && schoolData && monthData) {
+    if (yearData && schoolRetrieve && monthData) {
       const query_data = query(
         undefined,
-        schoolData.id,
+        schoolRetrieve.id,
         undefined,
         undefined,
         monthData
@@ -48,7 +50,7 @@ export const CalendarSelect = ({ onClick }: iCalendarSelectProps) => {
         .then((res) => setEventData(res.data))
         .finally(() => setLoading(false));
     }
-  }, [schoolData, monthData, yearData, query]);
+  }, [schoolRetrieve, monthData, yearData, query]);
 
   return (
     <>

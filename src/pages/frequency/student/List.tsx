@@ -9,10 +9,10 @@ import {
 import { TableBase } from "../../../shared/components";
 import {
   useAppThemeContext,
-  useAuthContext,
   useDrawerContext,
   useFrequencyContext,
   usePaginationContext,
+  useSchoolContext,
 } from "../../../shared/contexts";
 import {
   iFrequencyBase,
@@ -66,7 +66,7 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
 export const ListStudentFrequencyPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const { schoolData } = useAuthContext();
+  const { schoolRetrieve } = useSchoolContext();
   const { dataStudents, setDataStudents } = useFrequencyContext();
   const { handleClickButtonTools } = useDrawerContext();
   const { setIsLoading, query, setCount } = usePaginationContext();
@@ -109,7 +109,7 @@ export const ListStudentFrequencyPage = () => {
               clickable
               color="primary"
               variant="outlined"
-              label={schoolData?.name}
+              label={schoolRetrieve?.name}
               icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
             />
           </Link>
