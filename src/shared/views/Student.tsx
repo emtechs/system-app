@@ -13,9 +13,13 @@ import { apiStudent } from "../services";
 import { Box } from "@mui/material";
 import { PaginationTable, TabsYear } from "../components";
 import sortArray from "sort-array";
-import { TableStudentSchool } from "./tables";
+import { TableStudentClass, TableStudentSchool } from "./tables";
 
-export const ViewStudent = () => {
+interface iViewStudentProps {
+  class_id?: string;
+}
+
+export const ViewStudent = ({ class_id }: iViewStudentProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { school_id } = useParams();
   const year_id = searchParams.get("year_id") || undefined;
@@ -61,10 +65,13 @@ export const ViewStudent = () => {
   const define_query = useCallback(
     (comp: string) => {
       const query_data =
-        query(year_id, school_id) + comp + "&order=name" + query_page();
+        query(year_id, school_id, class_id) +
+        comp +
+        "&order=name" +
+        query_page();
       return query_data;
     },
-    [query, query_page, school_id, year_id]
+    [class_id, query, query_page, school_id, year_id]
   );
 
   const onClick = () => getStudents(define_query(handleFace(face)), true);
@@ -90,10 +97,19 @@ export const ViewStudent = () => {
           computed: { class_name: (row) => row.class.name },
         });
 
+      if (order === "school_name")
+        students = sortArray<iStudent>(data, {
+          by: order,
+          order: by,
+          computed: { school_name: (row) => row.school.name },
+        });
+
+      if (class_id) return <TableStudentClass data={students} />;
+
       return <TableStudentSchool data={students} />;
     }
     return <></>;
-  }, [by, data, order]);
+  }, [by, class_id, data, order]);
 
   return (
     <Box display="flex" justifyContent="space-between">

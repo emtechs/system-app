@@ -45,7 +45,7 @@ export const RetrieveClassPage = () => {
         break;
 
       case "student":
-        setView(<ViewStudent />);
+        setView(<ViewStudent class_id={class_id} />);
         setTools(
           <ToolsSchool back="/school" isNew titleNew="Aluno" isDash isSearch />
         );
