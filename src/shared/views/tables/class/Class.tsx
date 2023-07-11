@@ -12,10 +12,10 @@ export const TableClass = ({ data }: iTableClassProps) => {
   const navigate = useNavigate();
   const headCells: iheadCell[] = useMemo(() => {
     return [
-      { order: "name", numeric: false, label: "Turma" },
-      { order: "schools", numeric: true, label: "Escolas" },
-      { order: "students", numeric: true, label: "Alunos" },
-      { order: "frequencies", numeric: true, label: "Frequências" },
+      { order: "name", numeric: "left", label: "Turma" },
+      { order: "schools", numeric: "right", label: "Escolas" },
+      { order: "students", numeric: "right", label: "Alunos" },
+      { order: "frequencies", numeric: "right", label: "Frequências" },
     ];
   }, []);
 

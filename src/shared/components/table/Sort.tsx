@@ -1,12 +1,15 @@
-import { TableCell, TableHead, TableRow, TableSortLabel } from "@mui/material";
+import { TableHead, TableRow, TableSortLabel } from "@mui/material";
 import { usePaginationContext } from "../../contexts";
-import { iheadCell } from "../../interfaces";
+import { iLinkComp, iheadCell } from "../../interfaces";
+import { TableCellLink } from "./CellLink";
 
 interface iSortProps {
   headCells: iheadCell[];
+  linkComp: iLinkComp;
+  link?: "div";
 }
 
-export const TableSort = ({ headCells }: iSortProps) => {
+export const TableSort = ({ headCells, linkComp, link }: iSortProps) => {
   const { by, setBy, order, setOrder } = usePaginationContext();
 
   const createSortHandler = (property?: string) => () => {
@@ -16,13 +19,14 @@ export const TableSort = ({ headCells }: iSortProps) => {
   };
 
   return (
-    <TableHead>
-      <TableRow>
+    <TableHead {...linkComp}>
+      <TableRow {...linkComp}>
         {headCells.map((el, index) => (
-          <TableCell
+          <TableCellLink
             key={index}
-            align={el.numeric ? "right" : "left"}
             sortDirection={order === el.order ? by : false}
+            numeric={el.numeric}
+            link={link}
           >
             <TableSortLabel
               disabled={!el.order}
@@ -32,7 +36,7 @@ export const TableSort = ({ headCells }: iSortProps) => {
             >
               {el.label}
             </TableSortLabel>
-          </TableCell>
+          </TableCellLink>
         ))}
       </TableRow>
     </TableHead>

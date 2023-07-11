@@ -95,14 +95,14 @@ export const FrequencyPage = () => {
 
   const headCells: iheadCell[] = mdDown
     ? [
-        { order: "name", numeric: false, label: "Turma" },
-        { order: "infreq", numeric: true, label: "Infrequência" },
+        { order: "name", numeric: "left", label: "Turma" },
+        { order: "infreq", numeric: "right", label: "Infrequência" },
       ]
     : [
-        { order: "name", numeric: false, label: "Turma" },
-        { numeric: true, label: "Alunos" },
-        { numeric: true, label: "Frequências" },
-        { order: "infreq", numeric: true, label: "Infrequência" },
+        { order: "name", numeric: "left", label: "Turma" },
+        { numeric: "right", label: "Alunos" },
+        { numeric: "right", label: "Frequências" },
+        { order: "infreq", numeric: "right", label: "Infrequência" },
       ];
 
   const date = useCallback(() => {

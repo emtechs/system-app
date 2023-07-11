@@ -49,11 +49,11 @@ export const ViewFrequencyHistory = () => {
   }, [debounce, query, getFrequencies, search, userRetrieve, year_id]);
 
   const headCells: iheadCell[] = [
-    { numeric: false, label: "Data" },
-    { numeric: false, label: "Matrícula" },
-    { numeric: false, label: "Aluno" },
-    { numeric: false, label: "Turma" },
-    { numeric: false, label: "Presença" },
+    { numeric: "left", label: "Data" },
+    { numeric: "left", label: "Matrícula" },
+    { numeric: "left", label: "Aluno" },
+    { numeric: "left", label: "Turma" },
+    { numeric: "left", label: "Presença" },
   ];
 
   return (

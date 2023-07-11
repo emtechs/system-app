@@ -11,9 +11,9 @@ interface iTableSchoolUserProps {
 export const TableSchoolUser = ({ data }: iTableSchoolUserProps) => {
   const headCells: iheadCell[] = useMemo(() => {
     return [
-      { order: "name", numeric: false, label: "Escola" },
-      { numeric: false, label: "Função" },
-      { numeric: false, label: "Tela" },
+      { order: "name", numeric: "left", label: "Escola" },
+      { numeric: "left", label: "Função" },
+      { numeric: "left", label: "Tela" },
     ];
   }, []);
 

@@ -65,20 +65,20 @@ export const ListFrequencyCommon = () => {
   const headCells: iheadCell[] = !date
     ? mdDown
       ? [
-          { order: "date", numeric: false, label: "Data" },
-          { order: "name", numeric: false, label: "Turma" },
-          { order: "infreq", numeric: true, label: "Infrequência" },
+          { order: "date", numeric: "left", label: "Data" },
+          { order: "name", numeric: "left", label: "Turma" },
+          { order: "infreq", numeric: "right", label: "Infrequência" },
         ]
       : [
-          { order: "date", numeric: false, label: "Data" },
-          { order: "name", numeric: false, label: "Turma" },
-          { numeric: true, label: "Alunos" },
-          { order: "infreq", numeric: true, label: "Infrequência" },
+          { order: "date", numeric: "left", label: "Data" },
+          { order: "name", numeric: "left", label: "Turma" },
+          { numeric: "right", label: "Alunos" },
+          { order: "infreq", numeric: "right", label: "Infrequência" },
         ]
     : [
-        { order: "name", numeric: false, label: "Turma" },
-        { numeric: true, label: "Alunos" },
-        { order: "infreq", numeric: true, label: "Infrequência" },
+        { order: "name", numeric: "left", label: "Turma" },
+        { numeric: "right", label: "Alunos" },
+        { order: "infreq", numeric: "right", label: "Infrequência" },
       ];
 
   useEffect(() => {

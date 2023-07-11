@@ -23,15 +23,15 @@ export const TableUserSchool = ({
   const headCells: iheadCell[] = useMemo(() => {
     if (mdDown)
       return [
-        { order: "name", numeric: false, label: "Nome Completo" },
-        { numeric: false, label: "CPF" },
+        { order: "name", numeric: "left", label: "Nome Completo" },
+        { numeric: "left", label: "CPF" },
       ];
 
     return [
-      { order: "name", numeric: false, label: "Nome Completo" },
-      { numeric: false, label: "CPF" },
-      { numeric: false, label: "Função" },
-      { numeric: false, label: "Tela" },
+      { order: "name", numeric: "left", label: "Nome Completo" },
+      { numeric: "left", label: "CPF" },
+      { numeric: "left", label: "Função" },
+      { numeric: "left", label: "Tela" },
     ];
   }, [mdDown]);
 

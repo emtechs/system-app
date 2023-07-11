@@ -10,12 +10,12 @@ import { LayoutBasePage } from "../../shared/layouts";
 import { SchoolTwoTone } from "@mui/icons-material";
 
 const headCells: iheadCell[] = [
-  { order: "name", numeric: false, label: "Escola" },
-  { order: "director_name", numeric: false, label: "Diretor" },
-  { numeric: true, label: "Turmas" },
-  { numeric: true, label: "Alunos" },
-  { numeric: true, label: "Frequências" },
-  { numeric: true, label: "Infrequência" },
+  { order: "name", numeric: "left", label: "Escola" },
+  { order: "director_name", numeric: "left", label: "Diretor" },
+  { numeric: "right", label: "Turmas" },
+  { numeric: "right", label: "Alunos" },
+  { numeric: "right", label: "Frequências" },
+  { numeric: "right", label: "Infrequência" },
 ];
 
 interface iCardSchoolProps {

@@ -18,14 +18,14 @@ export const TableUser = ({ data }: iTableUserProps) => {
   const headCells: iheadCell[] = useMemo(() => {
     if (mdDown)
       return [
-        { order: "name", numeric: false, label: "Nome Completo" },
-        { numeric: false, label: "CPF" },
+        { order: "name", numeric: "left", label: "Nome Completo" },
+        { numeric: "left", label: "CPF" },
       ];
 
     return [
-      { order: "name", numeric: false, label: "Nome Completo" },
-      { numeric: false, label: "CPF" },
-      { order: "role", numeric: false, label: "Função" },
+      { order: "name", numeric: "left", label: "Nome Completo" },
+      { numeric: "left", label: "CPF" },
+      { order: "role", numeric: "left", label: "Função" },
     ];
   }, [mdDown]);
 

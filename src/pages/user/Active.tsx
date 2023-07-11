@@ -21,8 +21,8 @@ import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
 
 const headCells: iheadCell[] = [
-  { order: "name", numeric: false, label: "Nome Completo" },
-  { numeric: false, label: "CPF" },
+  { order: "name", numeric: "left", label: "Nome Completo" },
+  { numeric: "left", label: "CPF" },
 ];
 
 interface iCardUserProps {

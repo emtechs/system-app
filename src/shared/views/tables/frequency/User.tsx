@@ -11,11 +11,11 @@ interface iTableFrequencyUserProps {
 export const TableFrequencyUser = ({ data }: iTableFrequencyUserProps) => {
   const { theme } = useAppThemeContext();
   const headCells: iheadCell[] = [
-    { order: "date", numeric: false, label: "Data" },
-    { numeric: false, label: "Escola" },
-    { numeric: false, label: "Turma" },
-    { numeric: true, label: "Alunos" },
-    { order: "infrequency", numeric: true, label: "Infrequência" },
+    { order: "date", numeric: "left", label: "Data" },
+    { numeric: "left", label: "Escola" },
+    { numeric: "left", label: "Turma" },
+    { numeric: "right", label: "Alunos" },
+    { order: "infrequency", numeric: "right", label: "Infrequência" },
   ];
 
   return (

@@ -35,10 +35,10 @@ dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
 
 const headCells: iheadCell[] = [
-  { order: "registry", numeric: false, label: "Matrícula" },
-  { order: "name", numeric: false, label: "Aluno" },
-  { numeric: false, label: "Estado da Presença" },
-  { numeric: false, label: "Atualizado Em" },
+  { order: "registry", numeric: "left", label: "Matrícula" },
+  { order: "name", numeric: "left", label: "Aluno" },
+  { numeric: "left", label: "Estado da Presença" },
+  { numeric: "left", label: "Atualizado Em" },
 ];
 
 interface iCardFrequencyProps {

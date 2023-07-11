@@ -56,10 +56,10 @@ export const ViewInfrequency = () => {
   }, [search, period, year_id, school_id, query]);
 
   const headCells: iheadCell[] = [
-    { numeric: false, label: "Nome" },
-    { numeric: false, label: "Período" },
-    { numeric: true, label: "Frequências" },
-    { numeric: true, label: "Infrequência" },
+    { numeric: "left", label: "Nome" },
+    { numeric: "left", label: "Período" },
+    { numeric: "right", label: "Frequências" },
+    { numeric: "right", label: "Infrequência" },
   ];
 
   return (

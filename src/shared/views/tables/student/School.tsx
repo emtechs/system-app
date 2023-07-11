@@ -15,15 +15,15 @@ export const TableStudentSchool = ({ data }: iTableStudentSchoolProps) => {
   const headCells: iheadCell[] = useMemo(() => {
     if (mdDown)
       return [
-        { order: "registry", numeric: true, label: "Matrícula" },
-        { order: "name", numeric: false, label: "Aluno" },
-        { order: "infrequency", numeric: true, label: "Infrequência" },
+        { order: "registry", numeric: "right", label: "Matrícula" },
+        { order: "name", numeric: "left", label: "Aluno" },
+        { order: "infrequency", numeric: "right", label: "Infrequência" },
       ];
     return [
-      { order: "registry", numeric: true, label: "Matrícula" },
-      { order: "name", numeric: false, label: "Aluno" },
-      { order: "class_name", numeric: false, label: "Turma" },
-      { order: "infrequency", numeric: true, label: "Infrequência" },
+      { order: "registry", numeric: "right", label: "Matrícula" },
+      { order: "name", numeric: "left", label: "Aluno" },
+      { order: "class_name", numeric: "left", label: "Turma" },
+      { order: "infrequency", numeric: "right", label: "Infrequência" },
     ];
   }, [mdDown]);
 

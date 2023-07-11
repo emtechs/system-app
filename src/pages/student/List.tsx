@@ -13,11 +13,11 @@ import { TableCell, TableRow } from "@mui/material";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 
 const headCells: iheadCell[] = [
-  { order: "registry", numeric: false, label: "Matrícula" },
-  { order: "name", numeric: false, label: "Aluno" },
-  { order: "class_name", numeric: false, label: "Turma" },
-  { order: "school_name", numeric: false, label: "Escola" },
-  { order: "infreq", numeric: true, label: "Infrequência" },
+  { order: "registry", numeric: "left", label: "Matrícula" },
+  { order: "name", numeric: "left", label: "Aluno" },
+  { order: "class_name", numeric: "left", label: "Turma" },
+  { order: "school_name", numeric: "left", label: "Escola" },
+  { order: "infreq", numeric: "right", label: "Infrequência" },
 ];
 
 interface iCardStudentProps {

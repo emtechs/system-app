@@ -30,9 +30,9 @@ import {
 } from "../../../shared/scripts";
 
 const headCells: iheadCell[] = [
-  { order: "registry", numeric: false, label: "Matrícula" },
-  { order: "name", numeric: false, label: "Aluno" },
-  { numeric: false, label: "Estado da Presença" },
+  { order: "registry", numeric: "left", label: "Matrícula" },
+  { order: "name", numeric: "left", label: "Aluno" },
+  { numeric: "left", label: "Estado da Presença" },
 ];
 
 interface iCardFrequencyProps {

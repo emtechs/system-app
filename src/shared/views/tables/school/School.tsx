@@ -1,60 +1,73 @@
-import { useMemo, useState } from "react";
-import { TableCell, TableRow } from "@mui/material";
+import { Fragment, useMemo, useState } from "react";
+import { Link as LinkComp, TableRow } from "@mui/material";
 import {
   DialogActiveSchool,
   DialogCreateSchool,
   TableBase,
+  TableCellLink,
 } from "../../../components";
 import { iSchool, iheadCell } from "../../../interfaces";
 import { useDialogContext, usePaginationContext } from "../../../contexts";
-import { useNavigate } from "react-router-dom";
 
 interface iTableSchoolProps {
   data: iSchool[];
 }
 
 export const TableSchool = ({ data }: iTableSchoolProps) => {
-  const navigate = useNavigate();
   const { onClickReset } = usePaginationContext();
   const { handleOpenActive } = useDialogContext();
   const [dataSchool, setDataSchool] = useState<iSchool>();
 
+  const onClick = (school: iSchool) => {
+    if (!school.is_active) {
+      setDataSchool(school);
+      handleOpenActive();
+    } else onClickReset();
+  };
+
   const headCells: iheadCell[] = useMemo(() => {
     return [
-      { order: "name", numeric: false, label: "Escola" },
-      { order: "classes", numeric: true, label: "Turmas" },
-      { order: "students", numeric: true, label: "Alunos" },
-      { order: "frequencies", numeric: true, label: "Frequências" },
-      { order: "servers", numeric: true, label: "Servidores" },
-      { order: "director_name", numeric: false, label: "Diretor" },
+      { order: "name", numeric: "left", label: "Escola" },
+      { order: "classes", numeric: "right", label: "Turmas" },
+      { order: "students", numeric: "right", label: "Alunos" },
+      { order: "frequencies", numeric: "right", label: "Frequências" },
+      { order: "servers", numeric: "right", label: "Servidores" },
+      { order: "director_name", numeric: "left", label: "Diretor" },
     ];
   }, []);
 
   return (
     <>
-      <TableBase headCells={headCells} message="Nenhuma escola encotrada">
+      <TableBase
+        headCells={headCells}
+        message="Nenhuma escola encotrada"
+        link="div"
+      >
         {data.map((school) => (
-          <TableRow
-            key={school.id}
-            hover
-            sx={{ cursor: "pointer" }}
-            onClick={() => {
-              if (!school.is_active) {
-                setDataSchool(school);
-                handleOpenActive();
-              } else {
-                onClickReset();
-                navigate("/school/" + school.id);
-              }
-            }}
-          >
-            <TableCell>{school.name}</TableCell>
-            <TableCell align="right">{school.classes}</TableCell>
-            <TableCell align="right">{school.students}</TableCell>
-            <TableCell align="right">{school.frequencies}</TableCell>
-            <TableCell align="right">{school.servers}</TableCell>
-            <TableCell>{school.director?.name}</TableCell>
-          </TableRow>
+          <Fragment key={school.id}>
+            <TableRow
+              hover
+              underline="none"
+              href={school.is_active ? `/school/${school.id}` : ""}
+              component={LinkComp}
+              onClick={() => onClick(school)}
+            >
+              <TableCellLink link="div">{school.name}</TableCellLink>
+              <TableCellLink link="div" numeric="right">
+                {school.classes}
+              </TableCellLink>
+              <TableCellLink link="div" numeric="right">
+                {school.students}
+              </TableCellLink>
+              <TableCellLink link="div" numeric="right">
+                {school.frequencies}
+              </TableCellLink>
+              <TableCellLink link="div" numeric="right">
+                {school.servers}
+              </TableCellLink>
+              <TableCellLink link="div">{school.director?.name}</TableCellLink>
+            </TableRow>
+          </Fragment>
         ))}
       </TableBase>
       <DialogCreateSchool />

@@ -42,7 +42,10 @@ export interface iButtonBaseProps {
 export interface iTable extends iChildren {
   headCells: iheadCell[];
   message?: string;
+  link?: "div";
 }
+
+export type iLinkComp = { component: "div" } | object;
 
 export interface iPageProps {
   back?: string;
@@ -50,6 +53,6 @@ export interface iPageProps {
 
 export interface iheadCell {
   order?: string;
-  numeric: boolean;
+  numeric: "right" | "left";
   label: string;
 }

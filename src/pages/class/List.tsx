@@ -15,11 +15,11 @@
 // import { defineBgColorInfrequency } from "../../shared/scripts";
 
 // const headCells: iheadCell[] = [
-//   { order: "name", numeric: false, label: "Turma" },
-//   { order: "school_name", numeric: false, label: "Escola" },
-//   { numeric: true, label: "Alunos" },
-//   { numeric: true, label: "Frequências" },
-//   { order: "infreq", numeric: true, label: "Infrequência" },
+//   { order: "name", numeric: 'left', label: "Turma" },
+//   { order: "school_name", numeric: 'left', label: "Escola" },
+//   { numeric: 'right', label: "Alunos" },
+//   { numeric: 'right', label: "Frequências" },
+//   { order: "infreq", numeric: 'right', label: "Infrequência" },
 // ];
 
 // interface iCardClassProps {

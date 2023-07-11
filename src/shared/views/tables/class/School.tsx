@@ -15,14 +15,14 @@ export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
   const headCells: iheadCell[] = useMemo(() => {
     if (mdDown)
       return [
-        { order: "name", numeric: false, label: "Turma" },
-        { order: "infrequency", numeric: true, label: "Infrequência" },
+        { order: "name", numeric: "left", label: "Turma" },
+        { order: "infrequency", numeric: "right", label: "Infrequência" },
       ];
     return [
-      { order: "name", numeric: false, label: "Turma" },
-      { numeric: true, label: "Alunos" },
-      { numeric: true, label: "Frequências" },
-      { order: "infrequency", numeric: true, label: "Infrequência" },
+      { order: "name", numeric: "left", label: "Turma" },
+      { numeric: "right", label: "Alunos" },
+      { numeric: "right", label: "Frequências" },
+      { order: "infrequency", numeric: "right", label: "Infrequência" },
     ];
   }, [mdDown]);
 

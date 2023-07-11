@@ -13,11 +13,11 @@ import { useSearchParams } from "react-router-dom";
 import { defineBgColorInfrequency } from "../../../shared/scripts";
 
 const headCells: iheadCell[] = [
-  { order: "date", numeric: false, label: "Data" },
-  { order: "name", numeric: false, label: "Turma" },
-  { numeric: true, label: "Alunos" },
-  { order: "school_name", numeric: false, label: "Escola" },
-  { order: "infreq", numeric: true, label: "Infrequência" },
+  { order: "date", numeric: "left", label: "Data" },
+  { order: "name", numeric: "left", label: "Turma" },
+  { numeric: "right", label: "Alunos" },
+  { order: "school_name", numeric: "left", label: "Escola" },
+  { order: "infreq", numeric: "right", label: "Infrequência" },
 ];
 
 interface iCardFrequencyProps {
