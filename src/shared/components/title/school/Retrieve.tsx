@@ -1,11 +1,10 @@
 import { Breadcrumbs, Chip, Link } from "@mui/material";
 import { Home, School } from "@mui/icons-material";
-import { useAppThemeContext, useSchoolContext } from "../../../contexts";
+import { useAppThemeContext } from "../../../contexts";
 import { LabelSchool } from "../../label";
 
 export const TitleSchoolRetrievePage = () => {
   const { mdDown } = useAppThemeContext();
-  const { schoolRetrieve } = useSchoolContext();
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
       <Link underline="none" color="inherit" href="/">
@@ -26,7 +25,7 @@ export const TitleSchoolRetrievePage = () => {
           icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </Link>
-      <LabelSchool school={schoolRetrieve} />
+      <LabelSchool />
     </Breadcrumbs>
   );
 };

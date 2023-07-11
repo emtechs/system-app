@@ -4,6 +4,7 @@ import {
   useCalendarContext,
   useClassContext,
   useDrawerContext,
+  useSchoolContext,
 } from "../../../shared/contexts";
 import {
   Box,
@@ -38,24 +39,25 @@ export const StudentFrequencyPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const { theme, setLoading } = useAppThemeContext();
-  const { yearData, schoolData } = useAuthContext();
+  const { yearData } = useAuthContext();
+  const { schoolRetrieve } = useSchoolContext();
   const { handleClickSchool, handleClickButtonTools } = useDrawerContext();
   const { monthData } = useCalendarContext();
   const { classWithSchoolSelect } = useClassContext();
   const [infoClass, setInfoClass] = useState<iDashClass>();
 
   useEffect(() => {
-    if (yearData && schoolData && classWithSchoolSelect && monthData) {
+    if (yearData && schoolRetrieve && classWithSchoolSelect && monthData) {
       const query = `?month=${monthData}`;
       setLoading(true);
       apiUsingNow
         .get<iDashClass>(
-          `classes/${classWithSchoolSelect.class.id}/${schoolData.id}/${yearData.id}/dash${query}`
+          `classes/${classWithSchoolSelect.class.id}/${schoolRetrieve.id}/${yearData.id}/dash${query}`
         )
         .then((res) => setInfoClass(res.data))
         .finally(() => setLoading(false));
     }
-  }, [classWithSchoolSelect, schoolData, monthData, yearData]);
+  }, [classWithSchoolSelect, schoolRetrieve, monthData, yearData]);
 
   if (!id) {
     return <Navigate to="/" />;
@@ -75,7 +77,7 @@ export const StudentFrequencyPage = () => {
               clickable
               color="primary"
               variant="outlined"
-              label={schoolData?.name}
+              label={schoolRetrieve?.name}
               icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
             />
           </Link>

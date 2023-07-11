@@ -18,31 +18,22 @@ import {
   ViewSchool,
   ViewUserData,
 } from "../../shared/views";
+import { useValueTabs } from "../../shared/hooks";
 
 export const RetrieveUserPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { user_id } = useParams();
   const viewData = searchParams.get("view") || "";
+  const school_id = searchParams.get("school_id") || undefined;
   const { yearData } = useAuthContext();
-  const { userDataRetrieve, userRetrieve, search, listYear } = useUserContext();
+  const { userDataRetrieve, userRetrieve } = useUserContext();
   const { schoolDataRetrieve } = useSchoolContext();
   const [view, setView] = useState(<ViewUserData />);
   const [tools, setTools] = useState(<ToolsUser back="/user" />);
-
-  const school_id = useMemo(() => {
-    const id = searchParams.get("school_id");
-    if (id && id.length > 0) return id;
-  }, [searchParams]);
+  const { valueTabs } = useValueTabs(yearData?.id, undefined, school_id);
 
   const handleChange = (_event: SyntheticEvent, newValue: string) => {
-    setSearchParams(
-      {
-        view: newValue,
-        school_id: school_id ? school_id : "",
-        year_id: yearData ? yearData.id : "",
-      },
-      { replace: true }
-    );
+    setSearchParams(valueTabs(newValue, "view"), { replace: true });
   };
 
   const back = useMemo(() => {
@@ -65,13 +56,7 @@ export const RetrieveUserPage = () => {
   useEffect(() => {
     switch (viewData) {
       case "school":
-        setView(
-          <ViewSchool
-            search={search}
-            server_id={user_id}
-            school_id={school_id}
-          />
-        );
+        setView(<ViewSchool server_id={user_id} school_id={school_id} />);
         setTools(<ToolsUser back={back} isNew titleNew="Nova" isSearch />);
         break;
 
@@ -79,9 +64,7 @@ export const RetrieveUserPage = () => {
         setView(
           <ViewFrequency
             user_id={user_id}
-            listYear={listYear}
             school_id={school_id ? school_id : undefined}
-            search={search}
             table_def={school_id ? "school" : "user"}
           />
         );
@@ -97,7 +80,7 @@ export const RetrieveUserPage = () => {
         setView(<ViewUserData />);
         setTools(<ToolsUser back={back} />);
     }
-  }, [viewData, search, school_id, user_id, back, listYear]);
+  }, [viewData, school_id, user_id, back]);
 
   return (
     <LayoutBasePage title={title} tools={tools}>

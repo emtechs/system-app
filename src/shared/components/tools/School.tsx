@@ -65,16 +65,16 @@ export const ToolsSchool = ({
 }: iToolsSchoolProps) => {
   const { theme, mdDown } = useAppThemeContext();
   const { handleOpenCreate } = useDialogContext();
+  const { schoolRetrieve } = useSchoolContext();
   const {
-    schoolRetrieve,
+    is_active,
     director,
     setDirector,
     is_director,
     onClickReset,
     search,
     setSearch,
-  } = useSchoolContext();
-  const { is_active } = usePaginationContext();
+  } = usePaginationContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {

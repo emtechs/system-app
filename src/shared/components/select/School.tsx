@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useAuthContext, usePaginationContext } from "../../contexts";
+import { usePaginationContext, useSchoolContext } from "../../contexts";
 import { BaseSchool, ListBase, Loading } from "./structure";
 import { iSchool, iWorkSchool } from "../../interfaces";
 import { apiUser } from "../../services";
 
 export const SelectSchool = () => {
-  const { schoolData, setSchoolData } = useAuthContext();
+  const { schoolRetrieve, setSchoolRetrieve } = useSchoolContext();
   const { query } = usePaginationContext();
   const [listSchoolSelect, setListSchoolSelect] = useState<iSchool[]>();
   const [listData, setListData] = useState<iWorkSchool[]>();
@@ -27,10 +27,10 @@ export const SelectSchool = () => {
     if (listSchoolSelect?.length === 0) {
       return false;
     }
-    return schoolData ? false : true;
-  }, [listSchoolSelect, schoolData]);
+    return schoolRetrieve ? false : true;
+  }, [listSchoolSelect, schoolRetrieve]);
 
-  const handleOpenDialog = useCallback(() => setSchoolData(undefined), []);
+  const handleOpenDialog = useCallback(() => setSchoolRetrieve(undefined), []);
 
   return (
     <BaseSchool
@@ -47,7 +47,7 @@ export const SelectSchool = () => {
             key={el.school.id}
             name={el.school.name}
             onClick={() => {
-              setSchoolData(el.school);
+              setSchoolRetrieve(el.school);
             }}
           />
         ))

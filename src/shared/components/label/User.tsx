@@ -1,17 +1,12 @@
 import { Chip, Skeleton } from "@mui/material";
 import { useAppThemeContext, useUserContext } from "../../contexts";
-import { iUser } from "../../interfaces";
+import { iLabelBaseProps } from "../../interfaces";
 import { Person } from "@mui/icons-material";
 import { adaptName } from "../../scripts";
 
-interface iLabelUserProps {
-  user?: iUser;
-  clickable?: boolean;
-}
-
-export const LabelUser = ({ user, clickable }: iLabelUserProps) => {
+export const LabelUser = ({ clickable }: iLabelBaseProps) => {
   const { mdDown } = useAppThemeContext();
-  const { loadingUser } = useUserContext();
+  const { loadingUser, userRetrieve } = useUserContext();
 
   return (
     <Chip
@@ -22,9 +17,9 @@ export const LabelUser = ({ user, clickable }: iLabelUserProps) => {
         loadingUser ? (
           <Skeleton width={100} />
         ) : mdDown ? (
-          adaptName(user?.name)
+          adaptName(userRetrieve?.name)
         ) : (
-          user?.name
+          userRetrieve?.name
         )
       }
       icon={<Person sx={{ mr: 0.5 }} fontSize="inherit" />}

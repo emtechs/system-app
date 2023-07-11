@@ -1,24 +1,32 @@
 import sortArray from "sort-array";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useDebounce } from "../hooks";
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { useDebounce, useValueTabs } from "../hooks";
 import { usePaginationContext } from "../contexts";
-import { iSchool, iViewBaseProps } from "../interfaces";
+import { iSchool } from "../interfaces";
 import { apiSchool } from "../services";
-import { PaginationTable } from "../components";
-import { TableSchool, TableSchoolUser } from "./tables";
+import { PaginationTable, TabsYear } from "../components";
+import { TableSchool, TableSchoolClass, TableSchoolUser } from "./tables";
+import { Box } from "@mui/material";
+import { useSearchParams } from "react-router-dom";
 
-interface iViewSchoolProps extends iViewBaseProps {
-  is_director?: "" | "&is_director=true" | "&is_director=false";
+interface iViewSchoolProps {
   server_id?: string;
   school_id?: string;
+  class_id?: string;
 }
 
 export const ViewSchool = ({
-  is_director,
-  search,
   server_id,
   school_id,
+  class_id,
 }: iViewSchoolProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
   const {
     query,
@@ -30,8 +38,19 @@ export const ViewSchool = ({
     by,
     setFace,
     query_page,
+    search,
+    is_director,
   } = usePaginationContext();
+  const { valueTabs } = useValueTabs();
   const [listData, setListData] = useState<iSchool[]>();
+
+  const year_id = useMemo(() => {
+    if (class_id) return searchParams.get("year_id") || undefined;
+  }, [class_id, searchParams]);
+
+  const handleChange = (_event: SyntheticEvent, newValue: string) => {
+    setSearchParams(valueTabs(newValue, "year"), { replace: true });
+  };
 
   const getSchools = useCallback((query_schools: string, isPage?: boolean) => {
     setIsLoading(true);
@@ -55,12 +74,16 @@ export const ViewSchool = ({
   const define_query = useCallback(
     (comp: string) => {
       let query_data =
-        query(undefined, school_id) + comp + "&order=name" + query_page();
-      if (is_director) query_data += is_director;
+        query(year_id, school_id, class_id) +
+        comp +
+        "&order=name" +
+        query_page() +
+        is_director;
+
       if (server_id) query_data += `&server_id=${server_id}`;
       return query_data;
     },
-    [is_director, query, query_page, school_id, server_id]
+    [class_id, is_director, query, query_page, school_id, server_id, year_id]
   );
 
   const onClick = () => getSchools(define_query(handleFace(face)), true);
@@ -90,19 +113,24 @@ export const ViewSchool = ({
 
       if (server_id) return <TableSchoolUser data={listSchool} />;
 
+      if (class_id) return <TableSchoolClass data={listSchool} />;
+
       return <TableSchool data={listSchool} />;
     }
 
     return <></>;
-  }, [by, listData, order, server_id]);
+  }, [by, class_id, listData, order, server_id]);
 
   return (
-    <>
-      {table}
-      <PaginationTable
-        total={listData ? listData.length : 0}
-        onClick={onClick}
-      />
-    </>
+    <Box display="flex" justifyContent="space-between">
+      {class_id && <TabsYear value={year_id} handleChange={handleChange} />}
+      <Box flex={1}>
+        {table}
+        <PaginationTable
+          total={listData ? listData.length : 0}
+          onClick={onClick}
+        />
+      </Box>
+    </Box>
   );
 };

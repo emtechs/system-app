@@ -38,6 +38,12 @@ interface iPaginationContextData {
   face: number;
   setFace: Dispatch<SetStateAction<number>>;
   query_page: (take_data?: number, isSkip?: boolean) => string;
+  search: string | undefined;
+  setSearch: Dispatch<SetStateAction<string | undefined>>;
+  is_director: "" | "&is_director=true" | "&is_director=false";
+  onClickReset: () => void;
+  director: boolean[];
+  setDirector: Dispatch<SetStateAction<boolean[]>>;
 }
 
 const PaginationContext = createContext({} as iPaginationContextData);
@@ -53,6 +59,14 @@ export const PaginationProvider = ({ children }: iChildren) => {
   const [by, setBy] = useState<"asc" | "desc">("asc");
   const [isLoading, setIsLoading] = useState(true);
   const [active, setActive] = useState(true);
+  const [search, setSearch] = useState<string>();
+  const [director, setDirector] = useState([true, true]);
+
+  const onClickReset = useCallback(() => {
+    setDirector([true, true]);
+    setActive(true);
+    setSearch(undefined);
+  }, []);
 
   const define_take = useCallback(
     (take_data?: number) => {
@@ -74,6 +88,14 @@ export const PaginationProvider = ({ children }: iChildren) => {
     const arredSteps = Math.ceil(count / take);
     return arredSteps === 1 ? 0 : arredSteps;
   }, [count, take]);
+
+  const is_director = useMemo(() => {
+    if (director[0] !== director[1]) {
+      if (director[0]) return "&is_director=true";
+      if (director[1]) return "&is_director=false";
+    }
+    return "";
+  }, [director]);
 
   const define_is_active = useCallback(
     (is_default?: boolean) => {
@@ -169,6 +191,12 @@ export const PaginationProvider = ({ children }: iChildren) => {
         handleFace,
         setFace,
         query_page: define_query_page,
+        search,
+        setSearch,
+        is_director,
+        onClickReset,
+        director,
+        setDirector,
       }}
     >
       {children}

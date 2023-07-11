@@ -8,6 +8,7 @@ export const TabsUserRetrievePage = ({
   handleChange,
 }: iTabsBaseProps) => {
   const { userRetrieve } = useUserContext();
+
   return (
     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
       <Tabs

@@ -5,7 +5,6 @@ import {
   useAppThemeContext,
   useDialogContext,
   usePaginationContext,
-  useUserContext,
 } from "../../contexts";
 import { ActiveButton, CompBase, HomeButton, UserTools } from "./components";
 import { ButtonDest } from "../button";
@@ -39,8 +38,7 @@ export const ToolsUser = ({
 }: iToolsUserProps) => {
   const { theme } = useAppThemeContext();
   const { handleOpenCreate } = useDialogContext();
-  const { search, setSearch, onClickReset } = useUserContext();
-  const { is_active } = usePaginationContext();
+  const { is_active, search, setSearch, onClickReset } = usePaginationContext();
 
   const disabled = useMemo(() => {
     if (search || is_active() === "&is_active=false") return false;

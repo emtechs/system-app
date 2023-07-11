@@ -38,6 +38,12 @@ export const ViewSchoolData = () => {
               )}
             </AccordionSummary>
             <AccordionDetails>
+              <Typography>Servidores: {schoolRetrieve?.servers}</Typography>
+              <Typography>Turmas: {schoolRetrieve?.classes}</Typography>
+              <Typography>Alunos: {schoolRetrieve?.students}</Typography>
+              <Typography>
+                Frequências: {schoolRetrieve?.frequencies}
+              </Typography>
               <Typography>
                 Diretor(a): {schoolRetrieve?.director?.name}
               </Typography>

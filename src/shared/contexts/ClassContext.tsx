@@ -15,7 +15,6 @@ import {
   iClassWithSchool,
   iSchoolImportRequest,
   iSelectBase,
-  iYear,
 } from "../interfaces";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
@@ -47,10 +46,6 @@ interface iClassContextData {
   classDataRetrieve: (id: string) => void;
   classRetrieve: iClass | undefined;
   loadingClass: boolean;
-  listYear: iYear[] | undefined;
-  periods: iSelectBase[] | undefined;
-  search: string | undefined;
-  setSearch: Dispatch<SetStateAction<string | undefined>>;
 }
 
 const ClassContext = createContext({} as iClassContextData);
@@ -58,7 +53,7 @@ const ClassContext = createContext({} as iClassContextData);
 export const ClassProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { yearData } = useAuthContext();
+  const { yearData, setPeriods, setListYear } = useAuthContext();
   const [classDataSelect, setClassDataSelect] = useState<iClassSelect[]>();
   const [listClassData, setListClassData] = useState<iClass[]>();
   const [classSelect, setClassSelect] = useState<iClass>();
@@ -66,9 +61,6 @@ export const ClassProvider = ({ children }: iChildren) => {
     useState<iClassWithSchool>();
   const [classRetrieve, setClassRetrieve] = useState<iClass>();
   const [loadingClass, setLoadingClass] = useState(false);
-  const [listYear, setListYear] = useState<iYear[]>();
-  const [periods, setPeriods] = useState<iSelectBase[]>();
-  const [search, setSearch] = useState<string>();
 
   const classDataRetrieve = useCallback(
     (id: string) => {
@@ -183,11 +175,7 @@ export const ClassProvider = ({ children }: iChildren) => {
         setClassWithSchoolSelect,
         classDataRetrieve,
         classRetrieve,
-        listYear,
         loadingClass,
-        periods,
-        search,
-        setSearch,
       }}
     >
       {children}

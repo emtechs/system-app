@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePaginationContext } from "../contexts";
 import { useDebounce } from "../hooks";
-import { iUser, iViewBaseProps } from "../interfaces";
+import { iUser } from "../interfaces";
 import { apiUser } from "../services";
 import { TableUser, TableUserSchool } from "./tables";
 import { PaginationTable } from "../components";
 import sortArray from "sort-array";
 
-interface iViewUserProps extends iViewBaseProps {
+interface iViewUserProps {
   school_id?: string;
   role?: string;
 }
 
-export const ViewUser = ({ search, school_id, role }: iViewUserProps) => {
+export const ViewUser = ({ school_id, role }: iViewUserProps) => {
   const { debounce } = useDebounce();
   const {
     setIsLoading,
@@ -23,6 +23,7 @@ export const ViewUser = ({ search, school_id, role }: iViewUserProps) => {
     face,
     order,
     by,
+    search,
     query_page,
   } = usePaginationContext();
   const [data, setData] = useState<iUser[]>();

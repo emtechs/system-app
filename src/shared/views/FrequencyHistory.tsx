@@ -1,20 +1,25 @@
 import { useSearchParams } from "react-router-dom";
-import { useDebounce } from "../hooks";
+import { useDebounce, useValueTabs } from "../hooks";
 import { usePaginationContext, useUserContext } from "../contexts";
-import { useCallback, useEffect, useState } from "react";
+import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { iFrequencyHistory, iheadCell } from "../interfaces";
 import { apiFrequency } from "../services";
-import { Box, Tab, TableCell, TableRow, Tabs } from "@mui/material";
-import { TableBase } from "../components";
+import { Box, TableCell, TableRow } from "@mui/material";
+import { TableBase, TabsYear } from "../components";
 import { statusFrequencyPtBr } from "../scripts";
 
 export const ViewFrequencyHistory = () => {
-  const [searchParams] = useSearchParams();
-  const year_id = searchParams.get("year_id");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const year_id = searchParams.get("year_id") || undefined;
   const { debounce } = useDebounce();
-  const { search, userRetrieve, listYear } = useUserContext();
-  const { setCount, setIsLoading, query } = usePaginationContext();
+  const { userRetrieve } = useUserContext();
+  const { setCount, setIsLoading, query, search } = usePaginationContext();
+  const { valueTabs } = useValueTabs();
   const [data, setData] = useState<iFrequencyHistory[]>();
+
+  const handleChange = (_event: SyntheticEvent, newValue: string) => {
+    setSearchParams(valueTabs(newValue, "year"), { replace: true });
+  };
 
   const getFrequencies = useCallback(
     (query: string) => {
@@ -53,23 +58,7 @@ export const ViewFrequencyHistory = () => {
 
   return (
     <Box display="flex" justifyContent="space-between">
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={year_id}
-        sx={{ borderRight: 1, borderColor: "divider" }}
-      >
-        {listYear?.map((el) => (
-          <Tab
-            key={el.id}
-            label={el.year}
-            href={
-              "/user/" + userRetrieve?.id + "?view=history&year_id=" + el.id
-            }
-            value={el.id}
-          />
-        ))}
-      </Tabs>
+      <TabsYear value={year_id} handleChange={handleChange} />
       <Box flex={1}>
         <TableBase headCells={headCells}>
           {data?.map((el) => (

@@ -31,9 +31,6 @@ export interface iSchool {
   is_dash: boolean;
   director?: iDiretor;
   server: iServer;
-}
-
-export interface iSchoolClass extends iSchool {
   classes: number;
   students: number;
   frequencies: number;
@@ -45,12 +42,6 @@ export interface iWorkSchool {
   dash: iDash;
   role: iRole;
   school: iSchool;
-}
-
-export interface iWorkSchoolClass {
-  dash: iDash;
-  role: iRole;
-  school: iSchoolClass;
 }
 
 export interface iSchoolServer {

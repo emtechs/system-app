@@ -14,8 +14,7 @@ import {
   iLoginRequest,
   iRecoveryPasswordRequest,
   iRecoveryRequest,
-  iSchool,
-  iSchoolClass,
+  iSelectBase,
   iUser,
   iYear,
 } from "../interfaces";
@@ -43,10 +42,10 @@ interface iAuthContextData {
   dashData: iDash | undefined;
   setDashData: Dispatch<SetStateAction<iDash | undefined>>;
   yearData: iYear | undefined;
-  schoolData: iSchool | undefined;
-  setSchoolData: Dispatch<SetStateAction<iSchool | undefined>>;
-  schoolDataAdmin: iSchoolClass | undefined;
-  setSchoolDataAdmin: Dispatch<SetStateAction<iSchoolClass | undefined>>;
+  listYear: iYear[] | undefined;
+  setListYear: Dispatch<SetStateAction<iYear[] | undefined>>;
+  periods: iSelectBase[] | undefined;
+  setPeriods: Dispatch<SetStateAction<iSelectBase[] | undefined>>;
 }
 
 const AuthContext = createContext({} as iAuthContextData);
@@ -58,8 +57,8 @@ export const AuthProvider = ({ children }: iChildren) => {
   const [userData, setUserData] = useState<iUser>();
   const [dashData, setDashData] = useState<iDash>();
   const [yearData, setYearData] = useState<iYear>();
-  const [schoolData, setSchoolData] = useState<iSchool>();
-  const [schoolDataAdmin, setSchoolDataAdmin] = useState<iSchoolClass>();
+  const [listYear, setListYear] = useState<iYear[]>();
+  const [periods, setPeriods] = useState<iSelectBase[]>();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("@EMTechs:token");
@@ -165,8 +164,6 @@ export const AuthProvider = ({ children }: iChildren) => {
   const handleLogout = useCallback(() => {
     localStorage.removeItem("@EMTechs:token");
     setAccessToken(undefined);
-    setSchoolData(undefined);
-    setSchoolDataAdmin(undefined);
     setUserData(undefined);
     setDashData(undefined);
     navigate("/");
@@ -189,10 +186,10 @@ export const AuthProvider = ({ children }: iChildren) => {
         setUserData,
         userData,
         yearData,
-        schoolData,
-        setSchoolData,
-        schoolDataAdmin,
-        setSchoolDataAdmin,
+        listYear,
+        periods,
+        setListYear,
+        setPeriods,
       }}
     >
       {children}

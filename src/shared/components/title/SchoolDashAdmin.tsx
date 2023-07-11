@@ -1,14 +1,9 @@
 import { Breadcrumbs, Chip, Link } from "@mui/material";
-import {
-  useAppThemeContext,
-  useAuthContext,
-  useDrawerContext,
-} from "../../contexts";
+import { useAppThemeContext, useDrawerContext } from "../../contexts";
 import { Home } from "@mui/icons-material";
 import { LabelSchool } from "../label";
 
 export const TitleSchoolDashAdmin = () => {
-  const { schoolDataAdmin } = useAuthContext();
   const { handleClickButtonTools } = useDrawerContext();
 
   return (
@@ -27,7 +22,7 @@ export const TitleSchoolDashAdmin = () => {
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </Link>
-      <LabelSchool school={schoolDataAdmin} />
+      <LabelSchool />
     </Breadcrumbs>
   );
 };
@@ -40,7 +35,6 @@ export const TitleSchoolDashAdminPages = ({
   breadcrumbs,
 }: iTitleSchoolDashAdminPagesProps) => {
   const { mdDown } = useAppThemeContext();
-  const { schoolDataAdmin } = useAuthContext();
   const { handleClickButtonTools } = useDrawerContext();
 
   return (
@@ -60,7 +54,7 @@ export const TitleSchoolDashAdminPages = ({
         />
       </Link>
       <Link underline="none" color="inherit" href="/school">
-        <LabelSchool clickable school={schoolDataAdmin} />
+        <LabelSchool clickable />
       </Link>
       {breadcrumbs}
     </Breadcrumbs>

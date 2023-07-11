@@ -16,7 +16,7 @@ import {
 } from "../../../shared/contexts";
 import { useDebounce } from "../../../shared/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { iWorkSchoolClass } from "../../../shared/interfaces";
+import { iWorkSchool } from "../../../shared/interfaces";
 import { apiUser } from "../../../shared/services";
 import { School as SchoolIcon } from "@mui/icons-material";
 import { DialogSchool } from "./DialogSchool";
@@ -34,7 +34,7 @@ export const School = ({ isHome }: iSchoolProps) => {
   const { query, setCount, query_page } = usePaginationContext();
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const [schoolsData, setSchoolsData] = useState<iWorkSchoolClass[]>();
+  const [schoolsData, setSchoolsData] = useState<iWorkSchool[]>();
   const [open, setOpen] = useState(false);
 
   const onClose = () => setOpen(!open);
@@ -42,7 +42,7 @@ export const School = ({ isHome }: iSchoolProps) => {
   const getSchools = useCallback((query: string) => {
     setLoading(true);
     apiUser
-      .schoolsClass(query)
+      .schools(query)
       .then((res) => {
         setSchoolsData(res.result);
         setCount(res.total);

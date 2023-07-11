@@ -12,11 +12,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
-import {
-  PaginationList,
-  ValidateSchool,
-  ValidateSchoolAdmin,
-} from "../../../shared/components";
+import { PaginationList, ValidateSchool } from "../../../shared/components";
 import {
   useAppThemeContext,
   useAuthContext,
@@ -80,7 +76,7 @@ export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
                 }
                 textFieldProps={{ fullWidth: true }}
               />
-              {isHome ? <ValidateSchoolAdmin /> : <ValidateSchool />}
+              <ValidateSchool />
             </FormContainer>
           </Box>
         </ListItem>

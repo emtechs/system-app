@@ -3,7 +3,6 @@ import {
   ClassPage,
   CreateFrequencyPage,
   CreateStudentAdmPage,
-  DashboardSchoolAdminPage,
   DashboardSchoolPage,
   EditPasswordPage,
   EditProfilePage,
@@ -54,10 +53,6 @@ const AppRoutes = () => {
           <Route path="/school" element={<SchoolPage />} />
           <Route path="/school/:school_id" element={<RetrieveSchoolPage />} />
           <Route path="/home/school" element={<HomePage isHome />} />
-          <Route
-            path="/home/school/:school_id"
-            element={<DashboardSchoolAdminPage />}
-          />
         </Route>
         <Route path="/" element={<HomePage />} />
         <Route path="/:school_id" element={<DashboardSchoolPage />} />

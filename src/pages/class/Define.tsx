@@ -3,19 +3,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Grid, Paper } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 import { SelectClass, Tools } from "../../shared/components";
-import { useAuthContext, useClassContext } from "../../shared/contexts";
+import {
+  useAuthContext,
+  useClassContext,
+  useSchoolContext,
+} from "../../shared/contexts";
 import { classSchoolCreateSchema } from "../../shared/schemas";
 import { LayoutBasePage } from "../../shared/layouts";
 
 export const DefineSchoolsPage = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const { yearData, schoolData } = useAuthContext();
+  const { yearData } = useAuthContext();
+  const { schoolRetrieve } = useSchoolContext();
   const { createClassSchool } = useClassContext();
   let school_id = "";
   if (id) {
     school_id = id;
-  } else if (schoolData) school_id = schoolData.id;
+  } else if (schoolRetrieve) school_id = schoolRetrieve.id;
   const back = id ? `/school/class?id=${id}&order=name` : undefined;
 
   return (

@@ -1,13 +1,11 @@
 import {
   iChildren,
   iSchool,
-  iSchoolClass,
   iSchoolClassRequest,
   iSchoolImportRequest,
   iSchoolServerRequest,
   iSelectBase,
   iWorkSchool,
-  iYear,
 } from "../interfaces";
 import { FieldValues } from "react-hook-form";
 import {
@@ -16,22 +14,17 @@ import {
   createContext,
   useCallback,
   useContext,
-  useMemo,
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { apiSchool } from "../services";
 import { useAuthContext } from "./AuthContext";
-import { usePaginationContext } from "./PaginationContext";
 import sortArray from "sort-array";
 
 interface iSchoolContextData {
   updateServerData: iWorkSchool | undefined;
   setUpdateServerData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
-  director: boolean[];
-  setDirector: Dispatch<SetStateAction<boolean[]>>;
-  is_director: "" | "&is_director=true" | "&is_director=false";
   schoolDataRetrieve: (id: string) => void;
   importSchool: (data: iSchoolImportRequest, back?: string) => Promise<void>;
   createSchoolClass: (
@@ -50,17 +43,9 @@ interface iSchoolContextData {
     query?: string,
     back?: string
   ) => Promise<void>;
-  clickRetrieveSchool: (school_id: string, server_id: string) => void;
   loadingSchool: boolean;
-  listYear: iYear[] | undefined;
-  onClickReset: () => void;
-  search: string | undefined;
-  setSearch: Dispatch<SetStateAction<string | undefined>>;
   schoolRetrieve: iSchool | undefined;
   setSchoolRetrieve: Dispatch<SetStateAction<iSchool | undefined>>;
-  schoolAdminRetrieve: iSchoolClass | undefined;
-  setSchoolAdminRetrieve: Dispatch<SetStateAction<iSchoolClass | undefined>>;
-  periods: iSelectBase[] | undefined;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -68,38 +53,10 @@ const SchoolContext = createContext({} as iSchoolContextData);
 export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { yearData } = useAuthContext();
-  const { setActive } = usePaginationContext();
+  const { yearData, setPeriods, setListYear } = useAuthContext();
   const [schoolRetrieve, setSchoolRetrieve] = useState<iSchool>();
-  const [schoolAdminRetrieve, setSchoolAdminRetrieve] =
-    useState<iSchoolClass>();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
-  const [director, setDirector] = useState([true, true]);
   const [loadingSchool, setLoadingSchool] = useState(false);
-  const [listYear, setListYear] = useState<iYear[]>();
-  const [periods, setPeriods] = useState<iSelectBase[]>();
-  const [search, setSearch] = useState<string>();
-
-  const onClickReset = useCallback(() => {
-    setDirector([true, true]);
-    setActive(true);
-    setSearch(undefined);
-  }, []);
-
-  const clickRetrieveSchool = useCallback(
-    (school_id: string, server_id: string) => {
-      navigate("/school/" + school_id + "/server/" + server_id);
-    },
-    []
-  );
-
-  const is_director = useMemo(() => {
-    if (director[0] !== director[1]) {
-      if (director[0]) return "&is_director=true";
-      if (director[1]) return "&is_director=false";
-    }
-    return "";
-  }, [director]);
 
   const schoolDataRetrieve = useCallback(
     (id: string) => {
@@ -110,7 +67,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
           .retrieve(id, `?year_id=${yearData.id}`)
           .then((res) => {
             setSchoolRetrieve(res.school);
-            setSchoolAdminRetrieve(res.schoolClass);
             setPeriods(
               sortArray<iSelectBase>(res.periods, { by: "label", order: "asc" })
             );
@@ -210,27 +166,16 @@ export const SchoolProvider = ({ children }: iChildren) => {
   return (
     <SchoolContext.Provider
       value={{
-        director,
-        is_director,
         schoolDataRetrieve,
-        setDirector,
         setUpdateServerData,
         updateServerData,
         updateSchool: handleUpdateSchool,
         importSchool: handleImportSchool,
-        clickRetrieveSchool,
         loadingSchool,
         createSchoolServer: handleCreateSchoolServer,
-        listYear,
         createSchoolClass: handleCreateSchoolClass,
-        onClickReset,
-        search,
-        setSearch,
         schoolRetrieve,
         setSchoolRetrieve,
-        schoolAdminRetrieve,
-        setSchoolAdminRetrieve,
-        periods,
       }}
     >
       {children}

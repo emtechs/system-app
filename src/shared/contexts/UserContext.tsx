@@ -13,14 +13,12 @@ import {
   iUserPasswordRequest,
   iUserSecretRequest,
   iUserUpdateRequest,
-  iYear,
 } from "../interfaces";
 import { useNavigate } from "react-router-dom";
 import { FieldValues } from "react-hook-form";
 import { apiUser } from "../services";
 import { useAppThemeContext } from "./ThemeContext";
 import { useAuthContext } from "./AuthContext";
-import { usePaginationContext } from "./PaginationContext";
 
 interface iUserContextData {
   createSecret: (data: iUserSecretRequest, back?: string) => Promise<void>;
@@ -37,12 +35,9 @@ interface iUserContextData {
   setUpdateUserData: Dispatch<SetStateAction<iUser | undefined>>;
   userDataRetrieve: (id: string) => void;
   loadingUser: boolean;
-  search: string | undefined;
-  setSearch: Dispatch<SetStateAction<string | undefined>>;
+
   userRetrieve: iUser | undefined;
   setUserRetrieve: Dispatch<SetStateAction<iUser | undefined>>;
-  listYear: iYear[] | undefined;
-  onClickReset: () => void;
 }
 
 const UserContext = createContext({} as iUserContextData);
@@ -50,18 +45,10 @@ const UserContext = createContext({} as iUserContextData);
 export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { setDashData, setUserData } = useAuthContext();
-  const { setActive } = usePaginationContext();
+  const { setDashData, setUserData,setListYear } = useAuthContext();
   const [updateUserData, setUpdateUserData] = useState<iUser>();
   const [loadingUser, setLoadingUser] = useState(true);
-  const [search, setSearch] = useState<string>();
   const [userRetrieve, setUserRetrieve] = useState<iUser>();
-  const [listYear, setListYear] = useState<iYear[]>();
-
-  const onClickReset = useCallback(() => {
-    setActive(true);
-    setSearch(undefined);
-  }, []);
 
   const userDataRetrieve = useCallback((id: string) => {
     setLoadingUser(true);
@@ -175,12 +162,8 @@ export const UserProvider = ({ children }: iChildren) => {
         setUpdateUserData,
         userRetrieve,
         loadingUser,
-        search,
-        setSearch,
         setUserRetrieve,
         userDataRetrieve,
-        listYear,
-        onClickReset,
       }}
     >
       {children}

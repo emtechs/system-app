@@ -1,73 +1,73 @@
-import { AutocompleteElement, useFormContext } from "react-hook-form-mui";
-import {
-  useAppThemeContext,
-  useAuthContext,
-  useClassContext,
-} from "../../contexts";
-import { useEffect, useState } from "react";
-import { apiUsingNow } from "../../services";
-import { iClassWithSchool } from "../../interfaces";
+// import { AutocompleteElement, useFormContext } from "react-hook-form-mui";
+// import {
+//   useAppThemeContext,
+//   useAuthContext,
+//   useClassContext,
+// } from "../../contexts";
+// import { useEffect, useState } from "react";
+// import { apiUsingNow } from "../../services";
+// import { iClassWithSchool } from "../../interfaces";
 
-const ValidateClass = () => {
-  const { watch } = useFormContext();
-  const { setClassWithSchoolSelect } = useClassContext();
-  const classData: iClassWithSchool = watch("class");
+// const ValidateClass = () => {
+//   const { watch } = useFormContext();
+//   const { setClassWithSchoolSelect } = useClassContext();
+//   const classData: iClassWithSchool = watch("class");
 
-  useEffect(() => {
-    setClassWithSchoolSelect(classData);
-  }, [classData]);
+//   useEffect(() => {
+//     setClassWithSchoolSelect(classData);
+//   }, [classData]);
 
-  return <></>;
-};
+//   return <></>;
+// };
 
-interface iSelect extends iClassWithSchool {
-  id: string;
-  label: string;
-}
+// interface iSelect extends iClassWithSchool {
+//   id: string;
+//   label: string;
+// }
 
-export const SelectClassSelectData = () => {
-  const { setLoading } = useAppThemeContext();
-  const { yearData, schoolData } = useAuthContext();
-  const [data, setData] = useState<iSelect[]>();
+// export const SelectClassSelectData = () => {
+//   const { setLoading } = useAppThemeContext();
+//   const { yearData, schoolData } = useAuthContext();
+//   const [data, setData] = useState<iSelect[]>();
 
-  useEffect(() => {
-    setLoading(true);
-    apiUsingNow
-      .get<{ result: iClassWithSchool[] }>(
-        `classes/school/${schoolData?.id}?is_active=true&year_id=${yearData?.id}`
-      )
-      .then((res) => {
-        if (res.data) {
-          setData(
-            res.data.result.map((el) => {
-              return { ...el, id: el.class.id, label: el.class.name };
-            })
-          );
-        }
-      })
-      .finally(() => setLoading(false));
-  }, [schoolData]);
+//   useEffect(() => {
+//     setLoading(true);
+//     apiUsingNow
+//       .get<{ result: iClassWithSchool[] }>(
+//         `classes/school/${schoolData?.id}?is_active=true&year_id=${yearData?.id}`
+//       )
+//       .then((res) => {
+//         if (res.data) {
+//           setData(
+//             res.data.result.map((el) => {
+//               return { ...el, id: el.class.id, label: el.class.name };
+//             })
+//           );
+//         }
+//       })
+//       .finally(() => setLoading(false));
+//   }, [schoolData]);
 
-  return (
-    <>
-      <div style={{ width: "100%" }}>
-        <AutocompleteElement
-          name="class"
-          label="Turma"
-          loading={!data}
-          options={
-            data && data.length > 0
-              ? data
-              : [
-                  {
-                    id: 1,
-                    label: "No momento, não há nenhuma turma cadastrada",
-                  },
-                ]
-          }
-        />
-      </div>
-      <ValidateClass />
-    </>
-  );
-};
+//   return (
+//     <>
+//       <div style={{ width: "100%" }}>
+//         <AutocompleteElement
+//           name="class"
+//           label="Turma"
+//           loading={!data}
+//           options={
+//             data && data.length > 0
+//               ? data
+//               : [
+//                   {
+//                     id: 1,
+//                     label: "No momento, não há nenhuma turma cadastrada",
+//                   },
+//                 ]
+//           }
+//         />
+//       </div>
+//       <ValidateClass />
+//     </>
+//   );
+// };

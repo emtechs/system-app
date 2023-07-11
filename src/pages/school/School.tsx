@@ -1,10 +1,8 @@
 import { TitleSchoolPage, ToolsSchool } from "../../shared/components";
 import { LayoutBasePage } from "../../shared/layouts";
 import { ViewSchool } from "../../shared/views";
-import { useSchoolContext } from "../../shared/contexts";
 
 export const SchoolPage = () => {
-  const { is_director, search } = useSchoolContext();
   return (
     <LayoutBasePage
       title={<TitleSchoolPage />}
@@ -20,7 +18,7 @@ export const SchoolPage = () => {
         />
       }
     >
-      <ViewSchool is_director={is_director} search={search} />
+      <ViewSchool />
     </LayoutBasePage>
   );
 };

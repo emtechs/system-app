@@ -2,17 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Chip, TableCell, TableRow } from "@mui/material";
 import { TableBase, TitleAdminDashPages, Tools } from "../../shared/components";
-import {
-  useAppThemeContext,
-  useAuthContext,
-  usePaginationContext,
-} from "../../shared/contexts";
-import { iSchoolClass, iheadCell } from "../../shared/interfaces";
+import { useAuthContext, usePaginationContext } from "../../shared/contexts";
+import { iSchool, iheadCell } from "../../shared/interfaces";
 import { apiSchool } from "../../shared/services";
-import { useDebounce } from "../../shared/hooks";
+import { useBgColorInfrequency, useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
 import { SchoolTwoTone } from "@mui/icons-material";
-import { defineBgColorInfrequency } from "../../shared/scripts";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Escola" },
@@ -24,12 +19,12 @@ const headCells: iheadCell[] = [
 ];
 
 interface iCardSchoolProps {
-  school: iSchoolClass;
+  school: iSchool;
 }
 
 const CardSchool = ({ school }: iCardSchoolProps) => {
   const navigate = useNavigate();
-  const { theme } = useAppThemeContext();
+  const { defineBgColorInfrequency } = useBgColorInfrequency();
 
   return (
     <TableRow
@@ -48,7 +43,7 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(school.infrequency, theme),
+          bgcolor: defineBgColorInfrequency(school.infrequency),
         }}
       >
         {school.infrequency.toFixed(0)}%
@@ -60,15 +55,14 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
 export const ListSchoolPage = () => {
   const { debounce } = useDebounce();
   const { yearData } = useAuthContext();
-  const { setCount, setIsLoading, query } = usePaginationContext();
-  const [listSchoolData, setListSchoolData] = useState<iSchoolClass[]>();
-  const [search, setSearch] = useState<string>();
+  const { setCount, setIsLoading, query, search } = usePaginationContext();
+  const [listSchoolData, setListSchoolData] = useState<iSchool[]>();
   const [infreq, setInfreq] = useState<string>();
 
   const getSchool = useCallback((query: string) => {
     setIsLoading(true);
     apiSchool
-      .listClass(query)
+      .list(query)
       .then((res) => {
         setListSchoolData(res.result);
         setCount(res.total);
@@ -110,16 +104,10 @@ export const ListSchoolPage = () => {
         <Tools
           isHome
           isSearch
-          search={search}
-          setSearch={(text) => setSearch(text)}
           titleNew="Nova"
           isInfreq
           infreq={infreq}
           setInfreq={(text) => setInfreq(text)}
-          onClickReset={() => {
-            setSearch(undefined);
-            setInfreq(undefined);
-          }}
         />
       }
     >
