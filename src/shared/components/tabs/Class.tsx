@@ -40,7 +40,7 @@ export const TabsClassRetrievePage = ({
         <Tab
           icon={<Percent />}
           label="Infrequência"
-          disabled={classRetrieve?.schools === 0}
+          disabled={classRetrieve?.frequencies === 0}
           value="infrequency"
         />
       </Tabs>

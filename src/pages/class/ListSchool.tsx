@@ -2,17 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Chip, TableCell, TableRow } from "@mui/material";
 import { TableBase, TitleAdminDashPages, Tools } from "../../shared/components";
-import {
-  useAppThemeContext,
-  useAuthContext,
-  usePaginationContext,
-} from "../../shared/contexts";
+import { useAuthContext, usePaginationContext } from "../../shared/contexts";
 import { iSchool, iheadCell } from "../../shared/interfaces";
 import { apiSchool } from "../../shared/services";
-import { useDebounce } from "../../shared/hooks";
+import { useBgColorInfrequency, useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
 import { SchoolTwoTone } from "@mui/icons-material";
-import { defineBgColorInfrequency } from "../../shared/scripts";
 
 const headCells: iheadCell[] = [
   { order: "name", numeric: false, label: "Escola" },
@@ -29,7 +24,7 @@ interface iCardSchoolProps {
 
 const CardSchool = ({ school }: iCardSchoolProps) => {
   const navigate = useNavigate();
-  const { theme } = useAppThemeContext();
+  const { defineBgColorInfrequency } = useBgColorInfrequency();
 
   return (
     <TableRow
@@ -48,7 +43,7 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
         align="right"
         sx={{
           color: "#fff",
-          bgcolor: defineBgColorInfrequency(school.infrequency, theme),
+          bgcolor: defineBgColorInfrequency(school.infrequency),
         }}
       >
         {school.infrequency.toFixed(0)}%

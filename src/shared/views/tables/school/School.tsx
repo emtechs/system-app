@@ -22,6 +22,9 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
   const headCells: iheadCell[] = useMemo(() => {
     return [
       { order: "name", numeric: false, label: "Escola" },
+      { order: "classes", numeric: true, label: "Turmas" },
+      { order: "students", numeric: true, label: "Alunos" },
+      { order: "frequencies", numeric: true, label: "Frequências" },
       { order: "servers", numeric: true, label: "Servidores" },
       { order: "director_name", numeric: false, label: "Diretor" },
     ];
@@ -46,6 +49,9 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
             }}
           >
             <TableCell>{school.name}</TableCell>
+            <TableCell align="right">{school.classes}</TableCell>
+            <TableCell align="right">{school.students}</TableCell>
+            <TableCell align="right">{school.frequencies}</TableCell>
             <TableCell align="right">{school.servers}</TableCell>
             <TableCell>{school.director?.name}</TableCell>
           </TableRow>
