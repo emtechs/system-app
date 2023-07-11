@@ -1,9 +1,9 @@
 import { Breadcrumbs, Chip, Link } from "@mui/material";
-import { Home, People } from "@mui/icons-material";
+import { Home, Workspaces } from "@mui/icons-material";
 import { useAppThemeContext } from "../../../contexts";
-import { LabelUser } from "../../label";
+import { LabelClass } from "../../label";
 
-export const TitleUserRetrievePage = () => {
+export const TitleClassRetrievePage = () => {
   const { mdDown } = useAppThemeContext();
 
   return (
@@ -17,16 +17,16 @@ export const TitleUserRetrievePage = () => {
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </Link>
-      <Link underline="none" color="inherit" href="/user">
+      <Link underline="none" color="inherit" href="/school">
         <Chip
           clickable
           color="primary"
           variant="outlined"
-          label={mdDown ? "..." : "Usuários"}
-          icon={<People sx={{ mr: 0.5 }} fontSize="inherit" />}
+          label={mdDown ? "..." : "Turmas"}
+          icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </Link>
-      <LabelUser />
+      <LabelClass />
     </Breadcrumbs>
   );
 };

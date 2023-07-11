@@ -3,5 +3,4 @@ export * from "./ClassData";
 export * from "./ClassSelectData";
 export * from "./Date";
 export * from "./School";
-export * from "./SchoolAdmin";
 // export * from "./SchoolClass";

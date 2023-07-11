@@ -1,29 +1,32 @@
 import { useSearchParams } from "react-router-dom";
-import { useDebounce } from "../hooks";
+import { useDebounce, useValueTabs } from "../hooks";
 import { usePaginationContext } from "../contexts";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { iFrequencyBase, iViewBaseProps, iYear } from "../interfaces";
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { iFrequencyBase } from "../interfaces";
 import { apiFrequency } from "../services";
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box } from "@mui/material";
 import { TableFrequencySchool, TableFrequencyUser } from "./tables";
-import { PaginationTable } from "../components";
+import { PaginationTable, TabsYear } from "../components";
 import sortArray from "sort-array";
 
-interface iViewFrequency extends iViewBaseProps {
-  listYear?: iYear[];
+interface iViewFrequency {
   school_id?: string;
   user_id?: string;
   table_def: "user" | "school";
 }
 
 export const ViewFrequency = ({
-  search,
-  listYear,
   school_id,
   user_id,
   table_def,
 }: iViewFrequency) => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const year_id = searchParams.get("year_id") || undefined;
   const { debounce } = useDebounce();
   const {
@@ -36,8 +39,14 @@ export const ViewFrequency = ({
     order,
     by,
     query_page,
+    search,
   } = usePaginationContext();
+  const { valueTabs } = useValueTabs();
   const [data, setData] = useState<iFrequencyBase[]>();
+
+  const handleChange = (_event: SyntheticEvent, newValue: string) => {
+    setSearchParams(valueTabs(newValue, "year"), { replace: true });
+  };
 
   const getFrequencies = useCallback((query: string, isPage?: boolean) => {
     setIsLoading(true);
@@ -104,21 +113,7 @@ export const ViewFrequency = ({
 
   return (
     <Box display="flex" justifyContent="space-between">
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={year_id}
-        sx={{ borderRight: 1, borderColor: "divider" }}
-      >
-        {listYear?.map((el) => (
-          <Tab
-            key={el.id}
-            label={el.year}
-            href={"/school/" + school_id + "?view=frequency&year_id=" + el.id}
-            value={el.id}
-          />
-        ))}
-      </Tabs>
+      <TabsYear value={year_id} handleChange={handleChange} />
       <Box flex={1}>
         {table}
         <PaginationTable total={data ? data.length : 0} onClick={onClick} />

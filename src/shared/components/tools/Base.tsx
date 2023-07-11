@@ -21,7 +21,6 @@ import {
   useAppThemeContext,
   useDrawerContext,
   usePaginationContext,
-  useSchoolContext,
 } from "../../contexts";
 import { ActiveButton, CompBase, HomeButton, UserTools } from "./components";
 import { ButtonDest } from "../button";
@@ -36,15 +35,13 @@ interface iToolsProps {
   iconNew?: ReactNode;
   onClickNew?: () => void;
   isSearch?: boolean;
-  search?: string;
-  setSearch?: (text: string) => void;
   isActive?: boolean;
   isDirector?: boolean;
   isInfreq?: boolean;
   infreq?: string;
   setInfreq?: (text: string) => void;
   finish?: ReactNode;
-  onClickReset?: () => void;
+  isReset?: boolean;
 }
 
 export const Tools = ({
@@ -57,19 +54,24 @@ export const Tools = ({
   iconNew = <AddBox />,
   onClickNew,
   isSearch,
-  search = "",
-  setSearch,
   isActive,
   isDirector,
   isInfreq,
   infreq = "",
   setInfreq,
   finish,
-  onClickReset,
+  isReset,
 }: iToolsProps) => {
   const { theme, mdDown } = useAppThemeContext();
-  const { director, setDirector, is_director } = useSchoolContext();
-  const { is_active } = usePaginationContext();
+  const {
+    is_active,
+    is_director,
+    search,
+    setSearch,
+    director,
+    setDirector,
+    onClickReset,
+  } = usePaginationContext();
   const { handleClickButtonTools } = useDrawerContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -93,7 +95,7 @@ export const Tools = ({
 
   const disabled = useMemo(() => {
     if (
-      search.length > 0 ||
+      search ||
       infreq.length > 0 ||
       is_director.length > 0 ||
       is_active() === "&is_active=false"
@@ -199,7 +201,7 @@ export const Tools = ({
           </>
         )}
         {finish}
-        {onClickReset && (
+        {isReset && (
           <CompBase
             title="Limpar"
             endIcon={<ClearAll />}

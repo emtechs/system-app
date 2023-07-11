@@ -5,7 +5,6 @@ import {
   iSchoolServer,
   iUser,
   iWorkSchool,
-  iWorkSchoolClass,
   iYear,
 } from "../interfaces";
 
@@ -82,19 +81,6 @@ const schools = async (query: string) => {
   return response;
 };
 
-interface iSchoolClassReturn {
-  schools: iSchool[];
-  total: number;
-  result: iWorkSchoolClass[];
-}
-
-const schoolsClass = async (query: string) => {
-  const { data: response } = await apiUsingNow.get<iSchoolClassReturn>(
-    `users/schools${query}`
-  );
-  return response;
-};
-
 export const apiUser = {
   create,
   createServer,
@@ -102,6 +88,5 @@ export const apiUser = {
   update,
   schools,
   retrieve,
-  schoolsClass,
   list,
 };

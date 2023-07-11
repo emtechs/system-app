@@ -6,7 +6,7 @@ import {
   TableBase,
 } from "../../../components";
 import { iSchool, iheadCell } from "../../../interfaces";
-import { useDialogContext, useSchoolContext } from "../../../contexts";
+import { useDialogContext, usePaginationContext } from "../../../contexts";
 import { useNavigate } from "react-router-dom";
 
 interface iTableSchoolProps {
@@ -15,7 +15,7 @@ interface iTableSchoolProps {
 
 export const TableSchool = ({ data }: iTableSchoolProps) => {
   const navigate = useNavigate();
-  const { onClickReset } = useSchoolContext();
+  const { onClickReset } = usePaginationContext();
   const { handleOpenActive } = useDialogContext();
   const [dataSchool, setDataSchool] = useState<iSchool>();
 

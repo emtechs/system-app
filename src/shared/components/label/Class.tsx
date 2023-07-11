@@ -1,17 +1,12 @@
 import { Chip, Skeleton } from "@mui/material";
 import { useAppThemeContext, useClassContext } from "../../contexts";
-import { iClass } from "../../interfaces";
+import { iLabelBaseProps } from "../../interfaces";
 import { Workspaces } from "@mui/icons-material";
 import { adaptNameSchool } from "../../scripts";
 
-interface iLabelClassProps {
-  classData?: iClass;
-  clickable?: boolean;
-}
-
-export const LabelClass = ({ classData, clickable }: iLabelClassProps) => {
+export const LabelClass = ({ clickable }: iLabelBaseProps) => {
   const { mdDown } = useAppThemeContext();
-  const { loadingClass } = useClassContext();
+  const { loadingClass, classRetrieve } = useClassContext();
 
   return (
     <Chip
@@ -22,9 +17,9 @@ export const LabelClass = ({ classData, clickable }: iLabelClassProps) => {
         loadingClass ? (
           <Skeleton width={100} />
         ) : mdDown ? (
-          adaptNameSchool(classData?.name, 15)
+          adaptNameSchool(classRetrieve?.name, 15)
         ) : (
-          classData?.name
+          classRetrieve?.name
         )
       }
       icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}

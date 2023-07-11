@@ -1,10 +1,15 @@
-import { useDialogContext, useSchoolContext } from "../../contexts";
+import {
+  useDialogContext,
+  usePaginationContext,
+  useSchoolContext,
+} from "../../contexts";
 import { iDialogSchoolProps } from "../../interfaces";
 import { DialogActive } from "./structure";
 
 export const DialogActiveSchool = ({ school }: iDialogSchoolProps) => {
+  const { onClickReset } = usePaginationContext();
   const { handleOpenActive, openActive } = useDialogContext();
-  const { updateSchool, onClickReset } = useSchoolContext();
+  const { updateSchool } = useSchoolContext();
   return (
     school && (
       <DialogActive

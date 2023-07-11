@@ -92,9 +92,8 @@ const CardUser = ({ user }: iCardUserProps) => {
 
 export const ActiveUserPage = () => {
   const { debounce } = useDebounce();
-  const { setCount, setIsLoading, query } = usePaginationContext();
+  const { setCount, setIsLoading, query, search } = usePaginationContext();
   const [listUserData, setListUserData] = useState<iUser[]>();
-  const [search, setSearch] = useState<string>();
 
   useEffect(() => {
     let query_data = query() + `&is_active=false`;
@@ -126,15 +125,7 @@ export const ActiveUserPage = () => {
   return (
     <LayoutBasePage
       title="Listagem de Usuários"
-      tools={
-        <Tools
-          isHome
-          back="/user/list"
-          isSearch
-          search={search}
-          setSearch={setSearch}
-        />
-      }
+      tools={<Tools isHome back="/user/list" isSearch />}
     >
       <TableBase headCells={headCells}>
         {listUserData?.map((el) => (

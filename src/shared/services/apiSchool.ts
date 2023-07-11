@@ -1,12 +1,6 @@
 import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
-import {
-  iSchool,
-  iSchoolClass,
-  iSchoolServer,
-  iSelectBase,
-  iYear,
-} from "../interfaces";
+import { iSchool, iSchoolServer, iSelectBase, iYear } from "../interfaces";
 
 const create = async (data: FieldValues): Promise<iSchool> => {
   const { data: response } = await apiUsingNow.post<iSchool>("schools", data);
@@ -77,20 +71,6 @@ const list = async (query: string): Promise<iList> => {
   return response;
 };
 
-interface iListClass {
-  schools: iSchool[];
-  total: number;
-  result: iSchoolClass[];
-}
-
-const listClass = async (query: string): Promise<iListClass> => {
-  const { data: response } = await apiUsingNow.get<iListClass>(
-    `schools${query}`
-  );
-
-  return response;
-};
-
 interface ilistServers {
   total: number;
   result: iSchoolServer[];
@@ -111,7 +91,6 @@ interface iRetrieveReturn {
   school: iSchool;
   years: iYear[];
   periods: iSelectBase[];
-  schoolClass: iSchoolClass;
 }
 
 const retrieve = async (
@@ -134,7 +113,6 @@ export const apiSchool = {
   updateInfreq,
   deleteServer,
   list,
-  listClass,
   listServers,
   retrieve,
 };

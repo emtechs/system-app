@@ -1,9 +1,5 @@
 import { Breadcrumbs, Chip, Link } from "@mui/material";
-import {
-  useAppThemeContext,
-  useAuthContext,
-  useDrawerContext,
-} from "../../contexts";
+import { useAppThemeContext, useDrawerContext } from "../../contexts";
 import { Home, School } from "@mui/icons-material";
 import { LabelSchool } from "../label";
 
@@ -51,7 +47,6 @@ export const TitleRetrieveSchoolAdminPages = ({
   breadcrumbs,
 }: iTitleSchoolAdminPagesProps) => {
   const { mdDown } = useAppThemeContext();
-  const { schoolData } = useAuthContext();
   const { handleClickButtonTools } = useDrawerContext();
 
   return (
@@ -80,13 +75,7 @@ export const TitleRetrieveSchoolAdminPages = ({
         />
       </Link>
 
-      <Link
-        underline="none"
-        color="inherit"
-        href={"/school?id=" + schoolData?.id}
-      >
-        <LabelSchool clickable />
-      </Link>
+      <LabelSchool clickable />
 
       {breadcrumbs}
     </Breadcrumbs>

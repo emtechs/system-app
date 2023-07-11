@@ -9,18 +9,18 @@ export interface iDialogBaseProps {
   onClose: () => void;
 }
 
+export interface iLabelBaseProps {
+  clickable?: boolean;
+}
+
 export interface iTabsBaseProps {
-  value: string;
+  value?: string;
   handleChange: (_event: SyntheticEvent, newValue: string) => void;
 }
 
 export interface iSelectBase {
   id: string;
   label: string;
-}
-
-export interface iViewBaseProps {
-  search?: string;
 }
 
 export interface iButtonBaseProps {

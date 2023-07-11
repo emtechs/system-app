@@ -1,32 +1,38 @@
-import { Chip, Skeleton } from "@mui/material";
+import { Chip, Link, Skeleton } from "@mui/material";
 import { useAppThemeContext, useSchoolContext } from "../../contexts";
-import { iSchool } from "../../interfaces";
+import { iLabelBaseProps } from "../../interfaces";
 import { School } from "@mui/icons-material";
 import { adaptNameSchool } from "../../scripts";
+import { useMemo } from "react";
 
-interface iLabelSchoolProps {
-  school?: iSchool;
-  clickable?: boolean;
-}
-
-export const LabelSchool = ({ school, clickable }: iLabelSchoolProps) => {
+export const LabelSchool = ({ clickable }: iLabelBaseProps) => {
   const { mdDown } = useAppThemeContext();
-  const { loadingSchool } = useSchoolContext();
+  const { loadingSchool, schoolRetrieve } = useSchoolContext();
 
-  return (
+  const label = useMemo(() => {
+    if (loadingSchool) return <Skeleton width={100} />;
+    if (mdDown) return adaptNameSchool(schoolRetrieve?.name, 15);
+    return schoolRetrieve?.name;
+  }, [loadingSchool, mdDown, schoolRetrieve]);
+
+  return clickable ? (
+    <Link
+      underline="none"
+      color="inherit"
+      href={"/school?id=" + schoolRetrieve?.id}
+    >
+      <Chip
+        clickable
+        color="primary"
+        variant={"outlined"}
+        label={label}
+        icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+      />
+    </Link>
+  ) : (
     <Chip
-      clickable={clickable}
       color="primary"
-      variant={clickable ? "outlined" : undefined}
-      label={
-        loadingSchool ? (
-          <Skeleton width={100} />
-        ) : mdDown ? (
-          adaptNameSchool(school?.name, 15)
-        ) : (
-          school?.name
-        )
-      }
+      label={label}
       icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
     />
   );

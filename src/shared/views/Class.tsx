@@ -1,5 +1,5 @@
 import { iClass } from "../interfaces";
-import { usePaginationContext, useSchoolContext } from "../contexts";
+import { usePaginationContext } from "../contexts";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiClass } from "../services";
 import { useDebounce } from "../hooks";
@@ -9,7 +9,6 @@ import { PaginationTable } from "../components";
 
 export const ViewClass = () => {
   const { debounce } = useDebounce();
-  const { search } = useSchoolContext();
   const {
     setCount,
     setIsLoading,
@@ -20,6 +19,7 @@ export const ViewClass = () => {
     order,
     by,
     query_page,
+    search,
   } = usePaginationContext();
   const [data, setData] = useState<iClass[]>();
 

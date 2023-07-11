@@ -1,20 +1,25 @@
 import { iClassSchoolList } from "../interfaces";
-import { usePaginationContext, useSchoolContext } from "../contexts";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { usePaginationContext } from "../contexts";
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { apiClass } from "../services";
 import { useParams, useSearchParams } from "react-router-dom";
-import { useDebounce } from "../hooks";
-import { Box, Tab, Tabs } from "@mui/material";
+import { useDebounce, useValueTabs } from "../hooks";
+import { Box } from "@mui/material";
 import { TableClassSchool } from "./tables";
 import sortArray from "sort-array";
-import { PaginationTable } from "../components";
+import { PaginationTable, TabsYear } from "../components";
 
 export const ViewClassYear = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { school_id } = useParams();
   const year_id = searchParams.get("year_id") || undefined;
   const { debounce } = useDebounce();
-  const { search, listYear } = useSchoolContext();
   const {
     setCount,
     setIsLoading,
@@ -25,8 +30,14 @@ export const ViewClassYear = () => {
     order,
     by,
     query_page,
+    search,
   } = usePaginationContext();
+  const { valueTabs } = useValueTabs();
   const [data, setData] = useState<iClassSchoolList[]>();
+
+  const handleChange = (_event: SyntheticEvent, newValue: string) => {
+    setSearchParams(valueTabs(newValue, "year"), { replace: true });
+  };
 
   const getClasses = useCallback((query: string, isFace?: boolean) => {
     setIsLoading(true);
@@ -80,21 +91,7 @@ export const ViewClassYear = () => {
 
   return (
     <Box display="flex" justifyContent="space-between">
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={year_id}
-        sx={{ borderRight: 1, borderColor: "divider" }}
-      >
-        {listYear?.map((el) => (
-          <Tab
-            key={el.id}
-            label={el.year}
-            href={"/school/" + school_id + "?view=class&year_id=" + el.id}
-            value={el.id}
-          />
-        ))}
-      </Tabs>
+      <TabsYear value={year_id} handleChange={handleChange} />
       <Box flex={1}>
         {table}
         <PaginationTable total={data ? data.length : 0} onClick={onClick} />

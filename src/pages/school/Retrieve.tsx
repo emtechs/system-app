@@ -16,16 +16,17 @@ import {
   ViewStudent,
   ViewUser,
 } from "../../shared/views";
+import { useValueTabs } from "../../shared/hooks";
 
 export const RetrieveSchoolPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { school_id } = useParams();
   const viewData = searchParams.get("view") || "";
-  const { yearData } = useAuthContext();
-  const { schoolDataRetrieve, schoolRetrieve, search, listYear, periods } =
-    useSchoolContext();
+  const { periods, listYear } = useAuthContext();
+  const { schoolDataRetrieve, schoolRetrieve } = useSchoolContext();
   const [view, setView] = useState(<ViewSchoolData />);
   const [tools, setTools] = useState(<ToolsSchool back="/school" />);
+  const { valueTabs } = useValueTabs(listYear?.at(0)?.id, periods?.at(0)?.id);
 
   useEffect(() => {
     if (school_id) {
@@ -34,20 +35,13 @@ export const RetrieveSchoolPage = () => {
   }, [school_id]);
 
   const handleChange = (_event: SyntheticEvent, newValue: string) => {
-    setSearchParams(
-      {
-        view: newValue,
-        year_id: yearData ? yearData.id : "",
-        period: periods ? periods[0].id : "",
-      },
-      { replace: true }
-    );
+    setSearchParams(valueTabs(newValue, "view"), { replace: true });
   };
 
   useEffect(() => {
     switch (viewData) {
       case "server":
-        setView(<ViewUser search={search} school_id={school_id} />);
+        setView(<ViewUser school_id={school_id} />);
         setTools(
           <ToolsSchool
             back="/school"
@@ -75,14 +69,7 @@ export const RetrieveSchoolPage = () => {
         break;
 
       case "frequency":
-        setView(
-          <ViewFrequency
-            listYear={listYear}
-            school_id={school_id}
-            search={search}
-            table_def="school"
-          />
-        );
+        setView(<ViewFrequency school_id={school_id} table_def="school" />);
         setTools(<ToolsSchool isDash back="/school" />);
         break;
 
@@ -95,7 +82,7 @@ export const RetrieveSchoolPage = () => {
         setView(<ViewSchoolData />);
         setTools(<ToolsSchool isDash back="/school" />);
     }
-  }, [viewData, school_id, search, listYear]);
+  }, [viewData, school_id, listYear]);
 
   return (
     <LayoutBasePage title={<TitleSchoolRetrievePage />} tools={tools}>

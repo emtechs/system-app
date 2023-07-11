@@ -2,22 +2,21 @@ import sortArray from "sort-array";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDebounce } from "../hooks";
 import { usePaginationContext } from "../contexts";
-import { iSchool, iViewBaseProps } from "../interfaces";
+import { iSchool } from "../interfaces";
 import { apiSchool } from "../services";
 import { PaginationTable } from "../components";
 import { TableSchool, TableSchoolUser } from "./tables";
 
-interface iViewSchoolProps extends iViewBaseProps {
-  is_director?: "" | "&is_director=true" | "&is_director=false";
+interface iViewSchoolProps {
   server_id?: string;
   school_id?: string;
+  class_id?: string;
 }
 
 export const ViewSchool = ({
-  is_director,
-  search,
   server_id,
   school_id,
+  class_id,
 }: iViewSchoolProps) => {
   const { debounce } = useDebounce();
   const {
@@ -30,6 +29,8 @@ export const ViewSchool = ({
     by,
     setFace,
     query_page,
+    search,
+    is_director,
   } = usePaginationContext();
   const [listData, setListData] = useState<iSchool[]>();
 
@@ -55,12 +56,16 @@ export const ViewSchool = ({
   const define_query = useCallback(
     (comp: string) => {
       let query_data =
-        query(undefined, school_id) + comp + "&order=name" + query_page();
-      if (is_director) query_data += is_director;
+        query(undefined, school_id, class_id) +
+        comp +
+        "&order=name" +
+        query_page() +
+        is_director;
+
       if (server_id) query_data += `&server_id=${server_id}`;
       return query_data;
     },
-    [is_director, query, query_page, school_id, server_id]
+    [class_id, is_director, query, query_page, school_id, server_id]
   );
 
   const onClick = () => getSchools(define_query(handleFace(face)), true);

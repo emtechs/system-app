@@ -1,20 +1,19 @@
 import {
   Checklist,
   Groups,
-  People,
   Percent,
   School,
   Workspaces,
 } from "@mui/icons-material";
 import { Box, Tab, Tabs } from "@mui/material";
-import { useSchoolContext } from "../../contexts";
+import { useClassContext } from "../../contexts";
 import { iTabsBaseProps } from "../../interfaces";
 
-export const TabsSchoolRetrievePage = ({
+export const TabsClassRetrievePage = ({
   value,
   handleChange,
 }: iTabsBaseProps) => {
-  const { schoolRetrieve } = useSchoolContext();
+  const { classRetrieve } = useClassContext();
 
   return (
     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -24,25 +23,24 @@ export const TabsSchoolRetrievePage = ({
         variant="scrollable"
         scrollButtons="auto"
       >
-        <Tab icon={<School />} label="Escola" value="" />
-        <Tab icon={<People />} label="Servidores" value="server" />
-        <Tab icon={<Workspaces />} label="Turmas" value="class" />
+        <Tab icon={<Workspaces />} label="Turma" value="" />
+        <Tab icon={<School />} label="Escolas" value="school" />
         <Tab
           icon={<Groups />}
           label="Alunos"
-          disabled={schoolRetrieve?.is_dash ? false : true}
+          disabled={classRetrieve?.schools === 0}
           value="student"
         />
         <Tab
           icon={<Checklist />}
           label="Frequências"
-          disabled={schoolRetrieve?.is_dash ? false : true}
+          disabled={classRetrieve?.schools === 0}
           value="frequency"
         />
         <Tab
           icon={<Percent />}
           label="Infrequência"
-          disabled={schoolRetrieve?.is_dash ? false : true}
+          disabled={classRetrieve?.schools === 0}
           value="infrequency"
         />
       </Tabs>
