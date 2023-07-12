@@ -2,12 +2,21 @@ import { Checklist, History, Person, School } from "@mui/icons-material";
 import { Box, Tab, Tabs } from "@mui/material";
 import { useUserContext } from "../../contexts";
 import { iTabsBaseProps } from "../../interfaces";
+import { useMemo } from "react";
 
 export const TabsUserRetrievePage = ({
   value,
   handleChange,
 }: iTabsBaseProps) => {
   const { userRetrieve } = useUserContext();
+
+  const disabledSchool = useMemo(() => {
+    if (userRetrieve?.role === "ADMIN") return true;
+
+    if (userRetrieve?.work_school) return true;
+
+    return false;
+  }, [userRetrieve]);
 
   return (
     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -21,7 +30,7 @@ export const TabsUserRetrievePage = ({
         <Tab
           icon={<School />}
           label="Escolas"
-          disabled={userRetrieve?.role === "ADMIN" ? true : false}
+          disabled={disabledSchool}
           value="school"
         />
         <Tab

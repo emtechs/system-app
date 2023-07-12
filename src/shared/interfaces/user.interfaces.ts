@@ -29,7 +29,7 @@ export interface iUser {
   is_first_access: boolean;
   created_at: Date;
   frequencies: number;
-  work_school: iWorkSchool;
+  work_school?: iWorkSchool;
 }
 
 export interface iUserDash {

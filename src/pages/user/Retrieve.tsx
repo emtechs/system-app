@@ -30,7 +30,9 @@ export const RetrieveUserPage = () => {
   const { verifySchool } = useSchoolContext();
   const [tools, setTools] = useState(<ToolsUser back="/user" />);
   const { valueTabs } = useValueTabs(listYear?.at(0)?.id, undefined, school_id);
-  const [view, setView] = useState(<ViewUserData id={user_id} />);
+  const [view, setView] = useState(
+    <ViewUserData id={user_id} school_id={school_id} />
+  );
 
   const handleChange = (_event: SyntheticEvent, newValue: string) => {
     setSearchParams(valueTabs(newValue, "view"), { replace: true });
@@ -75,7 +77,7 @@ export const RetrieveUserPage = () => {
         break;
 
       default:
-        setView(<ViewUserData id={user_id} />);
+        setView(<ViewUserData id={user_id} school_id={school_id} />);
         setTools(<ToolsUser back={back} />);
     }
   }, [viewData, school_id, user_id, back]);

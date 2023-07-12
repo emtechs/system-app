@@ -26,7 +26,7 @@ export const RemoveUser = ({ user, getUsers }: iRemoveProps) => {
         await apiSchool.deleteServer(school_id, server_id);
         handleSucess("Usuário removido da função com sucesso!");
         getUsers(`?school_id=${school_id}`, 1);
-        if (user.work_school.role === "DIRET")
+        if (user.work_school && user.work_school.role === "DIRET")
           schoolDataRetrieve(school_id, "");
       } catch {
         handleError("Não foi possível remover o usuário da função no momento!");
@@ -38,19 +38,22 @@ export const RemoveUser = ({ user, getUsers }: iRemoveProps) => {
   );
 
   return (
-    <DialogBase
-      open={openActive}
-      onClose={handleOpenActive}
-      title="Remover Usuário da Função"
-      description={`Deseja continuar removendo o usúario ${user.name.toUpperCase()} da
+    user.work_school && (
+      <DialogBase
+        open={openActive}
+        onClose={handleOpenActive}
+        title="Remover Usuário da Função"
+        description={`Deseja continuar removendo o usúario ${user.name.toUpperCase()} da
       Função ${rolePtBr(user.work_school.role).toUpperCase()} da Escola ${
-        user.work_school.school.name
-      }?`}
-      action={() => {
-        deleteServer(user.work_school.school.id, user.id);
-        handleOpenActive();
-      }}
-      actionTitle="Continuar"
-    />
+          user.work_school.school.name
+        }?`}
+        action={() => {
+          if (user.work_school)
+            deleteServer(user.work_school.school.id, user.id);
+          handleOpenActive();
+        }}
+        actionTitle="Continuar"
+      />
+    )
   );
 };

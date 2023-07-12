@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import {
   DialogCreateServer,
   TableBase,
@@ -41,23 +41,26 @@ export const TableUserSchool = ({
     <>
       <TableBase headCells={headCells} link="div">
         {data.map((user) => (
-          <TableRowLink
-            key={user.id}
-            href={`/user/${user.id}?school_id=${school_id}`}
-          >
-            <TableCellLink link="div">{user.name}</TableCellLink>
-            <TableCellLink link="div">{user.cpf}</TableCellLink>
-            {!mdDown && (
-              <TableCellLink link="div">
-                {rolePtBr(user.work_school.role)}
-              </TableCellLink>
+          <Fragment key={user.id}>
+            {user.work_school && (
+              <TableRowLink href={`/user/${user.id}?school_id=${school_id}`}>
+                <TableCellLink link="div">{user.name}</TableCellLink>
+                <TableCellLink link="div">{user.cpf}</TableCellLink>
+                {!mdDown && (
+                  <TableCellLink link="div">
+                    {rolePtBr(user.work_school.role)}
+                  </TableCellLink>
+                )}
+                {!mdDown && (
+                  <TableCellLink link="div">
+                    {user.work_school.dash === "SCHOOL"
+                      ? "Escola"
+                      : "Frequência"}
+                  </TableCellLink>
+                )}
+              </TableRowLink>
             )}
-            {!mdDown && (
-              <TableCellLink link="div">
-                {user.work_school.dash === "SCHOOL" ? "Escola" : "Frequência"}
-              </TableCellLink>
-            )}
-          </TableRowLink>
+          </Fragment>
         ))}
       </TableBase>
       <DialogCreateServer school_id={school_id} getUsers={getUsers} />
