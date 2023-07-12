@@ -11,10 +11,17 @@ import {
 import { useClassContext, useDialogContext } from "../contexts";
 import { Edit, ExpandMore, RemoveDone } from "@mui/icons-material";
 import { ButtonSmDown } from "../components";
+import { iViewBaseProps } from "../interfaces";
+import { useEffect } from "react";
 
-export const ViewClassData = () => {
+export const ViewClassData = ({ id }: iViewBaseProps) => {
   const { handleOpenActive, handleOpenEdit } = useDialogContext();
-  const { loadingClass, classRetrieve } = useClassContext();
+  const { loadingClass, classRetrieve, classDataRetrieve } = useClassContext();
+
+  useEffect(() => {
+    if (id) classDataRetrieve(id);
+  }, [id]);
+
   return (
     <>
       <Card>

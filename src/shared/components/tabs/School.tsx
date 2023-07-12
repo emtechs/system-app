@@ -30,13 +30,13 @@ export const TabsSchoolRetrievePage = ({
         <Tab
           icon={<Groups />}
           label="Alunos"
-          disabled={schoolRetrieve?.is_dash ? false : true}
+          disabled={schoolRetrieve?.classes === 0}
           value="student"
         />
         <Tab
           icon={<Checklist />}
           label="Frequências"
-          disabled={schoolRetrieve?.is_dash ? false : true}
+          disabled={schoolRetrieve?.classes === 0}
           value="frequency"
         />
         <Tab

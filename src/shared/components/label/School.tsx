@@ -6,21 +6,17 @@ import { adaptNameSchool } from "../../scripts";
 import { useMemo } from "react";
 
 export const LabelSchool = ({ clickable }: iLabelBaseProps) => {
-  const { mdDown } = useAppThemeContext();
-  const { loadingSchool, schoolRetrieve } = useSchoolContext();
+  const { mdDown, loading } = useAppThemeContext();
+  const { schoolSelect } = useSchoolContext();
 
   const label = useMemo(() => {
-    if (loadingSchool) return <Skeleton width={100} />;
-    if (mdDown) return adaptNameSchool(schoolRetrieve?.name, 15);
-    return schoolRetrieve?.name;
-  }, [loadingSchool, mdDown, schoolRetrieve]);
+    if (loading) return <Skeleton width={100} />;
+    if (mdDown) return adaptNameSchool(schoolSelect?.label, 15);
+    return schoolSelect?.label;
+  }, [loading, mdDown, schoolSelect]);
 
   return clickable ? (
-    <Link
-      underline="none"
-      color="inherit"
-      href={"/school/" + schoolRetrieve?.id}
-    >
+    <Link underline="none" color="inherit" href={"/school/" + schoolSelect?.id}>
       <Chip
         clickable
         color="primary"

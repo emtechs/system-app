@@ -11,9 +11,16 @@ import {
 } from "@mui/material";
 import { useUserContext } from "../contexts";
 import { ExpandMore, RemoveDone } from "@mui/icons-material";
+import { iViewBaseProps } from "../interfaces";
+import { useEffect } from "react";
 
-export const ViewUserData = () => {
-  const { loadingUser, userRetrieve } = useUserContext();
+export const ViewUserData = ({ id }: iViewBaseProps) => {
+  const { loadingUser, userRetrieve, userDataRetrieve } = useUserContext();
+
+  useEffect(() => {
+    if (id) userDataRetrieve(id, "");
+  }, [id]);
+
   return (
     <>
       <Card>

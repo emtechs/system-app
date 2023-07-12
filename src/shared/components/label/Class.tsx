@@ -5,8 +5,8 @@ import { Workspaces } from "@mui/icons-material";
 import { adaptNameSchool } from "../../scripts";
 
 export const LabelClass = ({ clickable }: iLabelBaseProps) => {
-  const { mdDown } = useAppThemeContext();
-  const { loadingClass, classRetrieve } = useClassContext();
+  const { mdDown, loading } = useAppThemeContext();
+  const { classSelect } = useClassContext();
 
   return (
     <Chip
@@ -14,12 +14,12 @@ export const LabelClass = ({ clickable }: iLabelBaseProps) => {
       color="primary"
       variant={clickable ? "outlined" : undefined}
       label={
-        loadingClass ? (
+        loading ? (
           <Skeleton width={100} />
         ) : mdDown ? (
-          adaptNameSchool(classRetrieve?.name, 15)
+          adaptNameSchool(classSelect?.label, 15)
         ) : (
-          classRetrieve?.name
+          classSelect?.label
         )
       }
       icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}

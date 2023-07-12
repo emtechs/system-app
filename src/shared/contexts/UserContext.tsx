@@ -8,6 +8,7 @@ import {
 } from "react";
 import {
   iChildren,
+  iSelectBase,
   iUser,
   iUserFirstRequest,
   iUserPasswordRequest,
@@ -16,7 +17,7 @@ import {
 } from "../interfaces";
 import { useNavigate } from "react-router-dom";
 import { FieldValues } from "react-hook-form";
-import { apiUser } from "../services";
+import { apiAuth, apiUser } from "../services";
 import { useAppThemeContext } from "./ThemeContext";
 import { useAuthContext } from "./AuthContext";
 
@@ -33,10 +34,11 @@ interface iUserContextData {
   ) => Promise<void>;
   updateUserData: iUser | undefined;
   setUpdateUserData: Dispatch<SetStateAction<iUser | undefined>>;
-  userDataRetrieve: (id: string, query: string) => void;
+  verifyUser: (id: string) => void;
+  userSelect: iSelectBase | undefined;
   loadingUser: boolean;
   userRetrieve: iUser | undefined;
-  setUserRetrieve: Dispatch<SetStateAction<iUser | undefined>>;
+  userDataRetrieve: (id: string, query: string) => void;
 }
 
 const UserContext = createContext({} as iUserContextData);
@@ -44,20 +46,38 @@ const UserContext = createContext({} as iUserContextData);
 export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { setDashData, setUserData, setListYear } = useAuthContext();
+  const { setDashData, setUserData, setListYear, yearData } = useAuthContext();
   const [updateUserData, setUpdateUserData] = useState<iUser>();
+  const [userSelect, setUserSelect] = useState<iSelectBase>();
   const [loadingUser, setLoadingUser] = useState(true);
   const [userRetrieve, setUserRetrieve] = useState<iUser>();
+
+  const verifyUser = useCallback(
+    (id: string) => {
+      setLoading(true);
+      apiAuth
+        .verify(`?user_id=${id}`)
+        .then((res) => {
+          setUserSelect(res.select);
+          if (res.years) {
+            if (res.years.length > 0) {
+              setListYear(res.years);
+            } else if (yearData) {
+              setListYear([yearData]);
+            }
+          }
+        })
+        .catch(() => navigate("/"))
+        .finally(() => setLoading(false));
+    },
+    [yearData]
+  );
 
   const userDataRetrieve = useCallback((id: string, query: string) => {
     setLoadingUser(true);
     apiUser
       .retrieve(id, query)
-      .then((res) => {
-        setUserRetrieve(res.user);
-        setListYear(res.years);
-      })
-      .catch(() => navigate("/"))
+      .then((res) => setUserRetrieve(res))
       .finally(() => setLoadingUser(false));
   }, []);
 
@@ -159,10 +179,11 @@ export const UserProvider = ({ children }: iChildren) => {
         updateAllUser: handleUpdateAllUser,
         updateUserData,
         setUpdateUserData,
-        userRetrieve,
+        userSelect,
+        verifyUser,
         loadingUser,
-        setUserRetrieve,
         userDataRetrieve,
+        userRetrieve,
       }}
     >
       {children}

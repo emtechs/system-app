@@ -16,11 +16,19 @@ import {
   DialogDirectorSchool,
   DialogEditSchool,
 } from "../components";
+import { iViewBaseProps } from "../interfaces";
+import { useEffect } from "react";
 
-export const ViewSchoolData = () => {
+export const ViewSchoolData = ({ id }: iViewBaseProps) => {
   const { handleOpenActive, handleOpenDirector, handleOpenEdit } =
     useDialogContext();
-  const { loadingSchool, schoolRetrieve } = useSchoolContext();
+  const { loadingSchool, schoolRetrieve, schoolDataRetrieve } =
+    useSchoolContext();
+
+  useEffect(() => {
+    if (id) schoolDataRetrieve(id, "");
+  }, [id]);
+
   return (
     <>
       <Card>

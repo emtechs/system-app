@@ -5,8 +5,8 @@ import { Person } from "@mui/icons-material";
 import { adaptName } from "../../scripts";
 
 export const LabelUser = ({ clickable }: iLabelBaseProps) => {
-  const { mdDown } = useAppThemeContext();
-  const { loadingUser, userRetrieve } = useUserContext();
+  const { mdDown,loading } = useAppThemeContext();
+  const { userSelect } = useUserContext();
 
   return (
     <Chip
@@ -14,12 +14,12 @@ export const LabelUser = ({ clickable }: iLabelBaseProps) => {
       color="primary"
       variant={clickable ? "outlined" : undefined}
       label={
-        loadingUser ? (
+        loading ? (
           <Skeleton width={100} />
         ) : mdDown ? (
-          adaptName(userRetrieve?.name)
+          adaptName(userSelect?.label)
         ) : (
-          userRetrieve?.name
+          userSelect?.label
         )
       }
       icon={<Person sx={{ mr: 0.5 }} fontSize="inherit" />}

@@ -6,11 +6,10 @@ import { iClass } from "../../interfaces";
 
 const ValidateClass = () => {
   const { watch } = useFormContext();
-  const { setClassSelect } = useClassContext();
   const classData: iClass = watch("class");
 
   useEffect(() => {
-    setClassSelect(classData);
+    <></>;
   }, [classData]);
 
   return <></>;

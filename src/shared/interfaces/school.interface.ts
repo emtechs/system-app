@@ -28,7 +28,6 @@ export interface iSchool {
   label: string;
   name: string;
   is_active: boolean;
-  is_dash: boolean;
   director?: iDiretor;
   server: iServer;
   classes: number;

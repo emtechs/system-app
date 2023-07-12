@@ -12,7 +12,6 @@ import {
   ViewFrequency,
   ViewInfrequency,
   ViewSchool,
-  ViewSchoolData,
   ViewStudent,
 } from "../../shared/views";
 import { useValueTabs } from "../../shared/hooks";
@@ -21,20 +20,18 @@ export const RetrieveClassPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { class_id } = useParams();
   const viewData = searchParams.get("view") || "";
-  const { listYear, periods } = useAuthContext();
-  const { classRetrieve, classDataRetrieve } = useClassContext();
-  const [view, setView] = useState(<ViewSchoolData />);
+  const { listYear } = useAuthContext();
+  const { verifyClass } = useClassContext();
+  const [view, setView] = useState(<ViewClassData id={class_id} />);
   const [tools, setTools] = useState(<ToolsSchool back="/school" />);
-  const { valueTabs } = useValueTabs(listYear?.at(0)?.id, periods?.at(0)?.id);
+  const { valueTabs } = useValueTabs(listYear?.at(0)?.id, "ANO");
 
   const handleChange = (_event: SyntheticEvent, newValue: string) => {
     setSearchParams(valueTabs(newValue, "view"), { replace: true });
   };
 
   useEffect(() => {
-    if (class_id) {
-      if (classRetrieve?.id !== class_id) classDataRetrieve(class_id);
-    }
+    if (class_id) verifyClass(class_id);
   }, [class_id]);
 
   useEffect(() => {
@@ -62,7 +59,7 @@ export const RetrieveClassPage = () => {
         break;
 
       default:
-        setView(<ViewClassData />);
+        setView(<ViewClassData id={class_id} />);
         setTools(<ToolsSchool isDash back="/school" />);
     }
   }, [viewData, listYear, class_id]);

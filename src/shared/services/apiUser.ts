@@ -1,12 +1,6 @@
 import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
-import {
-  iSchool,
-  iSchoolServer,
-  iUser,
-  iWorkSchool,
-  iYear,
-} from "../interfaces";
+import { iSchool, iSchoolServer, iUser, iWorkSchool } from "../interfaces";
 
 const create = async (
   data: FieldValues,
@@ -31,20 +25,15 @@ const createServer = async (
   return response;
 };
 
-interface iRetrieve {
-  user: iUser;
-  years: iYear[];
-}
-
-const retrieve = async (id: string, query: string): Promise<iRetrieve> => {
-  const { data: response } = await apiUsingNow.get<iRetrieve>(
+const retrieve = async (id: string, query: string): Promise<iUser> => {
+  const { data: response } = await apiUsingNow.get<iUser>(
     `users/${id}${query}`
   );
   return response;
 };
 
-const profile = async (token: string): Promise<iRetrieve> => {
-  const { data: response } = await apiUsingNow.get<iRetrieve>("users/profile", {
+const profile = async (token: string): Promise<iUser> => {
+  const { data: response } = await apiUsingNow.get<iUser>("users/profile", {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response;

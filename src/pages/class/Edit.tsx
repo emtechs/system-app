@@ -1,7 +1,6 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { iPageProps } from "../../shared/interfaces";
-import { useClassContext } from "../../shared/contexts";
-import { useEffect } from "react";
+import { iClass, iPageProps } from "../../shared/interfaces";
+import { useEffect, useState } from "react";
 import { BasePage, BoxResp, SelectClass } from "../../shared/components";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schoolUpdateSchema } from "../../shared/schemas";
@@ -20,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 export const EditClassPage = ({ back }: iPageProps) => {
   const navigate = useNavigate();
   // const { updateSchool, schoolSelect } = useSchoolContext();
-  const { classSelect, setClassSelect } = useClassContext();
+  const [classSelect, setClassSelect] = useState<iClass>();
 
   useEffect(() => {
     setClassSelect(undefined);

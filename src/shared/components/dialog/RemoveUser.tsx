@@ -26,7 +26,8 @@ export const RemoveUser = ({ user, getUsers }: iRemoveProps) => {
         await apiSchool.deleteServer(school_id, server_id);
         handleSucess("Usuário removido da função com sucesso!");
         getUsers(`?school_id=${school_id}`, 1);
-        if (user.work_school.role === "DIRET") schoolDataRetrieve(school_id);
+        if (user.work_school.role === "DIRET")
+          schoolDataRetrieve(school_id, "");
       } catch {
         handleError("Não foi possível remover o usuário da função no momento!");
       } finally {

@@ -22,16 +22,14 @@ export const RetrieveSchoolPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { school_id } = useParams();
   const viewData = searchParams.get("view") || "";
-  const { periods, listYear } = useAuthContext();
-  const { schoolDataRetrieve, schoolRetrieve } = useSchoolContext();
-  const [view, setView] = useState(<ViewSchoolData />);
+  const { listYear } = useAuthContext();
+  const { verifySchool } = useSchoolContext();
+  const [view, setView] = useState(<ViewSchoolData id={school_id} />);
   const [tools, setTools] = useState(<ToolsSchool back="/school" />);
-  const { valueTabs } = useValueTabs(listYear?.at(0)?.id, periods?.at(0)?.id);
+  const { valueTabs } = useValueTabs(listYear?.at(0)?.id, "ANO");
 
   useEffect(() => {
-    if (school_id) {
-      if (schoolRetrieve?.id !== school_id) schoolDataRetrieve(school_id);
-    }
+    if (school_id) verifySchool(school_id);
   }, [school_id]);
 
   const handleChange = (_event: SyntheticEvent, newValue: string) => {
@@ -79,7 +77,7 @@ export const RetrieveSchoolPage = () => {
         break;
 
       default:
-        setView(<ViewSchoolData />);
+        setView(<ViewSchoolData id={school_id} />);
         setTools(<ToolsSchool isDash back="/school" />);
     }
   }, [viewData, school_id, listYear]);

@@ -19,9 +19,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { FieldValues } from "react-hook-form";
-import { apiClass } from "../services";
+import { apiAuth, apiClass } from "../services";
 import { useAuthContext } from "./AuthContext";
-import sortArray from "sort-array";
 
 interface iClassContextData {
   createClass: (data: iClassRequest, back?: string) => Promise<void>;
@@ -37,15 +36,15 @@ interface iClassContextData {
   setClassDataSelect: Dispatch<SetStateAction<iClassSelect[] | undefined>>;
   listClassData: iClass[] | undefined;
   setListClassData: Dispatch<SetStateAction<iClass[] | undefined>>;
-  classSelect: iClass | undefined;
-  setClassSelect: Dispatch<SetStateAction<iClass | undefined>>;
   classWithSchoolSelect: iClassWithSchool | undefined;
   setClassWithSchoolSelect: Dispatch<
     SetStateAction<iClassWithSchool | undefined>
   >;
-  classDataRetrieve: (id: string) => void;
+  verifyClass: (id: string) => void;
+  classSelect: iSelectBase | undefined;
   classRetrieve: iClass | undefined;
   loadingClass: boolean;
+  classDataRetrieve: (id: string) => void;
 }
 
 const ClassContext = createContext({} as iClassContextData);
@@ -53,40 +52,43 @@ const ClassContext = createContext({} as iClassContextData);
 export const ClassProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { yearData, setPeriods, setListYear } = useAuthContext();
+  const { yearData, setListYear } = useAuthContext();
   const [classDataSelect, setClassDataSelect] = useState<iClassSelect[]>();
   const [listClassData, setListClassData] = useState<iClass[]>();
-  const [classSelect, setClassSelect] = useState<iClass>();
   const [classWithSchoolSelect, setClassWithSchoolSelect] =
     useState<iClassWithSchool>();
+  const [classSelect, setClassSelect] = useState<iSelectBase>();
   const [classRetrieve, setClassRetrieve] = useState<iClass>();
   const [loadingClass, setLoadingClass] = useState(false);
 
-  const classDataRetrieve = useCallback(
+  const verifyClass = useCallback(
     (id: string) => {
-      setLoadingClass(true);
       setLoading(true);
-      apiClass
-        .retrieve(id)
+      apiAuth
+        .verify(`?class_id=${id}`)
         .then((res) => {
-          setClassRetrieve(res.class);
-          setPeriods(
-            sortArray<iSelectBase>(res.periods, { by: "label", order: "asc" })
-          );
-          if (res.years.length > 0) {
-            setListYear(res.years);
-          } else {
-            if (yearData) setListYear([yearData]);
+          setClassSelect(res.select);
+          if (res.years) {
+            if (res.years.length > 0) {
+              setListYear(res.years);
+            } else if (yearData) {
+              setListYear([yearData]);
+            }
           }
         })
         .catch(() => navigate("/"))
-        .finally(() => {
-          setLoadingClass(false);
-          setLoading(false);
-        });
+        .finally(() => setLoading(false));
     },
     [yearData]
   );
+
+  const classDataRetrieve = useCallback((id: string) => {
+    setLoadingClass(true);
+    apiClass
+      .retrieve(id)
+      .then((res) => setClassRetrieve(res))
+      .finally(() => setLoadingClass(false));
+  }, []);
 
   const handleCreateClass = useCallback(
     async (data: iClassRequest, back?: string) => {
@@ -168,11 +170,11 @@ export const ClassProvider = ({ children }: iChildren) => {
         classDataSelect,
         listClassData,
         classSelect,
-        setClassSelect,
         setListClassData,
         setClassDataSelect,
         classWithSchoolSelect,
         setClassWithSchoolSelect,
+        verifyClass,
         classDataRetrieve,
         classRetrieve,
         loadingClass,

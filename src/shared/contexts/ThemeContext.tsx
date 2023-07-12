@@ -22,6 +22,7 @@ interface iThemeContextProps {
   theme: iTheme;
   smDown: boolean;
   mdDown: boolean;
+  loading: boolean;
   setLoading: Dispatch<SetStateAction<boolean>>;
   handleSucess: (msg: string) => void;
   handleError: (msg: string) => void;
@@ -73,6 +74,7 @@ export const AppThemeProvider = ({ children }: iChildren) => {
         setLoading,
         smDown,
         theme,
+        loading,
       }}
     >
       <ThemeProvider theme={theme}>

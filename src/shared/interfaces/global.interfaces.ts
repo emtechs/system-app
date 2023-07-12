@@ -18,6 +18,10 @@ export interface iTabsBaseProps {
   handleChange: (_event: SyntheticEvent, newValue: string) => void;
 }
 
+export interface iViewBaseProps {
+  id?: string;
+}
+
 export interface iSelectBase {
   id: string;
   label: string;

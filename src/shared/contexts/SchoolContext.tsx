@@ -18,14 +18,12 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
-import { apiSchool } from "../services";
 import { useAuthContext } from "./AuthContext";
-import sortArray from "sort-array";
+import { apiAuth, apiSchool } from "../services";
 
 interface iSchoolContextData {
   updateServerData: iWorkSchool | undefined;
   setUpdateServerData: Dispatch<SetStateAction<iWorkSchool | undefined>>;
-  schoolDataRetrieve: (id: string) => void;
   importSchool: (data: iSchoolImportRequest, back?: string) => Promise<void>;
   createSchoolClass: (
     data: iSchoolClassRequest,
@@ -43,9 +41,11 @@ interface iSchoolContextData {
     query?: string,
     back?: string
   ) => Promise<void>;
-  loadingSchool: boolean;
+  schoolSelect: iSelectBase | undefined;
+  verifySchool: (id: string) => void;
+  schoolDataRetrieve: (id: string, query: string) => void;
   schoolRetrieve: iSchool | undefined;
-  setSchoolRetrieve: Dispatch<SetStateAction<iSchool | undefined>>;
+  loadingSchool: boolean;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -53,38 +53,40 @@ const SchoolContext = createContext({} as iSchoolContextData);
 export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { yearData, setPeriods, setListYear } = useAuthContext();
-  const [schoolRetrieve, setSchoolRetrieve] = useState<iSchool>();
+  const { setListYear, yearData } = useAuthContext();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
+  const [schoolSelect, setSchoolSelect] = useState<iSelectBase>();
+  const [schoolRetrieve, setSchoolRetrieve] = useState<iSchool>();
   const [loadingSchool, setLoadingSchool] = useState(false);
 
-  const schoolDataRetrieve = useCallback(
+  const verifySchool = useCallback(
     (id: string) => {
-      if (yearData) {
-        setLoadingSchool(true);
-        setLoading(true);
-        apiSchool
-          .retrieve(id, `?year_id=${yearData.id}`)
-          .then((res) => {
-            setSchoolRetrieve(res.school);
-            setPeriods(
-              sortArray<iSelectBase>(res.periods, { by: "label", order: "asc" })
-            );
-            if (res.school.is_dash) {
+      setLoading(true);
+      apiAuth
+        .verify(`?school_id=${id}`)
+        .then((res) => {
+          setSchoolSelect(res.select);
+          if (res.years) {
+            if (res.years.length > 0) {
               setListYear(res.years);
-            } else {
+            } else if (yearData) {
               setListYear([yearData]);
             }
-          })
-          .catch(() => navigate("/"))
-          .finally(() => {
-            setLoadingSchool(false);
-            setLoading(false);
-          });
-      }
+          }
+        })
+        .catch(() => navigate("/"))
+        .finally(() => setLoading(false));
     },
     [yearData]
   );
+
+  const schoolDataRetrieve = useCallback((id: string, query: string) => {
+    setLoadingSchool(true);
+    apiSchool
+      .retrieve(id, query)
+      .then((res) => setSchoolRetrieve(res))
+      .finally(() => setLoadingSchool(false));
+  }, []);
 
   const handleCreateSchoolServer = useCallback(
     async (data: iSchoolServerRequest, server_id: string) => {
@@ -148,8 +150,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
     ) => {
       try {
         setLoading(true);
-        const school = await apiSchool.update(data, id, query);
-        setSchoolRetrieve(school);
+        await apiSchool.update(data, id, query);
         handleSucess(`Sucesso ao alterar o ${type} da Escola!`);
       } catch {
         handleError(
@@ -166,16 +167,17 @@ export const SchoolProvider = ({ children }: iChildren) => {
   return (
     <SchoolContext.Provider
       value={{
-        schoolDataRetrieve,
         setUpdateServerData,
         updateServerData,
         updateSchool: handleUpdateSchool,
         importSchool: handleImportSchool,
-        loadingSchool,
         createSchoolServer: handleCreateSchoolServer,
         createSchoolClass: handleCreateSchoolClass,
+        schoolSelect,
+        verifySchool,
+        loadingSchool,
+        schoolDataRetrieve,
         schoolRetrieve,
-        setSchoolRetrieve,
       }}
     >
       {children}

@@ -65,7 +65,7 @@ export const ToolsSchool = ({
 }: iToolsSchoolProps) => {
   const { theme, mdDown } = useAppThemeContext();
   const { handleOpenCreate } = useDialogContext();
-  const { schoolRetrieve } = useSchoolContext();
+  const { schoolSelect } = useSchoolContext();
   const {
     is_active,
     director,
@@ -129,10 +129,10 @@ export const ToolsSchool = ({
         />
       )}
       {isUser && <UserTools />}
-      {isDash && schoolRetrieve?.is_dash && (
+      {isDash && (
         <ButtonDest
           title="Painel"
-          to={"/home/school/" + schoolRetrieve.id}
+          to={"/home/school/" + schoolSelect?.id}
           startIcon={<Dashboard />}
           isResp
         />

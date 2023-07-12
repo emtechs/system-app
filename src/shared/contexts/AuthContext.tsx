@@ -14,7 +14,6 @@ import {
   iLoginRequest,
   iRecoveryPasswordRequest,
   iRecoveryRequest,
-  iSelectBase,
   iUser,
   iYear,
 } from "../interfaces";
@@ -44,8 +43,6 @@ interface iAuthContextData {
   yearData: iYear | undefined;
   listYear: iYear[] | undefined;
   setListYear: Dispatch<SetStateAction<iYear[] | undefined>>;
-  periods: iSelectBase[] | undefined;
-  setPeriods: Dispatch<SetStateAction<iSelectBase[] | undefined>>;
 }
 
 const AuthContext = createContext({} as iAuthContextData);
@@ -58,7 +55,6 @@ export const AuthProvider = ({ children }: iChildren) => {
   const [dashData, setDashData] = useState<iDash>();
   const [yearData, setYearData] = useState<iYear>();
   const [listYear, setListYear] = useState<iYear[]>();
-  const [periods, setPeriods] = useState<iSelectBase[]>();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("@EMTechs:token");
@@ -77,8 +73,8 @@ export const AuthProvider = ({ children }: iChildren) => {
         .profile(accessToken)
         .then((res) => {
           apiUsingNow.defaults.headers.authorization = `Bearer ${accessToken}`;
-          setUserData(res.user);
-          setDashData(res.user.dash);
+          setUserData(res);
+          setDashData(res.dash);
         })
         .catch(() => {
           localStorage.removeItem("@EMTechs:token");
@@ -187,9 +183,7 @@ export const AuthProvider = ({ children }: iChildren) => {
         userData,
         yearData,
         listYear,
-        periods,
         setListYear,
-        setPeriods,
       }}
     >
       {children}

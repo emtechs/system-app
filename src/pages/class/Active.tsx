@@ -18,7 +18,7 @@ import {
   useClassContext,
   useSchoolContext,
 } from "../../shared/contexts";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { iClass, iPageProps } from "../../shared/interfaces";
 import { apiUsingNow } from "../../shared/services";
 import { BasePage } from "../../shared/components";
@@ -30,7 +30,7 @@ interface iCardClassProps {
 
 const CardClass = ({ el, theme }: iCardClassProps) => {
   const { updateSchool } = useSchoolContext();
-  const { classSelect, setClassSelect } = useClassContext();
+  const [classSelect, setClassSelect] = useState<iClass>();
 
   return (
     <>

@@ -26,11 +26,11 @@ export const RetrieveUserPage = () => {
   const viewData = searchParams.get("view") || "";
   const school_id = searchParams.get("school_id") || undefined;
   const { listYear } = useAuthContext();
-  const { userDataRetrieve, userRetrieve } = useUserContext();
-  const { schoolDataRetrieve } = useSchoolContext();
-  const [view, setView] = useState(<ViewUserData />);
+  const { verifyUser } = useUserContext();
+  const { verifySchool } = useSchoolContext();
   const [tools, setTools] = useState(<ToolsUser back="/user" />);
   const { valueTabs } = useValueTabs(listYear?.at(0)?.id, undefined, school_id);
+  const [view, setView] = useState(<ViewUserData id={user_id} />);
 
   const handleChange = (_event: SyntheticEvent, newValue: string) => {
     setSearchParams(valueTabs(newValue, "view"), { replace: true });
@@ -42,14 +42,8 @@ export const RetrieveUserPage = () => {
   }, [school_id]);
 
   useEffect(() => {
-    if (user_id) {
-      if (userRetrieve?.id !== user_id) {
-        userDataRetrieve(user_id, "");
-      } else if (school_id) {
-        userDataRetrieve(user_id, `?school_id=${school_id}`);
-        schoolDataRetrieve(school_id);
-      }
-    }
+    if (user_id) verifyUser(user_id);
+    if (school_id) verifySchool(school_id);
   }, [school_id, user_id]);
 
   const title = useMemo(() => {
@@ -81,7 +75,7 @@ export const RetrieveUserPage = () => {
         break;
 
       default:
-        setView(<ViewUserData />);
+        setView(<ViewUserData id={user_id} />);
         setTools(<ToolsUser back={back} />);
     }
   }, [viewData, school_id, user_id, back]);

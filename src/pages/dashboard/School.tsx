@@ -16,7 +16,7 @@ export const DashboardSchoolPage = () => {
 
   useEffect(() => {
     if (school_id) {
-      if (schoolRetrieve?.id !== school_id) schoolDataRetrieve(school_id);
+      if (schoolRetrieve?.id !== school_id) schoolDataRetrieve(school_id, "");
     }
   }, [school_id]);
 

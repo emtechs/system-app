@@ -5,7 +5,7 @@ import { iSchool, iWorkSchool } from "../../interfaces";
 import { apiUser } from "../../services";
 
 export const SelectSchool = () => {
-  const { schoolRetrieve, setSchoolRetrieve } = useSchoolContext();
+  const { schoolRetrieve } = useSchoolContext();
   const { query } = usePaginationContext();
   const [listSchoolSelect, setListSchoolSelect] = useState<iSchool[]>();
   const [listData, setListData] = useState<iWorkSchool[]>();
@@ -30,7 +30,10 @@ export const SelectSchool = () => {
     return schoolRetrieve ? false : true;
   }, [listSchoolSelect, schoolRetrieve]);
 
-  const handleOpenDialog = useCallback(() => setSchoolRetrieve(undefined), []);
+  const handleOpenDialog = useCallback(
+    () => setListSchoolSelect(undefined),
+    []
+  );
 
   return (
     <BaseSchool
@@ -47,7 +50,7 @@ export const SelectSchool = () => {
             key={el.school.id}
             name={el.school.name}
             onClick={() => {
-              setSchoolRetrieve(el.school);
+              setListSchoolSelect(undefined);
             }}
           />
         ))
