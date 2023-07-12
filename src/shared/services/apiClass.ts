@@ -48,6 +48,7 @@ const list = async (query: string): Promise<ilistReturn> => {
 };
 
 interface ilistSchoolReturn {
+  classes: iClassSchoolList[];
   total: number;
   result: iClassSchoolList[];
 }

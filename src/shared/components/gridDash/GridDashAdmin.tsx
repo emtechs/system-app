@@ -52,7 +52,7 @@ export const GridDashAdmin = () => {
           icon={<Workspaces fontSize="large" />}
           quant={userDashData.countClass}
           info="Turmas"
-          dest="/class/list"
+          dest={`/class/year/${yearData?.id}`}
           onClick={handleClickClass}
         />
         <GridDashContent

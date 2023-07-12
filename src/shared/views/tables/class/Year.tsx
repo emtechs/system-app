@@ -5,32 +5,35 @@ import { TableBase } from "../../../components";
 import { TableCell, TableRow } from "@mui/material";
 import { defineBgColorInfrequency } from "../../../scripts";
 
-interface iTableClassSchoolProps {
+interface iTableClassYearProps {
   data: iClassSchoolList[];
 }
 
-export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
+export const TableClassYear = ({ data }: iTableClassYearProps) => {
   const { mdDown, theme } = useAppThemeContext();
 
   const headCells: iheadCell[] = useMemo(() => {
     if (mdDown)
       return [
         { order: "name", numeric: "left", label: "Turma" },
+        { numeric: "left", label: "Escola" },
         { order: "infrequency", numeric: "right", label: "Infrequência" },
       ];
     return [
       { order: "name", numeric: "left", label: "Turma" },
-      { numeric: "right", label: "Alunos" },
-      { numeric: "right", label: "Frequências" },
+      { order: "school_name", numeric: "left", label: "Escola" },
+      { order: "students", numeric: "right", label: "Alunos" },
+      { order: "frequencies", numeric: "right", label: "Frequências" },
       { order: "infrequency", numeric: "right", label: "Infrequência" },
     ];
   }, [mdDown]);
 
   return (
     <TableBase headCells={headCells}>
-      {data.map((el) => (
-        <TableRow key={el.id}>
+      {data.map((el, index) => (
+        <TableRow key={index}>
           <TableCell>{el.name}</TableCell>
+          <TableCell>{el.school.name}</TableCell>
           {!mdDown && (
             <>
               <TableCell align="right">{el.students}</TableCell>
