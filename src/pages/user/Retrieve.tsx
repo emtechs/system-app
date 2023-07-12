@@ -14,7 +14,7 @@ import {
 } from "../../shared/components";
 import {
   ViewFrequency,
-  ViewFrequencyHistory,
+  ViewHistory,
   ViewSchool,
   ViewUserData,
 } from "../../shared/views";
@@ -72,7 +72,7 @@ export const RetrieveUserPage = () => {
         break;
 
       case "history":
-        setView(<ViewFrequencyHistory />);
+        setView(<ViewHistory />);
         setTools(<ToolsUser back={back} />);
         break;
 

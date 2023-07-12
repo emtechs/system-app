@@ -2,7 +2,7 @@ export * from "./Class";
 export * from "./ClassData";
 export * from "./ClassYear";
 export * from "./Frequency";
-export * from "./FrequencyHistory";
+export * from "./History";
 export * from "./Infrequency";
 export * from "./School";
 export * from "./SchoolData";
