@@ -1,15 +1,12 @@
 import { useMemo } from "react";
 import { iClass, iheadCell } from "../../../interfaces";
-import { TableBase } from "../../../components";
-import { TableCell, TableRow } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { TableBase, TableCellLink, TableRowLink } from "../../../components";
 
 interface iTableClassProps {
   data: iClass[];
 }
 
 export const TableClass = ({ data }: iTableClassProps) => {
-  const navigate = useNavigate();
   const headCells: iheadCell[] = useMemo(() => {
     return [
       { order: "name", numeric: "left", label: "Turma" },
@@ -20,21 +17,20 @@ export const TableClass = ({ data }: iTableClassProps) => {
   }, []);
 
   return (
-    <TableBase headCells={headCells}>
+    <TableBase headCells={headCells} link="div">
       {data.map((el) => (
-        <TableRow
-          key={el.id}
-          hover
-          sx={{ cursor: "pointer" }}
-          onClick={() => {
-            navigate("/class/" + el.id);
-          }}
-        >
-          <TableCell>{el.name}</TableCell>
-          <TableCell align="right">{el.schools}</TableCell>
-          <TableCell align="right">{el.students}</TableCell>
-          <TableCell align="right">{el.frequencies}</TableCell>
-        </TableRow>
+        <TableRowLink key={el.id} href={`/class/${el.id}`}>
+          <TableCellLink link="div">{el.name}</TableCellLink>
+          <TableCellLink link="div" numeric="right">
+            {el.schools}
+          </TableCellLink>
+          <TableCellLink link="div" numeric="right">
+            {el.students}
+          </TableCellLink>
+          <TableCellLink link="div" numeric="right">
+            {el.frequencies}
+          </TableCellLink>
+        </TableRowLink>
       ))}
     </TableBase>
   );

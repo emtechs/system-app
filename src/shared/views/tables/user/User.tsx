@@ -1,7 +1,10 @@
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import { TableCell, TableRow } from "@mui/material";
-import { DialogCreateAdmin, TableBase } from "../../../components";
+import {
+  DialogCreateAdmin,
+  TableBase,
+  TableCellLink,
+  TableRowLink,
+} from "../../../components";
 import { useAppThemeContext, usePaginationContext } from "../../../contexts";
 import { iUser, iheadCell } from "../../../interfaces";
 import { rolePtBr } from "../../../scripts";
@@ -11,7 +14,6 @@ interface iTableUserProps {
 }
 
 export const TableUser = ({ data }: iTableUserProps) => {
-  const navigate = useNavigate();
   const { mdDown } = useAppThemeContext();
   const { onClickReset } = usePaginationContext();
 
@@ -31,21 +33,19 @@ export const TableUser = ({ data }: iTableUserProps) => {
 
   return (
     <>
-      <TableBase headCells={headCells}>
+      <TableBase headCells={headCells} link="div">
         {data.map((user) => (
-          <TableRow
+          <TableRowLink
             key={user.id}
-            hover
-            sx={{ cursor: "pointer" }}
-            onClick={() => {
-              onClickReset();
-              navigate("/user/" + user.id);
-            }}
+            href={`/user/${user.id}`}
+            onClick={onClickReset}
           >
-            <TableCell>{user.name}</TableCell>
-            <TableCell>{user.cpf}</TableCell>
-            {!mdDown && <TableCell>{rolePtBr(user.role)}</TableCell>}
-          </TableRow>
+            <TableCellLink link="div">{user.name}</TableCellLink>
+            <TableCellLink link="div">{user.cpf}</TableCellLink>
+            {!mdDown && (
+              <TableCellLink link="div">{rolePtBr(user.role)}</TableCellLink>
+            )}
+          </TableRowLink>
         ))}
       </TableBase>
       <DialogCreateAdmin />

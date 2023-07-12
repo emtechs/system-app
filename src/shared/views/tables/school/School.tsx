@@ -1,10 +1,10 @@
-import { Fragment, useMemo, useState } from "react";
-import { Link as LinkComp, TableRow } from "@mui/material";
+import { useMemo, useState } from "react";
 import {
   DialogActiveSchool,
   DialogCreateSchool,
   TableBase,
   TableCellLink,
+  TableRowLink,
 } from "../../../components";
 import { iSchool, iheadCell } from "../../../interfaces";
 import { useDialogContext, usePaginationContext } from "../../../contexts";
@@ -44,30 +44,26 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
         link="div"
       >
         {data.map((school) => (
-          <Fragment key={school.id}>
-            <TableRow
-              hover
-              underline="none"
-              href={school.is_active ? `/school/${school.id}` : ""}
-              component={LinkComp}
-              onClick={() => onClick(school)}
-            >
-              <TableCellLink link="div">{school.name}</TableCellLink>
-              <TableCellLink link="div" numeric="right">
-                {school.classes}
-              </TableCellLink>
-              <TableCellLink link="div" numeric="right">
-                {school.students}
-              </TableCellLink>
-              <TableCellLink link="div" numeric="right">
-                {school.frequencies}
-              </TableCellLink>
-              <TableCellLink link="div" numeric="right">
-                {school.servers}
-              </TableCellLink>
-              <TableCellLink link="div">{school.director?.name}</TableCellLink>
-            </TableRow>
-          </Fragment>
+          <TableRowLink
+            key={school.id}
+            href={school.is_active ? `/school/${school.id}` : ""}
+            onClick={() => onClick(school)}
+          >
+            <TableCellLink link="div">{school.name}</TableCellLink>
+            <TableCellLink link="div" numeric="right">
+              {school.classes}
+            </TableCellLink>
+            <TableCellLink link="div" numeric="right">
+              {school.students}
+            </TableCellLink>
+            <TableCellLink link="div" numeric="right">
+              {school.frequencies}
+            </TableCellLink>
+            <TableCellLink link="div" numeric="right">
+              {school.servers}
+            </TableCellLink>
+            <TableCellLink link="div">{school.director?.name}</TableCellLink>
+          </TableRowLink>
         ))}
       </TableBase>
       <DialogCreateSchool />

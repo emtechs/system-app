@@ -1,7 +1,10 @@
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import { TableCell, TableRow } from "@mui/material";
-import { DialogCreateServer, TableBase } from "../../../components";
+import {
+  DialogCreateServer,
+  TableBase,
+  TableCellLink,
+  TableRowLink,
+} from "../../../components";
 import { useAppThemeContext } from "../../../contexts";
 import { iUser, iheadCell } from "../../../interfaces";
 import { rolePtBr } from "../../../scripts";
@@ -17,7 +20,6 @@ export const TableUserSchool = ({
   school_id,
   getUsers,
 }: iTableUserSchoolProps) => {
-  const navigate = useNavigate();
   const { mdDown } = useAppThemeContext();
 
   const headCells: iheadCell[] = useMemo(() => {
@@ -37,27 +39,25 @@ export const TableUserSchool = ({
 
   return (
     <>
-      <TableBase headCells={headCells}>
+      <TableBase headCells={headCells} link="div">
         {data.map((user) => (
-          <TableRow
+          <TableRowLink
             key={user.id}
-            hover
-            sx={{ cursor: "pointer" }}
-            onClick={() => {
-              navigate("/user/" + user.id + "?school_id=" + school_id);
-            }}
+            href={`/user/${user.id}?school_id=${school_id}`}
           >
-            <TableCell>{user.name}</TableCell>
-            <TableCell>{user.cpf}</TableCell>
+            <TableCellLink link="div">{user.name}</TableCellLink>
+            <TableCellLink link="div">{user.cpf}</TableCellLink>
             {!mdDown && (
-              <TableCell>{rolePtBr(user.work_school.role)}</TableCell>
+              <TableCellLink link="div">
+                {rolePtBr(user.work_school.role)}
+              </TableCellLink>
             )}
             {!mdDown && (
-              <TableCell>
+              <TableCellLink link="div">
                 {user.work_school.dash === "SCHOOL" ? "Escola" : "Frequência"}
-              </TableCell>
+              </TableCellLink>
             )}
-          </TableRow>
+          </TableRowLink>
         ))}
       </TableBase>
       <DialogCreateServer school_id={school_id} getUsers={getUsers} />
