@@ -33,9 +33,8 @@ interface iUserContextData {
   ) => Promise<void>;
   updateUserData: iUser | undefined;
   setUpdateUserData: Dispatch<SetStateAction<iUser | undefined>>;
-  userDataRetrieve: (id: string) => void;
+  userDataRetrieve: (id: string, query: string) => void;
   loadingUser: boolean;
-
   userRetrieve: iUser | undefined;
   setUserRetrieve: Dispatch<SetStateAction<iUser | undefined>>;
 }
@@ -45,15 +44,15 @@ const UserContext = createContext({} as iUserContextData);
 export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { setDashData, setUserData,setListYear } = useAuthContext();
+  const { setDashData, setUserData, setListYear } = useAuthContext();
   const [updateUserData, setUpdateUserData] = useState<iUser>();
   const [loadingUser, setLoadingUser] = useState(true);
   const [userRetrieve, setUserRetrieve] = useState<iUser>();
 
-  const userDataRetrieve = useCallback((id: string) => {
+  const userDataRetrieve = useCallback((id: string, query: string) => {
     setLoadingUser(true);
     apiUser
-      .retrieve(id)
+      .retrieve(id, query)
       .then((res) => {
         setUserRetrieve(res.user);
         setListYear(res.years);

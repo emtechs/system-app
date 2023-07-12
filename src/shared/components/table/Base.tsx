@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import {
+  Box,
   LinearProgress,
   Paper,
   Table,
@@ -7,6 +8,7 @@ import {
   TableContainer,
   TableFooter,
   TableRow,
+  Typography,
 } from "@mui/material";
 import { usePaginationContext } from "../../contexts";
 import { iLinkComp, iTable } from "../../interfaces";
@@ -15,6 +17,30 @@ import { TableCellLink } from "./CellLink";
 
 export const TableBase = ({ message, children, headCells, link }: iTable) => {
   const { isLoading, count } = usePaginationContext();
+
+  const msg = useMemo(() => {
+    return message ? message : "Nenhum registro encontrado.";
+  }, [message]);
+
+  const FooterComp = useMemo(() => {
+    if (link) {
+      if (isLoading) {
+        return (
+          <Box width="100%" p={2}>
+            <LinearProgress variant="indeterminate" />
+          </Box>
+        );
+      } else if (count === 0)
+        return (
+          <Box width="100%" p={2}>
+            <Typography color="GrayText" variant="body2">
+              {msg}
+            </Typography>
+          </Box>
+        );
+    }
+    return <></>;
+  }, [count, isLoading, link, msg]);
 
   const linkComp: iLinkComp = useMemo(() => {
     if (link) return { component: link };
@@ -30,19 +56,20 @@ export const TableBase = ({ message, children, headCells, link }: iTable) => {
       <Table {...linkComp}>
         <TableSort headCells={headCells} linkComp={linkComp} link={link} />
         <TableBody {...linkComp}>{children}</TableBody>
-        {count === 0 && !isLoading && (
-          <caption>{message ? message : "Nenhum registro encontrado."}</caption>
+        {!link && count === 0 && !isLoading && <caption>{msg}</caption>}
+        {!link && (
+          <TableFooter>
+            {isLoading && (
+              <TableRow>
+                <TableCellLink colSpan={headCells.length}>
+                  <LinearProgress variant="indeterminate" />
+                </TableCellLink>
+              </TableRow>
+            )}
+          </TableFooter>
         )}
-        <TableFooter {...linkComp}>
-          {isLoading && (
-            <TableRow {...linkComp}>
-              <TableCellLink colSpan={headCells.length} link={link}>
-                <LinearProgress variant="indeterminate" />
-              </TableCellLink>
-            </TableRow>
-          )}
-        </TableFooter>
       </Table>
+      {FooterComp}
     </TableContainer>
   );
 };

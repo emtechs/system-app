@@ -16,17 +16,13 @@ import { Box } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 
 interface iViewSchoolProps {
-  server_id?: string;
-  school_id?: string;
+  user_id?: string;
   class_id?: string;
 }
 
-export const ViewSchool = ({
-  server_id,
-  school_id,
-  class_id,
-}: iViewSchoolProps) => {
+export const ViewSchool = ({ user_id, class_id }: iViewSchoolProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const school_id = searchParams.get("school_id") || undefined;
   const { debounce } = useDebounce();
   const {
     query,
@@ -80,10 +76,10 @@ export const ViewSchool = ({
         query_page() +
         is_director;
 
-      if (server_id) query_data += `&server_id=${server_id}`;
+      if (user_id) query_data += `&server_id=${user_id}`;
       return query_data;
     },
-    [class_id, is_director, query, query_page, school_id, server_id, year_id]
+    [class_id, is_director, query, query_page, school_id, user_id, year_id]
   );
 
   const onClick = () => getSchools(define_query(handleFace(face)), true);
@@ -111,7 +107,7 @@ export const ViewSchool = ({
 
       listSchool = sortArray<iSchool>(listData, { by: order, order: by });
 
-      if (server_id) return <TableSchoolUser data={listSchool} />;
+      if (user_id) return <TableSchoolUser data={listSchool} />;
 
       if (class_id) return <TableSchoolClass data={listSchool} />;
 
@@ -119,7 +115,7 @@ export const ViewSchool = ({
     }
 
     return <></>;
-  }, [by, class_id, listData, order, server_id]);
+  }, [by, class_id, listData, order, user_id]);
 
   return (
     <Box display="flex" justifyContent="space-between">
