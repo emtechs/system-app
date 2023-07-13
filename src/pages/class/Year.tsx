@@ -1,11 +1,21 @@
-import { TitleClassPage, ToolsSchool } from "../../shared/components";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { TitleClassYearPage, ToolsSchool } from "../../shared/components";
 import { LayoutBasePage } from "../../shared/layouts";
 import { ViewClassYear } from "../../shared/views";
+import { useCalendarContext } from "../../shared/contexts";
 
 export const ClassYearPage = () => {
+  const { year_id } = useParams();
+  const { verifyYear } = useCalendarContext();
+
+  useEffect(() => {
+    verifyYear(year_id);
+  }, [year_id]);
+
   return (
     <LayoutBasePage
-      title={<TitleClassPage />}
+      title={<TitleClassYearPage />}
       tools={
         <ToolsSchool
           isHome
@@ -18,7 +28,7 @@ export const ClassYearPage = () => {
         />
       }
     >
-      <ViewClassYear />
+      <ViewClassYear id={year_id} />
     </LayoutBasePage>
   );
 };

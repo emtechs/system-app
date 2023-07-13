@@ -9,6 +9,7 @@ import {
   studentImportSchema,
 } from "../schemas";
 import { iDash, iDiretor, iRole, iServer } from "./user.interfaces";
+import { iClass } from "./class.interfaces";
 
 export interface iDialogSchoolProps {
   school: iSchool;
@@ -35,6 +36,7 @@ export interface iSchool {
   frequencies: number;
   servers: number;
   infrequency: number;
+  class?: iClass;
 }
 
 export interface iWorkSchool {

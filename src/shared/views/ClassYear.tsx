@@ -1,5 +1,5 @@
-import { iClassSchoolList } from "../interfaces";
-import { useAuthContext, usePaginationContext } from "../contexts";
+import { iClass, iViewBaseProps } from "../interfaces";
+import { usePaginationContext } from "../contexts";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiClass } from "../services";
 import { useDebounce } from "../hooks";
@@ -7,8 +7,7 @@ import { TableClassYear } from "./tables";
 import sortArray from "sort-array";
 import { PaginationTable } from "../components";
 
-export const ViewClassYear = () => {
-  const { yearData } = useAuthContext();
+export const ViewClassYear = ({ id = "" }: iViewBaseProps) => {
   const { debounce } = useDebounce();
   const {
     setCount,
@@ -23,58 +22,56 @@ export const ViewClassYear = () => {
     search,
   } = usePaginationContext();
 
-  const [data, setData] = useState<iClassSchoolList[]>();
+  const [data, setData] = useState<iClass[]>();
 
-  const getClasses = useCallback((query: string, isFace?: boolean) => {
-    setIsLoading(true);
-    if (isFace) {
-      apiClass
-        .listSchool(query)
-        .then((res) => setData((old) => old?.concat(res.result)))
-        .finally(() => setIsLoading(false));
-    } else {
-      apiClass
-        .listSchool(query)
-        .then((res) => {
-          setFace(1);
-          setData(res.result);
-          setCount(res.total);
-        })
-        .finally(() => setIsLoading(false));
-    }
-  }, []);
+  const getClasses = useCallback(
+    (year_id: string, query: string, isFace?: boolean) => {
+      setIsLoading(true);
+      if (isFace) {
+        apiClass
+          .listClass(year_id, query)
+          .then((res) => setData((old) => old?.concat(res.result)))
+          .finally(() => setIsLoading(false));
+      } else {
+        apiClass
+          .listClass(year_id, query)
+          .then((res) => {
+            setFace(1);
+            setData(res.result);
+            setCount(res.total);
+          })
+          .finally(() => setIsLoading(false));
+      }
+    },
+    []
+  );
 
   const define_query = useCallback(
     (comp: string) => {
-      let query_data = "";
-
-      if (yearData) query_data = query(yearData.id);
-
-      query_data += comp + "&order=name" + query_page();
-      return query_data;
+      return query() + comp + "&order=name" + query_page();
     },
-    [query, query_page, yearData]
+    [query, query_page]
   );
 
-  const onClick = () => getClasses(define_query(handleFace(face)), true);
+  const onClick = () => getClasses(id, define_query(handleFace(face)), true);
 
   useEffect(() => {
     let query_data = "";
     if (search) {
       query_data += `&name=${search}`;
       debounce(() => {
-        getClasses(define_query(query_data));
+        getClasses(id, define_query(query_data));
       });
-    } else getClasses(define_query(query_data));
-  }, [define_query, search]);
+    } else getClasses(id, define_query(query_data));
+  }, [define_query, id, search]);
 
   const table = useMemo(() => {
-    let classes: iClassSchoolList[];
+    let classes: iClass[];
     if (data) {
-      classes = sortArray<iClassSchoolList>(data, { by: order, order: by });
+      classes = sortArray<iClass>(data, { by: order, order: by });
 
       if (order === "school_name")
-        classes = sortArray<iClassSchoolList>(data, {
+        classes = sortArray<iClass>(data, {
           by: order,
           order: by,
           computed: { school_name: (row) => row.school.name },

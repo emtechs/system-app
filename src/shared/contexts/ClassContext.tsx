@@ -45,6 +45,11 @@ interface iClassContextData {
   classRetrieve: iClass | undefined;
   loadingClass: boolean;
   classDataRetrieve: (id: string) => void;
+  verifyClassYear: (
+    class_id: string,
+    school_id: string,
+    year_id: string
+  ) => void;
 }
 
 const ClassContext = createContext({} as iClassContextData);
@@ -80,6 +85,20 @@ export const ClassProvider = ({ children }: iChildren) => {
         .finally(() => setLoading(false));
     },
     [yearData]
+  );
+
+  const verifyClassYear = useCallback(
+    (class_id: string, school_id: string, year_id: string) => {
+      setLoading(true);
+      apiAuth
+        .verify(
+          `?class_id=${class_id}&school_id=${school_id}&year_id=${year_id}`
+        )
+        .then((res) => setClassSelect(res.select))
+        .catch(() => navigate("/"))
+        .finally(() => setLoading(false));
+    },
+    []
   );
 
   const classDataRetrieve = useCallback((id: string) => {
@@ -178,6 +197,7 @@ export const ClassProvider = ({ children }: iChildren) => {
         classDataRetrieve,
         classRetrieve,
         loadingClass,
+        verifyClassYear,
       }}
     >
       {children}

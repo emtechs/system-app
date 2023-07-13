@@ -1,4 +1,8 @@
-import { TitleClassPage, ToolsSchool } from "../../shared/components";
+import {
+  TabsClassYearPage,
+  TitleClassPage,
+  ToolsSchool,
+} from "../../shared/components";
 import { LayoutBasePage } from "../../shared/layouts";
 import { ViewClass } from "../../shared/views";
 
@@ -18,6 +22,7 @@ export const ClassPage = () => {
         />
       }
     >
+      <TabsClassYearPage />
       <ViewClass />
     </LayoutBasePage>
   );

@@ -18,27 +18,29 @@ import {
 } from "../components";
 import { iViewBaseProps } from "../interfaces";
 import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 export const ViewSchoolData = ({ id }: iViewBaseProps) => {
+  const [searchParams] = useSearchParams();
+  const year_id = searchParams.get("year_id") || undefined;
+  const class_id = searchParams.get("class_id") || undefined;
   const { handleOpenActive, handleOpenDirector, handleOpenEdit } =
     useDialogContext();
   const { loadingSchool, schoolRetrieve, schoolDataRetrieve } =
     useSchoolContext();
 
   useEffect(() => {
-    if (id) schoolDataRetrieve(id, "");
-  }, [id]);
+    let query = "";
+    if (class_id && year_id) query = `?class_id=${class_id}&year_id=${year_id}`;
+    if (id) schoolDataRetrieve(id, query);
+  }, [class_id, id, year_id]);
 
   return (
     <>
       <Card>
         <CardContent>
           <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMore />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
+            <AccordionSummary expandIcon={<ExpandMore />}>
               {loadingSchool ? (
                 <Skeleton width={300} />
               ) : (
@@ -57,6 +59,28 @@ export const ViewSchoolData = ({ id }: iViewBaseProps) => {
               </Typography>
             </AccordionDetails>
           </Accordion>
+          {class_id && (
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMore />}>
+                {loadingSchool ? (
+                  <Skeleton width={300} />
+                ) : (
+                  <Typography>{schoolRetrieve?.class?.name}</Typography>
+                )}
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  Alunos: {schoolRetrieve?.class?.students}
+                </Typography>
+                <Typography>
+                  Frequências: {schoolRetrieve?.class?.frequencies}
+                </Typography>
+                <Typography>
+                  Infrequência: {schoolRetrieve?.class?.infrequency}
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          )}
         </CardContent>
         <CardActions>
           <ButtonSmDown
