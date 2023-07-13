@@ -1,15 +1,14 @@
 import { useMemo } from "react";
 import { useAppThemeContext } from "../../../contexts";
 import { iClass, iheadCell } from "../../../interfaces";
-import { TableBase } from "../../../components";
+import { TableBase, TableCellLink, TableRowLink } from "../../../components";
 import { defineBgColorInfrequency } from "../../../scripts";
-import { TableCell, TableRow } from "@mui/material";
 
-interface iTableClassSchoolProps {
+interface iTableClassYearProps {
   data: iClass[];
 }
 
-export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
+export const TableClassYear = ({ data }: iTableClassYearProps) => {
   const { mdDown, theme } = useAppThemeContext();
 
   const headCells: iheadCell[] = useMemo(() => {
@@ -21,6 +20,7 @@ export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
       ];
     return [
       { order: "name", numeric: "left", label: "Turma" },
+      { order: "school_name", numeric: "left", label: "Escola" },
       { order: "students", numeric: "right", label: "Alunos" },
       { order: "frequencies", numeric: "right", label: "Frequências" },
       { order: "infrequency", numeric: "right", label: "Infrequência" },
@@ -28,26 +28,35 @@ export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
   }, [mdDown]);
 
   return (
-    <TableBase headCells={headCells}>
+    <TableBase headCells={headCells} link="div">
       {data.map((el, index) => (
-        <TableRow key={index}>
-          <TableCell>{el.name}</TableCell>
+        <TableRowLink
+          key={index}
+          href={`/school/${el.school.id}?year_id=${el.year_id}&class_id=${el.id}`}
+        >
+          <TableCellLink link="div">{el.name}</TableCellLink>
+          <TableCellLink link="div">{el.school.name}</TableCellLink>
           {!mdDown && (
             <>
-              <TableCell align="right">{el.students}</TableCell>
-              <TableCell align="right">{el.frequencies}</TableCell>
+              <TableCellLink link="div" numeric="right">
+                {el.students}
+              </TableCellLink>
+              <TableCellLink link="div" numeric="right">
+                {el.frequencies}
+              </TableCellLink>
             </>
           )}
-          <TableCell
-            align="right"
+          <TableCellLink
+            link="div"
+            numeric="right"
             sx={{
               color: "#fff",
               bgcolor: defineBgColorInfrequency(el.infrequency, theme),
             }}
           >
             {el.infrequency.toFixed(0)}%
-          </TableCell>
-        </TableRow>
+          </TableCellLink>
+        </TableRowLink>
       ))}
     </TableBase>
   );

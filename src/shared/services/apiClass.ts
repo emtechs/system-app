@@ -1,11 +1,6 @@
 import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
-import {
-  iClass,
-  iClassDash,
-  iClassSchoolList,
-  iClassSchoolRequest,
-} from "../interfaces";
+import { iClass, iClassDash, iClassSchoolRequest, iYear } from "../interfaces";
 
 const create = async (data: FieldValues): Promise<iClass> => {
   const { data: response } = await apiUsingNow.post<iClass>("classes", data);
@@ -37,6 +32,7 @@ interface ilistReturn {
   classes: iClass[];
   total: number;
   result: iClass[];
+  years: iYear[];
 }
 
 const list = async (query: string): Promise<ilistReturn> => {
@@ -47,14 +43,18 @@ const list = async (query: string): Promise<ilistReturn> => {
   return response;
 };
 
-interface ilistSchoolReturn {
+interface iClassYearReturn {
+  classes: iClass[];
   total: number;
-  result: iClassSchoolList[];
+  result: iClass[];
 }
 
-const listSchool = async (query: string): Promise<ilistSchoolReturn> => {
-  const { data: response } = await apiUsingNow.get<ilistSchoolReturn>(
-    `classes/school${query}`
+const listClass = async (
+  id: string,
+  query: string
+): Promise<iClassYearReturn> => {
+  const { data: response } = await apiUsingNow.get<iClassYearReturn>(
+    `classes/year/${id}${query}`
   );
 
   return response;
@@ -85,7 +85,7 @@ export const apiClass = {
   createSchool,
   impClass,
   updateSchool,
-  listSchool,
+  listClass,
   listDash,
   list,
   retrieve,

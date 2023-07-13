@@ -1,14 +1,25 @@
-import { iClass } from "../interfaces";
-import { usePaginationContext } from "../contexts";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { iClass, iViewBaseProps } from "../interfaces";
+import { useAuthContext, usePaginationContext } from "../contexts";
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { apiClass } from "../services";
-import { useDebounce } from "../hooks";
-import { TableClass } from "./tables";
+import { useDebounce, useValueTabs } from "../hooks";
+import { TableClass, TableClassSchool } from "./tables";
 import sortArray from "sort-array";
-import { PaginationTable } from "../components";
+import { PaginationTable, TabsYear } from "../components";
+import { useSearchParams } from "react-router-dom";
+import { Box } from "@mui/material";
 
-export const ViewClass = () => {
+export const ViewClass = ({ id }: iViewBaseProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const year_id = searchParams.get("year_id") || undefined;
   const { debounce } = useDebounce();
+  const { setListYear } = useAuthContext();
   const {
     setCount,
     setIsLoading,
@@ -21,7 +32,12 @@ export const ViewClass = () => {
     query_page,
     search,
   } = usePaginationContext();
+  const { valueTabs } = useValueTabs();
   const [data, setData] = useState<iClass[]>();
+
+  const handleChange = (_event: SyntheticEvent, newValue: string) => {
+    setSearchParams(valueTabs(newValue, "year"), { replace: true });
+  };
 
   const getClasses = useCallback((query: string, isFace?: boolean) => {
     setIsLoading(true);
@@ -37,6 +53,7 @@ export const ViewClass = () => {
           setFace(1);
           setData(res.result);
           setCount(res.total);
+          setListYear(res.years);
         })
         .finally(() => setIsLoading(false));
     }
@@ -44,7 +61,8 @@ export const ViewClass = () => {
 
   const define_query = useCallback(
     (comp: string) => {
-      const query_data = query() + comp + "&order=name" + query_page();
+      const query_data =
+        query(year_id, id) + comp + "&order=name" + query_page();
       return query_data;
     },
     [query, query_page]
@@ -67,15 +85,20 @@ export const ViewClass = () => {
     if (data) {
       classes = sortArray<iClass>(data, { by: order, order: by });
 
+      if (id) return <TableClassSchool data={classes} />;
+
       return <TableClass data={classes} />;
     }
     return <></>;
   }, [by, data, order]);
 
   return (
-    <>
-      {table}
-      <PaginationTable total={data ? data.length : 0} onClick={onClick} />
-    </>
+    <Box display="flex" justifyContent="space-between">
+      {id && <TabsYear value={year_id} handleChange={handleChange} />}
+      <Box flex={1}>
+        {table}
+        <PaginationTable total={data ? data.length : 0} onClick={onClick} />
+      </Box>
+    </Box>
   );
 };

@@ -12,14 +12,12 @@ export interface iClass {
   schools: number;
   students: number;
   frequencies: number;
-}
-
-export interface iClassSchoolList extends iClass {
   infrequency: number;
   school: {
     id: string;
     name: string;
   };
+  year_id: string;
 }
 
 export interface iDashClass {
