@@ -3,7 +3,7 @@ import { LayoutBasePage } from "../../shared/layouts";
 import {
   CalendarDashCommon,
   GridDashSchool,
-  TitleSchoolDash,
+  TitleSchoolDashPage,
 } from "../../shared/components";
 import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
 import { useEffect } from "react";
@@ -12,16 +12,14 @@ import { useParams } from "react-router-dom";
 export const DashboardSchoolPage = () => {
   const { school_id } = useParams();
   const { theme } = useAppThemeContext();
-  const { schoolRetrieve, schoolDataRetrieve } = useSchoolContext();
+  const { verifySchool } = useSchoolContext();
 
   useEffect(() => {
-    if (school_id) {
-      if (schoolRetrieve?.id !== school_id) schoolDataRetrieve(school_id, "");
-    }
+    if (school_id) verifySchool(school_id);
   }, [school_id]);
 
   return (
-    <LayoutBasePage title={<TitleSchoolDash />}>
+    <LayoutBasePage title={<TitleSchoolDashPage />}>
       <Box my={1} mx={2} component={Paper} variant="outlined">
         <Card>
           <CardContent>

@@ -22,25 +22,25 @@ dayjs.extend(localizedFormat);
 export const GridDashSchool = () => {
   const { setLoading } = useAppThemeContext();
   const { yearData } = useAuthContext();
-  const { schoolRetrieve } = useSchoolContext();
+  const { schoolSelect } = useSchoolContext();
   const { handleClickFrequency, handleClickSchool } = useDrawerContext();
   const { setDateData } = useCalendarContext();
   const { query } = usePaginationContext();
   const [infoSchool, setInfoSchool] = useState<iDashSchool>();
 
   useEffect(() => {
-    if (schoolRetrieve && yearData) {
+    if (schoolSelect && yearData) {
       const date = dayjs().format("DD/MM/YYYY");
       const query_data = query(undefined, undefined, undefined, date);
       setLoading(true);
       apiUsingNow
         .get<iDashSchool>(
-          `schools/${schoolRetrieve.id}/dash/${yearData.id}${query_data}`
+          `schools/${schoolSelect.id}/dash/${yearData.id}${query_data}`
         )
         .then((res) => setInfoSchool(res.data))
         .finally(() => setLoading(false));
     }
-  }, [schoolRetrieve, yearData, query]);
+  }, [schoolSelect, yearData, query]);
 
   return (
     <Grid container item direction="row" xs={12} md={5} spacing={2}>
@@ -55,7 +55,7 @@ export const GridDashSchool = () => {
           <Typography variant="h6" textAlign="center">
             {dayjs().format("dddd, LL")}
           </Typography>
-          {schoolRetrieve && <CardSchool school={schoolRetrieve} />}
+          <CardSchool />
         </Box>
       </Grid>
       {infoSchool && (

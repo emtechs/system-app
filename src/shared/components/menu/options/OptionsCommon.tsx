@@ -5,12 +5,17 @@ import {
   School as SchoolIcon,
   Summarize,
 } from "@mui/icons-material";
-import { useAppThemeContext, useDrawerContext } from "../../../contexts";
+import {
+  useAppThemeContext,
+  useDrawerContext,
+  useSchoolContext,
+} from "../../../contexts";
 import { ListItemLinkOpen, OtherListItemLink } from "../item";
 import { Frequency, Profile, School } from "../components";
 
 export const OptionsCommon = () => {
   const { mdDown } = useAppThemeContext();
+  const { schoolSelect } = useSchoolContext();
   const {
     handleClickSchool,
     handleClickFrequency,
@@ -21,7 +26,11 @@ export const OptionsCommon = () => {
   } = useDrawerContext();
   return (
     <>
-      <OtherListItemLink icon={<Home />} label="Página Inicial" />
+      <OtherListItemLink
+        icon={<Home />}
+        label="Página Inicial"
+        to={`/${schoolSelect?.id}`}
+      />
       <ListItemLinkOpen
         onClick={handleClickSchool}
         open={openSchool}

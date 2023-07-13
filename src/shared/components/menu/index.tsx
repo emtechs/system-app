@@ -18,6 +18,7 @@ import {
 } from "../../contexts";
 import { Options } from "./options";
 import { adaptName } from "../../scripts";
+import { useMemo } from "react";
 
 export const MenuDrawer = () => {
   const location = useLocation();
@@ -27,6 +28,38 @@ export const MenuDrawer = () => {
   const user = {
     name: adaptName(userData?.name),
   };
+
+  const listButton = useMemo(() => {
+    if (dashData === "ADMIN") {
+      if (location.pathname.includes("/home/school"))
+        return (
+          <ListItemButton href="/" onClick={handleClick}>
+            <ListItemIcon>
+              <FirstPage />
+            </ListItemIcon>
+            <ListItemText primary="Voltar" />
+          </ListItemButton>
+        );
+
+      return (
+        <ListItemButton href="/home/school" onClick={handleClick}>
+          <ListItemIcon>
+            <Dashboard />
+          </ListItemIcon>
+          <ListItemText primary="Painel Escola" />
+        </ListItemButton>
+      );
+    }
+
+    return (
+      <ListItemButton href="/" onClick={handleClick}>
+        <ListItemIcon>
+          <FirstPage />
+        </ListItemIcon>
+        <ListItemText primary="Voltar" />
+      </ListItemButton>
+    );
+  }, [dashData, handleClick, location]);
 
   return (
     <Drawer
@@ -78,22 +111,7 @@ export const MenuDrawer = () => {
         </Box>
         <Box>
           <List component="nav">
-            {dashData === "ADMIN" &&
-            location.pathname.includes("/home/school") ? (
-              <ListItemButton href="/" onClick={handleClick}>
-                <ListItemIcon>
-                  <FirstPage />
-                </ListItemIcon>
-                <ListItemText primary="Voltar" />
-              </ListItemButton>
-            ) : (
-              <ListItemButton href="/home/school" onClick={handleClick}>
-                <ListItemIcon>
-                  <Dashboard />
-                </ListItemIcon>
-                <ListItemText primary="Painel Escola" />
-              </ListItemButton>
-            )}
+            {listButton}
             <ListItemButton onClick={logout}>
               <ListItemIcon>
                 <Logout />

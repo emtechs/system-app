@@ -33,7 +33,6 @@ import {
   Groups,
   Workspaces,
 } from "@mui/icons-material";
-import { Navigate } from "react-router-dom";
 import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 
@@ -84,7 +83,7 @@ const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
 export const FrequencyPage = () => {
   const { setLoading, mdDown } = useAppThemeContext();
   const { yearData } = useAuthContext();
-  const { schoolRetrieve } = useSchoolContext();
+  const { schoolSelect } = useSchoolContext();
   const { dateData, monthData } = useCalendarContext();
   const { handleClickSchool } = useDrawerContext();
   const { setIsLoading, query } = usePaginationContext();
@@ -110,33 +109,31 @@ export const FrequencyPage = () => {
   }, [dateData]);
 
   useEffect(() => {
-    if (schoolRetrieve && yearData) {
+    if (schoolSelect && yearData) {
       const queryData = query(undefined, undefined, undefined, date());
       setIsLoading(true);
       apiClass
-        .listDash(schoolRetrieve.id, yearData.id, queryData)
+        .listDash(schoolSelect.id, yearData.id, queryData)
         .then((res) => {
           setListClassSelectData(res.classes);
           setListClassData(res.result);
         })
         .finally(() => setIsLoading(false));
     }
-  }, [date, schoolRetrieve, yearData, query]);
+  }, [date, schoolSelect, yearData, query]);
 
   useEffect(() => {
-    if (schoolRetrieve && yearData) {
+    if (schoolSelect && yearData) {
       const queryData = query(undefined, undefined, undefined, date());
       setLoading(true);
       apiUsingNow
         .get<iDashSchool>(
-          `schools/${schoolRetrieve.id}/dash/${yearData.id}${queryData}`
+          `schools/${schoolSelect.id}/dash/${yearData.id}${queryData}`
         )
         .then((res) => setInfoSchool(res.data))
         .finally(() => setLoading(false));
     }
-  }, [date, schoolRetrieve, yearData]);
-
-  if (!schoolRetrieve) return <Navigate to="/" />;
+  }, [date, schoolSelect, yearData]);
 
   return (
     <LayoutBasePage

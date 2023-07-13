@@ -12,13 +12,13 @@ import {
   ListItemText,
 } from "@mui/material";
 import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
-import { PaginationList, ValidateSchool } from "../../../shared/components";
+import { PaginationList, ValidateBase } from "../../../shared/components";
 import {
   useAppThemeContext,
   useAuthContext,
   usePaginationContext,
 } from "../../../shared/contexts";
-import { iSchool, iWorkSchool } from "../../../shared/interfaces";
+import { iSelectBase, iWorkSchool } from "../../../shared/interfaces";
 import { useEffect, useState } from "react";
 import { apiUser } from "../../../shared/services";
 
@@ -32,7 +32,7 @@ export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
   const { theme } = useAppThemeContext();
   const { yearData } = useAuthContext();
   const { query, query_page } = usePaginationContext();
-  const [listSchoolSelect, setListSchoolSelect] = useState<iSchool[]>();
+  const [listSchoolSelect, setListSchoolSelect] = useState<iSelectBase[]>();
   const [listData, setListData] = useState<iWorkSchool[]>();
   const [loading, setLoading] = useState(true);
 
@@ -61,7 +61,7 @@ export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
           <Box width="100%">
             <FormContainer>
               <AutocompleteElement
-                name="school"
+                name="base"
                 label="Escola"
                 loading={!listSchoolSelect}
                 options={
@@ -76,7 +76,7 @@ export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
                 }
                 textFieldProps={{ fullWidth: true }}
               />
-              <ValidateSchool />
+              <ValidateBase to={isHome ? "/home/school/" : "/"} />
             </FormContainer>
           </Box>
         </ListItem>

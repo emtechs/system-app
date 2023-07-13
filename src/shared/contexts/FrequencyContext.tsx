@@ -102,7 +102,10 @@ export const FrequencyProvider = ({ children }: iChildren) => {
       try {
         setLoading(true);
         const { frequency_id } = await apiFrequency.updateFreqStudent(data, id);
-        const students = await apiFrequency.students(frequency_id, "");
+        const students = await apiFrequency.students(
+          frequency_id,
+          "?order=name&by=asc"
+        );
         setDataStudents(students.result);
       } catch {
         handleError("Não foi possível cadastrar a falta no momento!");

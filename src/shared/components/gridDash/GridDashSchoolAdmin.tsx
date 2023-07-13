@@ -27,7 +27,7 @@ export const GridDashSchoolAdmin = () => {
             <Typography variant="h6" textAlign="center">
               {dayjs().format("dddd, LL")}
             </Typography>
-            <CardSchool school={schoolRetrieve} />
+            <CardSchool />
           </Box>
         </Grid>
         <>
