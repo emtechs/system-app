@@ -1,9 +1,8 @@
 import { useMemo } from "react";
 import { useAppThemeContext } from "../../../contexts";
 import { iClass, iheadCell } from "../../../interfaces";
-import { TableBase } from "../../../components";
+import { TableBase, TableCellLink, TableRowLink } from "../../../components";
 import { defineBgColorInfrequency } from "../../../scripts";
-import { TableCell, TableRow } from "@mui/material";
 
 interface iTableClassSchoolProps {
   data: iClass[];
@@ -28,26 +27,34 @@ export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
   }, [mdDown]);
 
   return (
-    <TableBase headCells={headCells}>
+    <TableBase headCells={headCells} link="div">
       {data.map((el, index) => (
-        <TableRow key={index}>
-          <TableCell>{el.name}</TableCell>
+        <TableRowLink
+          key={index}
+          href={`/class/${el.id}?school_id=${el.school.id}`}
+        >
+          <TableCellLink link="div">{el.name}</TableCellLink>
           {!mdDown && (
             <>
-              <TableCell align="right">{el.students}</TableCell>
-              <TableCell align="right">{el.frequencies}</TableCell>
+              <TableCellLink link="div" numeric="right">
+                {el.students}
+              </TableCellLink>
+              <TableCellLink link="div" numeric="right">
+                {el.frequencies}
+              </TableCellLink>
             </>
           )}
-          <TableCell
-            align="right"
+          <TableCellLink
+            link="div"
+            numeric="right"
             sx={{
               color: "#fff",
               bgcolor: defineBgColorInfrequency(el.infrequency, theme),
             }}
           >
             {el.infrequency.toFixed(0)}%
-          </TableCell>
-        </TableRow>
+          </TableCellLink>
+        </TableRowLink>
       ))}
     </TableBase>
   );

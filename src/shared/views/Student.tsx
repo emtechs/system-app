@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useDebounce, useValueTabs } from "../hooks";
 import { usePaginationContext } from "../contexts";
 import {
@@ -8,20 +8,19 @@ import {
   useMemo,
   useState,
 } from "react";
-import { iStudent } from "../interfaces";
+import { iStudent, iViewBaseProps } from "../interfaces";
 import { apiStudent } from "../services";
 import { Box } from "@mui/material";
 import { PaginationTable, TabsYear } from "../components";
 import sortArray from "sort-array";
 import { TableStudentClass, TableStudentSchool } from "./tables";
 
-interface iViewStudentProps {
-  class_id?: string;
+interface iViewStudentProps extends iViewBaseProps {
+  type?: "class" | "school";
 }
 
-export const ViewStudent = ({ class_id }: iViewStudentProps) => {
+export const ViewStudent = ({ id, type }: iViewStudentProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { school_id } = useParams();
   const year_id = searchParams.get("year_id") || undefined;
   const { debounce } = useDebounce();
   const {
@@ -38,6 +37,18 @@ export const ViewStudent = ({ class_id }: iViewStudentProps) => {
   } = usePaginationContext();
   const { valueTabs } = useValueTabs();
   const [data, setData] = useState<iStudent[]>();
+
+  const school_id = useMemo(() => {
+    if (type === "school") return id;
+
+    return searchParams.get("school_id") || undefined;
+  }, [id, searchParams, type]);
+
+  const class_id = useMemo(() => {
+    if (type === "class") return id;
+
+    return searchParams.get("class_id") || undefined;
+  }, [id, searchParams, type]);
 
   const handleChange = (_event: SyntheticEvent, newValue: string) => {
     setSearchParams(valueTabs(newValue, "year"), { replace: true });
