@@ -51,7 +51,7 @@ export const OptionsCommon = () => {
         <OtherListItemLink
           icon={<Summarize />}
           label="Relatório"
-          to="/report"
+          to="report"
         />
       )}
       <ListItemLinkOpen

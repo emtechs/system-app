@@ -9,7 +9,7 @@ export const TabsClassYearPage = () => {
       <Tabs value={0} variant="scrollable" scrollButtons="auto">
         <Tab label="Turmas" />
         {listYear?.map((el) => (
-          <Tab key={el.id} label={el.year} href={`/class/year/${el.id}`} />
+          <Tab key={el.id} label={el.year} href={`/year/${el.id}?view=class`} />
         ))}
       </Tabs>
     </Box>

@@ -1,7 +1,6 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import {
   ClassPage,
-  ClassYearPage,
   CreateFrequencyPage,
   CreateStudentAdmPage,
   DashboardSchoolPage,
@@ -27,6 +26,7 @@ import {
   UserPage,
 } from "../pages";
 import { ProtectedAdmin, ProtectedAuth } from "../shared/components";
+import { YearPage } from "../pages/year";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -59,7 +59,7 @@ const AppRoutes = () => {
         <Route path="/:school_id" element={<DashboardSchoolPage />} />
         <Route path="/report" element={<ReportPage />} />
         <Route path="/class" element={<ClassPage />} />
-        <Route path="/class/year/:year_id" element={<ClassYearPage />} />
+        <Route path="/year/:year_id" element={<YearPage />} />
         <Route path="/class/:class_id" element={<RetrieveClassPage />} />
         <Route
           path="/student/create"

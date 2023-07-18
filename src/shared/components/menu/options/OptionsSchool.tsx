@@ -48,7 +48,7 @@ export const OptionsSchool = () => {
       >
         <Student />
       </ListItemLinkOpen>
-      <OtherListItemLink icon={<Summarize />} label="Relatório" to="/report" />
+      <OtherListItemLink icon={<Summarize />} label="Relatório" to="report" />
       <ListItemLinkOpen
         onClick={handleClickProfile}
         open={openProfile}

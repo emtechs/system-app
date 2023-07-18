@@ -10,7 +10,7 @@ import {
 } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
 import { useDrawerContext } from "../../../contexts";
-import { Frequency, Import, Profile, Student } from "../components";
+import { Frequency, Import, Profile } from "../components";
 import { ListItemLinkOpen, OtherListItemLink } from "../item";
 import { OptionsSchoolHome } from "./OptionsSchoolHome";
 
@@ -20,11 +20,9 @@ export const OptionsAdmin = () => {
     handleClickFrequency,
     handleClickImport,
     handleClickProfile,
-    handleClickStudent,
     openFrequency,
     openImport,
     openProfile,
-    openStudent,
   } = useDrawerContext();
 
   return location.pathname.includes("/home/school") ? (
@@ -32,17 +30,10 @@ export const OptionsAdmin = () => {
   ) : (
     <>
       <OtherListItemLink icon={<Home />} label="Página Inicial" />
-      <OtherListItemLink icon={<People />} label="Usuários" to="/user" />
-      <OtherListItemLink icon={<School />} label="Escolas" to="/school" />
-      <OtherListItemLink icon={<Workspaces />} label="Turmas" to="/class" />
-      <ListItemLinkOpen
-        onClick={handleClickStudent}
-        open={openStudent}
-        icon={<Groups />}
-        label="Alunos"
-      >
-        <Student />
-      </ListItemLinkOpen>
+      <OtherListItemLink icon={<People />} label="Usuários" to="user" />
+      <OtherListItemLink icon={<School />} label="Escolas" to="school" />
+      <OtherListItemLink icon={<Workspaces />} label="Turmas" to="class" />
+      <OtherListItemLink icon={<Groups />} label="Alunos" to="student" />
       <ListItemLinkOpen
         onClick={handleClickFrequency}
         open={openFrequency}

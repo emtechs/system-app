@@ -29,7 +29,7 @@ export const OptionsSchoolHome = () => {
       <OtherListItemLink
         icon={<Home />}
         label="Página Inicial"
-        to="/home/school"
+        to="home/school"
       />
       <ListItemLinkOpen
         onClick={handleClickUser}
@@ -55,7 +55,7 @@ export const OptionsSchoolHome = () => {
       >
         <Student />
       </ListItemLinkOpen>
-      <OtherListItemLink icon={<Summarize />} label="Relatório" to="/report" />
+      <OtherListItemLink icon={<Summarize />} label="Relatório" to="report" />
       <ListItemLinkOpen
         onClick={handleClickProfile}
         open={openProfile}
