@@ -21,12 +21,8 @@ import { GridDashOrgan } from "./Organ";
 export const GridDashAdmin = () => {
   const { setLoading } = useAppThemeContext();
   const { yearData } = useAuthContext();
-  const {
-    handleClickClass,
-    handleClickStudent,
-    handleClickFrequency,
-    handleClickUser,
-  } = useDrawerContext();
+  const { handleClickStudent, handleClickFrequency, handleClickUser } =
+    useDrawerContext();
   const [userDashData, setUserDashData] = useState<iUserDash>();
 
   useEffect(() => {
@@ -53,14 +49,12 @@ export const GridDashAdmin = () => {
           quant={userDashData.countClass}
           info="Turmas"
           dest={`/year/${yearData?.id}?view=class`}
-          onClick={handleClickClass}
         />
         <GridDashContent
           icon={<Groups fontSize="large" />}
           quant={userDashData.countStudent}
           info="Alunos"
-          dest="/student/list"
-          onClick={handleClickStudent}
+          dest={`/year/${yearData?.id}?view=student`}
         />
         <GridDashContent
           icon={<Checklist fontSize="large" />}

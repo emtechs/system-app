@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { PersonAdd } from "@mui/icons-material";
 import { LayoutBasePage } from "../../shared/layouts";
 import { TitleSchoolRetrievePage, ToolsSchool } from "../../shared/components";
-import { ViewClassYear } from "../../shared/views";
+import { ViewClass } from "../../shared/views";
 import { useCalendarContext } from "../../shared/contexts";
 
 export const YearPage = () => {
@@ -20,11 +20,11 @@ export const YearPage = () => {
   useEffect(() => {
     switch (viewData) {
       case "class":
-        setView(<ViewClassYear id={year_id} />);
+        setView(<ViewClass id={year_id} />);
         break;
 
       case "student":
-        setView(<ViewClassYear id={year_id} />);
+        setView(<ViewClass id={year_id} />);
         break;
 
       default:

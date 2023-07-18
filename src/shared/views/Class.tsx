@@ -9,7 +9,7 @@ import {
 } from "react";
 import { apiClass } from "../services";
 import { useDebounce, useValueTabs } from "../hooks";
-import { TableClass, TableClassSchool } from "./tables";
+import { TableClass, TableClassSchool, TableClassYear } from "./tables";
 import sortArray from "sort-array";
 import { PaginationTable, TabsYear } from "../components";
 import { useSearchParams } from "react-router-dom";
@@ -18,6 +18,7 @@ import { Box } from "@mui/material";
 export const ViewClass = ({ id }: iViewBaseProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const year_id = searchParams.get("year_id") || undefined;
+  const view = searchParams.get("view") || undefined;
   const { debounce } = useDebounce();
   const { setListYear } = useAuthContext();
   const {
@@ -39,33 +40,56 @@ export const ViewClass = ({ id }: iViewBaseProps) => {
     setSearchParams(valueTabs(newValue, "year"), { replace: true });
   };
 
-  const getClasses = useCallback((query: string, isFace?: boolean) => {
-    setIsLoading(true);
-    if (isFace) {
-      apiClass
-        .list(query)
-        .then((res) => setData((old) => old?.concat(res.result)))
-        .finally(() => setIsLoading(false));
-    } else {
-      apiClass
-        .list(query)
-        .then((res) => {
-          setFace(1);
-          setData(res.result);
-          setCount(res.total);
-          setListYear(res.years);
-        })
-        .finally(() => setIsLoading(false));
-    }
-  }, []);
+  const getClasses = useCallback(
+    (query: string, isFace?: boolean) => {
+      setIsLoading(true);
+
+      if (id && view === "class") {
+        if (isFace) {
+          apiClass
+            .listClass(id, query)
+            .then((res) => setData((old) => old?.concat(res.result)))
+            .finally(() => setIsLoading(false));
+        } else {
+          apiClass
+            .listClass(id, query)
+            .then((res) => {
+              setFace(1);
+              setData(res.result);
+              setCount(res.total);
+            })
+            .finally(() => setIsLoading(false));
+        }
+      } else {
+        if (isFace) {
+          apiClass
+            .list(query)
+            .then((res) => setData((old) => old?.concat(res.result)))
+            .finally(() => setIsLoading(false));
+        } else {
+          apiClass
+            .list(query)
+            .then((res) => {
+              setFace(1);
+              setData(res.result);
+              setCount(res.total);
+              setListYear(res.years);
+            })
+            .finally(() => setIsLoading(false));
+        }
+      }
+    },
+    [id, view]
+  );
 
   const define_query = useCallback(
     (comp: string) => {
-      const query_data =
-        query(year_id, id) + comp + "&order=name" + query_page();
-      return query_data;
+      if (view === "class")
+        return query() + comp + "&order=name" + query_page();
+
+      return query(year_id, id) + comp + "&order=name" + query_page();
     },
-    [query, query_page]
+    [id, query, query_page, view, year_id]
   );
 
   const onClick = () => getClasses(define_query(handleFace(face)), true);
@@ -85,16 +109,25 @@ export const ViewClass = ({ id }: iViewBaseProps) => {
     if (data) {
       classes = sortArray<iClass>(data, { by: order, order: by });
 
+      if (order === "school_name")
+        classes = sortArray<iClass>(data, {
+          by: order,
+          order: by,
+          computed: { school_name: (row) => row.school.name },
+        });
+
+      if (id && view === "class") return <TableClassYear data={classes} />;
+
       if (id) return <TableClassSchool data={classes} />;
 
       return <TableClass data={classes} />;
     }
     return <></>;
-  }, [by, data, order]);
+  }, [by, data, id, order, view]);
 
   return (
     <Box display="flex" justifyContent="space-between">
-      {id && <TabsYear value={year_id} handleChange={handleChange} />}
+      {id && !view && <TabsYear value={year_id} handleChange={handleChange} />}
       <Box flex={1}>
         {table}
         <PaginationTable total={data ? data.length : 0} onClick={onClick} />

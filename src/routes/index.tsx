@@ -2,7 +2,6 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import {
   ClassPage,
   CreateFrequencyPage,
-  CreateStudentAdmPage,
   DashboardSchoolPage,
   EditPasswordPage,
   EditProfilePage,
@@ -14,7 +13,6 @@ import {
   ImportStudentPage,
   ListFrequencyPage,
   ListStudentFrequencyPage,
-  ListStudentPage,
   PasswordPage,
   ReportPage,
   RetrieveClassPage,
@@ -23,6 +21,7 @@ import {
   RetrieveUserPage,
   SchoolPage,
   StudentFrequencyPage,
+  StudentPage,
   UserPage,
 } from "../pages";
 import { ProtectedAdmin, ProtectedAuth } from "../shared/components";
@@ -38,7 +37,6 @@ const AppRoutes = () => {
         <Route element={<ProtectedAdmin />}>
           <Route path="/user" element={<UserPage />} />
           <Route path="/user/:user_id" element={<RetrieveUserPage />} />
-          <Route path="/student/list" element={<ListStudentPage />} />
           <Route
             path="/import/school"
             element={<ImportSchoolPage back="/school" />}
@@ -59,12 +57,9 @@ const AppRoutes = () => {
         <Route path="/:school_id" element={<DashboardSchoolPage />} />
         <Route path="/report" element={<ReportPage />} />
         <Route path="/class" element={<ClassPage />} />
-        <Route path="/year/:year_id" element={<YearPage />} />
         <Route path="/class/:class_id" element={<RetrieveClassPage />} />
-        <Route
-          path="/student/create"
-          element={<CreateStudentAdmPage back="/student" />}
-        />
+        <Route path="/student" element={<StudentPage />} />
+        <Route path="/year/:year_id" element={<YearPage />} />
         <Route path="/frequency" element={<FrequencyPage />} />
         <Route path="/frequency/create" element={<CreateFrequencyPage />} />
         <Route path="/frequency/:id" element={<ListFrequencyPage />} />
