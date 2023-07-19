@@ -13,6 +13,7 @@ import { iClass } from "./class.interfaces";
 
 export interface iDialogSchoolProps {
   school: iSchool;
+  locale: "list" | "data";
 }
 
 export interface iDashSchool {

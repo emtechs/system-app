@@ -1,12 +1,12 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { useDialogContext, useSchoolContext } from "../../contexts";
-import { iDialogSchoolProps } from "../../interfaces";
-import { BaseContentChildren, DialogBaseChildren } from "./structure";
+import { useDialogContext, useSchoolContext } from "../../../contexts";
+import { iDialogSchoolProps } from "../../../interfaces";
+import { BaseContentChildren, DialogBaseChildren } from "../structure";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { schoolUpdateSchema } from "../../schemas";
+import { schoolUpdateSchema } from "../../../schemas";
 import { Button } from "@mui/material";
 
-export const DialogEditSchool = ({ school }: iDialogSchoolProps) => {
+export const DialogEditSchool = ({ locale, school }: iDialogSchoolProps) => {
   const { handleOpenEdit, openEdit } = useDialogContext();
   const { updateSchool } = useSchoolContext();
   return (
@@ -21,7 +21,7 @@ export const DialogEditSchool = ({ school }: iDialogSchoolProps) => {
           name: school.name,
         }}
         onSuccess={(data) => {
-          updateSchool(data, school.id, "nome");
+          updateSchool(data, school.id, "nome", locale);
           handleOpenEdit();
         }}
         resolver={zodResolver(schoolUpdateSchema)}

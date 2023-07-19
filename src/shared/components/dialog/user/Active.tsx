@@ -1,8 +1,8 @@
-import { useDialogContext, useUserContext } from "../../contexts";
-import { iDialogUserProps } from "../../interfaces";
-import { DialogActive } from "./structure";
+import { useDialogContext, useUserContext } from "../../../contexts";
+import { iDialogUserProps } from "../../../interfaces";
+import { DialogActive } from "../structure";
 
-export const DialogActiveSchool = ({ user }: iDialogUserProps) => {
+export const DialogActiveUser = ({ user }: iDialogUserProps) => {
   const { handleOpenActive, openActive } = useDialogContext();
   const { updateAllUser } = useUserContext();
 

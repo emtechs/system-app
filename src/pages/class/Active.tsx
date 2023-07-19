@@ -84,7 +84,8 @@ const CardClass = ({ el, theme }: iCardClassProps) => {
                       is_active: true,
                     },
                     classSelect.id,
-                    "estado"
+                    "estado",
+                    "data"
                   );
                 setClassSelect(undefined);
               }}

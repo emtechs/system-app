@@ -5,6 +5,7 @@ export * from "./button";
 export * from "./calendar";
 export * from "./card";
 export * from "./dialog";
+export * from "./footer";
 export * from "./glossary";
 export * from "./gridDash";
 export * from "./header";

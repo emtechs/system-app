@@ -1,13 +1,16 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { useDialogContext, useSchoolContext } from "../../contexts";
-import { iDialogSchoolProps } from "../../interfaces";
-import { BaseContentChildren, DialogBaseChildren } from "./structure";
+import { useDialogContext, useSchoolContext } from "../../../contexts";
+import { iDialogSchoolProps } from "../../../interfaces";
+import { BaseContentChildren, DialogBaseChildren } from "../structure";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { schoolUpdateDirectorSchema } from "../../schemas";
+import { schoolUpdateDirectorSchema } from "../../../schemas";
 import { Box, Typography } from "@mui/material";
-import { ValidateCPF } from "../validate";
+import { ValidateCPF } from "../../validate";
 
-export const DialogDirectorSchool = ({ school }: iDialogSchoolProps) => {
+export const DialogDirectorSchool = ({
+  locale,
+  school,
+}: iDialogSchoolProps) => {
   const { handleOpenDirector, openDirector } = useDialogContext();
   const { updateSchool } = useSchoolContext();
   return (
@@ -22,7 +25,7 @@ export const DialogDirectorSchool = ({ school }: iDialogSchoolProps) => {
           const query = school.director
             ? `?director_id=${school.director.id}`
             : undefined;
-          updateSchool(data, school.id, "diretor", query);
+          updateSchool(data, school.id, "diretor", locale, query);
           handleOpenDirector();
         }}
         resolver={zodResolver(schoolUpdateDirectorSchema)}

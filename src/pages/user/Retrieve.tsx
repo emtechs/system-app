@@ -56,7 +56,7 @@ export const RetrieveUserPage = () => {
   useEffect(() => {
     switch (viewData) {
       case "school":
-        setView(<ViewSchool user_id={user_id} />);
+        setView(<ViewSchool id={user_id} />);
         setTools(<ToolsUser back={back} isNew titleNew="Nova" isSearch />);
         break;
 

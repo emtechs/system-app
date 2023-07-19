@@ -1,73 +1,65 @@
-import { useMemo, useState } from "react";
 import {
   DialogActiveSchool,
   DialogCreateSchool,
+  DialogDirectorSchool,
+  DialogEditSchool,
   TableBase,
-  TableCellLink,
-  TableRowLink,
 } from "../../../components";
 import { iSchool, iheadCell } from "../../../interfaces";
-import { useDialogContext, usePaginationContext } from "../../../contexts";
+import { Link, Skeleton, TableCell, TableRow, Typography } from "@mui/material";
+import { ActionsSchool } from "../actions";
+import { useState } from "react";
+import { usePaginationContext } from "../../../contexts";
 
 interface iTableSchoolProps {
   data: iSchool[];
 }
 
 export const TableSchool = ({ data }: iTableSchoolProps) => {
-  const { onClickReset } = usePaginationContext();
-  const { handleOpenActive } = useDialogContext();
-  const [dataSchool, setDataSchool] = useState<iSchool>();
+  const { isLoading } = usePaginationContext();
+  const [schoolData, setSchoolData] = useState<iSchool>();
 
-  const onClick = (school: iSchool) => {
-    if (!school.is_active) {
-      setDataSchool(school);
-      handleOpenActive();
-    } else onClickReset();
-  };
+  const handleSchool = (newSchool: iSchool) => setSchoolData(newSchool);
 
-  const headCells: iheadCell[] = useMemo(() => {
-    return [
-      { order: "name", numeric: "left", label: "Escola" },
-      { order: "classes", numeric: "right", label: "Turmas" },
-      { order: "students", numeric: "right", label: "Alunos" },
-      { order: "frequencies", numeric: "right", label: "Frequências" },
-      { order: "servers", numeric: "right", label: "Servidores" },
-      { order: "director_name", numeric: "left", label: "Diretor" },
-    ];
-  }, []);
+  const headCells: iheadCell[] = [
+    { order: "name", numeric: "left", label: "Escola" },
+    { order: "director_name", numeric: "left", label: "Diretor" },
+    { numeric: "left", label: "Ações" },
+  ];
 
   return (
     <>
-      <TableBase
-        headCells={headCells}
-        message="Nenhuma escola encotrada"
-        link="div"
-      >
+      <TableBase headCells={headCells} message="Nenhuma escola encotrada">
         {data.map((school) => (
-          <TableRowLink
-            key={school.id}
-            href={school.is_active ? `/school/${school.id}` : ""}
-            onClick={() => onClick(school)}
-          >
-            <TableCellLink link="div">{school.name}</TableCellLink>
-            <TableCellLink link="div" numeric="right">
-              {school.classes}
-            </TableCellLink>
-            <TableCellLink link="div" numeric="right">
-              {school.students}
-            </TableCellLink>
-            <TableCellLink link="div" numeric="right">
-              {school.frequencies}
-            </TableCellLink>
-            <TableCellLink link="div" numeric="right">
-              {school.servers}
-            </TableCellLink>
-            <TableCellLink link="div">{school.director?.name}</TableCellLink>
-          </TableRowLink>
+          <TableRow key={school.id} hover>
+            <TableCell>
+              {isLoading ? (
+                <Skeleton width={250} />
+              ) : school.is_active ? (
+                <Typography
+                  underline="none"
+                  variant="body2"
+                  color="inherit"
+                  component={Link}
+                  href={`/school/${school.id}`}
+                >
+                  {school.name}
+                </Typography>
+              ) : (
+                school.name
+              )}
+            </TableCell>
+            <TableCell>
+              {isLoading ? <Skeleton width={200} /> : school.director?.name}
+            </TableCell>
+            <ActionsSchool school={school} handleSchool={handleSchool} />
+          </TableRow>
         ))}
       </TableBase>
       <DialogCreateSchool />
-      {dataSchool && <DialogActiveSchool school={dataSchool} />}
+      {schoolData && <DialogEditSchool school={schoolData} locale="list" />}
+      {schoolData && <DialogDirectorSchool school={schoolData} locale="list" />}
+      {schoolData && <DialogActiveSchool school={schoolData} locale="list" />}
     </>
   );
 };

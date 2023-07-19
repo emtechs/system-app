@@ -2,11 +2,11 @@ import {
   useDialogContext,
   usePaginationContext,
   useSchoolContext,
-} from "../../contexts";
-import { iDialogSchoolProps } from "../../interfaces";
-import { DialogActive } from "./structure";
+} from "../../../contexts";
+import { iDialogSchoolProps } from "../../../interfaces";
+import { DialogActive } from "../structure";
 
-export const DialogActiveSchool = ({ school }: iDialogSchoolProps) => {
+export const DialogActiveSchool = ({ locale, school }: iDialogSchoolProps) => {
   const { onClickReset } = usePaginationContext();
   const { handleOpenActive, openActive } = useDialogContext();
   const { updateSchool } = useSchoolContext();
@@ -20,6 +20,7 @@ export const DialogActiveSchool = ({ school }: iDialogSchoolProps) => {
             },
             school.id,
             "estado",
+            locale,
             undefined,
             school.is_active ? "/school" : "/school/" + school.id
           );

@@ -37,7 +37,7 @@ export const RetrieveClassPage = () => {
   useEffect(() => {
     switch (viewData) {
       case "school":
-        setView(<ViewSchool class_id={class_id} />);
+        setView(<ViewSchool id={class_id} />);
         setTools(<ToolsSchool isDash back="/school" />);
         break;
 

@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
-import { iFrequencyStudentsBase } from "../../interfaces";
-import { useFrequencyContext } from "../../contexts";
+import { iFrequencyStudentsBase } from "../../../interfaces";
+import { useFrequencyContext } from "../../../contexts";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
-import { DialogBaseChildrenAction } from "./structure";
+import { DialogBaseChildrenAction } from "../structure";
 
 interface iDialogRemoveMissedProps {
   open: boolean;

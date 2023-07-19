@@ -101,9 +101,15 @@ export const ViewSchoolData = ({ id }: iViewBaseProps) => {
           />
         </CardActions>
       </Card>
-      {schoolRetrieve && <DialogEditSchool school={schoolRetrieve} />}
-      {schoolRetrieve && <DialogDirectorSchool school={schoolRetrieve} />}
-      {schoolRetrieve && <DialogActiveSchool school={schoolRetrieve} />}
+      {schoolRetrieve && (
+        <DialogEditSchool school={schoolRetrieve} locale="data" />
+      )}
+      {schoolRetrieve && (
+        <DialogDirectorSchool school={schoolRetrieve} locale="data" />
+      )}
+      {schoolRetrieve && (
+        <DialogActiveSchool school={schoolRetrieve} locale="data" />
+      )}
     </>
   );
 };

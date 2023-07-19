@@ -1,4 +1,4 @@
-import { TitleSchoolPage, ToolsSchool } from "../../shared/components";
+import { Footer, TitleSchoolPage, ToolsSchool } from "../../shared/components";
 import { LayoutBasePage } from "../../shared/layouts";
 import { ViewSchool } from "../../shared/views";
 
@@ -19,6 +19,7 @@ export const SchoolPage = () => {
       }
     >
       <ViewSchool />
+      <Footer />
     </LayoutBasePage>
   );
 };

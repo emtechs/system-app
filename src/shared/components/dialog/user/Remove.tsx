@@ -3,11 +3,11 @@ import {
   useAppThemeContext,
   useDialogContext,
   useSchoolContext,
-} from "../../contexts";
-import { iUser } from "../../interfaces";
-import { rolePtBr } from "../../scripts";
-import { DialogBase } from "./structure";
-import { apiSchool } from "../../services";
+} from "../../../contexts";
+import { iUser } from "../../../interfaces";
+import { rolePtBr } from "../../../scripts";
+import { DialogBase } from "../structure";
+import { apiSchool } from "../../../services";
 
 interface iRemoveProps {
   user: iUser;

@@ -1,12 +1,12 @@
 import { Box, Button, Typography } from "@mui/material";
-import { iFrequencyStudentsBase } from "../../interfaces";
-import { useFrequencyContext } from "../../contexts";
+import { iFrequencyStudentsBase } from "../../../interfaces";
+import { useFrequencyContext } from "../../../contexts";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { frequencyUpdateSchema } from "../../schemas";
+import { frequencyUpdateSchema } from "../../../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DialogBaseChildrenAction } from "./structure";
+import { DialogBaseChildrenAction } from "../structure";
 
 interface iDialogMissedProps {
   open: boolean;

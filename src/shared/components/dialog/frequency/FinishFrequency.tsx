@@ -3,11 +3,11 @@ import {
   useAppThemeContext,
   useDrawerContext,
   useFrequencyContext,
-} from "../../contexts";
-import { iFrequencyStudentsBase, iheadCell } from "../../interfaces";
-import { TableBase } from "../table";
-import { DialogBaseChildrenAction } from "./structure";
-import { defineBgColorFrequency, statusFrequencyPtBr } from "../../scripts";
+} from "../../../contexts";
+import { iFrequencyStudentsBase, iheadCell } from "../../../interfaces";
+import { TableBase } from "../../table";
+import { DialogBaseChildrenAction } from "../structure";
+import { defineBgColorFrequency, statusFrequencyPtBr } from "../../../scripts";
 
 const headCells: iheadCell[] = [
   { order: "registry", numeric: "left", label: "Matrícula" },

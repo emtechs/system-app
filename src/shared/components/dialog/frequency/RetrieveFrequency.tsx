@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
-import { iFrequencyWithInfreq } from "../../interfaces";
-import { useFrequencyContext } from "../../contexts";
-import { DialogBaseChildrenAction } from "./structure";
+import { iFrequencyWithInfreq } from "../../../interfaces";
+import { useFrequencyContext } from "../../../contexts";
+import { DialogBaseChildrenAction } from "../structure";
 
 interface iDialogDeleteFrequencyProps {
   open: boolean;

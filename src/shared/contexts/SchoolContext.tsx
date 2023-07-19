@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { useAuthContext } from "./AuthContext";
 import { apiAuth, apiSchool } from "../services";
+import { usePaginationContext } from ".";
 
 interface iSchoolContextData {
   updateServerData: iWorkSchool | undefined;
@@ -38,6 +39,7 @@ interface iSchoolContextData {
     data: FieldValues,
     id: string,
     type: "nome" | "diretor" | "estado",
+    locale: "list" | "data",
     query?: string,
     back?: string
   ) => Promise<void>;
@@ -46,6 +48,8 @@ interface iSchoolContextData {
   schoolDataRetrieve: (id: string, query: string) => void;
   schoolRetrieve: iSchool | undefined;
   loadingSchool: boolean;
+  getSchools: (query_schools: string) => void;
+  listData: iSchool[] | undefined;
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -54,10 +58,23 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const { setListYear, yearData } = useAuthContext();
+  const { setIsLoading, setCount } = usePaginationContext();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
   const [schoolSelect, setSchoolSelect] = useState<iSelectBase>();
   const [schoolRetrieve, setSchoolRetrieve] = useState<iSchool>();
   const [loadingSchool, setLoadingSchool] = useState(false);
+  const [listData, setListData] = useState<iSchool[]>();
+
+  const getSchools = useCallback((query_schools: string) => {
+    setIsLoading(true);
+    apiSchool
+      .list(query_schools)
+      .then((res) => {
+        setListData(res.result);
+        setCount(res.total);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
 
   const verifySchool = useCallback(
     (id: string) => {
@@ -145,6 +162,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
       data: FieldValues,
       id: string,
       type: "nome" | "diretor" | "estado",
+      locale: "list" | "data",
       query?: string,
       back?: string
     ) => {
@@ -152,6 +170,15 @@ export const SchoolProvider = ({ children }: iChildren) => {
         setLoading(true);
         await apiSchool.update(data, id, query);
         handleSucess(`Sucesso ao alterar o ${type} da Escola!`);
+        switch (locale) {
+          case "data":
+            schoolDataRetrieve(id, "");
+            break;
+
+          case "list":
+            getSchools("?is_active=true");
+            break;
+        }
       } catch {
         handleError(
           `Não foi possível atualizar o ${type} da escola no momento!`
@@ -178,6 +205,8 @@ export const SchoolProvider = ({ children }: iChildren) => {
         loadingSchool,
         schoolDataRetrieve,
         schoolRetrieve,
+        getSchools,
+        listData,
       }}
     >
       {children}
