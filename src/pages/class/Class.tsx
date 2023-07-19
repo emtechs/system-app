@@ -1,4 +1,5 @@
 import {
+  Footer,
   TabsClassYearPage,
   TitleClassPage,
   ToolsSchool,
@@ -24,6 +25,7 @@ export const ClassPage = () => {
     >
       <TabsClassYearPage />
       <ViewClass />
+      <Footer />
     </LayoutBasePage>
   );
 };

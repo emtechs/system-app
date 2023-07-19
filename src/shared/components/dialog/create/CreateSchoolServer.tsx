@@ -3,7 +3,9 @@ import { BaseContentChildren, DialogBaseChildren } from "../..";
 import {
   useAppThemeContext,
   useDialogContext,
+  usePaginationContext,
   useSchoolContext,
+  useUserContext,
 } from "../../../contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { defineServerSchema } from "../../../schemas";
@@ -15,14 +17,19 @@ import {
   iSchool,
   iSchoolServerRequest,
 } from "../../../interfaces";
+import { useNavigate } from "react-router-dom";
 
 export const DialogCreateSchoolServer = ({
   locale,
   user,
+  school,
 }: iDialogUserProps) => {
+  const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const { openCreate, handleOpenCreate, openEdit, handleOpenEdit } =
     useDialogContext();
+  const { onClickReset } = usePaginationContext();
+  const { userDataRetrieve } = useUserContext();
   const { getSchools } = useSchoolContext();
   const [schoolDataSelect, setSchoolDataSelect] = useState<iSchool[]>();
 
@@ -32,9 +39,11 @@ export const DialogCreateSchoolServer = ({
 
   useEffect(() => {
     apiUsingNow
-      .get<{ result: iSchool[] }>(`schools?server_id=${user.id}&is_active=true`)
+      .get<{ result: iSchool[] }>(
+        `schools?none_server_id=${user.id}&is_active=true`
+      )
       .then((res) => setSchoolDataSelect(res.data.result));
-  }, [user]);
+  }, [user, school]);
 
   const createSchoolServer = async (
     data: iSchoolServerRequest,
@@ -44,7 +53,17 @@ export const DialogCreateSchoolServer = ({
       setLoading(true);
       await apiSchool.createServer(data, server_id);
       handleSucess("O servidor foi cadastrada com sucesso na escola!");
-      if (locale === "list") getSchools(`?server_id=${user.id}`);
+      switch (locale) {
+        case "data":
+          onClickReset();
+          navigate(`/user/${user.id}?view=school`);
+          break;
+
+        case "list":
+          userDataRetrieve(user.id, "");
+          getSchools(`?server_id=${user.id}`);
+          break;
+      }
     } catch {
       handleError(
         "No momento, não foi possível cadastrar o servidor na escola. Por favor, tente novamente mais tarde."

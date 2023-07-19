@@ -1,9 +1,24 @@
-import { useMemo } from "react";
-import { Skeleton, TableCell, TableRow } from "@mui/material";
-import { DialogCreateSchoolServer, TableBase } from "../../../components";
+import { useMemo, useState } from "react";
+import {
+  IconButton,
+  Skeleton,
+  TableCell,
+  TableRow,
+  Tooltip,
+} from "@mui/material";
+import {
+  DialogCreateSchoolServer,
+  DialogRemoveUser,
+  TableBase,
+} from "../../../components";
 import { iSchool, iHeadcell } from "../../../interfaces";
 import { rolePtBr } from "../../../scripts";
-import { usePaginationContext, useUserContext } from "../../../contexts";
+import {
+  useDialogContext,
+  usePaginationContext,
+  useUserContext,
+} from "../../../contexts";
+import { RemoveDone } from "@mui/icons-material";
 
 interface iTableSchoolUserProps {
   data: iSchool[];
@@ -11,13 +26,16 @@ interface iTableSchoolUserProps {
 
 export const TableSchoolUser = ({ data }: iTableSchoolUserProps) => {
   const { isLoading } = usePaginationContext();
+  const { handleOpenActive } = useDialogContext();
   const { userRetrieve } = useUserContext();
+  const [schoolData, setSchoolData] = useState<iSchool>();
 
   const headCells: iHeadcell[] = useMemo(() => {
     return [
       { order: "name", numeric: "left", label: "Escola" },
       { numeric: "left", label: "Função" },
       { numeric: "left", label: "Tela" },
+      { numeric: "left", label: "Ações" },
     ];
   }, []);
 
@@ -37,11 +55,36 @@ export const TableSchoolUser = ({ data }: iTableSchoolUserProps) => {
                 </TableCell>
               </>
             )}
+            <TableCell>
+              <Tooltip title="Remover">
+                <IconButton
+                  color="error"
+                  size="small"
+                  onClick={() => {
+                    setSchoolData(school);
+                    handleOpenActive();
+                  }}
+                >
+                  <RemoveDone fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </TableCell>
           </TableRow>
         ))}
       </TableBase>
       {userRetrieve && (
-        <DialogCreateSchoolServer user={userRetrieve} locale="list" />
+        <DialogCreateSchoolServer
+          user={userRetrieve}
+          school={schoolData}
+          locale="list"
+        />
+      )}
+      {userRetrieve && (
+        <DialogRemoveUser
+          user={userRetrieve}
+          school={schoolData}
+          locale="list"
+        />
       )}
     </>
   );

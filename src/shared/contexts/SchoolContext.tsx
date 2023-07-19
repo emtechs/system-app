@@ -4,7 +4,6 @@ import {
   iSchool,
   iSchoolClassRequest,
   iSchoolImportRequest,
-  iSchoolServerRequest,
   iSelectBase,
   iWorkSchool,
 } from "../interfaces";
@@ -31,10 +30,6 @@ interface iSchoolContextData {
     data: iSchoolClassRequest,
     school_id: string,
     year_id: string
-  ) => Promise<void>;
-  createSchoolServer: (
-    data: iSchoolServerRequest,
-    server_id: string
   ) => Promise<void>;
   updateSchool: (
     data: FieldValues,
@@ -105,23 +100,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
       .then((res) => setSchoolRetrieve(res))
       .finally(() => setLoadingSchool(false));
   }, []);
-
-  const handleCreateSchoolServer = useCallback(
-    async (data: iSchoolServerRequest, server_id: string) => {
-      try {
-        setLoading(true);
-        await apiSchool.createServer(data, server_id);
-        handleSucess("O servidor foi cadastrada com sucesso na escola!");
-      } catch {
-        handleError(
-          "No momento, não foi possível cadastrar o servidor na escola. Por favor, tente novamente mais tarde."
-        );
-      } finally {
-        setLoading(false);
-      }
-    },
-    []
-  );
 
   const handleCreateSchoolClass = useCallback(
     async (data: iSchoolClassRequest, school_id: string, year_id: string) => {
@@ -199,7 +177,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
         updateServerData,
         updateSchool: handleUpdateSchool,
         importSchool: handleImportSchool,
-        createSchoolServer: handleCreateSchoolServer,
         createSchoolClass: handleCreateSchoolClass,
         schoolSelect,
         verifySchool,

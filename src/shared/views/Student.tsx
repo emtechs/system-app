@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { useDebounce, useValueTabs } from "../hooks";
 import { usePaginationContext } from "../contexts";
 import {
@@ -13,13 +13,14 @@ import { apiStudent } from "../services";
 import { Box } from "@mui/material";
 import { PaginationTable, TabsYear } from "../components";
 import sortArray from "sort-array";
-import { TableStudentClass, TableStudentSchool } from "./tables";
+import {
+  TableStudentClass,
+  TableStudentSchool,
+  TableStudentSchoolClass,
+} from "./tables";
 
-interface iViewStudentProps extends iViewBaseProps {
-  type?: "class" | "school";
-}
-
-export const ViewStudent = ({ id, type }: iViewStudentProps) => {
+export const ViewStudent = ({ id }: iViewBaseProps) => {
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const year_id = searchParams.get("year_id") || undefined;
   const { debounce } = useDebounce();
@@ -39,16 +40,16 @@ export const ViewStudent = ({ id, type }: iViewStudentProps) => {
   const [data, setData] = useState<iStudent[]>();
 
   const school_id = useMemo(() => {
-    if (type === "school") return id;
+    if (location.pathname.includes("school")) return id;
 
     return searchParams.get("school_id") || undefined;
-  }, [id, searchParams, type]);
+  }, [id, location, searchParams]);
 
   const class_id = useMemo(() => {
-    if (type === "class") return id;
+    if (location.pathname.includes("class")) return id;
 
     return searchParams.get("class_id") || undefined;
-  }, [id, searchParams, type]);
+  }, [id, location, searchParams]);
 
   const handleChange = (_event: SyntheticEvent, newValue: string) => {
     setSearchParams(valueTabs(newValue, "year"), { replace: true });
@@ -114,6 +115,9 @@ export const ViewStudent = ({ id, type }: iViewStudentProps) => {
           order: by,
           computed: { school_name: (row) => row.school.name },
         });
+
+      if (class_id && school_id)
+        return <TableStudentSchoolClass data={students} />;
 
       if (class_id) return <TableStudentClass data={students} />;
 

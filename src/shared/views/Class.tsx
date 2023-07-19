@@ -12,13 +12,13 @@ import { useDebounce, useValueTabs } from "../hooks";
 import { TableClass, TableClassSchool, TableClassYear } from "./tables";
 import sortArray from "sort-array";
 import { PaginationTable, TabsYear } from "../components";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { Box } from "@mui/material";
 
 export const ViewClass = ({ id }: iViewBaseProps) => {
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const year_id = searchParams.get("year_id") || undefined;
-  const view = searchParams.get("view") || undefined;
   const { debounce } = useDebounce();
   const { setListYear } = useAuthContext();
   const {
@@ -36,6 +36,10 @@ export const ViewClass = ({ id }: iViewBaseProps) => {
   const { valueTabs } = useValueTabs();
   const [data, setData] = useState<iClass[]>();
 
+  const year_class_id = location.pathname.includes("year") ? id : undefined;
+
+  const school_id = location.pathname.includes("school") ? id : undefined;
+
   const handleChange = (_event: SyntheticEvent, newValue: string) => {
     setSearchParams(valueTabs(newValue, "year"), { replace: true });
   };
@@ -44,15 +48,15 @@ export const ViewClass = ({ id }: iViewBaseProps) => {
     (query: string, isFace?: boolean) => {
       setIsLoading(true);
 
-      if (id && view === "class") {
+      if (year_class_id) {
         if (isFace) {
           apiClass
-            .listClass(id, query)
+            .listClass(year_class_id, query)
             .then((res) => setData((old) => old?.concat(res.result)))
             .finally(() => setIsLoading(false));
         } else {
           apiClass
-            .listClass(id, query)
+            .listClass(year_class_id, query)
             .then((res) => {
               setFace(1);
               setData(res.result);
@@ -79,17 +83,16 @@ export const ViewClass = ({ id }: iViewBaseProps) => {
         }
       }
     },
-    [id, view]
+    [year_class_id]
   );
 
   const define_query = useCallback(
     (comp: string) => {
-      if (view === "class")
-        return query() + comp + "&order=name" + query_page();
+      if (year_class_id) return query() + comp + "&order=name" + query_page();
 
-      return query(year_id, id) + comp + "&order=name" + query_page();
+      return query(year_id, school_id) + comp + "&order=name" + query_page();
     },
-    [id, query, query_page, view, year_id]
+    [query, query_page, school_id, year_class_id, year_id]
   );
 
   const onClick = () => getClasses(define_query(handleFace(face)), true);
@@ -116,18 +119,20 @@ export const ViewClass = ({ id }: iViewBaseProps) => {
           computed: { school_name: (row) => row.school.name },
         });
 
-      if (id && view === "class") return <TableClassYear data={classes} />;
+      if (year_class_id) return <TableClassYear data={classes} />;
 
-      if (id) return <TableClassSchool data={classes} />;
+      if (school_id) return <TableClassSchool data={classes} />;
 
       return <TableClass data={classes} />;
     }
     return <></>;
-  }, [by, data, id, order, view]);
+  }, [by, data, order, school_id, year_class_id]);
 
   return (
     <Box display="flex" justifyContent="space-between">
-      {id && !view && <TabsYear value={year_id} handleChange={handleChange} />}
+      {!year_class_id && (
+        <TabsYear value={year_id} handleChange={handleChange} />
+      )}
       <Box flex={1}>
         {table}
         <PaginationTable total={data ? data.length : 0} onClick={onClick} />

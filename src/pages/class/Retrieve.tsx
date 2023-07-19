@@ -1,10 +1,12 @@
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { useAuthContext, useClassContext } from "../../shared/contexts";
+import { useAuthContext } from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
 import {
+  Footer,
   TabsClassRetrievePage,
   TitleClassRetrievePage,
+  TitleSchoolClassPage,
   ToolsSchool,
 } from "../../shared/components";
 import {
@@ -14,25 +16,31 @@ import {
   ViewSchool,
   ViewStudent,
 } from "../../shared/views";
-import { useValueTabs } from "../../shared/hooks";
+import { useValueTabs, useVerify } from "../../shared/hooks";
 
 export const RetrieveClassPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { class_id } = useParams();
   const viewData = searchParams.get("view") || "";
+  const school_id = searchParams.get("school_id") || undefined;
   const { listYear } = useAuthContext();
-  const { verifyClass } = useClassContext();
   const [view, setView] = useState(<ViewClassData id={class_id} />);
   const [tools, setTools] = useState(<ToolsSchool back="/school" />);
   const { valueTabs } = useValueTabs(listYear?.at(0)?.id, "ANO");
+  const { verify } = useVerify();
 
   const handleChange = (_event: SyntheticEvent, newValue: string) => {
     setSearchParams(valueTabs(newValue, "view"), { replace: true });
   };
 
   useEffect(() => {
-    if (class_id) verifyClass(class_id);
-  }, [class_id]);
+    verify(undefined, school_id, class_id);
+  }, [school_id, class_id]);
+
+  const title = useMemo(() => {
+    if (school_id) return <TitleSchoolClassPage />;
+    return <TitleClassRetrievePage />;
+  }, [school_id]);
 
   useEffect(() => {
     switch (viewData) {
@@ -42,7 +50,7 @@ export const RetrieveClassPage = () => {
         break;
 
       case "student":
-        setView(<ViewStudent id={class_id} type="class" />);
+        setView(<ViewStudent id={class_id} />);
         setTools(
           <ToolsSchool back="/school" isNew titleNew="Aluno" isDash isSearch />
         );
@@ -65,9 +73,10 @@ export const RetrieveClassPage = () => {
   }, [viewData, listYear, class_id]);
 
   return (
-    <LayoutBasePage title={<TitleClassRetrievePage />} tools={tools}>
+    <LayoutBasePage title={title} tools={tools}>
       <TabsClassRetrievePage value={viewData} handleChange={handleChange} />
       {view}
+      <Footer />
     </LayoutBasePage>
   );
 };

@@ -1,12 +1,9 @@
 import { SyntheticEvent, useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import {
-  useAuthContext,
-  useSchoolContext,
-  useUserContext,
-} from "../../shared/contexts";
+import { useAuthContext } from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
 import {
+  Footer,
   TabsUserRetrievePage,
   TitleSchoolUserPage,
   TitleUserRetrievePage,
@@ -18,7 +15,7 @@ import {
   ViewSchool,
   ViewUserData,
 } from "../../shared/views";
-import { useValueTabs } from "../../shared/hooks";
+import { useValueTabs, useVerify } from "../../shared/hooks";
 
 export const RetrieveUserPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -26,13 +23,16 @@ export const RetrieveUserPage = () => {
   const viewData = searchParams.get("view") || "";
   const school_id = searchParams.get("school_id") || undefined;
   const { listYear } = useAuthContext();
-  const { verifyUser } = useUserContext();
-  const { verifySchool } = useSchoolContext();
   const [tools, setTools] = useState(<ToolsUser back="/user" />);
   const { valueTabs } = useValueTabs(listYear?.at(0)?.id, undefined, school_id);
   const [view, setView] = useState(
     <ViewUserData id={user_id} school_id={school_id} />
   );
+  const { verify } = useVerify();
+
+  useEffect(() => {
+    verify(undefined, school_id, undefined, user_id);
+  }, [school_id, user_id]);
 
   const handleChange = (_event: SyntheticEvent, newValue: string) => {
     setSearchParams(valueTabs(newValue, "view"), { replace: true });
@@ -42,11 +42,6 @@ export const RetrieveUserPage = () => {
     if (school_id) return `/school/${school_id}`;
     return "/user";
   }, [school_id]);
-
-  useEffect(() => {
-    if (user_id) verifyUser(user_id);
-    if (school_id) verifySchool(school_id);
-  }, [school_id, user_id]);
 
   const title = useMemo(() => {
     if (school_id) return <TitleSchoolUserPage />;
@@ -86,6 +81,7 @@ export const RetrieveUserPage = () => {
     <LayoutBasePage title={title} tools={tools}>
       <TabsUserRetrievePage value={viewData} handleChange={handleChange} />
       {view}
+      <Footer />
     </LayoutBasePage>
   );
 };

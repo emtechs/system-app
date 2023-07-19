@@ -4,6 +4,7 @@ import { PersonAdd } from "@mui/icons-material";
 import { useAuthContext } from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
 import {
+  Footer,
   TabsSchoolRetrievePage,
   TitleSchoolRetrievePage,
   ToolsSchool,
@@ -61,7 +62,7 @@ export const RetrieveSchoolPage = () => {
         break;
 
       case "student":
-        setView(<ViewStudent id={school_id} type="school" />);
+        setView(<ViewStudent id={school_id} />);
         setTools(
           <ToolsSchool back="/school" isNew titleNew="Aluno" isDash isSearch />
         );
@@ -87,6 +88,7 @@ export const RetrieveSchoolPage = () => {
     <LayoutBasePage title={<TitleSchoolRetrievePage />} tools={tools}>
       <TabsSchoolRetrievePage value={viewData} handleChange={handleChange} />
       {view}
+      <Footer />
     </LayoutBasePage>
   );
 };
