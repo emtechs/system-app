@@ -43,7 +43,7 @@ interface iUserContextData {
   userRetrieve: iUser | undefined;
   userDataRetrieve: (id: string, query: string) => void;
   getUsers: (query: string) => void;
-  listData: iUser[] | undefined;
+  listData: iUser[];
 }
 
 const UserContext = createContext({} as iUserContextData);
@@ -57,7 +57,7 @@ export const UserProvider = ({ children }: iChildren) => {
   const [userSelect, setUserSelect] = useState<iSelectBase>();
   const [loadingUser, setLoadingUser] = useState(true);
   const [userRetrieve, setUserRetrieve] = useState<iUser>();
-  const [listData, setListData] = useState<iUser[]>();
+  const [listData, setListData] = useState<iUser[]>([]);
 
   const getUsers = useCallback((query: string) => {
     setIsLoading(true);

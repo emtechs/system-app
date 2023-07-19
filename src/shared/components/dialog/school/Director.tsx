@@ -1,5 +1,9 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { useDialogContext, useSchoolContext } from "../../../contexts";
+import {
+  useDialogContext,
+  usePaginationContext,
+  useSchoolContext,
+} from "../../../contexts";
 import { iDialogSchoolProps } from "../../../interfaces";
 import { BaseContentChildren, DialogBaseChildren } from "../structure";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,6 +15,7 @@ export const DialogDirectorSchool = ({
   locale,
   school,
 }: iDialogSchoolProps) => {
+  const { onClickReset } = usePaginationContext();
   const { handleOpenDirector, openDirector } = useDialogContext();
   const { updateSchool } = useSchoolContext();
   return (
@@ -26,6 +31,7 @@ export const DialogDirectorSchool = ({
             ? `?director_id=${school.director.id}`
             : undefined;
           updateSchool(data, school.id, "diretor", locale, query);
+          onClickReset();
           handleOpenDirector();
         }}
         resolver={zodResolver(schoolUpdateDirectorSchema)}

@@ -3,14 +3,10 @@ import {
   usePaginationContext,
   useUserContext,
 } from "../../../contexts";
-import { iDialogUserProps, iLocale } from "../../../interfaces";
+import { iDialogUserProps } from "../../../interfaces";
 import { DialogActive } from "../structure";
 
-interface iDialogActiveUserProps extends iDialogUserProps {
-  locale: iLocale;
-}
-
-export const DialogActiveUser = ({ locale, user }: iDialogActiveUserProps) => {
+export const DialogActiveUser = ({ locale, user }: iDialogUserProps) => {
   const { onClickReset } = usePaginationContext();
   const { handleOpenActive, openActive } = useDialogContext();
   const { updateAllUser } = useUserContext();

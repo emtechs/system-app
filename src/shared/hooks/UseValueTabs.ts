@@ -8,10 +8,6 @@ export const useValueTabs = (
 ) => {
   const [searchParams] = useSearchParams();
 
-  const data = useMemo(() => {
-    return searchParams.get("data");
-  }, [searchParams]);
-
   const viewData = useMemo(() => {
     return searchParams.get("view");
   }, [searchParams]);
@@ -35,7 +31,6 @@ export const useValueTabs = (
     (value: string, op: "view" | "year" | "period") => {
       let valueTabsData = {};
 
-      if (data) valueTabsData = { ...valueTabsData, data };
       if (viewData) valueTabsData = { ...valueTabsData, view: viewData };
       if (yearId) valueTabsData = { ...valueTabsData, year_id: yearId };
       if (periodData) valueTabsData = { ...valueTabsData, period: periodData };
@@ -55,7 +50,7 @@ export const useValueTabs = (
 
       return valueTabsData;
     },
-    [data, periodData, schoolId, viewData, yearId]
+    [periodData, schoolId, viewData, yearId]
   );
 
   return { valueTabs };

@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { schoolCreateSchema } from "../../../schemas";
 import { Button } from "@mui/material";
 import { iSchoolRequest } from "../../../interfaces";
-import { useCallback } from "react";
 import { useAppThemeContext, useDialogContext } from "../../../contexts";
 import { useNavigate } from "react-router-dom";
 import { apiSchool } from "../../../services";
@@ -14,7 +13,7 @@ export const DialogCreateSchool = () => {
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const { handleOpenCreate, openCreate } = useDialogContext();
 
-  const createSchool = useCallback(async (data: iSchoolRequest) => {
+  const createSchool = async (data: iSchoolRequest) => {
     try {
       setLoading(true);
       const school = await apiSchool.create(data);
@@ -27,7 +26,7 @@ export const DialogCreateSchool = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   return (
     <DialogBaseChildren

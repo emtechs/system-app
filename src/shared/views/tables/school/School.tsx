@@ -41,7 +41,7 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
                   variant="body2"
                   color="inherit"
                   component={Link}
-                  href={`/school/${school.id}?data=school`}
+                  href={`/school/${school.id}`}
                   onClick={onClickReset}
                 >
                   {school.name}

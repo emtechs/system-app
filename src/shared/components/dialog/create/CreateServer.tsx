@@ -7,7 +7,6 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { iServerRequest } from "../../../interfaces";
 import { serverCreateSchema } from "../../../schemas";
-import { useCallback } from "react";
 import { apiUser } from "../../../services";
 import { BaseContentChildren, DialogBaseChildren } from "../structure";
 import { ValidateCPF } from "../../validate";
@@ -21,7 +20,7 @@ export const DialogCreateServer = ({ school_id }: iDialogCreateServer) => {
   const { openCreate, handleOpenCreate } = useDialogContext();
   const { getUsers } = useUserContext();
 
-  const createServer = useCallback(async (data: iServerRequest, id: string) => {
+  const createServer = async (data: iServerRequest, id: string) => {
     try {
       setLoading(true);
       await apiUser.createServer(data, id);
@@ -32,7 +31,7 @@ export const DialogCreateServer = ({ school_id }: iDialogCreateServer) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   return (
     <DialogBaseChildren

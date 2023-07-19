@@ -7,7 +7,7 @@ import { BaseContentChildren, DialogBaseChildren } from "../structure";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createDirectorSchema } from "../../../schemas";
 import { iSchool, iUserDirectorRequest } from "../../../interfaces";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppThemeContext, useDialogContext } from "../../../contexts";
 import { apiUser, apiUsingNow } from "../../../services";
 import { ValidateCPF } from "../../validate";
@@ -17,7 +17,7 @@ export const DialogCreateDirector = () => {
   const { handleOpenDirector, openDirector } = useDialogContext();
   const [schoolDataSelect, setSchoolDataSelect] = useState<iSchool[]>();
 
-  const createDirector = useCallback(async (data: iUserDirectorRequest) => {
+  const createDirector = async (data: iUserDirectorRequest) => {
     try {
       setLoading(true);
       await apiUser.create(data);
@@ -27,7 +27,7 @@ export const DialogCreateDirector = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
     setLoading(true);

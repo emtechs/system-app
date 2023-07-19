@@ -1,41 +1,40 @@
-import { useCallback } from "react";
 import {
   useAppThemeContext,
   useDialogContext,
-  useSchoolContext,
+  useUserContext,
 } from "../../../contexts";
-import { iUser } from "../../../interfaces";
+import { iDialogUserProps } from "../../../interfaces";
 import { rolePtBr } from "../../../scripts";
 import { DialogBase } from "../structure";
 import { apiSchool } from "../../../services";
+import { useNavigate } from "react-router-dom";
 
-interface iRemoveProps {
-  user: iUser;
-  getUsers: (query: string, take: number) => void;
-}
-
-export const RemoveUser = ({ user, getUsers }: iRemoveProps) => {
+export const DialogRemoveUser = ({ locale, user }: iDialogUserProps) => {
+  const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const { openActive, handleOpenActive } = useDialogContext();
-  const { schoolDataRetrieve } = useSchoolContext();
+  const { getUsers } = useUserContext();
 
-  const deleteServer = useCallback(
-    async (school_id: string, server_id: string) => {
-      try {
-        setLoading(true);
-        await apiSchool.deleteServer(school_id, server_id);
-        handleSucess("Usuário removido da função com sucesso!");
-        getUsers(`?school_id=${school_id}`, 1);
-        if (user.work_school && user.work_school.role === "DIRET")
-          schoolDataRetrieve(school_id, "");
-      } catch {
-        handleError("Não foi possível remover o usuário da função no momento!");
-      } finally {
-        setLoading(false);
+  const deleteServer = async (school_id: string, server_id: string) => {
+    try {
+      setLoading(true);
+      await apiSchool.deleteServer(school_id, server_id);
+      handleSucess("Usuário removido da função com sucesso!");
+      switch (locale) {
+        case "data":
+          navigate(`/school/${school_id}?view=server`);
+          break;
+
+        case "list":
+          getUsers(`?school_id=${school_id}`);
+          break;
       }
-    },
-    []
-  );
+    } catch {
+      handleError("Não foi possível remover o usuário da função no momento!");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     user.work_school && (

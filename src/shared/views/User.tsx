@@ -35,13 +35,11 @@ export const ViewUser = ({ id }: iViewBaseProps) => {
   }, [debounce, define_query, getUsers, search]);
 
   const table = useMemo(() => {
-    let users: iUser[];
-    if (listData) {
-      users = sortArray<iUser>(listData, { by: order, order: by });
-      if (id) return <TableUserSchool data={users} school_id={id} />;
-      return <TableUser data={users} />;
-    }
-    return <></>;
+    const users = sortArray<iUser>(listData, { by: order, order: by });
+
+    if (id) return <TableUserSchool data={users} school_id={id} />;
+
+    return <TableUser data={users} />;
   }, [by, id, listData, order]);
 
   return table;

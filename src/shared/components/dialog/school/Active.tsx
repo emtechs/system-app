@@ -22,7 +22,7 @@ export const DialogActiveSchool = ({ locale, school }: iDialogSchoolProps) => {
             "estado",
             locale,
             undefined,
-            school.is_active ? "/school" : "/school/" + school.id
+            school.is_active ? "/school" : `/school/${school.id}`
           );
           onClickReset();
           handleOpenActive();

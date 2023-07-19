@@ -8,6 +8,7 @@ import {
   userUpdateSchema,
 } from "../schemas";
 import { iWorkSchool } from "./school.interface";
+import { iLocale } from "./global.interfaces";
 
 export type iRole = "ADMIN" | "SERV" | "DIRET" | "SECRET";
 
@@ -15,6 +16,7 @@ export type iDash = "COMMON" | "SCHOOL" | "ORGAN" | "ADMIN";
 
 export interface iDialogUserProps {
   user: iUser;
+  locale: iLocale;
 }
 
 export interface iUser {

@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import {
   DialogActiveUser,
   DialogCreateAdmin,
+  DialogCreateSchoolServer,
   TableBase,
 } from "../../../components";
 import { useAppThemeContext, usePaginationContext } from "../../../contexts";
@@ -41,7 +42,7 @@ export const TableUser = ({ data }: iTableUserProps) => {
     <>
       <TableBase headCells={headCells} message="Nenhum usuário encotrado">
         {data.map((user) => (
-          <TableRow key={user.id}>
+          <TableRow key={user.id} hover>
             <TableCell>
               {isLoading ? (
                 <Skeleton width={250} />
@@ -51,7 +52,7 @@ export const TableUser = ({ data }: iTableUserProps) => {
                   variant="body2"
                   color="inherit"
                   component={Link}
-                  href={`/user/${user.id}?data=user`}
+                  href={`/user/${user.id}`}
                   onClick={onClickReset}
                 >
                   {user.name}
@@ -74,6 +75,7 @@ export const TableUser = ({ data }: iTableUserProps) => {
       </TableBase>
       <DialogCreateAdmin />
       {userData && <DialogActiveUser user={userData} locale="list" />}
+      {userData && <DialogCreateSchoolServer user={userData} locale="data" />}
     </>
   );
 };

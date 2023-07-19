@@ -50,7 +50,7 @@ interface iSchoolContextData {
   schoolRetrieve: iSchool | undefined;
   loadingSchool: boolean;
   getSchools: (query_schools: string) => void;
-  listData: iSchool[] | undefined;
+  listData: iSchool[];
 }
 
 const SchoolContext = createContext({} as iSchoolContextData);
@@ -64,7 +64,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [schoolSelect, setSchoolSelect] = useState<iSelectBase>();
   const [schoolRetrieve, setSchoolRetrieve] = useState<iSchool>();
   const [loadingSchool, setLoadingSchool] = useState(false);
-  const [listData, setListData] = useState<iSchool[]>();
+  const [listData, setListData] = useState<iSchool[]>([]);
 
   const getSchools = useCallback((query_schools: string) => {
     setIsLoading(true);

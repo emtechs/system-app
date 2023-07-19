@@ -9,18 +9,19 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
-import { useUserContext } from "../contexts";
+import { useDialogContext, useUserContext } from "../contexts";
 import { ExpandMore, RemoveDone } from "@mui/icons-material";
 import { iViewBaseProps } from "../interfaces";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { rolePtBr } from "../scripts";
-import { DialogActiveUser } from "../components";
+import { DialogActiveUser, DialogRemoveUser } from "../components";
 
 interface iViewUserDataProps extends iViewBaseProps {
   school_id?: string;
 }
 
 export const ViewUserData = ({ id, school_id }: iViewUserDataProps) => {
+  const { handleOpenActive } = useDialogContext();
   const { loadingUser, userRetrieve, userDataRetrieve } = useUserContext();
 
   useEffect(() => {
@@ -28,34 +29,6 @@ export const ViewUserData = ({ id, school_id }: iViewUserDataProps) => {
 
     if (id) userDataRetrieve(id, query);
   }, [id, school_id]);
-
-  const actions = useMemo(() => {
-    if (school_id)
-      return (
-        <CardActions>
-          <Button
-            variant="contained"
-            color="error"
-            disableElevation
-            endIcon={<RemoveDone />}
-          >
-            Remover
-          </Button>
-        </CardActions>
-      );
-    return (
-      <CardActions>
-        <Button
-          variant="contained"
-          color="error"
-          disableElevation
-          endIcon={<RemoveDone />}
-        >
-          Desativar
-        </Button>
-      </CardActions>
-    );
-  }, []);
 
   return (
     <>
@@ -107,9 +80,22 @@ export const ViewUserData = ({ id, school_id }: iViewUserDataProps) => {
             </Accordion>
           )}
         </CardContent>
-        {actions}
+        <CardActions>
+          <Button
+            variant="contained"
+            color="error"
+            disableElevation
+            endIcon={<RemoveDone />}
+            onClick={handleOpenActive}
+          >
+            {school_id ? "Remover" : "Desativar"}
+          </Button>
+        </CardActions>
       </Card>
       {userRetrieve && <DialogActiveUser user={userRetrieve} locale="data" />}
+      {school_id && userRetrieve && (
+        <DialogRemoveUser user={userRetrieve} locale="data" />
+      )}
     </>
   );
 };

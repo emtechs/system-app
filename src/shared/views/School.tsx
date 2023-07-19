@@ -6,12 +6,12 @@ import { iSchool, iViewBaseProps } from "../interfaces";
 import { TabsYear } from "../components";
 import { TableSchool, TableSchoolClass, TableSchoolUser } from "./tables";
 import { Box } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 export const ViewSchool = ({ id }: iViewBaseProps) => {
+  const location = useLocation();
   const { getSchools, listData } = useSchoolContext();
   const [searchParams, setSearchParams] = useSearchParams();
-  const data = searchParams.get("data") || undefined;
   const school_id = searchParams.get("school_id") || undefined;
   const year_id = searchParams.get("year_id") || undefined;
   const { debounce } = useDebounce();
@@ -22,9 +22,9 @@ export const ViewSchool = ({ id }: iViewBaseProps) => {
     setSearchParams(valueTabs(newValue, "year"), { replace: true });
   };
 
-  const class_id = data === "class" ? id : undefined;
+  const class_id = location.pathname.includes("class") ? id : undefined;
 
-  const user_id = data === "user" ? id : undefined;
+  const user_id = location.pathname.includes("user") ? id : undefined;
 
   const define_query = useCallback(
     (comp: string) => {
@@ -49,24 +49,20 @@ export const ViewSchool = ({ id }: iViewBaseProps) => {
   const table = useMemo(() => {
     let listSchool: iSchool[];
 
-    if (listData) {
-      if (order === "director_name")
-        listSchool = sortArray<iSchool>(listData, {
-          by: order,
-          order: by,
-          computed: { director_name: (row) => row.director?.name },
-        });
+    if (order === "director_name")
+      listSchool = sortArray<iSchool>(listData, {
+        by: order,
+        order: by,
+        computed: { director_name: (row) => row.director?.name },
+      });
 
-      listSchool = sortArray<iSchool>(listData, { by: order, order: by });
+    listSchool = sortArray<iSchool>(listData, { by: order, order: by });
 
-      if (user_id) return <TableSchoolUser data={listSchool} />;
+    if (user_id) return <TableSchoolUser data={listSchool} />;
 
-      if (class_id) return <TableSchoolClass data={listSchool} />;
+    if (class_id) return <TableSchoolClass data={listSchool} />;
 
-      return <TableSchool data={listSchool} />;
-    }
-
-    return <></>;
+    return <TableSchool data={listSchool} />;
   }, [by, class_id, listData, order, user_id]);
 
   return (
