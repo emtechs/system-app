@@ -1,5 +1,9 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { useAppThemeContext, useDialogContext } from "../../../contexts";
+import {
+  useAppThemeContext,
+  useDialogContext,
+  useUserContext,
+} from "../../../contexts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { iServerRequest } from "../../../interfaces";
 import { serverCreateSchema } from "../../../schemas";
@@ -8,17 +12,14 @@ import { apiUser } from "../../../services";
 import { BaseContentChildren, DialogBaseChildren } from "../structure";
 import { ValidateCPF } from "../../validate";
 
-interface iDialogCreateServerProps {
+interface iDialogCreateServer {
   school_id: string;
-  getUsers: (query: string, isPage?: boolean) => void;
 }
 
-export const DialogCreateServer = ({
-  getUsers,
-  school_id,
-}: iDialogCreateServerProps) => {
+export const DialogCreateServer = ({ school_id }: iDialogCreateServer) => {
   const { setLoading, handleError, handleSucess } = useAppThemeContext();
   const { openCreate, handleOpenCreate } = useDialogContext();
+  const { getUsers } = useUserContext();
 
   const createServer = useCallback(async (data: iServerRequest, id: string) => {
     try {

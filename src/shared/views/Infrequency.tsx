@@ -2,7 +2,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { useDebounce, useValueTabs } from "../hooks";
 import { useAppThemeContext, usePaginationContext } from "../contexts";
 import { SyntheticEvent, useCallback, useEffect, useState } from "react";
-import { iInfrequency, iheadCell } from "../interfaces";
+import { iInfrequency, iHeadcell } from "../interfaces";
 import { apiFrequency } from "../services";
 import { Box, TableCell, TableRow } from "@mui/material";
 import { TableBase, TabsYear } from "../components";
@@ -55,7 +55,7 @@ export const ViewInfrequency = () => {
     } else getFrequencies(query_data);
   }, [search, period, year_id, school_id, query]);
 
-  const headCells: iheadCell[] = [
+  const headCells: iHeadcell[] = [
     { numeric: "left", label: "Nome" },
     { numeric: "left", label: "Período" },
     { numeric: "right", label: "Frequências" },

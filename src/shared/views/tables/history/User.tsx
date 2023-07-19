@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from "@mui/material";
 import { TableBase } from "../../../components";
-import { iFrequencyHistory, iheadCell } from "../../../interfaces";
+import { iFrequencyHistory, iHeadcell } from "../../../interfaces";
 import { statusFrequencyPtBr } from "../../../scripts";
 
 interface iTableHistoryUserProps {
@@ -8,7 +8,7 @@ interface iTableHistoryUserProps {
 }
 
 export const TableHistoryUser = ({ data }: iTableHistoryUserProps) => {
-  const headCells: iheadCell[] = [
+  const headCells: iHeadcell[] = [
     { numeric: "left", label: "Data" },
     { numeric: "left", label: "Matrícula" },
     { numeric: "left", label: "Aluno" },

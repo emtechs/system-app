@@ -14,6 +14,7 @@ import { ExpandMore, RemoveDone } from "@mui/icons-material";
 import { iViewBaseProps } from "../interfaces";
 import { useEffect, useMemo } from "react";
 import { rolePtBr } from "../scripts";
+import { DialogActiveUser } from "../components";
 
 interface iViewUserDataProps extends iViewBaseProps {
   school_id?: string;
@@ -108,6 +109,7 @@ export const ViewUserData = ({ id, school_id }: iViewUserDataProps) => {
         </CardContent>
         {actions}
       </Card>
+      {userRetrieve && <DialogActiveUser user={userRetrieve} locale="data" />}
     </>
   );
 };

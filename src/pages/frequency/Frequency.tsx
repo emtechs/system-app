@@ -26,7 +26,7 @@ import {
 } from "../../shared/components";
 import { useAppThemeContext } from "../../shared/contexts/ThemeContext";
 import { apiClass, apiUsingNow } from "../../shared/services";
-import { iClassDash, iDashSchool, iheadCell } from "../../shared/interfaces";
+import { iClassDash, iDashSchool, iHeadcell } from "../../shared/interfaces";
 import {
   EventAvailable,
   EventBusy,
@@ -92,7 +92,7 @@ export const FrequencyPage = () => {
   const [listClassSelectData, setListClassSelectData] =
     useState<iClassDash[]>();
 
-  const headCells: iheadCell[] = mdDown
+  const headCells: iHeadcell[] = mdDown
     ? [
         { order: "name", numeric: "left", label: "Turma" },
         { order: "infreq", numeric: "right", label: "Infrequência" },

@@ -44,7 +44,7 @@ export interface iButtonBaseProps {
 }
 
 export interface iTable extends iChildren {
-  headCells: iheadCell[];
+  headCells: iHeadcell[];
   message?: string;
   link?: "div";
 }
@@ -55,8 +55,10 @@ export interface iPageProps {
   back?: string;
 }
 
-export interface iheadCell {
+export interface iHeadcell {
   order?: string;
   numeric: "right" | "left";
   label: string;
 }
+
+export type iLocale = "list" | "data";

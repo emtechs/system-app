@@ -33,7 +33,8 @@ export const DefineSecretPage = () => {
                 is_active: false,
                 role: "SERV",
               },
-              true
+              true,
+              "list"
             );
           createSecret(data);
         }}

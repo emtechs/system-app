@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { TableCell, TableRow } from "@mui/material";
 import { TableBase } from "../../../components";
-import { iSchool, iheadCell } from "../../../interfaces";
+import { iSchool, iHeadcell } from "../../../interfaces";
 import { rolePtBr } from "../../../scripts";
 
 interface iTableSchoolUserProps {
@@ -9,7 +9,7 @@ interface iTableSchoolUserProps {
 }
 
 export const TableSchoolUser = ({ data }: iTableSchoolUserProps) => {
-  const headCells: iheadCell[] = useMemo(() => {
+  const headCells: iHeadcell[] = useMemo(() => {
     return [
       { order: "name", numeric: "left", label: "Escola" },
       { numeric: "left", label: "Função" },
@@ -22,10 +22,14 @@ export const TableSchoolUser = ({ data }: iTableSchoolUserProps) => {
       {data.map((school) => (
         <TableRow key={school.id} hover sx={{ cursor: "pointer" }}>
           <TableCell>{school.name}</TableCell>
-          <TableCell>{rolePtBr(school.server.role)}</TableCell>
-          <TableCell>
-            {school.server.dash === "SCHOOL" ? "Escola" : "Frequência"}
-          </TableCell>
+          {school.server && (
+            <>
+              <TableCell>{rolePtBr(school.server.role)}</TableCell>
+              <TableCell>
+                {school.server.dash === "SCHOOL" ? "Escola" : "Frequência"}
+              </TableCell>
+            </>
+          )}
         </TableRow>
       ))}
     </TableBase>

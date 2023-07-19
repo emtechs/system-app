@@ -18,7 +18,7 @@ import {
   useFrequencyContext,
   usePaginationContext,
 } from "../../shared/contexts";
-import { iFrequencyStudentsBase, iheadCell } from "../../shared/interfaces";
+import { iFrequencyStudentsBase, iHeadcell } from "../../shared/interfaces";
 import { ChangeEvent, useEffect, useState } from "react";
 import { apiFrequency } from "../../shared/services";
 import dayjs from "dayjs";
@@ -34,7 +34,7 @@ import {
 dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
 
-const headCells: iheadCell[] = [
+const headCells: iHeadcell[] = [
   { order: "registry", numeric: "left", label: "Matrícula" },
   { order: "name", numeric: "left", label: "Aluno" },
   { numeric: "left", label: "Estado da Presença" },

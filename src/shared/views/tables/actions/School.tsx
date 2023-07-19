@@ -47,7 +47,7 @@ export const ActionsSchool = ({
             <IconButton
               color="primary"
               size="small"
-              href={`/school/${id}`}
+              href={`/school/${id}?data=school`}
               onClick={onClickReset}
             >
               <Visibility fontSize="small" />

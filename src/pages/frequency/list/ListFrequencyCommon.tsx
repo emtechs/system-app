@@ -9,7 +9,7 @@ import {
 } from "../../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../../shared/services";
-import { iFrequency, iheadCell } from "../../../shared/interfaces";
+import { iFrequency, iHeadcell } from "../../../shared/interfaces";
 import { LayoutBasePage } from "../../../shared/layouts";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { EventAvailable, List, School } from "@mui/icons-material";
@@ -62,7 +62,7 @@ export const ListFrequencyCommon = () => {
   const { setCount, setIsLoading, query } = usePaginationContext();
   const [data, setData] = useState<iFrequency[]>();
 
-  const headCells: iheadCell[] = !date
+  const headCells: iHeadcell[] = !date
     ? mdDown
       ? [
           { order: "date", numeric: "left", label: "Data" },

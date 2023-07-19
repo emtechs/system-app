@@ -5,7 +5,7 @@ import {
   DialogEditSchool,
   TableBase,
 } from "../../../components";
-import { iSchool, iheadCell } from "../../../interfaces";
+import { iSchool, iHeadcell } from "../../../interfaces";
 import { Link, Skeleton, TableCell, TableRow, Typography } from "@mui/material";
 import { ActionsSchool } from "../actions";
 import { useState } from "react";
@@ -16,12 +16,12 @@ interface iTableSchoolProps {
 }
 
 export const TableSchool = ({ data }: iTableSchoolProps) => {
-  const { isLoading } = usePaginationContext();
+  const { isLoading, onClickReset } = usePaginationContext();
   const [schoolData, setSchoolData] = useState<iSchool>();
 
   const handleSchool = (newSchool: iSchool) => setSchoolData(newSchool);
 
-  const headCells: iheadCell[] = [
+  const headCells: iHeadcell[] = [
     { order: "name", numeric: "left", label: "Escola" },
     { order: "director_name", numeric: "left", label: "Diretor" },
     { numeric: "left", label: "Ações" },
@@ -41,7 +41,8 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
                   variant="body2"
                   color="inherit"
                   component={Link}
-                  href={`/school/${school.id}`}
+                  href={`/school/${school.id}?data=school`}
+                  onClick={onClickReset}
                 >
                   {school.name}
                 </Typography>

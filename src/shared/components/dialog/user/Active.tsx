@@ -1,8 +1,17 @@
-import { useDialogContext, useUserContext } from "../../../contexts";
-import { iDialogUserProps } from "../../../interfaces";
+import {
+  useDialogContext,
+  usePaginationContext,
+  useUserContext,
+} from "../../../contexts";
+import { iDialogUserProps, iLocale } from "../../../interfaces";
 import { DialogActive } from "../structure";
 
-export const DialogActiveUser = ({ user }: iDialogUserProps) => {
+interface iDialogActiveUserProps extends iDialogUserProps {
+  locale: iLocale;
+}
+
+export const DialogActiveUser = ({ locale, user }: iDialogActiveUserProps) => {
+  const { onClickReset } = usePaginationContext();
   const { handleOpenActive, openActive } = useDialogContext();
   const { updateAllUser } = useUserContext();
 
@@ -14,8 +23,10 @@ export const DialogActiveUser = ({ user }: iDialogUserProps) => {
             user.id,
             { role: "SERV", is_active: !user.is_active },
             false,
+            locale,
             user.is_active ? "/user" : "/user/" + user.id
           );
+          onClickReset();
           handleOpenActive();
         }}
         description={`o usúario ${user.name.toUpperCase()}`}

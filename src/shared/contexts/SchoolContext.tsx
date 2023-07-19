@@ -1,5 +1,6 @@
 import {
   iChildren,
+  iLocale,
   iSchool,
   iSchoolClassRequest,
   iSchoolImportRequest,
@@ -20,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { useAuthContext } from "./AuthContext";
 import { apiAuth, apiSchool } from "../services";
-import { usePaginationContext } from ".";
+import { usePaginationContext } from "./PaginationContext";
 
 interface iSchoolContextData {
   updateServerData: iWorkSchool | undefined;
@@ -39,7 +40,7 @@ interface iSchoolContextData {
     data: FieldValues,
     id: string,
     type: "nome" | "diretor" | "estado",
-    locale: "list" | "data",
+    locale: iLocale,
     query?: string,
     back?: string
   ) => Promise<void>;
@@ -162,7 +163,7 @@ export const SchoolProvider = ({ children }: iChildren) => {
       data: FieldValues,
       id: string,
       type: "nome" | "diretor" | "estado",
-      locale: "list" | "data",
+      locale: iLocale,
       query?: string,
       back?: string
     ) => {

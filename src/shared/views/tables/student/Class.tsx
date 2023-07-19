@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { iStudent, iheadCell } from "../../../interfaces";
+import { iStudent, iHeadcell } from "../../../interfaces";
 import { useAppThemeContext } from "../../../contexts";
 import { TableBase } from "../../../components";
 import { TableCell, TableRow } from "@mui/material";
@@ -12,7 +12,7 @@ interface iTableStudentClassProps {
 export const TableStudentClass = ({ data }: iTableStudentClassProps) => {
   const { mdDown, theme } = useAppThemeContext();
 
-  const headCells: iheadCell[] = useMemo(() => {
+  const headCells: iHeadcell[] = useMemo(() => {
     if (mdDown)
       return [
         { order: "registry", numeric: "right", label: "Matrícula" },

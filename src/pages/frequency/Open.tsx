@@ -8,13 +8,13 @@ import {
   usePaginationContext,
   useSchoolContext,
 } from "../../shared/contexts";
-import { iFrequency, iheadCell } from "../../shared/interfaces";
+import { iFrequency, iHeadcell } from "../../shared/interfaces";
 import { TableBase } from "../../shared/components";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Outbox } from "@mui/icons-material";
 import { defineBgColorInfrequency } from "../../shared/scripts";
 
-const headCells: iheadCell[] = [
+const headCells: iHeadcell[] = [
   { order: "date", numeric: "left", label: "Data" },
   { order: "name", numeric: "left", label: "Turma" },
   { numeric: "right", label: "Alunos" },

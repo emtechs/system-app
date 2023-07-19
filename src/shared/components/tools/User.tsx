@@ -76,7 +76,7 @@ export const ToolsUser = ({
           onChange={(e) => setSearch?.(e.target.value)}
         />
       )}
-      {isActive && <ActiveButton />}
+      {isActive && <ActiveButton isFem={false} />}
       <Box flex={1} display="flex" justifyContent="end" gap={1}>
         {finish}
         {isReset && (

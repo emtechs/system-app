@@ -40,7 +40,7 @@ export const RetrieveSchoolPage = () => {
   useEffect(() => {
     switch (viewData) {
       case "server":
-        setView(<ViewUser school_id={school_id} />);
+        setView(<ViewUser id={school_id} />);
         setTools(
           <ToolsSchool
             back="/school"

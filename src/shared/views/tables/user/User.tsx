@@ -1,13 +1,14 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
+  DialogActiveUser,
   DialogCreateAdmin,
   TableBase,
-  TableCellLink,
-  TableRowLink,
 } from "../../../components";
 import { useAppThemeContext, usePaginationContext } from "../../../contexts";
-import { iUser, iheadCell } from "../../../interfaces";
+import { iUser, iHeadcell } from "../../../interfaces";
 import { rolePtBr } from "../../../scripts";
+import { Link, Skeleton, TableCell, TableRow, Typography } from "@mui/material";
+import { ActionsUser } from "../actions";
 
 interface iTableUserProps {
   data: iUser[];
@@ -15,40 +16,64 @@ interface iTableUserProps {
 
 export const TableUser = ({ data }: iTableUserProps) => {
   const { mdDown } = useAppThemeContext();
-  const { onClickReset } = usePaginationContext();
+  const { isLoading, onClickReset } = usePaginationContext();
+  const [userData, setUserData] = useState<iUser>();
 
-  const headCells: iheadCell[] = useMemo(() => {
+  const handleUser = (newUser: iUser) => setUserData(newUser);
+
+  const headCells: iHeadcell[] = useMemo(() => {
     if (mdDown)
       return [
         { order: "name", numeric: "left", label: "Nome Completo" },
         { numeric: "left", label: "CPF" },
+        { numeric: "left", label: "Ações" },
       ];
 
     return [
       { order: "name", numeric: "left", label: "Nome Completo" },
       { numeric: "left", label: "CPF" },
       { order: "role", numeric: "left", label: "Função" },
+      { numeric: "left", label: "Ações" },
     ];
   }, [mdDown]);
 
   return (
     <>
-      <TableBase headCells={headCells} link="div">
+      <TableBase headCells={headCells} message="Nenhum usuário encotrado">
         {data.map((user) => (
-          <TableRowLink
-            key={user.id}
-            href={`/user/${user.id}`}
-            onClick={onClickReset}
-          >
-            <TableCellLink link="div">{user.name}</TableCellLink>
-            <TableCellLink link="div">{user.cpf}</TableCellLink>
+          <TableRow key={user.id}>
+            <TableCell>
+              {isLoading ? (
+                <Skeleton width={250} />
+              ) : user.is_active ? (
+                <Typography
+                  underline="none"
+                  variant="body2"
+                  color="inherit"
+                  component={Link}
+                  href={`/user/${user.id}?data=user`}
+                  onClick={onClickReset}
+                >
+                  {user.name}
+                </Typography>
+              ) : (
+                user.name
+              )}
+            </TableCell>
+            <TableCell>
+              {isLoading ? <Skeleton width={100} /> : user.cpf}
+            </TableCell>
             {!mdDown && (
-              <TableCellLink link="div">{rolePtBr(user.role)}</TableCellLink>
+              <TableCell>
+                {isLoading ? <Skeleton width={100} /> : rolePtBr(user.role)}
+              </TableCell>
             )}
-          </TableRowLink>
+            <ActionsUser user={user} handleUser={handleUser} />
+          </TableRow>
         ))}
       </TableBase>
       <DialogCreateAdmin />
+      {userData && <DialogActiveUser user={userData} locale="list" />}
     </>
   );
 };

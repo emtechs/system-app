@@ -11,6 +11,7 @@ import { useSearchParams } from "react-router-dom";
 export const ViewSchool = ({ id }: iViewBaseProps) => {
   const { getSchools, listData } = useSchoolContext();
   const [searchParams, setSearchParams] = useSearchParams();
+  const data = searchParams.get("data") || undefined;
   const school_id = searchParams.get("school_id") || undefined;
   const year_id = searchParams.get("year_id") || undefined;
   const { debounce } = useDebounce();
@@ -21,14 +22,18 @@ export const ViewSchool = ({ id }: iViewBaseProps) => {
     setSearchParams(valueTabs(newValue, "year"), { replace: true });
   };
 
+  const class_id = data === "class" ? id : undefined;
+
+  const user_id = data === "user" ? id : undefined;
+
   const define_query = useCallback(
     (comp: string) => {
-      let query_data = query(year_id, school_id, id) + comp + is_director;
+      let query_data = query(year_id, school_id, class_id) + comp + is_director;
 
-      if (id) query_data += `&server_id=${id}`;
+      if (user_id) query_data += `&server_id=${user_id}`;
       return query_data;
     },
-    [id, is_director, query, school_id, year_id]
+    [class_id, is_director, query, school_id, user_id, year_id]
   );
 
   useEffect(() => {
@@ -54,19 +59,19 @@ export const ViewSchool = ({ id }: iViewBaseProps) => {
 
       listSchool = sortArray<iSchool>(listData, { by: order, order: by });
 
-      if (id) return <TableSchoolUser data={listSchool} />;
+      if (user_id) return <TableSchoolUser data={listSchool} />;
 
-      if (id) return <TableSchoolClass data={listSchool} />;
+      if (class_id) return <TableSchoolClass data={listSchool} />;
 
       return <TableSchool data={listSchool} />;
     }
 
     return <></>;
-  }, [by, id, listData, order]);
+  }, [by, class_id, listData, order, user_id]);
 
   return (
     <Box display="flex" justifyContent="space-between">
-      {id && <TabsYear value={year_id} handleChange={handleChange} />}
+      {class_id && <TabsYear value={year_id} handleChange={handleChange} />}
       <Box flex={1}>{table}</Box>
     </Box>
   );

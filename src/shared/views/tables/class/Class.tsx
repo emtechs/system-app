@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { iClass, iheadCell } from "../../../interfaces";
+import { iClass, iHeadcell } from "../../../interfaces";
 import { TableBase, TableCellLink, TableRowLink } from "../../../components";
 
 interface iTableClassProps {
@@ -7,7 +7,7 @@ interface iTableClassProps {
 }
 
 export const TableClass = ({ data }: iTableClassProps) => {
-  const headCells: iheadCell[] = useMemo(() => {
+  const headCells: iHeadcell[] = useMemo(() => {
     return [
       { order: "name", numeric: "left", label: "Turma" },
       { order: "schools", numeric: "right", label: "Escolas" },

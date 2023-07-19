@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from "@mui/material";
 import { TableBase } from "../../../components";
 import { useAppThemeContext } from "../../../contexts";
-import { iFrequencyBase, iheadCell } from "../../../interfaces";
+import { iFrequencyBase, iHeadcell } from "../../../interfaces";
 import { defineBgColorInfrequency } from "../../../scripts";
 
 interface iTableFrequencySchoolProps {
@@ -10,7 +10,7 @@ interface iTableFrequencySchoolProps {
 
 export const TableFrequencySchool = ({ data }: iTableFrequencySchoolProps) => {
   const { theme } = useAppThemeContext();
-  const headCells: iheadCell[] = [
+  const headCells: iHeadcell[] = [
     { order: "date", numeric: "left", label: "Data" },
     { order: "class_name", numeric: "left", label: "Turma" },
     { numeric: "right", label: "Alunos" },

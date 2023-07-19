@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useAppThemeContext } from "../../../contexts";
-import { iClass, iheadCell } from "../../../interfaces";
+import { iClass, iHeadcell } from "../../../interfaces";
 import { TableBase, TableCellLink, TableRowLink } from "../../../components";
 import { defineBgColorInfrequency } from "../../../scripts";
 
@@ -11,7 +11,7 @@ interface iTableClassYearProps {
 export const TableClassYear = ({ data }: iTableClassYearProps) => {
   const { mdDown, theme } = useAppThemeContext();
 
-  const headCells: iheadCell[] = useMemo(() => {
+  const headCells: iHeadcell[] = useMemo(() => {
     if (mdDown)
       return [
         { order: "name", numeric: "left", label: "Turma" },

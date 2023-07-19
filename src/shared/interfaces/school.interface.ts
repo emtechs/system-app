@@ -10,10 +10,11 @@ import {
 } from "../schemas";
 import { iDash, iDiretor, iRole, iServer } from "./user.interfaces";
 import { iClass } from "./class.interfaces";
+import { iLocale } from "./global.interfaces";
 
 export interface iDialogSchoolProps {
   school: iSchool;
-  locale: "list" | "data";
+  locale: iLocale;
 }
 
 export interface iDashSchool {
@@ -31,7 +32,7 @@ export interface iSchool {
   name: string;
   is_active: boolean;
   director?: iDiretor;
-  server: iServer;
+  server?: iServer;
   classes: number;
   students: number;
   frequencies: number;

@@ -8,6 +8,7 @@ import {
 } from "react";
 import {
   iChildren,
+  iLocale,
   iSelectBase,
   iUser,
   iUserFirstRequest,
@@ -20,6 +21,7 @@ import { FieldValues } from "react-hook-form";
 import { apiAuth, apiUser } from "../services";
 import { useAppThemeContext } from "./ThemeContext";
 import { useAuthContext } from "./AuthContext";
+import { usePaginationContext } from "./PaginationContext";
 
 interface iUserContextData {
   createSecret: (data: iUserSecretRequest, back?: string) => Promise<void>;
@@ -30,6 +32,7 @@ interface iUserContextData {
     id: string,
     data: FieldValues,
     is_all: boolean,
+    locale: iLocale,
     back?: string
   ) => Promise<void>;
   updateUserData: iUser | undefined;
@@ -39,6 +42,8 @@ interface iUserContextData {
   loadingUser: boolean;
   userRetrieve: iUser | undefined;
   userDataRetrieve: (id: string, query: string) => void;
+  getUsers: (query: string) => void;
+  listData: iUser[] | undefined;
 }
 
 const UserContext = createContext({} as iUserContextData);
@@ -47,10 +52,23 @@ export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const { setDashData, setUserData, setListYear, yearData } = useAuthContext();
+  const { setIsLoading, setCount } = usePaginationContext();
   const [updateUserData, setUpdateUserData] = useState<iUser>();
   const [userSelect, setUserSelect] = useState<iSelectBase>();
   const [loadingUser, setLoadingUser] = useState(true);
   const [userRetrieve, setUserRetrieve] = useState<iUser>();
+  const [listData, setListData] = useState<iUser[]>();
+
+  const getUsers = useCallback((query: string) => {
+    setIsLoading(true);
+    apiUser
+      .list(query)
+      .then((res) => {
+        setListData(res.result);
+        setCount(res.total);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
 
   const verifyUser = useCallback(
     (id: string) => {
@@ -134,12 +152,27 @@ export const UserProvider = ({ children }: iChildren) => {
   );
 
   const handleUpdateAllUser = useCallback(
-    async (id: string, data: FieldValues, is_all: boolean, back?: string) => {
+    async (
+      id: string,
+      data: FieldValues,
+      is_all: boolean,
+      locale: iLocale,
+      back?: string
+    ) => {
       try {
         setLoading(true);
         const user = await apiUser.update(id, data);
         setUpdateUserData(user);
         if (!is_all) handleSucess("Sucesso ao alterar o estado do usuário!");
+        switch (locale) {
+          case "data":
+            userDataRetrieve(id, "");
+            break;
+
+          case "list":
+            getUsers("?is_active=true");
+            break;
+        }
         if (back) navigate(back);
       } catch {
         if (!is_all)
@@ -184,6 +217,8 @@ export const UserProvider = ({ children }: iChildren) => {
         loadingUser,
         userDataRetrieve,
         userRetrieve,
+        getUsers,
+        listData,
       }}
     >
       {children}

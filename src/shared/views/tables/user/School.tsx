@@ -6,23 +6,18 @@ import {
   TableRowLink,
 } from "../../../components";
 import { useAppThemeContext } from "../../../contexts";
-import { iUser, iheadCell } from "../../../interfaces";
+import { iUser, iHeadcell } from "../../../interfaces";
 import { rolePtBr } from "../../../scripts";
 
 interface iTableUserSchoolProps {
   data: iUser[];
   school_id: string;
-  getUsers: (query: string, isPage?: boolean) => void;
 }
 
-export const TableUserSchool = ({
-  data,
-  school_id,
-  getUsers,
-}: iTableUserSchoolProps) => {
+export const TableUserSchool = ({ data, school_id }: iTableUserSchoolProps) => {
   const { mdDown } = useAppThemeContext();
 
-  const headCells: iheadCell[] = useMemo(() => {
+  const headCells: iHeadcell[] = useMemo(() => {
     if (mdDown)
       return [
         { order: "name", numeric: "left", label: "Nome Completo" },
@@ -63,7 +58,7 @@ export const TableUserSchool = ({
           </Fragment>
         ))}
       </TableBase>
-      <DialogCreateServer school_id={school_id} getUsers={getUsers} />
+      <DialogCreateServer school_id={school_id} />
     </>
   );
 };

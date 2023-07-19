@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from "@mui/material";
 import { TableBase } from "../../../components";
 import { useAppThemeContext } from "../../../contexts";
-import { iFrequencyBase, iheadCell } from "../../../interfaces";
+import { iFrequencyBase, iHeadcell } from "../../../interfaces";
 import { defineBgColorInfrequency } from "../../../scripts";
 
 interface iTableFrequencyUserProps {
@@ -10,7 +10,7 @@ interface iTableFrequencyUserProps {
 
 export const TableFrequencyUser = ({ data }: iTableFrequencyUserProps) => {
   const { theme } = useAppThemeContext();
-  const headCells: iheadCell[] = [
+  const headCells: iHeadcell[] = [
     { order: "date", numeric: "left", label: "Data" },
     { numeric: "left", label: "Escola" },
     { numeric: "left", label: "Turma" },

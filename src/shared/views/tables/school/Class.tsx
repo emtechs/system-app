@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { TableCell, TableRow } from "@mui/material";
 import { TableBase } from "../../../components";
-import { iSchool, iheadCell } from "../../../interfaces";
+import { iSchool, iHeadcell } from "../../../interfaces";
 import { useBgColorInfrequency } from "../../../hooks";
 
 interface iTableSchoolProps {
@@ -11,7 +11,7 @@ interface iTableSchoolProps {
 export const TableSchoolClass = ({ data }: iTableSchoolProps) => {
   const { defineBgColorInfrequency } = useBgColorInfrequency();
 
-  const headCells: iheadCell[] = useMemo(() => {
+  const headCells: iHeadcell[] = useMemo(() => {
     return [
       { order: "name", numeric: "left", label: "Escola" },
       { order: "students", numeric: "right", label: "Alunos" },
