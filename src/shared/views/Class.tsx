@@ -8,19 +8,17 @@ import {
   useState,
 } from "react";
 import { apiClass } from "../services";
-import { useDebounce, useValueTabs } from "../hooks";
+import { useDebounce } from "../hooks";
 import { TableClass, TableClassSchool, TableClassYear } from "./tables";
 import sortArray from "sort-array";
 import { PaginationTable, TabsYear } from "../components";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Box } from "@mui/material";
 
 export const ViewClass = ({ id }: iViewBaseProps) => {
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const year_id = searchParams.get("year_id") || undefined;
   const { debounce } = useDebounce();
-  const { setListYear } = useAuthContext();
+  const { setListYear, listYear } = useAuthContext();
   const {
     setCount,
     setIsLoading,
@@ -33,15 +31,17 @@ export const ViewClass = ({ id }: iViewBaseProps) => {
     query_page,
     search,
   } = usePaginationContext();
-  const { valueTabs } = useValueTabs();
   const [data, setData] = useState<iClass[]>();
+  const [index, setIndex] = useState(0);
 
   const year_class_id = location.pathname.includes("year") ? id : undefined;
 
   const school_id = location.pathname.includes("school") ? id : undefined;
 
-  const handleChange = (_event: SyntheticEvent, newValue: string) => {
-    setSearchParams(valueTabs(newValue, "year"), { replace: true });
+  const year_id = year_class_id ? undefined : listYear[index].id;
+
+  const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
+    setIndex(Number(newValue));
   };
 
   const getClasses = useCallback(
@@ -130,9 +130,7 @@ export const ViewClass = ({ id }: iViewBaseProps) => {
 
   return (
     <Box display="flex" justifyContent="space-between">
-      {!year_class_id && (
-        <TabsYear value={year_id} handleChange={handleChange} />
-      )}
+      {!year_class_id && <TabsYear value={index} handleChange={handleChange} />}
       <Box flex={1}>
         {table}
         <PaginationTable total={data ? data.length : 0} onClick={onClick} />

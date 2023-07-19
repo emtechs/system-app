@@ -49,8 +49,8 @@ export const TableStudentSchoolClass = ({ data }: iTableStudentSchoolProps) => {
           </TableRow>
         ))}
       </TableBase>
-      {studentData && <DialogRemoveStudent student={studentData} />}
-      {studentData && <DialogTransferStudent student={studentData} />}
+      {studentData && <DialogRemoveStudent id="" student={studentData} />}
+      {studentData && <DialogTransferStudent id="" student={studentData} />}
     </>
   );
 };

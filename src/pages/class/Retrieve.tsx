@@ -1,6 +1,5 @@
 import { SyntheticEvent, useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { useAuthContext } from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
 import {
   Footer,
@@ -23,14 +22,13 @@ export const RetrieveClassPage = () => {
   const { class_id } = useParams();
   const viewData = searchParams.get("view") || "";
   const school_id = searchParams.get("school_id") || undefined;
-  const { listYear } = useAuthContext();
   const [view, setView] = useState(<ViewClassData id={class_id} />);
   const [tools, setTools] = useState(<ToolsSchool back="/school" />);
-  const { valueTabs } = useValueTabs(listYear?.at(0)?.id, "ANO");
+  const { valueTabs } = useValueTabs();
   const { verify } = useVerify();
 
-  const handleChange = (_event: SyntheticEvent, newValue: string) => {
-    setSearchParams(valueTabs(newValue, "view"), { replace: true });
+  const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
+    setSearchParams(valueTabs(String(newValue), "view"), { replace: true });
   };
 
   useEffect(() => {
@@ -70,7 +68,7 @@ export const RetrieveClassPage = () => {
         setView(<ViewClassData id={class_id} />);
         setTools(<ToolsSchool isDash back="/school" />);
     }
-  }, [viewData, listYear, class_id]);
+  }, [viewData, class_id]);
 
   return (
     <LayoutBasePage title={title} tools={tools}>

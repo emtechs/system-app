@@ -11,16 +11,15 @@ import {
 } from "@mui/material";
 import { useDialogContext, useUserContext } from "../contexts";
 import { ExpandMore, RemoveDone } from "@mui/icons-material";
-import { iViewBaseProps } from "../interfaces";
 import { useEffect } from "react";
 import { rolePtBr } from "../scripts";
 import { DialogActiveUser, DialogRemoveUser } from "../components";
+import { iViewBaseProps } from "../interfaces";
+import { useSearchParams } from "react-router-dom";
 
-interface iViewUserDataProps extends iViewBaseProps {
-  school_id?: string;
-}
-
-export const ViewUserData = ({ id, school_id }: iViewUserDataProps) => {
+export const ViewUserData = ({ id }: iViewBaseProps) => {
+  const [searchParams] = useSearchParams();
+  const school_id = searchParams.get("school_id") || undefined;
   const { handleOpenActive } = useDialogContext();
   const { loadingUser, userRetrieve, userDataRetrieve } = useUserContext();
 

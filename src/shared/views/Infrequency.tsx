@@ -1,6 +1,10 @@
-import { useParams, useSearchParams } from "react-router-dom";
-import { useDebounce, useValueTabs } from "../hooks";
-import { useAppThemeContext, usePaginationContext } from "../contexts";
+import { useParams } from "react-router-dom";
+import { useDebounce } from "../hooks";
+import {
+  useAppThemeContext,
+  useAuthContext,
+  usePaginationContext,
+} from "../contexts";
 import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { iInfrequency, iHeadcell } from "../interfaces";
 import { apiFrequency } from "../services";
@@ -15,22 +19,29 @@ dayjs.locale("pt-br");
 dayjs.extend(utc);
 
 export const ViewInfrequency = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const { school_id } = useParams();
-  const year_id = searchParams.get("year_id") || undefined;
-  const period = searchParams.get("period") || undefined;
   const { debounce } = useDebounce();
   const { theme } = useAppThemeContext();
+  const { listYear } = useAuthContext();
   const { setCount, setIsLoading, query, search } = usePaginationContext();
-  const { valueTabs } = useValueTabs();
   const [data, setData] = useState<iInfrequency[]>();
+  const [index, setIndex] = useState(0);
+  const [period, setPeriod] = useState("ano");
 
-  const handleChangeYear = (_event: SyntheticEvent, newValue: string) => {
-    setSearchParams(valueTabs(newValue, "year"), { replace: true });
+  const year_id = listYear[index].id;
+
+  const handleChangeYear = (
+    _event: SyntheticEvent,
+    newValue: string | number
+  ) => {
+    setIndex(Number(newValue));
   };
 
-  const handleChangePeriod = (_event: SyntheticEvent, newValue: string) => {
-    setSearchParams(valueTabs(newValue, "period"), { replace: true });
+  const handleChangePeriod = (
+    _event: SyntheticEvent,
+    newValue: string | number
+  ) => {
+    setPeriod(String(newValue));
   };
 
   const getFrequencies = useCallback((query: string) => {
@@ -64,7 +75,7 @@ export const ViewInfrequency = () => {
 
   return (
     <Box display="flex" justifyContent="space-between">
-      <TabsYear value={year_id} handleChange={handleChangeYear} />
+      <TabsYear value={index} handleChange={handleChangeYear} />
       <Box flex={1}>
         <TabsPeriod value={period} handleChange={handleChangePeriod} />
         <TableBase headCells={headCells}>

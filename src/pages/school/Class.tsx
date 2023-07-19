@@ -20,8 +20,8 @@ export const RetrieveSchoolClassPage = () => {
   const [tools, setTools] = useState(<></>);
   const { valueTabs } = useValueTabs();
 
-  const handleChange = (_event: SyntheticEvent, newValue: string) => {
-    setSearchParams(valueTabs(newValue, "view"), { replace: true });
+  const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
+    setSearchParams(valueTabs(String(newValue), "view"), { replace: true });
   };
 
   useEffect(() => {

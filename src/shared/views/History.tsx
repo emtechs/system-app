@@ -18,8 +18,8 @@ export const ViewHistory = () => {
   const { valueTabs } = useValueTabs();
   const [data, setData] = useState<iFrequencyHistory[]>();
 
-  const handleChange = (_event: SyntheticEvent, newValue: string) => {
-    setSearchParams(valueTabs(newValue, "year"), { replace: true });
+  const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
+    setSearchParams(valueTabs(String(newValue), "year"), { replace: true });
   };
 
   const getHistories = useCallback(

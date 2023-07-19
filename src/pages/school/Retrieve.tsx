@@ -1,7 +1,6 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { PersonAdd } from "@mui/icons-material";
-import { useAuthContext } from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
 import {
   Footer,
@@ -23,19 +22,17 @@ export const RetrieveSchoolPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { school_id } = useParams();
   const viewData = searchParams.get("view") || "";
-  const year_id = searchParams.get("year_id") || undefined;
-  const { listYear } = useAuthContext();
   const [view, setView] = useState(<ViewSchoolData id={school_id} />);
   const [tools, setTools] = useState(<ToolsSchool back="/school" />);
-  const { valueTabs } = useValueTabs(listYear?.at(0)?.id, "ANO");
+  const { valueTabs } = useValueTabs();
   const { verify } = useVerify();
 
   useEffect(() => {
-    verify(year_id, school_id);
-  }, [school_id, verify, year_id]);
+    verify(undefined, school_id);
+  }, [school_id, verify]);
 
-  const handleChange = (_event: SyntheticEvent, newValue: string) => {
-    setSearchParams(valueTabs(newValue, "view"), { replace: true });
+  const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
+    setSearchParams(valueTabs(String(newValue), "view"), { replace: true });
   };
 
   useEffect(() => {
@@ -82,7 +79,7 @@ export const RetrieveSchoolPage = () => {
         setView(<ViewSchoolData id={school_id} />);
         setTools(<ToolsSchool isDash back="/school" />);
     }
-  }, [viewData, school_id, listYear]);
+  }, [viewData, school_id]);
 
   return (
     <LayoutBasePage title={<TitleSchoolRetrievePage />} tools={tools}>

@@ -14,8 +14,8 @@ export interface iLabelBaseProps {
 }
 
 export interface iTabsBaseProps {
-  value?: string;
-  handleChange: (_event: SyntheticEvent, newValue: string) => void;
+  value?: string | number;
+  handleChange: (_event: SyntheticEvent, newValue: string | number) => void;
 }
 
 export interface iViewBaseProps {

@@ -1,46 +1,41 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import sortArray from "sort-array";
-import { apiClass } from "../../../shared/services";
-import { usePaginationContext } from "../../../shared/contexts";
+import {
+  useClassContext,
+  usePaginationContext,
+} from "../../../shared/contexts";
 import { iStudent, iViewBaseProps } from "../../../shared/interfaces";
 import { TableStudentSchoolClass } from "./TableClassStudent";
 
 export const ViewClassStudent = ({ id }: iViewBaseProps) => {
-  const { setCount, setIsLoading, order, by } = usePaginationContext();
-  const [listData, setListData] = useState<iStudent[]>([]);
+  const { setIsLoading, order, by } = usePaginationContext();
+  const { getStudents, listStudentData } = useClassContext();
 
   useEffect(() => {
     setIsLoading(true);
-    if (id)
-      apiClass
-        .listYear(id, "?view=student")
-        .then((res) => {
-          setCount(res.total);
-          setListData(res.result);
-        })
-        .finally(() => setIsLoading(false));
+    if (id) getStudents(id);
   }, [id]);
 
   const table = useMemo(() => {
     let students: iStudent[];
 
-    students = sortArray<iStudent>(listData, { by: order, order: by });
+    students = sortArray<iStudent>(listStudentData, { by: order, order: by });
     if (order === "class_name")
-      students = sortArray<iStudent>(listData, {
+      students = sortArray<iStudent>(listStudentData, {
         by: order,
         order: by,
         computed: { class_name: (row) => row.class.name },
       });
 
     if (order === "school_name")
-      students = sortArray<iStudent>(listData, {
+      students = sortArray<iStudent>(listStudentData, {
         by: order,
         order: by,
         computed: { school_name: (row) => row.school.name },
       });
 
-    return <TableStudentSchoolClass data={students} />;
-  }, [by, listData, order]);
+    return <TableStudentSchoolClass id="" data={students} />;
+  }, [by, listStudentData, order]);
 
   return table;
 };

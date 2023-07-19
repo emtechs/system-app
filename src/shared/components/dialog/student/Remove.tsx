@@ -1,5 +1,9 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { useAppThemeContext, useDialogContext } from "../../../contexts";
+import {
+  useAppThemeContext,
+  useClassContext,
+  useDialogContext,
+} from "../../../contexts";
 import { iStudent, iStudentRemoveRequest } from "../../../interfaces";
 import { BaseContentChildren, DialogBaseChildren } from "../structure";
 import { apiClass } from "../../../services";
@@ -9,17 +13,26 @@ import { Button } from "@mui/material";
 
 interface iDialogRemoveStudentProps {
   student: iStudent;
+  id: string;
 }
 
-export const DialogRemoveStudent = ({ student }: iDialogRemoveStudentProps) => {
+export const DialogRemoveStudent = ({
+  student,
+  id,
+}: iDialogRemoveStudentProps) => {
+  const { getStudents } = useClassContext();
   const { setLoading, handleError, handleSucess } = useAppThemeContext();
   const { openActive, handleOpenActive } = useDialogContext();
 
-  const removeStudent = async (id: string, data: iStudentRemoveRequest) => {
+  const removeStudent = async (
+    id_data: string,
+    data: iStudentRemoveRequest
+  ) => {
     try {
       setLoading(true);
-      await apiClass.destroy(id, data);
+      await apiClass.destroy(id_data, data);
       handleSucess("Aluno removido com sucesso!");
+      getStudents(id);
     } catch {
       handleError("Não foi possível remover o aluno no momento!");
     } finally {

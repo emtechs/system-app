@@ -30,7 +30,7 @@ export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
       {data.map((el, index) => (
         <TableRowLink
           key={index}
-          href={`/school/${el.school.id}/class/${el.key}?view=student`}
+          href={`/${el.school.id}/class/${el.key}?view=student`}
         >
           <TableCellLink link="div">{el.name}</TableCellLink>
           {!mdDown && (

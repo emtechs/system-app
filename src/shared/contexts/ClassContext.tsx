@@ -15,12 +15,14 @@ import {
   iClassWithSchool,
   iSchoolImportRequest,
   iSelectBase,
+  iStudent,
 } from "../interfaces";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { FieldValues } from "react-hook-form";
 import { apiAuth, apiClass } from "../services";
 import { useAuthContext } from "./AuthContext";
+import { usePaginationContext } from ".";
 
 interface iClassContextData {
   createClass: (data: iClassRequest, back?: string) => Promise<void>;
@@ -50,6 +52,8 @@ interface iClassContextData {
     school_id: string,
     year_id: string
   ) => void;
+  getStudents: (id: string) => void;
+  listStudentData: iStudent[];
 }
 
 const ClassContext = createContext({} as iClassContextData);
@@ -58,6 +62,7 @@ export const ClassProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
   const { yearData, setListYear } = useAuthContext();
+  const { setCount, setIsLoading } = usePaginationContext();
   const [classDataSelect, setClassDataSelect] = useState<iClassSelect[]>();
   const [listClassData, setListClassData] = useState<iClass[]>();
   const [classWithSchoolSelect, setClassWithSchoolSelect] =
@@ -65,6 +70,17 @@ export const ClassProvider = ({ children }: iChildren) => {
   const [classSelect, setClassSelect] = useState<iSelectBase>();
   const [classRetrieve, setClassRetrieve] = useState<iClass>();
   const [loadingClass, setLoadingClass] = useState(false);
+  const [listStudentData, setListStudentData] = useState<iStudent[]>([]);
+
+  const getStudents = useCallback((id: string) => {
+    apiClass
+      .listYear(id, "?view=student")
+      .then((res) => {
+        setCount(res.total);
+        setListStudentData(res.result);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
 
   const verifyClass = useCallback(
     (id: string) => {
@@ -198,6 +214,8 @@ export const ClassProvider = ({ children }: iChildren) => {
         classRetrieve,
         loadingClass,
         verifyClassYear,
+        getStudents,
+        listStudentData,
       }}
     >
       {children}

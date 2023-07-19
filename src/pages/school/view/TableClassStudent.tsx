@@ -10,9 +10,13 @@ import { ActionsStudent } from "../../../shared/views/tables/actions";
 
 interface iTableStudentSchoolProps {
   data: iStudent[];
+  id: string;
 }
 
-export const TableStudentSchoolClass = ({ data }: iTableStudentSchoolProps) => {
+export const TableStudentSchoolClass = ({
+  data,
+  id,
+}: iTableStudentSchoolProps) => {
   const [studentData, setStudentData] = useState<iStudent>();
 
   const handleStudent = (newStudent: iStudent) => setStudentData(newStudent);
@@ -36,8 +40,8 @@ export const TableStudentSchoolClass = ({ data }: iTableStudentSchoolProps) => {
           </TableRow>
         ))}
       </TableBase>
-      {studentData && <DialogRemoveStudent student={studentData} />}
-      {studentData && <DialogTransferStudent student={studentData} />}
+      {studentData && <DialogRemoveStudent id={id} student={studentData} />}
+      {studentData && <DialogTransferStudent id={id} student={studentData} />}
     </>
   );
 };

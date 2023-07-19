@@ -1,7 +1,17 @@
 import { useLocation, useSearchParams } from "react-router-dom";
-import { useDebounce, useValueTabs } from "../hooks";
-import { usePaginationContext, useStudentContext } from "../contexts";
-import { SyntheticEvent, useCallback, useEffect, useMemo } from "react";
+import { useDebounce } from "../hooks";
+import {
+  useAuthContext,
+  usePaginationContext,
+  useStudentContext,
+} from "../contexts";
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { iStudent, iViewBaseProps } from "../interfaces";
 import { Box } from "@mui/material";
 import { PaginationTable, TabsYear } from "../components";
@@ -14,13 +24,15 @@ import {
 
 export const ViewStudent = ({ id }: iViewBaseProps) => {
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const year_id = searchParams.get("year_id") || undefined;
+  const [searchParams] = useSearchParams();
   const { debounce } = useDebounce();
+  const { listYear } = useAuthContext();
   const { query, handleFace, face, order, by, query_page, search } =
     usePaginationContext();
   const { getStudents, listData } = useStudentContext();
-  const { valueTabs } = useValueTabs();
+  const [index, setIndex] = useState(0);
+
+  const year_id = listYear[index].id;
 
   const school_id = useMemo(() => {
     if (location.pathname.includes("school")) return id;
@@ -34,8 +46,8 @@ export const ViewStudent = ({ id }: iViewBaseProps) => {
     return searchParams.get("class_id") || undefined;
   }, [id, location, searchParams]);
 
-  const handleChange = (_event: SyntheticEvent, newValue: string) => {
-    setSearchParams(valueTabs(newValue, "year"), { replace: true });
+  const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
+    setIndex(Number(newValue));
   };
 
   const define_query = useCallback(
@@ -90,7 +102,7 @@ export const ViewStudent = ({ id }: iViewBaseProps) => {
 
   return (
     <Box display="flex" justifyContent="space-between">
-      <TabsYear value={year_id} handleChange={handleChange} />
+      <TabsYear value={index} handleChange={handleChange} />
       <Box flex={1}>
         {table}
         <PaginationTable

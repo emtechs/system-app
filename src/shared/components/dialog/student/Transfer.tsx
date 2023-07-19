@@ -5,7 +5,11 @@ import {
   TextFieldElement,
   useFormContext,
 } from "react-hook-form-mui";
-import { useAppThemeContext, useDialogContext } from "../../../contexts";
+import {
+  useAppThemeContext,
+  useClassContext,
+  useDialogContext,
+} from "../../../contexts";
 import { iClass, iSchool, iStudent } from "../../../interfaces";
 import { BaseContentChildren, DialogBaseChildren } from "../structure";
 import { apiClass, apiSchool } from "../../../services";
@@ -53,11 +57,14 @@ const ClassSelect = ({ year_id }: iClassSelectProps) => {
 
 interface iDialogTransferStudentProps {
   student: iStudent;
+  id: string;
 }
 
 export const DialogTransferStudent = ({
   student,
+  id,
 }: iDialogTransferStudentProps) => {
+  const { getStudents } = useClassContext();
   const { setLoading, handleError, handleSucess } = useAppThemeContext();
   const { openEdit, handleOpenEdit } = useDialogContext();
   const [schoolDataSelect, setSchoolDataSelect] = useState<iSchool[]>();
@@ -71,6 +78,7 @@ export const DialogTransferStudent = ({
       setLoading(true);
       await apiClass.transfer(data);
       handleSucess("Aluno transferido com sucesso!");
+      getStudents(id);
     } catch {
       handleError("Não foi possível transferir o aluno no momento!");
     } finally {
@@ -90,6 +98,7 @@ export const DialogTransferStudent = ({
     >
       <FormContainer
         onSuccess={(data) => {
+          console.log(data);
           handleOpenEdit();
           transferStudent(data);
         }}

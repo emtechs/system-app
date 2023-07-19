@@ -1,6 +1,5 @@
 import { SyntheticEvent, useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { useAuthContext } from "../../shared/contexts";
 import { LayoutBasePage } from "../../shared/layouts";
 import {
   Footer,
@@ -22,20 +21,17 @@ export const RetrieveUserPage = () => {
   const { user_id } = useParams();
   const viewData = searchParams.get("view") || "";
   const school_id = searchParams.get("school_id") || undefined;
-  const { listYear } = useAuthContext();
   const [tools, setTools] = useState(<ToolsUser back="/user" />);
-  const { valueTabs } = useValueTabs(listYear?.at(0)?.id, undefined, school_id);
-  const [view, setView] = useState(
-    <ViewUserData id={user_id} school_id={school_id} />
-  );
+  const { valueTabs } = useValueTabs();
+  const [view, setView] = useState(<ViewUserData id={user_id} />);
   const { verify } = useVerify();
 
   useEffect(() => {
     verify(undefined, school_id, undefined, user_id);
   }, [school_id, user_id]);
 
-  const handleChange = (_event: SyntheticEvent, newValue: string) => {
-    setSearchParams(valueTabs(newValue, "view"), { replace: true });
+  const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
+    setSearchParams(valueTabs(String(newValue), "view"), { replace: true });
   };
 
   const back = useMemo(() => {
@@ -72,7 +68,7 @@ export const RetrieveUserPage = () => {
         break;
 
       default:
-        setView(<ViewUserData id={user_id} school_id={school_id} />);
+        setView(<ViewUserData id={user_id} />);
         setTools(<ToolsUser back={back} />);
     }
   }, [viewData, school_id, user_id, back]);

@@ -13,8 +13,8 @@ export const TabsYear = ({ value, handleChange }: iTabsBaseProps) => {
       variant="scrollable"
       sx={{ borderRight: 1, borderColor: "divider" }}
     >
-      {listYear?.map((el) => (
-        <Tab key={el.id} label={el.year} value={el.id} />
+      {listYear.map((el, index) => (
+        <Tab key={el.id} label={el.year} value={index} />
       ))}
     </Tabs>
   );

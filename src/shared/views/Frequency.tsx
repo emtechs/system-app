@@ -1,6 +1,5 @@
-import { useSearchParams } from "react-router-dom";
-import { useDebounce, useValueTabs } from "../hooks";
-import { usePaginationContext } from "../contexts";
+import { useDebounce } from "../hooks";
+import { useAuthContext, usePaginationContext } from "../contexts";
 import {
   SyntheticEvent,
   useCallback,
@@ -26,9 +25,8 @@ export const ViewFrequency = ({
   user_id,
   table_def,
 }: iViewFrequency) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const year_id = searchParams.get("year_id") || undefined;
   const { debounce } = useDebounce();
+  const { listYear } = useAuthContext();
   const {
     setCount,
     setIsLoading,
@@ -41,11 +39,13 @@ export const ViewFrequency = ({
     query_page,
     search,
   } = usePaginationContext();
-  const { valueTabs } = useValueTabs();
   const [data, setData] = useState<iFrequencyBase[]>();
+  const [index, setIndex] = useState(0);
 
-  const handleChange = (_event: SyntheticEvent, newValue: string) => {
-    setSearchParams(valueTabs(newValue, "year"), { replace: true });
+  const year_id = listYear[index].id;
+
+  const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
+    setIndex(Number(newValue));
   };
 
   const getFrequencies = useCallback((query: string, isPage?: boolean) => {
@@ -113,7 +113,7 @@ export const ViewFrequency = ({
 
   return (
     <Box display="flex" justifyContent="space-between">
-      <TabsYear value={year_id} handleChange={handleChange} />
+      <TabsYear value={index} handleChange={handleChange} />
       <Box flex={1}>
         {table}
         <PaginationTable total={data ? data.length : 0} onClick={onClick} />

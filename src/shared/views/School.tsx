@@ -1,7 +1,17 @@
 import sortArray from "sort-array";
-import { SyntheticEvent, useCallback, useEffect, useMemo } from "react";
-import { useDebounce, useValueTabs } from "../hooks";
-import { usePaginationContext, useSchoolContext } from "../contexts";
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { useDebounce } from "../hooks";
+import {
+  useAuthContext,
+  usePaginationContext,
+  useSchoolContext,
+} from "../contexts";
 import { iSchool, iViewBaseProps } from "../interfaces";
 import { TabsYear } from "../components";
 import { TableSchool, TableSchoolClass, TableSchoolUser } from "./tables";
@@ -11,20 +21,22 @@ import { useLocation, useSearchParams } from "react-router-dom";
 export const ViewSchool = ({ id }: iViewBaseProps) => {
   const location = useLocation();
   const { getSchools, listData } = useSchoolContext();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const school_id = searchParams.get("school_id") || undefined;
-  const year_id = searchParams.get("year_id") || undefined;
   const { debounce } = useDebounce();
   const { query, order, by, search, is_director } = usePaginationContext();
-  const { valueTabs } = useValueTabs();
+  const { listYear } = useAuthContext();
+  const [index, setIndex] = useState(0);
 
-  const handleChange = (_event: SyntheticEvent, newValue: string) => {
-    setSearchParams(valueTabs(newValue, "year"), { replace: true });
+  const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
+    setIndex(Number(newValue));
   };
 
   const class_id = location.pathname.includes("class") ? id : undefined;
 
   const user_id = location.pathname.includes("user") ? id : undefined;
+
+  const year_id = class_id ? listYear[index].id : undefined;
 
   const define_query = useCallback(
     (comp: string) => {
@@ -67,7 +79,7 @@ export const ViewSchool = ({ id }: iViewBaseProps) => {
 
   return (
     <Box display="flex" justifyContent="space-between">
-      {class_id && <TabsYear value={year_id} handleChange={handleChange} />}
+      {class_id && <TabsYear value={index} handleChange={handleChange} />}
       <Box flex={1}>{table}</Box>
     </Box>
   );

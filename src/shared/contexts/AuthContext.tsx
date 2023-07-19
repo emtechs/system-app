@@ -41,8 +41,8 @@ interface iAuthContextData {
   dashData: iDash | undefined;
   setDashData: Dispatch<SetStateAction<iDash | undefined>>;
   yearData: iYear | undefined;
-  listYear: iYear[] | undefined;
-  setListYear: Dispatch<SetStateAction<iYear[] | undefined>>;
+  listYear: iYear[];
+  setListYear: Dispatch<SetStateAction<iYear[]>>;
 }
 
 const AuthContext = createContext({} as iAuthContextData);
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: iChildren) => {
   const [userData, setUserData] = useState<iUser>();
   const [dashData, setDashData] = useState<iDash>();
   const [yearData, setYearData] = useState<iYear>();
-  const [listYear, setListYear] = useState<iYear[]>();
+  const [listYear, setListYear] = useState<iYear[]>([]);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("@EMTechs:token");
