@@ -1,6 +1,12 @@
 import { FieldValues } from "react-hook-form";
 import { apiUsingNow } from "./api";
-import { iClass, iClassDash, iClassSchoolRequest, iYear } from "../interfaces";
+import {
+  iClass,
+  iClassDash,
+  iClassSchoolRequest,
+  iStudent,
+  iYear,
+} from "../interfaces";
 
 const create = async (data: FieldValues): Promise<iClass> => {
   const { data: response } = await apiUsingNow.post<iClass>("classes", data);
@@ -97,6 +103,19 @@ const transfer = async (data: FieldValues) => {
   return response;
 };
 
+interface ilistYearReturn {
+  total: number;
+  result: iStudent[];
+}
+
+const listYear = async (key: string, query: string) => {
+  const { data: response } = await apiUsingNow.get<ilistYearReturn>(
+    `classes/year/${key}${query}`
+  );
+
+  return response;
+};
+
 export const apiClass = {
   create,
   createSchool,
@@ -108,4 +127,5 @@ export const apiClass = {
   retrieve,
   destroy,
   transfer,
+  listYear,
 };

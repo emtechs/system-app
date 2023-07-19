@@ -23,6 +23,7 @@ export interface iStudent {
     id: string;
     name: string;
   };
+  year_id: string;
 }
 
 export interface iStudentClass {

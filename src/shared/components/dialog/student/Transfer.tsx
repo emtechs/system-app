@@ -5,11 +5,7 @@ import {
   TextFieldElement,
   useFormContext,
 } from "react-hook-form-mui";
-import {
-  useAppThemeContext,
-  useDialogContext,
-  useStudentContext,
-} from "../../../contexts";
+import { useAppThemeContext, useDialogContext } from "../../../contexts";
 import { iClass, iSchool, iStudent } from "../../../interfaces";
 import { BaseContentChildren, DialogBaseChildren } from "../structure";
 import { apiClass, apiSchool } from "../../../services";
@@ -57,15 +53,12 @@ const ClassSelect = ({ year_id }: iClassSelectProps) => {
 
 interface iDialogTransferStudentProps {
   student: iStudent;
-  year_id: string;
 }
 
 export const DialogTransferStudent = ({
   student,
-  year_id,
 }: iDialogTransferStudentProps) => {
   const { setLoading, handleError, handleSucess } = useAppThemeContext();
-  const { getStudents } = useStudentContext();
   const { openEdit, handleOpenEdit } = useDialogContext();
   const [schoolDataSelect, setSchoolDataSelect] = useState<iSchool[]>();
 
@@ -78,9 +71,6 @@ export const DialogTransferStudent = ({
       setLoading(true);
       await apiClass.transfer(data);
       handleSucess("Aluno transferido com sucesso!");
-      getStudents(
-        `?is_active=true&year_id=${year_id}&school_id=${student.school.id}&class_id=${student.class.id}`
-      );
     } catch {
       handleError("Não foi possível transferir o aluno no momento!");
     } finally {
@@ -103,7 +93,11 @@ export const DialogTransferStudent = ({
           handleOpenEdit();
           transferStudent(data);
         }}
-        values={{ year_id, student_id: student.id, key: student.key }}
+        values={{
+          year_id: student.year_id,
+          student_id: student.id,
+          key: student.key,
+        }}
         resolver={zodResolver(studentTransferSchema)}
       >
         <BaseContentChildren>
@@ -129,7 +123,7 @@ export const DialogTransferStudent = ({
             }
             textFieldProps={{ fullWidth: true }}
           />
-          <ClassSelect year_id={year_id} />
+          <ClassSelect year_id={student.year_id} />
           <Button variant="contained" type="submit" fullWidth>
             Salvar
           </Button>

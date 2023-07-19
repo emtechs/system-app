@@ -15,7 +15,6 @@ export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
     if (mdDown)
       return [
         { order: "name", numeric: "left", label: "Turma" },
-        { numeric: "left", label: "Escola" },
         { order: "infrequency", numeric: "right", label: "Infrequência" },
       ];
     return [
@@ -31,7 +30,7 @@ export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
       {data.map((el, index) => (
         <TableRowLink
           key={index}
-          href={`/class/${el.id}?school_id=${el.school.id}`}
+          href={`/school/${el.school.id}/class/${el.key}?view=student`}
         >
           <TableCellLink link="div">{el.name}</TableCellLink>
           {!mdDown && (

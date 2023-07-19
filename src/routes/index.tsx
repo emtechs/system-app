@@ -17,6 +17,7 @@ import {
   ReportPage,
   RetrieveClassPage,
   RetrieveFrequencyPage,
+  RetrieveSchoolClassPage,
   RetrieveSchoolPage,
   RetrieveUserPage,
   SchoolPage,
@@ -51,6 +52,10 @@ const AppRoutes = () => {
           />
           <Route path="/school" element={<SchoolPage />} />
           <Route path="/school/:school_id" element={<RetrieveSchoolPage />} />
+          <Route
+            path="/school/:school_id/class/:key"
+            element={<RetrieveSchoolClassPage />}
+          />
           <Route path="/home/school" element={<HomePage isHome />} />
         </Route>
         <Route path="/" element={<HomePage />} />

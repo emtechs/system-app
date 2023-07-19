@@ -18,6 +18,7 @@ export interface iClass {
     name: string;
   };
   year_id: string;
+  key: string;
 }
 
 export interface iDashClass {
