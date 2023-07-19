@@ -1,16 +1,46 @@
-import { useDialogContext } from "../../../contexts";
-import { iStudent } from "../../../interfaces";
-import { DialogBase } from "../structure";
+import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import {
+  useAppThemeContext,
+  useDialogContext,
+  useStudentContext,
+} from "../../../contexts";
+import { iStudent, iStudentRemoveRequest } from "../../../interfaces";
+import { BaseContentChildren, DialogBaseChildren } from "../structure";
+import { apiClass } from "../../../services";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { studentRemoveSchema } from "../../../schemas";
+import { Button } from "@mui/material";
 
 interface iDialogRemoveStudentProps {
   student: iStudent;
+  year_id: string;
 }
 
-export const DialogRemoveStudent = ({ student }: iDialogRemoveStudentProps) => {
+export const DialogRemoveStudent = ({
+  student,
+  year_id,
+}: iDialogRemoveStudentProps) => {
+  const { setLoading, handleError, handleSucess } = useAppThemeContext();
+  const { getStudents } = useStudentContext();
   const { openActive, handleOpenActive } = useDialogContext();
 
+  const removeStudent = async (id: string, data: iStudentRemoveRequest) => {
+    try {
+      setLoading(true);
+      await apiClass.destroy(id, data);
+      handleSucess("Aluno removido com sucesso!");
+      getStudents(
+        `?is_active=true&year_id=${year_id}&school_id=${student.school.id}&class_id=${student.class.id}`
+      );
+    } catch {
+      handleError("Não foi possível remover o aluno no momento!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <DialogBase
+    <DialogBaseChildren
       open={openActive}
       onClose={handleOpenActive}
       title="Remover Aluno da Turma"
@@ -18,10 +48,26 @@ export const DialogRemoveStudent = ({ student }: iDialogRemoveStudentProps) => {
       Turma ${student.class.name.toUpperCase()} da Escola ${
         student.school.name
       }?`}
-      action={() => {
-        handleOpenActive();
-      }}
-      actionTitle="Continuar"
-    />
+    >
+      <FormContainer
+        onSuccess={(data) => {
+          handleOpenActive();
+          removeStudent(student.key, data);
+        }}
+        resolver={zodResolver(studentRemoveSchema)}
+      >
+        <BaseContentChildren>
+          <TextFieldElement
+            name="justify_disabled"
+            label="Justificativa"
+            required
+            fullWidth
+          />
+          <Button variant="contained" type="submit" fullWidth>
+            Salvar
+          </Button>
+        </BaseContentChildren>
+      </FormContainer>
+    </DialogBaseChildren>
   );
 };

@@ -33,7 +33,7 @@ export const TableFrequencyUser = ({ data }: iTableFrequencyUserProps) => {
               bgcolor: defineBgColorInfrequency(el.infrequency, theme),
             }}
           >
-            {el.infrequency.toFixed(0)}%
+            {el.infrequency > 0 ? el.infrequency.toFixed(0) : 0}%
           </TableCell>
         </TableRow>
       ))}

@@ -1,3 +1,5 @@
+import { z } from "zod";
+import { studentRemoveSchema, studentTransferSchema } from "../schemas";
 import { iClass, iClassFreq } from "./class.interfaces";
 
 export interface iStudent {
@@ -6,6 +8,7 @@ export interface iStudent {
   registry: string;
   created_at: Date;
   infrequency: number;
+  key: string;
   frequencies: {
     presented: number;
     justified: number;
@@ -47,3 +50,7 @@ export interface iStudentFrequency extends iStudent {
 export interface iStudentDash extends iStudentFrequency {
   class: iClass;
 }
+
+export type iStudentRemoveRequest = z.infer<typeof studentRemoveSchema>;
+
+export type iStudentTransferRequest = z.infer<typeof studentTransferSchema>;

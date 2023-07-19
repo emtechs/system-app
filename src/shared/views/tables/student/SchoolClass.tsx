@@ -1,16 +1,23 @@
 import { useMemo, useState } from "react";
 import { iStudent, iHeadcell } from "../../../interfaces";
 import { useAppThemeContext } from "../../../contexts";
-import { DialogRemoveStudent, TableBase } from "../../../components";
+import {
+  DialogRemoveStudent,
+  DialogTransferStudent,
+  TableBase,
+} from "../../../components";
 import { TableCell, TableRow } from "@mui/material";
 import { defineBgColorInfrequency } from "../../../scripts";
 import { ActionsStudent } from "../actions";
+import { useSearchParams } from "react-router-dom";
 
 interface iTableStudentSchoolProps {
   data: iStudent[];
 }
 
 export const TableStudentSchoolClass = ({ data }: iTableStudentSchoolProps) => {
+  const [searchParams] = useSearchParams();
+  const year_id = searchParams.get("year_id") || undefined;
   const { theme } = useAppThemeContext();
   const [studentData, setStudentData] = useState<iStudent>();
 
@@ -45,7 +52,12 @@ export const TableStudentSchoolClass = ({ data }: iTableStudentSchoolProps) => {
           </TableRow>
         ))}
       </TableBase>
-      {studentData && <DialogRemoveStudent student={studentData} />}
+      {studentData && year_id && (
+        <DialogRemoveStudent student={studentData} year_id={year_id} />
+      )}
+      {studentData && year_id && (
+        <DialogTransferStudent student={studentData} year_id={year_id} />
+      )}
     </>
   );
 };

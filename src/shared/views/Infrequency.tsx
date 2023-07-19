@@ -86,7 +86,7 @@ export const ViewInfrequency = () => {
                   bgcolor: defineBgColorInfrequency(el.value, theme),
                 }}
               >
-                {el.value.toFixed(0)}%
+                {el.value > 0 ? el.value.toFixed(0) : 0}%
               </TableCell>
             </TableRow>
           ))}

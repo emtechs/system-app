@@ -1,15 +1,8 @@
 import { useLocation, useSearchParams } from "react-router-dom";
 import { useDebounce, useValueTabs } from "../hooks";
-import { usePaginationContext } from "../contexts";
-import {
-  SyntheticEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { usePaginationContext, useStudentContext } from "../contexts";
+import { SyntheticEvent, useCallback, useEffect, useMemo } from "react";
 import { iStudent, iViewBaseProps } from "../interfaces";
-import { apiStudent } from "../services";
 import { Box } from "@mui/material";
 import { PaginationTable, TabsYear } from "../components";
 import sortArray from "sort-array";
@@ -24,20 +17,10 @@ export const ViewStudent = ({ id }: iViewBaseProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const year_id = searchParams.get("year_id") || undefined;
   const { debounce } = useDebounce();
-  const {
-    setCount,
-    setIsLoading,
-    query,
-    setFace,
-    handleFace,
-    face,
-    order,
-    by,
-    query_page,
-    search,
-  } = usePaginationContext();
+  const { query, handleFace, face, order, by, query_page, search } =
+    usePaginationContext();
+  const { getStudents, listData } = useStudentContext();
   const { valueTabs } = useValueTabs();
-  const [data, setData] = useState<iStudent[]>();
 
   const school_id = useMemo(() => {
     if (location.pathname.includes("school")) return id;
@@ -54,25 +37,6 @@ export const ViewStudent = ({ id }: iViewBaseProps) => {
   const handleChange = (_event: SyntheticEvent, newValue: string) => {
     setSearchParams(valueTabs(newValue, "year"), { replace: true });
   };
-
-  const getStudents = useCallback((query: string, isPage?: boolean) => {
-    setIsLoading(true);
-    if (isPage) {
-      apiStudent
-        .list(query)
-        .then((res) => setData((old) => old?.concat(res.result)))
-        .finally(() => setIsLoading(false));
-    } else {
-      apiStudent
-        .list(query)
-        .then((res) => {
-          setFace(1);
-          setData(res.result);
-          setCount(res.total);
-        })
-        .finally(() => setIsLoading(false));
-    }
-  }, []);
 
   const define_query = useCallback(
     (comp: string) => {
@@ -100,38 +64,39 @@ export const ViewStudent = ({ id }: iViewBaseProps) => {
 
   const table = useMemo(() => {
     let students: iStudent[];
-    if (data) {
-      students = sortArray<iStudent>(data, { by: order, order: by });
-      if (order === "class_name")
-        students = sortArray<iStudent>(data, {
-          by: order,
-          order: by,
-          computed: { class_name: (row) => row.class.name },
-        });
 
-      if (order === "school_name")
-        students = sortArray<iStudent>(data, {
-          by: order,
-          order: by,
-          computed: { school_name: (row) => row.school.name },
-        });
+    students = sortArray<iStudent>(listData, { by: order, order: by });
+    if (order === "class_name")
+      students = sortArray<iStudent>(listData, {
+        by: order,
+        order: by,
+        computed: { class_name: (row) => row.class.name },
+      });
 
-      if (class_id && school_id)
-        return <TableStudentSchoolClass data={students} />;
+    if (order === "school_name")
+      students = sortArray<iStudent>(listData, {
+        by: order,
+        order: by,
+        computed: { school_name: (row) => row.school.name },
+      });
 
-      if (class_id) return <TableStudentClass data={students} />;
+    if (class_id && school_id)
+      return <TableStudentSchoolClass data={students} />;
 
-      return <TableStudentSchool data={students} />;
-    }
-    return <></>;
-  }, [by, class_id, data, order]);
+    if (class_id) return <TableStudentClass data={students} />;
+
+    return <TableStudentSchool data={students} />;
+  }, [by, class_id, listData, order, school_id]);
 
   return (
     <Box display="flex" justifyContent="space-between">
       <TabsYear value={year_id} handleChange={handleChange} />
       <Box flex={1}>
         {table}
-        <PaginationTable total={data ? data.length : 0} onClick={onClick} />
+        <PaginationTable
+          total={listData ? listData.length : 0}
+          onClick={onClick}
+        />
       </Box>
     </Box>
   );

@@ -80,6 +80,23 @@ const retrieve = async (id: string) => {
   return response;
 };
 
+const destroy = async (id: string, data: FieldValues) => {
+  const { data: response } = await apiUsingNow.delete<iClass>(`classes/${id}`, {
+    data: { ...data },
+  });
+
+  return response;
+};
+
+const transfer = async (data: FieldValues) => {
+  const { data: response } = await apiUsingNow.patch<iClass>(
+    `classes/transfer`,
+    data
+  );
+
+  return response;
+};
+
 export const apiClass = {
   create,
   createSchool,
@@ -89,4 +106,6 @@ export const apiClass = {
   listDash,
   list,
   retrieve,
+  destroy,
+  transfer,
 };
