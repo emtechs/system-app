@@ -41,3 +41,19 @@ export const studentClassCreateSchema = z.object({
     .string({ required_error: "Matricula obrigatória" })
     .nonempty("Matricula obrigatória"),
 });
+
+export const studentSchoolCreateSchema = z
+  .object({
+    name: z
+      .string({ required_error: "Nome obrigatório" })
+      .nonempty("Nome obrigatório"),
+    registry: z
+      .string({ required_error: "Matricula obrigatória" })
+      .nonempty("Matricula obrigatória"),
+    class: z.object(
+      { id: z.string().uuid() },
+      { required_error: "Turma obrigatória" }
+    ),
+    class_id: z.string().uuid().optional(),
+  })
+  .refine((fields) => (fields.class_id = fields.class.id));

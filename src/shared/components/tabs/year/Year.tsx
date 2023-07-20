@@ -1,9 +1,16 @@
-import { Tab, Tabs } from "@mui/material";
-import { useAuthContext } from "../../../contexts";
+import { Tabs, Tab } from "@mui/material";
+import { useEffect } from "react";
+import { useAuthContext, useCalendarContext } from "../../../contexts";
 import { iTabsBaseProps } from "../../../interfaces";
 
 export const TabsYear = ({ value, handleChange }: iTabsBaseProps) => {
   const { listYear } = useAuthContext();
+  const { setYearIdSelect } = useCalendarContext();
+
+  useEffect(() => {
+    const newValue = Number(value);
+    setYearIdSelect(listYear[newValue].id);
+  }, [value]);
 
   return (
     <Tabs

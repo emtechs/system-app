@@ -13,6 +13,7 @@ import {
   DialogRemoveStudent,
   DialogTransferStudent,
   DialogCreateStudentClass,
+  DialogCreateStudentSchool,
 } from "../components";
 import { useAuthContext, usePaginationContext } from "../contexts";
 import { useDebounce } from "../hooks";
@@ -31,9 +32,8 @@ export const ViewStudent = () => {
 
   const handleStudent = (newStudent: iStudent) => setStudentData(newStudent);
 
-  const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
+  const handleChange = (_event: SyntheticEvent, newValue: string | number) =>
     setIndex(Number(newValue));
-  };
 
   const getStudent = useCallback((query: string) => {
     setIsLoading(true);
@@ -98,6 +98,7 @@ export const ViewStudent = () => {
         table
       )}
 
+      {school_id && <DialogCreateStudentSchool id={school_id} list={list} />}
       {class_id && <DialogCreateStudentClass id={class_id} list={list} />}
       {studentData && <DialogRemoveStudent student={studentData} list={list} />}
       {studentData && (
