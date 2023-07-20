@@ -3,6 +3,7 @@ import { useAppThemeContext, useAuthContext } from "../../shared/contexts";
 import { HomePageAdmin } from "./Admin";
 import { Header } from "../../shared/components";
 import { School, User } from "./components";
+import { Navigate } from "react-router-dom";
 
 interface iHomePageProps {
   isHome?: boolean;
@@ -10,7 +11,9 @@ interface iHomePageProps {
 
 export const HomePage = ({ isHome }: iHomePageProps) => {
   const { theme, mdDown } = useAppThemeContext();
-  const { userData } = useAuthContext();
+  const { isAuthenticated, userData } = useAuthContext();
+
+  if (!isAuthenticated) return <Navigate to="/login" />;
 
   if (userData?.role === "ADMIN" && !isHome) return <HomePageAdmin />;
 
