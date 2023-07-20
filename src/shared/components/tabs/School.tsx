@@ -6,46 +6,56 @@ import {
   School,
   Workspaces,
 } from "@mui/icons-material";
-import { Box, Tab, Tabs } from "@mui/material";
 import { useSchoolContext } from "../../contexts";
-import { iTabsBaseProps } from "../../interfaces";
+import { TabsBase } from "./Base";
+
+interface iTabsSchoolRetrieveProps {
+  value?: string;
+}
 
 export const TabsSchoolRetrievePage = ({
-  value,
-  handleChange,
-}: iTabsBaseProps) => {
+  value = "",
+}: iTabsSchoolRetrieveProps) => {
   const { schoolRetrieve } = useSchoolContext();
 
-  return (
-    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        variant="scrollable"
-        scrollButtons="auto"
-      >
-        <Tab icon={<School />} label="Escola" value="" />
-        <Tab icon={<People />} label="Servidores" value="server" />
-        <Tab icon={<Workspaces />} label="Turmas" value="class" />
-        <Tab
-          icon={<Groups />}
-          label="Alunos"
-          disabled={schoolRetrieve?.classes === 0}
-          value="student"
-        />
-        <Tab
-          icon={<Checklist />}
-          label="Frequências"
-          disabled={schoolRetrieve?.classes === 0}
-          value="frequency"
-        />
-        <Tab
-          icon={<Percent />}
-          label="Infrequência"
-          disabled={schoolRetrieve?.frequencies === 0}
-          value="infrequency"
-        />
-      </Tabs>
-    </Box>
-  );
+  const href = `/school/${schoolRetrieve?.id}`;
+
+  const elemArr = [
+    { icon: <School />, label: "Escola", value: "", href },
+    {
+      icon: <People />,
+      label: "Servidores",
+      value: "server",
+      href: `${href}/server`,
+    },
+    {
+      icon: <Workspaces />,
+      label: "Turmas",
+      value: "class",
+      href: `${href}/class`,
+    },
+    {
+      icon: <Groups />,
+      label: "Alunos",
+      disabled: schoolRetrieve?.classes === 0,
+      value: "student",
+      href: `${href}/student`,
+    },
+    {
+      icon: <Checklist />,
+      label: "Frequências",
+      disabled: schoolRetrieve?.classes === 0,
+      value: "frequency",
+      href: `${href}/frequency`,
+    },
+    {
+      icon: <Percent />,
+      label: "Infrequência",
+      disabled: schoolRetrieve?.frequencies === 0,
+      value: "infrequency",
+      href: `${href}/infrequency`,
+    },
+  ];
+
+  return <TabsBase value={value} elemArr={elemArr} />;
 };

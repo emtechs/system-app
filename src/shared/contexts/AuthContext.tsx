@@ -162,7 +162,7 @@ export const AuthProvider = ({ children }: iChildren) => {
     setAccessToken(undefined);
     setUserData(undefined);
     setDashData(undefined);
-    navigate("/");
+    navigate("/login");
   }, []);
 
   const isAuthenticated = useMemo(() => !!accessToken, [accessToken]);

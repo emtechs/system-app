@@ -41,6 +41,39 @@ export interface iSchool {
   class?: iClass;
 }
 
+export interface iSchoolClass {
+  id: string;
+  name: string;
+  students: number;
+  frequencies: number;
+  key: string;
+}
+
+export interface iSchoolUser {
+  id: string;
+  name: string;
+  cpf: string;
+  dash: iDash;
+  role: iRole;
+  key: string;
+}
+
+export interface iSchoolStudent {
+  id: string;
+  name: string;
+  registry: string;
+  class: {
+    id: string;
+    name: string;
+  };
+  school: {
+    id: string;
+    name: string;
+  };
+  year_id: string;
+  key: string;
+}
+
 export interface iWorkSchool {
   dash: iDash;
   role: iRole;

@@ -1,13 +1,15 @@
-import { Outlet } from "react-router-dom";
-import { Login } from "../login";
+import { Navigate, Outlet } from "react-router-dom";
 import { First } from "../first";
+import { useAuthContext } from "../../contexts";
 
 export const ProtectedAuth = () => {
+  const { isAuthenticated } = useAuthContext();
+
+  if (!isAuthenticated) return <Navigate to="/login" />;
+
   return (
-    <Login>
-      <First>
-        <Outlet />
-      </First>
-    </Login>
+    <First>
+      <Outlet />
+    </First>
   );
 };
