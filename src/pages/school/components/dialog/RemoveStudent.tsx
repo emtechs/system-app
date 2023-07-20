@@ -45,7 +45,9 @@ export const DialogRemoveStudent = ({
       onClose={handleOpenActive}
       title="Remover Aluno da Turma"
       description={`Deseja continuar removendo o aluno ${student.name.toUpperCase()} da
-      Turma ${student.class.name.toUpperCase()}?`}
+      Turma ${student.class.name.toUpperCase()} da Escola ${
+        student.school.name
+      }?`}
     >
       <FormContainer
         onSuccess={(data) => {

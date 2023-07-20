@@ -8,7 +8,11 @@ import {
 import { useAuthContext, usePaginationContext } from "../../../shared/contexts";
 import { useDebounce } from "../../../shared/hooks";
 import { iSchoolStudent } from "../../../shared/interfaces";
-import { DialogRemoveStudent, TableStudentSchool } from "../components";
+import {
+  DialogRemoveStudent,
+  DialogTransferStudent,
+  TableStudentSchool,
+} from "../components";
 import sortArray from "sort-array";
 import { apiSchoolRetrieve } from "../../../shared/services";
 import { useParams } from "react-router-dom";
@@ -89,6 +93,9 @@ export const ViewStudent = () => {
       </Box>
       {studentData && (
         <DialogRemoveStudent student={studentData} getStudent={getStudent} />
+      )}
+      {studentData && (
+        <DialogTransferStudent student={studentData} getStudent={getStudent} />
       )}
     </>
   );

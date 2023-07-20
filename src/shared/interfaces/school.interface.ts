@@ -66,6 +66,11 @@ export interface iSchoolStudent {
     id: string;
     name: string;
   };
+  school: {
+    id: string;
+    name: string;
+  };
+  year_id: string;
   key: string;
 }
 

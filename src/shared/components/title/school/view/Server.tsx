@@ -16,7 +16,7 @@ export const TitleSchoolViewServerPage = () => {
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </Link>
-      <LabelSchool />
+      <LabelSchool clickable />
       <Chip
         color="primary"
         label="Servidores"

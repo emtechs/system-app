@@ -1,14 +1,23 @@
 import { FieldValues, useFormContext } from "react-hook-form";
 import { iClass, iSchool, iSchoolStudent } from "../../../../shared/interfaces";
 import { useEffect, useState } from "react";
-import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
+import {
+  AutocompleteElement,
+  FormContainer,
+  TextFieldElement,
+} from "react-hook-form-mui";
 import { apiClass, apiSchool } from "../../../../shared/services";
 import {
   useAppThemeContext,
   useDialogContext,
 } from "../../../../shared/contexts";
-import { DialogBaseChildren } from "../../../../shared/components";
+import {
+  BaseContentChildren,
+  DialogBaseChildren,
+} from "../../../../shared/components";
 import { studentTransferSchema } from "../../../../shared/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@mui/material";
 
 interface iClassSelectProps {
   year_id: string;
@@ -83,7 +92,9 @@ export const DialogTransferStudent = ({
       onClose={handleOpenEdit}
       title="Transferir Aluno de Turma"
       description={`Deseja continuar transferindo o aluno ${student.name.toUpperCase()} da
-      Turma ${student.class.name.toUpperCase()}?`}
+      Turma ${student.class.name.toUpperCase()} da Escola ${
+        student.school.name
+      }?`}
     >
       <FormContainer
         onSuccess={(data) => {
