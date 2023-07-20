@@ -1,38 +1,37 @@
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import { FieldValues } from "react-hook-form";
 import {
   useAppThemeContext,
-  useClassContext,
   useDialogContext,
-} from "../../../contexts";
-import { iStudent, iStudentRemoveRequest } from "../../../interfaces";
-import { BaseContentChildren, DialogBaseChildren } from "../structure";
-import { apiClass } from "../../../services";
+} from "../../../../shared/contexts";
+import { iStudent } from "../../../../shared/interfaces";
+import { apiClass } from "../../../../shared/services";
+import {
+  BaseContentChildren,
+  DialogBaseChildren,
+} from "../../../../shared/components";
+import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { studentRemoveSchema } from "../../../schemas";
+import { studentRemoveSchema } from "../../../../shared/schemas";
 import { Button } from "@mui/material";
 
 interface iDialogRemoveStudentProps {
   student: iStudent;
-  id: string;
+  list: () => void;
 }
 
 export const DialogRemoveStudent = ({
   student,
-  id,
+  list,
 }: iDialogRemoveStudentProps) => {
-  const { getStudents } = useClassContext();
   const { setLoading, handleError, handleSucess } = useAppThemeContext();
   const { openActive, handleOpenActive } = useDialogContext();
 
-  const removeStudent = async (
-    id_data: string,
-    data: iStudentRemoveRequest
-  ) => {
+  const removeStudent = async (id_data: string, data: FieldValues) => {
     try {
       setLoading(true);
       await apiClass.destroy(id_data, data);
       handleSucess("Aluno removido com sucesso!");
-      getStudents(id);
+      list();
     } catch {
       handleError("Não foi possível remover o aluno no momento!");
     } finally {

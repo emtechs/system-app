@@ -1,22 +1,23 @@
+import { FieldValues, useFormContext } from "react-hook-form";
+import { iClass, iSchool, iStudent } from "../../../../shared/interfaces";
+import { useEffect, useState } from "react";
 import {
   AutocompleteElement,
-  FieldValues,
   FormContainer,
   TextFieldElement,
-  useFormContext,
 } from "react-hook-form-mui";
+import { apiClass, apiSchool } from "../../../../shared/services";
 import {
   useAppThemeContext,
-  useClassContext,
   useDialogContext,
-} from "../../../contexts";
-import { iClass, iSchool, iStudent } from "../../../interfaces";
-import { BaseContentChildren, DialogBaseChildren } from "../structure";
-import { apiClass, apiSchool } from "../../../services";
+} from "../../../../shared/contexts";
+import {
+  BaseContentChildren,
+  DialogBaseChildren,
+} from "../../../../shared/components";
+import { studentTransferSchema } from "../../../../shared/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { studentTransferSchema } from "../../../schemas";
 import { Button } from "@mui/material";
-import { useEffect, useState } from "react";
 
 interface iClassSelectProps {
   year_id: string;
@@ -57,14 +58,13 @@ const ClassSelect = ({ year_id }: iClassSelectProps) => {
 
 interface iDialogTransferStudentProps {
   student: iStudent;
-  id: string;
+  list: () => void;
 }
 
 export const DialogTransferStudent = ({
+  list,
   student,
-  id,
 }: iDialogTransferStudentProps) => {
-  const { getStudents } = useClassContext();
   const { setLoading, handleError, handleSucess } = useAppThemeContext();
   const { openEdit, handleOpenEdit } = useDialogContext();
   const [schoolDataSelect, setSchoolDataSelect] = useState<iSchool[]>();
@@ -78,7 +78,7 @@ export const DialogTransferStudent = ({
       setLoading(true);
       await apiClass.transfer(data);
       handleSucess("Aluno transferido com sucesso!");
-      getStudents(id);
+      list();
     } catch {
       handleError("Não foi possível transferir o aluno no momento!");
     } finally {
@@ -98,7 +98,6 @@ export const DialogTransferStudent = ({
     >
       <FormContainer
         onSuccess={(data) => {
-          console.log(data);
           handleOpenEdit();
           transferStudent(data);
         }}

@@ -1,5 +1,5 @@
 import { apiUsingNow } from "./api";
-import { iSchoolClass, iSchoolStudent, iSchoolUser } from "../interfaces";
+import { iSchoolClass, iSchoolUser } from "../interfaces";
 
 interface iClassDataReturn {
   total: number;
@@ -35,21 +35,4 @@ const server = async (
   return response;
 };
 
-interface iStudentReturn {
-  total: number;
-  result: iSchoolStudent[];
-}
-
-const student = async (
-  id: string,
-  queryData: string
-): Promise<iStudentReturn> => {
-  const query = `?view=student${queryData}`;
-  const { data: response } = await apiUsingNow.get<iStudentReturn>(
-    `schools/${id}${query}`
-  );
-
-  return response;
-};
-
-export const apiSchoolRetrieve = { classData, server, student };
+export const apiSchoolRetrieve = { classData, server };

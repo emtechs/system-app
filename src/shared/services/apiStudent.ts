@@ -20,6 +20,13 @@ const list = async (query: string): Promise<iList> => {
   return response;
 };
 
+const listClass = async (query: string): Promise<iList> => {
+  const { data: response } = await apiUsingNow.get<iList>(
+    `students/class${query}`
+  );
+  return response;
+};
+
 const update = async (data: FieldValues, id: string): Promise<iStudent> => {
   const { data: response } = await apiUsingNow.patch<iStudent>(
     `students/${id}`,
@@ -55,4 +62,5 @@ export const apiStudent = {
   impStudent,
   impStudentAll,
   list,
+  listClass,
 };

@@ -6,15 +6,6 @@ export interface iStudent {
   id: string;
   name: string;
   registry: string;
-  created_at: Date;
-  infrequency: number;
-  key: string;
-  frequencies: {
-    presented: number;
-    justified: number;
-    missed: number;
-    total: number;
-  };
   class: {
     id: string;
     name: string;
@@ -24,6 +15,7 @@ export interface iStudent {
     name: string;
   };
   year_id: string;
+  key: string;
 }
 
 export interface iStudentClass {
@@ -39,12 +31,12 @@ export interface iStudentList extends iStudent {
 }
 
 export interface iStudentFrequency extends iStudent {
-  is_active: boolean;
-  justify_disabled?: string;
-  presented: number;
-  justified: number;
-  missed: number;
-  total_frequencies: number;
+  frequencies: {
+    presented: number;
+    justified: number;
+    missed: number;
+    total: number;
+  };
   infrequency: number;
 }
 

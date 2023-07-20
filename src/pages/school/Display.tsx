@@ -11,7 +11,8 @@ import {
 import { LayoutBasePage } from "../../shared/layouts";
 import { useEffect, useState } from "react";
 import { PersonAdd } from "@mui/icons-material";
-import { ViewClass, ViewServer, ViewStudent } from "./view";
+import { ViewClass, ViewServer } from "./view";
+import { ViewStudent } from "../../shared/views";
 
 export const ViewSchoolPage = () => {
   const { view } = useParams();

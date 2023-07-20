@@ -1,115 +1,105 @@
-import { useLocation, useSearchParams } from "react-router-dom";
-import { useDebounce } from "../hooks";
+import { Box } from "@mui/material";
 import {
-  useAuthContext,
-  usePaginationContext,
-  useStudentContext,
-} from "../contexts";
-import {
+  useState,
   SyntheticEvent,
   useCallback,
-  useEffect,
   useMemo,
-  useState,
+  useEffect,
 } from "react";
-import { iStudent, iViewBaseProps } from "../interfaces";
-import { Box } from "@mui/material";
-import { PaginationTable, TabsYear } from "../components";
+import { useParams } from "react-router-dom";
 import sortArray from "sort-array";
 import {
-  TableStudentClass,
-  TableStudentSchool,
-  TableStudentSchoolClass,
-} from "./tables";
+  TabsYear,
+  DialogRemoveStudent,
+  DialogTransferStudent,
+} from "../components";
+import { useAuthContext, usePaginationContext } from "../contexts";
+import { useDebounce } from "../hooks";
+import { iStudent } from "../interfaces";
+import { apiStudent } from "../services";
+import { TableStudentSchool } from "./tables";
 
-export const ViewStudent = ({ id }: iViewBaseProps) => {
-  const location = useLocation();
-  const [searchParams] = useSearchParams();
+export const ViewStudent = () => {
+  const { school_id, class_id } = useParams();
   const { debounce } = useDebounce();
   const { listYear } = useAuthContext();
-  const { query, handleFace, face, order, by, query_page, search } =
-    usePaginationContext();
-  const { getStudents, listData } = useStudentContext();
+  const { search, order, by, setCount, setIsLoading } = usePaginationContext();
+  const [listData, setListData] = useState<iStudent[]>([]);
   const [index, setIndex] = useState(0);
+  const [studentData, setStudentData] = useState<iStudent>();
 
-  const year_id = listYear[index].id;
-
-  const school_id = useMemo(() => {
-    if (location.pathname.includes("school")) return id;
-
-    return searchParams.get("school_id") || undefined;
-  }, [id, location, searchParams]);
-
-  const class_id = useMemo(() => {
-    if (location.pathname.includes("class")) return id;
-
-    return searchParams.get("class_id") || undefined;
-  }, [id, location, searchParams]);
+  const handleStudent = (newStudent: iStudent) => setStudentData(newStudent);
 
   const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
     setIndex(Number(newValue));
   };
 
-  const define_query = useCallback(
-    (comp: string) => {
-      const query_data =
-        query(year_id, school_id, class_id) +
-        comp +
-        "&order=name" +
-        query_page();
-      return query_data;
-    },
-    [class_id, query, query_page, school_id, year_id]
-  );
+  const getStudent = useCallback((query: string) => {
+    setIsLoading(true);
+    apiStudent
+      .listClass(query)
+      .then((res) => {
+        setListData(res.result);
+        setCount(res.total);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
 
-  const onClick = () => getStudents(define_query(handleFace(face)), true);
+  const queryData = useMemo(() => {
+    if (school_id)
+      return `?school_id=${school_id}&year_id=${listYear[index].id}`;
+
+    if (class_id) return `?key_class=${class_id}`;
+
+    return "?by=asc";
+  }, [class_id, index, listYear, school_id]);
 
   useEffect(() => {
-    let query_data = "";
+    let query_data = queryData;
     if (search) {
       query_data += `&name=${search}`;
       debounce(() => {
-        getStudents(define_query(query_data));
+        getStudent(query_data);
       });
-    } else getStudents(define_query(query_data));
-  }, [define_query, search]);
+    } else getStudent(query_data);
+  }, [queryData, search]);
+
+  const list = () => getStudent(queryData);
 
   const table = useMemo(() => {
-    let students: iStudent[];
+    let listStundet: iStudent[];
 
-    students = sortArray<iStudent>(listData, { by: order, order: by });
     if (order === "class_name")
-      students = sortArray<iStudent>(listData, {
+      listStundet = sortArray<iStudent>(listData, {
         by: order,
         order: by,
         computed: { class_name: (row) => row.class.name },
       });
 
-    if (order === "school_name")
-      students = sortArray<iStudent>(listData, {
-        by: order,
-        order: by,
-        computed: { school_name: (row) => row.school.name },
-      });
+    listStundet = sortArray<iStudent>(listData, {
+      by: order,
+      order: by,
+    });
 
-    if (class_id && school_id)
-      return <TableStudentSchoolClass data={students} />;
-
-    if (class_id) return <TableStudentClass data={students} />;
-
-    return <TableStudentSchool data={students} />;
-  }, [by, class_id, listData, order, school_id]);
+    return (
+      <TableStudentSchool data={listStundet} handleStudent={handleStudent} />
+    );
+  }, [by, listData, order]);
 
   return (
-    <Box display="flex" justifyContent="space-between">
-      <TabsYear value={index} handleChange={handleChange} />
-      <Box flex={1}>
-        {table}
-        <PaginationTable
-          total={listData ? listData.length : 0}
-          onClick={onClick}
-        />
-      </Box>
-    </Box>
+    <>
+      {school_id ? (
+        <Box display="flex" justifyContent="space-between">
+          <TabsYear value={index} handleChange={handleChange} />
+          <Box flex={1}>{table}</Box>
+        </Box>
+      ) : (
+        table
+      )}
+      {studentData && <DialogRemoveStudent student={studentData} list={list} />}
+      {studentData && (
+        <DialogTransferStudent student={studentData} list={list} />
+      )}
+    </>
   );
 };

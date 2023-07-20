@@ -51,7 +51,7 @@ export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
                 variant="body2"
                 color="inherit"
                 component={Link}
-                href={`/year/class/${el.key}`}
+                href={`/year/class/${el.key}/student`}
                 onClick={onClickReset}
               >
                 {el.name}
@@ -69,7 +69,7 @@ export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
               <IconButton
                 color="primary"
                 size="small"
-                href={`/year/class/${el.key}`}
+                href={`/year/class/${el.key}/student`}
                 onClick={onClickReset}
               >
                 <Visibility fontSize="small" />

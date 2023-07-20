@@ -58,22 +58,6 @@ export interface iSchoolUser {
   key: string;
 }
 
-export interface iSchoolStudent {
-  id: string;
-  name: string;
-  registry: string;
-  class: {
-    id: string;
-    name: string;
-  };
-  school: {
-    id: string;
-    name: string;
-  };
-  year_id: string;
-  key: string;
-}
-
 export interface iWorkSchool {
   dash: iDash;
   role: iRole;
