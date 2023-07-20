@@ -32,3 +32,12 @@ export const studentTransferSchema = z
   .refine((fields) => (fields.finished_at = Date.now()))
   .refine((fields) => (fields.class_id = fields.class.id))
   .refine((fields) => (fields.school_id = fields.school.id));
+
+export const studentClassCreateSchema = z.object({
+  name: z
+    .string({ required_error: "Nome obrigatório" })
+    .nonempty("Nome obrigatório"),
+  registry: z
+    .string({ required_error: "Matricula obrigatória" })
+    .nonempty("Matricula obrigatória"),
+});

@@ -12,6 +12,7 @@ import {
   TabsYear,
   DialogRemoveStudent,
   DialogTransferStudent,
+  DialogCreateStudentClass,
 } from "../components";
 import { useAuthContext, usePaginationContext } from "../contexts";
 import { useDebounce } from "../hooks";
@@ -96,6 +97,8 @@ export const ViewStudent = () => {
       ) : (
         table
       )}
+
+      {class_id && <DialogCreateStudentClass id={class_id} list={list} />}
       {studentData && <DialogRemoveStudent student={studentData} list={list} />}
       {studentData && (
         <DialogTransferStudent student={studentData} list={list} />

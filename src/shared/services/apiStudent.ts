@@ -2,9 +2,9 @@ import { FieldValues } from "react-hook-form";
 import { iStudent } from "../interfaces";
 import { apiUsingNow } from "./api";
 
-const create = async (data: FieldValues, id: string): Promise<iStudent> => {
+const create = async (data: FieldValues, query?: string): Promise<iStudent> => {
   const { data: response } = await apiUsingNow.post<iStudent>(
-    `students/${id}`,
+    `students${query}`,
     data
   );
   return response;
