@@ -10,3 +10,4 @@ export * from "./report";
 export * from "./school";
 export * from "./student";
 export * from "./user";
+export * from "./year";

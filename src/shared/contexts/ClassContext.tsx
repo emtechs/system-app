@@ -20,9 +20,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
 import { FieldValues } from "react-hook-form";
-import { apiAuth, apiClass } from "../services";
-import { useAuthContext } from "./AuthContext";
-import { usePaginationContext } from ".";
+import { apiClass } from "../services";
+import { usePaginationContext } from "./PaginationContext";
 
 interface iClassContextData {
   createClass: (data: iClassRequest, back?: string) => Promise<void>;
@@ -42,16 +41,11 @@ interface iClassContextData {
   setClassWithSchoolSelect: Dispatch<
     SetStateAction<iClassWithSchool | undefined>
   >;
-  verifyClass: (id: string) => void;
   classSelect: iSelectBase | undefined;
+  setClassSelect: Dispatch<SetStateAction<iSelectBase | undefined>>;
   classRetrieve: iClass | undefined;
   loadingClass: boolean;
   classDataRetrieve: (id: string) => void;
-  verifyClassYear: (
-    class_id: string,
-    school_id: string,
-    year_id: string
-  ) => void;
   getStudents: (id: string) => void;
   listStudentData: iStudent[];
 }
@@ -61,7 +55,6 @@ const ClassContext = createContext({} as iClassContextData);
 export const ClassProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { yearData, setListYear } = useAuthContext();
   const { setCount, setIsLoading } = usePaginationContext();
   const [classDataSelect, setClassDataSelect] = useState<iClassSelect[]>();
   const [listClassData, setListClassData] = useState<iClass[]>();
@@ -81,41 +74,6 @@ export const ClassProvider = ({ children }: iChildren) => {
       })
       .finally(() => setIsLoading(false));
   }, []);
-
-  const verifyClass = useCallback(
-    (id: string) => {
-      setLoading(true);
-      apiAuth
-        .verify(`?class_id=${id}`)
-        .then((res) => {
-          setClassSelect(res.select);
-          if (res.years) {
-            if (res.years.length > 0) {
-              setListYear(res.years);
-            } else if (yearData) {
-              setListYear([yearData]);
-            }
-          }
-        })
-        .catch(() => navigate("/"))
-        .finally(() => setLoading(false));
-    },
-    [yearData]
-  );
-
-  const verifyClassYear = useCallback(
-    (class_id: string, school_id: string, year_id: string) => {
-      setLoading(true);
-      apiAuth
-        .verify(
-          `?class_id=${class_id}&school_id=${school_id}&year_id=${year_id}`
-        )
-        .then((res) => setClassSelect(res.select))
-        .catch(() => navigate("/"))
-        .finally(() => setLoading(false));
-    },
-    []
-  );
 
   const classDataRetrieve = useCallback((id: string) => {
     setLoadingClass(true);
@@ -209,13 +167,12 @@ export const ClassProvider = ({ children }: iChildren) => {
         setClassDataSelect,
         classWithSchoolSelect,
         setClassWithSchoolSelect,
-        verifyClass,
         classDataRetrieve,
         classRetrieve,
         loadingClass,
-        verifyClassYear,
         getStudents,
         listStudentData,
+        setClassSelect,
       }}
     >
       {children}

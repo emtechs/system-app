@@ -1,8 +1,6 @@
 import { useMemo } from "react";
-import {
-  useAppThemeContext,
-  usePaginationContext,
-} from "../../../../shared/contexts";
+import { TableBase } from "../../../../shared/components";
+import { iClass, iHeadcell } from "../../../../shared/interfaces";
 import {
   IconButton,
   Link,
@@ -12,64 +10,63 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { iHeadcell, iSchoolClass } from "../../../../shared/interfaces";
-import { TableBase } from "../../../../shared/components";
+import { usePaginationContext } from "../../../../shared/contexts";
 import { Visibility } from "@mui/icons-material";
 
-interface iTableClassSchoolProps {
-  data: iSchoolClass[];
+interface iTableClassProps {
+  data: iClass[];
 }
 
-export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
-  const { mdDown } = useAppThemeContext();
+export const TableClass = ({ data }: iTableClassProps) => {
   const { isLoading, onClickReset } = usePaginationContext();
 
   const headCells: iHeadcell[] = useMemo(() => {
-    if (mdDown)
-      return [
-        { order: "name", numeric: "left", label: "Turma" },
-        { numeric: "left", label: "Ações" },
-      ];
     return [
       { order: "name", numeric: "left", label: "Turma" },
+      { order: "schools", numeric: "right", label: "Escolas" },
       { order: "students", numeric: "right", label: "Alunos" },
       { order: "frequencies", numeric: "right", label: "Frequências" },
       { numeric: "left", label: "Ações" },
     ];
-  }, [mdDown]);
+  }, []);
 
   return (
     <TableBase headCells={headCells}>
       {data.map((el) => (
-        <TableRow key={el.key}>
+        <TableRow hover key={el.id}>
           <TableCell>
             {isLoading ? (
               <Skeleton width={300} />
-            ) : (
+            ) : el.is_active ? (
               <Typography
                 underline="none"
                 variant="body2"
                 color="inherit"
                 component={Link}
-                href={`/year/class/${el.key}`}
+                href={`/class/${el.id}`}
                 onClick={onClickReset}
               >
                 {el.name}
               </Typography>
+            ) : (
+              el.name
             )}
           </TableCell>
-          {!mdDown && (
-            <>
-              <TableCell align="right">{el.students}</TableCell>
-              <TableCell align="right">{el.frequencies}</TableCell>
-            </>
-          )}
+          <TableCell align="right">
+            {isLoading ? <Skeleton width={150} /> : el.schools}
+          </TableCell>
+          <TableCell align="right">
+            {isLoading ? <Skeleton width={150} /> : el.students}
+          </TableCell>
+          <TableCell align="right">
+            {isLoading ? <Skeleton width={150} /> : el.frequencies}
+          </TableCell>
           <TableCell>
             <Tooltip title="Detalhar">
               <IconButton
                 color="primary"
                 size="small"
-                href={`/year/class/${el.key}`}
+                href={`/class/${el.id}`}
                 onClick={onClickReset}
               >
                 <Visibility fontSize="small" />

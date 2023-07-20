@@ -2,12 +2,12 @@ import { Outlet, useParams } from "react-router-dom";
 import { Footer, TitleSchoolPage, ToolsSchool } from "../../shared/components";
 import { LayoutBasePage } from "../../shared/layouts";
 import { useEffect } from "react";
-import { useSchoolContext } from "../../shared/contexts";
 import { ViewSchool } from "./view";
+import { useVerifySchool } from "../../shared/hooks";
 
 export const SchoolPage = () => {
   const { school_id } = useParams();
-  const { verifySchool } = useSchoolContext();
+  const { verifySchool } = useVerifySchool();
 
   useEffect(() => {
     if (school_id) verifySchool(school_id);

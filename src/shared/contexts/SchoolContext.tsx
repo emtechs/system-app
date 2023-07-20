@@ -18,8 +18,7 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppThemeContext } from "./ThemeContext";
-import { useAuthContext } from "./AuthContext";
-import { apiAuth, apiSchool } from "../services";
+import { apiSchool } from "../services";
 import { usePaginationContext } from "./PaginationContext";
 
 interface iSchoolContextData {
@@ -40,7 +39,7 @@ interface iSchoolContextData {
     back?: string
   ) => Promise<void>;
   schoolSelect: iSelectBase | undefined;
-  verifySchool: (id: string) => void;
+  setSchoolSelect: Dispatch<SetStateAction<iSelectBase | undefined>>;
   schoolDataRetrieve: (id: string, query: string) => void;
   schoolRetrieve: iSchool | undefined;
   loadingSchool: boolean;
@@ -53,7 +52,6 @@ const SchoolContext = createContext({} as iSchoolContextData);
 export const SchoolProvider = ({ children }: iChildren) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { setListYear, yearData } = useAuthContext();
   const { setIsLoading, setCount } = usePaginationContext();
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>();
   const [schoolSelect, setSchoolSelect] = useState<iSelectBase>();
@@ -71,27 +69,6 @@ export const SchoolProvider = ({ children }: iChildren) => {
       })
       .finally(() => setIsLoading(false));
   }, []);
-
-  const verifySchool = useCallback(
-    (id: string) => {
-      setLoading(true);
-      apiAuth
-        .verify(`?school_id=${id}`)
-        .then((res) => {
-          setSchoolSelect(res.select);
-          if (res.years) {
-            if (res.years.length > 0) {
-              setListYear(res.years);
-            } else if (yearData) {
-              setListYear([yearData]);
-            }
-          }
-        })
-        .catch(() => navigate("/"))
-        .finally(() => setLoading(false));
-    },
-    [yearData]
-  );
 
   const schoolDataRetrieve = useCallback((id: string, query: string) => {
     setLoadingSchool(true);
@@ -179,12 +156,12 @@ export const SchoolProvider = ({ children }: iChildren) => {
         importSchool: handleImportSchool,
         createSchoolClass: handleCreateSchoolClass,
         schoolSelect,
-        verifySchool,
         loadingSchool,
         schoolDataRetrieve,
         schoolRetrieve,
         getSchools,
         listData,
+        setSchoolSelect,
       }}
     >
       {children}

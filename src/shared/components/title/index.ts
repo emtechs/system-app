@@ -4,3 +4,4 @@ export * from "./SchoolDashAdmin";
 export * from "./class";
 export * from "./school";
 export * from "./user";
+export * from "./year";

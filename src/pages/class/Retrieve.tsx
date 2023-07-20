@@ -15,7 +15,7 @@ import {
   ViewSchool,
   ViewStudent,
 } from "../../shared/views";
-import { useValueTabs, useVerify } from "../../shared/hooks";
+import { useValueTabs } from "../../shared/hooks";
 
 export const RetrieveClassPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -25,15 +25,10 @@ export const RetrieveClassPage = () => {
   const [view, setView] = useState(<ViewClassData id={class_id} />);
   const [tools, setTools] = useState(<ToolsSchool back="/school" />);
   const { valueTabs } = useValueTabs();
-  const { verify } = useVerify();
 
   const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
     setSearchParams(valueTabs(String(newValue), "view"), { replace: true });
   };
-
-  useEffect(() => {
-    verify(undefined, school_id, class_id);
-  }, [school_id, class_id]);
 
   const title = useMemo(() => {
     if (school_id) return <TitleSchoolClassPage />;

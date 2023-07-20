@@ -14,7 +14,7 @@ import {
   ViewSchool,
   ViewUserData,
 } from "../../shared/views";
-import { useValueTabs, useVerify } from "../../shared/hooks";
+import { useValueTabs } from "../../shared/hooks";
 
 export const RetrieveUserPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,11 +24,6 @@ export const RetrieveUserPage = () => {
   const [tools, setTools] = useState(<ToolsUser back="/user" />);
   const { valueTabs } = useValueTabs();
   const [view, setView] = useState(<ViewUserData id={user_id} />);
-  const { verify } = useVerify();
-
-  useEffect(() => {
-    verify(undefined, school_id, undefined, user_id);
-  }, [school_id, user_id]);
 
   const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
     setSearchParams(valueTabs(String(newValue), "view"), { replace: true });

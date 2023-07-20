@@ -1,4 +1,4 @@
+export * from "./School";
+export * from "./User";
 export * from "./Class";
-export * from "./Year";
 export * from "./Student";
-export * from "./retrieve";

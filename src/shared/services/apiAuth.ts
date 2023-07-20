@@ -31,6 +31,8 @@ const passwordRecovery = async (
 interface iVerify {
   select: iSelectBase;
   years?: iYear[];
+  school?: iSelectBase;
+  year?: iSelectBase;
 }
 
 const verify = async (query: string): Promise<iVerify> => {

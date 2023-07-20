@@ -5,14 +5,15 @@ import {
   GridDashSchool,
   TitleSchoolDashPage,
 } from "../../shared/components";
-import { useAppThemeContext, useSchoolContext } from "../../shared/contexts";
+import { useAppThemeContext } from "../../shared/contexts";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useVerifySchool } from "../../shared/hooks";
 
 export const DashboardSchoolPage = () => {
   const { school_id } = useParams();
   const { theme } = useAppThemeContext();
-  const { verifySchool } = useSchoolContext();
+  const { verifySchool } = useVerifySchool();
 
   useEffect(() => {
     if (school_id) verifySchool(school_id);

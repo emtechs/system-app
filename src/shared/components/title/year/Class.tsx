@@ -1,10 +1,11 @@
 import { Breadcrumbs, Chip, Link } from "@mui/material";
 import { Home, Workspaces } from "@mui/icons-material";
-import { LabelYear } from "../../label";
-import { useAppThemeContext } from "../../../contexts";
+import { LabelClass, LabelSchool, LabelYear } from "../../label";
+import { useAppThemeContext, useAuthContext } from "../../../contexts";
 
 export const TitleClassYearPage = () => {
   const { mdDown } = useAppThemeContext();
+  const { yearData } = useAuthContext();
 
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
@@ -17,7 +18,11 @@ export const TitleClassYearPage = () => {
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </Link>
-      <Link underline="none" color="inherit" href="/class">
+      <Link
+        underline="none"
+        color="inherit"
+        href={`/year/${yearData?.id}/class`}
+      >
         <Chip
           clickable
           color="primary"
@@ -27,6 +32,8 @@ export const TitleClassYearPage = () => {
         />
       </Link>
       <LabelYear />
+      <LabelSchool />
+      <LabelClass />
     </Breadcrumbs>
   );
 };
