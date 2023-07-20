@@ -1,12 +1,7 @@
-import { FieldValues, useFormContext } from "react-hook-form";
-import { iClass, iSchool, iStudent } from "../../../../shared/interfaces";
-import { useEffect, useState } from "react";
-import {
-  AutocompleteElement,
-  FormContainer,
-  TextFieldElement,
-} from "react-hook-form-mui";
-import { apiClass, apiSchool } from "../../../../shared/services";
+import { FieldValues } from "react-hook-form";
+import { iStudent } from "../../../../shared/interfaces";
+import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import { apiClass } from "../../../../shared/services";
 import {
   useAppThemeContext,
   useDialogContext,
@@ -14,47 +9,12 @@ import {
 import {
   BaseContentChildren,
   DialogBaseChildren,
+  AutoCompleteClass,
+  AutoCompleteSchool,
 } from "../../../../shared/components";
 import { studentTransferSchema } from "../../../../shared/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@mui/material";
-
-interface iClassSelectProps {
-  year_id: string;
-}
-
-const ClassSelect = ({ year_id }: iClassSelectProps) => {
-  const { watch } = useFormContext();
-  const school: iSchool = watch("school");
-  const [classDataSelect, setClassDataSelect] = useState<iClass[]>();
-
-  useEffect(() => {
-    if (school) {
-      apiClass
-        .list(`?year_id=${year_id}&school_id=${school.id}&is_active=true`)
-        .then((res) => setClassDataSelect(res.classes));
-    }
-  }, [school, year_id]);
-
-  return (
-    <AutocompleteElement
-      name="class"
-      label="Turma"
-      loading={!classDataSelect}
-      options={
-        classDataSelect && classDataSelect.length > 0
-          ? classDataSelect
-          : [
-              {
-                id: 1,
-                label: "No momento, não há nenhuma turma cadastrada",
-              },
-            ]
-      }
-      textFieldProps={{ fullWidth: true }}
-    />
-  );
-};
 
 interface iDialogTransferStudentProps {
   student: iStudent;
@@ -67,11 +27,6 @@ export const DialogTransferStudent = ({
 }: iDialogTransferStudentProps) => {
   const { setLoading, handleError, handleSucess } = useAppThemeContext();
   const { openEdit, handleOpenEdit } = useDialogContext();
-  const [schoolDataSelect, setSchoolDataSelect] = useState<iSchool[]>();
-
-  useEffect(() => {
-    apiSchool.list("").then((res) => setSchoolDataSelect(res.schools));
-  }, []);
 
   const transferStudent = async (data: FieldValues) => {
     try {
@@ -115,23 +70,8 @@ export const DialogTransferStudent = ({
             required
             fullWidth
           />
-          <AutocompleteElement
-            name="school"
-            label="Escola"
-            loading={!schoolDataSelect}
-            options={
-              schoolDataSelect && schoolDataSelect.length > 0
-                ? schoolDataSelect
-                : [
-                    {
-                      id: 1,
-                      label: "No momento, não há nenhuma turma cadastrada",
-                    },
-                  ]
-            }
-            textFieldProps={{ fullWidth: true }}
-          />
-          <ClassSelect year_id={student.year_id} />
+          <AutoCompleteSchool />
+          <AutoCompleteClass year_id={student.year_id} />
           <Button variant="contained" type="submit" fullWidth>
             Salvar
           </Button>

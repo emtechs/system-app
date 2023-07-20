@@ -1,16 +1,19 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useEffect } from "react";
 import {
-  AutocompleteElement,
   FormContainer,
+  AutocompleteElement,
   TextFieldElement,
 } from "react-hook-form-mui";
-import { BaseContentChildren, DialogBaseChildren } from "../structure";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createDirectorSchema } from "../../../schemas";
-import { iSchool, iUserDirectorRequest } from "../../../interfaces";
-import { useEffect, useState } from "react";
-import { useAppThemeContext, useDialogContext } from "../../../contexts";
-import { apiUser, apiUsingNow } from "../../../services";
-import { ValidateCPF } from "../../validate";
+import {
+  DialogBaseChildren,
+  BaseContentChildren,
+  ValidateCPF,
+} from "../../../../components";
+import { useAppThemeContext, useDialogContext } from "../../../../contexts";
+import { iSchool, iUserDirectorRequest } from "../../../../interfaces";
+import { createDirectorSchema } from "../../../../schemas";
+import { apiUser, apiUsingNow } from "../../../../services";
 
 export const DialogCreateDirector = () => {
   const { setLoading, handleSucess, handleError } = useAppThemeContext();

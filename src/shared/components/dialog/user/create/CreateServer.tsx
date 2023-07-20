@@ -1,15 +1,18 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import {
+  DialogBaseChildren,
+  BaseContentChildren,
+  ValidateCPF,
+} from "../../../../components";
 import {
   useAppThemeContext,
   useDialogContext,
   useUserContext,
-} from "../../../contexts";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { iServerRequest } from "../../../interfaces";
-import { serverCreateSchema } from "../../../schemas";
-import { apiUser } from "../../../services";
-import { BaseContentChildren, DialogBaseChildren } from "../structure";
-import { ValidateCPF } from "../../validate";
+} from "../../../../contexts";
+import { iServerRequest } from "../../../../interfaces";
+import { serverCreateSchema } from "../../../../schemas";
+import { apiUser } from "../../../../services";
 
 interface iDialogCreateServer {
   school_id: string;

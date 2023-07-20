@@ -1,11 +1,14 @@
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { BaseContentChildren, DialogBaseChildren } from "../structure";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createAdmSchema } from "../../../schemas";
-import { iUserAdmRequest } from "../../../interfaces";
-import { useAppThemeContext, useDialogContext } from "../../../contexts";
-import { apiUser } from "../../../services";
-import { ValidateCPF } from "../../validate";
+import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import {
+  DialogBaseChildren,
+  BaseContentChildren,
+  ValidateCPF,
+} from "../../../../components";
+import { useAppThemeContext, useDialogContext } from "../../../../contexts";
+import { iUserAdmRequest } from "../../../../interfaces";
+import { createAdmSchema } from "../../../../schemas";
+import { apiUser } from "../../../../services";
 
 export const DialogCreateAdmin = () => {
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
