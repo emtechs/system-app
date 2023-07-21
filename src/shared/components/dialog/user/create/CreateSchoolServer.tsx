@@ -1,11 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Typography, Button } from "@mui/material";
-import { useState, useEffect } from "react";
-import { FormContainer, AutocompleteElement } from "react-hook-form-mui";
+import { FormContainer } from "react-hook-form-mui";
 import { useNavigate } from "react-router-dom";
 import {
   DialogBaseChildren,
   BaseContentChildren,
+  AutoCompleteSchool,
 } from "../../../../components";
 import {
   useAppThemeContext,
@@ -14,18 +14,13 @@ import {
   useUserContext,
   useSchoolContext,
 } from "../../../../contexts";
-import {
-  iDialogUserProps,
-  iSchool,
-  iSchoolServerRequest,
-} from "../../../../interfaces";
+import { iDialogUserProps, iSchoolServerRequest } from "../../../../interfaces";
 import { defineServerSchema } from "../../../../schemas";
-import { apiUsingNow, apiSchool } from "../../../../services";
+import { apiSchool } from "../../../../services";
 
 export const DialogCreateSchoolServer = ({
   locale,
   user,
-  school,
 }: iDialogUserProps) => {
   const navigate = useNavigate();
   const { setLoading, handleSucess, handleError } = useAppThemeContext();
@@ -34,19 +29,10 @@ export const DialogCreateSchoolServer = ({
   const { onClickReset } = usePaginationContext();
   const { userDataRetrieve } = useUserContext();
   const { getSchools } = useSchoolContext();
-  const [schoolDataSelect, setSchoolDataSelect] = useState<iSchool[]>();
 
   const open = locale === "data" ? openEdit : openCreate;
 
   const onClose = locale === "data" ? handleOpenEdit : handleOpenCreate;
-
-  useEffect(() => {
-    apiUsingNow
-      .get<{ result: iSchool[] }>(
-        `schools?none_server_id=${user.id}&is_active=true`
-      )
-      .then((res) => setSchoolDataSelect(res.data.result));
-  }, [user, school]);
 
   const createSchoolServer = async (
     data: iSchoolServerRequest,
@@ -92,24 +78,7 @@ export const DialogCreateSchoolServer = ({
       >
         <BaseContentChildren>
           <Typography>Usuário: {user.name}</Typography>
-          <AutocompleteElement
-            name="schools"
-            label="Escola"
-            multiple
-            required
-            loading={!schoolDataSelect}
-            textFieldProps={{ fullWidth: true }}
-            options={
-              schoolDataSelect && schoolDataSelect.length > 0
-                ? schoolDataSelect
-                : [
-                    {
-                      id: 1,
-                      label: "No momento, não há nenhuma escola disponível",
-                    },
-                  ]
-            }
-          />
+          <AutoCompleteSchool query={`&none_server_id=${user.id}`} isMultiple />
           <Button variant="contained" type="submit" fullWidth>
             Salvar
           </Button>

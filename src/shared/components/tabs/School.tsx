@@ -9,13 +9,13 @@ import {
 import { useSchoolContext } from "../../contexts";
 import { TabsBase } from "./Base";
 
-interface iTabsSchoolRetrieveProps {
+interface iTabsSchoolRetrievePageProps {
   value?: string;
 }
 
 export const TabsSchoolRetrievePage = ({
   value = "",
-}: iTabsSchoolRetrieveProps) => {
+}: iTabsSchoolRetrievePageProps) => {
   const { schoolRetrieve } = useSchoolContext();
 
   const href = `/school/${schoolRetrieve?.id}`;

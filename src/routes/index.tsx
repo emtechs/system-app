@@ -6,9 +6,12 @@ import {
   Login,
   RetrieveClassPage,
   RetrieveSchoolPage,
+  RetrieveUserPage,
   SchoolPage,
+  UserPage,
   ViewClassYearPage,
   ViewSchoolPage,
+  ViewUserPage,
   YearPage,
 } from "../pages";
 import { ProtectedAuth } from "../shared/components";
@@ -19,6 +22,11 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route element={<ProtectedAuth />}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/user" element={<UserPage />}>
+          <Route path=":user_id" element={<RetrieveUserPage />}>
+            <Route path=":view" element={<ViewUserPage />} />
+          </Route>
+        </Route>
         <Route path="/school" element={<SchoolPage />}>
           <Route path=":school_id" element={<RetrieveSchoolPage />}>
             <Route path=":view" element={<ViewSchoolPage />} />

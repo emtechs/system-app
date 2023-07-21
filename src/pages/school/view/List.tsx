@@ -15,7 +15,7 @@ export const ViewSchool = () => {
 
   const define_query = useCallback(
     (comp: string) => {
-      return "?by=asc" + comp + is_director + is_active;
+      return "?by=asc" + comp + is_director + is_active();
     },
     [is_active, is_director]
   );
@@ -23,6 +23,7 @@ export const ViewSchool = () => {
   useEffect(() => {
     let query_data = "";
     if (search) {
+      console.log(search);
       query_data += `&name=${search}`;
       debounce(() => {
         getSchools(define_query(query_data));

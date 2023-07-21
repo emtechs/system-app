@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { usePaginationContext, useUserContext } from "../contexts";
 import { useDebounce } from "../hooks";
-import { iUser, iViewBaseProps } from "../interfaces";
-import { TableUser, TableUserSchool } from "./tables";
+import { iUser } from "../interfaces";
+import { TableUser } from "./tables";
 import sortArray from "sort-array";
 import { useSearchParams } from "react-router-dom";
 
-export const ViewUser = ({ id }: iViewBaseProps) => {
+export const ViewUser = () => {
   const [searchParams] = useSearchParams();
   const role = searchParams.get("role") || undefined;
   const { debounce } = useDebounce();
@@ -15,11 +15,11 @@ export const ViewUser = ({ id }: iViewBaseProps) => {
 
   const define_query = useCallback(
     (comp: string) => {
-      let query_data = query(undefined, id) + comp;
+      let query_data = query() + comp;
       if (role) query_data += `&role=${role}`;
       return query_data;
     },
-    [id, query, role]
+    [query, role]
   );
 
   useEffect(() => {
@@ -37,10 +37,8 @@ export const ViewUser = ({ id }: iViewBaseProps) => {
   const table = useMemo(() => {
     const users = sortArray<iUser>(listData, { by: order, order: by });
 
-    if (id) return <TableUserSchool data={users} school_id={id} />;
-
     return <TableUser data={users} />;
-  }, [by, id, listData, order]);
+  }, [by, listData, order]);
 
   return table;
 };
