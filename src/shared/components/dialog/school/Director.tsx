@@ -1,23 +1,23 @@
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
 import {
   useDialogContext,
   usePaginationContext,
   useSchoolContext,
-} from "../../../contexts";
-import { iDialogSchoolProps } from "../../../interfaces";
-import { BaseContentChildren, DialogBaseChildren } from "../structure";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { schoolUpdateDirectorSchema } from "../../../schemas";
-import { Box, Typography } from "@mui/material";
-import { ValidateCPF } from "../../validate";
+} from '../../../contexts'
+import { iDialogSchoolProps } from '../../../interfaces'
+import { BaseContentChildren, DialogBaseChildren } from '../structure'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { schoolUpdateDirectorSchema } from '../../../schemas'
+import { Box, Typography } from '@mui/material'
+import { ValidateCPF } from '../../validate'
 
 export const DialogDirectorSchool = ({
   locale,
   school,
 }: iDialogSchoolProps) => {
-  const { onClickReset } = usePaginationContext();
-  const { handleOpenDirector, openDirector } = useDialogContext();
-  const { updateSchool } = useSchoolContext();
+  const { onClickReset } = usePaginationContext()
+  const { handleOpenDirector, openDirector } = useDialogContext()
+  const { updateSchool } = useSchoolContext()
   return (
     <DialogBaseChildren
       open={openDirector}
@@ -29,10 +29,10 @@ export const DialogDirectorSchool = ({
         onSuccess={(data) => {
           const query = school.director
             ? `?director_id=${school.director.id}`
-            : undefined;
-          updateSchool(data, school.id, "diretor", locale, query);
-          onClickReset();
-          handleOpenDirector();
+            : undefined
+          updateSchool(data, school.id, 'diretor', locale, query)
+          onClickReset()
+          handleOpenDirector()
         }}
         resolver={zodResolver(schoolUpdateDirectorSchema)}
       >
@@ -50,5 +50,5 @@ export const DialogDirectorSchool = ({
         </BaseContentChildren>
       </FormContainer>
     </DialogBaseChildren>
-  );
-};
+  )
+}

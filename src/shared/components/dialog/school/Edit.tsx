@@ -1,19 +1,19 @@
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
 import {
   useDialogContext,
   usePaginationContext,
   useSchoolContext,
-} from "../../../contexts";
-import { iDialogSchoolProps } from "../../../interfaces";
-import { BaseContentChildren, DialogBaseChildren } from "../structure";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { schoolUpdateSchema } from "../../../schemas";
-import { Button } from "@mui/material";
+} from '../../../contexts'
+import { iDialogSchoolProps } from '../../../interfaces'
+import { BaseContentChildren, DialogBaseChildren } from '../structure'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { schoolUpdateSchema } from '../../../schemas'
+import { Button } from '@mui/material'
 
 export const DialogEditSchool = ({ locale, school }: iDialogSchoolProps) => {
-  const { onClickReset } = usePaginationContext();
-  const { handleOpenEdit, openEdit } = useDialogContext();
-  const { updateSchool } = useSchoolContext();
+  const { onClickReset } = usePaginationContext()
+  const { handleOpenEdit, openEdit } = useDialogContext()
+  const { updateSchool } = useSchoolContext()
   return (
     <DialogBaseChildren
       open={openEdit}
@@ -26,9 +26,9 @@ export const DialogEditSchool = ({ locale, school }: iDialogSchoolProps) => {
           name: school.name,
         }}
         onSuccess={(data) => {
-          updateSchool(data, school.id, "nome", locale);
-          onClickReset();
-          handleOpenEdit();
+          updateSchool(data, school.id, 'nome', locale)
+          onClickReset()
+          handleOpenEdit()
         }}
         resolver={zodResolver(schoolUpdateSchema)}
       >
@@ -45,5 +45,5 @@ export const DialogEditSchool = ({ locale, school }: iDialogSchoolProps) => {
         </BaseContentChildren>
       </FormContainer>
     </DialogBaseChildren>
-  );
-};
+  )
+}

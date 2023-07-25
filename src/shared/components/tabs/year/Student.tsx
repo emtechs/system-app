@@ -1,11 +1,11 @@
-import { Box, Tab, Tabs } from "@mui/material";
-import { useAuthContext } from "../../../contexts";
+import { Box, Tab, Tabs } from '@mui/material'
+import { useAuthContext } from '../../../contexts'
 
 export const TabsStudentYearPage = () => {
-  const { listYear } = useAuthContext();
+  const { listYear } = useAuthContext()
 
   return (
-    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
       <Tabs value={0} variant="scrollable" scrollButtons="auto">
         <Tab label="Alunos" />
         {listYear?.map((el) => (
@@ -17,5 +17,5 @@ export const TabsStudentYearPage = () => {
         ))}
       </Tabs>
     </Box>
-  );
-};
+  )
+}

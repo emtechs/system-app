@@ -9,9 +9,14 @@ import { ActionsUser } from '../actions'
 interface iTableUserSchoolProps {
   data: iSchoolUser[]
   school_id: string
+  getServer: (query: string) => void
 }
 
-export const TableUserSchool = ({ data, school_id }: iTableUserSchoolProps) => {
+export const TableUserSchool = ({
+  data,
+  getServer,
+  school_id,
+}: iTableUserSchoolProps) => {
   const { mdDown } = useAppThemeContext()
   const [userData, setUserData] = useState<iSchoolUser>()
 
@@ -51,7 +56,7 @@ export const TableUserSchool = ({ data, school_id }: iTableUserSchoolProps) => {
           </TableRow>
         ))}
       </TableBase>
-      <DialogCreateServer school_id={school_id} />
+      <DialogCreateServer getServer={getServer} school_id={school_id} />
       {userData && <></>}
     </>
   )

@@ -2,9 +2,9 @@ import {
   TabsStudentYearPage,
   TitleClassPage,
   ToolsSchool,
-} from "../../shared/components";
-import { LayoutBasePage } from "../../shared/layouts";
-import { ViewStudent } from "../../shared/views";
+} from '../../shared/components'
+import { LayoutBasePage } from '../../shared/layouts'
+import { ViewStudent } from '../../shared/views'
 
 export const StudentPage = () => {
   return (
@@ -25,5 +25,5 @@ export const StudentPage = () => {
       <TabsStudentYearPage />
       <ViewStudent />
     </LayoutBasePage>
-  );
-};
+  )
+}

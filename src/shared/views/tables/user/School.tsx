@@ -1,6 +1,6 @@
 import { Fragment, useMemo, useState } from 'react'
 import {
-  DialogCreateServer,
+  // DialogCreateServer,
   DialogRemoveUser,
   TableBase,
 } from '../../../components'
@@ -79,7 +79,7 @@ export const TableUserSchool = ({ data, school_id }: iTableUserSchoolProps) => {
           </Fragment>
         ))}
       </TableBase>
-      <DialogCreateServer school_id={school_id} />
+      {/* <DialogCreateServer school_id={school_id} /> */}
       {userData && <DialogRemoveUser user={userData} locale="list" />}
     </>
   )
