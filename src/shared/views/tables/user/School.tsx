@@ -1,43 +1,43 @@
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from 'react'
 import {
   DialogCreateServer,
   DialogRemoveUser,
   TableBase,
-} from "../../../components";
-import { useAppThemeContext, usePaginationContext } from "../../../contexts";
-import { iUser, iHeadcell } from "../../../interfaces";
-import { rolePtBr } from "../../../scripts";
-import { Link, TableCell, TableRow, Typography } from "@mui/material";
-import { ActionsUser } from "../actions";
+} from '../../../components'
+import { useAppThemeContext, usePaginationContext } from '../../../contexts'
+import { iUser, iHeadCell } from '../../../interfaces'
+import { rolePtBr } from '../../../scripts'
+import { Link, TableCell, TableRow, Typography } from '@mui/material'
+import { ActionsUser } from '../actions'
 
 interface iTableUserSchoolProps {
-  data: iUser[];
-  school_id: string;
+  data: iUser[]
+  school_id: string
 }
 
 export const TableUserSchool = ({ data, school_id }: iTableUserSchoolProps) => {
-  const { mdDown } = useAppThemeContext();
-  const { onClickReset } = usePaginationContext();
-  const [userData, setUserData] = useState<iUser>();
+  const { mdDown } = useAppThemeContext()
+  const { onClickReset } = usePaginationContext()
+  const [userData, setUserData] = useState<iUser>()
 
-  const handleUser = (newUser: iUser) => setUserData(newUser);
+  const handleUser = (newUser: iUser) => setUserData(newUser)
 
-  const headCells: iHeadcell[] = useMemo(() => {
+  const headCells: iHeadCell[] = useMemo(() => {
     if (mdDown)
       return [
-        { order: "name", numeric: "left", label: "Nome Completo" },
-        { numeric: "left", label: "CPF" },
-        { numeric: "left", label: "Ações" },
-      ];
+        { order: 'name', numeric: 'left', label: 'Nome Completo' },
+        { numeric: 'left', label: 'CPF' },
+        { numeric: 'left', label: 'Ações' },
+      ]
 
     return [
-      { order: "name", numeric: "left", label: "Nome Completo" },
-      { numeric: "left", label: "CPF" },
-      { numeric: "left", label: "Função" },
-      { numeric: "left", label: "Tela" },
-      { numeric: "left", label: "Ações" },
-    ];
-  }, [mdDown]);
+      { order: 'name', numeric: 'left', label: 'Nome Completo' },
+      { numeric: 'left', label: 'CPF' },
+      { numeric: 'left', label: 'Função' },
+      { numeric: 'left', label: 'Tela' },
+      { numeric: 'left', label: 'Ações' },
+    ]
+  }, [mdDown])
 
   return (
     <>
@@ -64,9 +64,9 @@ export const TableUserSchool = ({ data, school_id }: iTableUserSchoolProps) => {
                 )}
                 {!mdDown && (
                   <TableCell>
-                    {user.work_school.dash === "SCHOOL"
-                      ? "Escola"
-                      : "Frequência"}
+                    {user.work_school.dash === 'SCHOOL'
+                      ? 'Escola'
+                      : 'Frequência'}
                   </TableCell>
                 )}
                 <ActionsUser
@@ -82,5 +82,5 @@ export const TableUserSchool = ({ data, school_id }: iTableUserSchoolProps) => {
       <DialogCreateServer school_id={school_id} />
       {userData && <DialogRemoveUser user={userData} locale="list" />}
     </>
-  );
-};
+  )
+}

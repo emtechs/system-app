@@ -1,35 +1,35 @@
-import { TableRow, TableCell } from "@mui/material";
-import { useMemo } from "react";
-import { TableBase } from "../../../../shared/components";
-import { useAppThemeContext } from "../../../../shared/contexts";
-import { iHeadcell, iStudent } from "../../../../shared/interfaces";
-import { ActionsStudent } from "../actions";
+import { TableRow, TableCell } from '@mui/material'
+import { useMemo } from 'react'
+import { TableBase } from '../../../../shared/components'
+import { useAppThemeContext } from '../../../../shared/contexts'
+import { iHeadCell, iStudent } from '../../../../shared/interfaces'
+import { ActionsStudent } from '../actions'
 
 interface iTableStudentSchoolProps {
-  data: iStudent[];
-  handleStudent: (newStudent: iStudent) => void;
+  data: iStudent[]
+  handleStudent: (newStudent: iStudent) => void
 }
 
 export const TableStudentSchool = ({
   data,
   handleStudent,
 }: iTableStudentSchoolProps) => {
-  const { mdDown } = useAppThemeContext();
+  const { mdDown } = useAppThemeContext()
 
-  const headCells: iHeadcell[] = useMemo(() => {
+  const headCells: iHeadCell[] = useMemo(() => {
     if (mdDown)
       return [
-        { order: "registry", numeric: "right", label: "Matrícula" },
-        { order: "name", numeric: "left", label: "Aluno" },
-        { numeric: "left", label: "Ações" },
-      ];
+        { order: 'registry', numeric: 'right', label: 'Matrícula' },
+        { order: 'name', numeric: 'left', label: 'Aluno' },
+        { numeric: 'left', label: 'Ações' },
+      ]
     return [
-      { order: "registry", numeric: "right", label: "Matrícula" },
-      { order: "name", numeric: "left", label: "Aluno" },
-      { order: "class_name", numeric: "left", label: "Turma" },
-      { numeric: "left", label: "Ações" },
-    ];
-  }, [mdDown]);
+      { order: 'registry', numeric: 'right', label: 'Matrícula' },
+      { order: 'name', numeric: 'left', label: 'Aluno' },
+      { order: 'class_name', numeric: 'left', label: 'Turma' },
+      { numeric: 'left', label: 'Ações' },
+    ]
+  }, [mdDown])
 
   return (
     <>
@@ -48,5 +48,5 @@ export const TableStudentSchool = ({
         ))}
       </TableBase>
     </>
-  );
-};
+  )
+}

@@ -1,21 +1,21 @@
-import { TableCell, TableRow } from "@mui/material";
-import { TableBase } from "../../../components";
-import { useAppThemeContext } from "../../../contexts";
-import { iFrequencyBase, iHeadcell } from "../../../interfaces";
-import { defineBgColorInfrequency } from "../../../scripts";
+import { TableCell, TableRow } from '@mui/material'
+import { TableBase } from '../../../components'
+import { useAppThemeContext } from '../../../contexts'
+import { iFrequencyBase, iHeadCell } from '../../../interfaces'
+import { defineBgColorInfrequency } from '../../../scripts'
 
 interface iTableFrequencySchoolProps {
-  data: iFrequencyBase[];
+  data: iFrequencyBase[]
 }
 
 export const TableFrequencySchool = ({ data }: iTableFrequencySchoolProps) => {
-  const { theme } = useAppThemeContext();
-  const headCells: iHeadcell[] = [
-    { order: "date", numeric: "left", label: "Data" },
-    { order: "class_name", numeric: "left", label: "Turma" },
-    { numeric: "right", label: "Alunos" },
-    { order: "infrequency", numeric: "right", label: "Infrequência" },
-  ];
+  const { theme } = useAppThemeContext()
+  const headCells: iHeadCell[] = [
+    { order: 'date', numeric: 'left', label: 'Data' },
+    { order: 'class_name', numeric: 'left', label: 'Turma' },
+    { numeric: 'right', label: 'Alunos' },
+    { order: 'infrequency', numeric: 'right', label: 'Infrequência' },
+  ]
 
   return (
     <TableBase headCells={headCells}>
@@ -27,7 +27,7 @@ export const TableFrequencySchool = ({ data }: iTableFrequencySchoolProps) => {
           <TableCell
             align="right"
             sx={{
-              color: "#fff",
+              color: '#fff',
               bgcolor: defineBgColorInfrequency(el.infrequency, theme),
             }}
           >
@@ -36,5 +36,5 @@ export const TableFrequencySchool = ({ data }: iTableFrequencySchoolProps) => {
         </TableRow>
       ))}
     </TableBase>
-  );
-};
+  )
+}

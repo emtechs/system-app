@@ -1,2 +1,2 @@
-export * from "./ListFrequency";
-export * from "./ListFrequencyClosed";
+export * from './ListFrequency'
+export * from './ListFrequencyClosed'

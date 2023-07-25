@@ -17,7 +17,7 @@ import {
 import {
   iFrequencyBase,
   iFrequencyStudentsBase,
-  iHeadcell,
+  iHeadCell,
 } from "../../../shared/interfaces";
 import { useEffect, useState } from "react";
 import { apiFrequency } from "../../../shared/services";
@@ -29,7 +29,7 @@ import {
   statusFrequencyPtBr,
 } from "../../../shared/scripts";
 
-const headCells: iHeadcell[] = [
+const headCells: iHeadCell[] = [
   { order: "registry", numeric: "left", label: "Matrícula" },
   { order: "name", numeric: "left", label: "Aluno" },
   { numeric: "left", label: "Estado da Presença" },

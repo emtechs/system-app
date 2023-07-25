@@ -1,16 +1,12 @@
-import { z } from "zod";
-import {
-  loginSchema,
-  passwordRecoverySchema,
-  recoverySchema,
-} from "../schemas";
+import { z } from 'zod'
+import { loginSchema, passwordRecoverySchema, recoverySchema } from '../schemas'
 
-export type iLoginRequest = z.infer<typeof loginSchema>;
+export type iLoginRequest = z.infer<typeof loginSchema>
 
 export interface iLoginResponse {
-  token: string;
+  token: string
 }
 
-export type iRecoveryRequest = z.infer<typeof recoverySchema>;
+export type iRecoveryRequest = z.infer<typeof recoverySchema>
 
-export type iRecoveryPasswordRequest = z.infer<typeof passwordRecoverySchema>;
+export type iRecoveryPasswordRequest = z.infer<typeof passwordRecoverySchema>

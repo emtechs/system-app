@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Chip, TableCell, TableRow } from "@mui/material";
 import { TableBase, TitleAdminDashPages, Tools } from "../../shared/components";
 import { useAuthContext, usePaginationContext } from "../../shared/contexts";
-import { iSchool, iHeadcell } from "../../shared/interfaces";
+import { iSchool, iHeadCell } from "../../shared/interfaces";
 import { apiSchool } from "../../shared/services";
 import { useBgColorInfrequency, useDebounce } from "../../shared/hooks";
 import { LayoutBasePage } from "../../shared/layouts";
 import { SchoolTwoTone } from "@mui/icons-material";
 
-const headCells: iHeadcell[] = [
+const headCells: iHeadCell[] = [
   { order: "name", numeric: "left", label: "Escola" },
   { order: "director_name", numeric: "left", label: "Diretor" },
   { numeric: "right", label: "Turmas" },

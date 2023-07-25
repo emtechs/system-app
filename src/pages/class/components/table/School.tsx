@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { usePaginationContext } from "../../../../shared/contexts";
-import { iHeadcell, iSchool } from "../../../../shared/interfaces";
+import { iHeadCell, iSchool } from "../../../../shared/interfaces";
 import {
   DialogActiveSchool,
   DialogCreateSchool,
@@ -21,7 +21,7 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
 
   const handleSchool = (newSchool: iSchool) => setSchoolData(newSchool);
 
-  const headCells: iHeadcell[] = [
+  const headCells: iHeadCell[] = [
     { order: "name", numeric: "left", label: "Escola" },
     { order: "director_name", numeric: "left", label: "Diretor" },
     { numeric: "left", label: "Ações" },

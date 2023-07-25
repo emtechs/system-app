@@ -1,26 +1,26 @@
-import { useMemo } from "react";
-import { Skeleton, TableCell, TableRow } from "@mui/material";
-import { TableBase } from "../../../components";
-import { iSchool, iHeadcell } from "../../../interfaces";
-import { useBgColorInfrequency } from "../../../hooks";
-import { usePaginationContext } from "../../../contexts";
+import { useMemo } from 'react'
+import { Skeleton, TableCell, TableRow } from '@mui/material'
+import { TableBase } from '../../../components'
+import { iSchool, iHeadCell } from '../../../interfaces'
+import { useBgColorInfrequency } from '../../../hooks'
+import { usePaginationContext } from '../../../contexts'
 
 interface iTableSchoolProps {
-  data: iSchool[];
+  data: iSchool[]
 }
 
 export const TableSchoolClass = ({ data }: iTableSchoolProps) => {
-  const { isLoading } = usePaginationContext();
-  const { defineBgColorInfrequency } = useBgColorInfrequency();
+  const { isLoading } = usePaginationContext()
+  const { defineBgColorInfrequency } = useBgColorInfrequency()
 
-  const headCells: iHeadcell[] = useMemo(() => {
+  const headCells: iHeadCell[] = useMemo(() => {
     return [
-      { order: "name", numeric: "left", label: "Escola" },
-      { order: "students", numeric: "right", label: "Alunos" },
-      { order: "frequencies", numeric: "right", label: "Frequências" },
-      { order: "infrequency", numeric: "right", label: "Infrequência" },
-    ];
-  }, []);
+      { order: 'name', numeric: 'left', label: 'Escola' },
+      { order: 'students', numeric: 'right', label: 'Alunos' },
+      { order: 'frequencies', numeric: 'right', label: 'Frequências' },
+      { order: 'infrequency', numeric: 'right', label: 'Infrequência' },
+    ]
+  }, [])
 
   return (
     <TableBase headCells={headCells} message="Nenhuma escola encotrada">
@@ -38,7 +38,7 @@ export const TableSchoolClass = ({ data }: iTableSchoolProps) => {
           <TableCell
             align="right"
             sx={{
-              color: "#fff",
+              color: '#fff',
               bgcolor: defineBgColorInfrequency(school.infrequency),
             }}
           >
@@ -54,5 +54,5 @@ export const TableSchoolClass = ({ data }: iTableSchoolProps) => {
         </TableRow>
       ))}
     </TableBase>
-  );
-};
+  )
+}

@@ -1,14 +1,14 @@
-import { iStatusStudent } from "../interfaces";
+import { iStatusStudent } from '../interfaces'
 
 export const statusFrequencyPtBr = (status: iStatusStudent) => {
   switch (status) {
-    case "PRESENTED":
-      return "Presente";
+    case 'PRESENTED':
+      return 'Presente'
 
-    case "MISSED":
-      return "Faltou";
+    case 'MISSED':
+      return 'Faltou'
 
-    case "JUSTIFIED":
-      return "Justificou";
+    case 'JUSTIFIED':
+      return 'Justificou'
   }
 }

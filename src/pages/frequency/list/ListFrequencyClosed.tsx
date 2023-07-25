@@ -7,12 +7,12 @@ import {
 } from "../../../shared/contexts";
 import { useEffect, useState } from "react";
 import { apiUsingNow } from "../../../shared/services";
-import { iFrequency, iHeadcell } from "../../../shared/interfaces";
+import { iFrequency, iHeadCell } from "../../../shared/interfaces";
 import { LayoutBasePage } from "../../../shared/layouts";
 import { useSearchParams } from "react-router-dom";
 import { defineBgColorInfrequency } from "../../../shared/scripts";
 
-const headCells: iHeadcell[] = [
+const headCells: iHeadCell[] = [
   { order: "date", numeric: "left", label: "Data" },
   { order: "name", numeric: "left", label: "Turma" },
   { numeric: "right", label: "Alunos" },

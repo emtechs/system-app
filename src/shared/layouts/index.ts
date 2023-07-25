@@ -1,2 +1,2 @@
-export * from "./LayoutBasePage";
-export * from "./LayoutBasePageRetrieve";
+export * from './LayoutBasePage'
+export * from './LayoutBasePageRetrieve'

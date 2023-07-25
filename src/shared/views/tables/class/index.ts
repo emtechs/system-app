@@ -1,3 +1,3 @@
-export * from "./Class";
-export * from "./School";
-export * from "./Year";
+export * from './Class'
+export * from './School'
+export * from './Year'

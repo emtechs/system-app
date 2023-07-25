@@ -1,59 +1,59 @@
-import { FieldValues } from "react-hook-form";
-import { iStudent } from "../interfaces";
-import { apiUsingNow } from "./api";
+import { FieldValues } from 'react-hook-form'
+import { iStudent } from '../interfaces'
+import { apiUsingNow } from './api'
 
 const create = async (data: FieldValues, query?: string): Promise<iStudent> => {
   const { data: response } = await apiUsingNow.post<iStudent>(
     `students${query}`,
-    data
-  );
-  return response;
-};
+    data,
+  )
+  return response
+}
 
 interface iList {
-  total: number;
-  result: iStudent[];
+  total: number
+  result: iStudent[]
 }
 
 const list = async (query: string): Promise<iList> => {
-  const { data: response } = await apiUsingNow.get<iList>(`students${query}`);
-  return response;
-};
+  const { data: response } = await apiUsingNow.get<iList>(`students${query}`)
+  return response
+}
 
 const listClass = async (query: string): Promise<iList> => {
   const { data: response } = await apiUsingNow.get<iList>(
-    `students/class${query}`
-  );
-  return response;
-};
+    `students/class${query}`,
+  )
+  return response
+}
 
 const update = async (data: FieldValues, id: string): Promise<iStudent> => {
   const { data: response } = await apiUsingNow.patch<iStudent>(
     `students/${id}`,
-    data
-  );
-  return response;
-};
+    data,
+  )
+  return response
+}
 
 const updateInfreq = async (data: FieldValues): Promise<iStudent> => {
   const { data: response } = await apiUsingNow.patch<iStudent>(
     `/infrequency/student`,
-    data
-  );
-  return response;
-};
+    data,
+  )
+  return response
+}
 
 const impStudent = async (
   data: FormData,
   class_id: string,
-  school_id: string
+  school_id: string,
 ): Promise<void> => {
-  await apiUsingNow.post(`imports/student/${class_id}/${school_id}`, data);
-};
+  await apiUsingNow.post(`imports/student/${class_id}/${school_id}`, data)
+}
 
 const impStudentAll = async (data: FormData): Promise<void> => {
-  await apiUsingNow.post("imports/student", data);
-};
+  await apiUsingNow.post('imports/student', data)
+}
 
 export const apiStudent = {
   create,
@@ -63,4 +63,4 @@ export const apiStudent = {
   impStudentAll,
   list,
   listClass,
-};
+}

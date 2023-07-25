@@ -5,61 +5,61 @@ import {
   FormControlLabel,
   TableCell,
   TableRow,
-} from "@mui/material";
+} from '@mui/material'
 import {
   DialogFinishFrequency,
   DialogMissed,
   DialogRemoveMissed,
   TableBase,
   Tools,
-} from "../../shared/components";
+} from '../../shared/components'
 import {
   useAppThemeContext,
   useFrequencyContext,
   usePaginationContext,
-} from "../../shared/contexts";
-import { iFrequencyStudentsBase, iHeadcell } from "../../shared/interfaces";
-import { ChangeEvent, useEffect, useState } from "react";
-import { apiFrequency } from "../../shared/services";
-import dayjs from "dayjs";
-import "dayjs/locale/pt-br";
-import relativeTime from "dayjs/plugin/relativeTime";
-import { Navigate, useSearchParams } from "react-router-dom";
-import { LayoutBasePage } from "../../shared/layouts";
-import { Checklist } from "@mui/icons-material";
+} from '../../shared/contexts'
+import { iFrequencyStudentsBase, iHeadCell } from '../../shared/interfaces'
+import { ChangeEvent, useEffect, useState } from 'react'
+import { apiFrequency } from '../../shared/services'
+import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import { Navigate, useSearchParams } from 'react-router-dom'
+import { LayoutBasePage } from '../../shared/layouts'
+import { Checklist } from '@mui/icons-material'
 import {
   defineBgColorFrequency,
   statusFrequencyPtBr,
-} from "../../shared/scripts";
-dayjs.locale("pt-br");
-dayjs.extend(relativeTime);
+} from '../../shared/scripts'
+dayjs.locale('pt-br')
+dayjs.extend(relativeTime)
 
-const headCells: iHeadcell[] = [
-  { order: "registry", numeric: "left", label: "Matrícula" },
-  { order: "name", numeric: "left", label: "Aluno" },
-  { numeric: "left", label: "Estado da Presença" },
-  { numeric: "left", label: "Atualizado Em" },
-];
+const headCells: iHeadCell[] = [
+  { order: 'registry', numeric: 'left', label: 'Matrícula' },
+  { order: 'name', numeric: 'left', label: 'Aluno' },
+  { numeric: 'left', label: 'Estado da Presença' },
+  { numeric: 'left', label: 'Atualizado Em' },
+]
 
 interface iCardFrequencyProps {
-  student: iFrequencyStudentsBase;
+  student: iFrequencyStudentsBase
 }
 
 const CardFrequency = ({ student }: iCardFrequencyProps) => {
-  const { theme } = useAppThemeContext();
-  const { studentData, setStudentData } = useFrequencyContext();
-  const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(!open);
+  const { theme } = useAppThemeContext()
+  const { studentData, setStudentData } = useFrequencyContext()
+  const [open, setOpen] = useState(false)
+  const handleClose = () => setOpen(!open)
 
   return (
     <>
       <TableRow
         hover
         onClick={() => {
-          setStudentData(student);
-          setOpen(true);
+          setStudentData(student)
+          setOpen(true)
         }}
-        sx={{ cursor: "pointer", height: theme.spacing(10) }}
+        sx={{ cursor: 'pointer', height: theme.spacing(10) }}
       >
         <TableCell>{student.student.registry}</TableCell>
         <TableCell>{student.student.name}</TableCell>
@@ -72,10 +72,10 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
           {statusFrequencyPtBr(student.status)}
         </TableCell>
         <TableCell>
-          {student.updated_at ? dayjs(student.updated_at).fromNow() : "-"}
+          {student.updated_at ? dayjs(student.updated_at).fromNow() : '-'}
         </TableCell>
       </TableRow>
-      {studentData?.status === "PRESENTED" ? (
+      {studentData?.status === 'PRESENTED' ? (
         <DialogMissed open={open} onClose={handleClose} student={studentData} />
       ) : (
         studentData && (
@@ -87,59 +87,59 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
         )
       )}
     </>
-  );
-};
+  )
+}
 
 export const RetrieveFrequencyPage = () => {
-  const [searchParams] = useSearchParams();
-  const id = searchParams.get("id");
+  const [searchParams] = useSearchParams()
+  const id = searchParams.get('id')
   // const { schoolData } = useAuthContext();
   // const { handleClickButtonTools } = useDrawerContext();
   const { dataStudents, setDataStudents, alterStudents, setAlterStudents } =
-    useFrequencyContext();
-  const { setIsLoading, query, setCount } = usePaginationContext();
+    useFrequencyContext()
+  const { setIsLoading, query, setCount } = usePaginationContext()
   // const [dataFrequency, setDataFrequency] = useState<iFrequencyBase>();
-  const [isAlter, setIsAlter] = useState(false);
-  const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(!open);
+  const [isAlter, setIsAlter] = useState(false)
+  const [open, setOpen] = useState(false)
+  const handleClose = () => setOpen(!open)
 
   useEffect(() => {
-    setAlterStudents(undefined);
-    setDataStudents(undefined);
-  }, []);
+    setAlterStudents(undefined)
+    setDataStudents(undefined)
+  }, [])
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
-    setIsAlter(event.target.checked);
+    setIsAlter(event.target.checked)
 
   useEffect(() => {
     if (id && open) {
-      let queryData = query();
-      queryData += "&isNot_presented=true&order=name";
-      setIsLoading(true);
+      let queryData = query()
+      queryData += '&isNot_presented=true&order=name'
+      setIsLoading(true)
       apiFrequency
         .students(id, queryData)
         .then((res) => {
-          setCount(res.total);
-          setAlterStudents(res.result);
+          setCount(res.total)
+          setAlterStudents(res.result)
         })
-        .finally(() => setIsLoading(false));
+        .finally(() => setIsLoading(false))
     } else if (id) {
-      let queryData = query();
-      if (isAlter) queryData += "&is_alter=true&order=name";
-      setIsLoading(true);
+      let queryData = query()
+      if (isAlter) queryData += '&is_alter=true&order=name'
+      setIsLoading(true)
       apiFrequency
         .students(id, queryData)
         .then((res) => {
           // setDataFrequency(res.frequency);
-          setDataStudents(res.result);
-          setCount(res.total);
+          setDataStudents(res.result)
+          setCount(res.total)
         })
-        .finally(() => setIsLoading(false));
+        .finally(() => setIsLoading(false))
     }
-  }, [id, open, query, isAlter]);
+  }, [id, open, query, isAlter])
 
   if (!id) {
-    return <Navigate to={"/frequency/create"} />;
+    return <Navigate to={'/frequency/create'} />
   }
 
   // const title = [
@@ -172,7 +172,7 @@ export const RetrieveFrequencyPage = () => {
                     <Checkbox
                       checked={isAlter}
                       onChange={handleChange}
-                      inputProps={{ "aria-label": "controlled" }}
+                      inputProps={{ 'aria-label': 'controlled' }}
                     />
                   }
                   label="Alteradas"
@@ -206,5 +206,5 @@ export const RetrieveFrequencyPage = () => {
         />
       )}
     </>
-  );
-};
+  )
+}

@@ -1,2 +1,2 @@
-export * from "./School";
-export * from "./SchoolAdmin";
+export * from './School'
+export * from './SchoolAdmin'

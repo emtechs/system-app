@@ -1,77 +1,77 @@
-import { useParams } from "react-router-dom";
-import { useDebounce } from "../hooks";
+import { useParams } from 'react-router-dom'
+import { useDebounce } from '../hooks'
 import {
   useAppThemeContext,
   useAuthContext,
   usePaginationContext,
-} from "../contexts";
-import { SyntheticEvent, useCallback, useEffect, useState } from "react";
-import { iInfrequency, iHeadcell } from "../interfaces";
-import { apiFrequency } from "../services";
-import { Box, TableCell, TableRow } from "@mui/material";
-import { TableBase, TabsYear } from "../components";
-import { defineBgColorInfrequency } from "../scripts";
-import dayjs from "dayjs";
-import "dayjs/locale/pt-br";
-import utc from "dayjs/plugin/utc";
-import { TabsPeriod } from "../components/tabs/Period";
-dayjs.locale("pt-br");
-dayjs.extend(utc);
+} from '../contexts'
+import { SyntheticEvent, useCallback, useEffect, useState } from 'react'
+import { iInfrequency, iHeadCell } from '../interfaces'
+import { apiFrequency } from '../services'
+import { Box, TableCell, TableRow } from '@mui/material'
+import { TableBase, TabsYear } from '../components'
+import { defineBgColorInfrequency } from '../scripts'
+import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
+import utc from 'dayjs/plugin/utc'
+import { TabsPeriod } from '../components/tabs/Period'
+dayjs.locale('pt-br')
+dayjs.extend(utc)
 
 export const ViewInfrequency = () => {
-  const { school_id } = useParams();
-  const { debounce } = useDebounce();
-  const { theme } = useAppThemeContext();
-  const { listYear } = useAuthContext();
-  const { setCount, setIsLoading, query, search } = usePaginationContext();
-  const [data, setData] = useState<iInfrequency[]>();
-  const [index, setIndex] = useState(0);
-  const [period, setPeriod] = useState("ano");
+  const { school_id } = useParams()
+  const { debounce } = useDebounce()
+  const { theme } = useAppThemeContext()
+  const { listYear } = useAuthContext()
+  const { setCount, setIsLoading, query, search } = usePaginationContext()
+  const [data, setData] = useState<iInfrequency[]>()
+  const [index, setIndex] = useState(0)
+  const [period, setPeriod] = useState('ano')
 
-  const year_id = listYear[index].id;
+  const year_id = listYear[index].id
 
   const handleChangeYear = (
     _event: SyntheticEvent,
-    newValue: string | number
+    newValue: string | number,
   ) => {
-    setIndex(Number(newValue));
-  };
+    setIndex(Number(newValue))
+  }
 
   const handleChangePeriod = (
     _event: SyntheticEvent,
-    newValue: string | number
+    newValue: string | number,
   ) => {
-    setPeriod(String(newValue));
-  };
+    setPeriod(String(newValue))
+  }
 
   const getFrequencies = useCallback((query: string) => {
-    setIsLoading(true);
+    setIsLoading(true)
     apiFrequency
       .infrequency(query)
       .then((res) => {
-        setData(res.result);
-        setCount(res.total);
+        setData(res.result)
+        setCount(res.total)
       })
-      .finally(() => setIsLoading(false));
-  }, []);
+      .finally(() => setIsLoading(false))
+  }, [])
 
   useEffect(() => {
-    let query_data = query(year_id, school_id);
-    if (period) query_data += `&category=${period}`;
+    let query_data = query(year_id, school_id)
+    if (period) query_data += `&category=${period}`
     if (search) {
-      query_data += `&name=${search}`;
+      query_data += `&name=${search}`
       debounce(() => {
-        getFrequencies(query_data);
-      });
-    } else getFrequencies(query_data);
-  }, [search, period, year_id, school_id, query]);
+        getFrequencies(query_data)
+      })
+    } else getFrequencies(query_data)
+  }, [search, period, year_id, school_id, query])
 
-  const headCells: iHeadcell[] = [
-    { numeric: "left", label: "Nome" },
-    { numeric: "left", label: "Período" },
-    { numeric: "right", label: "Frequências" },
-    { numeric: "right", label: "Infrequência" },
-  ];
+  const headCells: iHeadCell[] = [
+    { numeric: 'left', label: 'Nome' },
+    { numeric: 'left', label: 'Período' },
+    { numeric: 'right', label: 'Frequências' },
+    { numeric: 'right', label: 'Infrequência' },
+  ]
 
   return (
     <Box display="flex" justifyContent="space-between">
@@ -83,17 +83,17 @@ export const ViewInfrequency = () => {
             <TableRow key={el.id}>
               <TableCell>{el.name}</TableCell>
               <TableCell>
-                {`${dayjs(el.date_initial).utc().format("L")} - ${dayjs(
-                  el.date_final
+                {`${dayjs(el.date_initial).utc().format('L')} - ${dayjs(
+                  el.date_final,
                 )
                   .utc()
-                  .format("L")}`}
+                  .format('L')}`}
               </TableCell>
               <TableCell align="right">{el.frequencies}</TableCell>
               <TableCell
                 align="right"
                 sx={{
-                  color: "#fff",
+                  color: '#fff',
                   bgcolor: defineBgColorInfrequency(el.value, theme),
                 }}
               >
@@ -104,5 +104,5 @@ export const ViewInfrequency = () => {
         </TableBase>
       </Box>
     </Box>
-  );
-};
+  )
+}

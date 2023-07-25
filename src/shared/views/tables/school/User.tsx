@@ -1,43 +1,43 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState } from 'react'
 import {
   IconButton,
   Skeleton,
   TableCell,
   TableRow,
   Tooltip,
-} from "@mui/material";
+} from '@mui/material'
 import {
   DialogCreateSchoolServer,
   DialogRemoveUser,
   TableBase,
-} from "../../../components";
-import { iSchool, iHeadcell } from "../../../interfaces";
-import { rolePtBr } from "../../../scripts";
+} from '../../../components'
+import { iSchool, iHeadCell } from '../../../interfaces'
+import { rolePtBr } from '../../../scripts'
 import {
   useDialogContext,
   usePaginationContext,
   useUserContext,
-} from "../../../contexts";
-import { RemoveDone } from "@mui/icons-material";
+} from '../../../contexts'
+import { RemoveDone } from '@mui/icons-material'
 
 interface iTableSchoolUserProps {
-  data: iSchool[];
+  data: iSchool[]
 }
 
 export const TableSchoolUser = ({ data }: iTableSchoolUserProps) => {
-  const { isLoading } = usePaginationContext();
-  const { handleOpenActive } = useDialogContext();
-  const { userRetrieve } = useUserContext();
-  const [schoolData, setSchoolData] = useState<iSchool>();
+  const { isLoading } = usePaginationContext()
+  const { handleOpenActive } = useDialogContext()
+  const { userRetrieve } = useUserContext()
+  const [schoolData, setSchoolData] = useState<iSchool>()
 
-  const headCells: iHeadcell[] = useMemo(() => {
+  const headCells: iHeadCell[] = useMemo(() => {
     return [
-      { order: "name", numeric: "left", label: "Escola" },
-      { numeric: "left", label: "Função" },
-      { numeric: "left", label: "Tela" },
-      { numeric: "left", label: "Ações" },
-    ];
-  }, []);
+      { order: 'name', numeric: 'left', label: 'Escola' },
+      { numeric: 'left', label: 'Função' },
+      { numeric: 'left', label: 'Tela' },
+      { numeric: 'left', label: 'Ações' },
+    ]
+  }, [])
 
   return (
     <>
@@ -51,7 +51,7 @@ export const TableSchoolUser = ({ data }: iTableSchoolUserProps) => {
               <>
                 <TableCell>{rolePtBr(school.server.role)}</TableCell>
                 <TableCell>
-                  {school.server.dash === "SCHOOL" ? "Escola" : "Frequência"}
+                  {school.server.dash === 'SCHOOL' ? 'Escola' : 'Frequência'}
                 </TableCell>
               </>
             )}
@@ -61,8 +61,8 @@ export const TableSchoolUser = ({ data }: iTableSchoolUserProps) => {
                   color="error"
                   size="small"
                   onClick={() => {
-                    setSchoolData(school);
-                    handleOpenActive();
+                    setSchoolData(school)
+                    handleOpenActive()
                   }}
                 >
                   <RemoveDone fontSize="small" />
@@ -87,5 +87,5 @@ export const TableSchoolUser = ({ data }: iTableSchoolUserProps) => {
         />
       )}
     </>
-  );
-};
+  )
+}

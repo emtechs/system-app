@@ -1,31 +1,31 @@
-import { useState } from "react";
-import { usePaginationContext } from "../../../../shared/contexts";
-import { iHeadcell, iSchool } from "../../../../shared/interfaces";
+import { useState } from 'react'
+import { usePaginationContext } from '../../../../shared/contexts'
+import { iHeadCell, iSchool } from '../../../../shared/interfaces'
 import {
   DialogActiveSchool,
   DialogCreateSchool,
   DialogDirectorSchool,
   DialogEditSchool,
   TableBase,
-} from "../../../../shared/components";
-import { Link, Skeleton, TableCell, TableRow, Typography } from "@mui/material";
-import { ActionsSchool } from "../actions";
+} from '../../../../shared/components'
+import { Link, Skeleton, TableCell, TableRow, Typography } from '@mui/material'
+import { ActionsSchool } from '../actions'
 
 interface iTableSchoolProps {
-  data: iSchool[];
+  data: iSchool[]
 }
 
 export const TableSchool = ({ data }: iTableSchoolProps) => {
-  const { isLoading, onClickReset } = usePaginationContext();
-  const [schoolData, setSchoolData] = useState<iSchool>();
+  const { isLoading, onClickReset } = usePaginationContext()
+  const [schoolData, setSchoolData] = useState<iSchool>()
 
-  const handleSchool = (newSchool: iSchool) => setSchoolData(newSchool);
+  const handleSchool = (newSchool: iSchool) => setSchoolData(newSchool)
 
-  const headCells: iHeadcell[] = [
-    { order: "name", numeric: "left", label: "Escola" },
-    { order: "director_name", numeric: "left", label: "Diretor" },
-    { numeric: "left", label: "Ações" },
-  ];
+  const headCells: iHeadCell[] = [
+    { order: 'name', numeric: 'left', label: 'Escola' },
+    { order: 'director_name', numeric: 'left', label: 'Diretor' },
+    { numeric: 'left', label: 'Ações' },
+  ]
 
   return (
     <>
@@ -62,5 +62,5 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
       {schoolData && <DialogDirectorSchool school={schoolData} locale="list" />}
       {schoolData && <DialogActiveSchool school={schoolData} locale="list" />}
     </>
-  );
-};
+  )
+}

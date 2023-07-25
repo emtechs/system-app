@@ -2,7 +2,7 @@ import { TableRow, TableCell } from "@mui/material";
 import { useState, useMemo } from "react";
 import { TableBase, DialogCreateServer } from "../../../../shared/components";
 import { useAppThemeContext } from "../../../../shared/contexts";
-import { iHeadcell, iSchoolUser } from "../../../../shared/interfaces";
+import { iHeadCell, iSchoolUser } from "../../../../shared/interfaces";
 import { rolePtBr } from "../../../../shared/scripts";
 import { ActionsUser } from "../actions";
 
@@ -17,7 +17,7 @@ export const TableUserSchool = ({ data, school_id }: iTableUserSchoolProps) => {
 
   const handleUser = (newUser: iSchoolUser) => setUserData(newUser);
 
-  const headCells: iHeadcell[] = useMemo(() => {
+  const headCells: iHeadCell[] = useMemo(() => {
     if (mdDown)
       return [
         { order: "name", numeric: "left", label: "Nome Completo" },

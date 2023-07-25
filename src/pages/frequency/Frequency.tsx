@@ -7,9 +7,9 @@ import {
   Paper,
   TableCell,
   TableRow,
-} from "@mui/material";
-import { LayoutBasePage } from "../../shared/layouts";
-import { useCallback, useEffect, useState } from "react";
+} from '@mui/material'
+import { LayoutBasePage } from '../../shared/layouts'
+import { useCallback, useEffect, useState } from 'react'
 import {
   useAuthContext,
   useCalendarContext,
@@ -17,38 +17,38 @@ import {
   useFrequencyContext,
   usePaginationContext,
   useSchoolContext,
-} from "../../shared/contexts";
+} from '../../shared/contexts'
 import {
   GridDashContent,
   SelectDate,
   TableBase,
   ValidateFrequency,
-} from "../../shared/components";
-import { useAppThemeContext } from "../../shared/contexts/ThemeContext";
-import { apiClass, apiUsingNow } from "../../shared/services";
-import { iClassDash, iDashSchool, iHeadcell } from "../../shared/interfaces";
+} from '../../shared/components'
+import { useAppThemeContext } from '../../shared/contexts/ThemeContext'
+import { apiClass, apiUsingNow } from '../../shared/services'
+import { iClassDash, iDashSchool, iHeadCell } from '../../shared/interfaces'
 import {
   EventAvailable,
   EventBusy,
   Groups,
   Workspaces,
-} from "@mui/icons-material";
-import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
-import { defineBgColorInfrequency } from "../../shared/scripts";
+} from '@mui/icons-material'
+import { AutocompleteElement, FormContainer } from 'react-hook-form-mui'
+import { defineBgColorInfrequency } from '../../shared/scripts'
 
 interface iCardClassDashProps {
-  classDash: iClassDash;
-  date: string;
-  name: string;
+  classDash: iClassDash
+  date: string
+  name: string
 }
 
 const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
-  const { mdDown, theme } = useAppThemeContext();
-  const { createFrequency } = useFrequencyContext();
+  const { mdDown, theme } = useAppThemeContext()
+  const { createFrequency } = useFrequencyContext()
   return (
     <TableRow
       hover
-      sx={{ cursor: "pointer" }}
+      sx={{ cursor: 'pointer' }}
       onClick={() => {
         createFrequency({
           date,
@@ -57,7 +57,7 @@ const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
           school_id: classDash.school_id,
           year_id: classDash.year_id,
           students: classDash.students,
-        });
+        })
       }}
     >
       <TableCell>{classDash.class.name}</TableCell>
@@ -70,70 +70,69 @@ const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
       <TableCell
         align="right"
         sx={{
-          color: "#fff",
+          color: '#fff',
           bgcolor: defineBgColorInfrequency(classDash.infrequency, theme),
         }}
       >
         {classDash.infrequency.toFixed(0)}%
       </TableCell>
     </TableRow>
-  );
-};
+  )
+}
 
 export const FrequencyPage = () => {
-  const { setLoading, mdDown } = useAppThemeContext();
-  const { yearData } = useAuthContext();
-  const { schoolSelect } = useSchoolContext();
-  const { dateData, monthData } = useCalendarContext();
-  const { handleClickSchool } = useDrawerContext();
-  const { setIsLoading, query } = usePaginationContext();
-  const [infoSchool, setInfoSchool] = useState<iDashSchool>();
-  const [listClassData, setListClassData] = useState<iClassDash[]>();
-  const [listClassSelectData, setListClassSelectData] =
-    useState<iClassDash[]>();
+  const { setLoading, mdDown } = useAppThemeContext()
+  const { yearData } = useAuthContext()
+  const { schoolSelect } = useSchoolContext()
+  const { dateData, monthData } = useCalendarContext()
+  const { handleClickSchool } = useDrawerContext()
+  const { setIsLoading, query } = usePaginationContext()
+  const [infoSchool, setInfoSchool] = useState<iDashSchool>()
+  const [listClassData, setListClassData] = useState<iClassDash[]>()
+  const [listClassSelectData, setListClassSelectData] = useState<iClassDash[]>()
 
-  const headCells: iHeadcell[] = mdDown
+  const headCells: iHeadCell[] = mdDown
     ? [
-        { order: "name", numeric: "left", label: "Turma" },
-        { order: "infreq", numeric: "right", label: "Infrequência" },
+        { order: 'name', numeric: 'left', label: 'Turma' },
+        { order: 'infreq', numeric: 'right', label: 'Infrequência' },
       ]
     : [
-        { order: "name", numeric: "left", label: "Turma" },
-        { numeric: "right", label: "Alunos" },
-        { numeric: "right", label: "Frequências" },
-        { order: "infreq", numeric: "right", label: "Infrequência" },
-      ];
+        { order: 'name', numeric: 'left', label: 'Turma' },
+        { numeric: 'right', label: 'Alunos' },
+        { numeric: 'right', label: 'Frequências' },
+        { order: 'infreq', numeric: 'right', label: 'Infrequência' },
+      ]
 
   const date = useCallback(() => {
-    return dateData.format("DD/MM/YYYY");
-  }, [dateData]);
+    return dateData.format('DD/MM/YYYY')
+  }, [dateData])
 
   useEffect(() => {
     if (schoolSelect && yearData) {
-      const queryData = query(undefined, undefined, undefined, date());
-      setIsLoading(true);
+      const queryData = query(undefined, undefined, undefined, date())
+      setIsLoading(true)
       apiClass
         .listDash(schoolSelect.id, yearData.id, queryData)
         .then((res) => {
-          setListClassSelectData(res.classes);
-          setListClassData(res.result);
+          setListClassSelectData(res.classes)
+          setListClassData(res.result)
         })
-        .finally(() => setIsLoading(false));
+        .finally(() => setIsLoading(false))
     }
-  }, [date, schoolSelect, yearData, query]);
+  }, [date, schoolSelect, yearData, query])
 
   useEffect(() => {
     if (schoolSelect && yearData) {
-      const queryData = query(undefined, undefined, undefined, date());
-      setLoading(true);
+      const queryData = query(undefined, undefined, undefined, date())
+      setLoading(true)
       apiUsingNow
         .get<iDashSchool>(
-          `schools/${schoolSelect.id}/dash/${yearData.id}${queryData}`
+          `schools/${schoolSelect.id}/dash/${yearData.id}${queryData}`,
         )
         .then((res) => setInfoSchool(res.data))
-        .finally(() => setLoading(false));
+        .finally(() => setLoading(false))
     }
-  }, [date, schoolSelect, yearData]);
+  }, [date, schoolSelect, yearData])
 
   return (
     <LayoutBasePage
@@ -170,7 +169,7 @@ export const FrequencyPage = () => {
                                 {
                                   id: 1,
                                   label:
-                                    "Todas as frequências do dia já foram registradas.",
+                                    'Todas as frequências do dia já foram registradas.',
                                 },
                               ]
                         }
@@ -211,7 +210,7 @@ export const FrequencyPage = () => {
                       <GridDashContent
                         icon={<Workspaces fontSize="large" />}
                         quant={infoSchool.classTotal}
-                        info={infoSchool.classTotal === 1 ? "Turma" : "Turmas"}
+                        info={infoSchool.classTotal === 1 ? 'Turma' : 'Turmas'}
                         dest="/school/class"
                         onClick={handleClickSchool}
                       />
@@ -221,8 +220,8 @@ export const FrequencyPage = () => {
                           quant={infoSchool.frequencyOpen}
                           info={
                             infoSchool.frequencyOpen === 1
-                              ? "Frequência em aberto"
-                              : "Frequências em aberto"
+                              ? 'Frequência em aberto'
+                              : 'Frequências em aberto'
                           }
                           dest="/frequency/open"
                         />
@@ -230,7 +229,7 @@ export const FrequencyPage = () => {
                         <GridDashContent
                           icon={<Groups fontSize="large" />}
                           quant={infoSchool.stundents}
-                          info={infoSchool.stundents === 1 ? "Aluno" : "Alunos"}
+                          info={infoSchool.stundents === 1 ? 'Aluno' : 'Alunos'}
                           dest="/school/student"
                           onClick={handleClickSchool}
                         />
@@ -239,13 +238,13 @@ export const FrequencyPage = () => {
                         icon={<EventBusy fontSize="large" />}
                         quant={
                           infoSchool?.day_infreq
-                            ? infoSchool.day_infreq.toFixed(0) + "%"
-                            : "0%"
+                            ? infoSchool.day_infreq.toFixed(0) + '%'
+                            : '0%'
                         }
                         info="Infrequência do dia"
                         dest={
-                          "/frequency/list?date=" +
-                          dateData.format("DD/MM/YYYY")
+                          '/frequency/list?date=' +
+                          dateData.format('DD/MM/YYYY')
                         }
                       />
                     </>
@@ -272,5 +271,5 @@ export const FrequencyPage = () => {
         </Card>
       </Box>
     </LayoutBasePage>
-  );
-};
+  )
+}

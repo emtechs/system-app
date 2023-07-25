@@ -1,26 +1,26 @@
-import { TableCell, TableRow } from "@mui/material";
+import { TableCell, TableRow } from '@mui/material'
 import {
   useAppThemeContext,
   useDrawerContext,
   useFrequencyContext,
-} from "../../../contexts";
-import { iFrequencyStudentsBase, iHeadcell } from "../../../interfaces";
-import { TableBase } from "../../table";
-import { DialogBaseChildrenAction } from "../structure";
-import { defineBgColorFrequency, statusFrequencyPtBr } from "../../../scripts";
+} from '../../../contexts'
+import { iFrequencyStudentsBase, iHeadCell } from '../../../interfaces'
+import { TableBase } from '../../table'
+import { DialogBaseChildrenAction } from '../structure'
+import { defineBgColorFrequency, statusFrequencyPtBr } from '../../../scripts'
 
-const headCells: iHeadcell[] = [
-  { order: "registry", numeric: "left", label: "Matrícula" },
-  { order: "name", numeric: "left", label: "Aluno" },
-  { numeric: "left", label: "Estado da Presença" },
-];
+const headCells: iHeadCell[] = [
+  { order: 'registry', numeric: 'left', label: 'Matrícula' },
+  { order: 'name', numeric: 'left', label: 'Aluno' },
+  { numeric: 'left', label: 'Estado da Presença' },
+]
 
 interface iCardFrequencyProps {
-  student: iFrequencyStudentsBase;
+  student: iFrequencyStudentsBase
 }
 
 const CardFrequency = ({ student }: iCardFrequencyProps) => {
-  const { theme } = useAppThemeContext();
+  const { theme } = useAppThemeContext()
 
   return (
     <TableRow>
@@ -35,14 +35,14 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
         {statusFrequencyPtBr(student.status)}
       </TableCell>
     </TableRow>
-  );
-};
+  )
+}
 
 interface iDialogFinishFrequencyProps {
-  open: boolean;
-  onClose: () => void;
-  frequency_id: string;
-  students: iFrequencyStudentsBase[];
+  open: boolean
+  onClose: () => void
+  frequency_id: string
+  students: iFrequencyStudentsBase[]
 }
 
 export const DialogFinishFrequency = ({
@@ -51,20 +51,20 @@ export const DialogFinishFrequency = ({
   frequency_id,
   students,
 }: iDialogFinishFrequencyProps) => {
-  const { updateFrequency } = useFrequencyContext();
-  const { handleClickButtonTools } = useDrawerContext();
+  const { updateFrequency } = useFrequencyContext()
+  const { handleClickButtonTools } = useDrawerContext()
 
   const action = () => {
     updateFrequency(
       {
-        status: "CLOSED",
+        status: 'CLOSED',
         finished_at: Date.now(),
       },
-      frequency_id
-    );
-    handleClickButtonTools();
-    onClose();
-  };
+      frequency_id,
+    )
+    handleClickButtonTools()
+    onClose()
+  }
 
   return (
     <DialogBaseChildrenAction
@@ -72,7 +72,7 @@ export const DialogFinishFrequency = ({
       onClose={onClose}
       title="Conferência"
       description={
-        "Abaixo estão listados os alunos que você definiu como faltantes ou justificados. Por favor, verifique a listagem e, se estiver correta, clique em continuar para lançar a frequência no sistema."
+        'Abaixo estão listados os alunos que você definiu como faltantes ou justificados. Por favor, verifique a listagem e, se estiver correta, clique em continuar para lançar a frequência no sistema.'
       }
       action={action}
       actionTitle="Continuar"
@@ -86,5 +86,5 @@ export const DialogFinishFrequency = ({
         ))}
       </TableBase>
     </DialogBaseChildrenAction>
-  );
-};
+  )
+}

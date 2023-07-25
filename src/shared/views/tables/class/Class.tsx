@@ -1,20 +1,20 @@
-import { useMemo } from "react";
-import { iClass, iHeadcell } from "../../../interfaces";
-import { TableBase, TableCellLink, TableRowLink } from "../../../components";
+import { useMemo } from 'react'
+import { iClass, iHeadCell } from '../../../interfaces'
+import { TableBase, TableCellLink, TableRowLink } from '../../../components'
 
 interface iTableClassProps {
-  data: iClass[];
+  data: iClass[]
 }
 
 export const TableClass = ({ data }: iTableClassProps) => {
-  const headCells: iHeadcell[] = useMemo(() => {
+  const headCells: iHeadCell[] = useMemo(() => {
     return [
-      { order: "name", numeric: "left", label: "Turma" },
-      { order: "schools", numeric: "right", label: "Escolas" },
-      { order: "students", numeric: "right", label: "Alunos" },
-      { order: "frequencies", numeric: "right", label: "Frequências" },
-    ];
-  }, []);
+      { order: 'name', numeric: 'left', label: 'Turma' },
+      { order: 'schools', numeric: 'right', label: 'Escolas' },
+      { order: 'students', numeric: 'right', label: 'Alunos' },
+      { order: 'frequencies', numeric: 'right', label: 'Frequências' },
+    ]
+  }, [])
 
   return (
     <TableBase headCells={headCells} link="div">
@@ -33,5 +33,5 @@ export const TableClass = ({ data }: iTableClassProps) => {
         </TableRowLink>
       ))}
     </TableBase>
-  );
-};
+  )
+}

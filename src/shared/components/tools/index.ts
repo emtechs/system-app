@@ -1,3 +1,3 @@
-export * from "./Base";
-export * from "./School";
-export * from "./User";
+export * from './Base'
+export * from './School'
+export * from './User'

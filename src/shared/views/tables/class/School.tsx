@@ -1,29 +1,29 @@
-import { useMemo } from "react";
-import { useAppThemeContext } from "../../../contexts";
-import { iClass, iHeadcell } from "../../../interfaces";
-import { TableBase, TableCellLink, TableRowLink } from "../../../components";
-import { defineBgColorInfrequency } from "../../../scripts";
+import { useMemo } from 'react'
+import { useAppThemeContext } from '../../../contexts'
+import { iClass, iHeadCell } from '../../../interfaces'
+import { TableBase, TableCellLink, TableRowLink } from '../../../components'
+import { defineBgColorInfrequency } from '../../../scripts'
 
 interface iTableClassSchoolProps {
-  data: iClass[];
+  data: iClass[]
 }
 
 export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
-  const { mdDown, theme } = useAppThemeContext();
+  const { mdDown, theme } = useAppThemeContext()
 
-  const headCells: iHeadcell[] = useMemo(() => {
+  const headCells: iHeadCell[] = useMemo(() => {
     if (mdDown)
       return [
-        { order: "name", numeric: "left", label: "Turma" },
-        { order: "infrequency", numeric: "right", label: "Infrequência" },
-      ];
+        { order: 'name', numeric: 'left', label: 'Turma' },
+        { order: 'infrequency', numeric: 'right', label: 'Infrequência' },
+      ]
     return [
-      { order: "name", numeric: "left", label: "Turma" },
-      { order: "students", numeric: "right", label: "Alunos" },
-      { order: "frequencies", numeric: "right", label: "Frequências" },
-      { order: "infrequency", numeric: "right", label: "Infrequência" },
-    ];
-  }, [mdDown]);
+      { order: 'name', numeric: 'left', label: 'Turma' },
+      { order: 'students', numeric: 'right', label: 'Alunos' },
+      { order: 'frequencies', numeric: 'right', label: 'Frequências' },
+      { order: 'infrequency', numeric: 'right', label: 'Infrequência' },
+    ]
+  }, [mdDown])
 
   return (
     <TableBase headCells={headCells} link="div">
@@ -47,7 +47,7 @@ export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
             link="div"
             numeric="right"
             sx={{
-              color: "#fff",
+              color: '#fff',
               bgcolor: defineBgColorInfrequency(el.infrequency, theme),
             }}
           >
@@ -56,5 +56,5 @@ export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
         </TableRowLink>
       ))}
     </TableBase>
-  );
-};
+  )
+}

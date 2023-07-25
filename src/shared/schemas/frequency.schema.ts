@@ -1,13 +1,13 @@
-import dayjs from "dayjs";
-import { z } from "zod";
+import dayjs from 'dayjs'
+import { z } from 'zod'
 
 export const frequencyCreateSchema = z
   .object({
     date: z
       .string({
-        required_error: "Por favor, selecione uma data no calendário.",
+        required_error: 'Por favor, selecione uma data no calendário.',
       })
-      .nonempty("Por favor, selecione uma data no calendário."),
+      .nonempty('Por favor, selecione uma data no calendário.'),
     class: z.object(
       {
         id: z.string().uuid(),
@@ -15,9 +15,9 @@ export const frequencyCreateSchema = z
         school: z.object({ id: z.string().uuid() }),
       },
       {
-        required_error: "Turma obrigatória",
-        invalid_type_error: "Turma obrigatória",
-      }
+        required_error: 'Turma obrigatória',
+        invalid_type_error: 'Turma obrigatória',
+      },
     ),
     class_id: z.string().uuid().optional(),
     school_id: z.string().uuid().optional(),
@@ -29,17 +29,17 @@ export const frequencyCreateSchema = z
   .refine(
     (field) =>
       (field.students = field.class.students.map(({ id }) => {
-        return { student_id: id };
-      }))
-  );
+        return { student_id: id }
+      })),
+  )
 
 export const frequencyUpdateSchema = z
   .object({
     justification: z
-      .string({ required_error: "Justificativa obrigatória" })
-      .nonempty("Justificativa obrigatória"),
-    status: z.enum(["PRESENTED", "MISSED", "JUSTIFIED"]).optional(),
+      .string({ required_error: 'Justificativa obrigatória' })
+      .nonempty('Justificativa obrigatória'),
+    status: z.enum(['PRESENTED', 'MISSED', 'JUSTIFIED']).optional(),
     updated_at: z.string().optional(),
   })
-  .refine((field) => (field.status = "JUSTIFIED"))
-  .refine((field) => (field.updated_at = dayjs().format()));
+  .refine((field) => (field.status = 'JUSTIFIED'))
+  .refine((field) => (field.updated_at = dayjs().format()))

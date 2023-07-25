@@ -1,3 +1,3 @@
-export * from "./Base";
-export * from "./List";
-export * from "./Table";
+export * from './Base'
+export * from './List'
+export * from './Table'

@@ -1,22 +1,22 @@
-import { TableHead, TableRow, TableSortLabel } from "@mui/material";
-import { usePaginationContext } from "../../contexts";
-import { iLinkComp, iHeadcell } from "../../interfaces";
-import { TableCellLink } from "./CellLink";
+import { TableHead, TableRow, TableSortLabel } from '@mui/material'
+import { usePaginationContext } from '../../contexts'
+import { iLinkComp, iHeadCell } from '../../interfaces'
+import { TableCellLink } from './CellLink'
 
 interface iSortProps {
-  headCells: iHeadcell[];
-  linkComp: iLinkComp;
-  link?: "div";
+  headCells: iHeadCell[]
+  linkComp: iLinkComp
+  link?: 'div'
 }
 
 export const TableSort = ({ headCells, linkComp, link }: iSortProps) => {
-  const { by, setBy, order, setOrder } = usePaginationContext();
+  const { by, setBy, order, setOrder } = usePaginationContext()
 
   const createSortHandler = (property?: string) => () => {
-    const isAsc = order === property && by === "asc";
-    setOrder(property ? property : "");
-    setBy(isAsc ? "desc" : "asc");
-  };
+    const isAsc = order === property && by === 'asc'
+    setOrder(property || '')
+    setBy(isAsc ? 'desc' : 'asc')
+  }
 
   return (
     <TableHead {...linkComp}>
@@ -40,5 +40,5 @@ export const TableSort = ({ headCells, linkComp, link }: iSortProps) => {
         ))}
       </TableRow>
     </TableHead>
-  );
-};
+  )
+}

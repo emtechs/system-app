@@ -1,2 +1,2 @@
-export * from "./CreateStudent";
-export * from "./CreateStudentAdm";
+export * from './CreateStudent'
+export * from './CreateStudentAdm'

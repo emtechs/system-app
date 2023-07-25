@@ -1,21 +1,21 @@
-import { TableCell, TableRow } from "@mui/material";
-import { TableBase } from "../../../components";
-import { iFrequencyHistory, iHeadcell } from "../../../interfaces";
-import { statusFrequencyPtBr } from "../../../scripts";
+import { TableCell, TableRow } from '@mui/material'
+import { TableBase } from '../../../components'
+import { iFrequencyHistory, iHeadCell } from '../../../interfaces'
+import { statusFrequencyPtBr } from '../../../scripts'
 
 interface iTableHistoryUserProps {
-  data: iFrequencyHistory[];
+  data: iFrequencyHistory[]
 }
 
 export const TableHistoryUser = ({ data }: iTableHistoryUserProps) => {
-  const headCells: iHeadcell[] = [
-    { numeric: "left", label: "Data" },
-    { numeric: "left", label: "Matrícula" },
-    { numeric: "left", label: "Aluno" },
-    { numeric: "left", label: "Escola" },
-    { numeric: "left", label: "Turma" },
-    { numeric: "left", label: "Presença" },
-  ];
+  const headCells: iHeadCell[] = [
+    { numeric: 'left', label: 'Data' },
+    { numeric: 'left', label: 'Matrícula' },
+    { numeric: 'left', label: 'Aluno' },
+    { numeric: 'left', label: 'Escola' },
+    { numeric: 'left', label: 'Turma' },
+    { numeric: 'left', label: 'Presença' },
+  ]
 
   return (
     <TableBase headCells={headCells}>
@@ -30,5 +30,5 @@ export const TableHistoryUser = ({ data }: iTableHistoryUserProps) => {
         </TableRow>
       ))}
     </TableBase>
-  );
-};
+  )
+}

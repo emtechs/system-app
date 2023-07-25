@@ -1,18 +1,18 @@
-import { Theme } from "@mui/material";
-import { iStatusStudent } from "../interfaces";
+import { Theme } from '@mui/material'
+import { iStatusStudent } from '../interfaces'
 
 export const defineBgColorFrequency = (
   status: iStatusStudent,
-  theme: Theme
+  theme: Theme,
 ) => {
   switch (status) {
-    case "PRESENTED":
-      return theme.palette.success.dark;
+    case 'PRESENTED':
+      return theme.palette.success.dark
 
-    case "MISSED":
-      return theme.palette.error.dark;
+    case 'MISSED':
+      return theme.palette.error.dark
 
-    case "JUSTIFIED":
-      return theme.palette.warning.dark;
+    case 'JUSTIFIED':
+      return theme.palette.warning.dark
   }
-};
+}

@@ -1,2 +1,2 @@
-export * from "./CardUser";
-export * from "./title";
+export * from './CardUser'
+export * from './title'

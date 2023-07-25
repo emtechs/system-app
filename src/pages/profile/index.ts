@@ -1,2 +1,2 @@
-export * from "./Edit";
-export * from "./EditPassword";
+export * from './Edit'
+export * from './EditPassword'

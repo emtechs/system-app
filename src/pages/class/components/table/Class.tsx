@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { TableBase } from "../../../../shared/components";
-import { iClass, iHeadcell } from "../../../../shared/interfaces";
+import { iClass, iHeadCell } from "../../../../shared/interfaces";
 import {
   IconButton,
   Link,
@@ -20,7 +20,7 @@ interface iTableClassProps {
 export const TableClass = ({ data }: iTableClassProps) => {
   const { isLoading, onClickReset } = usePaginationContext();
 
-  const headCells: iHeadcell[] = useMemo(() => {
+  const headCells: iHeadCell[] = useMemo(() => {
     return [
       { order: "name", numeric: "left", label: "Turma" },
       { order: "schools", numeric: "right", label: "Escolas" },

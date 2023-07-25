@@ -1,8 +1,8 @@
-import { useMemo } from "react";
+import { useMemo } from 'react'
 import {
   useAppThemeContext,
   usePaginationContext,
-} from "../../../../shared/contexts";
+} from '../../../../shared/contexts'
 import {
   IconButton,
   Link,
@@ -11,32 +11,32 @@ import {
   TableRow,
   Tooltip,
   Typography,
-} from "@mui/material";
-import { iHeadcell, iSchoolClass } from "../../../../shared/interfaces";
-import { TableBase } from "../../../../shared/components";
-import { Visibility } from "@mui/icons-material";
+} from '@mui/material'
+import { iHeadCell, iSchoolClass } from '../../../../shared/interfaces'
+import { TableBase } from '../../../../shared/components'
+import { Visibility } from '@mui/icons-material'
 
 interface iTableClassSchoolProps {
-  data: iSchoolClass[];
+  data: iSchoolClass[]
 }
 
 export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
-  const { mdDown } = useAppThemeContext();
-  const { isLoading, onClickReset } = usePaginationContext();
+  const { mdDown } = useAppThemeContext()
+  const { isLoading, onClickReset } = usePaginationContext()
 
-  const headCells: iHeadcell[] = useMemo(() => {
+  const headCells: iHeadCell[] = useMemo(() => {
     if (mdDown)
       return [
-        { order: "name", numeric: "left", label: "Turma" },
-        { numeric: "left", label: "Ações" },
-      ];
+        { order: 'name', numeric: 'left', label: 'Turma' },
+        { numeric: 'left', label: 'Ações' },
+      ]
     return [
-      { order: "name", numeric: "left", label: "Turma" },
-      { order: "students", numeric: "right", label: "Alunos" },
-      { order: "frequencies", numeric: "right", label: "Frequências" },
-      { numeric: "left", label: "Ações" },
-    ];
-  }, [mdDown]);
+      { order: 'name', numeric: 'left', label: 'Turma' },
+      { order: 'students', numeric: 'right', label: 'Alunos' },
+      { order: 'frequencies', numeric: 'right', label: 'Frequências' },
+      { numeric: 'left', label: 'Ações' },
+    ]
+  }, [mdDown])
 
   return (
     <TableBase headCells={headCells}>
@@ -79,5 +79,5 @@ export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
         </TableRow>
       ))}
     </TableBase>
-  );
-};
+  )
+}

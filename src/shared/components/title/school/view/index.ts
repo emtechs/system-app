@@ -1,3 +1,3 @@
-export * from "./Server";
-export * from "./Class";
-export * from "./Student";
+export * from './Server'
+export * from './Class'
+export * from './Student'

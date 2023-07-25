@@ -1,2 +1,2 @@
-export * from "./Class";
-export * from "./Display";
+export * from './Class'
+export * from './Display'
