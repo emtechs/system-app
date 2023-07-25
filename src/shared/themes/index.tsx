@@ -8,7 +8,7 @@ import {
 
 const LinkBehavior = React.forwardRef<
   HTMLAnchorElement,
-  Omit<RouterLinkProps, 'to'> & { href: RouterLinkProps['to'] }
+  Omit<RouterLinkProps, 'to'> & { href: RouterLinkProps['to']; component: 'a' }
 >((props, ref) => {
   const { href, ...other } = props
   // Map href (Material UI) -> to (react-router)
