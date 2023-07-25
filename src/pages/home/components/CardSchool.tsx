@@ -10,6 +10,7 @@ import {
 import { useAppThemeContext } from '../../../shared/contexts'
 import { iSchool } from '../../../shared/interfaces'
 import { adaptName, adaptNameSchool } from '../../../shared/scripts'
+import { Link } from 'react-router-dom'
 
 interface iCardSchoolProps {
   school: iSchool
@@ -21,7 +22,10 @@ export const CardSchool = ({ school, isHome }: iCardSchoolProps) => {
   const href = `/${school.id}`
   return (
     <Card>
-      <CardActionArea href={isHome ? `${href}?dash=ADMIN` : href}>
+      <CardActionArea
+        component={Link}
+        to={isHome ? `${href}?dash=ADMIN` : href}
+      >
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: theme.palette.primary.main }}>

@@ -1,6 +1,6 @@
 import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import { ReactNode } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import { useDrawerContext } from '../../../contexts'
 
 export interface iOtherListItemLinkProps {
@@ -27,7 +27,8 @@ export const OtherListItemLink = ({
         location.pathname === normalizeHref ||
         location.pathname.includes(href + '/')
       }
-      href={href}
+      component={Link}
+      to={href}
     >
       <ListItemIcon>{icon}</ListItemIcon>
       <ListItemText primary={label} />

@@ -8,8 +8,9 @@ import {
 import { useAppThemeContext, usePaginationContext } from '../../../contexts'
 import { iUser, iHeadCell } from '../../../interfaces'
 import { rolePtBr } from '../../../scripts'
-import { Link, Skeleton, TableCell, TableRow, Typography } from '@mui/material'
+import { Link, Skeleton, TableCell, TableRow } from '@mui/material'
 import { ActionsUser } from '../actions'
+import { Link as RouterLink } from 'react-router-dom'
 
 interface iTableUserProps {
   data: iUser[]
@@ -47,16 +48,16 @@ export const TableUser = ({ data }: iTableUserProps) => {
               {isLoading ? (
                 <Skeleton width={250} />
               ) : user.is_active ? (
-                <Typography
+                <Link
                   underline="none"
                   variant="body2"
                   color="inherit"
-                  component={Link}
-                  href={`/user/${user.id}`}
+                  component={RouterLink}
+                  to={`/user/${user.id}`}
                   onClick={onClickReset}
                 >
                   {user.name}
-                </Typography>
+                </Link>
               ) : (
                 user.name
               )}

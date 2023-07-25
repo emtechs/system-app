@@ -1,29 +1,29 @@
-import { RemoveDone, Visibility } from "@mui/icons-material";
-import { IconButton, TableCell, Tooltip } from "@mui/material";
-import { iSchoolUser } from "../../../../shared/interfaces";
+import { RemoveDone, Visibility } from '@mui/icons-material'
+import { IconButton, TableCell, Tooltip } from '@mui/material'
+import { iSchoolUser } from '../../../../shared/interfaces'
 import {
   useDialogContext,
   usePaginationContext,
-} from "../../../../shared/contexts";
+} from '../../../../shared/contexts'
 
 interface iActionsUserProps {
-  user: iSchoolUser;
-  handleUser: (newUser: iSchoolUser) => void;
+  user: iSchoolUser
+  handleUser: (newUser: iSchoolUser) => void
 }
 
 export const ActionsUser = ({ handleUser, user }: iActionsUserProps) => {
-  const { handleOpenActive } = useDialogContext();
-  const { onClickReset } = usePaginationContext();
+  const { handleOpenActive } = useDialogContext()
+  const { onClickReset } = usePaginationContext()
 
   const onClickActive = () => {
-    handleUser(user);
-    handleOpenActive();
-  };
+    handleUser(user)
+    handleOpenActive()
+  }
 
   return (
     <TableCell>
       <Tooltip title="Detalhar">
-        <IconButton color="primary" size="small" href="" onClick={onClickReset}>
+        <IconButton color="primary" size="small" onClick={onClickReset}>
           <Visibility fontSize="small" />
         </IconButton>
       </Tooltip>
@@ -33,5 +33,5 @@ export const ActionsUser = ({ handleUser, user }: iActionsUserProps) => {
         </IconButton>
       </Tooltip>
     </TableCell>
-  );
-};
+  )
+}

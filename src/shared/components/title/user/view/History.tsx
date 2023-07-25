@@ -1,19 +1,20 @@
-import { Breadcrumbs, Chip, Link } from "@mui/material";
-import { History, Home } from "@mui/icons-material";
-import { useAppThemeContext } from "../../../../contexts";
-import { LabelUser } from "../../../label";
+import { Breadcrumbs, Chip, Link } from '@mui/material'
+import { History, Home } from '@mui/icons-material'
+import { Link as RouterLink } from 'react-router-dom'
+import { useAppThemeContext } from '../../../../contexts'
+import { LabelUser } from '../../../../components'
 
 export const TitleUserViewHistoryPage = () => {
-  const { mdDown } = useAppThemeContext();
+  const { mdDown } = useAppThemeContext()
 
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
-      <Link underline="none" color="inherit" href="/">
+      <Link underline="none" color="inherit" component={RouterLink} to="/">
         <Chip
           clickable
           color="primary"
           variant="outlined"
-          label={mdDown ? "..." : "Página Inicial"}
+          label={mdDown ? '...' : 'Página Inicial'}
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </Link>
@@ -24,5 +25,5 @@ export const TitleUserViewHistoryPage = () => {
         icon={<History sx={{ mr: 0.5 }} fontSize="inherit" />}
       />
     </Breadcrumbs>
-  );
-};
+  )
+}

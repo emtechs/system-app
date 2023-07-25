@@ -1,31 +1,32 @@
-import { useState } from "react";
-import { usePaginationContext } from "../../../../shared/contexts";
-import { iHeadCell, iSchool } from "../../../../shared/interfaces";
+import { useState } from 'react'
+import { usePaginationContext } from '../../../../shared/contexts'
+import { iHeadCell, iSchool } from '../../../../shared/interfaces'
 import {
   DialogActiveSchool,
   DialogCreateSchool,
   DialogDirectorSchool,
   DialogEditSchool,
   TableBase,
-} from "../../../../shared/components";
-import { Link, Skeleton, TableCell, TableRow, Typography } from "@mui/material";
-import { ActionsSchool } from "../actions";
+} from '../../../../shared/components'
+import { Link, Skeleton, TableCell, TableRow } from '@mui/material'
+import { ActionsSchool } from '../actions'
+import { Link as RouterLink } from 'react-router-dom'
 
 interface iTableSchoolProps {
-  data: iSchool[];
+  data: iSchool[]
 }
 
 export const TableSchool = ({ data }: iTableSchoolProps) => {
-  const { isLoading, onClickReset } = usePaginationContext();
-  const [schoolData, setSchoolData] = useState<iSchool>();
+  const { isLoading, onClickReset } = usePaginationContext()
+  const [schoolData, setSchoolData] = useState<iSchool>()
 
-  const handleSchool = (newSchool: iSchool) => setSchoolData(newSchool);
+  const handleSchool = (newSchool: iSchool) => setSchoolData(newSchool)
 
   const headCells: iHeadCell[] = [
-    { order: "name", numeric: "left", label: "Escola" },
-    { order: "director_name", numeric: "left", label: "Diretor" },
-    { numeric: "left", label: "Ações" },
-  ];
+    { order: 'name', numeric: 'left', label: 'Escola' },
+    { order: 'director_name', numeric: 'left', label: 'Diretor' },
+    { numeric: 'left', label: 'Ações' },
+  ]
 
   return (
     <>
@@ -36,16 +37,16 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
               {isLoading ? (
                 <Skeleton width={250} />
               ) : school.is_active ? (
-                <Typography
+                <Link
                   underline="none"
                   variant="body2"
                   color="inherit"
-                  component={Link}
-                  href={`/school/${school.id}`}
+                  component={RouterLink}
+                  to={`/school/${school.id}`}
                   onClick={onClickReset}
                 >
                   {school.name}
-                </Typography>
+                </Link>
               ) : (
                 school.name
               )}
@@ -62,5 +63,5 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
       {schoolData && <DialogDirectorSchool school={schoolData} locale="list" />}
       {schoolData && <DialogActiveSchool school={schoolData} locale="list" />}
     </>
-  );
-};
+  )
+}

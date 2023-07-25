@@ -1,16 +1,18 @@
-import { Breadcrumbs, Chip, Link } from "@mui/material";
-import { useAppThemeContext, useDrawerContext } from "../../contexts";
-import { Home } from "@mui/icons-material";
+import { Breadcrumbs, Chip, Link } from '@mui/material'
+import { useAppThemeContext, useDrawerContext } from '../../contexts'
+import { Home } from '@mui/icons-material'
+import { Link as RouterLink } from 'react-router-dom'
 
 export const TitleAdminDash = () => {
-  const { handleClickButtonTools } = useDrawerContext();
+  const { handleClickButtonTools } = useDrawerContext()
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
       <Link
         underline="none"
         color="inherit"
-        href="/"
+        component={RouterLink}
+        to="/"
         onClick={handleClickButtonTools}
       >
         <Chip
@@ -21,25 +23,26 @@ export const TitleAdminDash = () => {
         />
       </Link>
     </Breadcrumbs>
-  );
-};
+  )
+}
 
 interface iTitleAdminDashPagesProps {
-  breadcrumbs: JSX.Element[];
+  breadcrumbs: JSX.Element[]
 }
 
 export const TitleAdminDashPages = ({
   breadcrumbs,
 }: iTitleAdminDashPagesProps) => {
-  const { mdDown } = useAppThemeContext();
-  const { handleClickButtonTools } = useDrawerContext();
+  const { mdDown } = useAppThemeContext()
+  const { handleClickButtonTools } = useDrawerContext()
 
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
       <Link
         underline="none"
         color="inherit"
-        href="/"
+        component={RouterLink}
+        to="/"
         onClick={handleClickButtonTools}
       >
         <Chip
@@ -52,5 +55,5 @@ export const TitleAdminDashPages = ({
       </Link>
       {breadcrumbs}
     </Breadcrumbs>
-  );
-};
+  )
+}

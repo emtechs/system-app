@@ -1,9 +1,9 @@
-import { IconButton, TableCell, Tooltip } from "@mui/material";
+import { IconButton, TableCell, Tooltip } from '@mui/material'
 import {
   useDialogContext,
   usePaginationContext,
-} from "../../../../shared/contexts";
-import { iSchool } from "../../../../shared/interfaces";
+} from '../../../../shared/contexts'
+import { iSchool } from '../../../../shared/interfaces'
 import {
   Dashboard,
   DoneAll,
@@ -11,11 +11,12 @@ import {
   Person,
   RemoveDone,
   Visibility,
-} from "@mui/icons-material";
+} from '@mui/icons-material'
+import { Link } from 'react-router-dom'
 
 interface iActionsSchoolProps {
-  school: iSchool;
-  handleSchool: (newSchool: iSchool) => void;
+  school: iSchool
+  handleSchool: (newSchool: iSchool) => void
 }
 
 export const ActionsSchool = ({
@@ -23,24 +24,24 @@ export const ActionsSchool = ({
   school,
 }: iActionsSchoolProps) => {
   const { handleOpenEdit, handleOpenDirector, handleOpenActive } =
-    useDialogContext();
-  const { onClickReset } = usePaginationContext();
-  const { is_active, id } = school;
+    useDialogContext()
+  const { onClickReset } = usePaginationContext()
+  const { is_active, id } = school
 
   const onClickEdit = () => {
-    handleSchool(school);
-    handleOpenEdit();
-  };
+    handleSchool(school)
+    handleOpenEdit()
+  }
 
   const onClickDirector = () => {
-    handleSchool(school);
-    handleOpenDirector();
-  };
+    handleSchool(school)
+    handleOpenDirector()
+  }
 
   const onClickActive = () => {
-    handleSchool(school);
-    handleOpenActive();
-  };
+    handleSchool(school)
+    handleOpenActive()
+  }
 
   return (
     <TableCell>
@@ -50,7 +51,8 @@ export const ActionsSchool = ({
             <IconButton
               color="primary"
               size="small"
-              href={`/school/${id}`}
+              component={Link}
+              to={`/school/${id}`}
               onClick={onClickReset}
             >
               <Visibility fontSize="small" />
@@ -60,7 +62,8 @@ export const ActionsSchool = ({
             <IconButton
               color="secondary"
               size="small"
-              href={`/home/school/${id}`}
+              component={Link}
+              to={`/school/${id}`}
               onClick={onClickReset}
             >
               <Dashboard fontSize="small" />
@@ -90,5 +93,5 @@ export const ActionsSchool = ({
         </Tooltip>
       )}
     </TableCell>
-  );
-};
+  )
+}

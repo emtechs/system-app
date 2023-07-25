@@ -1,12 +1,13 @@
-import { DoneAll, RemoveDone, School, Visibility } from "@mui/icons-material";
-import { IconButton, TableCell, Tooltip } from "@mui/material";
-import { iUser } from "../../../interfaces";
-import { useDialogContext, usePaginationContext } from "../../../contexts";
+import { DoneAll, RemoveDone, School, Visibility } from '@mui/icons-material'
+import { IconButton, TableCell, Tooltip } from '@mui/material'
+import { iUser } from '../../../interfaces'
+import { useDialogContext, usePaginationContext } from '../../../contexts'
+import { Link } from 'react-router-dom'
 
 interface iActionsUserProps {
-  user: iUser;
-  handleUser: (newUser: iUser) => void;
-  school_id?: string;
+  user: iUser
+  handleUser: (newUser: iUser) => void
+  school_id?: string
 }
 
 export const ActionsUser = ({
@@ -14,19 +15,19 @@ export const ActionsUser = ({
   user,
   school_id,
 }: iActionsUserProps) => {
-  const { handleOpenActive, handleOpenEdit } = useDialogContext();
-  const { onClickReset } = usePaginationContext();
-  const { is_active, id, role } = user;
+  const { handleOpenActive, handleOpenEdit } = useDialogContext()
+  const { onClickReset } = usePaginationContext()
+  const { is_active, id, role } = user
 
   const onClickActive = () => {
-    handleUser(user);
-    handleOpenActive();
-  };
+    handleUser(user)
+    handleOpenActive()
+  }
 
   const onClickEdit = () => {
-    handleUser(user);
-    handleOpenEdit();
-  };
+    handleUser(user)
+    handleOpenEdit()
+  }
 
   return (
     <TableCell>
@@ -36,7 +37,8 @@ export const ActionsUser = ({
             <IconButton
               color="primary"
               size="small"
-              href={
+              component={Link}
+              to={
                 school_id
                   ? `/user/${user.id}?school_id=${school_id}`
                   : `/user/${id}`
@@ -46,7 +48,7 @@ export const ActionsUser = ({
               <Visibility fontSize="small" />
             </IconButton>
           </Tooltip>
-          {role !== "ADMIN" && !school_id && (
+          {role !== 'ADMIN' && !school_id && (
             <Tooltip title="Liberar Acesso">
               <IconButton color="secondary" size="small" onClick={onClickEdit}>
                 <School fontSize="small" />
@@ -67,5 +69,5 @@ export const ActionsUser = ({
         </Tooltip>
       )}
     </TableCell>
-  );
-};
+  )
+}

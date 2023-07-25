@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { useAppThemeContext } from "../../contexts";
+import { ReactNode } from 'react'
+import { useAppThemeContext } from '../../contexts'
 import {
   Box,
   Card,
@@ -7,14 +7,15 @@ import {
   CardContent,
   Grid,
   Typography,
-} from "@mui/material";
+} from '@mui/material'
+import { Link } from 'react-router-dom'
 
 interface iGridDashContentProps {
-  icon: ReactNode;
-  quant: number | string;
-  info: string;
-  dest: string;
-  onClick?: () => void;
+  icon: ReactNode
+  quant: number | string
+  info: string
+  dest: string
+  onClick?: () => void
 }
 
 export const GridDashContent = ({
@@ -24,12 +25,12 @@ export const GridDashContent = ({
   dest,
   onClick,
 }: iGridDashContentProps) => {
-  const { theme } = useAppThemeContext();
+  const { theme } = useAppThemeContext()
 
   return (
     <Grid item xs={4}>
       <Card>
-        <CardActionArea href={dest} onClick={onClick}>
+        <CardActionArea component={Link} to={dest} onClick={onClick}>
           <CardContent>
             <Box
               display="flex"
@@ -56,5 +57,5 @@ export const GridDashContent = ({
         </CardActionArea>
       </Card>
     </Grid>
-  );
-};
+  )
+}
