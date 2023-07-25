@@ -1,6 +1,6 @@
-import { useMemo } from "react";
-import { TableBase } from "../../../../shared/components";
-import { iClass, iHeadCell } from "../../../../shared/interfaces";
+import { useMemo } from 'react'
+import { Router, TableBase } from '../../../../shared/components'
+import { iClass, iHeadCell } from '../../../../shared/interfaces'
 import {
   IconButton,
   Link,
@@ -8,27 +8,27 @@ import {
   TableCell,
   TableRow,
   Tooltip,
-  Typography,
-} from "@mui/material";
-import { usePaginationContext } from "../../../../shared/contexts";
-import { Visibility } from "@mui/icons-material";
+} from '@mui/material'
+import { usePaginationContext } from '../../../../shared/contexts'
+import { Visibility } from '@mui/icons-material'
+import { Link as RouterLink } from 'react-router-dom'
 
 interface iTableClassProps {
-  data: iClass[];
+  data: iClass[]
 }
 
 export const TableClass = ({ data }: iTableClassProps) => {
-  const { isLoading, onClickReset } = usePaginationContext();
+  const { isLoading, onClickReset } = usePaginationContext()
 
   const headCells: iHeadCell[] = useMemo(() => {
     return [
-      { order: "name", numeric: "left", label: "Turma" },
-      { order: "schools", numeric: "right", label: "Escolas" },
-      { order: "students", numeric: "right", label: "Alunos" },
-      { order: "frequencies", numeric: "right", label: "Frequências" },
-      { numeric: "left", label: "Ações" },
-    ];
-  }, []);
+      { order: 'name', numeric: 'left', label: 'Turma' },
+      { order: 'schools', numeric: 'right', label: 'Escolas' },
+      { order: 'students', numeric: 'right', label: 'Alunos' },
+      { order: 'frequencies', numeric: 'right', label: 'Frequências' },
+      { numeric: 'left', label: 'Ações' },
+    ]
+  }, [])
 
   return (
     <TableBase headCells={headCells}>
@@ -38,16 +38,18 @@ export const TableClass = ({ data }: iTableClassProps) => {
             {isLoading ? (
               <Skeleton width={300} />
             ) : el.is_active ? (
-              <Typography
-                underline="none"
-                variant="body2"
-                color="inherit"
-                component={Link}
-                href={`/class/${el.id}`}
-                onClick={onClickReset}
-              >
-                {el.name}
-              </Typography>
+              <Router>
+                <Link
+                  underline="none"
+                  variant="body2"
+                  color="inherit"
+                  component={RouterLink}
+                  to={`/class/${el.id}`}
+                  onClick={onClickReset}
+                >
+                  {el.name}
+                </Link>
+              </Router>
             ) : (
               el.name
             )}
@@ -63,18 +65,21 @@ export const TableClass = ({ data }: iTableClassProps) => {
           </TableCell>
           <TableCell>
             <Tooltip title="Detalhar">
-              <IconButton
-                color="primary"
-                size="small"
-                href={`/class/${el.id}`}
-                onClick={onClickReset}
-              >
-                <Visibility fontSize="small" />
-              </IconButton>
+              <Router>
+                <IconButton
+                  color="primary"
+                  size="small"
+                  component={RouterLink}
+                  to={`/class/${el.id}`}
+                  onClick={onClickReset}
+                >
+                  <Visibility fontSize="small" />
+                </IconButton>
+              </Router>
             </Tooltip>
           </TableCell>
         </TableRow>
       ))}
     </TableBase>
-  );
-};
+  )
+}

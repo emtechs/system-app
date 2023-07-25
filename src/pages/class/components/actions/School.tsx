@@ -1,9 +1,9 @@
-import { IconButton, TableCell, Tooltip } from "@mui/material";
+import { IconButton, TableCell, Tooltip } from '@mui/material'
 import {
   useDialogContext,
   usePaginationContext,
-} from "../../../../shared/contexts";
-import { iSchool } from "../../../../shared/interfaces";
+} from '../../../../shared/contexts'
+import { iSchool } from '../../../../shared/interfaces'
 import {
   Dashboard,
   DoneAll,
@@ -11,11 +11,13 @@ import {
   Person,
   RemoveDone,
   Visibility,
-} from "@mui/icons-material";
+} from '@mui/icons-material'
+import { Router } from '../../../../shared/components'
+import { Link } from 'react-router-dom'
 
 interface iActionsSchoolProps {
-  school: iSchool;
-  handleSchool: (newSchool: iSchool) => void;
+  school: iSchool
+  handleSchool: (newSchool: iSchool) => void
 }
 
 export const ActionsSchool = ({
@@ -23,48 +25,54 @@ export const ActionsSchool = ({
   school,
 }: iActionsSchoolProps) => {
   const { handleOpenEdit, handleOpenDirector, handleOpenActive } =
-    useDialogContext();
-  const { onClickReset } = usePaginationContext();
-  const { is_active, id } = school;
+    useDialogContext()
+  const { onClickReset } = usePaginationContext()
+  const { is_active, id } = school
 
   const onClickEdit = () => {
-    handleSchool(school);
-    handleOpenEdit();
-  };
+    handleSchool(school)
+    handleOpenEdit()
+  }
 
   const onClickDirector = () => {
-    handleSchool(school);
-    handleOpenDirector();
-  };
+    handleSchool(school)
+    handleOpenDirector()
+  }
 
   const onClickActive = () => {
-    handleSchool(school);
-    handleOpenActive();
-  };
+    handleSchool(school)
+    handleOpenActive()
+  }
 
   return (
     <TableCell>
       {is_active ? (
         <>
           <Tooltip title="Detalhar">
-            <IconButton
-              color="primary"
-              size="small"
-              href={`/school/${id}`}
-              onClick={onClickReset}
-            >
-              <Visibility fontSize="small" />
-            </IconButton>
+            <Router>
+              <IconButton
+                color="primary"
+                size="small"
+                component={Link}
+                to={`/school/${id}`}
+                onClick={onClickReset}
+              >
+                <Visibility fontSize="small" />
+              </IconButton>
+            </Router>
           </Tooltip>
           <Tooltip title="Painel">
-            <IconButton
-              color="secondary"
-              size="small"
-              href={`/home/school/${id}`}
-              onClick={onClickReset}
-            >
-              <Dashboard fontSize="small" />
-            </IconButton>
+            <Router>
+              <IconButton
+                color="secondary"
+                size="small"
+                component={Link}
+                to={`/home/school/${id}`}
+                onClick={onClickReset}
+              >
+                <Dashboard fontSize="small" />
+              </IconButton>
+            </Router>
           </Tooltip>
           <Tooltip title="Editar">
             <IconButton color="success" size="small" onClick={onClickEdit}>
@@ -90,5 +98,5 @@ export const ActionsSchool = ({
         </Tooltip>
       )}
     </TableCell>
-  );
-};
+  )
+}
