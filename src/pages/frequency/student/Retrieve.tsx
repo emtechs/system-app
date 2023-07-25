@@ -5,7 +5,7 @@ import {
   useClassContext,
   useDrawerContext,
   useSchoolContext,
-} from "../../../shared/contexts";
+} from '../../../shared/contexts'
 import {
   Box,
   Breadcrumbs,
@@ -15,11 +15,11 @@ import {
   Grid,
   Link,
   Paper,
-} from "@mui/material";
-import { LayoutBasePage } from "../../../shared/layouts";
-import { CalendarStudent, GridDashContent } from "../../../shared/components";
-import { iDashClass } from "../../../shared/interfaces";
-import { useEffect, useState } from "react";
+} from '@mui/material'
+import { LayoutBasePage } from '../../../shared/layouts'
+import { CalendarStudent, GridDashContent } from '../../../shared/components'
+import { iDashClass } from '../../../shared/interfaces'
+import { useEffect, useState } from 'react'
 import {
   Checklist,
   EventBusy,
@@ -27,40 +27,40 @@ import {
   Groups,
   School,
   Workspaces,
-} from "@mui/icons-material";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import "dayjs/locale/pt-br";
-import { apiUsingNow } from "../../../shared/services";
-import { Navigate, useSearchParams } from "react-router-dom";
-dayjs.extend(localizedFormat);
+} from '@mui/icons-material'
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import 'dayjs/locale/pt-br'
+import { apiUsingNow } from '../../../shared/services'
+import { Navigate, useSearchParams, Link as RouterLink } from 'react-router-dom'
+dayjs.extend(localizedFormat)
 
 export const StudentFrequencyPage = () => {
-  const [searchParams] = useSearchParams();
-  const id = searchParams.get("id");
-  const { theme, setLoading } = useAppThemeContext();
-  const { yearData } = useAuthContext();
-  const { schoolRetrieve } = useSchoolContext();
-  const { handleClickSchool, handleClickButtonTools } = useDrawerContext();
-  const { monthData } = useCalendarContext();
-  const { classWithSchoolSelect } = useClassContext();
-  const [infoClass, setInfoClass] = useState<iDashClass>();
+  const [searchParams] = useSearchParams()
+  const id = searchParams.get('id')
+  const { theme, setLoading } = useAppThemeContext()
+  const { yearData } = useAuthContext()
+  const { schoolRetrieve } = useSchoolContext()
+  const { handleClickSchool, handleClickButtonTools } = useDrawerContext()
+  const { monthData } = useCalendarContext()
+  const { classWithSchoolSelect } = useClassContext()
+  const [infoClass, setInfoClass] = useState<iDashClass>()
 
   useEffect(() => {
     if (yearData && schoolRetrieve && classWithSchoolSelect && monthData) {
-      const query = `?month=${monthData}`;
-      setLoading(true);
+      const query = `?month=${monthData}`
+      setLoading(true)
       apiUsingNow
         .get<iDashClass>(
-          `classes/${classWithSchoolSelect.class.id}/${schoolRetrieve.id}/${yearData.id}/dash${query}`
+          `classes/${classWithSchoolSelect.class.id}/${schoolRetrieve.id}/${yearData.id}/dash${query}`,
         )
         .then((res) => setInfoClass(res.data))
-        .finally(() => setLoading(false));
+        .finally(() => setLoading(false))
     }
-  }, [classWithSchoolSelect, schoolRetrieve, monthData, yearData]);
+  }, [classWithSchoolSelect, schoolRetrieve, monthData, yearData])
 
   if (!id) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" />
   }
 
   return (
@@ -70,7 +70,8 @@ export const StudentFrequencyPage = () => {
           <Link
             underline="none"
             color="inherit"
-            href="/"
+            component={RouterLink}
+            to="/"
             onClick={handleClickButtonTools}
           >
             <Chip
@@ -121,7 +122,7 @@ export const StudentFrequencyPage = () => {
                         icon={<Checklist fontSize="large" />}
                         quant={`${infoClass.frequencies}`}
                         info="Frequências no mês"
-                        dest={"/"}
+                        dest={'/'}
                       />
                       {infoClass.frequencyOpen !== 0 ? (
                         <GridDashContent
@@ -130,8 +131,8 @@ export const StudentFrequencyPage = () => {
                           info="Frequências em aberto"
                           dest={
                             infoClass.frequencyOpen !== 0
-                              ? "/frequency/open"
-                              : "/frequency/list"
+                              ? '/frequency/open'
+                              : '/frequency/list'
                           }
                         />
                       ) : (
@@ -147,8 +148,8 @@ export const StudentFrequencyPage = () => {
                         icon={<Workspaces fontSize="large" />}
                         quant={
                           infoClass?.class_infreq
-                            ? infoClass.class_infreq.toFixed(0) + "%"
-                            : "0%"
+                            ? infoClass.class_infreq.toFixed(0) + '%'
+                            : '0%'
                         }
                         info="Infrequência"
                         dest="/school/class"
@@ -178,5 +179,5 @@ export const StudentFrequencyPage = () => {
         </Card>
       </Box>
     </LayoutBasePage>
-  );
-};
+  )
+}

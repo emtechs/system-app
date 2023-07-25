@@ -12,7 +12,6 @@ import {
   RemoveDone,
   Visibility,
 } from '@mui/icons-material'
-import { Router } from '../../../../shared/components'
 import { Link } from 'react-router-dom'
 
 interface iActionsSchoolProps {
@@ -49,30 +48,26 @@ export const ActionsSchool = ({
       {is_active ? (
         <>
           <Tooltip title="Detalhar">
-            <Router>
-              <IconButton
-                color="primary"
-                size="small"
-                component={Link}
-                to={`/school/${id}`}
-                onClick={onClickReset}
-              >
-                <Visibility fontSize="small" />
-              </IconButton>
-            </Router>
+            <IconButton
+              color="primary"
+              size="small"
+              component={Link}
+              to={`/school/${id}`}
+              onClick={onClickReset}
+            >
+              <Visibility fontSize="small" />
+            </IconButton>
           </Tooltip>
           <Tooltip title="Painel">
-            <Router>
-              <IconButton
-                color="secondary"
-                size="small"
-                component={Link}
-                to={`/home/school/${id}`}
-                onClick={onClickReset}
-              >
-                <Dashboard fontSize="small" />
-              </IconButton>
-            </Router>
+            <IconButton
+              color="secondary"
+              size="small"
+              component={Link}
+              to={`/home/school/${id}`}
+              onClick={onClickReset}
+            >
+              <Dashboard fontSize="small" />
+            </IconButton>
           </Tooltip>
           <Tooltip title="Editar">
             <IconButton color="success" size="small" onClick={onClickEdit}>

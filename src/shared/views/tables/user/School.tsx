@@ -7,8 +7,9 @@ import {
 import { useAppThemeContext, usePaginationContext } from '../../../contexts'
 import { iUser, iHeadCell } from '../../../interfaces'
 import { rolePtBr } from '../../../scripts'
-import { Link, TableCell, TableRow, Typography } from '@mui/material'
+import { Link, TableCell, TableRow } from '@mui/material'
 import { ActionsUser } from '../actions'
+import { Link as RouterLink } from 'react-router-dom'
 
 interface iTableUserSchoolProps {
   data: iUser[]
@@ -47,16 +48,16 @@ export const TableUserSchool = ({ data, school_id }: iTableUserSchoolProps) => {
             {user.work_school && (
               <TableRow hover>
                 <TableCell>
-                  <Typography
+                  <Link
                     underline="none"
                     variant="body2"
                     color="inherit"
-                    component={Link}
-                    href={`/user/${user.id}?school_id=${school_id}`}
+                    component={RouterLink}
+                    to={`/user/${user.id}?school_id=${school_id}`}
                     onClick={onClickReset}
                   >
                     {user.name}
-                  </Typography>
+                  </Link>
                 </TableCell>
                 <TableCell>{user.cpf}</TableCell>
                 {!mdDown && (

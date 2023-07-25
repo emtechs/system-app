@@ -5,49 +5,54 @@ import {
   Link,
   TableCell,
   TableRow,
-} from "@mui/material";
-import { TableBase } from "../../../shared/components";
+} from '@mui/material'
+import { TableBase } from '../../../shared/components'
 import {
   useAppThemeContext,
   useDrawerContext,
   useFrequencyContext,
   usePaginationContext,
   useSchoolContext,
-} from "../../../shared/contexts";
+} from '../../../shared/contexts'
 import {
   iFrequencyBase,
   iFrequencyStudentsBase,
   iHeadCell,
-} from "../../../shared/interfaces";
-import { useEffect, useState } from "react";
-import { apiFrequency } from "../../../shared/services";
-import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
-import { LayoutBasePage } from "../../../shared/layouts";
-import { EventAvailable, Group, School } from "@mui/icons-material";
+} from '../../../shared/interfaces'
+import { useEffect, useState } from 'react'
+import { apiFrequency } from '../../../shared/services'
+import {
+  Navigate,
+  useNavigate,
+  useSearchParams,
+  Link as RouterLink,
+} from 'react-router-dom'
+import { LayoutBasePage } from '../../../shared/layouts'
+import { EventAvailable, Group, School } from '@mui/icons-material'
 import {
   defineBgColorFrequency,
   statusFrequencyPtBr,
-} from "../../../shared/scripts";
+} from '../../../shared/scripts'
 
 const headCells: iHeadCell[] = [
-  { order: "registry", numeric: "left", label: "Matrícula" },
-  { order: "name", numeric: "left", label: "Aluno" },
-  { numeric: "left", label: "Estado da Presença" },
-];
+  { order: 'registry', numeric: 'left', label: 'Matrícula' },
+  { order: 'name', numeric: 'left', label: 'Aluno' },
+  { numeric: 'left', label: 'Estado da Presença' },
+]
 
 interface iCardFrequencyProps {
-  student: iFrequencyStudentsBase;
+  student: iFrequencyStudentsBase
 }
 
 const CardFrequency = ({ student }: iCardFrequencyProps) => {
-  const navigate = useNavigate();
-  const { theme } = useAppThemeContext();
+  const navigate = useNavigate()
+  const { theme } = useAppThemeContext()
 
   return (
     <TableRow
       hover
       onClick={() => navigate(`/frequency/student?id=${student.student.id}`)}
-      sx={{ cursor: "pointer" }}
+      sx={{ cursor: 'pointer' }}
     >
       <TableCell>{student.student.registry}</TableCell>
       <TableCell>{student.student.name}</TableCell>
@@ -60,39 +65,39 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
         {statusFrequencyPtBr(student.status)}
       </TableCell>
     </TableRow>
-  );
-};
+  )
+}
 
 export const ListStudentFrequencyPage = () => {
-  const [searchParams] = useSearchParams();
-  const id = searchParams.get("id");
-  const { schoolRetrieve } = useSchoolContext();
-  const { dataStudents, setDataStudents } = useFrequencyContext();
-  const { handleClickButtonTools } = useDrawerContext();
-  const { setIsLoading, query, setCount } = usePaginationContext();
-  const [dataFrequency, setDataFrequency] = useState<iFrequencyBase>();
+  const [searchParams] = useSearchParams()
+  const id = searchParams.get('id')
+  const { schoolRetrieve } = useSchoolContext()
+  const { dataStudents, setDataStudents } = useFrequencyContext()
+  const { handleClickButtonTools } = useDrawerContext()
+  const { setIsLoading, query, setCount } = usePaginationContext()
+  const [dataFrequency, setDataFrequency] = useState<iFrequencyBase>()
 
   useEffect(() => {
-    setDataStudents(undefined);
-  }, []);
+    setDataStudents(undefined)
+  }, [])
 
   useEffect(() => {
     if (id) {
-      const queryData = query();
-      setIsLoading(true);
+      const queryData = query()
+      setIsLoading(true)
       apiFrequency
         .students(id, queryData)
         .then((res) => {
-          setCount(res.total);
-          setDataFrequency(res.frequency);
-          setDataStudents(res.result);
+          setCount(res.total)
+          setDataFrequency(res.frequency)
+          setDataStudents(res.result)
         })
-        .finally(() => setIsLoading(false));
+        .finally(() => setIsLoading(false))
     }
-  }, [id, open, query]);
+  }, [id, open, query])
 
   if (!id) {
-    return <Navigate to={"/frequency/list"} />;
+    return <Navigate to={'/frequency/list'} />
   }
 
   return (
@@ -102,7 +107,8 @@ export const ListStudentFrequencyPage = () => {
           <Link
             underline="none"
             color="inherit"
-            href="/"
+            component={RouterLink}
+            to="/"
             onClick={handleClickButtonTools}
           >
             <Chip
@@ -114,7 +120,12 @@ export const ListStudentFrequencyPage = () => {
             />
           </Link>
           {dataFrequency && (
-            <Link underline="none" color="inherit" href="/frequency/list">
+            <Link
+              underline="none"
+              color="inherit"
+              component={RouterLink}
+              to="/frequency/list"
+            >
               <Chip
                 clickable
                 color="primary"
@@ -133,11 +144,9 @@ export const ListStudentFrequencyPage = () => {
       }
     >
       <TableBase headCells={headCells}>
-        {dataStudents?.map((el) => (
-          <CardFrequency key={el.id} student={el} />
-        ))}
+        {dataStudents?.map((el) => <CardFrequency key={el.id} student={el} />)}
       </TableBase>
       <Box height={20} />
     </LayoutBasePage>
-  );
-};
+  )
+}

@@ -1,6 +1,7 @@
-import { Button, IconButton, Tooltip } from "@mui/material";
-import { useAppThemeContext } from "../../contexts";
-import { iButtonBaseProps } from "../../interfaces";
+import { Button, IconButton, Tooltip } from '@mui/material'
+import { useAppThemeContext } from '../../contexts'
+import { iButtonBaseProps } from '../../interfaces'
+import { Link } from 'react-router-dom'
 
 export const ButtonMdDown = ({
   title,
@@ -8,19 +9,39 @@ export const ButtonMdDown = ({
   endIcon,
   onClick,
   startIcon,
-  color = "primary",
+  color = 'primary',
 }: iButtonBaseProps) => {
-  const { mdDown } = useAppThemeContext();
-
-  const to = href ? { href } : undefined;
+  const { mdDown } = useAppThemeContext()
 
   return mdDown ? (
-    <Tooltip title={title}>
-      <IconButton color={color} onClick={onClick} {...to}>
-        {startIcon && startIcon}
-        {endIcon && endIcon}
-      </IconButton>
-    </Tooltip>
+    href ? (
+      <Tooltip title={title}>
+        <IconButton color={color} onClick={onClick} component={Link} to={href}>
+          {startIcon && startIcon}
+          {endIcon && endIcon}
+        </IconButton>
+      </Tooltip>
+    ) : (
+      <Tooltip title={title}>
+        <IconButton color={color} onClick={onClick}>
+          {startIcon && startIcon}
+          {endIcon && endIcon}
+        </IconButton>
+      </Tooltip>
+    )
+  ) : href ? (
+    <Button
+      color={color}
+      variant="contained"
+      disableElevation
+      startIcon={startIcon}
+      endIcon={endIcon}
+      onClick={onClick}
+      component={Link}
+      to={href}
+    >
+      {title}
+    </Button>
   ) : (
     <Button
       color={color}
@@ -29,9 +50,8 @@ export const ButtonMdDown = ({
       startIcon={startIcon}
       endIcon={endIcon}
       onClick={onClick}
-      {...to}
     >
       {title}
     </Button>
-  );
-};
+  )
+}

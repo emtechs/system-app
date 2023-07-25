@@ -1,17 +1,19 @@
-import { Breadcrumbs, Chip, Link } from "@mui/material";
-import { useAppThemeContext, useDrawerContext } from "../../contexts";
-import { Home } from "@mui/icons-material";
-import { LabelSchool } from "../label";
+import { Breadcrumbs, Chip, Link } from '@mui/material'
+import { Home } from '@mui/icons-material'
+import { Link as RouterLink } from 'react-router-dom'
+import { useAppThemeContext, useDrawerContext } from '../../contexts'
+import { LabelSchool } from '../../components'
 
 export const TitleSchoolDashAdmin = () => {
-  const { handleClickButtonTools } = useDrawerContext();
+  const { handleClickButtonTools } = useDrawerContext()
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
       <Link
         underline="none"
         color="inherit"
-        href="/"
+        component={RouterLink}
+        to="/"
         onClick={handleClickButtonTools}
       >
         <Chip
@@ -24,25 +26,26 @@ export const TitleSchoolDashAdmin = () => {
       </Link>
       <LabelSchool />
     </Breadcrumbs>
-  );
-};
+  )
+}
 
 interface iTitleSchoolDashAdminPagesProps {
-  breadcrumbs: JSX.Element[];
+  breadcrumbs: JSX.Element[]
 }
 
 export const TitleSchoolDashAdminPages = ({
   breadcrumbs,
 }: iTitleSchoolDashAdminPagesProps) => {
-  const { mdDown } = useAppThemeContext();
-  const { handleClickButtonTools } = useDrawerContext();
+  const { mdDown } = useAppThemeContext()
+  const { handleClickButtonTools } = useDrawerContext()
 
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
       <Link
         underline="none"
         color="inherit"
-        href="/"
+        component={RouterLink}
+        to="/"
         onClick={handleClickButtonTools}
       >
         <Chip
@@ -53,10 +56,15 @@ export const TitleSchoolDashAdminPages = ({
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </Link>
-      <Link underline="none" color="inherit" href="/school">
+      <Link
+        underline="none"
+        color="inherit"
+        component={RouterLink}
+        to="/school"
+      >
         <LabelSchool clickable />
       </Link>
       {breadcrumbs}
     </Breadcrumbs>
-  );
-};
+  )
+}

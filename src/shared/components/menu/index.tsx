@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material'
 import { Dashboard, FirstPage, Logout, Person } from '@mui/icons-material'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import {
   useAppThemeContext,
   useAuthContext,
@@ -33,7 +33,7 @@ export const MenuDrawer = () => {
     if (dashData === 'ADMIN') {
       if (location.search.includes('dash=ADMIN'))
         return (
-          <ListItemButton href="/home" onClick={handleClick}>
+          <ListItemButton component={Link} to="/home" onClick={handleClick}>
             <ListItemIcon>
               <FirstPage />
             </ListItemIcon>
@@ -42,7 +42,7 @@ export const MenuDrawer = () => {
         )
 
       return (
-        <ListItemButton href="/home" onClick={handleClick}>
+        <ListItemButton component={Link} to="/home" onClick={handleClick}>
           <ListItemIcon>
             <Dashboard />
           </ListItemIcon>
@@ -52,7 +52,7 @@ export const MenuDrawer = () => {
     }
 
     return (
-      <ListItemButton href="/" onClick={handleClick}>
+      <ListItemButton component={Link} to="/" onClick={handleClick}>
         <ListItemIcon>
           <FirstPage />
         </ListItemIcon>
@@ -82,7 +82,11 @@ export const MenuDrawer = () => {
           flexShrink={0}
         >
           <Box display="flex" alignItems="center" justifyContent="center">
-            <img src="/pref_massape_out.png" height={theme.spacing(8)} />
+            <img
+              src="/pref_massape_out.png"
+              height={theme.spacing(8)}
+              alt="Massapê"
+            />
           </Box>
           <Box
             display="flex"

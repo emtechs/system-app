@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Router, TableBase } from '../../../../shared/components'
+import { TableBase } from '../../../../shared/components'
 import { iClass, iHeadCell } from '../../../../shared/interfaces'
 import {
   IconButton,
@@ -38,18 +38,16 @@ export const TableClass = ({ data }: iTableClassProps) => {
             {isLoading ? (
               <Skeleton width={300} />
             ) : el.is_active ? (
-              <Router>
-                <Link
-                  underline="none"
-                  variant="body2"
-                  color="inherit"
-                  component={RouterLink}
-                  to={`/class/${el.id}`}
-                  onClick={onClickReset}
-                >
-                  {el.name}
-                </Link>
-              </Router>
+              <Link
+                underline="none"
+                variant="body2"
+                color="inherit"
+                component={RouterLink}
+                to={`/class/${el.id}`}
+                onClick={onClickReset}
+              >
+                {el.name}
+              </Link>
             ) : (
               el.name
             )}
@@ -65,17 +63,15 @@ export const TableClass = ({ data }: iTableClassProps) => {
           </TableCell>
           <TableCell>
             <Tooltip title="Detalhar">
-              <Router>
-                <IconButton
-                  color="primary"
-                  size="small"
-                  component={RouterLink}
-                  to={`/class/${el.id}`}
-                  onClick={onClickReset}
-                >
-                  <Visibility fontSize="small" />
-                </IconButton>
-              </Router>
+              <IconButton
+                color="primary"
+                size="small"
+                component={RouterLink}
+                to={`/class/${el.id}`}
+                onClick={onClickReset}
+              >
+                <Visibility fontSize="small" />
+              </IconButton>
             </Tooltip>
           </TableCell>
         </TableRow>

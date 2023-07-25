@@ -1,12 +1,13 @@
-import { useAppThemeContext } from "../../contexts";
-import { iButtonBaseProps } from "../../interfaces";
-import { ButtonMdDown } from "./MdDown";
-import { Button, IconButton, Tooltip } from "@mui/material";
+import { useAppThemeContext } from '../../contexts'
+import { iButtonBaseProps } from '../../interfaces'
+import { ButtonMdDown } from './MdDown'
+import { Button, IconButton, Tooltip } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 interface iButtonDestProps extends iButtonBaseProps {
-  to: string;
-  isResp?: boolean;
-  isHome?: boolean;
+  to: string
+  isResp?: boolean
+  isHome?: boolean
 }
 
 export const ButtonDest = ({
@@ -18,7 +19,7 @@ export const ButtonDest = ({
   isResp,
   isHome,
 }: iButtonDestProps) => {
-  const { smDown } = useAppThemeContext();
+  const { smDown } = useAppThemeContext()
 
   return isResp ? (
     <ButtonMdDown
@@ -31,7 +32,7 @@ export const ButtonDest = ({
   ) : isHome ? (
     smDown && (
       <Tooltip title={title}>
-        <IconButton color="primary" onClick={onClick} href={to}>
+        <IconButton color="primary" component={Link} to={to} onClick={onClick}>
           {startIcon && startIcon}
           {endIcon && endIcon}
         </IconButton>
@@ -44,9 +45,10 @@ export const ButtonDest = ({
       startIcon={startIcon}
       endIcon={endIcon}
       onClick={onClick}
-      href={to}
+      component={Link}
+      to={to}
     >
       {title}
     </Button>
-  );
-};
+  )
+}

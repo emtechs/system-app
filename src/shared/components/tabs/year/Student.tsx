@@ -1,5 +1,6 @@
 import { Box, Tab, Tabs } from '@mui/material'
 import { useAuthContext } from '../../../contexts'
+import { Link } from 'react-router-dom'
 
 export const TabsStudentYearPage = () => {
   const { listYear } = useAuthContext()
@@ -12,7 +13,8 @@ export const TabsStudentYearPage = () => {
           <Tab
             key={el.id}
             label={el.year}
-            href={`/year/${el.id}?view=student`}
+            component={Link}
+            to={`/year/${el.id}?view=student`}
           />
         ))}
       </Tabs>

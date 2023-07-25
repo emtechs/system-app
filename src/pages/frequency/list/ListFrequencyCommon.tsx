@@ -1,5 +1,5 @@
 import { Breadcrumbs, Chip, Link, TableCell, TableRow } from '@mui/material'
-import { Router, TableBase } from '../../../shared/components'
+import { TableBase } from '../../../shared/components'
 import {
   useAppThemeContext,
   useAuthContext,
@@ -11,7 +11,12 @@ import { useEffect, useState } from 'react'
 import { apiUsingNow } from '../../../shared/services'
 import { iFrequency, iHeadCell } from '../../../shared/interfaces'
 import { LayoutBasePage } from '../../../shared/layouts'
-import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
+import {
+  Navigate,
+  useNavigate,
+  useSearchParams,
+  Link as RouterLink,
+} from 'react-router-dom'
 import { EventAvailable, List, School } from '@mui/icons-material'
 import { defineBgColorInfrequency } from '../../../shared/scripts'
 
@@ -110,26 +115,28 @@ export const ListFrequencyCommon = () => {
     <LayoutBasePage
       title={
         <Breadcrumbs aria-label="breadcrumb">
-          <Router>
+          <Link
+            underline="none"
+            color="inherit"
+            component={RouterLink}
+            to="/"
+            onClick={handleClickButtonTools}
+          >
+            <Chip
+              clickable
+              color="primary"
+              variant="outlined"
+              label={schoolRetrieve.name}
+              icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </Link>
+          {date && (
             <Link
               underline="none"
               color="inherit"
-              component={}
-              href="/"
-              onClick={handleClickButtonTools}
+              component={RouterLink}
+              to="/frequency"
             >
-              <Chip
-                clickable
-                color="primary"
-                variant="outlined"
-                label={schoolRetrieve.name}
-                icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-              />
-            </Link>
-          </Router>
-
-          {date && (
-            <Link underline="none" color="inherit" href="/frequency">
               <Chip
                 clickable
                 color="primary"

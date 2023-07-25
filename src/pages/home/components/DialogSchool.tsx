@@ -10,47 +10,48 @@ import {
   ListItemAvatar,
   ListItemButton,
   ListItemText,
-} from "@mui/material";
-import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
-import { PaginationList, ValidateBase } from "../../../shared/components";
+} from '@mui/material'
+import { AutocompleteElement, FormContainer } from 'react-hook-form-mui'
+import { PaginationList, ValidateBase } from '../../../shared/components'
 import {
   useAppThemeContext,
   useAuthContext,
   usePaginationContext,
-} from "../../../shared/contexts";
-import { iSelectBase, iWorkSchool } from "../../../shared/interfaces";
-import { useEffect, useState } from "react";
-import { apiUser } from "../../../shared/services";
+} from '../../../shared/contexts'
+import { iSelectBase, iWorkSchool } from '../../../shared/interfaces'
+import { useEffect, useState } from 'react'
+import { apiUser } from '../../../shared/services'
+import { Link } from 'react-router-dom'
 
 interface iDialogSchoolProps {
-  open: boolean;
-  onClose: () => void;
-  isHome?: boolean;
+  open: boolean
+  onClose: () => void
+  isHome?: boolean
 }
 
 export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
-  const { theme } = useAppThemeContext();
-  const { yearData } = useAuthContext();
-  const { query, query_page } = usePaginationContext();
-  const [listSchoolSelect, setListSchoolSelect] = useState<iSelectBase[]>();
-  const [listData, setListData] = useState<iWorkSchool[]>();
-  const [loading, setLoading] = useState(true);
+  const { theme } = useAppThemeContext()
+  const { yearData } = useAuthContext()
+  const { query, query_page } = usePaginationContext()
+  const [listSchoolSelect, setListSchoolSelect] = useState<iSelectBase[]>()
+  const [listData, setListData] = useState<iWorkSchool[]>()
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (yearData) {
-      const take = 3;
+      const take = 3
       const queryData =
-        query(yearData.id) + "&order=name" + query_page(take, true);
-      setLoading(true);
+        query(yearData.id) + '&order=name' + query_page(take, true)
+      setLoading(true)
       apiUser
         .schools(queryData)
         .then((res) => {
-          setListSchoolSelect(res.schools);
-          setListData(res.result);
+          setListSchoolSelect(res.schools)
+          setListData(res.result)
         })
-        .finally(() => setLoading(false));
+        .finally(() => setLoading(false))
     }
-  }, [query, query_page, yearData]);
+  }, [query, query_page, yearData])
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -65,18 +66,16 @@ export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
                 label="Escola"
                 loading={!listSchoolSelect}
                 options={
-                  listSchoolSelect
-                    ? listSchoolSelect
-                    : [
-                        {
-                          id: 1,
-                          label: `No momento, não há nenhuma escola cadastrada`,
-                        },
-                      ]
+                  listSchoolSelect || [
+                    {
+                      id: 1,
+                      label: `No momento, não há nenhuma escola cadastrada`,
+                    },
+                  ]
                 }
                 textFieldProps={{ fullWidth: true }}
               />
-              <ValidateBase to={isHome ? "/home/school/" : "/"} />
+              <ValidateBase to={isHome ? '/home/school/' : '/'} />
             </FormContainer>
           </Box>
         </ListItem>
@@ -91,8 +90,9 @@ export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
           listData?.map((el) => (
             <ListItem key={el.school.id} disableGutters>
               <ListItemButton
-                href={
-                  isHome ? "/home/school/" + el.school.id : "/" + el.school.id
+                component={Link}
+                to={
+                  isHome ? '/home/school/' + el.school.id : '/' + el.school.id
                 }
               >
                 <ListItemAvatar>
@@ -113,5 +113,5 @@ export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
         <PaginationList />
       </List>
     </Dialog>
-  );
-};
+  )
+}

@@ -10,11 +10,11 @@ import {
   TableCell,
   TableRow,
   Tooltip,
-  Typography,
 } from '@mui/material'
 import { iHeadCell, iSchoolClass } from '../../../../shared/interfaces'
 import { TableBase } from '../../../../shared/components'
 import { Visibility } from '@mui/icons-material'
+import { Link as RouterLink } from 'react-router-dom'
 
 interface iTableClassSchoolProps {
   data: iSchoolClass[]
@@ -46,16 +46,16 @@ export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
             {isLoading ? (
               <Skeleton width={300} />
             ) : (
-              <Typography
+              <Link
                 underline="none"
                 variant="body2"
                 color="inherit"
-                component={Link}
-                href={`/year/class/${el.key}/student`}
+                component={RouterLink}
+                to={`/year/class/${el.key}/student`}
                 onClick={onClickReset}
               >
                 {el.name}
-              </Typography>
+              </Link>
             )}
           </TableCell>
           {!mdDown && (
@@ -69,7 +69,8 @@ export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
               <IconButton
                 color="primary"
                 size="small"
-                href={`/year/class/${el.key}/student`}
+                component={RouterLink}
+                to={`/year/class/${el.key}/student`}
                 onClick={onClickReset}
               >
                 <Visibility fontSize="small" />

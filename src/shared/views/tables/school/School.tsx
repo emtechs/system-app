@@ -6,10 +6,11 @@ import {
   TableBase,
 } from '../../../components'
 import { iSchool, iHeadCell } from '../../../interfaces'
-import { Link, Skeleton, TableCell, TableRow, Typography } from '@mui/material'
+import { Link, Skeleton, TableCell, TableRow } from '@mui/material'
 import { ActionsSchool } from '../actions'
 import { useState } from 'react'
 import { usePaginationContext } from '../../../contexts'
+import { Link as RouterLink } from 'react-router-dom'
 
 interface iTableSchoolProps {
   data: iSchool[]
@@ -36,16 +37,16 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
               {isLoading ? (
                 <Skeleton width={250} />
               ) : school.is_active ? (
-                <Typography
+                <Link
                   underline="none"
                   variant="body2"
                   color="inherit"
-                  component={Link}
-                  href={`/school/${school.id}`}
+                  component={RouterLink}
+                  to={`/school/${school.id}`}
                   onClick={onClickReset}
                 >
                   {school.name}
-                </Typography>
+                </Link>
               ) : (
                 school.name
               )}

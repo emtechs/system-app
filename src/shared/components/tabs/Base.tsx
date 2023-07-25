@@ -1,20 +1,21 @@
-import { Box, Tab, Tabs } from "@mui/material";
-import { ReactElement } from "react";
+import { Box, Tab, Tabs } from '@mui/material'
+import { ReactElement } from 'react'
+import { Link } from 'react-router-dom'
 
 interface iTabsBaseProps {
-  value?: string;
+  value?: string
   elemArr: {
-    icon: ReactElement<unknown, string>;
-    disabled?: boolean;
-    label: string;
-    value: string;
-    href: string;
-  }[];
+    icon: ReactElement<unknown, string>
+    disabled?: boolean
+    label: string
+    value: string
+    href: string
+  }[]
 }
 
-export const TabsBase = ({ value = "", elemArr }: iTabsBaseProps) => {
+export const TabsBase = ({ value = '', elemArr }: iTabsBaseProps) => {
   return (
-    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
       <Tabs value={value} variant="scrollable" scrollButtons="auto">
         {elemArr.map((el) => (
           <Tab
@@ -23,10 +24,11 @@ export const TabsBase = ({ value = "", elemArr }: iTabsBaseProps) => {
             label={el.label}
             disabled={el.disabled}
             value={el.value}
-            href={el.href}
+            component={Link}
+            to={el.href}
           />
         ))}
       </Tabs>
     </Box>
-  );
-};
+  )
+}

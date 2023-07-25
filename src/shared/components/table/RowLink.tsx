@@ -1,9 +1,10 @@
-import { Link, TableRow } from "@mui/material";
-import { iChildren } from "../../interfaces";
+import { TableRow } from '@mui/material'
+import { iChildren } from '../../interfaces'
+import { Link } from 'react-router-dom'
 
 interface iTableRowLinkProps extends iChildren {
-  href: string;
-  onClick?: () => void;
+  href: string
+  onClick?: () => void
 }
 
 export const TableRowLink = ({
@@ -11,13 +12,7 @@ export const TableRowLink = ({
   href,
   onClick,
 }: iTableRowLinkProps) => (
-  <TableRow
-    hover
-    underline="none"
-    component={Link}
-    href={href}
-    onClick={onClick}
-  >
+  <TableRow hover component={Link} to={href} onClick={onClick}>
     {children}
   </TableRow>
-);
+)

@@ -1,24 +1,26 @@
-import { Breadcrumbs, Chip, Link } from "@mui/material";
-import { useAppThemeContext, useDrawerContext } from "../../contexts";
-import { Home, School } from "@mui/icons-material";
-import { LabelSchool } from "../label";
+import { Breadcrumbs, Chip, Link } from '@mui/material'
+import { useAppThemeContext, useDrawerContext } from '../../contexts'
+import { Home, School } from '@mui/icons-material'
+import { LabelSchool } from '../label'
+import { Link as RouterLink } from 'react-router-dom'
 
 interface iTitleSchoolAdminPagesProps {
-  breadcrumbs: JSX.Element[];
+  breadcrumbs: JSX.Element[]
 }
 
 export const TitleSchoolAdminPages = ({
   breadcrumbs,
 }: iTitleSchoolAdminPagesProps) => {
-  const { mdDown } = useAppThemeContext();
-  const { handleClickButtonTools } = useDrawerContext();
+  const { mdDown } = useAppThemeContext()
+  const { handleClickButtonTools } = useDrawerContext()
 
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
       <Link
         underline="none"
         color="inherit"
-        href="/"
+        component={RouterLink}
+        to="/"
         onClick={handleClickButtonTools}
       >
         <Chip
@@ -29,7 +31,12 @@ export const TitleSchoolAdminPages = ({
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </Link>
-      <Link underline="none" color="inherit" href="/school">
+      <Link
+        underline="none"
+        color="inherit"
+        component={RouterLink}
+        to="/school"
+      >
         <Chip
           clickable
           color="primary"
@@ -40,21 +47,22 @@ export const TitleSchoolAdminPages = ({
       </Link>
       {breadcrumbs}
     </Breadcrumbs>
-  );
-};
+  )
+}
 
 export const TitleRetrieveSchoolAdminPages = ({
   breadcrumbs,
 }: iTitleSchoolAdminPagesProps) => {
-  const { mdDown } = useAppThemeContext();
-  const { handleClickButtonTools } = useDrawerContext();
+  const { mdDown } = useAppThemeContext()
+  const { handleClickButtonTools } = useDrawerContext()
 
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
       <Link
         underline="none"
         color="inherit"
-        href="/"
+        component={RouterLink}
+        to="/"
         onClick={handleClickButtonTools}
       >
         <Chip
@@ -65,7 +73,12 @@ export const TitleRetrieveSchoolAdminPages = ({
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </Link>
-      <Link underline="none" color="inherit" href="/school">
+      <Link
+        underline="none"
+        color="inherit"
+        component={RouterLink}
+        to="/school"
+      >
         <Chip
           clickable
           color="primary"
@@ -74,10 +87,8 @@ export const TitleRetrieveSchoolAdminPages = ({
           icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </Link>
-
       <LabelSchool clickable />
-
       {breadcrumbs}
     </Breadcrumbs>
-  );
-};
+  )
+}

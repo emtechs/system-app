@@ -6,7 +6,6 @@ import {
   DialogCreateSchool,
   DialogDirectorSchool,
   DialogEditSchool,
-  Router,
   TableBase,
 } from '../../../../shared/components'
 import { Link, Skeleton, TableCell, TableRow } from '@mui/material'
@@ -38,18 +37,16 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
               {isLoading ? (
                 <Skeleton width={250} />
               ) : school.is_active ? (
-                <Router>
-                  <Link
-                    underline="none"
-                    variant="body2"
-                    color="inherit"
-                    component={RouterLink}
-                    to={`/school/${school.id}`}
-                    onClick={onClickReset}
-                  >
-                    {school.name}
-                  </Link>
-                </Router>
+                <Link
+                  underline="none"
+                  variant="body2"
+                  color="inherit"
+                  component={RouterLink}
+                  to={`/school/${school.id}`}
+                  onClick={onClickReset}
+                >
+                  {school.name}
+                </Link>
               ) : (
                 school.name
               )}
