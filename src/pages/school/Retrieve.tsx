@@ -25,7 +25,7 @@ export const RetrieveSchoolPage = () => {
   return (
     <LayoutBasePage
       title={<TitleSchoolRetrievePage />}
-      tools={<ToolsSchool back="/school" />}
+      tools={<ToolsSchool isDash back="/school" />}
     >
       <TabsSchoolRetrievePage value={view} />
       <ViewSchoolData />

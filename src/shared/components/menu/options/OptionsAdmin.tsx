@@ -7,15 +7,15 @@ import {
   People,
   School,
   Workspaces,
-} from "@mui/icons-material";
-import { useLocation } from "react-router-dom";
-import { useDrawerContext } from "../../../contexts";
-import { Frequency, Import, Profile } from "../components";
-import { ListItemLinkOpen, OtherListItemLink } from "../item";
-import { OptionsSchoolHome } from "./OptionsSchoolHome";
+} from '@mui/icons-material'
+import { useLocation } from 'react-router-dom'
+import { useDrawerContext } from '../../../contexts'
+import { Frequency, Import, Profile } from '../components'
+import { ListItemLinkOpen, OtherListItemLink } from '../item'
+import { OptionsSchool } from './OptionsSchool'
 
 export const OptionsAdmin = () => {
-  const location = useLocation();
+  const location = useLocation()
   const {
     handleClickFrequency,
     handleClickImport,
@@ -23,10 +23,10 @@ export const OptionsAdmin = () => {
     openFrequency,
     openImport,
     openProfile,
-  } = useDrawerContext();
+  } = useDrawerContext()
 
-  return location.pathname.includes("/home/school") ? (
-    <OptionsSchoolHome />
+  return location.search.includes('dash=ADMIN') ? (
+    <OptionsSchool />
   ) : (
     <>
       <OtherListItemLink icon={<Home />} label="Página Inicial" />
@@ -59,5 +59,5 @@ export const OptionsAdmin = () => {
         <Profile />
       </ListItemLinkOpen>
     </>
-  );
-};
+  )
+}

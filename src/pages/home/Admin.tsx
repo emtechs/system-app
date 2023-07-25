@@ -1,14 +1,14 @@
-import { Box, Card, CardContent, Grid, Paper } from "@mui/material";
+import { Box, Card, CardContent, Grid, Paper } from '@mui/material'
 import {
   CalendarDashAdmin,
   GridDashAdmin,
   TitleAdminDash,
-} from "../../shared/components";
-import { useAppThemeContext } from "../../shared/contexts";
-import { LayoutBasePage } from "../../shared/layouts";
+} from '../../shared/components'
+import { useAppThemeContext } from '../../shared/contexts'
+import { LayoutBasePage } from '../../shared/layouts'
 
 export const HomePageAdmin = () => {
-  const { theme } = useAppThemeContext();
+  const { theme } = useAppThemeContext()
   return (
     <LayoutBasePage title={<TitleAdminDash />}>
       <Box
@@ -46,5 +46,5 @@ export const HomePageAdmin = () => {
         </Card>
       </Box>
     </LayoutBasePage>
-  );
-};
+  )
+}

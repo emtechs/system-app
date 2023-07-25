@@ -8,47 +8,47 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-} from "@mui/material";
-import { Dashboard, FirstPage, Logout, Person } from "@mui/icons-material";
-import { useLocation } from "react-router-dom";
+} from '@mui/material'
+import { Dashboard, FirstPage, Logout, Person } from '@mui/icons-material'
+import { useLocation } from 'react-router-dom'
 import {
   useAppThemeContext,
   useAuthContext,
   useDrawerContext,
-} from "../../contexts";
-import { Options } from "./options";
-import { adaptName } from "../../scripts";
-import { useMemo } from "react";
+} from '../../contexts'
+import { Options } from './options'
+import { adaptName } from '../../scripts'
+import { useMemo } from 'react'
 
 export const MenuDrawer = () => {
-  const location = useLocation();
-  const { theme, smDown } = useAppThemeContext();
-  const { isDrawerOpen, toggleDrawerOpen, handleClick } = useDrawerContext();
-  const { userData, logout, dashData } = useAuthContext();
+  const location = useLocation()
+  const { theme, smDown } = useAppThemeContext()
+  const { isDrawerOpen, toggleDrawerOpen, handleClick } = useDrawerContext()
+  const { userData, logout, dashData } = useAuthContext()
   const user = {
     name: adaptName(userData?.name),
-  };
+  }
 
   const listButton = useMemo(() => {
-    if (dashData === "ADMIN") {
-      if (location.pathname.includes("/home/school"))
+    if (dashData === 'ADMIN') {
+      if (location.search.includes('dash=ADMIN'))
         return (
-          <ListItemButton href="/" onClick={handleClick}>
+          <ListItemButton href="/home" onClick={handleClick}>
             <ListItemIcon>
               <FirstPage />
             </ListItemIcon>
             <ListItemText primary="Voltar" />
           </ListItemButton>
-        );
+        )
 
       return (
-        <ListItemButton href="/home/school" onClick={handleClick}>
+        <ListItemButton href="/home" onClick={handleClick}>
           <ListItemIcon>
             <Dashboard />
           </ListItemIcon>
           <ListItemText primary="Painel Escola" />
         </ListItemButton>
-      );
+      )
     }
 
     return (
@@ -58,13 +58,13 @@ export const MenuDrawer = () => {
         </ListItemIcon>
         <ListItemText primary="Voltar" />
       </ListItemButton>
-    );
-  }, [dashData, handleClick, location]);
+    )
+  }, [dashData, handleClick, location])
 
   return (
     <Drawer
       open={isDrawerOpen}
-      variant={smDown ? "temporary" : "permanent"}
+      variant={smDown ? 'temporary' : 'permanent'}
       onClose={toggleDrawerOpen}
     >
       <Box
@@ -122,5 +122,5 @@ export const MenuDrawer = () => {
         </Box>
       </Box>
     </Drawer>
-  );
-};
+  )
+}

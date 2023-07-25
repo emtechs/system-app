@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, ReactNode, useMemo, useState } from "react";
+import { ChangeEvent, MouseEvent, ReactNode, useMemo, useState } from 'react'
 import {
   Box,
   Checkbox,
@@ -7,7 +7,7 @@ import {
   MenuItem,
   Paper,
   TextField,
-} from "@mui/material";
+} from '@mui/material'
 import {
   AddBox,
   ArrowBack,
@@ -16,56 +16,56 @@ import {
   ManageAccountsOutlined,
   PersonOffOutlined,
   PersonOutlined,
-} from "@mui/icons-material";
+} from '@mui/icons-material'
 import {
   useAppThemeContext,
   useDialogContext,
   usePaginationContext,
   useSchoolContext,
-} from "../../contexts";
-import { ActiveButton, CompBase, HomeButton, UserTools } from "./components";
-import { ButtonDest } from "../button";
+} from '../../contexts'
+import { ActiveButton, CompBase, HomeButton, UserTools } from './components'
+import { ButtonDest } from '../button'
 
 interface iToolsSchoolProps {
-  back?: string;
-  isHome?: boolean;
-  toHome?: string;
-  isUser?: boolean;
-  isNew?: boolean;
-  titleNew?: string;
-  iconNew?: ReactNode;
-  isSearch?: boolean;
-  isActive?: boolean;
-  isDirector?: boolean;
-  isInfreq?: boolean;
-  infreq?: string;
-  setInfreq?: (text: string) => void;
-  finish?: ReactNode;
-  isReset?: boolean;
-  isDash?: boolean;
+  back?: string
+  isHome?: boolean
+  toHome?: string
+  isUser?: boolean
+  isNew?: boolean
+  titleNew?: string
+  iconNew?: ReactNode
+  isSearch?: boolean
+  isActive?: boolean
+  isDirector?: boolean
+  isInfreq?: boolean
+  infreq?: string
+  setInfreq?: (text: string) => void
+  finish?: ReactNode
+  isReset?: boolean
+  isDash?: boolean
 }
 
 export const ToolsSchool = ({
   back,
   isHome,
-  toHome = "/",
+  toHome = '/',
   isUser,
   isNew,
-  titleNew = "Novo",
+  titleNew = 'Novo',
   iconNew = <AddBox />,
   isSearch,
   isActive,
   isDirector,
   isInfreq,
-  infreq = "",
+  infreq = '',
   setInfreq,
   finish,
   isReset,
   isDash,
 }: iToolsSchoolProps) => {
-  const { theme, mdDown } = useAppThemeContext();
-  const { handleOpenCreate } = useDialogContext();
-  const { schoolSelect } = useSchoolContext();
+  const { theme, mdDown } = useAppThemeContext()
+  const { handleOpenCreate } = useDialogContext()
+  const { schoolSelect } = useSchoolContext()
   const {
     is_active,
     director,
@@ -74,37 +74,37 @@ export const ToolsSchool = ({
     onClickReset,
     search,
     setSearch,
-  } = usePaginationContext();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  } = usePaginationContext()
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
   const handleChange1 = (event: ChangeEvent<HTMLInputElement>) => {
-    setDirector([event.target.checked, event.target.checked]);
-  };
+    setDirector([event.target.checked, event.target.checked])
+  }
 
   const handleChange2 = (event: ChangeEvent<HTMLInputElement>) => {
-    setDirector([event.target.checked, director[1]]);
-  };
+    setDirector([event.target.checked, director[1]])
+  }
 
   const handleChange3 = (event: ChangeEvent<HTMLInputElement>) => {
-    setDirector([director[0], event.target.checked]);
-  };
+    setDirector([director[0], event.target.checked])
+  }
 
   const disabled = useMemo(() => {
     if (
       search ||
       infreq.length > 0 ||
       is_director.length > 0 ||
-      is_active() === "&is_active=false"
+      is_active() === '&is_active=false'
     )
-      return false;
-    return true;
-  }, [search, infreq.length, is_director.length, is_active]);
+      return false
+    return true
+  }, [search, infreq.length, is_director.length, is_active])
 
   return (
     <Box
@@ -132,7 +132,7 @@ export const ToolsSchool = ({
       {isDash && (
         <ButtonDest
           title="Painel"
-          to={"/home/school/" + schoolSelect?.id}
+          to={`/${schoolSelect?.id}?dash=ADMIN`}
           startIcon={<Dashboard />}
           isResp
         />
@@ -140,7 +140,7 @@ export const ToolsSchool = ({
       {isSearch && (
         <TextField
           size="small"
-          value={search ? search : ""}
+          value={search || ''}
           placeholder="Pesquisar..."
           onChange={(e) => setSearch?.(e.target.value)}
         />
@@ -163,14 +163,14 @@ export const ToolsSchool = ({
           <>
             <FormControlLabel
               label={
-                mdDown ? <ManageAccountsOutlined color="primary" /> : "Diretor"
+                mdDown ? <ManageAccountsOutlined color="primary" /> : 'Diretor'
               }
               control={
                 <Checkbox
                   id="basic-button"
-                  aria-controls={open ? "basic-menu" : undefined}
+                  aria-controls={open ? 'basic-menu' : undefined}
                   aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
+                  aria-expanded={open ? 'true' : undefined}
                   checked={director[0] && director[1]}
                   indeterminate={director[0] !== director[1]}
                   onChange={handleChange1}
@@ -184,7 +184,7 @@ export const ToolsSchool = ({
               open={open}
               onClose={handleClose}
               MenuListProps={{
-                "aria-labelledby": "basic-button",
+                'aria-labelledby': 'basic-button',
               }}
             >
               <MenuItem>
@@ -217,5 +217,5 @@ export const ToolsSchool = ({
         )}
       </Box>
     </Box>
-  );
-};
+  )
+}

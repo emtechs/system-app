@@ -6,23 +6,22 @@ import {
   CardContent,
   CardHeader,
   Typography,
-} from "@mui/material";
-import { useAppThemeContext } from "../../../shared/contexts";
-import { iSchool } from "../../../shared/interfaces";
-import { adaptName, adaptNameSchool } from "../../../shared/scripts";
+} from '@mui/material'
+import { useAppThemeContext } from '../../../shared/contexts'
+import { iSchool } from '../../../shared/interfaces'
+import { adaptName, adaptNameSchool } from '../../../shared/scripts'
 
 interface iCardSchoolProps {
-  school: iSchool;
-  isHome?: boolean;
+  school: iSchool
+  isHome?: boolean
 }
 
 export const CardSchool = ({ school, isHome }: iCardSchoolProps) => {
-  const { theme, mdDown } = useAppThemeContext();
+  const { theme, mdDown } = useAppThemeContext()
+  const href = `/${school.id}`
   return (
     <Card>
-      <CardActionArea
-        href={isHome ? "/home/school/" + school.id : "/" + school.id}
-      >
+      <CardActionArea href={isHome ? `${href}?dash=ADMIN` : href}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: theme.palette.primary.main }}>
@@ -50,12 +49,12 @@ export const CardSchool = ({ school, isHome }: iCardSchoolProps) => {
               Frequências: {school.frequencies}
             </Typography>
             <Typography variant="caption">
-              Infrequência:{" "}
-              {school.infrequency ? school.infrequency.toFixed(0) + "%" : "0%"}
+              Infrequência:{' '}
+              {school.infrequency ? school.infrequency.toFixed(0) + '%' : '0%'}
             </Typography>
           </Box>
         </CardContent>
       </CardActionArea>
     </Card>
-  );
-};
+  )
+}

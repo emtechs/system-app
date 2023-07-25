@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import {
   ClassPage,
   ClassYearPage,
+  DashboardSchoolPage,
   HomePage,
   Login,
   RetrieveClassPage,
@@ -22,6 +23,8 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route element={<ProtectedAuth />}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/home" element={<HomePage isHome />} />
+        <Route path="/:school_id" element={<DashboardSchoolPage />} />
         <Route path="/user" element={<UserPage />}>
           <Route path=":user_id" element={<RetrieveUserPage />}>
             <Route path=":view" element={<ViewUserPage />} />

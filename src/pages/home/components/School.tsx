@@ -8,67 +8,67 @@ import {
   TextField,
   Tooltip,
   Typography,
-} from "@mui/material";
+} from '@mui/material'
 import {
   useAppThemeContext,
   useAuthContext,
   usePaginationContext,
-} from "../../../shared/contexts";
-import { useDebounce } from "../../../shared/hooks";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { iWorkSchool } from "../../../shared/interfaces";
-import { apiUser } from "../../../shared/services";
-import { School as SchoolIcon } from "@mui/icons-material";
-import { DialogSchool } from "./DialogSchool";
-import { CardSchool } from "./CardSchool";
-import { PaginationBase } from "../../../shared/components";
+} from '../../../shared/contexts'
+import { useDebounce } from '../../../shared/hooks'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { iWorkSchool } from '../../../shared/interfaces'
+import { apiUser } from '../../../shared/services'
+import { School as SchoolIcon } from '@mui/icons-material'
+import { DialogSchool } from './DialogSchool'
+import { CardSchool } from './CardSchool'
+import { PaginationBase } from '../../../shared/components'
 
 interface iSchoolProps {
-  isHome?: boolean;
+  isHome?: boolean
 }
 
 export const School = ({ isHome }: iSchoolProps) => {
-  const { debounce } = useDebounce();
-  const { smDown, mdDown, theme } = useAppThemeContext();
-  const { yearData } = useAuthContext();
-  const { query, setCount, query_page } = usePaginationContext();
-  const [loading, setLoading] = useState(false);
-  const [search, setSearch] = useState("");
-  const [schoolsData, setSchoolsData] = useState<iWorkSchool[]>();
-  const [open, setOpen] = useState(false);
+  const { debounce } = useDebounce()
+  const { smDown, mdDown, theme } = useAppThemeContext()
+  const { yearData } = useAuthContext()
+  const { query, setCount, query_page } = usePaginationContext()
+  const [loading, setLoading] = useState(false)
+  const [search, setSearch] = useState('')
+  const [schoolsData, setSchoolsData] = useState<iWorkSchool[]>()
+  const [open, setOpen] = useState(false)
 
-  const onClose = () => setOpen(!open);
+  const onClose = () => setOpen(!open)
 
   const getSchools = useCallback((query: string) => {
-    setLoading(true);
+    setLoading(true)
     apiUser
       .schools(query)
       .then((res) => {
-        setSchoolsData(res.result);
-        setCount(res.total);
+        setSchoolsData(res.result)
+        setCount(res.total)
       })
-      .finally(() => setLoading(false));
-  }, []);
+      .finally(() => setLoading(false))
+  }, [])
 
   const take = useMemo(() => {
     if (smDown) {
-      return 1;
-    } else if (mdDown) return 2;
+      return 1
+    } else if (mdDown) return 2
 
-    return 3;
-  }, [smDown, mdDown]);
+    return 3
+  }, [smDown, mdDown])
 
   useEffect(() => {
     if (yearData) {
-      let queryData = query(yearData.id) + query_page(take, true);
+      let queryData = query(yearData.id) + query_page(take, true)
       if (search) {
-        queryData += `&name=${search}`;
+        queryData += `&name=${search}`
         debounce(() => {
-          getSchools(queryData);
-        });
-      } else getSchools(queryData);
+          getSchools(queryData)
+        })
+      } else getSchools(queryData)
     }
-  }, [query, query_page, search, take, yearData]);
+  }, [query, query_page, search, take, yearData])
 
   return (
     <>
@@ -133,5 +133,5 @@ export const School = ({ isHome }: iSchoolProps) => {
       </Grid>
       <DialogSchool open={open} onClose={onClose} isHome={isHome} />
     </>
-  );
-};
+  )
+}
