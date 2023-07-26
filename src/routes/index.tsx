@@ -3,9 +3,11 @@ import {
   ClassPage,
   ClassYearPage,
   DashboardSchoolPage,
+  FrequencyDayPage,
   HomePage,
   Login,
   RetrieveClassPage,
+  RetrieveFrequencyPage,
   RetrieveSchoolPage,
   RetrieveUserPage,
   SchoolPage,
@@ -50,6 +52,9 @@ const AppRoutes = () => {
           </Route>
         </Route>
         <Route path="/" element={<HomePage />} />
+        <Route path="/:school_id/day" element={<FrequencyDayPage />}>
+          <Route path=":frequency_id" element={<RetrieveFrequencyPage />} />
+        </Route>
         <Route path="/:school_id" element={<DashboardSchoolPage />}>
           <Route path=":view" element={<ViewDashboardSchoolPage />} />
         </Route>

@@ -5,129 +5,128 @@ import {
   useCallback,
   useContext,
   useState,
-} from "react";
+} from 'react'
 import {
   iChildren,
   iFrequency,
   iFrequencyStudentsBase,
   iFrequencyWithInfreq,
-} from "../interfaces";
-import { useNavigate } from "react-router-dom";
-import { useAppThemeContext, useSchoolContext } from ".";
-import { FieldValues } from "react-hook-form";
-import { apiFrequency } from "../services";
+} from '../interfaces'
+import { useNavigate } from 'react-router-dom'
+import { useAppThemeContext, useSchoolContext } from '.'
+import { FieldValues } from 'react-hook-form'
+import { apiFrequency } from '../services'
 
 interface iFrequencyContextData {
-  createFrequency: (data: FieldValues) => Promise<void>;
+  createFrequency: (data: FieldValues) => Promise<void>
   updateFrequency: (
     data: FieldValues,
     id: string,
-    isOpen?: boolean
-  ) => Promise<void>;
-  updateFrequencyStudent: (data: FieldValues, id: string) => Promise<void>;
-  destroyFrequency: (id: string) => Promise<void>;
-  frequencyData: iFrequency | undefined;
-  setFrequencyData: Dispatch<SetStateAction<iFrequency | undefined>>;
-  studentData: iFrequencyStudentsBase | undefined;
-  setStudentData: Dispatch<SetStateAction<iFrequencyStudentsBase | undefined>>;
-  alterStudents: iFrequencyStudentsBase[] | undefined;
+    isOpen?: boolean,
+  ) => Promise<void>
+  updateFrequencyStudent: (data: FieldValues, id: string) => Promise<void>
+  destroyFrequency: (id: string) => Promise<void>
+  frequencyData: iFrequency | undefined
+  setFrequencyData: Dispatch<SetStateAction<iFrequency | undefined>>
+  studentData: iFrequencyStudentsBase | undefined
+  setStudentData: Dispatch<SetStateAction<iFrequencyStudentsBase | undefined>>
+  alterStudents: iFrequencyStudentsBase[] | undefined
   setAlterStudents: Dispatch<
     SetStateAction<iFrequencyStudentsBase[] | undefined>
-  >;
-  retrieveFreq: iFrequencyWithInfreq | undefined;
-  setRetrieveFreq: Dispatch<SetStateAction<iFrequencyWithInfreq | undefined>>;
-  dataStudents: iFrequencyStudentsBase[] | undefined;
+  >
+  retrieveFreq: iFrequencyWithInfreq | undefined
+  setRetrieveFreq: Dispatch<SetStateAction<iFrequencyWithInfreq | undefined>>
+  dataStudents: iFrequencyStudentsBase[] | undefined
   setDataStudents: Dispatch<
     SetStateAction<iFrequencyStudentsBase[] | undefined>
-  >;
-  isInfreq: boolean;
-  setIsInfreq: Dispatch<SetStateAction<boolean>>;
+  >
+  isInfreq: boolean
+  setIsInfreq: Dispatch<SetStateAction<boolean>>
 }
 
-const FrequencyContext = createContext({} as iFrequencyContextData);
+const FrequencyContext = createContext({} as iFrequencyContextData)
 
 export const FrequencyProvider = ({ children }: iChildren) => {
-  const navigate = useNavigate();
-  const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { schoolRetrieve } = useSchoolContext();
-  const [frequencyData, setFrequencyData] = useState<iFrequency>();
-  const [studentData, setStudentData] = useState<iFrequencyStudentsBase>();
-  const [retrieveFreq, setRetrieveFreq] = useState<iFrequencyWithInfreq>();
-  const [dataStudents, setDataStudents] = useState<iFrequencyStudentsBase[]>();
-  const [alterStudents, setAlterStudents] =
-    useState<iFrequencyStudentsBase[]>();
-  const [isInfreq, setIsInfreq] = useState(false);
+  const navigate = useNavigate()
+  const { setLoading, handleSucess, handleError } = useAppThemeContext()
+  const { schoolRetrieve } = useSchoolContext()
+  const [frequencyData, setFrequencyData] = useState<iFrequency>()
+  const [studentData, setStudentData] = useState<iFrequencyStudentsBase>()
+  const [retrieveFreq, setRetrieveFreq] = useState<iFrequencyWithInfreq>()
+  const [dataStudents, setDataStudents] = useState<iFrequencyStudentsBase[]>()
+  const [alterStudents, setAlterStudents] = useState<iFrequencyStudentsBase[]>()
+  const [isInfreq, setIsInfreq] = useState(false)
 
   const handleCreateFrequency = useCallback(async (data: FieldValues) => {
     try {
-      setLoading(true);
-      const frequency = await apiFrequency.create(data);
-      handleSucess("Frequência cadastrado com sucesso!");
-      navigate(`/frequency/realize?id=${frequency.id}`);
+      setLoading(true)
+      const frequency = await apiFrequency.create(data)
+      handleSucess('Frequência cadastrado com sucesso!')
+      navigate(`/${frequency.school.id}/day/${frequency.id}`)
     } catch {
-      handleError("Não foi possível cadastrar a frequência no momento!");
+      handleError('Não foi possível cadastrar a frequência no momento!')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, []);
+  }, [])
 
   const handleUpdateFrequency = useCallback(
     async (data: FieldValues, id: string, isOpen?: boolean) => {
       try {
-        setLoading(true);
-        await apiFrequency.update(data, id);
+        setLoading(true)
+        await apiFrequency.update(data, id)
         if (isOpen) {
-          handleSucess("Frequência reaberta com sucesso!");
+          handleSucess('Frequência reaberta com sucesso!')
         } else {
-          handleSucess("Frequência realizada com sucesso!");
+          handleSucess('Frequência realizada com sucesso!')
         }
-        navigate("/" + schoolRetrieve?.id);
+        navigate('/' + schoolRetrieve?.id)
       } catch {
         if (isOpen) {
-          handleSucess("Não foi possível reabrir a frequência no momento!");
+          handleSucess('Não foi possível reabrir a frequência no momento!')
         } else {
           handleError(
-            "No momento, não foi possível realizar a frequência. Por favor, tente enviar novamente."
-          );
+            'No momento, não foi possível realizar a frequência. Por favor, tente enviar novamente.',
+          )
         }
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     },
-    []
-  );
+    [],
+  )
 
   const handleUpdateStudentFrequency = useCallback(
     async (data: FieldValues, id: string) => {
       try {
-        setLoading(true);
-        const { frequency_id } = await apiFrequency.updateFreqStudent(data, id);
+        setLoading(true)
+        const { frequency_id } = await apiFrequency.updateFreqStudent(data, id)
         const students = await apiFrequency.students(
           frequency_id,
-          "?order=name&by=asc"
-        );
-        setDataStudents(students.result);
+          '?order=name&by=asc',
+        )
+        setDataStudents(students.result)
       } catch {
-        handleError("Não foi possível cadastrar a falta no momento!");
+        handleError('Não foi possível cadastrar a falta no momento!')
       } finally {
-        setAlterStudents(undefined);
-        setLoading(false);
+        setAlterStudents(undefined)
+        setLoading(false)
       }
     },
-    []
-  );
+    [],
+  )
 
   const handleDeleteFrequency = useCallback(async (id: string) => {
     try {
-      setLoading(true);
-      await apiFrequency.destroy(id);
-      handleSucess("Frequência deletada com sucesso!");
+      setLoading(true)
+      await apiFrequency.destroy(id)
+      handleSucess('Frequência deletada com sucesso!')
     } catch {
-      handleError("Não foi possível deletar a frequência no momento!");
+      handleError('Não foi possível deletar a frequência no momento!')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, []);
+  }, [])
 
   return (
     <FrequencyContext.Provider
@@ -152,7 +151,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
     >
       {children}
     </FrequencyContext.Provider>
-  );
-};
+  )
+}
 
-export const useFrequencyContext = () => useContext(FrequencyContext);
+export const useFrequencyContext = () => useContext(FrequencyContext)

@@ -6,9 +6,10 @@ import { adaptNameSchool } from '../../scripts'
 import { useMemo } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
-export const LabelSchool = ({ clickable }: iLabelBaseProps) => {
+export const LabelSchool = ({ clickable, isSchool }: iLabelBaseProps) => {
   const { mdDown, loading } = useAppThemeContext()
   const { schoolSelect } = useSchoolContext()
+  const to = isSchool ? `/${schoolSelect?.id}` : `/school/${schoolSelect?.id}`
 
   const label = useMemo(() => {
     if (loading) return <Skeleton width={100} />
@@ -17,12 +18,7 @@ export const LabelSchool = ({ clickable }: iLabelBaseProps) => {
   }, [loading, mdDown, schoolSelect])
 
   return clickable ? (
-    <Link
-      underline="none"
-      color="inherit"
-      component={RouterLink}
-      to={'/school/' + schoolSelect?.id}
-    >
+    <Link underline="none" color="inherit" component={RouterLink} to={to}>
       <Chip
         clickable
         color="primary"

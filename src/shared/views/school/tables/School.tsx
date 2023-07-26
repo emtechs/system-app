@@ -1,16 +1,16 @@
 import { useState } from 'react'
-import { usePaginationContext } from '../../../../shared/contexts'
-import { iHeadCell, iSchool } from '../../../../shared/interfaces'
-import {
-  DialogActiveSchool,
-  DialogCreateSchool,
-  DialogDirectorSchool,
-  DialogEditSchool,
-  TableBase,
-} from '../../../../shared/components'
 import { Link, Skeleton, TableCell, TableRow } from '@mui/material'
-import { ActionsSchool } from '../actions'
 import { Link as RouterLink } from 'react-router-dom'
+import {
+  TableBase,
+  DialogCreateSchool,
+  DialogEditSchool,
+  DialogDirectorSchool,
+  DialogActiveSchool,
+} from '../../../components'
+import { usePaginationContext } from '../../../contexts'
+import { iSchool, iHeadCell } from '../../../interfaces'
+import { ActionsSchool } from './actions'
 
 interface iTableSchoolProps {
   data: iSchool[]

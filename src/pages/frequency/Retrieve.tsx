@@ -24,7 +24,7 @@ import { apiFrequency } from '../../shared/services'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { Navigate, useSearchParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import { LayoutBasePage } from '../../shared/layouts'
 import { Checklist } from '@mui/icons-material'
 import {
@@ -91,8 +91,7 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
 }
 
 export const RetrieveFrequencyPage = () => {
-  const [searchParams] = useSearchParams()
-  const id = searchParams.get('id')
+  const { frequency_id } = useParams()
   // const { schoolData } = useAuthContext();
   // const { handleClickButtonTools } = useDrawerContext();
   const { dataStudents, setDataStudents, alterStudents, setAlterStudents } =
@@ -112,23 +111,23 @@ export const RetrieveFrequencyPage = () => {
     setIsAlter(event.target.checked)
 
   useEffect(() => {
-    if (id && open) {
+    if (frequency_id && open) {
       let queryData = query()
       queryData += '&isNot_presented=true&order=name'
       setIsLoading(true)
       apiFrequency
-        .students(id, queryData)
+        .students(frequency_id, queryData)
         .then((res) => {
           setCount(res.total)
           setAlterStudents(res.result)
         })
         .finally(() => setIsLoading(false))
-    } else if (id) {
+    } else if (frequency_id) {
       let queryData = query()
       if (isAlter) queryData += '&is_alter=true&order=name'
       setIsLoading(true)
       apiFrequency
-        .students(id, queryData)
+        .students(frequency_id, queryData)
         .then((res) => {
           // setDataFrequency(res.frequency);
           setDataStudents(res.result)
@@ -136,9 +135,9 @@ export const RetrieveFrequencyPage = () => {
         })
         .finally(() => setIsLoading(false))
     }
-  }, [id, open, query, isAlter])
+  }, [frequency_id, open, query, isAlter])
 
-  if (!id) {
+  if (!frequency_id) {
     return <Navigate to={'/frequency/create'} />
   }
 
@@ -201,7 +200,7 @@ export const RetrieveFrequencyPage = () => {
         <DialogFinishFrequency
           open={open}
           onClose={handleClose}
-          frequency_id={id}
+          frequency_id={frequency_id}
           students={alterStudents}
         />
       )}

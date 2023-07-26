@@ -9,7 +9,7 @@ import {
   TableRow,
 } from '@mui/material'
 import { LayoutBasePage } from '../../shared/layouts'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   useAuthContext,
   useCalendarContext,
@@ -20,8 +20,10 @@ import {
 } from '../../shared/contexts'
 import {
   GridDashContent,
+  PaginationBase,
   SelectDate,
   TableBase,
+  TitleSchoolDashViewPage,
   ValidateFrequency,
 } from '../../shared/components'
 import { useAppThemeContext } from '../../shared/contexts/ThemeContext'
@@ -86,44 +88,45 @@ export const FrequencyPage = () => {
   const { schoolSelect } = useSchoolContext()
   const { dateData, monthData } = useCalendarContext()
   const { handleClickSchool } = useDrawerContext()
-  const { setIsLoading, query } = usePaginationContext()
+  const { setIsLoading, query_page, setCount } = usePaginationContext()
   const [infoSchool, setInfoSchool] = useState<iDashSchool>()
   const [listClassData, setListClassData] = useState<iClassDash[]>()
   const [listClassSelectData, setListClassSelectData] = useState<iClassDash[]>()
 
   const headCells: iHeadCell[] = mdDown
     ? [
-        { order: 'name', numeric: 'left', label: 'Turma' },
-        { order: 'infreq', numeric: 'right', label: 'Infrequência' },
+        { numeric: 'left', label: 'Turma' },
+        { numeric: 'right', label: 'Infrequência' },
       ]
     : [
-        { order: 'name', numeric: 'left', label: 'Turma' },
+        { numeric: 'left', label: 'Turma' },
         { numeric: 'right', label: 'Alunos' },
         { numeric: 'right', label: 'Frequências' },
-        { order: 'infreq', numeric: 'right', label: 'Infrequência' },
+        { numeric: 'right', label: 'Infrequência' },
       ]
 
-  const date = useCallback(() => {
+  const date = useMemo(() => {
     return dateData.format('DD/MM/YYYY')
   }, [dateData])
 
   useEffect(() => {
     if (schoolSelect && yearData) {
-      const queryData = query(undefined, undefined, undefined, date())
+      const queryData = `?by=asc&order=name&date=${date}` + query_page(3, true)
       setIsLoading(true)
       apiClass
         .listDash(schoolSelect.id, yearData.id, queryData)
         .then((res) => {
           setListClassSelectData(res.classes)
           setListClassData(res.result)
+          setCount(res.total)
         })
         .finally(() => setIsLoading(false))
     }
-  }, [date, schoolSelect, yearData, query])
+  }, [date, query_page, schoolSelect, yearData])
 
   useEffect(() => {
     if (schoolSelect && yearData) {
-      const queryData = query(undefined, undefined, undefined, date())
+      const queryData = `?date=${date}`
       setLoading(true)
       apiUsingNow
         .get<iDashSchool>(
@@ -137,11 +140,13 @@ export const FrequencyPage = () => {
   return (
     <LayoutBasePage
       title={
-        <Chip
-          label="Frequência"
-          color="primary"
-          icon={<EventAvailable sx={{ mr: 0.5 }} fontSize="inherit" />}
-        />
+        <TitleSchoolDashViewPage>
+          <Chip
+            label={date}
+            color="primary"
+            icon={<EventAvailable sx={{ mr: 0.5 }} fontSize="inherit" />}
+          />
+        </TitleSchoolDashViewPage>
       }
     >
       <Box my={1} mx={2} component={Paper} variant="outlined">
@@ -186,11 +191,12 @@ export const FrequencyPage = () => {
                       <CardClassDash
                         key={el.class.id}
                         classDash={el}
-                        date={date()}
+                        date={date}
                         name={monthData}
                       />
                     ))}
                   </TableBase>
+                  <PaginationBase />
                 </Grid>
                 <Grid container item direction="row" xs={12} md={5} spacing={2}>
                   <Grid item xs={12}>
@@ -211,7 +217,7 @@ export const FrequencyPage = () => {
                         icon={<Workspaces fontSize="large" />}
                         quant={infoSchool.classTotal}
                         info={infoSchool.classTotal === 1 ? 'Turma' : 'Turmas'}
-                        dest="/school/class"
+                        dest={`/${schoolSelect?.id}/class`}
                         onClick={handleClickSchool}
                       />
                       {infoSchool.frequencyOpen !== 0 ? (
@@ -230,7 +236,7 @@ export const FrequencyPage = () => {
                           icon={<Groups fontSize="large" />}
                           quant={infoSchool.stundents}
                           info={infoSchool.stundents === 1 ? 'Aluno' : 'Alunos'}
-                          dest="/school/student"
+                          dest={`/${schoolSelect?.id}/student`}
                           onClick={handleClickSchool}
                         />
                       )}
@@ -258,8 +264,12 @@ export const FrequencyPage = () => {
                           alignItems="center"
                           gap={1}
                         >
-                          <img width="50%" src="/pref_massape.png" />
-                          <img width="25%" src="/emtechs.jpg" />
+                          <img
+                            width="50%"
+                            src="/pref_massape.png"
+                            alt="Massapê"
+                          />
+                          <img width="25%" src="/emtechs.jpg" alt="EmTechs" />
                         </Box>
                       </CardContent>
                     </Card>

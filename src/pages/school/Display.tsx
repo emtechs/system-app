@@ -10,8 +10,11 @@ import {
   ToolsSchool,
 } from '../../shared/components'
 import { LayoutBasePage } from '../../shared/layouts'
-import { ViewClass, ViewServer } from './view'
-import { ViewStudent } from '../../shared/views'
+import {
+  ViewSchoolClass,
+  ViewSchoolServer,
+  ViewSchoolStudent,
+} from '../../shared/views'
 
 export const ViewSchoolPage = () => {
   const { view } = useParams()
@@ -31,7 +34,7 @@ export const ViewSchoolPage = () => {
             />
           </TitleSchoolViewPage>,
         )
-        setViewData(<ViewServer />)
+        setViewData(<ViewSchoolServer />)
         setTools(
           <ToolsSchool
             back="/school"
@@ -54,7 +57,7 @@ export const ViewSchoolPage = () => {
             />
           </TitleSchoolViewPage>,
         )
-        setViewData(<ViewClass />)
+        setViewData(<ViewSchoolClass />)
         setTools(
           <ToolsSchool back="/school" isNew titleNew="Turma" isDash isSearch />,
         )
@@ -70,7 +73,7 @@ export const ViewSchoolPage = () => {
             />
           </TitleSchoolViewPage>,
         )
-        setViewData(<ViewStudent />)
+        setViewData(<ViewSchoolStudent />)
         setTools(
           <ToolsSchool back="/school" isNew titleNew="Aluno" isDash isSearch />,
         )

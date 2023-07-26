@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { usePaginationContext } from '../../../shared/contexts'
-import { useDebounce } from '../../../shared/hooks'
-import { iSchoolUser } from '../../../shared/interfaces'
-import { TableUserSchool } from '../components'
 import sortArray from 'sort-array'
-import { apiSchoolRetrieve } from '../../../shared/services'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useDebounce } from '../../hooks'
+import { usePaginationContext } from '../../contexts'
+import { iSchoolUser } from '../../interfaces'
+import { apiSchoolRetrieve } from '../../services'
+import { TableUserSchool } from './tables'
 
-export const ViewServer = () => {
+export const ViewSchoolServer = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
   const { search, order, by, setCount, setIsLoading } = usePaginationContext()

@@ -1,10 +1,5 @@
 import { IconButton, TableCell, Tooltip } from '@mui/material'
 import {
-  useDialogContext,
-  usePaginationContext,
-} from '../../../../shared/contexts'
-import { iSchool } from '../../../../shared/interfaces'
-import {
   Dashboard,
   DoneAll,
   Edit,
@@ -13,6 +8,8 @@ import {
   Visibility,
 } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
+import { useDialogContext, usePaginationContext } from '../../../../contexts'
+import { iSchool } from '../../../../interfaces'
 
 interface iActionsSchoolProps {
   school: iSchool

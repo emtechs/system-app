@@ -1,6 +1,5 @@
-import { useParams } from "react-router-dom";
-import { useDialogContext, useSchoolContext } from "../../../shared/contexts";
-import { useEffect } from "react";
+import { useParams } from 'react-router-dom'
+import { useEffect } from 'react'
 import {
   Accordion,
   AccordionDetails,
@@ -10,27 +9,28 @@ import {
   CardContent,
   Skeleton,
   Typography,
-} from "@mui/material";
-import { ExpandMore, Edit, Person, RemoveDone } from "@mui/icons-material";
+} from '@mui/material'
+import { ExpandMore, Edit, Person, RemoveDone } from '@mui/icons-material'
 import {
   ButtonSmDown,
   DialogEditSchool,
   DialogDirectorSchool,
   DialogActiveSchool,
-} from "../../../shared/components";
+} from '../../components'
+import { useDialogContext, useSchoolContext } from '../../contexts'
 
 export const ViewSchoolData = () => {
-  const { school_id, class_id, year_id } = useParams();
+  const { school_id, class_id, year_id } = useParams()
   const { handleOpenActive, handleOpenDirector, handleOpenEdit } =
-    useDialogContext();
+    useDialogContext()
   const { loadingSchool, schoolRetrieve, schoolDataRetrieve } =
-    useSchoolContext();
+    useSchoolContext()
 
   useEffect(() => {
-    let query = "";
-    if (class_id && year_id) query = `?class_id=${class_id}&year_id=${year_id}`;
-    if (school_id) schoolDataRetrieve(school_id, query);
-  }, [class_id, school_id, year_id]);
+    let query = ''
+    if (class_id && year_id) query = `?class_id=${class_id}&year_id=${year_id}`
+    if (school_id) schoolDataRetrieve(school_id, query)
+  }, [class_id, school_id, year_id])
 
   return (
     <>
@@ -108,5 +108,5 @@ export const ViewSchoolData = () => {
         <DialogActiveSchool school={schoolRetrieve} locale="data" />
       )}
     </>
-  );
-};
+  )
+}

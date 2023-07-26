@@ -1,13 +1,16 @@
 import {
   AccountBox,
   Checklist,
+  EventAvailable,
   Groups,
   Home,
+  Percent,
   Summarize,
   Workspaces,
 } from '@mui/icons-material'
 import {
   useAppThemeContext,
+  useCalendarContext,
   useDrawerContext,
   useSchoolContext,
 } from '../../../contexts'
@@ -17,6 +20,7 @@ import { ListItemLinkOpen, OtherListItemLink } from '../item'
 export const OptionsSchool = () => {
   const { mdDown } = useAppThemeContext()
   const { schoolSelect } = useSchoolContext()
+  const { dateData } = useCalendarContext()
   const { handleClickProfile, openProfile } = useDrawerContext()
   const baseHref = `/${schoolSelect?.id}`
   return (
@@ -25,6 +29,12 @@ export const OptionsSchool = () => {
         icon={<Home />}
         label="Página Inicial"
         baseHref={baseHref}
+      />
+      <OtherListItemLink
+        icon={<EventAvailable />}
+        label={dateData.format('DD/MM/YYYY')}
+        baseHref={baseHref}
+        to="/day"
       />
       <OtherListItemLink
         icon={<Workspaces />}
@@ -43,6 +53,12 @@ export const OptionsSchool = () => {
         label="Frequências"
         baseHref={baseHref}
         to="/frequency"
+      />
+      <OtherListItemLink
+        icon={<Percent />}
+        label="Infrequência"
+        baseHref={baseHref}
+        to="/infrequency"
       />
       {!mdDown && (
         <OtherListItemLink

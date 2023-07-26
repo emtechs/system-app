@@ -1,9 +1,5 @@
 import { useMemo } from 'react'
 import {
-  useAppThemeContext,
-  usePaginationContext,
-} from '../../../../shared/contexts'
-import {
   IconButton,
   Link,
   Skeleton,
@@ -11,10 +7,11 @@ import {
   TableRow,
   Tooltip,
 } from '@mui/material'
-import { iHeadCell, iSchoolClass } from '../../../../shared/interfaces'
-import { TableBase } from '../../../../shared/components'
 import { Visibility } from '@mui/icons-material'
 import { Link as RouterLink } from 'react-router-dom'
+import { TableBase } from '../../../components'
+import { useAppThemeContext, usePaginationContext } from '../../../contexts'
+import { iSchoolClass, iHeadCell } from '../../../interfaces'
 
 interface iTableClassSchoolProps {
   data: iSchoolClass[]

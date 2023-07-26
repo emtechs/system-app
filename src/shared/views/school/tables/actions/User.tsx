@@ -1,10 +1,7 @@
 import { RemoveDone, Visibility } from '@mui/icons-material'
 import { IconButton, TableCell, Tooltip } from '@mui/material'
-import { iSchoolUser } from '../../../../shared/interfaces'
-import {
-  useDialogContext,
-  usePaginationContext,
-} from '../../../../shared/contexts'
+import { useDialogContext, usePaginationContext } from '../../../../contexts'
+import { iSchoolUser } from '../../../../interfaces'
 
 interface iActionsUserProps {
   user: iSchoolUser

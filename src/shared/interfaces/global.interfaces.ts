@@ -11,6 +11,7 @@ export interface iDialogBaseProps {
 
 export interface iLabelBaseProps {
   clickable?: boolean
+  isSchool?: boolean
 }
 
 export interface iTabsBaseProps {

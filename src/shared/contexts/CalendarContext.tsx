@@ -4,34 +4,34 @@ import {
   createContext,
   useContext,
   useState,
-} from "react";
-import { iCalendar, iChildren, iSelectBase } from "../interfaces";
-import dayjs, { Dayjs } from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import "dayjs/locale/pt-br";
-dayjs.extend(localizedFormat);
+} from 'react'
+import { iCalendar, iChildren, iSelectBase } from '../interfaces'
+import dayjs, { Dayjs } from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import 'dayjs/locale/pt-br'
+dayjs.extend(localizedFormat)
 
 interface iCalendarContextData {
-  dateData: dayjs.Dayjs;
-  setDateData: Dispatch<SetStateAction<dayjs.Dayjs>>;
-  eventData: iCalendar[] | undefined;
-  setEventData: Dispatch<SetStateAction<iCalendar[] | undefined>>;
-  monthData: string;
-  setMonthData: Dispatch<SetStateAction<string>>;
-  yearSelect: iSelectBase | undefined;
-  setYearSelect: Dispatch<SetStateAction<iSelectBase | undefined>>;
-  yearIdSelect: string | undefined;
-  setYearIdSelect: Dispatch<SetStateAction<string | undefined>>;
+  dateData: dayjs.Dayjs
+  setDateData: Dispatch<SetStateAction<dayjs.Dayjs>>
+  eventData: iCalendar[] | undefined
+  setEventData: Dispatch<SetStateAction<iCalendar[] | undefined>>
+  monthData: string
+  setMonthData: Dispatch<SetStateAction<string>>
+  yearSelect: iSelectBase | undefined
+  setYearSelect: Dispatch<SetStateAction<iSelectBase | undefined>>
+  yearIdSelect: string | undefined
+  setYearIdSelect: Dispatch<SetStateAction<string | undefined>>
 }
 
-const CalendarContext = createContext({} as iCalendarContextData);
+const CalendarContext = createContext({} as iCalendarContextData)
 
 export const CalendarProvider = ({ children }: iChildren) => {
-  const [dateData, setDateData] = useState<Dayjs>(dayjs());
-  const [eventData, setEventData] = useState<iCalendar[]>();
-  const [monthData, setMonthData] = useState(dayjs().format("MMMM"));
-  const [yearSelect, setYearSelect] = useState<iSelectBase>();
-  const [yearIdSelect, setYearIdSelect] = useState<string>();
+  const [dateData, setDateData] = useState<Dayjs>(dayjs())
+  const [eventData, setEventData] = useState<iCalendar[]>()
+  const [monthData, setMonthData] = useState(dayjs().format('MMMM'))
+  const [yearSelect, setYearSelect] = useState<iSelectBase>()
+  const [yearIdSelect, setYearIdSelect] = useState<string>()
 
   return (
     <CalendarContext.Provider
@@ -50,7 +50,7 @@ export const CalendarProvider = ({ children }: iChildren) => {
     >
       {children}
     </CalendarContext.Provider>
-  );
-};
+  )
+}
 
-export const useCalendarContext = () => useContext(CalendarContext);
+export const useCalendarContext = () => useContext(CalendarContext)

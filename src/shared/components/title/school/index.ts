@@ -1,4 +1,5 @@
 export * from './Dash'
+export * from './DashView'
 export * from './Retrieve'
 export * from './School'
 export * from './User'

@@ -1,3 +1,4 @@
+import sortArray from 'sort-array'
 import {
   SyntheticEvent,
   useCallback,
@@ -5,17 +6,16 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { useAuthContext, usePaginationContext } from '../../../shared/contexts'
-import { useDebounce } from '../../../shared/hooks'
-import { iSchoolClass } from '../../../shared/interfaces'
-import { TableClassSchool } from '../components'
-import sortArray from 'sort-array'
-import { apiSchoolRetrieve } from '../../../shared/services'
-import { useParams } from 'react-router-dom'
 import { Box } from '@mui/material'
-import { TabsYear } from '../../../shared/components'
+import { useParams } from 'react-router-dom'
+import { TabsYear } from '../../components'
+import { useAuthContext, usePaginationContext } from '../../contexts'
+import { useDebounce } from '../../hooks'
+import { iSchoolClass } from '../../interfaces'
+import { apiSchoolRetrieve } from '../../services'
+import { TableClassSchool } from './tables'
 
-export const ViewClass = () => {
+export const ViewDashSchoolClass = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
   const { listYear } = useAuthContext()

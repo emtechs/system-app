@@ -6,9 +6,9 @@ import {
   ToolsSchool,
 } from '../../shared/components'
 import { LayoutBasePage } from '../../shared/layouts'
-import { ViewSchoolData } from './view'
 import { useSchoolContext } from '../../shared/contexts'
 import { useEffect } from 'react'
+import { ViewSchoolData } from '../../shared/views'
 
 export const RetrieveSchoolPage = () => {
   const { view, school_id } = useParams()

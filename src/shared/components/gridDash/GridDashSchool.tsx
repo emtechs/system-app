@@ -1,46 +1,44 @@
-import { useEffect, useState } from "react";
-import { Box, Grid, Typography } from "@mui/material";
-import { Checklist, EventBusy, Groups, School } from "@mui/icons-material";
+import { useEffect, useState } from 'react'
+import { Box, Grid, Typography } from '@mui/material'
+import { Checklist, EventBusy, Groups, School } from '@mui/icons-material'
 import {
   useAppThemeContext,
   useAuthContext,
   useCalendarContext,
-  useDrawerContext,
   usePaginationContext,
   useSchoolContext,
-} from "../../contexts";
-import { iDashSchool } from "../../interfaces";
-import { apiUsingNow } from "../../services";
-import { CardSchool } from "../card";
-import { GridDashContent } from "./GridDashContent";
-import { GridDashOrgan } from "./Organ";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import "dayjs/locale/pt-br";
-dayjs.extend(localizedFormat);
+} from '../../contexts'
+import { iDashSchool } from '../../interfaces'
+import { apiUsingNow } from '../../services'
+import { CardSchool } from '../card'
+import { GridDashContent } from './GridDashContent'
+import { GridDashOrgan } from './Organ'
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import 'dayjs/locale/pt-br'
+dayjs.extend(localizedFormat)
 
 export const GridDashSchool = () => {
-  const { setLoading } = useAppThemeContext();
-  const { yearData } = useAuthContext();
-  const { schoolSelect } = useSchoolContext();
-  const { handleClickFrequency, handleClickSchool } = useDrawerContext();
-  const { setDateData } = useCalendarContext();
-  const { query } = usePaginationContext();
-  const [infoSchool, setInfoSchool] = useState<iDashSchool>();
+  const { setLoading } = useAppThemeContext()
+  const { yearData } = useAuthContext()
+  const { schoolSelect } = useSchoolContext()
+  const { setDateData } = useCalendarContext()
+  const { query } = usePaginationContext()
+  const [infoSchool, setInfoSchool] = useState<iDashSchool>()
 
   useEffect(() => {
     if (schoolSelect && yearData) {
-      const date = dayjs().format("DD/MM/YYYY");
-      const query_data = query(undefined, undefined, undefined, date);
-      setLoading(true);
+      const date = dayjs().format('DD/MM/YYYY')
+      const query_data = query(undefined, undefined, undefined, date)
+      setLoading(true)
       apiUsingNow
         .get<iDashSchool>(
-          `schools/${schoolSelect.id}/dash/${yearData.id}${query_data}`
+          `schools/${schoolSelect.id}/dash/${yearData.id}${query_data}`,
         )
         .then((res) => setInfoSchool(res.data))
-        .finally(() => setLoading(false));
+        .finally(() => setLoading(false))
     }
-  }, [schoolSelect, yearData, query]);
+  }, [schoolSelect, yearData, query])
 
   return (
     <Grid container item direction="row" xs={12} md={5} spacing={2}>
@@ -53,7 +51,7 @@ export const GridDashSchool = () => {
           gap={2}
         >
           <Typography variant="h6" textAlign="center">
-            {dayjs().format("dddd, LL")}
+            {dayjs().format('dddd, LL')}
           </Typography>
           <CardSchool />
         </Box>
@@ -66,12 +64,13 @@ export const GridDashSchool = () => {
             info="Frequências no dia"
             dest={
               infoSchool.frequencies === infoSchool.classTotal
-                ? "/frequency/list?date=" + dayjs().format("DD/MM/YYYY")
-                : "/frequency"
+                ? `/${schoolSelect?.id}/frequency?date=${dayjs().format(
+                    'DD/MM/YYYY',
+                  )}`
+                : `/${schoolSelect?.id}/day`
             }
             onClick={() => {
-              setDateData(dayjs());
-              handleClickFrequency();
+              setDateData(dayjs())
             }}
           />
           {infoSchool.frequencyOpen !== 0 ? (
@@ -80,35 +79,32 @@ export const GridDashSchool = () => {
               quant={infoSchool.frequencyOpen}
               info={
                 infoSchool.frequencyOpen === 1
-                  ? "Frequência em aberto"
-                  : "Frequências em aberto"
+                  ? 'Frequência em aberto'
+                  : 'Frequências em aberto'
               }
               dest="/frequency/open"
-              onClick={handleClickFrequency}
             />
           ) : (
             <GridDashContent
               icon={<Groups fontSize="large" />}
               quant={infoSchool.stundents}
-              info={infoSchool.stundents === 1 ? "Aluno" : "Alunos"}
-              dest="/school/student"
-              onClick={handleClickSchool}
+              info={infoSchool.stundents === 1 ? 'Aluno' : 'Alunos'}
+              dest={`/${schoolSelect?.id}/student`}
             />
           )}
           <GridDashContent
             icon={<School fontSize="large" />}
             quant={
               infoSchool?.school_infreq
-                ? infoSchool.school_infreq.toFixed(0) + "%"
-                : "0%"
+                ? infoSchool.school_infreq.toFixed(0) + '%'
+                : '0%'
             }
             info="Infrequência"
-            dest="/school/class"
-            onClick={handleClickSchool}
+            dest={`/${schoolSelect?.id}/infrequency`}
           />
         </>
       )}
       <GridDashOrgan />
     </Grid>
-  );
-};
+  )
+}

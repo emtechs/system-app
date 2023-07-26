@@ -1,10 +1,10 @@
 import { TableRow, TableCell } from '@mui/material'
 import { useState, useMemo } from 'react'
-import { TableBase, DialogCreateServer } from '../../../../shared/components'
-import { useAppThemeContext } from '../../../../shared/contexts'
-import { iHeadCell, iSchoolUser } from '../../../../shared/interfaces'
-import { rolePtBr } from '../../../../shared/scripts'
-import { ActionsUser } from '../actions'
+import { TableBase, DialogCreateServer } from '../../../components'
+import { useAppThemeContext } from '../../../contexts'
+import { iSchoolUser, iHeadCell } from '../../../interfaces'
+import { rolePtBr } from '../../../scripts'
+import { ActionsUser } from './actions'
 
 interface iTableUserSchoolProps {
   data: iSchoolUser[]
