@@ -11,6 +11,7 @@ import {
   RetrieveSchoolPage,
   RetrieveUserPage,
   SchoolPage,
+  StudentPage,
   UserPage,
   ViewClassYearPage,
   ViewDashboardSchoolPage,
@@ -39,6 +40,11 @@ const AppRoutes = () => {
           </Route>
           <Route path="/class" element={<ClassPage />}>
             <Route path=":class_id" element={<RetrieveClassPage />}>
+              <Route path=":view" element={<ViewSchoolPage />} />
+            </Route>
+          </Route>
+          <Route path="/student" element={<StudentPage />}>
+            <Route path=":student_id" element={<RetrieveSchoolPage />}>
               <Route path=":view" element={<ViewSchoolPage />} />
             </Route>
           </Route>
