@@ -123,8 +123,8 @@ export const RetrieveFrequencyPage = () => {
         })
         .finally(() => setIsLoading(false))
     } else if (frequency_id) {
-      let queryData = query()
-      if (isAlter) queryData += '&is_alter=true&order=name'
+      let queryData = query() + '&order=name'
+      if (isAlter) queryData += '&is_alter=true'
       setIsLoading(true)
       apiFrequency
         .students(frequency_id, queryData)

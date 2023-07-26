@@ -1,8 +1,15 @@
+import { useEffect } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
 import { FrequencyPage } from './Frequency'
+import { useVerifySchool } from '../../shared/hooks'
 
 export const FrequencyDayPage = () => {
-  const { frequency_id } = useParams()
+  const { school_id, frequency_id } = useParams()
+  const { verifySchool } = useVerifySchool()
+
+  useEffect(() => {
+    if (school_id) verifySchool(school_id)
+  }, [school_id])
 
   if (frequency_id) return <Outlet />
 

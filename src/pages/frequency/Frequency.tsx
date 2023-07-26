@@ -52,14 +52,17 @@ const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
       hover
       sx={{ cursor: 'pointer' }}
       onClick={() => {
-        createFrequency({
-          date,
-          name,
-          class_id: classDash.class.id,
-          school_id: classDash.school_id,
-          year_id: classDash.year_id,
-          students: classDash.students,
-        })
+        createFrequency(
+          {
+            date,
+            name,
+            class_id: classDash.class.id,
+            school_id: classDash.school_id,
+            year_id: classDash.year_id,
+            students: classDash.students,
+          },
+          `/${classDash.school_id}/day`,
+        )
       }}
     >
       <TableCell>{classDash.class.name}</TableCell>

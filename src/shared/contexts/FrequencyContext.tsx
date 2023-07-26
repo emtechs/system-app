@@ -18,7 +18,7 @@ import { FieldValues } from 'react-hook-form'
 import { apiFrequency } from '../services'
 
 interface iFrequencyContextData {
-  createFrequency: (data: FieldValues) => Promise<void>
+  createFrequency: (data: FieldValues, back?: string) => Promise<void>
   updateFrequency: (
     data: FieldValues,
     id: string,
@@ -57,18 +57,21 @@ export const FrequencyProvider = ({ children }: iChildren) => {
   const [alterStudents, setAlterStudents] = useState<iFrequencyStudentsBase[]>()
   const [isInfreq, setIsInfreq] = useState(false)
 
-  const handleCreateFrequency = useCallback(async (data: FieldValues) => {
-    try {
-      setLoading(true)
-      const frequency = await apiFrequency.create(data)
-      handleSucess('Frequência cadastrado com sucesso!')
-      navigate(`/${frequency.school.id}/day/${frequency.id}`)
-    } catch {
-      handleError('Não foi possível cadastrar a frequência no momento!')
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+  const handleCreateFrequency = useCallback(
+    async (data: FieldValues, back?: string) => {
+      try {
+        setLoading(true)
+        const frequency = await apiFrequency.create(data)
+        handleSucess('Frequência cadastrado com sucesso!')
+        navigate(`${back}/${frequency.id}`)
+      } catch {
+        handleError('Não foi possível cadastrar a frequência no momento!')
+      } finally {
+        setLoading(false)
+      }
+    },
+    [],
+  )
 
   const handleUpdateFrequency = useCallback(
     async (data: FieldValues, id: string, isOpen?: boolean) => {
