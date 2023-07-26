@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Chip } from '@mui/material'
-import { Groups, Workspaces } from '@mui/icons-material'
+import { Groups } from '@mui/icons-material'
 import {
   Footer,
   TabsSchoolRetrievePage,
@@ -10,8 +10,8 @@ import {
   ToolsSchool,
 } from '../../shared/components'
 import { LayoutBasePage } from '../../shared/layouts'
-import { ViewSchoolClass, ViewSchoolStudent } from '../../shared/views'
-import { ViewSchoolServerPage } from './view'
+import { ViewSchoolStudent } from '../../shared/views'
+import { ViewSchoolClassPage, ViewSchoolServerPage } from './view'
 
 export const ViewSchoolPage = () => {
   const { view } = useParams()
@@ -21,22 +21,6 @@ export const ViewSchoolPage = () => {
 
   useEffect(() => {
     switch (view) {
-      case 'class':
-        setTitle(
-          <TitleSchoolViewPage>
-            <Chip
-              color="primary"
-              label="Turmas"
-              icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
-            />
-          </TitleSchoolViewPage>,
-        )
-        setViewData(<ViewSchoolClass />)
-        setTools(
-          <ToolsSchool back="/school" isNew titleNew="Turma" isDash isSearch />,
-        )
-        break
-
       case 'student':
         setTitle(
           <TitleSchoolViewPage>
@@ -68,6 +52,8 @@ export const ViewSchoolPage = () => {
   switch (view) {
     case 'server':
       return <ViewSchoolServerPage />
+    case 'class':
+      return <ViewSchoolClassPage />
   }
 
   return (
