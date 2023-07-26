@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import {
   useAppThemeContext,
   useAuthContext,
+  useDrawerContext,
   useUserContext,
 } from '../../contexts'
 import { apiAuth } from '../../services'
@@ -12,6 +13,7 @@ export const useVerifyUser = () => {
   const { setLoading } = useAppThemeContext()
   const { setListYear, yearData } = useAuthContext()
   const { setUserSelect } = useUserContext()
+  const { handleDisplayDash } = useDrawerContext()
 
   const verifyUser = useCallback((id: string) => {
     setLoading(true)
@@ -27,7 +29,10 @@ export const useVerifyUser = () => {
           }
         }
       })
-      .catch(() => navigate('/'))
+      .catch(() => {
+        handleDisplayDash('ADMIN')
+        navigate('/')
+      })
       .finally(() => setLoading(false))
   }, [])
 

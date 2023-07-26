@@ -1,24 +1,24 @@
-import { useState, useEffect } from "react";
-import { AutocompleteElement } from "react-hook-form-mui";
-import { iSchool } from "../../interfaces";
-import { apiSchool } from "../../services";
+import { useState, useEffect } from 'react'
+import { AutocompleteElement } from 'react-hook-form-mui'
+import { iSchool } from '../../interfaces'
+import { apiSchool } from '../../services'
 
 interface iAutoCompleteSchoolProps {
-  query?: string;
-  isMultiple?: boolean;
+  query?: string
+  isMultiple?: boolean
 }
 
 export const AutoCompleteSchool = ({
   isMultiple,
-  query = "",
+  query = '',
 }: iAutoCompleteSchoolProps) => {
-  const [schoolDataSelect, setSchoolDataSelect] = useState<iSchool[]>();
+  const [schoolDataSelect, setSchoolDataSelect] = useState<iSchool[]>()
 
   useEffect(() => {
     apiSchool
-      .list("?is_active=true" + query)
-      .then((res) => setSchoolDataSelect(res.schools));
-  }, [query]);
+      .list('?is_active=true' + query)
+      .then((res) => setSchoolDataSelect(res.schools))
+  }, [query])
 
   return (
     <AutocompleteElement
@@ -33,11 +33,11 @@ export const AutoCompleteSchool = ({
           : [
               {
                 id: 1,
-                label: "No momento, não há nenhuma escola cadastrada",
+                label: 'No momento, não há nenhuma escola cadastrada',
               },
             ]
       }
       textFieldProps={{ fullWidth: true }}
     />
-  );
-};
+  )
+}

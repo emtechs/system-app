@@ -8,14 +8,11 @@ import {
   School,
   Workspaces,
 } from '@mui/icons-material'
-import { useLocation } from 'react-router-dom'
 import { useDrawerContext } from '../../../contexts'
 import { Frequency, Import, Profile } from '../components'
 import { ListItemLinkOpen, OtherListItemLink } from '../item'
-import { OptionsSchool } from './OptionsSchool'
 
 export const OptionsAdmin = () => {
-  const location = useLocation()
   const {
     handleClickFrequency,
     handleClickImport,
@@ -25,9 +22,7 @@ export const OptionsAdmin = () => {
     openProfile,
   } = useDrawerContext()
 
-  return location.search.includes('dash=ADMIN') ? (
-    <OptionsSchool />
-  ) : (
+  return (
     <>
       <OtherListItemLink icon={<Home />} label="Página Inicial" />
       <OtherListItemLink icon={<People />} label="Usuários" to="user" />

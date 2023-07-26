@@ -9,7 +9,11 @@ import {
   Typography,
 } from '@mui/material'
 import { MouseEvent, useMemo, useState } from 'react'
-import { useAppThemeContext, useAuthContext } from '../../contexts'
+import {
+  useAppThemeContext,
+  useAuthContext,
+  useDrawerContext,
+} from '../../contexts'
 import { Home, Logout, Menu, Person } from '@mui/icons-material'
 import { MenuUser, MenuUserMdDown } from './components'
 import { adaptName } from '../../scripts'
@@ -22,6 +26,7 @@ interface iHeaderProps {
 export const Header = ({ isHome }: iHeaderProps) => {
   const { mdDown } = useAppThemeContext()
   const { logout, userData } = useAuthContext()
+  const { handleDisplayDash } = useDrawerContext()
   const [open, setOpen] = useState(true)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
@@ -51,7 +56,11 @@ export const Header = ({ isHome }: iHeaderProps) => {
           <Toolbar disableGutters>
             {!mdDown && (
               <Box ml={2} mr={2} height={80}>
-                <img style={{ height: '100%' }} src="/header.webp" />
+                <img
+                  style={{ height: '100%' }}
+                  src="/header.webp"
+                  alt="Portal de Frequência"
+                />
               </Box>
             )}
             <Box
@@ -73,6 +82,7 @@ export const Header = ({ isHome }: iHeaderProps) => {
                         startIcon={<Home />}
                         component={Link}
                         to="/"
+                        onClick={() => handleDisplayDash('ADMIN')}
                       >
                         Início
                       </Button>

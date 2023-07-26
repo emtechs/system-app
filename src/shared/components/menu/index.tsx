@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material'
 import { Dashboard, FirstPage, Logout, Person } from '@mui/icons-material'
-import { useLocation, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   useAppThemeContext,
   useAuthContext,
@@ -21,9 +21,9 @@ import { adaptName } from '../../scripts'
 import { useMemo } from 'react'
 
 export const MenuDrawer = () => {
-  const location = useLocation()
   const { theme, smDown } = useAppThemeContext()
-  const { isDrawerOpen, toggleDrawerOpen, handleClick } = useDrawerContext()
+  const { isDrawerOpen, toggleDrawerOpen, handleClick, displayDash } =
+    useDrawerContext()
   const { userData, logout, dashData } = useAuthContext()
   const user = {
     name: adaptName(userData?.name),
@@ -31,22 +31,22 @@ export const MenuDrawer = () => {
 
   const listButton = useMemo(() => {
     if (dashData === 'ADMIN') {
-      if (location.search.includes('dash=ADMIN'))
+      if (displayDash === 'ADMIN')
         return (
           <ListItemButton component={Link} to="/home" onClick={handleClick}>
             <ListItemIcon>
-              <FirstPage />
+              <Dashboard />
             </ListItemIcon>
-            <ListItemText primary="Voltar" />
+            <ListItemText primary="Painel Escola" />
           </ListItemButton>
         )
 
       return (
         <ListItemButton component={Link} to="/home" onClick={handleClick}>
           <ListItemIcon>
-            <Dashboard />
+            <FirstPage />
           </ListItemIcon>
-          <ListItemText primary="Painel Escola" />
+          <ListItemText primary="Voltar" />
         </ListItemButton>
       )
     }
@@ -59,7 +59,7 @@ export const MenuDrawer = () => {
         <ListItemText primary="Voltar" />
       </ListItemButton>
     )
-  }, [dashData, handleClick, location])
+  }, [dashData, displayDash, handleClick])
 
   return (
     <Drawer
@@ -101,7 +101,6 @@ export const MenuDrawer = () => {
             >
               {user.name.length > 0 ? user.name[0].toUpperCase() : <Person />}
             </Avatar>
-
             <Typography color={theme.palette.primary.contrastText}>
               {user.name}
             </Typography>

@@ -6,7 +6,7 @@ import {
   Logout,
   Password,
   Person,
-} from "@mui/icons-material";
+} from '@mui/icons-material'
 import {
   Collapse,
   List,
@@ -15,17 +15,17 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-} from "@mui/material";
-import { useAuthContext } from "../../../../contexts";
-import { useNavigate } from "react-router-dom";
+} from '@mui/material'
+import { useAuthContext, useDrawerContext } from '../../../../contexts'
+import { useNavigate } from 'react-router-dom'
 
 interface iMenuBaseProps {
-  anchorEl: HTMLElement | null;
-  handleClose: () => void;
-  label: string;
-  open: boolean;
-  onClick: () => void;
-  isHome?: boolean;
+  anchorEl: HTMLElement | null
+  handleClose: () => void
+  label: string
+  open: boolean
+  onClick: () => void
+  isHome?: boolean
 }
 
 export const MenuUserMdDown = ({
@@ -36,20 +36,21 @@ export const MenuUserMdDown = ({
   open,
   isHome,
 }: iMenuBaseProps) => {
-  const navigate = useNavigate();
-  const { logout } = useAuthContext();
+  const navigate = useNavigate()
+  const { logout } = useAuthContext()
+  const { handleDisplayDash } = useDrawerContext()
   return (
     <Menu
-      sx={{ mt: "45px" }}
+      sx={{ mt: '45px' }}
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       keepMounted
       transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       open={Boolean(anchorEl)}
       onClose={handleClose}
@@ -57,8 +58,9 @@ export const MenuUserMdDown = ({
       {isHome && (
         <MenuItem
           onClick={() => {
-            navigate("/");
-            handleClose();
+            handleDisplayDash('ADMIN')
+            navigate('/')
+            handleClose()
           }}
         >
           <ListItemIcon>
@@ -92,8 +94,8 @@ export const MenuUserMdDown = ({
       </Collapse>
       <MenuItem
         onClick={() => {
-          handleClose();
-          logout();
+          handleClose()
+          logout()
         }}
       >
         <ListItemIcon>
@@ -102,5 +104,5 @@ export const MenuUserMdDown = ({
         <ListItemText primary="Sair" />
       </MenuItem>
     </Menu>
-  );
-};
+  )
+}

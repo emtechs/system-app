@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from 'react-router-dom'
 import {
   ClassPage,
   ClassYearPage,
@@ -14,8 +14,8 @@ import {
   ViewSchoolPage,
   ViewUserPage,
   YearPage,
-} from "../pages";
-import { ProtectedAuth } from "../shared/components";
+} from '../pages'
+import { ProtectedAuth } from '../shared/components'
 
 const AppRoutes = () => {
   return (
@@ -51,7 +51,7 @@ const AppRoutes = () => {
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
-  );
-};
+  )
+}
 
-export default AppRoutes;
+export default AppRoutes

@@ -23,11 +23,7 @@ import { DialogSchool } from './DialogSchool'
 import { CardSchool } from './CardSchool'
 import { PaginationBase } from '../../../shared/components'
 
-interface iSchoolProps {
-  isHome?: boolean
-}
-
-export const School = ({ isHome }: iSchoolProps) => {
+export const School = () => {
   const { debounce } = useDebounce()
   const { smDown, mdDown, theme } = useAppThemeContext()
   const { yearData } = useAuthContext()
@@ -116,7 +112,7 @@ export const School = ({ isHome }: iSchoolProps) => {
               ) : schoolsData && schoolsData.length > 0 ? (
                 schoolsData.map((el) => (
                   <Grid key={el.school.id} item xs={12} sm={6} md={4}>
-                    <CardSchool school={el.school} isHome={isHome} />
+                    <CardSchool school={el.school} />
                   </Grid>
                 ))
               ) : (
@@ -131,7 +127,7 @@ export const School = ({ isHome }: iSchoolProps) => {
           <PaginationBase />
         </Box>
       </Grid>
-      <DialogSchool open={open} onClose={onClose} isHome={isHome} />
+      <DialogSchool open={open} onClose={onClose} />
     </>
   )
 }

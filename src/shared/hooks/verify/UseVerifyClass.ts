@@ -4,6 +4,7 @@ import {
   useAppThemeContext,
   useAuthContext,
   useClassContext,
+  useDrawerContext,
 } from '../../contexts'
 import { apiAuth } from '../../services'
 
@@ -12,6 +13,7 @@ export const useVerifyClass = () => {
   const { setLoading } = useAppThemeContext()
   const { setListYear, yearData } = useAuthContext()
   const { setClassSelect } = useClassContext()
+  const { handleDisplayDash } = useDrawerContext()
 
   const verifyClass = useCallback((id: string) => {
     setLoading(true)
@@ -27,7 +29,10 @@ export const useVerifyClass = () => {
           }
         }
       })
-      .catch(() => navigate('/'))
+      .catch(() => {
+        handleDisplayDash('ADMIN')
+        navigate('/')
+      })
       .finally(() => setLoading(false))
   }, [])
 

@@ -16,6 +16,7 @@ import { PaginationList, ValidateBase } from '../../../shared/components'
 import {
   useAppThemeContext,
   useAuthContext,
+  useDrawerContext,
   usePaginationContext,
 } from '../../../shared/contexts'
 import { iSelectBase, iWorkSchool } from '../../../shared/interfaces'
@@ -26,12 +27,12 @@ import { Link } from 'react-router-dom'
 interface iDialogSchoolProps {
   open: boolean
   onClose: () => void
-  isHome?: boolean
 }
 
-export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
+export const DialogSchool = ({ onClose, open }: iDialogSchoolProps) => {
   const { theme } = useAppThemeContext()
   const { yearData } = useAuthContext()
+  const { handleDisplayDash } = useDrawerContext()
   const { query, query_page } = usePaginationContext()
   const [listSchoolSelect, setListSchoolSelect] = useState<iSelectBase[]>()
   const [listData, setListData] = useState<iWorkSchool[]>()
@@ -73,9 +74,12 @@ export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
                     },
                   ]
                 }
-                textFieldProps={{ fullWidth: true }}
+                textFieldProps={{
+                  fullWidth: true,
+                  onClick: () => handleDisplayDash('SCHOOL'),
+                }}
               />
-              <ValidateBase to={isHome ? '/home/school/' : '/'} />
+              <ValidateBase to="/" />
             </FormContainer>
           </Box>
         </ListItem>
@@ -91,9 +95,8 @@ export const DialogSchool = ({ onClose, open, isHome }: iDialogSchoolProps) => {
             <ListItem key={el.school.id} disableGutters>
               <ListItemButton
                 component={Link}
-                to={
-                  isHome ? '/home/school/' + el.school.id : '/' + el.school.id
-                }
+                to={`/${el.school.id}`}
+                onClick={() => handleDisplayDash('SCHOOL')}
               >
                 <ListItemAvatar>
                   <Avatar

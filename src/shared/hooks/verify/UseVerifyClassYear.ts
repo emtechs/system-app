@@ -5,6 +5,7 @@ import {
   useSchoolContext,
   useClassContext,
   useCalendarContext,
+  useDrawerContext,
 } from '../../contexts'
 import { apiAuth } from '../../services'
 
@@ -14,6 +15,7 @@ export const useVerifyClassYear = () => {
   const { setSchoolSelect } = useSchoolContext()
   const { setClassSelect } = useClassContext()
   const { setYearSelect } = useCalendarContext()
+  const { handleDisplayDash } = useDrawerContext()
 
   const verifyClassYear = useCallback((id: string) => {
     setLoading(true)
@@ -25,7 +27,10 @@ export const useVerifyClassYear = () => {
         setSchoolSelect(res.school)
         setYearSelect(res.year)
       })
-      .catch(() => navigate('/'))
+      .catch(() => {
+        handleDisplayDash('ADMIN')
+        navigate('/')
+      })
       .finally(() => setLoading(false))
   }, [])
 

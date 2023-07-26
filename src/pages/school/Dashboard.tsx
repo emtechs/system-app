@@ -1,23 +1,23 @@
-import { Box, Card, CardContent, Grid, Paper } from "@mui/material";
-import { LayoutBasePage } from "../../shared/layouts";
+import { Box, Card, CardContent, Grid, Paper } from '@mui/material'
+import { LayoutBasePage } from '../../shared/layouts'
 import {
   CalendarDashCommon,
   GridDashSchool,
   TitleSchoolDashPage,
-} from "../../shared/components";
-import { useAppThemeContext } from "../../shared/contexts";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useVerifySchool } from "../../shared/hooks";
+} from '../../shared/components'
+import { useAppThemeContext } from '../../shared/contexts'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { useVerifySchool } from '../../shared/hooks'
 
 export const DashboardSchoolPage = () => {
-  const { school_id } = useParams();
-  const { theme } = useAppThemeContext();
-  const { verifySchool } = useVerifySchool();
+  const { school_id } = useParams()
+  const { theme } = useAppThemeContext()
+  const { verifySchool } = useVerifySchool()
 
   useEffect(() => {
-    if (school_id) verifySchool(school_id);
-  }, [school_id]);
+    if (school_id) verifySchool(school_id)
+  }, [school_id])
 
   return (
     <LayoutBasePage title={<TitleSchoolDashPage />}>
@@ -50,5 +50,5 @@ export const DashboardSchoolPage = () => {
         </Card>
       </Box>
     </LayoutBasePage>
-  );
-};
+  )
+}

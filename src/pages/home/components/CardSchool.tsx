@@ -7,24 +7,25 @@ import {
   CardHeader,
   Typography,
 } from '@mui/material'
-import { useAppThemeContext } from '../../../shared/contexts'
+import { useAppThemeContext, useDrawerContext } from '../../../shared/contexts'
 import { iSchool } from '../../../shared/interfaces'
 import { adaptName, adaptNameSchool } from '../../../shared/scripts'
 import { Link } from 'react-router-dom'
 
 interface iCardSchoolProps {
   school: iSchool
-  isHome?: boolean
 }
 
-export const CardSchool = ({ school, isHome }: iCardSchoolProps) => {
+export const CardSchool = ({ school }: iCardSchoolProps) => {
   const { theme, mdDown } = useAppThemeContext()
-  const href = `/${school.id}`
+  const { handleDisplayDash } = useDrawerContext()
+
   return (
     <Card>
       <CardActionArea
         component={Link}
-        to={isHome ? `${href}?dash=ADMIN` : href}
+        to={`/${school.id}`}
+        onClick={() => handleDisplayDash('SCHOOL')}
       >
         <CardHeader
           avatar={

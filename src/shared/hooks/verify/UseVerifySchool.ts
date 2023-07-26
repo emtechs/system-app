@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import {
   useAppThemeContext,
   useAuthContext,
+  useDrawerContext,
   useSchoolContext,
 } from '../../contexts'
 import { apiAuth } from '../../services'
@@ -12,6 +13,7 @@ export const useVerifySchool = () => {
   const { setLoading } = useAppThemeContext()
   const { setListYear, yearData } = useAuthContext()
   const { setSchoolSelect } = useSchoolContext()
+  const { handleDisplayDash } = useDrawerContext()
 
   const verifySchool = useCallback((id: string) => {
     setLoading(true)
@@ -27,7 +29,10 @@ export const useVerifySchool = () => {
           }
         }
       })
-      .catch(() => navigate('/'))
+      .catch(() => {
+        handleDisplayDash('ADMIN')
+        navigate('/')
+      })
       .finally(() => setLoading(false))
   }, [])
 

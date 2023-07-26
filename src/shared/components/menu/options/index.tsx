@@ -1,20 +1,16 @@
-import { useAuthContext } from '../../../contexts'
+import { useAuthContext, useDrawerContext } from '../../../contexts'
 import { OptionsAdmin } from './OptionsAdmin'
-import { OptionsCommon } from './OptionsCommon'
+import { OptionsSchool } from './OptionsSchool'
 
 export const Options = () => {
   const { dashData } = useAuthContext()
+  const { displayDash } = useDrawerContext()
+
   switch (dashData) {
     case 'ADMIN':
-      return <OptionsAdmin />
-
-    case 'SCHOOL':
-      return <OptionsCommon />
-
-    case 'COMMON':
-      return <OptionsCommon />
+      return displayDash === 'ADMIN' ? <OptionsAdmin /> : <OptionsSchool />
 
     default:
-      return <></>
+      return <OptionsSchool />
   }
 }
