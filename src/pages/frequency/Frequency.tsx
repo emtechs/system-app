@@ -11,6 +11,7 @@ import {
 import { LayoutBasePage } from '../../shared/layouts'
 import { useEffect, useMemo, useState } from 'react'
 import {
+  useAppThemeContext,
   useAuthContext,
   useCalendarContext,
   useDrawerContext,
@@ -20,13 +21,13 @@ import {
 } from '../../shared/contexts'
 import {
   GridDashContent,
+  GridDashOrgan,
   PaginationBase,
   SelectDate,
   TableBase,
   TitleSchoolDashViewPage,
   ValidateFrequency,
 } from '../../shared/components'
-import { useAppThemeContext } from '../../shared/contexts/ThemeContext'
 import { apiClass, apiUsingNow } from '../../shared/services'
 import { iClassDash, iDashSchool, iHeadCell } from '../../shared/interfaces'
 import {
@@ -258,25 +259,7 @@ export const FrequencyPage = () => {
                       />
                     </>
                   )}
-                  <Grid item xs={12}>
-                    <Card>
-                      <CardContent>
-                        <Box
-                          display="flex"
-                          justifyContent="space-evenly"
-                          alignItems="center"
-                          gap={1}
-                        >
-                          <img
-                            width="50%"
-                            src="/pref_massape.png"
-                            alt="Massapê"
-                          />
-                          <img width="25%" src="/emtechs.jpg" alt="EmTechs" />
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
+                  <GridDashOrgan />
                 </Grid>
               </Grid>
             </Grid>

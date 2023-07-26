@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Grid } from "@mui/material";
+import { Box, Card, CardContent, Grid } from '@mui/material'
 
 export const GridDashOrgan = () => {
   return (
@@ -11,11 +11,19 @@ export const GridDashOrgan = () => {
             alignItems="center"
             gap={1}
           >
-            <img width="50%" src="/pref_massape.png" />
-            <img width="25%" src="/emtechs.jpg" />
+            <img
+              width="50%"
+              src="/pref_massape.png"
+              alt="Prefeitura de Massapê"
+            />
+            <img
+              width="25%"
+              src="/emtechs.jpg"
+              alt="Em Soluções Tecnológicas"
+            />
           </Box>
         </CardContent>
       </Card>
     </Grid>
-  );
-};
+  )
+}

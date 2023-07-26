@@ -5,44 +5,48 @@ import {
   useClassContext,
   useDrawerContext,
   useSchoolContext,
-} from "../../../shared/contexts";
-import { Box, Card, CardContent, Grid, Paper } from "@mui/material";
-import { LayoutBasePage } from "../../../shared/layouts";
-import { CalendarFrequency, GridDashContent } from "../../../shared/components";
-import { iDashClass } from "../../../shared/interfaces";
-import { useEffect, useState } from "react";
-import { Checklist, EventBusy, Groups, Workspaces } from "@mui/icons-material";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import "dayjs/locale/pt-br";
-import { apiUsingNow } from "../../../shared/services";
-import { Navigate } from "react-router-dom";
-dayjs.extend(localizedFormat);
+} from '../../../shared/contexts'
+import { Box, Card, CardContent, Grid, Paper } from '@mui/material'
+import { LayoutBasePage } from '../../../shared/layouts'
+import {
+  CalendarFrequency,
+  GridDashContent,
+  GridDashOrgan,
+} from '../../../shared/components'
+import { iDashClass } from '../../../shared/interfaces'
+import { useEffect, useState } from 'react'
+import { Checklist, EventBusy, Groups, Workspaces } from '@mui/icons-material'
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import 'dayjs/locale/pt-br'
+import { apiUsingNow } from '../../../shared/services'
+import { Navigate } from 'react-router-dom'
+dayjs.extend(localizedFormat)
 
 export const CreateFrequencyCommon = () => {
-  const { theme, setLoading } = useAppThemeContext();
-  const { yearData } = useAuthContext();
-  const { schoolRetrieve } = useSchoolContext();
-  const { handleClickSchool } = useDrawerContext();
-  const { monthData } = useCalendarContext();
-  const { classWithSchoolSelect } = useClassContext();
-  const [infoClass, setInfoClass] = useState<iDashClass>();
+  const { theme, setLoading } = useAppThemeContext()
+  const { yearData } = useAuthContext()
+  const { schoolRetrieve } = useSchoolContext()
+  const { handleClickSchool } = useDrawerContext()
+  const { monthData } = useCalendarContext()
+  const { classWithSchoolSelect } = useClassContext()
+  const [infoClass, setInfoClass] = useState<iDashClass>()
 
   useEffect(() => {
     if (yearData && schoolRetrieve && classWithSchoolSelect && monthData) {
-      const query = `?month=${monthData}`;
-      setLoading(true);
+      const query = `?month=${monthData}`
+      setLoading(true)
       apiUsingNow
         .get<iDashClass>(
-          `classes/${classWithSchoolSelect.class.id}/${schoolRetrieve.id}/${yearData.id}/dash${query}`
+          `classes/${classWithSchoolSelect.class.id}/${schoolRetrieve.id}/${yearData.id}/dash${query}`,
         )
         .then((res) => setInfoClass(res.data))
-        .finally(() => setLoading(false));
+        .finally(() => setLoading(false))
     }
-  }, [classWithSchoolSelect, schoolRetrieve, monthData, yearData]);
+  }, [classWithSchoolSelect, schoolRetrieve, monthData, yearData])
 
   if (!schoolRetrieve) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" />
   }
 
   // const title = (
@@ -121,7 +125,7 @@ export const CreateFrequencyCommon = () => {
                         icon={<Checklist fontSize="large" />}
                         quant={`${infoClass.frequencies}`}
                         info="Frequências no mês"
-                        dest={"/"}
+                        dest={'/'}
                       />
                       {infoClass.frequencyOpen !== 0 ? (
                         <GridDashContent
@@ -130,8 +134,8 @@ export const CreateFrequencyCommon = () => {
                           info="Frequências em aberto"
                           dest={
                             infoClass.frequencyOpen !== 0
-                              ? "/frequency/open"
-                              : "/frequency/list"
+                              ? '/frequency/open'
+                              : '/frequency/list'
                           }
                         />
                       ) : (
@@ -147,8 +151,8 @@ export const CreateFrequencyCommon = () => {
                         icon={<Workspaces fontSize="large" />}
                         quant={
                           infoClass?.class_infreq
-                            ? infoClass.class_infreq.toFixed(0) + "%"
-                            : "0%"
+                            ? infoClass.class_infreq.toFixed(0) + '%'
+                            : '0%'
                         }
                         info="Infrequência"
                         dest="/school/class"
@@ -156,21 +160,7 @@ export const CreateFrequencyCommon = () => {
                       />
                     </>
                   )}
-                  <Grid item xs={12}>
-                    <Card>
-                      <CardContent>
-                        <Box
-                          display="flex"
-                          justifyContent="space-evenly"
-                          alignItems="center"
-                          gap={1}
-                        >
-                          <img width="50%" src="/pref_massape.png" />
-                          <img width="25%" src="/emtechs.jpg" />
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
+                  <GridDashOrgan />
                 </Grid>
               </Grid>
             </Grid>
@@ -178,5 +168,5 @@ export const CreateFrequencyCommon = () => {
         </Card>
       </Box>
     </LayoutBasePage>
-  );
-};
+  )
+}
