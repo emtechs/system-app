@@ -1,16 +1,15 @@
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { Chip } from '@mui/material'
+import { Groups, People, PersonAdd, Workspaces } from '@mui/icons-material'
 import {
   Footer,
   TabsSchoolRetrievePage,
   TitleSchoolRetrievePage,
-  TitleSchoolViewClassPage,
-  TitleSchoolViewServerPage,
-  TitleSchoolViewStundetPage,
+  TitleSchoolViewPage,
   ToolsSchool,
 } from '../../shared/components'
 import { LayoutBasePage } from '../../shared/layouts'
-import { useEffect, useState } from 'react'
-import { PersonAdd } from '@mui/icons-material'
 import { ViewClass, ViewServer } from './view'
 import { ViewStudent } from '../../shared/views'
 
@@ -23,7 +22,15 @@ export const ViewSchoolPage = () => {
   useEffect(() => {
     switch (view) {
       case 'server':
-        setTitle(<TitleSchoolViewServerPage />)
+        setTitle(
+          <TitleSchoolViewPage>
+            <Chip
+              color="primary"
+              label="Servidores"
+              icon={<People sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </TitleSchoolViewPage>,
+        )
         setViewData(<ViewServer />)
         setTools(
           <ToolsSchool
@@ -38,7 +45,15 @@ export const ViewSchoolPage = () => {
         break
 
       case 'class':
-        setTitle(<TitleSchoolViewClassPage />)
+        setTitle(
+          <TitleSchoolViewPage>
+            <Chip
+              color="primary"
+              label="Turmas"
+              icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </TitleSchoolViewPage>,
+        )
         setViewData(<ViewClass />)
         setTools(
           <ToolsSchool back="/school" isNew titleNew="Turma" isDash isSearch />,
@@ -46,7 +61,15 @@ export const ViewSchoolPage = () => {
         break
 
       case 'student':
-        setTitle(<TitleSchoolViewStundetPage />)
+        setTitle(
+          <TitleSchoolViewPage>
+            <Chip
+              color="primary"
+              label="Alunos"
+              icon={<Groups sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </TitleSchoolViewPage>,
+        )
         setViewData(<ViewStudent />)
         setTools(
           <ToolsSchool back="/school" isNew titleNew="Aluno" isDash isSearch />,

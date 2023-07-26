@@ -5,57 +5,57 @@ import {
   Percent,
   School,
   Workspaces,
-} from "@mui/icons-material";
-import { useSchoolContext } from "../../contexts";
-import { TabsBase } from "./Base";
+} from '@mui/icons-material'
+import { useSchoolContext } from '../../contexts'
+import { TabsBase } from './Base'
 
 interface iTabsSchoolRetrievePageProps {
-  value?: string;
+  value?: string
 }
 
 export const TabsSchoolRetrievePage = ({
-  value = "",
+  value = '',
 }: iTabsSchoolRetrievePageProps) => {
-  const { schoolRetrieve } = useSchoolContext();
+  const { schoolRetrieve } = useSchoolContext()
 
-  const href = `/school/${schoolRetrieve?.id}`;
+  const href = `/school/${schoolRetrieve?.id}`
 
   const elemArr = [
-    { icon: <School />, label: "Escola", value: "", href },
+    { icon: <School />, label: 'Escola', value: '', href },
     {
       icon: <People />,
-      label: "Servidores",
-      value: "server",
+      label: 'Servidores',
+      value: 'server',
       href: `${href}/server`,
     },
     {
       icon: <Workspaces />,
-      label: "Turmas",
-      value: "class",
+      label: 'Turmas',
+      value: 'class',
       href: `${href}/class`,
     },
     {
       icon: <Groups />,
-      label: "Alunos",
+      label: 'Alunos',
       disabled: schoolRetrieve?.classes === 0,
-      value: "student",
+      value: 'student',
       href: `${href}/student`,
     },
     {
       icon: <Checklist />,
-      label: "Frequências",
+      label: 'Frequências',
       disabled: schoolRetrieve?.classes === 0,
-      value: "frequency",
+      value: 'frequency',
       href: `${href}/frequency`,
     },
     {
       icon: <Percent />,
-      label: "Infrequência",
+      label: 'Infrequência',
       disabled: schoolRetrieve?.frequencies === 0,
-      value: "infrequency",
+      value: 'infrequency',
       href: `${href}/infrequency`,
     },
-  ];
+  ]
 
-  return <TabsBase value={value} elemArr={elemArr} />;
-};
+  return <TabsBase value={value} elemArr={elemArr} />
+}

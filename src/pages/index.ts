@@ -1,5 +1,6 @@
 export * from './auth'
 export * from './class'
+export * from './dashboard'
 export * from './frequency'
 export * from './home'
 export * from './import'

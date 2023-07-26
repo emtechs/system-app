@@ -7,17 +7,19 @@ import {
 } from '../../shared/components'
 import { useAppThemeContext } from '../../shared/contexts'
 import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { Outlet, useParams } from 'react-router-dom'
 import { useVerifySchool } from '../../shared/hooks'
 
 export const DashboardSchoolPage = () => {
-  const { school_id } = useParams()
+  const { view, school_id } = useParams()
   const { theme } = useAppThemeContext()
   const { verifySchool } = useVerifySchool()
 
   useEffect(() => {
     if (school_id) verifySchool(school_id)
   }, [school_id])
+
+  if (view) return <Outlet />
 
   return (
     <LayoutBasePage title={<TitleSchoolDashPage />}>

@@ -1,10 +1,11 @@
 import { Breadcrumbs, Chip, Link } from '@mui/material'
-import { Home, Workspaces } from '@mui/icons-material'
+import { Home } from '@mui/icons-material'
 import { Link as RouterLink } from 'react-router-dom'
-import { useAppThemeContext } from '../../../../contexts'
-import { LabelSchool } from '../../../../components'
+import { useAppThemeContext } from '../../../contexts'
+import { LabelSchool } from '../../label'
+import { iChildren } from '../../../interfaces'
 
-export const TitleSchoolViewClassPage = () => {
+export const TitleSchoolViewPage = ({ children }: iChildren) => {
   const { mdDown } = useAppThemeContext()
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
@@ -18,11 +19,7 @@ export const TitleSchoolViewClassPage = () => {
         />
       </Link>
       <LabelSchool clickable />
-      <Chip
-        color="primary"
-        label="Turmas"
-        icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
-      />
+      {children}
     </Breadcrumbs>
   )
 }

@@ -11,37 +11,46 @@ import {
   useDrawerContext,
   useSchoolContext,
 } from '../../../contexts'
-import { Frequency, Profile } from '../components'
+import { Profile } from '../components'
 import { ListItemLinkOpen, OtherListItemLink } from '../item'
 
 export const OptionsSchool = () => {
   const { mdDown } = useAppThemeContext()
   const { schoolSelect } = useSchoolContext()
-  const {
-    handleClickFrequency,
-    handleClickProfile,
-    openFrequency,
-    openProfile,
-  } = useDrawerContext()
+  const { handleClickProfile, openProfile } = useDrawerContext()
+  const baseHref = `/${schoolSelect?.id}`
   return (
     <>
       <OtherListItemLink
         icon={<Home />}
         label="Página Inicial"
-        to={`${schoolSelect?.id}`}
+        baseHref={baseHref}
       />
-      <OtherListItemLink icon={<Workspaces />} label="Turmas" to="class" />
-      <OtherListItemLink icon={<Groups />} label="Alunos" to="student" />
-      <ListItemLinkOpen
-        onClick={handleClickFrequency}
-        open={openFrequency}
+      <OtherListItemLink
+        icon={<Workspaces />}
+        label="Turmas"
+        baseHref={baseHref}
+        to="/class"
+      />
+      <OtherListItemLink
+        icon={<Groups />}
+        label="Alunos"
+        baseHref={baseHref}
+        to="/student"
+      />
+      <OtherListItemLink
         icon={<Checklist />}
         label="Frequências"
-      >
-        <Frequency />
-      </ListItemLinkOpen>
+        baseHref={baseHref}
+        to="/frequency"
+      />
       {!mdDown && (
-        <OtherListItemLink icon={<Summarize />} label="Relatório" to="report" />
+        <OtherListItemLink
+          icon={<Summarize />}
+          label="Relatório"
+          baseHref={baseHref}
+          to="/report"
+        />
       )}
       <ListItemLinkOpen
         onClick={handleClickProfile}
