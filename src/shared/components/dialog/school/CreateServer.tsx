@@ -8,13 +8,13 @@ import { serverCreateSchema } from '../../../schemas'
 import { apiUser } from '../../../services'
 
 interface iDialogCreateServer {
-  school_id: string
+  school_id?: string
   getServer: (query: string) => void
 }
 
 export const DialogCreateServer = ({
   getServer,
-  school_id,
+  school_id = '',
 }: iDialogCreateServer) => {
   const { setLoading, handleError, handleSucess } = useAppThemeContext()
   const { openCreate, handleOpenCreate } = useDialogContext()

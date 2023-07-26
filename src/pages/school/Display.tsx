@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Chip } from '@mui/material'
-import { Groups, People, PersonAdd, Workspaces } from '@mui/icons-material'
+import { Groups, Workspaces } from '@mui/icons-material'
 import {
   Footer,
   TabsSchoolRetrievePage,
@@ -10,11 +10,8 @@ import {
   ToolsSchool,
 } from '../../shared/components'
 import { LayoutBasePage } from '../../shared/layouts'
-import {
-  ViewSchoolClass,
-  ViewSchoolServer,
-  ViewSchoolStudent,
-} from '../../shared/views'
+import { ViewSchoolClass, ViewSchoolStudent } from '../../shared/views'
+import { ViewSchoolServerPage } from './view'
 
 export const ViewSchoolPage = () => {
   const { view } = useParams()
@@ -24,29 +21,6 @@ export const ViewSchoolPage = () => {
 
   useEffect(() => {
     switch (view) {
-      case 'server':
-        setTitle(
-          <TitleSchoolViewPage>
-            <Chip
-              color="primary"
-              label="Servidores"
-              icon={<People sx={{ mr: 0.5 }} fontSize="inherit" />}
-            />
-          </TitleSchoolViewPage>,
-        )
-        setViewData(<ViewSchoolServer />)
-        setTools(
-          <ToolsSchool
-            back="/school"
-            iconNew={<PersonAdd />}
-            isNew
-            titleNew="Servidor"
-            isSearch
-            isDash
-          />,
-        )
-        break
-
       case 'class':
         setTitle(
           <TitleSchoolViewPage>
@@ -90,6 +64,11 @@ export const ViewSchoolPage = () => {
         break
     }
   }, [view])
+
+  switch (view) {
+    case 'server':
+      return <ViewSchoolServerPage />
+  }
 
   return (
     <LayoutBasePage title={title} tools={tools}>
