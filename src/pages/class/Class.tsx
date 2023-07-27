@@ -1,28 +1,34 @@
+import { useEffect } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
+import { Chip } from '@mui/material'
+import { Workspaces } from '@mui/icons-material'
 import {
   Footer,
   TabsClassYearPage,
   TitleBasePage,
   ToolsSchool,
 } from '../../shared/components'
+import {
+  useVerifyClass,
+  useVerifyClassKey,
+  useVerifyYear,
+} from '../../shared/hooks'
 import { LayoutBasePage } from '../../shared/layouts'
-import { useEffect } from 'react'
 import { ViewClass } from './view'
-import { useVerifyClass, useVerifyYear } from '../../shared/hooks'
-import { Workspaces } from '@mui/icons-material'
-import { Chip } from '@mui/material'
 
 export const ClassPage = () => {
-  const { class_id, year_id } = useParams()
+  const { class_id, year_id, key } = useParams()
   const { verifyClass } = useVerifyClass()
   const { verifyYear } = useVerifyYear()
+  const { verifyClassKey } = useVerifyClassKey()
 
   useEffect(() => {
     if (class_id) verifyClass(class_id)
     if (year_id) verifyYear(year_id)
-  }, [class_id, verifyClass, verifyYear, year_id])
+    if (key) verifyClassKey(key)
+  }, [class_id, key, verifyClass, verifyClassKey, verifyYear, year_id])
 
-  if (class_id) return <Outlet />
+  if (class_id || year_id || key) return <Outlet />
 
   return (
     <LayoutBasePage

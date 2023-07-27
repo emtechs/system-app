@@ -9,7 +9,7 @@ import {
 } from '../../contexts'
 import { apiAuth } from '../../services'
 
-export const useVerifyClassYear = () => {
+export const useVerifyClassKey = () => {
   const navigate = useNavigate()
   const { setLoading } = useAppThemeContext()
   const { setSchoolSelect } = useSchoolContext()
@@ -17,7 +17,7 @@ export const useVerifyClassYear = () => {
   const { setYearSelect } = useCalendarContext()
   const { handleDisplayDash } = useDrawerContext()
 
-  const verifyClassYear = useCallback((id: string) => {
+  const verifyClassKey = useCallback((id: string) => {
     setLoading(true)
     setLoading(true)
     apiAuth
@@ -34,5 +34,5 @@ export const useVerifyClassYear = () => {
       .finally(() => setLoading(false))
   }, [])
 
-  return { verifyClassYear }
+  return { verifyClassKey }
 }

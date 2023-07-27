@@ -1,5 +1,5 @@
 export * from './UseVerifyClass'
-export * from './UseVerifyClassYear'
+export * from './UseVerifyClassKey'
 export * from './UseVerifySchool'
 export * from './UseVerifyUser'
 export * from './UseVerifyYear'

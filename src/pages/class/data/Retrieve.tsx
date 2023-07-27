@@ -1,23 +1,23 @@
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { LayoutBasePage } from '../../shared/layouts'
-import {
-  Footer,
-  TabsClassRetrievePage,
-  TitleClassRetrievePage,
-  TitleSchoolViewPage,
-  ToolsSchool,
-} from '../../shared/components'
-import {
-  ViewClassData,
-  ViewFrequency,
-  ViewInfrequency,
-  ViewSchool,
-  ViewStudent,
-} from '../../shared/views'
-import { useValueTabs } from '../../shared/hooks'
 import { Chip } from '@mui/material'
 import { Workspaces } from '@mui/icons-material'
+import {
+  ToolsSchool,
+  TitleSchoolViewPage,
+  TitleClassRetrievePage,
+  TabsClassRetrievePage,
+  Footer,
+} from '../../../shared/components'
+import { useValueTabs } from '../../../shared/hooks'
+import { LayoutBasePage } from '../../../shared/layouts'
+import {
+  ViewClassData,
+  ViewSchool,
+  ViewStudent,
+  ViewFrequency,
+  ViewInfrequency,
+} from '../../../shared/views'
 
 export const RetrieveClassPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()

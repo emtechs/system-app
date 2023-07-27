@@ -76,7 +76,7 @@ export const TableSchoolClassPage = ({
                 variant="body2"
                 color="inherit"
                 component={RouterLink}
-                to={`/year/class/${el.key}/student`}
+                to={`/class/key/${el.key}/student`}
                 onClick={onClickReset}
               >
                 {el.name}
@@ -95,7 +95,7 @@ export const TableSchoolClassPage = ({
                 color="primary"
                 size="small"
                 component={RouterLink}
-                to={`/year/class/${el.key}/student`}
+                to={`/class/key/${el.key}/student`}
                 onClick={onClickReset}
               >
                 <Visibility fontSize="small" />

@@ -36,13 +36,13 @@ export interface iButtonBaseProps {
   endIcon?: ReactNode
   onClick?: () => void
   color?:
-  | 'primary'
-  | 'inherit'
-  | 'secondary'
-  | 'error'
-  | 'info'
-  | 'success'
-  | 'warning'
+    | 'primary'
+    | 'inherit'
+    | 'secondary'
+    | 'error'
+    | 'info'
+    | 'success'
+    | 'warning'
 }
 
 export type iLinkComp = { component: 'div' } | object

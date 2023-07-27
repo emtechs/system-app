@@ -6,6 +6,7 @@ import {
   FrequencyDayPage,
   HomePage,
   Login,
+  RetrieveClassKeyPage,
   RetrieveClassPage,
   RetrieveFrequencyPage,
   RetrieveSchoolPage,
@@ -14,6 +15,8 @@ import {
   StudentPage,
   StudentYearPage,
   UserPage,
+  ViewClassKeyPage,
+  ViewClassPage,
   ViewDashboardSchoolPage,
   ViewSchoolPage,
   ViewUserPage,
@@ -38,9 +41,12 @@ const AppRoutes = () => {
             </Route>
           </Route>
           <Route path="/class" element={<ClassPage />}>
+            <Route path="key/:key" element={<RetrieveClassKeyPage />}>
+              <Route path=":view" element={<ViewClassKeyPage />} />
+            </Route>
             <Route path="year/:year_id" element={<ClassYearPage />} />
             <Route path=":class_id" element={<RetrieveClassPage />}>
-              <Route path=":view" element={<ViewSchoolPage />} />
+              <Route path=":view" element={<ViewClassPage />} />
             </Route>
           </Route>
           <Route path="/student" element={<StudentPage />}>
