@@ -3,11 +3,12 @@ import { Chip } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
-  TitleSchoolViewPage,
   ToolsSchool,
   TabsSchoolRetrievePage,
   Footer,
   DialogCreateServer,
+  TitleBaseItemsPage,
+  LabelSchool,
 } from '../../../shared/components'
 import { LayoutBasePage } from '../../../shared/layouts'
 import { TableSchoolServerPage } from '../components'
@@ -43,13 +44,14 @@ export const ViewSchoolServerPage = () => {
     <>
       <LayoutBasePage
         title={
-          <TitleSchoolViewPage>
+          <TitleBaseItemsPage>
+            <LabelSchool clickable />
             <Chip
               color="primary"
               label="Servidores"
               icon={<People sx={{ mr: 0.5 }} fontSize="inherit" />}
             />
-          </TitleSchoolViewPage>
+          </TitleBaseItemsPage>
         }
         tools={
           <ToolsSchool
@@ -59,6 +61,7 @@ export const ViewSchoolServerPage = () => {
             titleNew="Servidor"
             isSearch
             isDash
+            isReset
           />
         }
       >

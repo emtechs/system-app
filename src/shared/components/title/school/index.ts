@@ -1,5 +1,3 @@
 export * from './Dash'
 export * from './DashView'
-export * from './Retrieve'
 export * from './User'
-export * from './View'

@@ -16,21 +16,19 @@ import {
   DialogEditSchool,
   DialogDirectorSchool,
   DialogActiveSchool,
-} from '../../components'
-import { useDialogContext, useSchoolContext } from '../../contexts'
+} from '../../../shared/components'
+import { useDialogContext, useSchoolContext } from '../../../shared/contexts'
 
-export const ViewSchoolData = () => {
-  const { school_id, class_id, year_id } = useParams()
+export const ViewRetrieveSchoolPage = () => {
+  const { school_id } = useParams()
   const { handleOpenActive, handleOpenDirector, handleOpenEdit } =
     useDialogContext()
   const { loadingSchool, schoolRetrieve, schoolDataRetrieve } =
     useSchoolContext()
 
   useEffect(() => {
-    let query = ''
-    if (class_id && year_id) query = `?class_id=${class_id}&year_id=${year_id}`
-    if (school_id) schoolDataRetrieve(school_id, query)
-  }, [class_id, school_id, year_id])
+    if (school_id) schoolDataRetrieve(school_id, '')
+  }, [school_id])
 
   return (
     <>
@@ -56,28 +54,6 @@ export const ViewSchoolData = () => {
               </Typography>
             </AccordionDetails>
           </Accordion>
-          {class_id && (
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMore />}>
-                {loadingSchool ? (
-                  <Skeleton width={300} />
-                ) : (
-                  <Typography>{schoolRetrieve?.class?.name}</Typography>
-                )}
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Alunos: {schoolRetrieve?.class?.students}
-                </Typography>
-                <Typography>
-                  Frequências: {schoolRetrieve?.class?.frequencies}
-                </Typography>
-                <Typography>
-                  Infrequência: {schoolRetrieve?.class?.infrequency}
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-          )}
         </CardContent>
         <CardActions>
           <ButtonSmDown

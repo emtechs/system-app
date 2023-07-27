@@ -10,7 +10,6 @@ import {
   useState,
 } from 'react'
 import {
-  TitleSchoolViewPage,
   ToolsSchool,
   TabsSchoolRetrievePage,
   Footer,
@@ -19,6 +18,8 @@ import {
   DialogRemoveStudent,
   DialogTransferStudent,
   PaginationTable,
+  LabelSchool,
+  TitleBaseItemsPage,
 } from '../../../shared/components'
 import { LayoutBasePage } from '../../../shared/layouts'
 import { TableSchoolStudentPage } from '../components'
@@ -116,13 +117,14 @@ export const ViewSchoolStudentPage = () => {
     <>
       <LayoutBasePage
         title={
-          <TitleSchoolViewPage>
+          <TitleBaseItemsPage>
+            <LabelSchool clickable />
             <Chip
               color="primary"
               label="Alunos"
               icon={<Groups sx={{ mr: 0.5 }} fontSize="inherit" />}
             />
-          </TitleSchoolViewPage>
+          </TitleBaseItemsPage>
         }
         tools={
           <ToolsSchool

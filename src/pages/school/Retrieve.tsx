@@ -1,17 +1,21 @@
+import { useEffect } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
+import { School } from '@mui/icons-material'
 import {
   Footer,
+  LabelSchool,
+  LinkChip,
   TabsSchoolRetrievePage,
-  TitleSchoolRetrievePage,
+  TitleBaseItemsPage,
   ToolsSchool,
 } from '../../shared/components'
 import { LayoutBasePage } from '../../shared/layouts'
-import { useSchoolContext } from '../../shared/contexts'
-import { useEffect } from 'react'
-import { ViewSchoolData } from '../../shared/views'
+import { useAppThemeContext, useSchoolContext } from '../../shared/contexts'
+import { ViewRetrieveSchoolPage } from './view/Retrieve'
 
 export const RetrieveSchoolPage = () => {
   const { view, school_id } = useParams()
+  const { mdDown } = useAppThemeContext()
   const { schoolDataRetrieve, schoolSelect } = useSchoolContext()
 
   useEffect(() => {
@@ -24,11 +28,20 @@ export const RetrieveSchoolPage = () => {
 
   return (
     <LayoutBasePage
-      title={<TitleSchoolRetrievePage />}
+      title={
+        <TitleBaseItemsPage>
+          <LinkChip
+            label={mdDown ? '...' : 'Escolas'}
+            icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+            to="/school"
+          />
+          <LabelSchool />
+        </TitleBaseItemsPage>
+      }
       tools={<ToolsSchool isDash back="/school" />}
     >
       <TabsSchoolRetrievePage value={view} />
-      <ViewSchoolData />
+      <ViewRetrieveSchoolPage />
       <Footer />
     </LayoutBasePage>
   )

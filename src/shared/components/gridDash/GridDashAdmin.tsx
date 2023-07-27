@@ -74,7 +74,7 @@ export const GridDashAdmin = () => {
           icon={<Close fontSize="large" />}
           quant={userDashData.countNotClass}
           info="Não enturmados"
-          dest="/"
+          dest="/student/year/none"
           onClick={handleClickStudent}
         />
         <GridDashOrgan />

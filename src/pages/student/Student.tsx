@@ -11,16 +11,17 @@ import { LayoutBasePage } from '../../shared/layouts'
 import { ViewStudentPage } from './view'
 import { Groups } from '@mui/icons-material'
 import { Chip } from '@mui/material'
+import { StudentNonePage } from './None'
 
 export const StudentPage = () => {
   const { year_id } = useParams()
   const { verifyYear } = useVerifyYear()
 
   useEffect(() => {
-    if (year_id) verifyYear(year_id)
+    if (year_id && year_id !== 'none') verifyYear(year_id)
   }, [verifyYear, year_id])
 
-  if (year_id) return <Outlet />
+  if (year_id) return year_id === 'none' ? <StudentNonePage /> : <Outlet />
 
   return (
     <LayoutBasePage

@@ -3,11 +3,12 @@ import { Box, Chip } from '@mui/material'
 import { SyntheticEvent, useCallback, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
-  TitleSchoolViewPage,
   ToolsSchool,
   TabsSchoolRetrievePage,
   Footer,
   TabsYear,
+  LabelSchool,
+  TitleBaseItemsPage,
 } from '../../../shared/components'
 import { LayoutBasePage } from '../../../shared/layouts'
 import { TableSchoolClassPage } from '../components'
@@ -50,16 +51,24 @@ export const ViewSchoolClassPage = () => {
     <>
       <LayoutBasePage
         title={
-          <TitleSchoolViewPage>
+          <TitleBaseItemsPage>
+            <LabelSchool clickable />
             <Chip
               color="primary"
               label="Turmas"
               icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
             />
-          </TitleSchoolViewPage>
+          </TitleBaseItemsPage>
         }
         tools={
-          <ToolsSchool back="/school" isNew titleNew="Turma" isDash isSearch />
+          <ToolsSchool
+            back="/school"
+            isNew
+            titleNew="Turma"
+            isDash
+            isSearch
+            isReset
+          />
         }
       >
         <TabsSchoolRetrievePage value="class" />

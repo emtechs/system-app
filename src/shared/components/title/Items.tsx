@@ -11,7 +11,7 @@ export const TitleBaseItemsPage = ({ children }: iChildren) => {
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
       <LinkChip
         icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
-        label="Página Inicial"
+        label={mdDown ? '...' : 'Página Inicial'}
       />
       {children}
     </Breadcrumbs>

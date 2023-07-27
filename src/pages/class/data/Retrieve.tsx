@@ -1,10 +1,7 @@
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { Chip } from '@mui/material'
-import { Workspaces } from '@mui/icons-material'
 import {
   ToolsSchool,
-  TitleSchoolViewPage,
   TitleClassRetrievePage,
   TabsClassRetrievePage,
   Footer,
@@ -33,16 +30,7 @@ export const RetrieveClassPage = () => {
   }
 
   const title = useMemo(() => {
-    if (school_id)
-      return (
-        <TitleSchoolViewPage>
-          <Chip
-            color="primary"
-            label="Turmas"
-            icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
-          />
-        </TitleSchoolViewPage>
-      )
+    if (school_id) return <></>
     return <TitleClassRetrievePage />
   }, [school_id])
 
