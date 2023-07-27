@@ -43,6 +43,7 @@ interface iAuthContextData {
   yearData: iYear | undefined
   listYear: iYear[]
   setListYear: Dispatch<SetStateAction<iYear[]>>
+  profileUser: () => void
 }
 
 const AuthContext = createContext({} as iAuthContextData)
@@ -66,7 +67,7 @@ export const AuthProvider = ({ children }: iChildren) => {
     }
   }, [])
 
-  useEffect(() => {
+  const profileUser = useCallback(() => {
     if (accessToken) {
       setLoading(true)
       apiUser
@@ -80,6 +81,7 @@ export const AuthProvider = ({ children }: iChildren) => {
         .catch(() => {
           localStorage.removeItem('@EMTechs:token')
           setAccessToken(undefined)
+          navigate('/login')
         })
         .finally(() => setLoading(false))
 
@@ -181,6 +183,7 @@ export const AuthProvider = ({ children }: iChildren) => {
         yearData,
         listYear,
         setListYear,
+        profileUser,
       }}
     >
       {children}
