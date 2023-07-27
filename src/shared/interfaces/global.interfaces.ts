@@ -12,6 +12,7 @@ export interface iDialogBaseProps {
 export interface iLabelBaseProps {
   clickable?: boolean
   isSchool?: boolean
+  to?: string
 }
 
 export interface iTabsBaseProps {
@@ -35,13 +36,13 @@ export interface iButtonBaseProps {
   endIcon?: ReactNode
   onClick?: () => void
   color?:
-    | 'primary'
-    | 'inherit'
-    | 'secondary'
-    | 'error'
-    | 'info'
-    | 'success'
-    | 'warning'
+  | 'primary'
+  | 'inherit'
+  | 'secondary'
+  | 'error'
+  | 'info'
+  | 'success'
+  | 'warning'
 }
 
 export type iLinkComp = { component: 'div' } | object

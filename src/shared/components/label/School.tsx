@@ -1,10 +1,10 @@
-import { Chip, Link, Skeleton } from '@mui/material'
+import { Chip, Skeleton } from '@mui/material'
+import { School } from '@mui/icons-material'
+import { useMemo } from 'react'
 import { useAppThemeContext, useSchoolContext } from '../../contexts'
 import { iLabelBaseProps } from '../../interfaces'
-import { School } from '@mui/icons-material'
 import { adaptNameSchool } from '../../scripts'
-import { useMemo } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
+import { LinkChip } from '../link'
 
 export const LabelSchool = ({ clickable, isSchool }: iLabelBaseProps) => {
   const { mdDown, loading } = useAppThemeContext()
@@ -18,15 +18,11 @@ export const LabelSchool = ({ clickable, isSchool }: iLabelBaseProps) => {
   }, [loading, mdDown, schoolSelect])
 
   return clickable ? (
-    <Link underline="none" color="inherit" component={RouterLink} to={to}>
-      <Chip
-        clickable
-        color="primary"
-        variant={'outlined'}
-        label={label}
-        icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
-      />
-    </Link>
+    <LinkChip
+      label={label}
+      icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+      to={to}
+    />
   ) : (
     <Chip
       color="primary"
