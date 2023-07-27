@@ -1,4 +1,5 @@
 export * from './AdminDash'
+export * from './Base'
 export * from './SchoolAdmin'
 export * from './SchoolDashAdmin'
 export * from './class'

@@ -1,5 +1,7 @@
-import { Groups } from '@mui/icons-material'
+import sortArray from 'sort-array'
 import { Box, Chip } from '@mui/material'
+import { useParams } from 'react-router-dom'
+import { Groups } from '@mui/icons-material'
 import {
   SyntheticEvent,
   useCallback,
@@ -16,21 +18,30 @@ import {
   DialogCreateStudentSchool,
   DialogRemoveStudent,
   DialogTransferStudent,
+  PaginationTable,
 } from '../../../shared/components'
 import { LayoutBasePage } from '../../../shared/layouts'
 import { TableSchoolStudentPage } from '../components'
 import { iStudent } from '../../../shared/interfaces'
 import { apiStudent } from '../../../shared/services'
 import { useAuthContext, usePaginationContext } from '../../../shared/contexts'
-import { useParams } from 'react-router-dom'
-import sortArray from 'sort-array'
 import { useDebounce } from '../../../shared/hooks'
 
 export const ViewSchoolStudentPage = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
   const { listYear } = useAuthContext()
-  const { setCount, setIsLoading, search, order, by } = usePaginationContext()
+  const {
+    setCount,
+    setIsLoading,
+    search,
+    order,
+    by,
+    setFace,
+    query_page,
+    handleFace,
+    face,
+  } = usePaginationContext()
   const [listData, setListData] = useState<iStudent[]>([])
   const [index, setIndex] = useState(0)
   const [studentData, setStudentData] = useState<iStudent>()
@@ -41,32 +52,47 @@ export const ViewSchoolStudentPage = () => {
     setIndex(Number(newValue))
   }
 
-  const getStudent = useCallback((query: string) => {
+  const getStudent = useCallback((query: string, isFace?: boolean) => {
     setIsLoading(true)
-    apiStudent
-      .listClass(query)
-      .then((res) => {
-        setListData(res.result)
-        setCount(res.total)
-      })
-      .finally(() => setIsLoading(false))
+    if (isFace) {
+      apiStudent
+        .listClass(query)
+        .then((res) => setListData((old) => old?.concat(res.result)))
+        .finally(() => setIsLoading(false))
+    } else {
+      apiStudent
+        .listClass(query)
+        .then((res) => {
+          setFace(1)
+          setListData(res.result)
+          setCount(res.total)
+        })
+        .finally(() => setIsLoading(false))
+    }
   }, [])
 
-  const queryData = useMemo(() => {
-    return `?school_id=${school_id}&year_id=${listYear[index].id}`
-  }, [index, listYear, school_id])
+  const define_query = useCallback(
+    (comp: string) => {
+      return `?school_id=${school_id}&year_id=${
+        listYear[index].id
+      }${comp}${query_page()}`
+    },
+    [index, listYear, query_page, school_id],
+  )
 
-  const list = () => getStudent(queryData)
+  const onClick = () => getStudent(define_query(handleFace(face)), true)
+
+  const list = () => getStudent(define_query(`&name=${search}`))
 
   useEffect(() => {
-    let query_data = queryData
+    let query_data = ''
     if (search) {
       query_data += `&name=${search}`
       debounce(() => {
-        getStudent(query_data)
+        getStudent(define_query(query_data))
       })
-    } else getStudent(query_data)
-  }, [queryData, search])
+    } else getStudent(define_query(query_data))
+  }, [define_query, search])
 
   const data = useMemo(() => {
     let listStundet: iStudent[]
@@ -107,6 +133,10 @@ export const ViewSchoolStudentPage = () => {
           <TabsYear value={index} handleChange={handleChange} />
           <Box flex={1}>
             <TableSchoolStudentPage data={data} handleStudent={handleStudent} />
+            <PaginationTable
+              total={listData ? listData.length : 0}
+              onClick={onClick}
+            />
           </Box>
         </Box>
         <Footer />

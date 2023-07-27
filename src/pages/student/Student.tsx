@@ -3,12 +3,14 @@ import { useParams, Outlet } from 'react-router-dom'
 import {
   Footer,
   TabsStudentYearPage,
-  TitleClassPage,
+  TitleBasePage,
   ToolsSchool,
 } from '../../shared/components'
 import { useVerifyYear } from '../../shared/hooks'
 import { LayoutBasePage } from '../../shared/layouts'
 import { ViewStudentPage } from './view'
+import { Groups } from '@mui/icons-material'
+import { Chip } from '@mui/material'
 
 export const StudentPage = () => {
   const { year_id } = useParams()
@@ -22,7 +24,15 @@ export const StudentPage = () => {
 
   return (
     <LayoutBasePage
-      title={<TitleClassPage />}
+      title={
+        <TitleBasePage>
+          <Chip
+            label="Alunos"
+            color="primary"
+            icon={<Groups sx={{ mr: 0.5 }} fontSize="inherit" />}
+          />
+        </TitleBasePage>
+      }
       tools={
         <ToolsSchool
           isHome

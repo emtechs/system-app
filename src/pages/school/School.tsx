@@ -2,17 +2,19 @@ import { Outlet, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useVerifySchool } from '../../shared/hooks'
 import {
-  TitleSchoolPage,
   ToolsSchool,
   Footer,
   DialogActiveSchool,
   DialogCreateSchool,
   DialogDirectorSchool,
   DialogEditSchool,
+  TitleBasePage,
 } from '../../shared/components'
 import { LayoutBasePage } from '../../shared/layouts'
 import { TableSchoolPage } from './components'
 import { iSchool } from '../../shared/interfaces'
+import { Chip } from '@mui/material'
+import { School } from '@mui/icons-material'
 
 export const SchoolPage = () => {
   const { school_id } = useParams()
@@ -30,7 +32,15 @@ export const SchoolPage = () => {
   return (
     <>
       <LayoutBasePage
-        title={<TitleSchoolPage />}
+        title={
+          <TitleBasePage>
+            <Chip
+              label="Escolas"
+              color="primary"
+              icon={<School sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </TitleBasePage>
+        }
         tools={
           <ToolsSchool
             isHome
