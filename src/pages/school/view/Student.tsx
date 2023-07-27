@@ -125,7 +125,14 @@ export const ViewSchoolStudentPage = () => {
           </TitleSchoolViewPage>
         }
         tools={
-          <ToolsSchool back="/school" isNew titleNew="Aluno" isDash isSearch />
+          <ToolsSchool
+            back="/school"
+            isNew
+            titleNew="Aluno"
+            isDash
+            isSearch
+            isReset
+          />
         }
       >
         <TabsSchoolRetrievePage value="student" />

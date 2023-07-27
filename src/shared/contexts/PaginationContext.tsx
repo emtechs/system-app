@@ -7,136 +7,136 @@ import {
   useContext,
   useMemo,
   useState,
-} from "react";
-import { iChildren } from "../interfaces";
-import { useAppThemeContext } from "./ThemeContext";
+} from 'react'
+import { iChildren } from '../interfaces'
+import { useAppThemeContext } from './ThemeContext'
 
 interface iPaginationContextData {
-  steps: number;
-  is_active: (is_default?: boolean) => "&is_active=true" | "&is_active=false";
-  count: number;
-  setCount: Dispatch<SetStateAction<number>>;
-  order: string;
-  setOrder: Dispatch<SetStateAction<string>>;
-  by: "asc" | "desc";
-  setBy: Dispatch<SetStateAction<"asc" | "desc">>;
-  isLoading: boolean;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
-  active: boolean;
-  setActive: Dispatch<SetStateAction<boolean>>;
+  steps: number
+  is_active: (is_default?: boolean) => '&is_active=true' | '&is_active=false'
+  count: number
+  setCount: Dispatch<SetStateAction<number>>
+  order: string
+  setOrder: Dispatch<SetStateAction<string>>
+  by: 'asc' | 'desc'
+  setBy: Dispatch<SetStateAction<'asc' | 'desc'>>
+  isLoading: boolean
+  setIsLoading: Dispatch<SetStateAction<boolean>>
+  active: boolean
+  setActive: Dispatch<SetStateAction<boolean>>
   query: (
     year_id?: string,
     school_id?: string,
     class_id?: string,
     date?: string,
     month?: string,
-    is_active?: boolean
-  ) => string;
-  handleChange: (_event: ChangeEvent<unknown>, value: number) => void;
-  handleFace: (face_data: number) => string;
-  page: number;
-  face: number;
-  setFace: Dispatch<SetStateAction<number>>;
-  query_page: (take_data?: number, isSkip?: boolean) => string;
-  search: string | undefined;
-  setSearch: Dispatch<SetStateAction<string | undefined>>;
-  is_director: "" | "&is_director=true" | "&is_director=false";
-  onClickReset: () => void;
-  director: boolean[];
-  setDirector: Dispatch<SetStateAction<boolean[]>>;
+    is_active?: boolean,
+  ) => string
+  handleChange: (_event: ChangeEvent<unknown>, value: number) => void
+  handleFace: (face_data: number) => string
+  page: number
+  face: number
+  setFace: Dispatch<SetStateAction<number>>
+  query_page: (take_data?: number, isSkip?: boolean) => string
+  search: string
+  setSearch: Dispatch<SetStateAction<string>>
+  is_director: '' | '&is_director=true' | '&is_director=false'
+  onClickReset: () => void
+  director: boolean[]
+  setDirector: Dispatch<SetStateAction<boolean[]>>
 }
 
-const PaginationContext = createContext({} as iPaginationContextData);
+const PaginationContext = createContext({} as iPaginationContextData)
 
 export const PaginationProvider = ({ children }: iChildren) => {
-  const { mdDown } = useAppThemeContext();
-  const [take, setTake] = useState(10);
-  const [skip, setSkip] = useState<string>();
-  const [count, setCount] = useState(0);
-  const [page, setPage] = useState(1);
-  const [face, setFace] = useState(1);
-  const [order, setOrder] = useState<string>("");
-  const [by, setBy] = useState<"asc" | "desc">("asc");
-  const [isLoading, setIsLoading] = useState(true);
-  const [active, setActive] = useState(true);
-  const [search, setSearch] = useState<string>();
-  const [director, setDirector] = useState([true, true]);
+  const { mdDown } = useAppThemeContext()
+  const [take, setTake] = useState(10)
+  const [skip, setSkip] = useState<string>()
+  const [count, setCount] = useState(0)
+  const [page, setPage] = useState(1)
+  const [face, setFace] = useState(1)
+  const [order, setOrder] = useState<string>('')
+  const [by, setBy] = useState<'asc' | 'desc'>('asc')
+  const [isLoading, setIsLoading] = useState(true)
+  const [active, setActive] = useState(true)
+  const [search, setSearch] = useState('')
+  const [director, setDirector] = useState([true, true])
 
   const onClickReset = useCallback(() => {
-    setDirector([true, true]);
-    setActive(true);
-    setSearch(undefined);
-  }, []);
+    setDirector([true, true])
+    setActive(true)
+    setSearch('')
+  }, [])
 
   const define_take = useCallback(
     (take_data?: number) => {
       if (take_data) {
-        setTake(take_data);
-        return `&take=${take_data}`;
+        setTake(take_data)
+        return `&take=${take_data}`
       }
       if (mdDown) {
-        setTake(5);
-        return `&take=${5}`;
+        setTake(5)
+        return `&take=${5}`
       }
-      setTake(10);
-      return `&take=${10}`;
+      setTake(10)
+      return `&take=${10}`
     },
-    [mdDown]
-  );
+    [mdDown],
+  )
 
   const steps = useMemo(() => {
-    const arredSteps = Math.ceil(count / take);
-    return arredSteps === 1 ? 0 : arredSteps;
-  }, [count, take]);
+    const arredSteps = Math.ceil(count / take)
+    return arredSteps === 1 ? 0 : arredSteps
+  }, [count, take])
 
   const is_director = useMemo(() => {
     if (director[0] !== director[1]) {
-      if (director[0]) return "&is_director=true";
-      if (director[1]) return "&is_director=false";
+      if (director[0]) return '&is_director=true'
+      if (director[1]) return '&is_director=false'
     }
-    return "";
-  }, [director]);
+    return ''
+  }, [director])
 
   const define_is_active = useCallback(
     (is_default?: boolean) => {
-      if (is_default) return "&is_active=true";
-      if (!active) return "&is_active=false";
-      return "&is_active=true";
+      if (is_default) return '&is_active=true'
+      if (!active) return '&is_active=false'
+      return '&is_active=true'
     },
-    [active]
-  );
+    [active],
+  )
 
   const handleChange = useCallback(
     (_event: ChangeEvent<unknown>, value: number) => {
       if (value > steps || value === steps) {
-        setPage(steps);
+        setPage(steps)
         if (steps === 0) {
-          setSkip(undefined);
+          setSkip(undefined)
         } else {
-          setSkip(`&skip=${(steps - 1) * take}`);
+          setSkip(`&skip=${(steps - 1) * take}`)
         }
       } else {
-        setPage(value);
-        setSkip(`&skip=${(value - 1) * take}`);
+        setPage(value)
+        setSkip(`&skip=${(value - 1) * take}`)
       }
     },
-    [steps, take]
-  );
+    [steps, take],
+  )
 
   const handleFace = useCallback(
     (face_data: number) => {
       if (face_data > steps || face_data === steps) {
-        setFace(steps);
+        setFace(steps)
         if (steps === 0) {
-          return "";
+          return ''
         }
-        return `&skip=${(steps - 1) * take}`;
+        return `&skip=${(steps - 1) * take}`
       }
-      setFace(face_data + 1);
-      return `&skip=${face_data * take}`;
+      setFace(face_data + 1)
+      return `&skip=${face_data * take}`
     },
-    [steps, take]
-  );
+    [steps, take],
+  )
 
   const define_query = useCallback(
     (
@@ -145,29 +145,29 @@ export const PaginationProvider = ({ children }: iChildren) => {
       class_id?: string,
       date?: string,
       month?: string,
-      is_active?: boolean
+      is_active?: boolean,
     ) => {
-      let query = "?by=asc" + define_is_active(is_active);
-      if (year_id) query += "&year_id=" + year_id;
-      if (school_id) query += "&school_id=" + school_id;
-      if (class_id) query += "&class_id=" + class_id;
-      if (date) query += "&date=" + date;
-      if (month) query += "&month=" + month;
+      let query = '?by=asc' + define_is_active(is_active)
+      if (year_id) query += '&year_id=' + year_id
+      if (school_id) query += '&school_id=' + school_id
+      if (class_id) query += '&class_id=' + class_id
+      if (date) query += '&date=' + date
+      if (month) query += '&month=' + month
 
-      return query;
+      return query
     },
-    [define_is_active]
-  );
+    [define_is_active],
+  )
 
   const define_query_page = useCallback(
     (take_data?: number, isSkip?: boolean) => {
-      let query = define_take(take_data);
-      if (isSkip && skip) query += skip;
+      let query = define_take(take_data)
+      if (isSkip && skip) query += skip
 
-      return query;
+      return query
     },
-    [define_take, skip]
-  );
+    [define_take, skip],
+  )
 
   return (
     <PaginationContext.Provider
@@ -201,7 +201,7 @@ export const PaginationProvider = ({ children }: iChildren) => {
     >
       {children}
     </PaginationContext.Provider>
-  );
-};
+  )
+}
 
-export const usePaginationContext = () => useContext(PaginationContext);
+export const usePaginationContext = () => useContext(PaginationContext)

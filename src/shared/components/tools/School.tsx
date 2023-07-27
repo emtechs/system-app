@@ -140,7 +140,7 @@ export const ToolsSchool = ({
       {isSearch && (
         <TextField
           size="small"
-          value={search || ''}
+          value={search}
           placeholder="Pesquisar..."
           onChange={(e) => setSearch?.(e.target.value)}
         />
