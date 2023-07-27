@@ -10,6 +10,7 @@ import { Box, Card, CardContent, Grid, Paper } from '@mui/material'
 import { LayoutBasePage } from '../../../shared/layouts'
 import {
   CalendarFrequency,
+  Footer,
   GridDashContent,
   GridDashOrgan,
 } from '../../../shared/components'
@@ -167,6 +168,7 @@ export const CreateFrequencyCommon = () => {
           </CardContent>
         </Card>
       </Box>
+      <Footer />
     </LayoutBasePage>
   )
 }

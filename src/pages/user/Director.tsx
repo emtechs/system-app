@@ -1,30 +1,30 @@
-import { ValidateCPF } from "../../shared/components";
-import { useAppThemeContext } from "../../shared/contexts";
+import { Footer, ValidateCPF } from '../../shared/components'
+import { useAppThemeContext } from '../../shared/contexts'
 import {
   AutocompleteElement,
   FormContainer,
   TextFieldElement,
-} from "react-hook-form-mui";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createDirectorSchema } from "../../shared/schemas";
-import { Box, Grid, Paper } from "@mui/material";
-import { useEffect, useState } from "react";
-import { apiUsingNow } from "../../shared/services";
-import { iSchool } from "../../shared/interfaces";
-import { LayoutBasePage } from "../../shared/layouts";
+} from 'react-hook-form-mui'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { createDirectorSchema } from '../../shared/schemas'
+import { Box, Grid, Paper } from '@mui/material'
+import { useEffect, useState } from 'react'
+import { apiUsingNow } from '../../shared/services'
+import { iSchool } from '../../shared/interfaces'
+import { LayoutBasePage } from '../../shared/layouts'
 
 export const CreateDirectorPage = () => {
-  const { setLoading } = useAppThemeContext();
+  const { setLoading } = useAppThemeContext()
   // const { createDirector } = useUserContext();
-  const [schoolDataSelect, setSchoolDataSelect] = useState<iSchool[]>();
+  const [schoolDataSelect, setSchoolDataSelect] = useState<iSchool[]>()
 
   useEffect(() => {
-    setLoading(true);
+    setLoading(true)
     apiUsingNow
-      .get<{ result: iSchool[] }>("schools?is_director=true&is_active=true")
+      .get<{ result: iSchool[] }>('schools?is_director=true&is_active=true')
       .then((res) => setSchoolDataSelect(res.data.result))
-      .finally(() => setLoading(false));
-  }, []);
+      .finally(() => setLoading(false))
+  }, [])
 
   return (
     <LayoutBasePage title="Novo Diretor">
@@ -55,7 +55,7 @@ export const CreateDirectorPage = () => {
                           {
                             id: 1,
                             label:
-                              "No momento, não há nenhuma escola sem diretor",
+                              'No momento, não há nenhuma escola sem diretor',
                           },
                         ]
                   }
@@ -80,6 +80,7 @@ export const CreateDirectorPage = () => {
           </Grid>
         </Box>
       </FormContainer>
+      <Footer />
     </LayoutBasePage>
-  );
-};
+  )
+}

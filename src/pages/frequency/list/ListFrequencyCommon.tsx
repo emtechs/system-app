@@ -1,5 +1,5 @@
 import { Breadcrumbs, Chip, Link, TableCell, TableRow } from '@mui/material'
-import { TableBase } from '../../../shared/components'
+import { Footer, TableBase } from '../../../shared/components'
 import {
   useAppThemeContext,
   useAuthContext,
@@ -159,6 +159,7 @@ export const ListFrequencyCommon = () => {
           <CardFrequency key={el.id} freq={el} isDate={!date} />
         ))}
       </TableBase>
+      <Footer />
     </LayoutBasePage>
   )
 }

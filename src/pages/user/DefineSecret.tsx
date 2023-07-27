@@ -1,26 +1,26 @@
-import { ValidateCPF } from "../../shared/components";
-import { useAppThemeContext, useUserContext } from "../../shared/contexts";
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createSecretSchema } from "../../shared/schemas";
-import { useEffect, useState } from "react";
-import { apiUsingNow } from "../../shared/services";
-import { iUser } from "../../shared/interfaces";
-import { Box, Grid, Paper, Typography } from "@mui/material";
-import { LayoutBasePage } from "../../shared/layouts";
+import { Footer, ValidateCPF } from '../../shared/components'
+import { useAppThemeContext, useUserContext } from '../../shared/contexts'
+import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { createSecretSchema } from '../../shared/schemas'
+import { useEffect, useState } from 'react'
+import { apiUsingNow } from '../../shared/services'
+import { iUser } from '../../shared/interfaces'
+import { Box, Grid, Paper, Typography } from '@mui/material'
+import { LayoutBasePage } from '../../shared/layouts'
 
 export const DefineSecretPage = () => {
-  const { setLoading } = useAppThemeContext();
-  const { createSecret, updateAllUser } = useUserContext();
-  const [secretData, setSecretData] = useState<iUser>();
+  const { setLoading } = useAppThemeContext()
+  const { createSecret, updateAllUser } = useUserContext()
+  const [secretData, setSecretData] = useState<iUser>()
 
   useEffect(() => {
-    setLoading(true);
+    setLoading(true)
     apiUsingNow
-      .get<iUser[]>("users?role=SECRET")
+      .get<iUser[]>('users?role=SECRET')
       .then((res) => setSecretData(res.data[0]))
-      .finally(() => setLoading(false));
-  }, []);
+      .finally(() => setLoading(false))
+  }, [])
 
   return (
     <LayoutBasePage title="Definir Secretário">
@@ -31,12 +31,12 @@ export const DefineSecretPage = () => {
               secretData.id,
               {
                 is_active: false,
-                role: "SERV",
+                role: 'SERV',
               },
               true,
-              "list"
-            );
-          createSecret(data);
+              'list',
+            )
+          createSecret(data)
         }}
         resolver={zodResolver(createSecretSchema)}
       >
@@ -85,6 +85,7 @@ export const DefineSecretPage = () => {
           </Grid>
         </Box>
       </FormContainer>
+      <Footer />
     </LayoutBasePage>
-  );
-};
+  )
+}

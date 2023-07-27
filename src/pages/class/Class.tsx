@@ -8,15 +8,17 @@ import {
 import { LayoutBasePage } from '../../shared/layouts'
 import { useEffect } from 'react'
 import { ViewClass } from './view'
-import { useVerifyClass } from '../../shared/hooks'
+import { useVerifyClass, useVerifyYear } from '../../shared/hooks'
 
 export const ClassPage = () => {
-  const { class_id } = useParams()
+  const { class_id, year_id } = useParams()
   const { verifyClass } = useVerifyClass()
+  const { verifyYear } = useVerifyYear()
 
   useEffect(() => {
     if (class_id) verifyClass(class_id)
-  }, [class_id, verifyClass])
+    if (year_id) verifyYear(year_id)
+  }, [class_id, verifyClass, verifyYear, year_id])
 
   if (class_id) return <Outlet />
 

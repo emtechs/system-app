@@ -1,22 +1,23 @@
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { LayoutBasePage } from "../../shared/layouts";
-import { useAuthContext, useUserContext } from "../../shared/contexts";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { userUpdateSchema } from "../../shared/schemas";
-import { Box, Button, Grid, Paper } from "@mui/material";
+import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
+import { LayoutBasePage } from '../../shared/layouts'
+import { useAuthContext, useUserContext } from '../../shared/contexts'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { userUpdateSchema } from '../../shared/schemas'
+import { Box, Button, Grid, Paper } from '@mui/material'
+import { Footer } from '../../shared/components'
 
 export const EditProfilePage = () => {
-  const { userData } = useAuthContext();
-  const { updateUser } = useUserContext();
+  const { userData } = useAuthContext()
+  const { updateUser } = useUserContext()
   return (
     <LayoutBasePage title="Editar Perfil">
       <FormContainer
         defaultValues={{
-          name: userData ? userData.name : "",
-          email: userData ? userData.email : "",
+          name: userData ? userData.name : '',
+          email: userData ? userData.email : '',
         }}
         onSuccess={(data) => {
-          if (userData) updateUser(userData.id, data);
+          if (userData) updateUser(userData.id, data)
         }}
         resolver={zodResolver(userUpdateSchema)}
       >
@@ -58,6 +59,7 @@ export const EditProfilePage = () => {
           </Grid>
         </Box>
       </FormContainer>
+      <Footer />
     </LayoutBasePage>
-  );
-};
+  )
+}

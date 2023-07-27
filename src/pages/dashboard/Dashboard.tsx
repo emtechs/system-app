@@ -2,6 +2,7 @@ import { Box, Card, CardContent, Grid, Paper } from '@mui/material'
 import { LayoutBasePage } from '../../shared/layouts'
 import {
   CalendarDashCommon,
+  Footer,
   GridDashSchool,
   TitleSchoolDashPage,
 } from '../../shared/components'
@@ -51,6 +52,7 @@ export const DashboardSchoolPage = () => {
           </CardContent>
         </Card>
       </Box>
+      <Footer />
     </LayoutBasePage>
   )
 }

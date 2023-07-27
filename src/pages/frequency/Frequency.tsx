@@ -20,6 +20,7 @@ import {
   useSchoolContext,
 } from '../../shared/contexts'
 import {
+  Footer,
   GridDashContent,
   GridDashOrgan,
   PaginationBase,
@@ -266,6 +267,7 @@ export const FrequencyPage = () => {
           </CardContent>
         </Card>
       </Box>
+      <Footer />
     </LayoutBasePage>
   )
 }

@@ -1,33 +1,33 @@
-import { FormContainer } from "react-hook-form-mui";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, Grid, Paper } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
-import { SelectClass, Tools } from "../../shared/components";
+import { FormContainer } from 'react-hook-form-mui'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Box, Button, Grid, Paper } from '@mui/material'
+import { useSearchParams } from 'react-router-dom'
+import { Footer, SelectClass, Tools } from '../../shared/components'
 import {
   useAuthContext,
   useClassContext,
   useSchoolContext,
-} from "../../shared/contexts";
-import { classSchoolCreateSchema } from "../../shared/schemas";
-import { LayoutBasePage } from "../../shared/layouts";
+} from '../../shared/contexts'
+import { classSchoolCreateSchema } from '../../shared/schemas'
+import { LayoutBasePage } from '../../shared/layouts'
 
 export const DefineSchoolsPage = () => {
-  const [searchParams] = useSearchParams();
-  const id = searchParams.get("id");
-  const { yearData } = useAuthContext();
-  const { schoolRetrieve } = useSchoolContext();
-  const { createClassSchool } = useClassContext();
-  let school_id = "";
+  const [searchParams] = useSearchParams()
+  const id = searchParams.get('id')
+  const { yearData } = useAuthContext()
+  const { schoolRetrieve } = useSchoolContext()
+  const { createClassSchool } = useClassContext()
+  let school_id = ''
   if (id) {
-    school_id = id;
-  } else if (schoolRetrieve) school_id = schoolRetrieve.id;
-  const back = id ? `/school/class?id=${id}&order=name` : undefined;
+    school_id = id
+  } else if (schoolRetrieve) school_id = schoolRetrieve.id
+  const back = id ? `/school/class?id=${id}&order=name` : undefined
 
   return (
     <LayoutBasePage title="Definir Escola" tools={<Tools back={back} isHome />}>
       <FormContainer
         onSuccess={(data) => {
-          if (yearData) createClassSchool(data, yearData.id, school_id, back);
+          if (yearData) createClassSchool(data, yearData.id, school_id, back)
         }}
         resolver={zodResolver(classSchoolCreateSchema)}
       >
@@ -54,6 +54,7 @@ export const DefineSchoolsPage = () => {
           </Grid>
         </Box>
       </FormContainer>
+      <Footer />
     </LayoutBasePage>
-  );
-};
+  )
+}

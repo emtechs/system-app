@@ -1,18 +1,19 @@
-import { FormContainer, PasswordElement } from "react-hook-form-mui";
-import { LayoutBasePage } from "../../shared/layouts";
-import { useAuthContext, useUserContext } from "../../shared/contexts";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { userPasswordSchema } from "../../shared/schemas";
-import { Box, Button, Grid, Paper } from "@mui/material";
+import { FormContainer, PasswordElement } from 'react-hook-form-mui'
+import { LayoutBasePage } from '../../shared/layouts'
+import { useAuthContext, useUserContext } from '../../shared/contexts'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { userPasswordSchema } from '../../shared/schemas'
+import { Box, Button, Grid, Paper } from '@mui/material'
+import { Footer } from '../../shared/components'
 
 export const EditPasswordPage = () => {
-  const { userData } = useAuthContext();
-  const { editPassword } = useUserContext();
+  const { userData } = useAuthContext()
+  const { editPassword } = useUserContext()
   return (
     <LayoutBasePage title="Editar Senha">
       <FormContainer
         onSuccess={(data) => {
-          if (userData) editPassword(userData.id, data);
+          if (userData) editPassword(userData.id, data)
         }}
         resolver={zodResolver(userPasswordSchema)}
       >
@@ -64,6 +65,7 @@ export const EditPasswordPage = () => {
           </Grid>
         </Box>
       </FormContainer>
+      <Footer />
     </LayoutBasePage>
-  );
-};
+  )
+}

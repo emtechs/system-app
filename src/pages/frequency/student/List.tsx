@@ -6,7 +6,7 @@ import {
   TableCell,
   TableRow,
 } from '@mui/material'
-import { TableBase } from '../../../shared/components'
+import { Footer, TableBase } from '../../../shared/components'
 import {
   useAppThemeContext,
   useDrawerContext,
@@ -147,6 +147,7 @@ export const ListStudentFrequencyPage = () => {
         {dataStudents?.map((el) => <CardFrequency key={el.id} student={el} />)}
       </TableBase>
       <Box height={20} />
+      <Footer />
     </LayoutBasePage>
   )
 }

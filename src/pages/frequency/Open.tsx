@@ -9,7 +9,7 @@ import {
   useSchoolContext,
 } from '../../shared/contexts'
 import { iFrequency, iHeadCell } from '../../shared/interfaces'
-import { TableBase } from '../../shared/components'
+import { Footer, TableBase } from '../../shared/components'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { Outbox } from '@mui/icons-material'
 import { defineBgColorInfrequency } from '../../shared/scripts'
@@ -90,6 +90,7 @@ export const FrequencyOpenPage = () => {
       <TableBase headCells={headCells}>
         {data?.map((el) => <CardFrequency key={el.id} freq={el} />)}
       </TableBase>
+      <Footer />
     </LayoutBasePage>
   )
 }

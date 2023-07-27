@@ -35,7 +35,7 @@ export const ViewSchoolClassPage = () => {
       if (school_id) {
         setIsLoading(true)
         apiSchoolRetrieve
-          .classData(school_id, `&year_id=${year_id}${query}`)
+          .classData(school_id, `${query}&year_id=${year_id}`)
           .then((res) => {
             setListData(res.result)
             setCount(res.total)

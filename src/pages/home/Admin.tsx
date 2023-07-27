@@ -1,6 +1,7 @@
 import { Box, Card, CardContent, Grid, Paper } from '@mui/material'
 import {
   CalendarDashAdmin,
+  Footer,
   GridDashAdmin,
   TitleAdminDash,
 } from '../../shared/components'
@@ -45,6 +46,7 @@ export const HomePageAdmin = () => {
           </CardContent>
         </Card>
       </Box>
+      <Footer />
     </LayoutBasePage>
   )
 }

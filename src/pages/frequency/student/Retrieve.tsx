@@ -17,7 +17,11 @@ import {
   Paper,
 } from '@mui/material'
 import { LayoutBasePage } from '../../../shared/layouts'
-import { CalendarStudent, GridDashContent } from '../../../shared/components'
+import {
+  CalendarStudent,
+  Footer,
+  GridDashContent,
+} from '../../../shared/components'
 import { iDashClass } from '../../../shared/interfaces'
 import { useEffect, useState } from 'react'
 import {
@@ -178,6 +182,7 @@ export const StudentFrequencyPage = () => {
           </CardContent>
         </Card>
       </Box>
+      <Footer />
     </LayoutBasePage>
   )
 }

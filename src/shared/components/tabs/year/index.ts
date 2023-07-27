@@ -1,3 +1,4 @@
+export * from './Base'
 export * from './Class'
 export * from './Student'
 export * from './Year'

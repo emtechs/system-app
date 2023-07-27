@@ -10,23 +10,24 @@ import {
   StepContent,
   StepLabel,
   Stepper,
-} from "@mui/material";
-import { LayoutBasePage } from "../../shared/layouts";
-import { useSchoolContext } from "../../shared/contexts";
-import { Summarize } from "@mui/icons-material";
-import { Navigate } from "react-router-dom";
-import { FormContainer } from "react-hook-form-mui";
-import { useState } from "react";
+} from '@mui/material'
+import { LayoutBasePage } from '../../shared/layouts'
+import { useSchoolContext } from '../../shared/contexts'
+import { Summarize } from '@mui/icons-material'
+import { Navigate } from 'react-router-dom'
+import { FormContainer } from 'react-hook-form-mui'
+import { useState } from 'react'
+import { Footer } from '../../shared/components'
 
 export const ReportPage = () => {
-  const { schoolRetrieve } = useSchoolContext();
-  const [activeStep, setActiveStep] = useState(0);
+  const { schoolRetrieve } = useSchoolContext()
+  const [activeStep, setActiveStep] = useState(0)
 
-  if (!schoolRetrieve) return <Navigate to="/" />;
+  if (!schoolRetrieve) return <Navigate to="/" />
 
   const steps = [
     {
-      label: "Selecione o modelo do relátorio",
+      label: 'Selecione o modelo do relátorio',
       content: (
         <Box display="flex" flexDirection="column">
           <Button onClick={() => setActiveStep(1)}>Mês</Button>
@@ -35,13 +36,13 @@ export const ReportPage = () => {
         </Box>
       ),
     },
-    { label: "Create an ad group" },
-    { label: "Create an ad" },
-  ];
+    { label: 'Create an ad group' },
+    { label: 'Create an ad' },
+  ]
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+    setActiveStep((prevActiveStep) => prevActiveStep - 1)
+  }
 
   return (
     <LayoutBasePage
@@ -60,7 +61,7 @@ export const ReportPage = () => {
               <Grid container direction="column" p={2} spacing={2}>
                 <Grid container item direction="row" justifyContent="center">
                   <Grid item md={9}>
-                    <Box sx={{ width: "100%" }}>
+                    <Box sx={{ width: '100%' }}>
                       <Stepper activeStep={activeStep} alternativeLabel>
                         {steps.map((el, index) => (
                           <Step key={index}>
@@ -87,6 +88,7 @@ export const ReportPage = () => {
           </Card>
         </FormContainer>
       </Box>
+      <Footer />
     </LayoutBasePage>
-  );
-};
+  )
+}

@@ -10,6 +10,7 @@ import {
   DialogFinishFrequency,
   DialogMissed,
   DialogRemoveMissed,
+  Footer,
   TableBase,
   Tools,
 } from '../../shared/components'
@@ -195,6 +196,7 @@ export const RetrieveFrequencyPage = () => {
           ))}
         </TableBase>
         <Box height={20} />
+        <Footer />
       </LayoutBasePage>
       {alterStudents && (
         <DialogFinishFrequency

@@ -12,12 +12,11 @@ import {
   RetrieveUserPage,
   SchoolPage,
   StudentPage,
+  StudentYearPage,
   UserPage,
-  ViewClassYearPage,
   ViewDashboardSchoolPage,
   ViewSchoolPage,
   ViewUserPage,
-  YearPage,
 } from '../pages'
 import { ProtectedAdmin, ProtectedAuth } from '../shared/components'
 
@@ -39,22 +38,16 @@ const AppRoutes = () => {
             </Route>
           </Route>
           <Route path="/class" element={<ClassPage />}>
+            <Route path="year/:year_id" element={<ClassYearPage />} />
             <Route path=":class_id" element={<RetrieveClassPage />}>
               <Route path=":view" element={<ViewSchoolPage />} />
             </Route>
           </Route>
           <Route path="/student" element={<StudentPage />}>
+            <Route path="year/:year_id" element={<StudentYearPage />} />
             <Route path=":student_id" element={<RetrieveSchoolPage />}>
               <Route path=":view" element={<ViewSchoolPage />} />
             </Route>
-          </Route>
-          <Route path="/year" element={<YearPage />}>
-            <Route path=":year_id" element={<RetrieveClassPage />}>
-              <Route path=":view" element={<ViewSchoolPage />} />
-            </Route>
-          </Route>
-          <Route path="/year/class/:class_id" element={<ClassYearPage />}>
-            <Route path=":view" element={<ViewClassYearPage />} />
           </Route>
         </Route>
         <Route path="/" element={<HomePage />} />
