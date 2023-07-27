@@ -4,7 +4,7 @@ import {
   ToolsSchool,
 } from '../../shared/components'
 import { LayoutBasePage } from '../../shared/layouts'
-import { ViewStudent } from '../../shared/views'
+import { ViewStudentPage } from './view'
 
 export const StudentPage = () => {
   return (
@@ -23,7 +23,7 @@ export const StudentPage = () => {
       }
     >
       <TabsStudentYearPage />
-      <ViewStudent />
+      <ViewStudentPage />
     </LayoutBasePage>
   )
 }
