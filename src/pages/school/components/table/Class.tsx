@@ -1,47 +1,26 @@
 import sortArray from 'sort-array'
-import { useEffect, useMemo } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
-import {
-  TableRow,
-  TableCell,
-  IconButton,
-  Link,
-  Skeleton,
-  Tooltip,
-} from '@mui/material'
+import { useMemo } from 'react'
+import { TableRow, TableCell } from '@mui/material'
 import { Visibility } from '@mui/icons-material'
 import {
   useAppThemeContext,
   usePaginationContext,
 } from '../../../../shared/contexts'
-import { useDebounce } from '../../../../shared/hooks'
-import { iHeadCell, iSchoolClass } from '../../../../shared/interfaces'
-import { TableBase } from '../../../../shared/components'
+import { iClass, iHeadCell } from '../../../../shared/interfaces'
+import { LinkIcon, LinkText, TableBase } from '../../../../shared/components'
 
 interface iTableSchoolClassPageProps {
-  getClass: (query: string) => void
-  listData: iSchoolClass[]
+  listData: iClass[]
 }
 
 export const TableSchoolClassPage = ({
-  getClass,
   listData,
 }: iTableSchoolClassPageProps) => {
-  const { debounce } = useDebounce()
   const { mdDown } = useAppThemeContext()
-  const { search, order, by, isLoading, onClickReset } = usePaginationContext()
-
-  useEffect(() => {
-    if (search) {
-      const query_data = `&name=${search}`
-      debounce(() => {
-        getClass(query_data)
-      })
-    } else getClass('')
-  }, [search])
+  const { order, by, isLoading, onClickReset } = usePaginationContext()
 
   const data = useMemo(() => {
-    const listClass = sortArray<iSchoolClass>(listData, {
+    const listClass = sortArray<iClass>(listData, {
       by: order,
       order: by,
     })
@@ -68,20 +47,12 @@ export const TableSchoolClassPage = ({
       {data.map((el) => (
         <TableRow key={el.key}>
           <TableCell>
-            {isLoading ? (
-              <Skeleton width={300} />
-            ) : (
-              <Link
-                underline="none"
-                variant="body2"
-                color="inherit"
-                component={RouterLink}
-                to={`/class/key/${el.key}/student`}
-                onClick={onClickReset}
-              >
-                {el.name}
-              </Link>
-            )}
+            <LinkText
+              label={el.name}
+              isLoading={isLoading}
+              onClick={onClickReset}
+              to={`/class/key/${el.key}/student`}
+            />
           </TableCell>
           {!mdDown && (
             <>
@@ -90,17 +61,12 @@ export const TableSchoolClassPage = ({
             </>
           )}
           <TableCell>
-            <Tooltip title="Detalhar">
-              <IconButton
-                color="primary"
-                size="small"
-                component={RouterLink}
-                to={`/class/key/${el.key}/student`}
-                onClick={onClickReset}
-              >
-                <Visibility fontSize="small" />
-              </IconButton>
-            </Tooltip>
+            <LinkIcon
+              icon={<Visibility fontSize="small" />}
+              label="Detalhar"
+              onClick={onClickReset}
+              to={`/class/key/${el.key}/student`}
+            />
           </TableCell>
         </TableRow>
       ))}

@@ -59,12 +59,9 @@ interface iClassYearReturn {
   result: iClass[]
 }
 
-const listClass = async (
-  id: string,
-  query: string,
-): Promise<iClassYearReturn> => {
+const listClass = async (query: string): Promise<iClassYearReturn> => {
   const { data: response } = await apiUsingNow.get<iClassYearReturn>(
-    `classes/year/${id}${query}`,
+    `classes/year/${query}`,
   )
 
   return response

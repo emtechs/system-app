@@ -1,4 +1,3 @@
-export * from './Class'
 export * from './ClassData'
 export * from './Frequency'
 export * from './History'

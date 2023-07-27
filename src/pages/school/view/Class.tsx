@@ -1,6 +1,6 @@
 import { Workspaces } from '@mui/icons-material'
 import { Box, Chip } from '@mui/material'
-import { SyntheticEvent, useCallback, useMemo, useState } from 'react'
+import { SyntheticEvent, useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
   ToolsSchool,
@@ -12,40 +12,49 @@ import {
 } from '../../../shared/components'
 import { LayoutBasePage } from '../../../shared/layouts'
 import { TableSchoolClassPage } from '../components'
-import { iSchoolClass } from '../../../shared/interfaces'
-import { apiSchoolRetrieve } from '../../../shared/services'
+import { iClass } from '../../../shared/interfaces'
+import { apiClass } from '../../../shared/services'
 import { useAuthContext, usePaginationContext } from '../../../shared/contexts'
+import { useDebounce } from '../../../shared/hooks'
 
 export const ViewSchoolClassPage = () => {
   const { school_id } = useParams()
+  const { debounce } = useDebounce()
   const { listYear } = useAuthContext()
-  const { setIsLoading, setCount } = usePaginationContext()
-  const [listData, setListData] = useState<iSchoolClass[]>([])
+  const { setIsLoading, setCount, search } = usePaginationContext()
+  const [listData, setListData] = useState<iClass[]>([])
   const [index, setIndex] = useState(0)
 
   const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
     setIndex(Number(newValue))
   }
 
-  const year_id = useMemo(() => {
-    return listYear[index].id
-  }, [index, listYear])
+  const getClass = useCallback((query: string) => {
+    setIsLoading(true)
+    apiClass
+      .listClass(query)
+      .then((res) => {
+        setListData(res.result)
+        setCount(res.total)
+      })
+      .finally(() => setIsLoading(false))
+  }, [])
 
-  const getClass = useCallback(
-    (query: string) => {
-      if (school_id) {
-        setIsLoading(true)
-        apiSchoolRetrieve
-          .classData(school_id, `${query}&year_id=${year_id}`)
-          .then((res) => {
-            setListData(res.result)
-            setCount(res.total)
-          })
-          .finally(() => setIsLoading(false))
-      }
+  const define_query = useCallback(
+    (comp: string) => {
+      return `?school_id=${school_id}&year_id=${listYear[index].id}${comp}`
     },
-    [school_id, year_id],
+    [index, listYear, school_id],
   )
+
+  useEffect(() => {
+    if (search) {
+      const query_data = `&name=${search}`
+      debounce(() => {
+        getClass(define_query(query_data))
+      })
+    } else getClass(define_query(''))
+  }, [define_query, search])
 
   return (
     <>
@@ -75,7 +84,7 @@ export const ViewSchoolClassPage = () => {
         <Box display="flex" justifyContent="space-between">
           <TabsYear value={index} handleChange={handleChange} />
           <Box flex={1}>
-            <TableSchoolClassPage getClass={getClass} listData={listData} />
+            <TableSchoolClassPage listData={listData} />
           </Box>
         </Box>
         <Footer />

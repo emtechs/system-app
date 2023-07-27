@@ -1,7 +1,7 @@
+import { ReactNode } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import { Box, Tab, Tabs } from '@mui/material'
 import { useAuthContext } from '../../../contexts'
-import { Link, useParams } from 'react-router-dom'
-import { ReactNode } from 'react'
 
 interface iTabsBaseYearPageProps {
   label: string
