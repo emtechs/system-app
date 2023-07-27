@@ -73,8 +73,9 @@ export const AuthProvider = ({ children }: iChildren) => {
         .profile(accessToken)
         .then((res) => {
           apiUsingNow.defaults.headers.authorization = `Bearer ${accessToken}`
-          setUserData(res)
-          setDashData(res.dash)
+          setUserData(res.user)
+          setDashData(res.user.dash)
+          setListYear(res.years)
         })
         .catch(() => {
           localStorage.removeItem('@EMTechs:token')

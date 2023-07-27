@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Grid } from "@mui/material";
+import { useEffect, useState } from 'react'
+import { Grid } from '@mui/material'
 import {
   Checklist,
   Close,
@@ -7,33 +7,33 @@ import {
   People,
   School,
   Workspaces,
-} from "@mui/icons-material";
+} from '@mui/icons-material'
 import {
   useAppThemeContext,
   useAuthContext,
   useDrawerContext,
-} from "../../contexts";
-import { iUserDash } from "../../interfaces";
-import { apiUsingNow } from "../../services";
-import { GridDashContent } from "./GridDashContent";
-import { GridDashOrgan } from "./Organ";
+} from '../../contexts'
+import { iUserDash } from '../../interfaces'
+import { apiUsingNow } from '../../services'
+import { GridDashContent } from './GridDashContent'
+import { GridDashOrgan } from './Organ'
 
 export const GridDashAdmin = () => {
-  const { setLoading } = useAppThemeContext();
-  const { yearData } = useAuthContext();
+  const { setLoading } = useAppThemeContext()
+  const { yearData } = useAuthContext()
   const { handleClickStudent, handleClickFrequency, handleClickUser } =
-    useDrawerContext();
-  const [userDashData, setUserDashData] = useState<iUserDash>();
+    useDrawerContext()
+  const [userDashData, setUserDashData] = useState<iUserDash>()
 
   useEffect(() => {
     if (yearData) {
-      setLoading(true);
+      setLoading(true)
       apiUsingNow
         .get<iUserDash>(`users/dash/${yearData.id}`)
         .then((res) => setUserDashData(res.data))
-        .finally(() => setLoading(false));
+        .finally(() => setLoading(false))
     }
-  }, [yearData]);
+  }, [yearData])
 
   return (
     userDashData && (
@@ -54,7 +54,7 @@ export const GridDashAdmin = () => {
           icon={<Groups fontSize="large" />}
           quant={userDashData.countStudent}
           info="Alunos"
-          dest={`/year/${yearData?.id}?view=student`}
+          dest={`/student`}
         />
         <GridDashContent
           icon={<Checklist fontSize="large" />}
@@ -80,5 +80,5 @@ export const GridDashAdmin = () => {
         <GridDashOrgan />
       </Grid>
     )
-  );
-};
+  )
+}
