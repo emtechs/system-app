@@ -13,13 +13,17 @@ const create = async (data: FieldValues): Promise<iClass> => {
   return response
 }
 
-const createSchool = async (
-  data: iClassSchoolRequest,
-  year_id: string,
-  school_id: string,
-): Promise<iClass> => {
+const createSchool = async (data: iClassSchoolRequest): Promise<iClass> => {
   const { data: response } = await apiUsingNow.post<iClass>(
-    `classes/${year_id}/${school_id}`,
+    'classes/school',
+    data,
+  )
+  return response
+}
+
+const createStudent = async (data: FieldValues): Promise<iClass> => {
+  const { data: response } = await apiUsingNow.post<iClass>(
+    'classes/student',
     data,
   )
   return response
@@ -119,6 +123,7 @@ const listYear = async (key: string, query: string) => {
 export const apiClass = {
   create,
   createSchool,
+  createStudent,
   impClass,
   updateSchool,
   listClass,

@@ -1,5 +1,9 @@
 import { z } from 'zod'
-import { classCreateSchema, classSchoolCreateSchema } from '../schemas'
+import {
+  classCreateSchema,
+  classSchoolCreateSchema,
+  classStudentCreateSchema,
+} from '../schemas'
 import { iWithSchool } from './school.interface'
 import { iStudent, iStudentClass } from './student.interface'
 import { iYear } from './calendar.interfaces'
@@ -91,3 +95,5 @@ export interface iClassWithSchoolSelect extends iClassWithSchool {
 export type iClassRequest = z.infer<typeof classCreateSchema>
 
 export type iClassSchoolRequest = z.infer<typeof classSchoolCreateSchema>
+
+export type iClassStudentRequest = z.infer<typeof classStudentCreateSchema>

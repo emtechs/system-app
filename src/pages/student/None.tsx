@@ -8,7 +8,7 @@ import {
   ToolsSchool,
 } from '../../shared/components'
 import { LayoutBasePage } from '../../shared/layouts'
-import { ViewStudentYearPage } from './view'
+import { ViewStudentNonePage } from './view'
 
 export const StudentNonePage = () => {
   return (
@@ -30,7 +30,7 @@ export const StudentNonePage = () => {
       tools={<ToolsSchool isHome isSearch isNew titleNew="Nova" isReset />}
     >
       <TabsStudentYearPage />
-      <ViewStudentYearPage />
+      <ViewStudentNonePage />
       <Footer />
     </LayoutBasePage>
   )
