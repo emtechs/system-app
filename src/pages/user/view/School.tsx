@@ -68,7 +68,7 @@ export const ViewUserSchoolPage = () => {
       <LayoutBasePage
         title={
           <TitleBaseItemsPage>
-            <LabelUser clickable />
+            <LabelUser clickable to={`/user/${user_id}`} />
             <Chip
               color="primary"
               label="Escolas"
