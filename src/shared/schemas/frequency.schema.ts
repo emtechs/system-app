@@ -43,3 +43,52 @@ export const frequencyUpdateSchema = z
   })
   .refine((field) => (field.status = 'JUSTIFIED'))
   .refine((field) => (field.updated_at = dayjs().format()))
+
+export const reportSchema = z.object({
+  year: z.object(
+    { id: z.string().uuid() },
+    {
+      required_error: 'Ano Letivo obrigatório',
+      invalid_type_error: 'Ano Letivo obrigatório',
+    },
+  ),
+  period: z.object(
+    { id: z.string().uuid() },
+    {
+      required_error: 'Período obrigatório',
+      invalid_type_error: 'Período obrigatório',
+    },
+  ),
+  year_id: z.string().uuid().optional(),
+  period_id: z.string().uuid().optional(),
+})
+
+export const reportClassSchema = reportSchema
+  .extend({
+    class: z.object(
+      { key: z.string().uuid() },
+      {
+        required_error: 'Turma obrigatória',
+        invalid_type_error: 'Turma obrigatória',
+      },
+    ),
+    key_class: z.string().uuid().optional(),
+  })
+  .refine((field) => (field.key_class = field.class.key))
+  .refine((field) => (field.year_id = field.year.id))
+  .refine((field) => (field.period_id = field.period.id))
+
+export const reportStudentSchema = reportSchema
+  .extend({
+    student: z.object(
+      { id: z.string().uuid() },
+      {
+        required_error: 'Aluno obrigatório',
+        invalid_type_error: 'Aluno obrigatório',
+      },
+    ),
+    student_id: z.string().uuid().optional(),
+  })
+  .refine((field) => (field.student_id = field.student.id))
+  .refine((field) => (field.year_id = field.year.id))
+  .refine((field) => (field.period_id = field.period.id))

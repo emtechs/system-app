@@ -9,3 +9,10 @@ export interface iCalendar {
   display: 'list-item'
   color: string
 }
+
+export interface iPeriod {
+  id: string
+  name: string
+  label: string
+  key: string
+}
