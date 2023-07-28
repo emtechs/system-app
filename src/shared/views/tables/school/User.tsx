@@ -6,11 +6,7 @@ import {
   TableRow,
   Tooltip,
 } from '@mui/material'
-import {
-  DialogCreateSchoolServer,
-  DialogRemoveUser,
-  TableBase,
-} from '../../../components'
+import { DialogRemoveUser, TableBase } from '../../../components'
 import { iSchool, iHeadCell } from '../../../interfaces'
 import { rolePtBr } from '../../../scripts'
 import {
@@ -72,9 +68,6 @@ export const TableSchoolUser = ({ data }: iTableSchoolUserProps) => {
           </TableRow>
         ))}
       </TableBase>
-      {userRetrieve && (
-        <DialogCreateSchoolServer user={userRetrieve} school={schoolData} />
-      )}
       {userRetrieve && (
         <DialogRemoveUser user={userRetrieve} school={schoolData} />
       )}

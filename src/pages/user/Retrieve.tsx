@@ -1,26 +1,17 @@
-import { useEffect } from "react";
-import { Outlet, useParams } from "react-router-dom";
-import { LayoutBasePage } from "../../shared/layouts";
+import { Outlet, useParams } from 'react-router-dom'
+import { LayoutBasePage } from '../../shared/layouts'
 import {
   Footer,
   TabsUserRetrievePage,
   TitleUserRetrievePage,
   ToolsUser,
-} from "../../shared/components";
-import { useUserContext } from "../../shared/contexts";
-import { ViewUserData } from "../../shared/views";
+} from '../../shared/components'
+import { ViewRetrieveUserPage } from './view'
 
 export const RetrieveUserPage = () => {
-  const { view, user_id } = useParams();
-  const { userDataRetrieve, userSelect } = useUserContext();
+  const { view } = useParams()
 
-  useEffect(() => {
-    if (user_id) {
-      if (userSelect?.id !== user_id) userDataRetrieve(user_id, "");
-    }
-  }, [user_id]);
-
-  if (view) return <Outlet />;
+  if (view) return <Outlet />
 
   return (
     <LayoutBasePage
@@ -28,8 +19,8 @@ export const RetrieveUserPage = () => {
       tools={<ToolsUser back="/user" />}
     >
       <TabsUserRetrievePage value={view} />
-      <ViewUserData />
+      <ViewRetrieveUserPage />
       <Footer />
     </LayoutBasePage>
-  );
-};
+  )
+}

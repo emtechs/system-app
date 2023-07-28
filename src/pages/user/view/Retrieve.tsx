@@ -1,3 +1,5 @@
+import { useParams } from 'react-router-dom'
+import { useCallback, useEffect, useState } from 'react'
 import {
   Accordion,
   AccordionDetails,
@@ -9,20 +11,31 @@ import {
   Skeleton,
   Typography,
 } from '@mui/material'
-import { useDialogContext, useUserContext } from '../contexts'
 import { ExpandMore, RemoveDone } from '@mui/icons-material'
-import { useEffect } from 'react'
-import { DialogActiveUser } from '../components'
-import { useParams } from 'react-router-dom'
+import { DialogActiveUser } from '../../../shared/components'
+import { useDialogContext } from '../../../shared/contexts'
+import { iUser } from '../../../shared/interfaces'
+import { apiUser } from '../../../shared/services'
 
-export const ViewUserData = () => {
+export const ViewRetrieveUserPage = () => {
   const { user_id } = useParams()
   const { handleOpenActive } = useDialogContext()
-  const { loadingUser, userRetrieve, userDataRetrieve } = useUserContext()
+  const [loadingUser, setLoadingUser] = useState(true)
+  const [userRetrieve, setUserRetrieve] = useState<iUser>()
+
+  const userDataRetrieve = useCallback((id: string, query: string) => {
+    setLoadingUser(true)
+    apiUser
+      .retrieve(id, query)
+      .then((res) => setUserRetrieve(res))
+      .finally(() => setLoadingUser(false))
+  }, [])
 
   useEffect(() => {
     if (user_id) userDataRetrieve(user_id, '')
   }, [user_id])
+
+  const retrieve = () => userDataRetrieve(user_id || '', '')
 
   return (
     <>
@@ -58,7 +71,9 @@ export const ViewUserData = () => {
           </Button>
         </CardActions>
       </Card>
-      {userRetrieve && <DialogActiveUser user={userRetrieve} />}
+      {userRetrieve && (
+        <DialogActiveUser user={userRetrieve} get={retrieve} isData />
+      )}
     </>
   )
 }
