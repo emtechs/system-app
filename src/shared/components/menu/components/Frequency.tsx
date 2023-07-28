@@ -6,9 +6,9 @@ import {
   List as ListIcon,
   Outbox,
   Person,
-} from "@mui/icons-material";
-import { List } from "@mui/material";
-import { ListItemLink } from "../item";
+} from '@mui/icons-material'
+import { List } from '@mui/material'
+import { ListItemLink } from '../item'
 
 export const Frequency = () => {
   return (
@@ -17,7 +17,7 @@ export const Frequency = () => {
       <ListItemLink
         icon={<EventAvailable />}
         label="Frequência"
-        to={"frequency"}
+        to={'frequency'}
       />
       <ListItemLink
         icon={<Checklist />}
@@ -33,5 +33,5 @@ export const Frequency = () => {
       />
       <ListItemLink icon={<Person />} label="Aluno" to="frequency/student" />
     </List>
-  );
-};
+  )
+}

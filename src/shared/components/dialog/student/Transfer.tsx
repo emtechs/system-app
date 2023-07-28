@@ -1,45 +1,45 @@
-import { FieldValues } from "react-hook-form";
-import { iStudent } from "../../../../shared/interfaces";
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { apiClass } from "../../../../shared/services";
+import { FieldValues } from 'react-hook-form'
+import { iStudent } from '../../../../shared/interfaces'
+import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
+import { apiClass } from '../../../../shared/services'
 import {
   useAppThemeContext,
   useDialogContext,
-} from "../../../../shared/contexts";
+} from '../../../../shared/contexts'
 import {
   BaseContentChildren,
   DialogBaseChildren,
   AutoCompleteClass,
   AutoCompleteSchool,
-} from "../../../../shared/components";
-import { studentTransferSchema } from "../../../../shared/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@mui/material";
+} from '../../../../shared/components'
+import { studentTransferSchema } from '../../../../shared/schemas'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@mui/material'
 
 interface iDialogTransferStudentProps {
-  student: iStudent;
-  list: () => void;
+  student: iStudent
+  list: () => void
 }
 
 export const DialogTransferStudent = ({
   list,
   student,
 }: iDialogTransferStudentProps) => {
-  const { setLoading, handleError, handleSucess } = useAppThemeContext();
-  const { openEdit, handleOpenEdit } = useDialogContext();
+  const { setLoading, handleError, handleSucess } = useAppThemeContext()
+  const { openEdit, handleOpenEdit } = useDialogContext()
 
   const transferStudent = async (data: FieldValues) => {
     try {
-      setLoading(true);
-      await apiClass.transfer(data);
-      handleSucess("Aluno transferido com sucesso!");
-      list();
+      setLoading(true)
+      await apiClass.transfer(data)
+      handleSucess('Aluno transferido com sucesso!')
+      list()
     } catch {
-      handleError("Não foi possível transferir o aluno no momento!");
+      handleError('Não foi possível transferir o aluno no momento!')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <DialogBaseChildren
@@ -53,8 +53,8 @@ export const DialogTransferStudent = ({
     >
       <FormContainer
         onSuccess={(data) => {
-          handleOpenEdit();
-          transferStudent(data);
+          handleOpenEdit()
+          transferStudent(data)
         }}
         values={{
           year_id: student.year_id,
@@ -78,5 +78,5 @@ export const DialogTransferStudent = ({
         </BaseContentChildren>
       </FormContainer>
     </DialogBaseChildren>
-  );
-};
+  )
+}

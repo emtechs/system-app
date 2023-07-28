@@ -1,30 +1,30 @@
-import { useState } from "react";
-import { useSchoolContext, useStudentContext } from "../../shared/contexts";
-import { iPageProps } from "../../shared/interfaces";
+import { useState } from 'react'
+import { useSchoolContext, useStudentContext } from '../../shared/contexts'
+import { iPageProps } from '../../shared/interfaces'
 import {
   BasePage,
   BoxResp,
   InputFile,
   SelectClass,
   SelectSchool,
-} from "../../shared/components";
-import { FormContainer } from "react-hook-form-mui";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { studentImportSchema } from "../../shared/schemas";
-import { Button } from "@mui/material";
+} from '../../shared/components'
+import { FormContainer } from 'react-hook-form-mui'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { studentImportSchema } from '../../shared/schemas'
+import { Button } from '@mui/material'
 
 export const ImportStudentPage = ({ back }: iPageProps) => {
-  const { schoolRetrieve } = useSchoolContext();
-  const { importStudent } = useStudentContext();
-  const urlToDownload = "/students.csv";
-  const [download, setDownload] = useState("");
-  const [count, setCount] = useState(0);
+  const { schoolRetrieve } = useSchoolContext()
+  const { importStudent } = useStudentContext()
+  const urlToDownload = '/students.csv'
+  const [download, setDownload] = useState('')
+  const [count, setCount] = useState(0)
 
   return (
     <BasePage isProfile back={back}>
       <FormContainer
         onSuccess={(data) => {
-          if (schoolRetrieve) importStudent(data, schoolRetrieve.id, back);
+          if (schoolRetrieve) importStudent(data, schoolRetrieve.id, back)
         }}
         resolver={zodResolver(studentImportSchema)}
       >
@@ -33,16 +33,16 @@ export const ImportStudentPage = ({ back }: iPageProps) => {
           <SelectClass />
           <Button
             onClick={() => {
-              setDownload(urlToDownload);
-              setCount((old) => old + 1);
+              setDownload(urlToDownload)
+              setCount((old) => old + 1)
             }}
           >
             Modelo do Arquivo .csv
           </Button>
           {download && (
             <iframe
-              src={download + "?c=" + count}
-              style={{ display: "none" }}
+              src={download + '?c=' + count}
+              style={{ display: 'none' }}
             ></iframe>
           )}
           <InputFile />
@@ -52,5 +52,5 @@ export const ImportStudentPage = ({ back }: iPageProps) => {
         </BoxResp>
       </FormContainer>
     </BasePage>
-  );
-};
+  )
+}

@@ -1,14 +1,14 @@
-import { Box, Typography, useMediaQuery } from "@mui/material";
-import { iChildren } from "../../interfaces";
+import { Box, Typography, useMediaQuery } from '@mui/material'
+import { iChildren } from '../../interfaces'
 
 interface iBoxRespProps extends iChildren {
-  isLogin?: boolean;
-  isProfile?: boolean;
+  isLogin?: boolean
+  isProfile?: boolean
 }
 
 export const BoxResp = ({ children, isLogin, isProfile }: iBoxRespProps) => {
-  const matches = useMediaQuery("(max-width:305px)");
-  const dateData = new Date();
+  const matches = useMediaQuery('(max-width:305px)')
+  const dateData = new Date()
   if (matches) {
     return (
       <Box
@@ -26,7 +26,7 @@ export const BoxResp = ({ children, isLogin, isProfile }: iBoxRespProps) => {
           </Typography>
         )}
       </Box>
-    );
+    )
   }
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
@@ -38,5 +38,5 @@ export const BoxResp = ({ children, isLogin, isProfile }: iBoxRespProps) => {
         </Typography>
       )}
     </Box>
-  );
-};
+  )
+}

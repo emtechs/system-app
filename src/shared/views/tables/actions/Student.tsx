@@ -1,28 +1,28 @@
-import { RemoveDone, SyncAlt } from "@mui/icons-material";
-import { IconButton, TableCell, Tooltip } from "@mui/material";
-import { iStudent } from "../../../interfaces";
-import { useDialogContext } from "../../../contexts";
+import { RemoveDone, SyncAlt } from '@mui/icons-material'
+import { IconButton, TableCell, Tooltip } from '@mui/material'
+import { iStudent } from '../../../interfaces'
+import { useDialogContext } from '../../../contexts'
 
 interface iActionsStudentProps {
-  student: iStudent;
-  handleStudent: (newStudent: iStudent) => void;
+  student: iStudent
+  handleStudent: (newStudent: iStudent) => void
 }
 
 export const ActionsStudent = ({
   handleStudent,
   student,
 }: iActionsStudentProps) => {
-  const { handleOpenEdit, handleOpenActive } = useDialogContext();
+  const { handleOpenEdit, handleOpenActive } = useDialogContext()
 
   const onClickEdit = () => {
-    handleStudent(student);
-    handleOpenEdit();
-  };
+    handleStudent(student)
+    handleOpenEdit()
+  }
 
   const onClickActive = () => {
-    handleStudent(student);
-    handleOpenActive();
-  };
+    handleStudent(student)
+    handleOpenActive()
+  }
 
   return (
     <TableCell>
@@ -37,5 +37,5 @@ export const ActionsStudent = ({
         </IconButton>
       </Tooltip>
     </TableCell>
-  );
-};
+  )
+}

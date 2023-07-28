@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react'
 import {
   Box,
   Dialog,
@@ -6,20 +6,20 @@ import {
   Divider,
   List,
   ListItem,
-} from "@mui/material";
-import { iChildren } from "../../../interfaces";
-import { PaginationList } from "../../pagination";
-import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
+} from '@mui/material'
+import { iChildren } from '../../../interfaces'
+import { PaginationList } from '../../pagination'
+import { AutocompleteElement, FormContainer } from 'react-hook-form-mui'
 
 interface iBaseProps extends iChildren {
-  card: ReactNode;
-  open: boolean;
-  title: string;
-  name: string;
-  label: string;
-  loading: boolean;
-  options?: unknown[];
-  validate: ReactNode;
+  card: ReactNode
+  open: boolean
+  title: string
+  name: string
+  label: string
+  loading: boolean
+  options?: unknown[]
+  validate: ReactNode
 }
 
 export const Base = ({
@@ -48,14 +48,12 @@ export const Base = ({
                   label={label}
                   loading={loading}
                   options={
-                    options
-                      ? options
-                      : [
-                          {
-                            id: 1,
-                            label: `No momento, não há nenhuma ${label.toLowerCase()} cadastrada`,
-                          },
-                        ]
+                    options || [
+                      {
+                        id: 1,
+                        label: `No momento, não há nenhuma ${label.toLowerCase()} cadastrada`,
+                      },
+                    ]
                   }
                   textFieldProps={{ fullWidth: true }}
                 />
@@ -69,5 +67,5 @@ export const Base = ({
         </List>
       </Dialog>
     </>
-  );
-};
+  )
+}

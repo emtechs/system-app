@@ -1,24 +1,24 @@
-import { Edit, Password } from "@mui/icons-material";
-import { ListItemIcon, Menu, MenuItem } from "@mui/material";
+import { Edit, Password } from '@mui/icons-material'
+import { ListItemIcon, Menu, MenuItem } from '@mui/material'
 
 interface iMenuBaseProps {
-  anchorEl: HTMLElement | null;
-  handleClose: () => void;
+  anchorEl: HTMLElement | null
+  handleClose: () => void
 }
 
 export const MenuUser = ({ anchorEl, handleClose }: iMenuBaseProps) => {
   return (
     <Menu
-      sx={{ mt: "45px" }}
+      sx={{ mt: '45px' }}
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       keepMounted
       transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       open={Boolean(anchorEl)}
       onClose={handleClose}
@@ -36,5 +36,5 @@ export const MenuUser = ({ anchorEl, handleClose }: iMenuBaseProps) => {
         Editar Senha
       </MenuItem>
     </Menu>
-  );
-};
+  )
+}

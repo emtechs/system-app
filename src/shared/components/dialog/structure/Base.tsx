@@ -5,15 +5,15 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from "@mui/material";
+} from '@mui/material'
 
 interface iDialogBaseProps {
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  description: string;
-  action: () => void;
-  actionTitle: string;
+  open: boolean
+  onClose: () => void
+  title: string
+  description: string
+  action: () => void
+  actionTitle: string
 }
 
 export const DialogBase = ({
@@ -44,5 +44,5 @@ export const DialogBase = ({
         </Button>
       </DialogActions>
     </Dialog>
-  );
-};
+  )
+}

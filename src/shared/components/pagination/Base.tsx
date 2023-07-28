@@ -1,8 +1,8 @@
-import { Box, Pagination } from "@mui/material";
-import { usePaginationContext } from "../../contexts";
+import { Box, Pagination } from '@mui/material'
+import { usePaginationContext } from '../../contexts'
 
 export const PaginationBase = () => {
-  const { steps, page, handleChange } = usePaginationContext();
+  const { steps, page, handleChange } = usePaginationContext()
 
   return (
     steps > 0 && (
@@ -17,5 +17,5 @@ export const PaginationBase = () => {
         />
       </Box>
     )
-  );
-};
+  )
+}

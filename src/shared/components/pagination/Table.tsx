@@ -1,15 +1,15 @@
-import { KeyboardArrowDown } from "@mui/icons-material";
-import { Box, Skeleton, Typography } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { usePaginationContext } from "../../contexts";
+import { KeyboardArrowDown } from '@mui/icons-material'
+import { Box, Skeleton, Typography } from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton'
+import { usePaginationContext } from '../../contexts'
 
 interface iPaginationTableProps {
-  total: number;
-  onClick: () => void;
+  total: number
+  onClick: () => void
 }
 
 export const PaginationTable = ({ onClick, total }: iPaginationTableProps) => {
-  const { count, isLoading } = usePaginationContext();
+  const { count, isLoading } = usePaginationContext()
 
   return (
     count !== total && (
@@ -41,5 +41,5 @@ export const PaginationTable = ({ onClick, total }: iPaginationTableProps) => {
         </LoadingButton>
       </Box>
     )
-  );
-};
+  )
+}

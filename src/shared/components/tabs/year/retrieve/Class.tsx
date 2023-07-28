@@ -1,43 +1,43 @@
-import { Checklist, Groups, Percent, Workspaces } from "@mui/icons-material";
-import { useParams } from "react-router-dom";
-import { TabsBase } from "../../Base";
-import { useClassContext } from "../../../../contexts";
+import { Checklist, Groups, Percent, Workspaces } from '@mui/icons-material'
+import { useParams } from 'react-router-dom'
+import { TabsBase } from '../../Base'
+import { useClassContext } from '../../../../contexts'
 
 interface iTabsClassYearRetrievePageProps {
-  value?: string;
+  value?: string
 }
 
 export const TabsClassYearRetrievePage = ({
   value,
 }: iTabsClassYearRetrievePageProps) => {
-  const { class_id } = useParams();
-  const { classRetrieve } = useClassContext();
+  const { class_id } = useParams()
+  const { classRetrieve } = useClassContext()
 
-  const href = `/year/class/${class_id}`;
+  const href = `/year/class/${class_id}`
 
   const elemArr = [
-    { icon: <Workspaces />, label: "Turma", value: "", href },
+    { icon: <Workspaces />, label: 'Turma', value: '', href },
     {
       icon: <Groups />,
-      label: "Alunos",
-      value: "student",
+      label: 'Alunos',
+      value: 'student',
       href: `${href}/student`,
     },
     {
       icon: <Checklist />,
-      label: "Frequências",
+      label: 'Frequências',
       disabled: classRetrieve?.students === 0,
-      value: "frequency",
+      value: 'frequency',
       href: `${href}/frequency`,
     },
     {
       icon: <Percent />,
-      label: "Infrequência",
+      label: 'Infrequência',
       disabled: classRetrieve?.frequencies === 0,
-      value: "infrequency",
+      value: 'infrequency',
       href: `${href}/infrequency`,
     },
-  ];
+  ]
 
-  return <TabsBase value={value} elemArr={elemArr} />;
-};
+  return <TabsBase value={value} elemArr={elemArr} />
+}

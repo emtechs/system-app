@@ -3,14 +3,14 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-} from "@mui/material";
-import { iChildren } from "../../../interfaces";
-import { iOtherListItemLinkProps } from "./OtherListItemLink";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
+} from '@mui/material'
+import { iChildren } from '../../../interfaces'
+import { iOtherListItemLinkProps } from './OtherListItemLink'
+import { ExpandLess, ExpandMore } from '@mui/icons-material'
 
 interface iListItemLinkOpenProps extends iChildren, iOtherListItemLinkProps {
-  open: boolean;
-  onClick: () => void;
+  open: boolean
+  onClick: () => void
 }
 
 export const ListItemLinkOpen = ({
@@ -29,5 +29,5 @@ export const ListItemLinkOpen = ({
       </ListItemButton>
       <Collapse in={open}>{children}</Collapse>
     </>
-  );
-};
+  )
+}

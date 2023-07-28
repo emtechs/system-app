@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo } from 'react'
 import {
   Box,
   LinearProgress,
@@ -9,18 +9,18 @@ import {
   TableFooter,
   TableRow,
   Typography,
-} from "@mui/material";
-import { usePaginationContext } from "../../contexts";
-import { iLinkComp, iTable } from "../../interfaces";
-import { TableSort } from "./Sort";
-import { TableCellLink } from "./CellLink";
+} from '@mui/material'
+import { usePaginationContext } from '../../contexts'
+import { iLinkComp, iTable } from '../../interfaces'
+import { TableSort } from './Sort'
+import { TableCellLink } from './CellLink'
 
 export const TableBase = ({ message, children, headCells, link }: iTable) => {
-  const { isLoading, count } = usePaginationContext();
+  const { isLoading, count } = usePaginationContext()
 
   const msg = useMemo(() => {
-    return message ? message : "Nenhum registro encontrado.";
-  }, [message]);
+    return message || 'Nenhum registro encontrado.'
+  }, [message])
 
   const FooterComp = useMemo(() => {
     if (link) {
@@ -29,7 +29,7 @@ export const TableBase = ({ message, children, headCells, link }: iTable) => {
           <Box width="100%" p={2}>
             <LinearProgress variant="indeterminate" />
           </Box>
-        );
+        )
       } else if (count === 0)
         return (
           <Box width="100%" p={2}>
@@ -37,19 +37,19 @@ export const TableBase = ({ message, children, headCells, link }: iTable) => {
               {msg}
             </Typography>
           </Box>
-        );
+        )
     }
-    return <></>;
-  }, [count, isLoading, link, msg]);
+    return <></>
+  }, [count, isLoading, link, msg])
 
   const linkComp: iLinkComp = useMemo(() => {
-    if (link) return { component: link };
-    return {};
-  }, [link]);
+    if (link) return { component: link }
+    return {}
+  }, [link])
 
   return (
     <TableContainer
-      sx={{ mx: 2, mt: 1, width: "auto" }}
+      sx={{ mx: 2, mt: 1, width: 'auto' }}
       component={Paper}
       variant="outlined"
     >
@@ -71,5 +71,5 @@ export const TableBase = ({ message, children, headCells, link }: iTable) => {
       </Table>
       {FooterComp}
     </TableContainer>
-  );
-};
+  )
+}

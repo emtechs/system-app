@@ -1,6 +1,6 @@
-import { Groups, School, Workspaces } from "@mui/icons-material";
-import { List } from "@mui/material";
-import { ListItemLink } from "../item";
+import { Groups, School, Workspaces } from '@mui/icons-material'
+import { List } from '@mui/material'
+import { ListItemLink } from '../item'
 
 export const Import = () => {
   return (
@@ -9,5 +9,5 @@ export const Import = () => {
       <ListItemLink icon={<Workspaces />} label="Turmas" to="import/class" />
       <ListItemLink icon={<Groups />} label="Alunos" to="import/student" />
     </List>
-  );
-};
+  )
+}

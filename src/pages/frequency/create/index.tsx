@@ -1,20 +1,20 @@
-import { useAuthContext } from "../../../shared/contexts";
-import { CreateFrequencyCommon } from "./CreateFrequency";
-import { CreateFrequencyAdm } from "./CreateFrequencyAdm";
+import { useAuthContext } from '../../../shared/contexts'
+import { CreateFrequencyCommon } from './CreateFrequency'
+import { CreateFrequencyAdm } from './CreateFrequencyAdm'
 
 export const CreateFrequencyPage = () => {
-  const { dashData } = useAuthContext();
+  const { dashData } = useAuthContext()
   switch (dashData) {
-    case "ADMIN":
-      return <CreateFrequencyAdm />;
+    case 'ADMIN':
+      return <CreateFrequencyAdm />
 
-    case "SCHOOL":
-      return <CreateFrequencyCommon />;
+    case 'SCHOOL':
+      return <CreateFrequencyCommon />
 
-    case "COMMON":
-      return <CreateFrequencyCommon />;
+    case 'COMMON':
+      return <CreateFrequencyCommon />
 
     default:
-      return <></>;
+      return <></>
   }
-};
+}

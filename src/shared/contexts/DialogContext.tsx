@@ -1,29 +1,29 @@
-import { createContext, useContext, useState } from "react";
-import { iChildren } from "../interfaces";
+import { createContext, useContext, useState } from 'react'
+import { iChildren } from '../interfaces'
 
 interface iDialogContextData {
-  openActive: boolean;
-  openCreate: boolean;
-  openDirector: boolean;
-  openEdit: boolean;
-  handleOpenActive: () => void;
-  handleOpenCreate: () => void;
-  handleOpenDirector: () => void;
-  handleOpenEdit: () => void;
+  openActive: boolean
+  openCreate: boolean
+  openDirector: boolean
+  openEdit: boolean
+  handleOpenActive: () => void
+  handleOpenCreate: () => void
+  handleOpenDirector: () => void
+  handleOpenEdit: () => void
 }
 
-const DialogContext = createContext({} as iDialogContextData);
+const DialogContext = createContext({} as iDialogContextData)
 
 export const DialogProvider = ({ children }: iChildren) => {
-  const [openActive, setOpenActive] = useState(false);
-  const [openCreate, setOpenCreate] = useState(false);
-  const [openDirector, setOpenDirector] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
+  const [openActive, setOpenActive] = useState(false)
+  const [openCreate, setOpenCreate] = useState(false)
+  const [openDirector, setOpenDirector] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
 
-  const handleOpenActive = () => setOpenActive(!openActive);
-  const handleOpenCreate = () => setOpenCreate(!openCreate);
-  const handleOpenDirector = () => setOpenDirector(!openDirector);
-  const handleOpenEdit = () => setOpenEdit(!openEdit);
+  const handleOpenActive = () => setOpenActive(!openActive)
+  const handleOpenCreate = () => setOpenCreate(!openCreate)
+  const handleOpenDirector = () => setOpenDirector(!openDirector)
+  const handleOpenEdit = () => setOpenEdit(!openEdit)
 
   return (
     <DialogContext.Provider
@@ -40,7 +40,7 @@ export const DialogProvider = ({ children }: iChildren) => {
     >
       {children}
     </DialogContext.Provider>
-  );
-};
+  )
+}
 
-export const useDialogContext = () => useContext(DialogContext);
+export const useDialogContext = () => useContext(DialogContext)

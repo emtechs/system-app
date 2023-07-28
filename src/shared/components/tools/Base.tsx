@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, ReactNode, useMemo, useState } from "react";
+import { ChangeEvent, MouseEvent, ReactNode, useMemo, useState } from 'react'
 import {
   Box,
   Checkbox,
@@ -7,7 +7,7 @@ import {
   MenuItem,
   Paper,
   TextField,
-} from "@mui/material";
+} from '@mui/material'
 import {
   AddBox,
   ArrowBack,
@@ -16,53 +16,53 @@ import {
   ManageAccountsOutlined,
   PersonOffOutlined,
   PersonOutlined,
-} from "@mui/icons-material";
+} from '@mui/icons-material'
 import {
   useAppThemeContext,
   useDrawerContext,
   usePaginationContext,
-} from "../../contexts";
-import { ActiveButton, CompBase, HomeButton, UserTools } from "./components";
-import { ButtonDest } from "../button";
+} from '../../contexts'
+import { ActiveButton, CompBase, HomeButton, UserTools } from './components'
+import { ButtonDest } from '../button'
 
 interface iToolsProps {
-  back?: string;
-  isSingle?: boolean;
-  isHome?: boolean;
-  toHome?: string;
-  isUser?: boolean;
-  titleNew?: string;
-  iconNew?: ReactNode;
-  onClickNew?: () => void;
-  isSearch?: boolean;
-  isActive?: boolean;
-  isDirector?: boolean;
-  isInfreq?: boolean;
-  infreq?: string;
-  setInfreq?: (text: string) => void;
-  finish?: ReactNode;
-  isReset?: boolean;
+  back?: string
+  isSingle?: boolean
+  isHome?: boolean
+  toHome?: string
+  isUser?: boolean
+  titleNew?: string
+  iconNew?: ReactNode
+  onClickNew?: () => void
+  isSearch?: boolean
+  isActive?: boolean
+  isDirector?: boolean
+  isInfreq?: boolean
+  infreq?: string
+  setInfreq?: (text: string) => void
+  finish?: ReactNode
+  isReset?: boolean
 }
 
 export const Tools = ({
   back,
   isSingle,
   isHome,
-  toHome = "/",
+  toHome = '/',
   isUser,
-  titleNew = "Novo",
+  titleNew = 'Novo',
   iconNew = <AddBox />,
   onClickNew,
   isSearch,
   isActive,
   isDirector,
   isInfreq,
-  infreq = "",
+  infreq = '',
   setInfreq,
   finish,
   isReset,
 }: iToolsProps) => {
-  const { theme, mdDown } = useAppThemeContext();
+  const { theme, mdDown } = useAppThemeContext()
   const {
     is_active,
     is_director,
@@ -71,38 +71,38 @@ export const Tools = ({
     director,
     setDirector,
     onClickReset,
-  } = usePaginationContext();
-  const { handleClickButtonTools } = useDrawerContext();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  } = usePaginationContext()
+  const { handleClickButtonTools } = useDrawerContext()
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
   const handleChange1 = (event: ChangeEvent<HTMLInputElement>) => {
-    setDirector([event.target.checked, event.target.checked]);
-  };
+    setDirector([event.target.checked, event.target.checked])
+  }
 
   const handleChange2 = (event: ChangeEvent<HTMLInputElement>) => {
-    setDirector([event.target.checked, director[1]]);
-  };
+    setDirector([event.target.checked, director[1]])
+  }
 
   const handleChange3 = (event: ChangeEvent<HTMLInputElement>) => {
-    setDirector([director[0], event.target.checked]);
-  };
+    setDirector([director[0], event.target.checked])
+  }
 
   const disabled = useMemo(() => {
     if (
       search ||
       infreq.length > 0 ||
       is_director.length > 0 ||
-      is_active() === "&is_active=false"
+      is_active() === '&is_active=false'
     )
-      return false;
-    return true;
-  }, [search, infreq, is_director, is_active]);
+      return false
+    return true
+  }, [search, infreq, is_director, is_active])
 
   return (
     <Box
@@ -157,14 +157,14 @@ export const Tools = ({
           <>
             <FormControlLabel
               label={
-                mdDown ? <ManageAccountsOutlined color="primary" /> : "Diretor"
+                mdDown ? <ManageAccountsOutlined color="primary" /> : 'Diretor'
               }
               control={
                 <Checkbox
                   id="basic-button"
-                  aria-controls={open ? "basic-menu" : undefined}
+                  aria-controls={open ? 'basic-menu' : undefined}
                   aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
+                  aria-expanded={open ? 'true' : undefined}
                   checked={director[0] && director[1]}
                   indeterminate={director[0] !== director[1]}
                   onChange={handleChange1}
@@ -178,7 +178,7 @@ export const Tools = ({
               open={open}
               onClose={handleClose}
               MenuListProps={{
-                "aria-labelledby": "basic-button",
+                'aria-labelledby': 'basic-button',
               }}
             >
               <MenuItem>
@@ -211,5 +211,5 @@ export const Tools = ({
         )}
       </Box>
     </Box>
-  );
-};
+  )
+}

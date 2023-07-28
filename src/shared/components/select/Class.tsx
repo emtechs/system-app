@@ -1,43 +1,43 @@
-import { AutocompleteElement, useFormContext } from "react-hook-form-mui";
-import { useAppThemeContext, useClassContext } from "../../contexts";
-import { useEffect } from "react";
-import { apiUsingNow } from "../../services";
-import { iClass } from "../../interfaces";
+import { AutocompleteElement, useFormContext } from 'react-hook-form-mui'
+import { useAppThemeContext, useClassContext } from '../../contexts'
+import { useEffect } from 'react'
+import { apiUsingNow } from '../../services'
+import { iClass } from '../../interfaces'
 
 const ValidateClass = () => {
-  const { watch } = useFormContext();
-  const classData: iClass = watch("class");
+  const { watch } = useFormContext()
+  const classData: iClass = watch('class')
 
   useEffect(() => {
-    <></>;
-  }, [classData]);
+    ;<></>
+  }, [classData])
 
-  return <></>;
-};
+  return <></>
+}
 
 export const SelectClass = () => {
-  const { setLoading } = useAppThemeContext();
-  const { classDataSelect, setClassDataSelect } = useClassContext();
+  const { setLoading } = useAppThemeContext()
+  const { classDataSelect, setClassDataSelect } = useClassContext()
 
   useEffect(() => {
-    setLoading(true);
+    setLoading(true)
     apiUsingNow
-      .get<iClass[]>("classes?&is_active=true")
+      .get<iClass[]>('classes?&is_active=true')
       .then((res) => {
         if (res.data) {
           setClassDataSelect(
             res.data.map((el) => {
-              return { ...el, label: el.name };
-            })
-          );
+              return { ...el, label: el.name }
+            }),
+          )
         }
       })
-      .finally(() => setLoading(false));
-  }, []);
+      .finally(() => setLoading(false))
+  }, [])
 
   return (
     <>
-      <div style={{ width: "100%" }}>
+      <div style={{ width: '100%' }}>
         <AutocompleteElement
           name="class"
           label="Turma"
@@ -48,7 +48,7 @@ export const SelectClass = () => {
               : [
                   {
                     id: 1,
-                    label: "No momento, não há nenhuma turma cadastrada",
+                    label: 'No momento, não há nenhuma turma cadastrada',
                   },
                 ]
           }
@@ -56,5 +56,5 @@ export const SelectClass = () => {
       </div>
       <ValidateClass />
     </>
-  );
-};
+  )
+}

@@ -1,25 +1,25 @@
-import { useState } from "react";
-import { useAuthContext } from "../../shared/contexts";
-import { BasePage, BoxResp, Glossary } from "../../shared/components";
-import { FormContainer, PasswordElement } from "react-hook-form-mui";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { passwordRecoverySchema } from "../../shared/schemas";
-import { Button, IconButton } from "@mui/material";
-import { Info } from "@mui/icons-material";
-import { useParams } from "react-router-dom";
+import { useState } from 'react'
+import { useAuthContext } from '../../shared/contexts'
+import { BasePage, BoxResp, Glossary } from '../../shared/components'
+import { FormContainer, PasswordElement } from 'react-hook-form-mui'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { passwordRecoverySchema } from '../../shared/schemas'
+import { Button, IconButton } from '@mui/material'
+import { Info } from '@mui/icons-material'
+import { useParams } from 'react-router-dom'
 
 export const PasswordPage = () => {
-  const { userId, token } = useParams();
-  const { recoveryPassword } = useAuthContext();
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(!open);
+  const { userId, token } = useParams()
+  const { recoveryPassword } = useAuthContext()
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(!open)
 
   return (
     <>
       <BasePage padding={6}>
         <FormContainer
           onSuccess={(data) => {
-            if (userId && token) recoveryPassword(data, userId, token);
+            if (userId && token) recoveryPassword(data, userId, token)
           }}
           resolver={zodResolver(passwordRecoverySchema)}
         >
@@ -50,5 +50,5 @@ export const PasswordPage = () => {
         ao sistema com a senha atualizada.
       </Glossary>
     </>
-  );
-};
+  )
+}

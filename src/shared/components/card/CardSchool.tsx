@@ -1,10 +1,10 @@
-import { Avatar, Box, Card, CardContent, Typography } from "@mui/material";
-import { useAppThemeContext, useSchoolContext } from "../../contexts";
-import { adaptNameSchool } from "../../scripts";
+import { Avatar, Box, Card, CardContent, Typography } from '@mui/material'
+import { useAppThemeContext, useSchoolContext } from '../../contexts'
+import { adaptNameSchool } from '../../scripts'
 
 export const CardSchool = () => {
-  const { theme } = useAppThemeContext();
-  const { schoolSelect } = useSchoolContext();
+  const { theme } = useAppThemeContext()
+  const { schoolSelect } = useSchoolContext()
 
   return (
     schoolSelect && (
@@ -12,8 +12,8 @@ export const CardSchool = () => {
         <Card>
           <CardContent
             sx={{
-              display: "flex",
-              alignItems: "center",
+              display: 'flex',
+              alignItems: 'center',
               gap: theme.spacing(2),
             }}
           >
@@ -31,5 +31,5 @@ export const CardSchool = () => {
         </Card>
       </Box>
     )
-  );
-};
+  )
+}

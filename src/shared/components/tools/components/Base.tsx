@@ -1,13 +1,13 @@
-import { ReactNode } from "react";
-import { Button, IconButton, Tooltip } from "@mui/material";
-import { useAppThemeContext } from "../../../contexts";
+import { ReactNode } from 'react'
+import { Button, IconButton, Tooltip } from '@mui/material'
+import { useAppThemeContext } from '../../../contexts'
 
 interface iCompBaseProps {
-  title: string;
-  startIcon?: ReactNode;
-  endIcon?: ReactNode;
-  onClick?: () => void;
-  disabled?: boolean;
+  title: string
+  startIcon?: ReactNode
+  endIcon?: ReactNode
+  onClick?: () => void
+  disabled?: boolean
 }
 
 export const CompBase = ({
@@ -17,7 +17,7 @@ export const CompBase = ({
   startIcon,
   disabled,
 }: iCompBaseProps) => {
-  const { mdDown } = useAppThemeContext();
+  const { mdDown } = useAppThemeContext()
 
   return mdDown ? (
     <Tooltip title={title}>
@@ -39,5 +39,5 @@ export const CompBase = ({
     >
       {title}
     </Button>
-  );
-};
+  )
+}

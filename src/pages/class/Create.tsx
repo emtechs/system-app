@@ -1,13 +1,13 @@
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { BasePage, BoxResp } from "../../shared/components";
-import { Button } from "@mui/material";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { classCreateSchema } from "../../shared/schemas";
-import { useClassContext } from "../../shared/contexts";
-import { iPageProps } from "../../shared/interfaces";
+import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
+import { BasePage, BoxResp } from '../../shared/components'
+import { Button } from '@mui/material'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { classCreateSchema } from '../../shared/schemas'
+import { useClassContext } from '../../shared/contexts'
+import { iPageProps } from '../../shared/interfaces'
 
 export const CreateClassPage = ({ back }: iPageProps) => {
-  const { createClass } = useClassContext();
+  const { createClass } = useClassContext()
 
   return (
     <BasePage isProfile back={back}>
@@ -23,5 +23,5 @@ export const CreateClassPage = ({ back }: iPageProps) => {
         </BoxResp>
       </FormContainer>
     </BasePage>
-  );
-};
+  )
+}

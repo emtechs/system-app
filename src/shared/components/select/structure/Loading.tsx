@@ -1,4 +1,4 @@
-import { Box, LinearProgress, ListItem } from "@mui/material";
+import { Box, LinearProgress, ListItem } from '@mui/material'
 
 export const Loading = () => {
   return (
@@ -7,5 +7,5 @@ export const Loading = () => {
         <LinearProgress variant="indeterminate" />
       </Box>
     </ListItem>
-  );
-};
+  )
+}

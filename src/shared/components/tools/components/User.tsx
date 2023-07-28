@@ -1,5 +1,5 @@
-import { MouseEvent, useState } from "react";
-import { AddBox, ExpandLess, ExpandMore, PersonAdd } from "@mui/icons-material";
+import { MouseEvent, useState } from 'react'
+import { AddBox, ExpandLess, ExpandMore, PersonAdd } from '@mui/icons-material'
 import {
   Button,
   IconButton,
@@ -7,20 +7,20 @@ import {
   Menu,
   MenuItem,
   Tooltip,
-} from "@mui/material";
-import { useAppThemeContext, useDialogContext } from "../../../contexts";
+} from '@mui/material'
+import { useAppThemeContext, useDialogContext } from '../../../contexts'
 
 export const UserTools = () => {
-  const { mdDown } = useAppThemeContext();
-  const { handleOpenCreate, handleOpenDirector } = useDialogContext();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const { mdDown } = useAppThemeContext()
+  const { handleOpenCreate, handleOpenDirector } = useDialogContext()
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   return (
     <>
@@ -28,9 +28,9 @@ export const UserTools = () => {
         <Tooltip title="Novo">
           <IconButton
             id="basic-button"
-            aria-controls={open ? "basic-menu" : undefined}
+            aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
+            aria-expanded={open ? 'true' : undefined}
             color="primary"
             onClick={handleClick}
           >
@@ -40,9 +40,9 @@ export const UserTools = () => {
       ) : (
         <Button
           id="basic-button"
-          aria-controls={open ? "basic-menu" : undefined}
+          aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
+          aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           disableElevation
           variant="contained"
@@ -59,13 +59,13 @@ export const UserTools = () => {
         open={open}
         onClose={handleClose}
         MenuListProps={{
-          "aria-labelledby": "basic-button",
+          'aria-labelledby': 'basic-button',
         }}
       >
         <MenuItem
           onClick={() => {
-            handleOpenCreate();
-            handleClose();
+            handleOpenCreate()
+            handleClose()
           }}
         >
           <ListItemIcon>
@@ -76,8 +76,8 @@ export const UserTools = () => {
 
         <MenuItem
           onClick={() => {
-            handleOpenDirector();
-            handleClose();
+            handleOpenDirector()
+            handleClose()
           }}
         >
           <ListItemIcon>
@@ -87,5 +87,5 @@ export const UserTools = () => {
         </MenuItem>
       </Menu>
     </>
-  );
-};
+  )
+}

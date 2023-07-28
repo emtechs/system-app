@@ -5,17 +5,17 @@ import {
   DialogTitle,
   IconButton,
   useTheme,
-} from "@mui/material";
-import { Close } from "@mui/icons-material";
-import { iChildren } from "../../interfaces";
+} from '@mui/material'
+import { Close } from '@mui/icons-material'
+import { iChildren } from '../../interfaces'
 
 interface iGlossaryProps extends iChildren {
-  onClose: () => void;
-  open: boolean;
+  onClose: () => void
+  open: boolean
 }
 
 export const Glossary = ({ onClose, open, children }: iGlossaryProps) => {
-  const theme = useTheme();
+  const theme = useTheme()
 
   return (
     <Dialog onClose={onClose} open={open}>
@@ -29,7 +29,7 @@ export const Glossary = ({ onClose, open, children }: iGlossaryProps) => {
           aria-label="close"
           onClick={onClose}
           sx={{
-            position: "absolute",
+            position: 'absolute',
             right: 8,
             top: 8,
             color: theme.palette.primary.contrastText,
@@ -42,5 +42,5 @@ export const Glossary = ({ onClose, open, children }: iGlossaryProps) => {
         <DialogContentText>{children}</DialogContentText>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

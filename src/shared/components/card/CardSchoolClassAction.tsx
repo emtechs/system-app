@@ -1,16 +1,16 @@
-import { Box, Card, CardActionArea, useTheme } from "@mui/material";
-import { useClassContext } from "../../contexts";
-import { CardSchoolClassContent } from "./CardSchoolClassContent";
+import { Box, Card, CardActionArea, useTheme } from '@mui/material'
+import { useClassContext } from '../../contexts'
+import { CardSchoolClassContent } from './CardSchoolClassContent'
 
 interface iCardSchoolClassActionProps {
-  onClick: () => void;
+  onClick: () => void
 }
 
 export const CardSchoolClassAction = ({
   onClick,
 }: iCardSchoolClassActionProps) => {
-  const theme = useTheme();
-  const { classWithSchoolSelect } = useClassContext();
+  const theme = useTheme()
+  const { classWithSchoolSelect } = useClassContext()
   return classWithSchoolSelect ? (
     <Box mx={2} width={theme.spacing(45)} maxWidth="90%">
       <Card>
@@ -21,5 +21,5 @@ export const CardSchoolClassAction = ({
     </Box>
   ) : (
     <></>
-  );
-};
+  )
+}

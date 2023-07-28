@@ -1,21 +1,21 @@
-import { Avatar, CardContent, Typography } from "@mui/material";
-import { iClass } from "../../interfaces";
-import { useAppThemeContext } from "../../contexts";
-import { adaptName } from "../../scripts";
+import { Avatar, CardContent, Typography } from '@mui/material'
+import { iClass } from '../../interfaces'
+import { useAppThemeContext } from '../../contexts'
+import { adaptName } from '../../scripts'
 
 interface iCardSchoolClassContentProps {
-  classData: iClass;
+  classData: iClass
 }
 
 export const CardSchoolClassContent = ({
   classData,
 }: iCardSchoolClassContentProps) => {
-  const { theme } = useAppThemeContext();
+  const { theme } = useAppThemeContext()
   return (
     <CardContent
       sx={{
-        display: "flex",
-        alignItems: "center",
+        display: 'flex',
+        alignItems: 'center',
         gap: theme.spacing(2),
       }}
     >
@@ -26,5 +26,5 @@ export const CardSchoolClassContent = ({
         {adaptName(classData.name)}
       </Typography>
     </CardContent>
-  );
-};
+  )
+}

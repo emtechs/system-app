@@ -1,12 +1,12 @@
-import { Box, Typography } from "@mui/material";
-import { iFrequencyWithInfreq } from "../../../interfaces";
-import { useFrequencyContext } from "../../../contexts";
-import { DialogBaseChildrenAction } from "../structure";
+import { Box, Typography } from '@mui/material'
+import { iFrequencyWithInfreq } from '../../../interfaces'
+import { useFrequencyContext } from '../../../contexts'
+import { DialogBaseChildrenAction } from '../structure'
 
 interface iDialogDeleteFrequencyProps {
-  open: boolean;
-  onClose: () => void;
-  frequency: iFrequencyWithInfreq;
+  open: boolean
+  onClose: () => void
+  frequency: iFrequencyWithInfreq
 }
 
 export const DialogDeleteFrequency = ({
@@ -14,12 +14,12 @@ export const DialogDeleteFrequency = ({
   onClose,
   frequency,
 }: iDialogDeleteFrequencyProps) => {
-  const { destroyFrequency, setRetrieveFreq } = useFrequencyContext();
+  const { destroyFrequency, setRetrieveFreq } = useFrequencyContext()
   const action = () => {
-    destroyFrequency(frequency.id);
-    setRetrieveFreq(undefined);
-    onClose();
-  };
+    destroyFrequency(frequency.id)
+    setRetrieveFreq(undefined)
+    onClose()
+  }
   return (
     <DialogBaseChildrenAction
       open={open}
@@ -38,5 +38,5 @@ export const DialogDeleteFrequency = ({
         <Typography>Escola: {frequency.school.name}</Typography>
       </Box>
     </DialogBaseChildrenAction>
-  );
-};
+  )
+}

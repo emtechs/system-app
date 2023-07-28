@@ -1,18 +1,18 @@
-import { List } from "@mui/material";
-import { useAuthContext } from "../../../contexts";
-import { ListItemLink } from "../item";
+import { List } from '@mui/material'
+import { useAuthContext } from '../../../contexts'
+import { ListItemLink } from '../item'
 import {
   AddBox,
   DoneAll,
   Edit,
   Groups,
   SchoolTwoTone,
-} from "@mui/icons-material";
+} from '@mui/icons-material'
 
 export const Class = () => {
-  const { dashData } = useAuthContext();
+  const { dashData } = useAuthContext()
   switch (dashData) {
-    case "ADMIN":
+    case 'ADMIN':
       return (
         <List component="div" disablePadding>
           <ListItemLink icon={<AddBox />} label="Nova" to="class/create" />
@@ -25,18 +25,18 @@ export const Class = () => {
           <ListItemLink icon={<Groups />} label="Listar" to="class/list" />
           <ListItemLink icon={<DoneAll />} label="Ativar" to="class/active" />
         </List>
-      );
+      )
 
-    case "SCHOOL":
+    case 'SCHOOL':
       return (
         <List component="div" disablePadding>
           <ListItemLink icon={<AddBox />} label="Nova" to="class/create" />
           <ListItemLink icon={<Edit />} label="Editar" to="class/edit" />
           <ListItemLink icon={<Groups />} label="Listar" to="class/list" />
         </List>
-      );
+      )
 
     default:
-      return <></>;
+      return <></>
   }
-};
+}

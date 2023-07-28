@@ -1,12 +1,12 @@
-import { Box, Typography } from "@mui/material";
-import { iFrequencyWithInfreq } from "../../../interfaces";
-import { useFrequencyContext } from "../../../contexts";
-import { DialogBaseChildrenAction } from "../structure";
+import { Box, Typography } from '@mui/material'
+import { iFrequencyWithInfreq } from '../../../interfaces'
+import { useFrequencyContext } from '../../../contexts'
+import { DialogBaseChildrenAction } from '../structure'
 
 interface iDialogDeleteFrequencyProps {
-  open: boolean;
-  onClose: () => void;
-  frequency: iFrequencyWithInfreq;
+  open: boolean
+  onClose: () => void
+  frequency: iFrequencyWithInfreq
 }
 
 export const DialogRetrieveFrequency = ({
@@ -14,12 +14,12 @@ export const DialogRetrieveFrequency = ({
   onClose,
   frequency,
 }: iDialogDeleteFrequencyProps) => {
-  const { updateFrequency, setRetrieveFreq } = useFrequencyContext();
+  const { updateFrequency, setRetrieveFreq } = useFrequencyContext()
   const action = () => {
-    updateFrequency({ status: "OPENED" }, frequency.id, true);
-    setRetrieveFreq(undefined);
-    onClose();
-  };
+    updateFrequency({ status: 'OPENED' }, frequency.id, true)
+    setRetrieveFreq(undefined)
+    onClose()
+  }
   return (
     <DialogBaseChildrenAction
       open={open}
@@ -38,5 +38,5 @@ export const DialogRetrieveFrequency = ({
         <Typography>Escola: {frequency.school.name}</Typography>
       </Box>
     </DialogBaseChildrenAction>
-  );
-};
+  )
+}

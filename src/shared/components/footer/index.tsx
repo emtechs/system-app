@@ -1,9 +1,9 @@
-import { Box, Typography } from "@mui/material";
-import { useAppThemeContext } from "../../contexts";
+import { Box, Typography } from '@mui/material'
+import { useAppThemeContext } from '../../contexts'
 
 export const Footer = () => {
-  const { theme } = useAppThemeContext();
-  const dateData = new Date();
+  const { theme } = useAppThemeContext()
+  const dateData = new Date()
 
   return (
     <Box
@@ -18,5 +18,5 @@ export const Footer = () => {
         {dateData.getUTCFullYear()} © EM Soluções Tecnológicas
       </Typography>
     </Box>
-  );
-};
+  )
+}

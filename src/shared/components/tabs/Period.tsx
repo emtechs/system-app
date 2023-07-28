@@ -1,9 +1,9 @@
-import { Box, Tab, Tabs } from "@mui/material";
-import { iTabsBaseProps } from "../../interfaces";
+import { Box, Tab, Tabs } from '@mui/material'
+import { iTabsBaseProps } from '../../interfaces'
 
 export const TabsPeriod = ({ value, handleChange }: iTabsBaseProps) => {
   return (
-    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
       <Tabs
         value={value}
         onChange={handleChange}
@@ -15,5 +15,5 @@ export const TabsPeriod = ({ value, handleChange }: iTabsBaseProps) => {
         <Tab label="Semestre" value="SEMESTRE" />
       </Tabs>
     </Box>
-  );
-};
+  )
+}

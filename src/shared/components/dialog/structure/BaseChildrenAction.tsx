@@ -5,16 +5,16 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from "@mui/material";
-import { iChildren } from "../../../interfaces";
+} from '@mui/material'
+import { iChildren } from '../../../interfaces'
 
 interface iDialogBaseChildrenActionProps extends iChildren {
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  description: string;
-  action: () => void;
-  actionTitle: string;
+  open: boolean
+  onClose: () => void
+  title: string
+  description: string
+  action: () => void
+  actionTitle: string
 }
 
 export const DialogBaseChildrenAction = ({
@@ -47,5 +47,5 @@ export const DialogBaseChildrenAction = ({
         </Button>
       </DialogActions>
     </Dialog>
-  );
-};
+  )
+}

@@ -1,10 +1,10 @@
-import { Fragment } from "react";
-import { Box, Tabs } from "@mui/material";
-import { iChildren } from "../interfaces";
+import { Fragment } from 'react'
+import { Box, Tabs } from '@mui/material'
+import { iChildren } from '../interfaces'
 
 interface iLayoutBasePageRetrieveProps extends iChildren {
-  value: number;
-  itens: JSX.Element[];
+  value: number
+  itens: JSX.Element[]
 }
 
 export const LayoutBasePageRetrieve = ({
@@ -14,7 +14,7 @@ export const LayoutBasePageRetrieve = ({
 }: iLayoutBasePageRetrieveProps) => {
   return (
     <>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} variant="scrollable" scrollButtons="auto">
           {itens.map((el, index) => (
             <Fragment key={index}>{el}</Fragment>
@@ -23,5 +23,5 @@ export const LayoutBasePageRetrieve = ({
       </Box>
       {children}
     </>
-  );
-};
+  )
+}

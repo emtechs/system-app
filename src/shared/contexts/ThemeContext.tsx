@@ -5,7 +5,7 @@ import {
   useCallback,
   useContext,
   useState,
-} from "react";
+} from 'react'
 import {
   Alert,
   Backdrop,
@@ -14,56 +14,56 @@ import {
   Snackbar,
   ThemeProvider,
   useMediaQuery,
-} from "@mui/material";
-import { iChildren } from "../interfaces";
-import { Theme } from "../themes";
+} from '@mui/material'
+import { iChildren } from '../interfaces'
+import { Theme } from '../themes'
 
 interface iThemeContextProps {
-  theme: iTheme;
-  smDown: boolean;
-  mdDown: boolean;
-  loading: boolean;
-  setLoading: Dispatch<SetStateAction<boolean>>;
-  handleSucess: (msg: string) => void;
-  handleError: (msg: string) => void;
+  theme: iTheme
+  smDown: boolean
+  mdDown: boolean
+  loading: boolean
+  setLoading: Dispatch<SetStateAction<boolean>>
+  handleSucess: (msg: string) => void
+  handleError: (msg: string) => void
 }
 
-const ThemeContext = createContext({} as iThemeContextProps);
+const ThemeContext = createContext({} as iThemeContextProps)
 
 export const AppThemeProvider = ({ children }: iChildren) => {
-  const theme = Theme;
-  const smDown = useMediaQuery(theme.breakpoints.down("sm"));
-  const mdDown = useMediaQuery(theme.breakpoints.down("md"));
-  const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [severity, setSeverity] = useState<"success" | "error">("success");
-  const [message, setMessage] = useState<string>();
+  const theme = Theme
+  const smDown = useMediaQuery(theme.breakpoints.down('sm'))
+  const mdDown = useMediaQuery(theme.breakpoints.down('md'))
+  const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [severity, setSeverity] = useState<'success' | 'error'>('success')
+  const [message, setMessage] = useState<string>()
 
   const handleSucess = useCallback((msg: string) => {
-    setMessage(msg);
-    setSeverity("success");
-    setOpen(true);
-  }, []);
+    setMessage(msg)
+    setSeverity('success')
+    setOpen(true)
+  }, [])
 
   const handleError = useCallback((msg: string) => {
-    setMessage(msg);
-    setSeverity("error");
-    setOpen(true);
-  }, []);
+    setMessage(msg)
+    setSeverity('error')
+    setOpen(true)
+  }, [])
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
-    reason?: string
+    reason?: string,
   ) => {
     if (event) {
       /* empty */
     }
-    if (reason === "clickaway") {
-      return;
+    if (reason === 'clickaway') {
+      return
     }
 
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   return (
     <ThemeContext.Provider
@@ -91,8 +91,8 @@ export const AppThemeProvider = ({ children }: iChildren) => {
         <Snackbar
           anchorOrigin={
             mdDown
-              ? { vertical: "bottom", horizontal: "center" }
-              : { vertical: "top", horizontal: "right" }
+              ? { vertical: 'bottom', horizontal: 'center' }
+              : { vertical: 'top', horizontal: 'right' }
           }
           open={open}
           autoHideDuration={3000}
@@ -101,14 +101,14 @@ export const AppThemeProvider = ({ children }: iChildren) => {
           <Alert
             onClose={handleClose}
             severity={severity}
-            sx={{ width: "100%" }}
+            sx={{ width: '100%' }}
           >
             {message}
           </Alert>
         </Snackbar>
       </ThemeProvider>
     </ThemeContext.Provider>
-  );
-};
+  )
+}
 
-export const useAppThemeContext = () => useContext(ThemeContext);
+export const useAppThemeContext = () => useContext(ThemeContext)

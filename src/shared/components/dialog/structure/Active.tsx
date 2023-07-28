@@ -1,12 +1,12 @@
-import { DialogBase } from "./Base";
+import { DialogBase } from './Base'
 
 interface iDialogActiveProps {
-  is_active: boolean;
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  description: string;
-  action: () => void;
+  is_active: boolean
+  open: boolean
+  onClose: () => void
+  title: string
+  description: string
+  action: () => void
 }
 
 export const DialogActive = ({
@@ -35,5 +35,5 @@ export const DialogActive = ({
       action={action}
       actionTitle="Continuar"
     />
-  );
-};
+  )
+}

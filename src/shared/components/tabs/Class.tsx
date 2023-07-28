@@ -4,19 +4,19 @@ import {
   Percent,
   School,
   Workspaces,
-} from "@mui/icons-material";
-import { Box, Tab, Tabs } from "@mui/material";
-import { useClassContext } from "../../contexts";
-import { iTabsBaseProps } from "../../interfaces";
+} from '@mui/icons-material'
+import { Box, Tab, Tabs } from '@mui/material'
+import { useClassContext } from '../../contexts'
+import { iTabsBaseProps } from '../../interfaces'
 
 export const TabsClassRetrievePage = ({
   value,
   handleChange,
 }: iTabsBaseProps) => {
-  const { classRetrieve } = useClassContext();
+  const { classRetrieve } = useClassContext()
 
   return (
-    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
       <Tabs
         value={value}
         onChange={handleChange}
@@ -45,5 +45,5 @@ export const TabsClassRetrievePage = ({
         />
       </Tabs>
     </Box>
-  );
-};
+  )
+}

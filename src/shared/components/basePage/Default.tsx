@@ -1,25 +1,25 @@
-import { Box, Container, Paper, useMediaQuery, useTheme } from "@mui/material";
-import { iChildren } from "../../interfaces";
+import { Box, Container, Paper, useMediaQuery, useTheme } from '@mui/material'
+import { iChildren } from '../../interfaces'
 
 interface iBasePageDefaultProps extends iChildren {
-  padding?: number;
+  padding?: number
 }
 
 export const BasePageDefault = ({
   children,
   padding = 8,
 }: iBasePageDefaultProps) => {
-  const matches = useMediaQuery("(max-width:395px)");
-  const theme = useTheme();
+  const matches = useMediaQuery('(max-width:395px)')
+  const theme = useTheme()
 
   return (
     <Box bgcolor={theme.palette.background.default}>
       <Container
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          minHeight: "100vh",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          alignItems: 'center',
         }}
       >
         <Box
@@ -36,5 +36,5 @@ export const BasePageDefault = ({
         </Box>
       </Container>
     </Box>
-  );
-};
+  )
+}

@@ -1,25 +1,25 @@
-import { UploadFile } from "@mui/icons-material";
-import { Box, IconButton, InputLabel, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useFormContext } from "react-hook-form-mui";
+import { UploadFile } from '@mui/icons-material'
+import { Box, IconButton, InputLabel, Typography } from '@mui/material'
+import { useEffect, useState } from 'react'
+import { useFormContext } from 'react-hook-form-mui'
 
 export const InputFile = () => {
-  const [fileName, setFileName] = useState("Nenhum arquivo escolhido");
+  const [fileName, setFileName] = useState('Nenhum arquivo escolhido')
   const {
     watch,
     formState: { errors },
     register,
-  } = useFormContext();
+  } = useFormContext()
 
-  const file: FileList = watch("file");
+  const file: FileList = watch('file')
 
-  let message = "";
-  let colorError = "#0009";
+  let message = ''
+  let colorError = '#0009'
 
   try {
     if (errors.file) {
-      colorError = "#D91604";
-      message = String(errors.file.message);
+      colorError = '#D91604'
+      message = String(errors.file.message)
     }
   } catch {
     /* empty */
@@ -27,9 +27,9 @@ export const InputFile = () => {
 
   useEffect(() => {
     if (file) {
-      if (file[0]) setFileName(file[0].name);
+      if (file[0]) setFileName(file[0].name)
     }
-  }, [file]);
+  }, [file])
 
   return (
     <Box position="relative" marginBottom={2}>
@@ -44,13 +44,13 @@ export const InputFile = () => {
             id="file"
             accept="text/csv"
             type="file"
-            {...register("file")}
+            {...register('file')}
           />
           <UploadFile />
         </IconButton>
         <InputLabel
           htmlFor="file"
-          sx={{ cursor: "pointer", color: `${colorError}` }}
+          sx={{ cursor: 'pointer', color: `${colorError}` }}
         >
           {fileName}
         </InputLabel>
@@ -61,5 +61,5 @@ export const InputFile = () => {
         </Typography>
       )}
     </Box>
-  );
-};
+  )
+}

@@ -1,29 +1,29 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, IconButton } from "@mui/material";
-import { Login as LoginIcon, LockReset, Info } from "@mui/icons-material";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button, IconButton } from '@mui/material'
+import { Login as LoginIcon, LockReset, Info } from '@mui/icons-material'
 import {
   FormContainer,
   TextFieldElement,
   PasswordElement,
-} from "react-hook-form-mui";
-import { useAuthContext } from "../../shared/contexts";
-import { useState } from "react";
-import { loginSchema, recoverySchema } from "../../shared/schemas";
+} from 'react-hook-form-mui'
+import { useAuthContext } from '../../shared/contexts'
+import { useState } from 'react'
+import { loginSchema, recoverySchema } from '../../shared/schemas'
 import {
   BasePage,
   BoxResp,
   Glossary,
   ValidateLogin,
-} from "../../shared/components";
-import { Navigate } from "react-router-dom";
+} from '../../shared/components'
+import { Navigate } from 'react-router-dom'
 
 export const Login = () => {
-  const { isAuthenticated, login, recovery } = useAuthContext();
-  const [isLogin, setIsLogin] = useState(true);
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(!open);
+  const { isAuthenticated, login, recovery } = useAuthContext()
+  const [isLogin, setIsLogin] = useState(true)
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(!open)
 
-  if (isAuthenticated) return <Navigate to="/" />;
+  if (isAuthenticated) return <Navigate to="/" />
 
   return (
     <>
@@ -117,5 +117,5 @@ export const Login = () => {
         )}
       </Glossary>
     </>
-  );
-};
+  )
+}

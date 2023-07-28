@@ -1,25 +1,25 @@
-import { useEffect } from "react";
+import { useEffect } from 'react'
 import {
   useAppThemeContext,
   useAuthContext,
   useCalendarContext,
   usePaginationContext,
   useSchoolContext,
-} from "../../contexts";
-import { CalendarBase } from "./Base";
-import { apiUsingNow } from "../../services";
-import { iCalendar } from "../../interfaces";
+} from '../../contexts'
+import { CalendarBase } from './Base'
+import { apiUsingNow } from '../../services'
+import { iCalendar } from '../../interfaces'
 
 export const CalendarDashSchool = () => {
-  const { setLoading } = useAppThemeContext();
-  const { yearData } = useAuthContext();
-  const { schoolRetrieve } = useSchoolContext();
-  const { monthData, setEventData } = useCalendarContext();
-  const { query } = usePaginationContext();
+  const { setLoading } = useAppThemeContext()
+  const { yearData } = useAuthContext()
+  const { schoolRetrieve } = useSchoolContext()
+  const { monthData, setEventData } = useCalendarContext()
+  const { query } = usePaginationContext()
 
   useEffect(() => {
-    setEventData(undefined);
-  }, []);
+    setEventData(undefined)
+  }, [])
 
   useEffect(() => {
     if (yearData && schoolRetrieve && monthData) {
@@ -28,15 +28,15 @@ export const CalendarDashSchool = () => {
         schoolRetrieve.id,
         undefined,
         undefined,
-        monthData
-      );
-      setLoading(true);
+        monthData,
+      )
+      setLoading(true)
       apiUsingNow
         .get<iCalendar[]>(`calendar/${yearData.id}${query_data}`)
         .then((res) => setEventData(res.data))
-        .finally(() => setLoading(false));
+        .finally(() => setLoading(false))
     }
-  }, [schoolRetrieve, monthData, yearData, query]);
+  }, [schoolRetrieve, monthData, yearData, query])
 
-  return <CalendarBase />;
-};
+  return <CalendarBase />
+}

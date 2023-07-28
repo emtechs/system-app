@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { CardDateAction } from "../card/CardDateAction";
-import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { CalendarSelect } from "../calendar";
+import { useState } from 'react'
+import { CardDateAction } from '../card/CardDateAction'
+import { Dialog, DialogContent, DialogTitle } from '@mui/material'
+import { CalendarSelect } from '../calendar'
 
 export const SelectDate = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
   return (
     <>
       <CardDateAction onClick={handleOpen} />
@@ -17,5 +17,5 @@ export const SelectDate = () => {
         </DialogContent>
       </Dialog>
     </>
-  );
-};
+  )
+}

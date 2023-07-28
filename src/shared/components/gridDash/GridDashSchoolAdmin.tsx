@@ -1,17 +1,17 @@
-import { Box, Grid, Typography } from "@mui/material";
-import { Checklist, Group, School } from "@mui/icons-material";
-import { useDrawerContext, useSchoolContext } from "../../contexts";
-import { GridDashContent } from "./GridDashContent";
-import { GridDashOrgan } from "./Organ";
-import { CardSchool } from "../card";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import "dayjs/locale/pt-br";
-dayjs.extend(localizedFormat);
+import { Box, Grid, Typography } from '@mui/material'
+import { Checklist, Group, School } from '@mui/icons-material'
+import { useDrawerContext, useSchoolContext } from '../../contexts'
+import { GridDashContent } from './GridDashContent'
+import { GridDashOrgan } from './Organ'
+import { CardSchool } from '../card'
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import 'dayjs/locale/pt-br'
+dayjs.extend(localizedFormat)
 
 export const GridDashSchoolAdmin = () => {
-  const { schoolRetrieve } = useSchoolContext();
-  const { handleClickFrequency } = useDrawerContext();
+  const { schoolRetrieve } = useSchoolContext()
+  const { handleClickFrequency } = useDrawerContext()
 
   return (
     schoolRetrieve && (
@@ -25,7 +25,7 @@ export const GridDashSchoolAdmin = () => {
             gap={2}
           >
             <Typography variant="h6" textAlign="center">
-              {dayjs().format("dddd, LL")}
+              {dayjs().format('dddd, LL')}
             </Typography>
             <CardSchool />
           </Box>
@@ -34,25 +34,25 @@ export const GridDashSchoolAdmin = () => {
           <GridDashContent
             icon={<Group fontSize="large" />}
             quant={schoolRetrieve.students}
-            info={schoolRetrieve.students === 1 ? "Aluno" : "Alunos"}
+            info={schoolRetrieve.students === 1 ? 'Aluno' : 'Alunos'}
             dest="/school/student"
           />
           <GridDashContent
             icon={<Checklist fontSize="large" />}
             quant={
               schoolRetrieve.frequencies === 0
-                ? "-"
+                ? '-'
                 : schoolRetrieve.frequencies
             }
             info={
-              schoolRetrieve.frequencies === 1 ? "Frequência" : "Frequências"
+              schoolRetrieve.frequencies === 1 ? 'Frequência' : 'Frequências'
             }
             dest="/frequency/list"
             onClick={handleClickFrequency}
           />
           <GridDashContent
             icon={<School fontSize="large" />}
-            quant={schoolRetrieve.infrequency.toFixed(0) + "%"}
+            quant={schoolRetrieve.infrequency.toFixed(0) + '%'}
             info="Infrequência"
             dest="/school/class"
           />
@@ -60,5 +60,5 @@ export const GridDashSchoolAdmin = () => {
         <GridDashOrgan />
       </Grid>
     )
-  );
-};
+  )
+}

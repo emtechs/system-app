@@ -7,20 +7,20 @@ import {
   School as SchoolIcon,
   SchoolTwoTone,
   Workspaces,
-} from "@mui/icons-material";
-import { List } from "@mui/material";
-import { ListItemLink } from "../item";
-import { useAuthContext } from "../../../contexts";
+} from '@mui/icons-material'
+import { List } from '@mui/material'
+import { ListItemLink } from '../item'
+import { useAuthContext } from '../../../contexts'
 
 export const School = () => {
-  const { dashData } = useAuthContext();
-  if (dashData !== "ADMIN") {
+  const { dashData } = useAuthContext()
+  if (dashData !== 'ADMIN') {
     return (
       <List component="div" disablePadding>
         <ListItemLink icon={<Workspaces />} label="Turmas" to="school/class" />
         <ListItemLink icon={<Group />} label="Alunos" to="school/student" />
       </List>
-    );
+    )
   }
   return (
     <List component="div" disablePadding>
@@ -40,5 +40,5 @@ export const School = () => {
       <ListItemLink icon={<Workspaces />} label="Turmas" to="school/class" />
       <ListItemLink icon={<SchoolTwoTone />} label="Listar" to="school/list" />
     </List>
-  );
-};
+  )
+}

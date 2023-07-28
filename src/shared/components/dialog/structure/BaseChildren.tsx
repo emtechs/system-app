@@ -3,14 +3,14 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from "@mui/material";
-import { iChildren } from "../../../interfaces";
+} from '@mui/material'
+import { iChildren } from '../../../interfaces'
 
 interface iDialogBaseChildrenProps extends iChildren {
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  description: string;
+  open: boolean
+  onClose: () => void
+  title: string
+  description: string
 }
 
 export const DialogBaseChildren = ({
@@ -36,5 +36,5 @@ export const DialogBaseChildren = ({
         {children}
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

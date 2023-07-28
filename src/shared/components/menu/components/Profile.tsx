@@ -1,6 +1,6 @@
-import { Edit, Password } from "@mui/icons-material";
-import { List } from "@mui/material";
-import { ListItemLink } from "../item";
+import { Edit, Password } from '@mui/icons-material'
+import { List } from '@mui/material'
+import { ListItemLink } from '../item'
 
 export const Profile = () => {
   return (
@@ -12,5 +12,5 @@ export const Profile = () => {
         to="profile/edit/password"
       />
     </List>
-  );
-};
+  )
+}

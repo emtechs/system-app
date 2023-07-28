@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
 import { School } from '@mui/icons-material'
 import {
@@ -9,12 +10,19 @@ import {
   ToolsSchool,
 } from '../../shared/components'
 import { LayoutBasePage } from '../../shared/layouts'
-import { useAppThemeContext } from '../../shared/contexts'
+import { useAppThemeContext, useSchoolContext } from '../../shared/contexts'
 import { ViewRetrieveSchoolPage } from './view/Retrieve'
 
 export const RetrieveSchoolPage = () => {
-  const { view } = useParams()
+  const { view, school_id } = useParams()
   const { mdDown } = useAppThemeContext()
+  const { schoolSelect, schoolDataRetrieve } = useSchoolContext()
+
+  useEffect(() => {
+    if (school_id) {
+      if (schoolSelect?.id !== school_id) schoolDataRetrieve(school_id, '')
+    }
+  }, [school_id])
 
   if (view) return <Outlet />
 

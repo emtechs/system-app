@@ -1,17 +1,17 @@
-import { Box, Button, Typography } from "@mui/material";
-import { iFrequencyStudentsBase } from "../../../interfaces";
-import { useFrequencyContext } from "../../../contexts";
-import dayjs from "dayjs";
-import "dayjs/locale/pt-br";
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { frequencyUpdateSchema } from "../../../schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { DialogBaseChildrenAction } from "../structure";
+import { Box, Button, Typography } from '@mui/material'
+import { iFrequencyStudentsBase } from '../../../interfaces'
+import { useFrequencyContext } from '../../../contexts'
+import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
+import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
+import { frequencyUpdateSchema } from '../../../schemas'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { DialogBaseChildrenAction } from '../structure'
 
 interface iDialogMissedProps {
-  open: boolean;
-  onClose: () => void;
-  student: iFrequencyStudentsBase;
+  open: boolean
+  onClose: () => void
+  student: iFrequencyStudentsBase
 }
 
 export const DialogMissed = ({
@@ -19,14 +19,14 @@ export const DialogMissed = ({
   onClose,
   student,
 }: iDialogMissedProps) => {
-  const { updateFrequencyStudent, setStudentData } = useFrequencyContext();
+  const { updateFrequencyStudent, setStudentData } = useFrequencyContext()
   const action = () => {
     updateFrequencyStudent(
-      { status: "MISSED", updated_at: dayjs().format() },
-      student.id
-    );
-    onClose();
-  };
+      { status: 'MISSED', updated_at: dayjs().format() },
+      student.id,
+    )
+    onClose()
+  }
   return (
     <DialogBaseChildrenAction
       open={open}
@@ -41,9 +41,9 @@ export const DialogMissed = ({
     >
       <FormContainer
         onSuccess={(data) => {
-          updateFrequencyStudent(data, student.id);
-          setStudentData(undefined);
-          onClose();
+          updateFrequencyStudent(data, student.id)
+          setStudentData(undefined)
+          onClose()
         }}
         resolver={zodResolver(frequencyUpdateSchema)}
       >
@@ -63,5 +63,5 @@ export const DialogMissed = ({
         </Box>
       </FormContainer>
     </DialogBaseChildrenAction>
-  );
-};
+  )
+}

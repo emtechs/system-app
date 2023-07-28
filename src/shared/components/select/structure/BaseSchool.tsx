@@ -5,18 +5,18 @@ import {
   Divider,
   List,
   ListItem,
-} from "@mui/material";
-import { iChildren } from "../../../interfaces";
-import { PaginationList } from "../../pagination";
-import { AutocompleteElement, FormContainer } from "react-hook-form-mui";
-import { CardSchoolAction } from "../../card";
-import { ValidateSchool } from "../../validate";
+} from '@mui/material'
+import { iChildren } from '../../../interfaces'
+import { PaginationList } from '../../pagination'
+import { AutocompleteElement, FormContainer } from 'react-hook-form-mui'
+import { CardSchoolAction } from '../../card'
+import { ValidateSchool } from '../../validate'
 
 interface iBaseSchoolProps extends iChildren {
-  onClick: () => void;
-  open: boolean;
-  loading: boolean;
-  options?: unknown[];
+  onClick: () => void
+  open: boolean
+  loading: boolean
+  options?: unknown[]
 }
 
 export const BaseSchool = ({
@@ -41,14 +41,12 @@ export const BaseSchool = ({
                   label="Escola"
                   loading={loading}
                   options={
-                    options
-                      ? options
-                      : [
-                          {
-                            id: 1,
-                            label: `No momento, não há nenhuma escola cadastrada`,
-                          },
-                        ]
+                    options || [
+                      {
+                        id: 1,
+                        label: `No momento, não há nenhuma escola cadastrada`,
+                      },
+                    ]
                   }
                   textFieldProps={{ fullWidth: true }}
                 />
@@ -62,5 +60,5 @@ export const BaseSchool = ({
         </List>
       </Dialog>
     </>
-  );
-};
+  )
+}

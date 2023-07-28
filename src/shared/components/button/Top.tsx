@@ -1,34 +1,34 @@
-import { KeyboardArrowUp } from "@mui/icons-material";
-import { Fab } from "@mui/material";
-import { RefObject, useEffect, useState } from "react";
+import { KeyboardArrowUp } from '@mui/icons-material'
+import { Fab } from '@mui/material'
+import { RefObject, useEffect, useState } from 'react'
 
 interface iButtonTopProps {
-  elem: RefObject<HTMLElement>;
+  elem: RefObject<HTMLElement>
 }
 
 export const ButtonTop = ({ elem }: iButtonTopProps) => {
-  const [showTopBtn, setShowTopBtn] = useState(false);
+  const [showTopBtn, setShowTopBtn] = useState(false)
 
   useEffect(() => {
-    elem.current?.addEventListener("scroll", () => {
+    elem.current?.addEventListener('scroll', () => {
       if (elem.current) {
         if (elem.current.scrollTop > 20) {
-          setShowTopBtn(true);
+          setShowTopBtn(true)
         } else {
-          setShowTopBtn(false);
+          setShowTopBtn(false)
         }
       }
-    });
-  }, [elem]);
+    })
+  }, [elem])
 
   const goToTop = () => {
-    elem.current?.scrollTo({ top: 0, behavior: "smooth" });
-  };
+    elem.current?.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
     showTopBtn && (
       <Fab
-        sx={{ position: "absolute", bottom: 15, right: 25 }}
+        sx={{ position: 'absolute', bottom: 15, right: 25 }}
         size="medium"
         color="primary"
         onClick={goToTop}
@@ -36,5 +36,5 @@ export const ButtonTop = ({ elem }: iButtonTopProps) => {
         <KeyboardArrowUp />
       </Fab>
     )
-  );
-};
+  )
+}

@@ -4,16 +4,16 @@ import {
   ListItemAvatar,
   ListItemButton,
   ListItemText,
-} from "@mui/material";
-import { useAppThemeContext } from "../../../contexts";
+} from '@mui/material'
+import { useAppThemeContext } from '../../../contexts'
 
 interface iListBaseProps {
-  onClick: () => void;
-  name: string;
+  onClick: () => void
+  name: string
 }
 
 export const ListBase = ({ onClick, name }: iListBaseProps) => {
-  const { theme } = useAppThemeContext();
+  const { theme } = useAppThemeContext()
   return (
     <ListItem disableGutters>
       <ListItemButton onClick={onClick}>
@@ -30,5 +30,5 @@ export const ListBase = ({ onClick, name }: iListBaseProps) => {
         <ListItemText primary={name} />
       </ListItemButton>
     </ListItem>
-  );
-};
+  )
+}

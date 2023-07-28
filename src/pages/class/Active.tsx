@@ -12,47 +12,47 @@ import {
   Theme,
   Typography,
   useTheme,
-} from "@mui/material";
+} from '@mui/material'
 import {
   useAppThemeContext,
   useClassContext,
   useSchoolContext,
-} from "../../shared/contexts";
-import { useEffect, useState } from "react";
-import { iClass, iPageProps } from "../../shared/interfaces";
-import { apiUsingNow } from "../../shared/services";
-import { BasePage } from "../../shared/components";
+} from '../../shared/contexts'
+import { useEffect, useState } from 'react'
+import { iClass, iPageProps } from '../../shared/interfaces'
+import { apiUsingNow } from '../../shared/services'
+import { BasePage } from '../../shared/components'
 
 interface iCardClassProps {
-  el: iClass;
-  theme: Theme;
+  el: iClass
+  theme: Theme
 }
 
 const CardClass = ({ el, theme }: iCardClassProps) => {
-  const { updateSchool } = useSchoolContext();
-  const [classSelect, setClassSelect] = useState<iClass>();
+  const { updateSchool } = useSchoolContext()
+  const [classSelect, setClassSelect] = useState<iClass>()
 
   return (
     <>
       <Card
         sx={{
-          width: "100%",
+          width: '100%',
           height: 80,
           maxWidth: 250,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
           bgcolor: theme.palette.error.main,
         }}
       >
         <CardContent
           onClick={() => setClassSelect(el)}
           sx={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            cursor: "pointer",
-            position: "relative",
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column',
+            cursor: 'pointer',
+            position: 'relative',
           }}
         >
           <Box display="flex" alignItems="center" gap={2}>
@@ -84,10 +84,10 @@ const CardClass = ({ el, theme }: iCardClassProps) => {
                       is_active: true,
                     },
                     classSelect.id,
-                    "estado",
-                    "data"
-                  );
-                setClassSelect(undefined);
+                    'estado',
+                    'data',
+                  )
+                setClassSelect(undefined)
               }}
             >
               Continuar
@@ -96,25 +96,25 @@ const CardClass = ({ el, theme }: iCardClassProps) => {
         </DialogContent>
       </Dialog>
     </>
-  );
-};
+  )
+}
 
 export const ActiveClassPage = ({ back }: iPageProps) => {
-  const theme = useTheme();
-  const { setLoading } = useAppThemeContext();
-  const { listClassData, setListClassData } = useClassContext();
+  const theme = useTheme()
+  const { setLoading } = useAppThemeContext()
+  const { listClassData, setListClassData } = useClassContext()
 
   useEffect(() => {
-    setLoading(true);
+    setLoading(true)
     apiUsingNow
-      .get<iClass[]>("classes?is_active=false")
+      .get<iClass[]>('classes?is_active=false')
       .then((res) => {
         if (res.data) {
-          setListClassData(res.data);
+          setListClassData(res.data)
         }
       })
-      .finally(() => setLoading(false));
-  }, []);
+      .finally(() => setLoading(false))
+  }, [])
 
   return (
     <BasePage isProfile back={back}>
@@ -128,5 +128,5 @@ export const ActiveClassPage = ({ back }: iPageProps) => {
         <Typography>Nenhuma turma para ativar no momento!</Typography>
       )}
     </BasePage>
-  );
-};
+  )
+}

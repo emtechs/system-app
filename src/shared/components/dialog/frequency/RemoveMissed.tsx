@@ -1,14 +1,14 @@
-import { Box, Typography } from "@mui/material";
-import { iFrequencyStudentsBase } from "../../../interfaces";
-import { useFrequencyContext } from "../../../contexts";
-import dayjs from "dayjs";
-import "dayjs/locale/pt-br";
-import { DialogBaseChildrenAction } from "../structure";
+import { Box, Typography } from '@mui/material'
+import { iFrequencyStudentsBase } from '../../../interfaces'
+import { useFrequencyContext } from '../../../contexts'
+import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
+import { DialogBaseChildrenAction } from '../structure'
 
 interface iDialogRemoveMissedProps {
-  open: boolean;
-  onClose: () => void;
-  student: iFrequencyStudentsBase;
+  open: boolean
+  onClose: () => void
+  student: iFrequencyStudentsBase
 }
 
 export const DialogRemoveMissed = ({
@@ -16,18 +16,18 @@ export const DialogRemoveMissed = ({
   onClose,
   student,
 }: iDialogRemoveMissedProps) => {
-  const { updateFrequencyStudent } = useFrequencyContext();
+  const { updateFrequencyStudent } = useFrequencyContext()
   const action = () => {
     updateFrequencyStudent(
       {
-        status: "PRESENTED",
-        justification: "",
+        status: 'PRESENTED',
+        justification: '',
         updated_at: dayjs().format(),
       },
-      student.id
-    );
-    onClose();
-  };
+      student.id,
+    )
+    onClose()
+  }
   return (
     <DialogBaseChildrenAction
       open={open}
@@ -46,5 +46,5 @@ export const DialogRemoveMissed = ({
         )}
       </Box>
     </DialogBaseChildrenAction>
-  );
-};
+  )
+}

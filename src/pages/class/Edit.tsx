@@ -1,9 +1,9 @@
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { iClass, iPageProps } from "../../shared/interfaces";
-import { useEffect, useState } from "react";
-import { BasePage, BoxResp, SelectClass } from "../../shared/components";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { schoolUpdateSchema } from "../../shared/schemas";
+import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
+import { iClass, iPageProps } from '../../shared/interfaces'
+import { useEffect, useState } from 'react'
+import { BasePage, BoxResp, SelectClass } from '../../shared/components'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { schoolUpdateSchema } from '../../shared/schemas'
 import {
   Box,
   Button,
@@ -13,17 +13,17 @@ import {
   DialogContentText,
   DialogTitle,
   Typography,
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";
+} from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 export const EditClassPage = ({ back }: iPageProps) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   // const { updateSchool, schoolSelect } = useSchoolContext();
-  const [classSelect, setClassSelect] = useState<iClass>();
+  const [classSelect, setClassSelect] = useState<iClass>()
 
   useEffect(() => {
-    setClassSelect(undefined);
-  }, []);
+    setClassSelect(undefined)
+  }, [])
 
   return (
     <>
@@ -56,7 +56,7 @@ export const EditClassPage = ({ back }: iPageProps) => {
           </BoxResp>
         </FormContainer>
       </BasePage>
-      <Dialog open={!classSelect} onClose={() => navigate(back ? back : "/")}>
+      <Dialog open={!classSelect} onClose={() => navigate(back || '/')}>
         <DialogTitle>Editar Turma</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -68,12 +68,10 @@ export const EditClassPage = ({ back }: iPageProps) => {
             </Box>
           </FormContainer>
           <DialogActions>
-            <Button onClick={() => navigate(back ? back : "/")}>
-              Cancelar
-            </Button>
+            <Button onClick={() => navigate(back || '/')}>Cancelar</Button>
           </DialogActions>
         </DialogContent>
       </Dialog>
     </>
-  );
-};
+  )
+}

@@ -1,18 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Chip, TableCell, TableRow } from '@mui/material'
-import {
-  Footer,
-  TableBase,
-  TitleAdminDashPages,
-  Tools,
-} from '../../shared/components'
+import { TableCell, TableRow } from '@mui/material'
+import { Footer, TableBase, Tools } from '../../shared/components'
 import { useAuthContext, usePaginationContext } from '../../shared/contexts'
 import { iSchool, iHeadCell } from '../../shared/interfaces'
 import { apiSchool } from '../../shared/services'
 import { useBgColorInfrequency, useDebounce } from '../../shared/hooks'
 import { LayoutBasePage } from '../../shared/layouts'
-import { SchoolTwoTone } from '@mui/icons-material'
 
 const headCells: iHeadCell[] = [
   { order: 'name', numeric: 'left', label: 'Escola' },
@@ -94,17 +88,9 @@ export const ListSchoolPage = () => {
     }
   }, [yearData, query, search, infreq])
 
-  const breadcrumbs = [
-    <Chip
-      label="Listar"
-      color="primary"
-      icon={<SchoolTwoTone sx={{ mr: 0.5 }} fontSize="inherit" />}
-    />,
-  ]
-
   return (
     <LayoutBasePage
-      title={<TitleAdminDashPages breadcrumbs={breadcrumbs} />}
+      title={<></>}
       tools={
         <Tools
           isHome

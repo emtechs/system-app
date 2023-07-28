@@ -1,14 +1,14 @@
-import { Box, Card, CardActionArea, useTheme } from "@mui/material";
-import { useSchoolContext } from "../../contexts";
-import { CardSchoolContent } from "./CardSchoolContent";
+import { Box, Card, CardActionArea, useTheme } from '@mui/material'
+import { useSchoolContext } from '../../contexts'
+import { CardSchoolContent } from './CardSchoolContent'
 
 interface iCardSchoolActionProps {
-  onClick: () => void;
+  onClick: () => void
 }
 
 export const CardSchoolSelectAction = ({ onClick }: iCardSchoolActionProps) => {
-  const theme = useTheme();
-  const { schoolRetrieve } = useSchoolContext();
+  const theme = useTheme()
+  const { schoolRetrieve } = useSchoolContext()
   return schoolRetrieve ? (
     <Box mx={2} width={theme.spacing(45)} maxWidth="90%">
       <Card>
@@ -19,5 +19,5 @@ export const CardSchoolSelectAction = ({ onClick }: iCardSchoolActionProps) => {
     </Box>
   ) : (
     <></>
-  );
-};
+  )
+}

@@ -1,14 +1,14 @@
-import { Box, Divider, Grid, Paper, Typography } from "@mui/material";
-import { iUser } from "../../../shared/interfaces";
-import { useAppThemeContext } from "../../../shared/contexts";
-import { AccountBox } from "@mui/icons-material";
+import { Box, Divider, Grid, Paper, Typography } from '@mui/material'
+import { iUser } from '../../../shared/interfaces'
+import { useAppThemeContext } from '../../../shared/contexts'
+import { AccountBox } from '@mui/icons-material'
 
 interface iUserProps {
-  user?: iUser;
+  user?: iUser
 }
 
 export const User = ({ user }: iUserProps) => {
-  const { theme } = useAppThemeContext();
+  const { theme } = useAppThemeContext()
   return (
     <Grid item xs={12} md={3}>
       <Box mb={2} component={Paper}>
@@ -60,5 +60,5 @@ export const User = ({ user }: iUserProps) => {
         </Box>
       </Box>
     </Grid>
-  );
-};
+  )
+}

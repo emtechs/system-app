@@ -7,20 +7,20 @@ import {
   CardContent,
   Skeleton,
   Typography,
-} from "@mui/material";
-import { useClassContext, useDialogContext } from "../contexts";
-import { Edit, ExpandMore, RemoveDone } from "@mui/icons-material";
-import { ButtonSmDown } from "../components";
-import { iViewBaseProps } from "../interfaces";
-import { useEffect } from "react";
+} from '@mui/material'
+import { useClassContext, useDialogContext } from '../contexts'
+import { Edit, ExpandMore, RemoveDone } from '@mui/icons-material'
+import { ButtonSmDown } from '../components'
+import { iViewBaseProps } from '../interfaces'
+import { useEffect } from 'react'
 
 export const ViewClassData = ({ id }: iViewBaseProps) => {
-  const { handleOpenActive, handleOpenEdit } = useDialogContext();
-  const { loadingClass, classRetrieve, classDataRetrieve } = useClassContext();
+  const { handleOpenActive, handleOpenEdit } = useDialogContext()
+  const { loadingClass, classRetrieve, classDataRetrieve } = useClassContext()
 
   useEffect(() => {
-    if (id) classDataRetrieve(id);
-  }, [id]);
+    if (id) classDataRetrieve(id)
+  }, [id])
 
   return (
     <>
@@ -40,7 +40,7 @@ export const ViewClassData = ({ id }: iViewBaseProps) => {
             </AccordionSummary>
             <AccordionDetails>
               <Typography>Escolas: {classRetrieve?.schools}</Typography>
-              <Typography>Alunos: {classRetrieve?.students}</Typography>{" "}
+              <Typography>Alunos: {classRetrieve?.students}</Typography>{' '}
               <Typography>Frequências: {classRetrieve?.frequencies}</Typography>
             </AccordionDetails>
           </Accordion>
@@ -62,5 +62,5 @@ export const ViewClassData = ({ id }: iViewBaseProps) => {
         )}
       </Card>
     </>
-  );
-};
+  )
+}

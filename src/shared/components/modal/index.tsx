@@ -1,5 +1,5 @@
-import { Close } from "@mui/icons-material";
-import { iChildren } from "../../interfaces";
+import { Close } from '@mui/icons-material'
+import { iChildren } from '../../interfaces'
 import {
   Backdrop,
   Box,
@@ -9,11 +9,11 @@ import {
   Modal,
   Paper,
   useTheme,
-} from "@mui/material";
+} from '@mui/material'
 
 interface iModalGeneralProps extends iChildren {
-  open: boolean;
-  handleClose: () => void;
+  open: boolean
+  handleClose: () => void
 }
 
 export const ModalGeneral = ({
@@ -21,7 +21,7 @@ export const ModalGeneral = ({
   open,
   handleClose,
 }: iModalGeneralProps) => {
-  const theme = useTheme();
+  const theme = useTheme()
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -39,12 +39,12 @@ export const ModalGeneral = ({
       <Fade in={open}>
         <Box
           sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
             maxWidth: 500,
-            width: "100vw",
+            width: '100vw',
             bgcolor: `${theme.palette.background.paper}`,
             border: `2px solid ${theme.palette.primary.main}`,
             boxShadow: 24,
@@ -53,8 +53,8 @@ export const ModalGeneral = ({
         >
           <Container
             sx={{
-              display: "flex",
-              justifyContent: "center",
+              display: 'flex',
+              justifyContent: 'center',
               paddingTop: 3,
               paddingBottom: 3,
             }}
@@ -71,7 +71,7 @@ export const ModalGeneral = ({
                 aria-label="close"
                 onClick={handleClose}
                 sx={{
-                  position: "absolute",
+                  position: 'absolute',
                   right: 8,
                   top: 8,
                   color: theme.palette.primary.main,
@@ -85,5 +85,5 @@ export const ModalGeneral = ({
         </Box>
       </Fade>
     </Modal>
-  );
-};
+  )
+}

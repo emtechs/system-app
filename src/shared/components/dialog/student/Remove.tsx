@@ -1,43 +1,43 @@
-import { FieldValues } from "react-hook-form";
+import { FieldValues } from 'react-hook-form'
 import {
   useAppThemeContext,
   useDialogContext,
-} from "../../../../shared/contexts";
-import { iStudent } from "../../../../shared/interfaces";
-import { apiClass } from "../../../../shared/services";
+} from '../../../../shared/contexts'
+import { iStudent } from '../../../../shared/interfaces'
+import { apiClass } from '../../../../shared/services'
 import {
   BaseContentChildren,
   DialogBaseChildren,
-} from "../../../../shared/components";
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { studentRemoveSchema } from "../../../../shared/schemas";
-import { Button } from "@mui/material";
+} from '../../../../shared/components'
+import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { studentRemoveSchema } from '../../../../shared/schemas'
+import { Button } from '@mui/material'
 
 interface iDialogRemoveStudentProps {
-  student: iStudent;
-  list: () => void;
+  student: iStudent
+  list: () => void
 }
 
 export const DialogRemoveStudent = ({
   student,
   list,
 }: iDialogRemoveStudentProps) => {
-  const { setLoading, handleError, handleSucess } = useAppThemeContext();
-  const { openActive, handleOpenActive } = useDialogContext();
+  const { setLoading, handleError, handleSucess } = useAppThemeContext()
+  const { openActive, handleOpenActive } = useDialogContext()
 
   const removeStudent = async (id_data: string, data: FieldValues) => {
     try {
-      setLoading(true);
-      await apiClass.destroy(id_data, data);
-      handleSucess("Aluno removido com sucesso!");
-      list();
+      setLoading(true)
+      await apiClass.destroy(id_data, data)
+      handleSucess('Aluno removido com sucesso!')
+      list()
     } catch {
-      handleError("Não foi possível remover o aluno no momento!");
+      handleError('Não foi possível remover o aluno no momento!')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <DialogBaseChildren
@@ -51,8 +51,8 @@ export const DialogRemoveStudent = ({
     >
       <FormContainer
         onSuccess={(data) => {
-          handleOpenActive();
-          removeStudent(student.key, data);
+          handleOpenActive()
+          removeStudent(student.key, data)
         }}
         resolver={zodResolver(studentRemoveSchema)}
       >
@@ -69,5 +69,5 @@ export const DialogRemoveStudent = ({
         </BaseContentChildren>
       </FormContainer>
     </DialogBaseChildren>
-  );
-};
+  )
+}
