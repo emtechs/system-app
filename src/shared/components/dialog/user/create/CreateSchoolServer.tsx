@@ -7,13 +7,19 @@ import {
   AutoCompleteSchool,
 } from '../../../../components'
 import { useAppThemeContext, useDialogContext } from '../../../../contexts'
-import { iDialogUserProps, iSchoolServerRequest } from '../../../../interfaces'
+import { iSchoolServerRequest, iUser } from '../../../../interfaces'
 import { defineServerSchema } from '../../../../schemas'
 import { apiSchool } from '../../../../services'
 
-export const DialogCreateSchoolServer = ({ user }: iDialogUserProps) => {
+interface iDialogCreateSchoolServerProps {
+  user: iUser
+}
+
+export const DialogCreateSchoolServer = ({
+  user,
+}: iDialogCreateSchoolServerProps) => {
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
-  const { openCreate, handleOpenCreate } = useDialogContext()
+  const { openEdit, handleOpenEdit } = useDialogContext()
 
   const createSchoolServer = async (
     data: iSchoolServerRequest,
@@ -34,15 +40,15 @@ export const DialogCreateSchoolServer = ({ user }: iDialogUserProps) => {
 
   return (
     <DialogBaseChildren
-      open={openCreate}
-      onClose={handleOpenCreate}
+      open={openEdit}
+      onClose={handleOpenEdit}
       title="Nova Escola"
       description=""
     >
       <FormContainer
         onSuccess={(data) => {
           createSchoolServer(data, user.id)
-          handleOpenCreate()
+          handleOpenEdit()
         }}
         resolver={zodResolver(defineServerSchema)}
       >

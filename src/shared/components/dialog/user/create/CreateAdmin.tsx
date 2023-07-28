@@ -1,30 +1,33 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
 import {
   DialogBaseChildren,
   BaseContentChildren,
   ValidateCPF,
-} from "../../../../components";
-import { useAppThemeContext, useDialogContext } from "../../../../contexts";
-import { iUserAdmRequest } from "../../../../interfaces";
-import { createAdmSchema } from "../../../../schemas";
-import { apiUser } from "../../../../services";
+} from '../../../../components'
+import { useAppThemeContext, useDialogContext } from '../../../../contexts'
+import { iUserAdmRequest } from '../../../../interfaces'
+import { createAdmSchema } from '../../../../schemas'
+import { apiUser } from '../../../../services'
+import { useNavigate } from 'react-router-dom'
 
 export const DialogCreateAdmin = () => {
-  const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { handleOpenCreate, openCreate } = useDialogContext();
+  const navigate = useNavigate()
+  const { setLoading, handleSucess, handleError } = useAppThemeContext()
+  const { handleOpenCreate, openCreate } = useDialogContext()
 
   const createAdmin = async (data: iUserAdmRequest) => {
     try {
-      setLoading(true);
-      await apiUser.create(data);
-      handleSucess("Administrador cadastrado com sucesso!");
+      setLoading(true)
+      const user = await apiUser.create(data)
+      handleSucess('Administrador cadastrado com sucesso!')
+      navigate(`/user/${user.id}`)
     } catch {
-      handleError("Não foi possível cadastrar o administrador no momento!");
+      handleError('Não foi possível cadastrar o administrador no momento!')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <DialogBaseChildren
@@ -35,8 +38,8 @@ export const DialogCreateAdmin = () => {
     >
       <FormContainer
         onSuccess={(data) => {
-          handleOpenCreate();
-          createAdmin(data);
+          handleOpenCreate()
+          createAdmin(data)
         }}
         resolver={zodResolver(createAdmSchema)}
       >
@@ -47,5 +50,5 @@ export const DialogCreateAdmin = () => {
         </BaseContentChildren>
       </FormContainer>
     </DialogBaseChildren>
-  );
-};
+  )
+}

@@ -20,7 +20,6 @@ import { FieldValues } from 'react-hook-form'
 import { apiUser } from '../services'
 import { useAppThemeContext } from './ThemeContext'
 import { useAuthContext } from './AuthContext'
-import { usePaginationContext } from './PaginationContext'
 
 interface iUserContextData {
   createSecret: (data: iUserSecretRequest, back?: string) => Promise<void>
@@ -39,8 +38,6 @@ interface iUserContextData {
   loadingUser: boolean
   userRetrieve: iUser | undefined
   userDataRetrieve: (id: string, query: string) => void
-  getUsers: (query: string) => void
-  listData: iUser[]
   setUserSelect: Dispatch<SetStateAction<iSelectBase | undefined>>
 }
 
@@ -50,23 +47,10 @@ export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
   const { setDashData, setUserData } = useAuthContext()
-  const { setIsLoading, setCount } = usePaginationContext()
   const [updateUserData, setUpdateUserData] = useState<iUser>()
   const [userSelect, setUserSelect] = useState<iSelectBase>()
   const [loadingUser, setLoadingUser] = useState(true)
   const [userRetrieve, setUserRetrieve] = useState<iUser>()
-  const [listData, setListData] = useState<iUser[]>([])
-
-  const getUsers = useCallback((query: string) => {
-    setIsLoading(true)
-    apiUser
-      .list(query)
-      .then((res) => {
-        setListData(res.result)
-        setCount(res.total)
-      })
-      .finally(() => setIsLoading(false))
-  }, [])
 
   const userDataRetrieve = useCallback((id: string, query: string) => {
     setLoadingUser(true)
@@ -178,8 +162,6 @@ export const UserProvider = ({ children }: iChildren) => {
         loadingUser,
         userDataRetrieve,
         userRetrieve,
-        getUsers,
-        listData,
         setUserSelect,
       }}
     >

@@ -1,11 +1,11 @@
-import { LayoutBasePage } from '../../shared/layouts'
-import { Footer, TitleBasePage, ToolsUser } from '../../shared/components'
-import { ViewUser } from '../../shared/views'
-import { useVerifyUser } from '../../shared/hooks'
-import { Outlet, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
+import { Outlet, useParams } from 'react-router-dom'
 import { People } from '@mui/icons-material'
 import { Chip } from '@mui/material'
+import { Footer, TitleBasePage, ToolsUser } from '../../shared/components'
+import { useVerifyUser } from '../../shared/hooks'
+import { LayoutBasePage } from '../../shared/layouts'
+import { ViewUserPage } from './view'
 
 export const UserPage = () => {
   const { user_id } = useParams()
@@ -30,7 +30,7 @@ export const UserPage = () => {
       }
       tools={<ToolsUser isHome isUser isActive isSearch isReset />}
     >
-      <ViewUser />
+      <ViewUserPage />
       <Footer />
     </LayoutBasePage>
   )
