@@ -1,9 +1,8 @@
+import { useDialogContext } from '../../../contexts'
 import { DialogBase } from './Base'
 
 interface iDialogActiveProps {
   is_active: boolean
-  open: boolean
-  onClose: () => void
   title: string
   description: string
   action: () => void
@@ -13,14 +12,14 @@ export const DialogActive = ({
   action,
   description,
   is_active,
-  onClose,
-  open,
   title,
 }: iDialogActiveProps) => {
+  const { openActive, handleOpenActive } = useDialogContext()
+
   return is_active ? (
     <DialogBase
-      open={open}
-      onClose={onClose}
+      open={openActive}
+      onClose={handleOpenActive}
       title={`Desativar ${title}`}
       description={`Deseja continuar desativando ${description}?`}
       action={action}
@@ -28,8 +27,8 @@ export const DialogActive = ({
     />
   ) : (
     <DialogBase
-      open={open}
-      onClose={onClose}
+      open={openActive}
+      onClose={handleOpenActive}
       title={`Ativar ${title}`}
       description={`Deseja continuar ativando ${description}?`}
       action={action}

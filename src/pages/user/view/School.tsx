@@ -2,7 +2,11 @@ import { useParams } from 'react-router-dom'
 import { useCallback, useEffect, useState } from 'react'
 import { School } from '@mui/icons-material'
 import { Chip } from '@mui/material'
-import { usePaginationContext, useUserContext } from '../../../shared/contexts'
+import {
+  useDialogContext,
+  usePaginationContext,
+  useUserContext,
+} from '../../../shared/contexts'
 import { useDebounce } from '../../../shared/hooks'
 import { iSchool } from '../../../shared/interfaces'
 import { apiSchool } from '../../../shared/services'
@@ -23,6 +27,7 @@ export const ViewUserSchoolPage = () => {
   const { debounce } = useDebounce()
   const { userRetrieve } = useUserContext()
   const { search, setIsLoading, setCount } = usePaginationContext()
+  const { openCreate, handleOpenCreate } = useDialogContext()
   const [listData, setListData] = useState<iSchool[]>([])
   const [schoolData, setSchoolData] = useState<iSchool>()
 
@@ -81,7 +86,12 @@ export const ViewUserSchoolPage = () => {
       </LayoutBasePage>
       {userRetrieve && (
         <>
-          <DialogCreateSchoolServer user={userRetrieve} getData={list} />
+          <DialogCreateSchoolServer
+            user={userRetrieve}
+            getData={list}
+            open={openCreate}
+            onClose={handleOpenCreate}
+          />
           {schoolData && (
             <DialogRemoveUser
               user={userRetrieve}

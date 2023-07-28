@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 export const DialogActiveSchool = ({ getData, school }: iDialogSchoolProps) => {
   const navigate = useNavigate()
   const { onClickReset } = usePaginationContext()
-  const { handleOpenActive, openActive } = useDialogContext()
+  const { handleOpenActive } = useDialogContext()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
 
   const updateSchool = async (data: FieldValues, id: string, back: string) => {
@@ -45,8 +45,6 @@ export const DialogActiveSchool = ({ getData, school }: iDialogSchoolProps) => {
         }}
         description={`a escola ${school.name.toUpperCase()}`}
         is_active={school.is_active}
-        onClose={handleOpenActive}
-        open={openActive}
         title="Escola"
       />
     )

@@ -1,6 +1,9 @@
 import { useSearchParams } from 'react-router-dom'
 import { useCallback, useEffect, useState } from 'react'
-import { usePaginationContext } from '../../../shared/contexts'
+import {
+  useDialogContext,
+  usePaginationContext,
+} from '../../../shared/contexts'
 import { useDebounce } from '../../../shared/hooks'
 import { iUser } from '../../../shared/interfaces'
 import { apiUser } from '../../../shared/services'
@@ -17,6 +20,7 @@ export const ViewUserPage = () => {
   const role = searchParams.get('role') || undefined
   const { debounce } = useDebounce()
   const { query, search, setIsLoading, setCount } = usePaginationContext()
+  const { handleOpenEdit, openEdit } = useDialogContext()
   const [listData, setListData] = useState<iUser[]>([])
   const [userData, setUserData] = useState<iUser>()
 
@@ -60,7 +64,13 @@ export const ViewUserPage = () => {
       <DialogCreateAdmin />
       <DialogCreateDirector />
       {userData && <DialogActiveUser user={userData} getData={list} />}
-      {userData && <DialogCreateSchoolServer user={userData} />}
+      {userData && (
+        <DialogCreateSchoolServer
+          user={userData}
+          onClose={handleOpenEdit}
+          open={openEdit}
+        />
+      )}
     </>
   )
 }

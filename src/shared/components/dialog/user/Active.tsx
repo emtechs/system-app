@@ -12,7 +12,7 @@ import { DialogActive } from '../structure'
 export const DialogActiveUser = ({ user, getData }: iDialogUserProps) => {
   const navigate = useNavigate()
   const { onClickReset } = usePaginationContext()
-  const { handleOpenActive, openActive } = useDialogContext()
+  const { handleOpenActive } = useDialogContext()
   const { setLoading, handleError, handleSucess } = useAppThemeContext()
 
   const updateUser = async (id: string, data: FieldValues, back: string) => {
@@ -43,8 +43,6 @@ export const DialogActiveUser = ({ user, getData }: iDialogUserProps) => {
         }}
         description={`o usúario ${user.name.toUpperCase()}`}
         is_active={user.is_active}
-        onClose={handleOpenActive}
-        open={openActive}
         title="Usuário"
       />
     )
