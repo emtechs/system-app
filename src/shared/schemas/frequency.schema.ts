@@ -59,7 +59,6 @@ export const reportSchema = z.object({
       invalid_type_error: 'Período obrigatório',
     },
   ),
-  year_id: z.string().uuid().optional(),
   period_id: z.string().uuid().optional(),
 })
 
@@ -75,11 +74,18 @@ export const reportClassSchema = reportSchema
     key_class: z.string().uuid().optional(),
   })
   .refine((field) => (field.key_class = field.class.key))
-  .refine((field) => (field.year_id = field.year.id))
   .refine((field) => (field.period_id = field.period.id))
 
 export const reportStudentSchema = reportSchema
   .extend({
+    class: z.object(
+      { key: z.string().uuid() },
+      {
+        required_error: 'Turma obrigatória',
+        invalid_type_error: 'Turma obrigatória',
+      },
+    ),
+    key_class: z.string().uuid().optional(),
     student: z.object(
       { id: z.string().uuid() },
       {
@@ -90,5 +96,5 @@ export const reportStudentSchema = reportSchema
     student_id: z.string().uuid().optional(),
   })
   .refine((field) => (field.student_id = field.student.id))
-  .refine((field) => (field.year_id = field.year.id))
   .refine((field) => (field.period_id = field.period.id))
+  .refine((field) => (field.key_class = field.class.key))

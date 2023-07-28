@@ -3,6 +3,7 @@ import {
   AutoCompleteClassReportPage,
   AutoCompleteStudentReportPage,
 } from '../autoComplete'
+import { Box } from '@mui/material'
 
 export const ContentReport = () => {
   const { watch } = useFormContext()
@@ -13,7 +14,12 @@ export const ContentReport = () => {
       return <AutoCompleteClassReportPage />
 
     case 'student':
-      return <AutoCompleteStudentReportPage />
+      return (
+        <Box display="flex" flexDirection="column" gap={1.5} width="100%" p={1}>
+          <AutoCompleteClassReportPage />
+          <AutoCompleteStudentReportPage />
+        </Box>
+      )
 
     default:
       return <></>
