@@ -4,7 +4,6 @@ import {
   iFrequencyBase,
   iFrequencyHistory,
   iFrequencyStudentsBase,
-  iInfrequency,
 } from '../interfaces'
 import { apiUsingNow } from './api'
 
@@ -31,10 +30,6 @@ const update = async (data: FieldValues, id: string): Promise<iFreqUpdate> => {
     data,
   )
   return response
-}
-
-const updateInfreq = async (data: FieldValues, id: string): Promise<void> => {
-  await apiUsingNow.patch(`frequencies/infreq/${id}`, data)
 }
 
 const updateFreqStudent = async (
@@ -78,18 +73,6 @@ const list = async (query: string): Promise<iList> => {
   return response
 }
 
-interface iInfrequencyReturn {
-  result: iInfrequency[]
-  total: number
-}
-
-const infrequency = async (query: string): Promise<iInfrequencyReturn> => {
-  const { data: response } = await apiUsingNow.get<iInfrequencyReturn>(
-    `frequencies/infrequency${query}`,
-  )
-  return response
-}
-
 interface iHistoryReturn {
   result: iFrequencyHistory[]
   total: number
@@ -105,11 +88,9 @@ const history = async (query: string): Promise<iHistoryReturn> => {
 export const apiFrequency = {
   create,
   update,
-  updateInfreq,
   updateFreqStudent,
   destroy,
   students,
   list,
-  infrequency,
   history,
 }

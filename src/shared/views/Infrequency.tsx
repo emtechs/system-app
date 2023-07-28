@@ -7,7 +7,7 @@ import {
 } from '../contexts'
 import { SyntheticEvent, useCallback, useEffect, useState } from 'react'
 import { iInfrequency, iHeadCell } from '../interfaces'
-import { apiFrequency } from '../services'
+import { apiInfrequency } from '../services'
 import { Box, TableCell, TableRow } from '@mui/material'
 import { TableBase, TabsYear } from '../components'
 import { defineBgColorInfrequency } from '../scripts'
@@ -46,8 +46,8 @@ export const ViewInfrequency = () => {
 
   const getFrequencies = useCallback((query: string) => {
     setIsLoading(true)
-    apiFrequency
-      .infrequency(query)
+    apiInfrequency
+      .list(query)
       .then((res) => {
         setData(res.result)
         setCount(res.total)
