@@ -14,14 +14,13 @@ export const AutoCompleteClassReportPage = () => {
 
   useEffect(() => {
     setLoading(true)
-    let query = ''
     if (year && schoolSelect)
-      query = `?take=0&is_report=true&school_id=${schoolSelect.id}&year_id=${year.id}`
-
-    apiClass
-      .listClass(query)
-      .then((res) => setClassDataSelect(res.classes))
-      .finally(() => setLoading(false))
+      apiClass
+        .listClass(
+          `?take=0&is_report=true&school_id=${schoolSelect.id}&year_id=${year.id}`,
+        )
+        .then((res) => setClassDataSelect(res.classes))
+        .finally(() => setLoading(false))
   }, [schoolSelect, year])
 
   return (

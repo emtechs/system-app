@@ -1,5 +1,5 @@
 import { apiUsingNow } from '.'
-import { iYear } from '../interfaces'
+import { iSelectBase, iYear } from '../interfaces'
 
 const listYear = async (): Promise<iYear[]> => {
   const { data: response } = await apiUsingNow.get<iYear[]>(`/calendar/year`)
@@ -18,4 +18,12 @@ const year = async (token: string, year: number): Promise<iYear> => {
   return response
 }
 
-export const apiCalendar = { year, listYear }
+const listPeriod = async (query: string): Promise<iSelectBase[]> => {
+  const { data: response } = await apiUsingNow.get<iSelectBase[]>(
+    `/calendar/period${query}`,
+  )
+
+  return response
+}
+
+export const apiCalendar = { year, listYear, listPeriod }

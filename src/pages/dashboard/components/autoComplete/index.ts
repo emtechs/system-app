@@ -1,2 +1,3 @@
 export * from './Class'
-export * from './PeriodClass'
+export * from './Period'
+export * from './Student'

@@ -1,5 +1,8 @@
 import { useFormContext } from 'react-hook-form'
-import { ContentClass } from './Class'
+import {
+  AutoCompleteClassReportPage,
+  AutoCompleteStudentReportPage,
+} from '../autoComplete'
 
 export const ContentReport = () => {
   const { watch } = useFormContext()
@@ -7,10 +10,10 @@ export const ContentReport = () => {
 
   switch (type) {
     case 'class':
-      return <ContentClass />
+      return <AutoCompleteClassReportPage />
 
     case 'student':
-      return <></>
+      return <AutoCompleteStudentReportPage />
 
     default:
       return <></>
