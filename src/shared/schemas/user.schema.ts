@@ -24,9 +24,11 @@ export const createDirectorSchema = z
       .string({ required_error: 'CPF obrigatório' })
       .min(14, 'Precisa ter 14 digitos'),
     password: z.string().optional(),
-    schools: z.object({ id: z.string().uuid() }).array(),
+    school: z.object({ id: z.string().uuid() }).array(),
+    schools: z.object({ id: z.string().uuid() }).array().optional(),
   })
   .refine((fields) => (fields.password = fields.login.substring(0, 6)))
+  .refine((fields) => (fields.schools = fields.school))
 
 export const defineServerSchema = z
   .object({

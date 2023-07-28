@@ -1,3 +1,3 @@
-export * from './CreateAdmin'
-export * from './CreateDirector'
-export * from './CreateSchoolServer'
+export * from './Admin'
+export * from './Director'
+export * from './SchoolServer'

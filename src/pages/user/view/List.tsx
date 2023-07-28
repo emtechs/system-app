@@ -1,14 +1,15 @@
+import { useSearchParams } from 'react-router-dom'
 import { useCallback, useEffect, useState } from 'react'
 import { usePaginationContext } from '../../../shared/contexts'
 import { useDebounce } from '../../../shared/hooks'
 import { iUser } from '../../../shared/interfaces'
 import { apiUser } from '../../../shared/services'
-import { useSearchParams } from 'react-router-dom'
 import { TableUserPage } from '../components/table'
 import {
   DialogCreateAdmin,
   DialogActiveUser,
   DialogCreateSchoolServer,
+  DialogCreateDirector,
 } from '../../../shared/components'
 
 export const ViewUserPage = () => {
@@ -57,6 +58,7 @@ export const ViewUserPage = () => {
     <>
       <TableUserPage listData={listData} handleUser={handleUser} />
       <DialogCreateAdmin />
+      <DialogCreateDirector />
       {userData && <DialogActiveUser user={userData} get={list} />}
       {userData && <DialogCreateSchoolServer user={userData} />}
     </>

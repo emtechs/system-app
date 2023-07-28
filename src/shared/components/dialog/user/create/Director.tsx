@@ -1,44 +1,34 @@
+import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState, useEffect } from 'react'
-import {
-  FormContainer,
-  AutocompleteElement,
-  TextFieldElement,
-} from 'react-hook-form-mui'
 import {
   DialogBaseChildren,
   BaseContentChildren,
   ValidateCPF,
+  AutoCompleteSchool,
 } from '../../../../components'
 import { useAppThemeContext, useDialogContext } from '../../../../contexts'
-import { iSchool, iUserDirectorRequest } from '../../../../interfaces'
+import { iUserDirectorRequest } from '../../../../interfaces'
 import { createDirectorSchema } from '../../../../schemas'
-import { apiUser, apiUsingNow } from '../../../../services'
+import { apiUser } from '../../../../services'
+import { useNavigate } from 'react-router-dom'
 
 export const DialogCreateDirector = () => {
+  const navigate = useNavigate()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
   const { handleOpenDirector, openDirector } = useDialogContext()
-  const [schoolDataSelect, setSchoolDataSelect] = useState<iSchool[]>()
 
   const createDirector = async (data: iUserDirectorRequest) => {
     try {
       setLoading(true)
-      await apiUser.create(data)
+      const user = await apiUser.create(data)
       handleSucess('Diretor cadastrado com sucesso!')
+      navigate(`/user/${user.id}`)
     } catch {
       handleError('Não foi possível cadastrar o Diretor no momento!')
     } finally {
       setLoading(false)
     }
   }
-
-  useEffect(() => {
-    setLoading(true)
-    apiUsingNow
-      .get<{ result: iSchool[] }>('schools?is_director=true&is_active=true')
-      .then((res) => setSchoolDataSelect(res.data.result))
-      .finally(() => setLoading(false))
-  }, [])
 
   return (
     <DialogBaseChildren
@@ -52,23 +42,7 @@ export const DialogCreateDirector = () => {
         resolver={zodResolver(createDirectorSchema)}
       >
         <BaseContentChildren>
-          <AutocompleteElement
-            name="schools"
-            label="Escola"
-            multiple
-            required
-            loading={!schoolDataSelect}
-            options={
-              schoolDataSelect && schoolDataSelect.length > 0
-                ? schoolDataSelect
-                : [
-                    {
-                      id: 1,
-                      label: 'No momento, não há nenhuma escola sem diretor',
-                    },
-                  ]
-            }
-          />
+          <AutoCompleteSchool isMultiple query="&is_director=false" />
           <TextFieldElement name="cpf" label="CPF" required fullWidth />
           <TextFieldElement name="name" label="Nome" required fullWidth />
           <ValidateCPF director />
