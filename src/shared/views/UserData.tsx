@@ -8,21 +8,21 @@ import {
   CardContent,
   Skeleton,
   Typography,
-} from "@mui/material";
-import { useDialogContext, useUserContext } from "../contexts";
-import { ExpandMore, RemoveDone } from "@mui/icons-material";
-import { useEffect } from "react";
-import { DialogActiveUser } from "../components";
-import { useParams } from "react-router-dom";
+} from '@mui/material'
+import { useDialogContext, useUserContext } from '../contexts'
+import { ExpandMore, RemoveDone } from '@mui/icons-material'
+import { useEffect } from 'react'
+import { DialogActiveUser } from '../components'
+import { useParams } from 'react-router-dom'
 
 export const ViewUserData = () => {
-  const { user_id } = useParams();
-  const { handleOpenActive } = useDialogContext();
-  const { loadingUser, userRetrieve, userDataRetrieve } = useUserContext();
+  const { user_id } = useParams()
+  const { handleOpenActive } = useDialogContext()
+  const { loadingUser, userRetrieve, userDataRetrieve } = useUserContext()
 
   useEffect(() => {
-    if (user_id) userDataRetrieve(user_id, "");
-  }, [user_id]);
+    if (user_id) userDataRetrieve(user_id, '')
+  }, [user_id])
 
   return (
     <>
@@ -58,7 +58,7 @@ export const ViewUserData = () => {
           </Button>
         </CardActions>
       </Card>
-      {userRetrieve && <DialogActiveUser user={userRetrieve} locale="data" />}
+      {userRetrieve && <DialogActiveUser user={userRetrieve} />}
     </>
-  );
-};
+  )
+}

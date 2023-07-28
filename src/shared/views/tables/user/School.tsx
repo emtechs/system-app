@@ -81,7 +81,7 @@ export const TableUserSchool = ({ data, school_id }: iTableUserSchoolProps) => {
         ))}
       </TableBase>
       {/* <DialogCreateServer school_id={school_id} /> */}
-      {userData && <DialogRemoveUser user={userData} locale="list" />}
+      {userData && <DialogRemoveUser user={userData} />}
     </>
   )
 }

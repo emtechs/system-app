@@ -75,8 +75,8 @@ export const TableUser = ({ data }: iTableUserProps) => {
         ))}
       </TableBase>
       <DialogCreateAdmin />
-      {userData && <DialogActiveUser user={userData} locale="list" />}
-      {userData && <DialogCreateSchoolServer user={userData} locale="data" />}
+      {userData && <DialogActiveUser user={userData} />}
+      {userData && <DialogCreateSchoolServer user={userData} />}
     </>
   )
 }

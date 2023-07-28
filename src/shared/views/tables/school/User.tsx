@@ -73,18 +73,10 @@ export const TableSchoolUser = ({ data }: iTableSchoolUserProps) => {
         ))}
       </TableBase>
       {userRetrieve && (
-        <DialogCreateSchoolServer
-          user={userRetrieve}
-          school={schoolData}
-          locale="list"
-        />
+        <DialogCreateSchoolServer user={userRetrieve} school={schoolData} />
       )}
       {userRetrieve && (
-        <DialogRemoveUser
-          user={userRetrieve}
-          school={schoolData}
-          locale="list"
-        />
+        <DialogRemoveUser user={userRetrieve} school={schoolData} />
       )}
     </>
   )

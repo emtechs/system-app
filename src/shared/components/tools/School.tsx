@@ -20,6 +20,7 @@ import {
 import {
   useAppThemeContext,
   useDialogContext,
+  useDrawerContext,
   usePaginationContext,
   useSchoolContext,
 } from '../../contexts'
@@ -65,6 +66,7 @@ export const ToolsSchool = ({
 }: iToolsSchoolProps) => {
   const { theme, mdDown } = useAppThemeContext()
   const { handleOpenCreate } = useDialogContext()
+  const { handleDisplayDash } = useDrawerContext()
   const { schoolSelect } = useSchoolContext()
   const {
     is_active,
@@ -132,9 +134,10 @@ export const ToolsSchool = ({
       {isDash && (
         <ButtonDest
           title="Painel"
-          to={`/${schoolSelect?.id}?dash=ADMIN`}
+          to={`/${schoolSelect?.id}`}
           startIcon={<Dashboard />}
           isResp
+          onClick={() => handleDisplayDash('SCHOOL')}
         />
       )}
       {isSearch && (

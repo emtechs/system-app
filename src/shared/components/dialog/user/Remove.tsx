@@ -1,48 +1,24 @@
-import {
-  useAppThemeContext,
-  useDialogContext,
-  useSchoolContext,
-  useUserContext,
-} from "../../../contexts";
-import { iDialogUserProps } from "../../../interfaces";
-import { rolePtBr } from "../../../scripts";
-import { DialogBase } from "../structure";
-import { apiSchool } from "../../../services";
-import { useNavigate } from "react-router-dom";
+import { useAppThemeContext, useDialogContext } from '../../../contexts'
+import { iDialogUserProps } from '../../../interfaces'
+import { rolePtBr } from '../../../scripts'
+import { DialogBase } from '../structure'
+import { apiSchool } from '../../../services'
 
-export const DialogRemoveUser = ({
-  locale,
-  user,
-  school,
-}: iDialogUserProps) => {
-  const navigate = useNavigate();
-  const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { openActive, handleOpenActive } = useDialogContext();
-  const { getSchools } = useSchoolContext();
-  const { getUsers } = useUserContext();
+export const DialogRemoveUser = ({ user, school }: iDialogUserProps) => {
+  const { setLoading, handleSucess, handleError } = useAppThemeContext()
+  const { openActive, handleOpenActive } = useDialogContext()
 
   const deleteServer = async (school_id: string, server_id: string) => {
     try {
-      setLoading(true);
-      await apiSchool.deleteServer(school_id, server_id);
-      handleSucess("Usuário removido da função com sucesso!");
-      switch (locale) {
-        case "data":
-          navigate(`/school/${school_id}?view=server`);
-          break;
-
-        case "list":
-          if (school) {
-            getSchools(`?server_id=${server_id}`);
-          } else getUsers(`?school_id=${school_id}`);
-          break;
-      }
+      setLoading(true)
+      await apiSchool.deleteServer(school_id, server_id)
+      handleSucess('Usuário removido da função com sucesso!')
     } catch {
-      handleError("Não foi possível remover o usuário da função no momento!");
+      handleError('Não foi possível remover o usuário da função no momento!')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return user.work_school ? (
     <DialogBase
@@ -54,8 +30,8 @@ export const DialogRemoveUser = ({
         user.work_school.school.name
       }?`}
       action={() => {
-        if (user.work_school) deleteServer(user.work_school.school.id, user.id);
-        handleOpenActive();
+        if (user.work_school) deleteServer(user.work_school.school.id, user.id)
+        handleOpenActive()
       }}
       actionTitle="Continuar"
     />
@@ -67,14 +43,14 @@ export const DialogRemoveUser = ({
         title="Remover Usuário da Função"
         description={`Deseja continuar removendo o usúario ${user.name.toUpperCase()} da
     Função ${rolePtBr(school.server.role).toUpperCase()} da Escola ${
-          school.name
-        }?`}
+      school.name
+    }?`}
         action={() => {
-          if (school) deleteServer(school.id, user.id);
-          handleOpenActive();
+          if (school) deleteServer(school.id, user.id)
+          handleOpenActive()
         }}
         actionTitle="Continuar"
       />
     )
-  );
-};
+  )
+}

@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   Accordion,
   AccordionDetails,
@@ -17,18 +17,36 @@ import {
   DialogDirectorSchool,
   DialogActiveSchool,
 } from '../../../shared/components'
-import { useDialogContext, useSchoolContext } from '../../../shared/contexts'
+import { useDialogContext } from '../../../shared/contexts'
+import { iSchool } from '../../../shared/interfaces'
+import { apiSchool } from '../../../shared/services'
+import { useVerifySchool } from '../../../shared/hooks'
 
 export const ViewRetrieveSchoolPage = () => {
   const { school_id } = useParams()
   const { handleOpenActive, handleOpenDirector, handleOpenEdit } =
     useDialogContext()
-  const { loadingSchool, schoolRetrieve, schoolDataRetrieve } =
-    useSchoolContext()
+  const [schoolRetrieve, setSchoolRetrieve] = useState<iSchool>()
+  const [loadingSchool, setLoadingSchool] = useState(false)
+  const { verifySchool } = useVerifySchool()
+
+  const schoolDataRetrieve = useCallback((id: string, query: string) => {
+    setLoadingSchool(true)
+    apiSchool
+      .retrieve(id, query)
+      .then((res) => setSchoolRetrieve(res))
+      .finally(() => setLoadingSchool(false))
+  }, [])
 
   useEffect(() => {
     if (school_id) schoolDataRetrieve(school_id, '')
   }, [school_id])
+
+  const retrieve = () => schoolDataRetrieve(school_id || '', '')
+  const retrieveEdit = () => {
+    schoolDataRetrieve(school_id || '', '')
+    verifySchool(school_id || '')
+  }
 
   return (
     <>
@@ -75,13 +93,13 @@ export const ViewRetrieveSchoolPage = () => {
         </CardActions>
       </Card>
       {schoolRetrieve && (
-        <DialogEditSchool school={schoolRetrieve} locale="data" />
+        <DialogEditSchool school={schoolRetrieve} get={retrieveEdit} />
       )}
       {schoolRetrieve && (
-        <DialogDirectorSchool school={schoolRetrieve} locale="data" />
+        <DialogDirectorSchool school={schoolRetrieve} get={retrieve} />
       )}
       {schoolRetrieve && (
-        <DialogActiveSchool school={schoolRetrieve} locale="data" />
+        <DialogActiveSchool school={schoolRetrieve} get={retrieve} isData />
       )}
     </>
   )

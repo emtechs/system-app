@@ -8,7 +8,6 @@ import {
   userUpdateSchema,
 } from '../schemas'
 import { iSchool, iWorkSchool } from './school.interface'
-import { iLocale } from './global.interfaces'
 
 export type iRole = 'ADMIN' | 'SERV' | 'DIRET' | 'SECRET'
 
@@ -32,7 +31,6 @@ export interface iUser {
 export interface iDialogUserProps {
   user: iUser
   school?: iSchool
-  locale: iLocale
 }
 
 export interface iUserDash {

@@ -1,43 +1,21 @@
 import sortArray from 'sort-array'
-import { useCallback, useEffect, useMemo } from 'react'
-import { TableRow, TableCell, Skeleton, Link } from '@mui/material'
-import { Link as RouterLink } from 'react-router-dom'
-import { TableBase } from '../../../../shared/components'
-import {
-  useSchoolContext,
-  usePaginationContext,
-} from '../../../../shared/contexts'
-import { useDebounce } from '../../../../shared/hooks'
+import { useMemo } from 'react'
+import { TableRow, TableCell, Skeleton } from '@mui/material'
+import { LinkText, TableBase } from '../../../../shared/components'
+import { usePaginationContext } from '../../../../shared/contexts'
 import { iHeadCell, iSchool } from '../../../../shared/interfaces'
 import { ActionsSchool } from '../actions'
 
 interface iTableSchoolPageProps {
+  listData: iSchool[]
   handleSchool: (newSchool: iSchool) => void
 }
 
-export const TableSchoolPage = ({ handleSchool }: iTableSchoolPageProps) => {
-  const { debounce } = useDebounce()
-  const { getSchools, listData } = useSchoolContext()
-  const { is_active, is_director, search, order, by, isLoading, onClickReset } =
-    usePaginationContext()
-
-  const define_query = useCallback(
-    (comp: string) => {
-      return '?by=asc' + comp + is_director + is_active()
-    },
-    [is_active, is_director],
-  )
-
-  useEffect(() => {
-    let query_data = ''
-    if (search) {
-      console.log(search)
-      query_data += `&name=${search}`
-      debounce(() => {
-        getSchools(define_query(query_data))
-      })
-    } else getSchools(define_query(query_data))
-  }, [debounce, define_query, getSchools, search])
+export const TableSchoolPage = ({
+  handleSchool,
+  listData,
+}: iTableSchoolPageProps) => {
+  const { order, by, isLoading, onClickReset } = usePaginationContext()
 
   const data = useMemo(() => {
     let listSchool: iSchool[]
@@ -65,22 +43,13 @@ export const TableSchoolPage = ({ handleSchool }: iTableSchoolPageProps) => {
       {data.map((school) => (
         <TableRow key={school.id} hover>
           <TableCell>
-            {isLoading ? (
-              <Skeleton width={250} />
-            ) : school.is_active ? (
-              <Link
-                underline="none"
-                variant="body2"
-                color="inherit"
-                component={RouterLink}
-                to={`/school/${school.id}`}
-                onClick={onClickReset}
-              >
-                {school.name}
-              </Link>
-            ) : (
-              school.name
-            )}
+            <LinkText
+              label={school.name}
+              isLoading={isLoading}
+              onClick={onClickReset}
+              to={`/school/${school.id}`}
+              width={250}
+            />
           </TableCell>
           <TableCell>
             {isLoading ? <Skeleton width={200} /> : school.director?.name}

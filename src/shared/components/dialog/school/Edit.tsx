@@ -1,19 +1,39 @@
-import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
 import {
+  FieldValues,
+  FormContainer,
+  TextFieldElement,
+} from 'react-hook-form-mui'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@mui/material'
+import {
+  useAppThemeContext,
   useDialogContext,
   usePaginationContext,
-  useSchoolContext,
 } from '../../../contexts'
 import { iDialogSchoolProps } from '../../../interfaces'
 import { BaseContentChildren, DialogBaseChildren } from '../structure'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { schoolUpdateSchema } from '../../../schemas'
-import { Button } from '@mui/material'
+import { apiSchool } from '../../../services'
 
-export const DialogEditSchool = ({ locale, school }: iDialogSchoolProps) => {
+export const DialogEditSchool = ({ school, get }: iDialogSchoolProps) => {
   const { onClickReset } = usePaginationContext()
   const { handleOpenEdit, openEdit } = useDialogContext()
-  const { updateSchool } = useSchoolContext()
+  const { setLoading, handleSucess, handleError } = useAppThemeContext()
+
+  const updateSchool = async (data: FieldValues, id: string) => {
+    try {
+      setLoading(true)
+      await apiSchool.update(data, id, '')
+      handleSucess(`Sucesso ao alterar o nome da Escola!`)
+      onClickReset()
+      get()
+    } catch {
+      handleError(`Não foi possível atualizar o nome da escola no momento!`)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <DialogBaseChildren
       open={openEdit}
@@ -26,8 +46,7 @@ export const DialogEditSchool = ({ locale, school }: iDialogSchoolProps) => {
           name: school.name,
         }}
         onSuccess={(data) => {
-          updateSchool(data, school.id, 'nome', locale)
-          onClickReset()
+          updateSchool(data, school.id)
           handleOpenEdit()
         }}
         resolver={zodResolver(schoolUpdateSchema)}

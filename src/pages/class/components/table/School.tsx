@@ -1,13 +1,7 @@
 import { useState } from 'react'
 import { usePaginationContext } from '../../../../shared/contexts'
 import { iHeadCell, iSchool } from '../../../../shared/interfaces'
-import {
-  DialogActiveSchool,
-  DialogCreateSchool,
-  DialogDirectorSchool,
-  DialogEditSchool,
-  TableBase,
-} from '../../../../shared/components'
+import { DialogCreateSchool, TableBase } from '../../../../shared/components'
 import { Link, Skeleton, TableCell, TableRow } from '@mui/material'
 import { ActionsSchool } from '../actions'
 import { Link as RouterLink } from 'react-router-dom'
@@ -59,9 +53,7 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
         ))}
       </TableBase>
       <DialogCreateSchool />
-      {schoolData && <DialogEditSchool school={schoolData} locale="list" />}
-      {schoolData && <DialogDirectorSchool school={schoolData} locale="list" />}
-      {schoolData && <DialogActiveSchool school={schoolData} locale="list" />}
+      {schoolData && <></>}
     </>
   )
 }

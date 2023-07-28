@@ -1,15 +1,43 @@
+import { FieldValues } from 'react-hook-form'
 import {
+  useAppThemeContext,
   useDialogContext,
   usePaginationContext,
-  useSchoolContext,
-} from "../../../contexts";
-import { iDialogSchoolProps } from "../../../interfaces";
-import { DialogActive } from "../structure";
+} from '../../../contexts'
+import { iDialogSchoolProps } from '../../../interfaces'
+import { apiSchool } from '../../../services'
+import { DialogActive } from '../structure'
+import { useNavigate } from 'react-router-dom'
 
-export const DialogActiveSchool = ({ locale, school }: iDialogSchoolProps) => {
-  const { onClickReset } = usePaginationContext();
-  const { handleOpenActive, openActive } = useDialogContext();
-  const { updateSchool } = useSchoolContext();
+interface iDialogActiveSchoolProps extends iDialogSchoolProps {
+  isData?: boolean
+}
+
+export const DialogActiveSchool = ({
+  get,
+  school,
+  isData,
+}: iDialogActiveSchoolProps) => {
+  const navigate = useNavigate()
+  const { onClickReset } = usePaginationContext()
+  const { handleOpenActive, openActive } = useDialogContext()
+  const { setLoading, handleSucess, handleError } = useAppThemeContext()
+
+  const updateSchool = async (data: FieldValues, id: string, back: string) => {
+    try {
+      setLoading(true)
+      await apiSchool.update(data, id, '')
+      handleSucess(`Sucesso ao alterar o estado da Escola!`)
+      onClickReset()
+      !isData && get()
+      navigate(back)
+    } catch {
+      handleError(`Não foi possível atualizar o estado da escola no momento!`)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     school && (
       <DialogActive
@@ -19,13 +47,9 @@ export const DialogActiveSchool = ({ locale, school }: iDialogSchoolProps) => {
               is_active: !school.is_active,
             },
             school.id,
-            "estado",
-            locale,
-            undefined,
-            school.is_active ? "/school" : `/school/${school.id}`
-          );
-          onClickReset();
-          handleOpenActive();
+            school.is_active ? '/school' : `/school/${school.id}`,
+          )
+          handleOpenActive()
         }}
         description={`a escola ${school.name.toUpperCase()}`}
         is_active={school.is_active}
@@ -34,5 +58,5 @@ export const DialogActiveSchool = ({ locale, school }: iDialogSchoolProps) => {
         title="Escola"
       />
     )
-  );
-};
+  )
+}

@@ -1,23 +1,40 @@
-import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
 import {
+  FieldValues,
+  FormContainer,
+  TextFieldElement,
+} from 'react-hook-form-mui'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Box, Typography } from '@mui/material'
+import {
+  useAppThemeContext,
   useDialogContext,
   usePaginationContext,
-  useSchoolContext,
 } from '../../../contexts'
 import { iDialogSchoolProps } from '../../../interfaces'
 import { BaseContentChildren, DialogBaseChildren } from '../structure'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { schoolUpdateDirectorSchema } from '../../../schemas'
-import { Box, Typography } from '@mui/material'
 import { ValidateCPF } from '../../validate'
+import { apiSchool } from '../../../services'
 
-export const DialogDirectorSchool = ({
-  locale,
-  school,
-}: iDialogSchoolProps) => {
+export const DialogDirectorSchool = ({ school, get }: iDialogSchoolProps) => {
   const { onClickReset } = usePaginationContext()
   const { handleOpenDirector, openDirector } = useDialogContext()
-  const { updateSchool } = useSchoolContext()
+  const { setLoading, handleSucess, handleError } = useAppThemeContext()
+
+  const updateSchool = async (data: FieldValues, id: string, query: string) => {
+    try {
+      setLoading(true)
+      await apiSchool.update(data, id, query)
+      handleSucess(`Sucesso ao alterar o diretor da Escola!`)
+      onClickReset()
+      get()
+    } catch {
+      handleError(`Não foi possível atualizar o diretor da escola no momento!`)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <DialogBaseChildren
       open={openDirector}
@@ -29,9 +46,8 @@ export const DialogDirectorSchool = ({
         onSuccess={(data) => {
           const query = school.director
             ? `?director_id=${school.director.id}`
-            : undefined
-          updateSchool(data, school.id, 'diretor', locale, query)
-          onClickReset()
+            : ''
+          updateSchool(data, school.id, query)
           handleOpenDirector()
         }}
         resolver={zodResolver(schoolUpdateDirectorSchema)}

@@ -10,7 +10,6 @@ import {
 } from '../schemas'
 import { iDash, iDiretor, iRole, iServer } from './user.interfaces'
 import { iClass } from './class.interfaces'
-import { iLocale } from './global.interfaces'
 
 export interface iDashSchool {
   frequencies: number
@@ -38,7 +37,7 @@ export interface iSchool {
 
 export interface iDialogSchoolProps {
   school: iSchool
-  locale: iLocale
+  get: () => void
 }
 
 export interface iSchoolClass {

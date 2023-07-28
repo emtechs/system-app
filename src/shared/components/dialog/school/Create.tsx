@@ -1,32 +1,32 @@
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import { BaseContentChildren, DialogBaseChildren } from "../structure";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { schoolCreateSchema } from "../../../schemas";
-import { Button } from "@mui/material";
-import { iSchoolRequest } from "../../../interfaces";
-import { useAppThemeContext, useDialogContext } from "../../../contexts";
-import { useNavigate } from "react-router-dom";
-import { apiSchool } from "../../../services";
+import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
+import { BaseContentChildren, DialogBaseChildren } from '../structure'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { schoolCreateSchema } from '../../../schemas'
+import { Button } from '@mui/material'
+import { iSchoolRequest } from '../../../interfaces'
+import { useAppThemeContext, useDialogContext } from '../../../contexts'
+import { useNavigate } from 'react-router-dom'
+import { apiSchool } from '../../../services'
 
 export const DialogCreateSchool = () => {
-  const navigate = useNavigate();
-  const { setLoading, handleSucess, handleError } = useAppThemeContext();
-  const { handleOpenCreate, openCreate } = useDialogContext();
+  const navigate = useNavigate()
+  const { setLoading, handleSucess, handleError } = useAppThemeContext()
+  const { handleOpenCreate, openCreate } = useDialogContext()
 
   const createSchool = async (data: iSchoolRequest) => {
     try {
-      setLoading(true);
-      const school = await apiSchool.create(data);
-      handleSucess("A escola foi cadastrada com sucesso!");
-      navigate("/school/" + school.id);
+      setLoading(true)
+      const school = await apiSchool.create(data)
+      handleSucess('A escola foi cadastrada com sucesso!')
+      navigate('/school/' + school.id)
     } catch {
       handleError(
-        "No momento, não foi possível cadastrar a escola. Por favor, tente novamente mais tarde."
-      );
+        'No momento, não foi possível cadastrar a escola. Por favor, tente novamente mais tarde.',
+      )
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <DialogBaseChildren
@@ -37,8 +37,8 @@ export const DialogCreateSchool = () => {
     >
       <FormContainer
         onSuccess={(data) => {
-          handleOpenCreate();
-          createSchool(data);
+          handleOpenCreate()
+          createSchool(data)
         }}
         resolver={zodResolver(schoolCreateSchema)}
       >
@@ -55,5 +55,5 @@ export const DialogCreateSchool = () => {
         </BaseContentChildren>
       </FormContainer>
     </DialogBaseChildren>
-  );
-};
+  )
+}

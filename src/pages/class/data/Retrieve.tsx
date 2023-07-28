@@ -10,7 +10,6 @@ import { useValueTabs } from '../../../shared/hooks'
 import { LayoutBasePage } from '../../../shared/layouts'
 import {
   ViewClassData,
-  ViewSchool,
   ViewStudent,
   ViewFrequency,
   ViewInfrequency,
@@ -37,7 +36,7 @@ export const RetrieveClassPage = () => {
   useEffect(() => {
     switch (viewData) {
       case 'school':
-        setView(<ViewSchool id={class_id} />)
+        setView(<></>)
         setTools(<ToolsSchool isDash back="/school" />)
         break
 
