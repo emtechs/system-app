@@ -38,7 +38,10 @@ export const DialogCreateDirector = () => {
       description=""
     >
       <FormContainer
-        onSuccess={createDirector}
+        onSuccess={(data) => {
+          handleOpenDirector()
+          createDirector(data)
+        }}
         resolver={zodResolver(createDirectorSchema)}
       >
         <BaseContentChildren>

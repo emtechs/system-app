@@ -59,7 +59,7 @@ export const ViewUserPage = () => {
       <TableUserPage listData={listData} handleUser={handleUser} />
       <DialogCreateAdmin />
       <DialogCreateDirector />
-      {userData && <DialogActiveUser user={userData} get={list} />}
+      {userData && <DialogActiveUser user={userData} getData={list} />}
       {userData && <DialogCreateSchoolServer user={userData} />}
     </>
   )

@@ -9,15 +9,7 @@ import { apiSchool } from '../../../services'
 import { DialogActive } from '../structure'
 import { useNavigate } from 'react-router-dom'
 
-interface iDialogActiveSchoolProps extends iDialogSchoolProps {
-  isData?: boolean
-}
-
-export const DialogActiveSchool = ({
-  get,
-  school,
-  isData,
-}: iDialogActiveSchoolProps) => {
+export const DialogActiveSchool = ({ getData, school }: iDialogSchoolProps) => {
   const navigate = useNavigate()
   const { onClickReset } = usePaginationContext()
   const { handleOpenActive, openActive } = useDialogContext()
@@ -29,7 +21,7 @@ export const DialogActiveSchool = ({
       await apiSchool.update(data, id, '')
       handleSucess(`Sucesso ao alterar o estado da Escola!`)
       onClickReset()
-      !isData && get()
+      getData && getData()
       navigate(back)
     } catch {
       handleError(`Não foi possível atualizar o estado da escola no momento!`)

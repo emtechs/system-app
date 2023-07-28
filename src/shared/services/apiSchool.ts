@@ -1,6 +1,6 @@
 import { FieldValues } from 'react-hook-form'
 import { apiUsingNow } from './api'
-import { iSchool, iSchoolServer } from '../interfaces'
+import { iSchool } from '../interfaces'
 
 const create = async (data: FieldValues): Promise<iSchool> => {
   const { data: response } = await apiUsingNow.post<iSchool>('schools', data)
@@ -73,15 +73,12 @@ const list = async (query: string): Promise<iList> => {
 
 interface ilistServers {
   total: number
-  result: iSchoolServer[]
+  result: iSchool[]
 }
 
-const listServers = async (
-  id: string,
-  query: string,
-): Promise<ilistServers> => {
+const listServers = async (query: string): Promise<ilistServers> => {
   const { data: response } = await apiUsingNow.get<ilistServers>(
-    `schools/${id}/server${query}`,
+    `schools/server${query}`,
   )
 
   return response

@@ -15,7 +15,7 @@ import { BaseContentChildren, DialogBaseChildren } from '../structure'
 import { schoolUpdateSchema } from '../../../schemas'
 import { apiSchool } from '../../../services'
 
-export const DialogEditSchool = ({ school, get }: iDialogSchoolProps) => {
+export const DialogEditSchool = ({ school, getData }: iDialogSchoolProps) => {
   const { onClickReset } = usePaginationContext()
   const { handleOpenEdit, openEdit } = useDialogContext()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
@@ -26,7 +26,7 @@ export const DialogEditSchool = ({ school, get }: iDialogSchoolProps) => {
       await apiSchool.update(data, id, '')
       handleSucess(`Sucesso ao alterar o nome da Escola!`)
       onClickReset()
-      get()
+      getData && getData()
     } catch {
       handleError(`Não foi possível atualizar o nome da escola no momento!`)
     } finally {

@@ -5,21 +5,11 @@ import {
   useDialogContext,
   usePaginationContext,
 } from '../../../contexts'
-import { iUser } from '../../../interfaces'
+import { iDialogUserProps } from '../../../interfaces'
 import { apiUser } from '../../../services'
 import { DialogActive } from '../structure'
 
-interface iDialogActiveUserProps {
-  user: iUser
-  get: () => void
-  isData?: boolean
-}
-
-export const DialogActiveUser = ({
-  user,
-  get,
-  isData,
-}: iDialogActiveUserProps) => {
+export const DialogActiveUser = ({ user, getData }: iDialogUserProps) => {
   const navigate = useNavigate()
   const { onClickReset } = usePaginationContext()
   const { handleOpenActive, openActive } = useDialogContext()
@@ -31,7 +21,7 @@ export const DialogActiveUser = ({
       await apiUser.update(id, data)
       handleSucess('Sucesso ao alterar o estado do usuário!')
       onClickReset()
-      !isData && get()
+      getData && getData()
       navigate(back)
     } catch {
       handleError('Não foi possível atualizar o estado do usuário no momento!')

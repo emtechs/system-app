@@ -7,7 +7,8 @@ import {
   userPasswordSchema,
   userUpdateSchema,
 } from '../schemas'
-import { iSchool, iWorkSchool } from './school.interface'
+import { iWorkSchool } from './school.interface'
+import { iDialogDataProps } from './global.interfaces'
 
 export type iRole = 'ADMIN' | 'SERV' | 'DIRET' | 'SECRET'
 
@@ -28,9 +29,8 @@ export interface iUser {
   work_school?: iWorkSchool
 }
 
-export interface iDialogUserProps {
+export interface iDialogUserProps extends iDialogDataProps {
   user: iUser
-  school?: iSchool
 }
 
 export interface iUserDash {

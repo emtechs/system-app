@@ -10,6 +10,7 @@ import {
 } from '../schemas'
 import { iDash, iDiretor, iRole, iServer } from './user.interfaces'
 import { iClass } from './class.interfaces'
+import { iDialogDataProps } from './global.interfaces'
 
 export interface iDashSchool {
   frequencies: number
@@ -33,11 +34,13 @@ export interface iSchool {
   servers: number
   infrequency: number
   class?: iClass
+  dash: iDash
+  role: iRole
+  key: string
 }
 
-export interface iDialogSchoolProps {
+export interface iDialogSchoolProps extends iDialogDataProps {
   school: iSchool
-  get: () => void
 }
 
 export interface iSchoolClass {

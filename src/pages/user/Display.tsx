@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
   Footer,
@@ -5,11 +6,10 @@ import {
   TitleUserRetrievePage,
   TitleUserViewFrequencyPage,
   TitleUserViewHistoryPage,
-  TitleUserViewSchoolPage,
   ToolsUser,
 } from '../../shared/components'
 import { LayoutBasePage } from '../../shared/layouts'
-import { useEffect, useState } from 'react'
+import { ViewUserSchoolPage } from './view'
 
 export const ViewUserPage = () => {
   const { view } = useParams()
@@ -19,12 +19,6 @@ export const ViewUserPage = () => {
 
   useEffect(() => {
     switch (view) {
-      case 'school':
-        setTitle(<TitleUserViewSchoolPage />)
-        setViewData(<></>)
-        setTools(<ToolsUser back="/user" isNew titleNew="Nova" isSearch />)
-        break
-
       case 'frequency':
         setTitle(<TitleUserViewFrequencyPage />)
         setViewData(<></>)
@@ -38,6 +32,11 @@ export const ViewUserPage = () => {
         break
     }
   }, [view])
+
+  switch (view) {
+    case 'school':
+      return <ViewUserSchoolPage />
+  }
 
   return (
     <LayoutBasePage title={title} tools={tools}>

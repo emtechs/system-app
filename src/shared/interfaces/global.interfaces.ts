@@ -9,6 +9,10 @@ export interface iDialogBaseProps {
   onClose: () => void
 }
 
+export interface iDialogDataProps {
+  getData?: () => void
+}
+
 export interface iLabelBaseProps {
   clickable?: boolean
   isSchool?: boolean

@@ -93,14 +93,12 @@ export const ViewRetrieveSchoolPage = () => {
         </CardActions>
       </Card>
       {schoolRetrieve && (
-        <DialogEditSchool school={schoolRetrieve} get={retrieveEdit} />
+        <DialogEditSchool school={schoolRetrieve} getData={retrieveEdit} />
       )}
       {schoolRetrieve && (
-        <DialogDirectorSchool school={schoolRetrieve} get={retrieve} />
+        <DialogDirectorSchool school={schoolRetrieve} getData={retrieve} />
       )}
-      {schoolRetrieve && (
-        <DialogActiveSchool school={schoolRetrieve} get={retrieve} isData />
-      )}
+      {schoolRetrieve && <DialogActiveSchool school={schoolRetrieve} />}
     </>
   )
 }

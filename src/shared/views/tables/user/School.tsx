@@ -1,9 +1,5 @@
 import { Fragment, useMemo, useState } from 'react'
-import {
-  // DialogCreateServer,
-  DialogRemoveUser,
-  TableBase,
-} from '../../../components'
+import { TableBase } from '../../../components'
 import { useAppThemeContext, usePaginationContext } from '../../../contexts'
 import { iUser, iHeadCell } from '../../../interfaces'
 import { rolePtBr } from '../../../scripts'
@@ -80,8 +76,7 @@ export const TableUserSchool = ({ data, school_id }: iTableUserSchoolProps) => {
           </Fragment>
         ))}
       </TableBase>
-      {/* <DialogCreateServer school_id={school_id} /> */}
-      {userData && <DialogRemoveUser user={userData} />}
+      {userData && <></>}
     </>
   )
 }

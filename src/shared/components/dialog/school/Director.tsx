@@ -16,7 +16,10 @@ import { schoolUpdateDirectorSchema } from '../../../schemas'
 import { ValidateCPF } from '../../validate'
 import { apiSchool } from '../../../services'
 
-export const DialogDirectorSchool = ({ school, get }: iDialogSchoolProps) => {
+export const DialogDirectorSchool = ({
+  school,
+  getData,
+}: iDialogSchoolProps) => {
   const { onClickReset } = usePaginationContext()
   const { handleOpenDirector, openDirector } = useDialogContext()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
@@ -27,7 +30,7 @@ export const DialogDirectorSchool = ({ school, get }: iDialogSchoolProps) => {
       await apiSchool.update(data, id, query)
       handleSucess(`Sucesso ao alterar o diretor da Escola!`)
       onClickReset()
-      get()
+      getData && getData()
     } catch {
       handleError(`Não foi possível atualizar o diretor da escola no momento!`)
     } finally {

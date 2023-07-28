@@ -35,8 +35,6 @@ export const ViewRetrieveUserPage = () => {
     if (user_id) userDataRetrieve(user_id, '')
   }, [user_id])
 
-  const retrieve = () => userDataRetrieve(user_id || '', '')
-
   return (
     <>
       <Card>
@@ -71,9 +69,7 @@ export const ViewRetrieveUserPage = () => {
           </Button>
         </CardActions>
       </Card>
-      {userRetrieve && (
-        <DialogActiveUser user={userRetrieve} get={retrieve} isData />
-      )}
+      {userRetrieve && <DialogActiveUser user={userRetrieve} />}
     </>
   )
 }

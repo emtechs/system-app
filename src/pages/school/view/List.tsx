@@ -54,9 +54,11 @@ export const ViewSchoolPage = () => {
     <>
       <TableSchoolPage listData={listData} handleSchool={handleSchool} />
       <DialogCreateSchool />
-      {schoolData && <DialogEditSchool school={schoolData} get={list} />}
-      {schoolData && <DialogDirectorSchool school={schoolData} get={list} />}
-      {schoolData && <DialogActiveSchool school={schoolData} get={list} />}
+      {schoolData && <DialogEditSchool school={schoolData} getData={list} />}
+      {schoolData && (
+        <DialogDirectorSchool school={schoolData} getData={list} />
+      )}
+      {schoolData && <DialogActiveSchool school={schoolData} getData={list} />}
     </>
   )
 }

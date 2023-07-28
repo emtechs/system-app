@@ -7,17 +7,14 @@ import {
   AutoCompleteSchool,
 } from '../../../../components'
 import { useAppThemeContext, useDialogContext } from '../../../../contexts'
-import { iSchoolServerRequest, iUser } from '../../../../interfaces'
+import { iDialogUserProps, iSchoolServerRequest } from '../../../../interfaces'
 import { defineServerSchema } from '../../../../schemas'
 import { apiSchool } from '../../../../services'
 
-interface iDialogCreateSchoolServerProps {
-  user: iUser
-}
-
 export const DialogCreateSchoolServer = ({
   user,
-}: iDialogCreateSchoolServerProps) => {
+  getData,
+}: iDialogUserProps) => {
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
   const { openEdit, handleOpenEdit } = useDialogContext()
 
@@ -29,6 +26,7 @@ export const DialogCreateSchoolServer = ({
       setLoading(true)
       await apiSchool.createServer(data, server_id)
       handleSucess('O servidor foi cadastrada com sucesso na escola!')
+      getData && getData()
     } catch {
       handleError(
         'No momento, não foi possível cadastrar o servidor na escola. Por favor, tente novamente mais tarde.',
