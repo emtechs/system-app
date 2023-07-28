@@ -2,87 +2,89 @@ import {
   Box,
   Button,
   Card,
+  CardActions,
   CardContent,
   Grid,
   Paper,
-  Step,
-  StepContent,
-  StepLabel,
-  Stepper,
+  Typography,
 } from '@mui/material'
-import { useState } from 'react'
 import { ContentReport } from './content'
+import { FormContainer, RadioButtonGroup } from 'react-hook-form-mui'
+import { AutoCompleteYear, GridDashOrgan } from '../../../../shared/components'
 
 export const CardDashboardSchoolReportPage = () => {
-  const [activeStep, setActiveStep] = useState(0)
-  const [typeData, setTypeData] = useState<'class' | 'student'>()
-
   const steps = [
     {
       label: 'Selecione o modelo do relátorio',
       content: (
-        <Box display="flex" flexDirection="column">
-          <Button
-            onClick={() => {
-              setActiveStep(1)
-              setTypeData('class')
-            }}
-          >
-            Turma
-          </Button>
-          <Button
-            onClick={() => {
-              setActiveStep(1)
-              setTypeData('student')
-            }}
-          >
-            Aluno
-          </Button>
+        <Box mt={1}>
+          <RadioButtonGroup
+            name="type"
+            options={[
+              { id: 'class', label: 'Turma' },
+              { id: 'student', label: 'Aluno' },
+            ]}
+            required
+          />
         </Box>
       ),
     },
     {
       label: 'Selecione os dados do relátorio',
-      content: <ContentReport type={typeData} />,
+      content: <ContentReport />,
     },
   ]
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1)
-  }
-
   return (
     <Box my={1} mx={2} component={Paper} variant="outlined">
-      <Card>
-        <CardContent>
-          <Grid container direction="column" p={2} spacing={2}>
-            <Grid container item direction="row" justifyContent="center">
-              <Grid item md={9}>
-                <Box sx={{ width: '100%' }}>
-                  <Stepper activeStep={activeStep} alternativeLabel>
-                    {steps.map((el, index) => (
-                      <Step key={index}>
-                        <StepLabel>{el.label}</StepLabel>
-                        <StepContent>{el.content}</StepContent>
-                      </Step>
-                    ))}
-                  </Stepper>
-                  <Box display="flex" pt={2}>
-                    <Button
-                      color="inherit"
-                      disabled={activeStep === 0}
-                      onClick={handleBack}
-                      sx={{ mr: 1 }}
-                    >
-                      Voltar
-                    </Button>
-                  </Box>
+      <FormContainer
+        onSuccess={(data) => {
+          console.log(data)
+        }}
+      >
+        <Card>
+          <CardContent>
+            <Grid container direction="row" p={2} spacing={2}>
+              <Grid item md={4}>
+                <Box height="100%" display="flex" flexDirection="column">
+                  <Typography>Relatório de Frequência</Typography>
+                  <GridDashOrgan />
+                </Box>
+              </Grid>
+              <Grid item md={3}>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  gap={2.5}
+                  width="100%"
+                  p={1}
+                >
+                  <RadioButtonGroup
+                    label="Selecione o modelo"
+                    name="type"
+                    options={[
+                      { id: 'class', label: 'Turma' },
+                      { id: 'student', label: 'Aluno' },
+                    ]}
+                    required
+                  />
+                  <AutoCompleteYear />
+                </Box>
+              </Grid>
+              <Grid item md={5}>
+                <Box>
+                  <ContentReport />
                 </Box>
               </Grid>
             </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+          </CardContent>
+          <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button type="submit" variant="contained" disableElevation>
+              Consultar
+            </Button>
+          </CardActions>
+        </Card>
+      </FormContainer>
     </Box>
   )
 }

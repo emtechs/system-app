@@ -1,10 +1,10 @@
+import { useFormContext } from 'react-hook-form'
 import { ContentClass } from './Class'
 
-interface iContentReportProps {
-  type?: 'class' | 'student'
-}
+export const ContentReport = () => {
+  const { watch } = useFormContext()
+  const type: string = watch('type')
 
-export const ContentReport = ({ type }: iContentReportProps) => {
   switch (type) {
     case 'class':
       return <ContentClass />
