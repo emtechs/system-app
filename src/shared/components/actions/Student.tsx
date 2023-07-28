@@ -1,6 +1,10 @@
 import { RemoveDone, SyncAlt } from '@mui/icons-material'
 import { IconButton, TableCell, Tooltip } from '@mui/material'
-import { useDialogContext } from '../../contexts'
+import {
+  useAuthContext,
+  useCalendarContext,
+  useDialogContext,
+} from '../../contexts'
 import { iStudent } from '../../interfaces'
 
 interface iActionsStudentProps {
@@ -12,6 +16,8 @@ export const ActionsStudent = ({
   handleStudent,
   student,
 }: iActionsStudentProps) => {
+  const { yearData } = useAuthContext()
+  const { yearSelect } = useCalendarContext()
   const { handleOpenEdit, handleOpenActive } = useDialogContext()
 
   const onClickEdit = () => {
@@ -24,7 +30,7 @@ export const ActionsStudent = ({
     handleOpenActive()
   }
 
-  return (
+  return yearData?.id === yearSelect?.id ? (
     <TableCell>
       <Tooltip title="Transferir">
         <IconButton color="primary" size="small" onClick={onClickEdit}>
@@ -37,5 +43,7 @@ export const ActionsStudent = ({
         </IconButton>
       </Tooltip>
     </TableCell>
+  ) : (
+    <></>
   )
 }

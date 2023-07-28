@@ -45,7 +45,7 @@ export const TableSchoolClassPage = ({
   return (
     <TableBase headCells={headCells}>
       {data.map((el) => (
-        <TableRow key={el.key}>
+        <TableRow key={el.key} hover>
           <TableCell>
             <LinkText
               label={el.name}
