@@ -9,16 +9,18 @@ import {
 import { useAppThemeContext } from '../../shared/contexts'
 import { useEffect } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
-import { useVerifySchool } from '../../shared/hooks'
+import { useVerifyDisplay, useVerifySchool } from '../../shared/hooks'
 
 export const DashboardSchoolPage = () => {
   const { view, school_id } = useParams()
   const { theme } = useAppThemeContext()
   const { verifySchool } = useVerifySchool()
+  const { verifyDisplay } = useVerifyDisplay()
 
   useEffect(() => {
+    verifyDisplay()
     if (school_id) verifySchool(school_id)
-  }, [school_id])
+  }, [school_id, verifyDisplay, verifySchool])
 
   if (view) return <Outlet />
 
