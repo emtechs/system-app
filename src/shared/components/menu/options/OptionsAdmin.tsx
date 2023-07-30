@@ -5,6 +5,7 @@ import {
   Home,
   People,
   School,
+  Today,
   Workspaces,
 } from '@mui/icons-material'
 import { useDrawerContext } from '../../../contexts'
@@ -26,6 +27,7 @@ export const OptionsAdmin = () => {
         label="Frequências"
         to="frequency"
       />
+      <OtherListItemLink icon={<Today />} label="Período" to="period" />
       <ListItemLinkOpen
         onClick={handleClickProfile}
         open={openProfile}

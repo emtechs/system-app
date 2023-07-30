@@ -33,7 +33,7 @@ export const MenuDrawer = () => {
     if (dashData === 'ADMIN') {
       if (displayDash === 'ADMIN')
         return (
-          <ListItemButton component={Link} to="/home" onClick={handleClick}>
+          <ListItemButton component={Link} to="/dash" onClick={handleClick}>
             <ListItemIcon>
               <Dashboard />
             </ListItemIcon>
@@ -42,7 +42,7 @@ export const MenuDrawer = () => {
         )
 
       return (
-        <ListItemButton component={Link} to="/home" onClick={handleClick}>
+        <ListItemButton component={Link} to="/dash" onClick={handleClick}>
           <ListItemIcon>
             <FirstPage />
           </ListItemIcon>

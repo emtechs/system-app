@@ -63,7 +63,7 @@ export const ActionsSchool = ({
               color="secondary"
               size="small"
               component={Link}
-              to={`/home/school/${id}`}
+              to={`/${id}`}
               onClick={onClickReset}
             >
               <Dashboard fontSize="small" />

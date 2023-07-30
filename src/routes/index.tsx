@@ -6,6 +6,7 @@ import {
   FrequencyDayPage,
   HomePage,
   Login,
+  PeriodPage,
   RetrieveClassKeyPage,
   RetrieveClassPage,
   RetrieveFrequencyPage,
@@ -29,7 +30,7 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route element={<ProtectedAuth />}>
         <Route element={<ProtectedAdmin />}>
-          <Route path="/home" element={<HomePage isHome />} />
+          <Route path="/dash" element={<HomePage isHome />} />
           <Route path="/user" element={<UserPage />}>
             <Route path=":user_id" element={<RetrieveUserPage />}>
               <Route path=":view" element={<ViewUserPage />} />
@@ -55,6 +56,7 @@ const AppRoutes = () => {
               <Route path=":view" element={<ViewSchoolPage />} />
             </Route>
           </Route>
+          <Route path="/period" element={<PeriodPage />} />
         </Route>
         <Route path="/" element={<HomePage />} />
         <Route path="/:school_id/day" element={<FrequencyDayPage />}>
