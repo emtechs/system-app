@@ -17,7 +17,7 @@ export const AutoCompletePeriod = ({
     setLoading(true)
     apiCalendar
       .listPeriod(query)
-      .then((res) => setPeriodDataSelect(res))
+      .then((res) => setPeriodDataSelect(res.result))
       .finally(() => setLoading(false))
   }, [query])
 

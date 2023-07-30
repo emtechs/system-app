@@ -2,6 +2,7 @@ import { Today } from '@mui/icons-material'
 import { Chip } from '@mui/material'
 import { Footer, TitleBasePage, Tools } from '../../shared/components'
 import { LayoutBasePage } from '../../shared/layouts'
+import { ViewPeriodPage } from './view'
 
 export const PeriodPage = () => {
   return (
@@ -17,6 +18,7 @@ export const PeriodPage = () => {
       }
       tools={<Tools isHome isSearch isReset />}
     >
+      <ViewPeriodPage />
       <Footer />
     </LayoutBasePage>
   )

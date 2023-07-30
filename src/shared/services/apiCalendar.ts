@@ -18,8 +18,13 @@ const year = async (token: string, year: number): Promise<iYear> => {
   return response
 }
 
-const listPeriod = async (query: string): Promise<iPeriod[]> => {
-  const { data: response } = await apiUsingNow.get<iPeriod[]>(
+interface iListPeriodReturn {
+  result: iPeriod[]
+  total: number
+}
+
+const listPeriod = async (query: string): Promise<iListPeriodReturn> => {
+  const { data: response } = await apiUsingNow.get<iListPeriodReturn>(
     `/calendar/period${query}`,
   )
 

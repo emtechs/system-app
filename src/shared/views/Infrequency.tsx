@@ -11,10 +11,10 @@ import { apiInfrequency } from '../services'
 import { Box, TableCell, TableRow } from '@mui/material'
 import { TableBase, TabsYear } from '../components'
 import { defineBgColorInfrequency } from '../scripts'
+import { TabsPeriod } from '../components/tabs/Period'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 import utc from 'dayjs/plugin/utc'
-import { TabsPeriod } from '../components/tabs/Period'
 dayjs.locale('pt-br')
 dayjs.extend(utc)
 
