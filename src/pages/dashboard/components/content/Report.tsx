@@ -4,14 +4,29 @@ import {
   AutoCompleteClassReportPage,
   AutoCompleteStudentReportPage,
 } from '../autoComplete'
+import { iReport } from '../../../../shared'
+import { RadioButtonGroup } from 'react-hook-form-mui'
 
 export const ContentReport = () => {
   const { watch } = useFormContext()
-  const type: string = watch('type')
+  const type: iReport = watch('type')
 
   switch (type) {
     case 'class':
       return <AutoCompleteClassReportPage />
+
+    case 'school':
+      return (
+        <RadioButtonGroup
+          label="Selecione o tipo"
+          name="model"
+          options={[
+            { id: 'resume', label: 'Resumo' },
+            { id: 'details', label: 'Detalhado' },
+          ]}
+          required
+        />
+      )
 
     case 'student':
       return (

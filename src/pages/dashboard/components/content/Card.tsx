@@ -7,23 +7,28 @@ import {
 } from 'react-hook-form-mui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AutoCompleteYear } from '../../../../shared/components'
-import { useAuthContext } from '../../../../shared/contexts'
+import { useAuthContext, useSchoolContext } from '../../../../shared/contexts'
 import {
   reportClassSchema,
+  reportSchema,
+  reportSchoolSchema,
   reportStudentSchema,
 } from '../../../../shared/schemas'
 import { AutoCompletePeriodReportPage, ContentReport } from '../../components'
+import { iReport } from '../../../../shared'
+import { useMemo } from 'react'
 
 const ResetButton = () => {
   const { reset } = useFormContext()
   const { yearData } = useAuthContext()
+  const { schoolSelect } = useSchoolContext()
 
   return (
     <Button
       onClick={() => {
         reset({
-          type: 'class',
           year: { id: yearData?.id, label: yearData?.year },
+          school_id: schoolSelect?.id,
         })
       }}
     >
@@ -33,8 +38,8 @@ const ResetButton = () => {
 }
 
 interface iContentCardReportProps {
-  typeData: 'class' | 'student'
-  handleTypeData: (newType: 'class' | 'student') => void
+  typeData?: iReport
+  handleTypeData: (newType: iReport) => void
   onSuccess: (data: FieldValues) => void
 }
 
@@ -44,17 +49,32 @@ export const ContentCardReport = ({
   typeData,
 }: iContentCardReportProps) => {
   const { yearData } = useAuthContext()
+  const { schoolSelect } = useSchoolContext()
+
+  const schema = useMemo(() => {
+    switch (typeData) {
+      case 'class':
+        return reportClassSchema
+
+      case 'school':
+        return reportSchoolSchema
+
+      case 'student':
+        return reportStudentSchema
+
+      default:
+        return reportSchema
+    }
+  }, [typeData])
 
   return (
     <FormContainer
       onSuccess={onSuccess}
       defaultValues={{
-        type: 'class',
         year: { id: yearData?.id, label: yearData?.year },
+        school_id: schoolSelect?.id,
       }}
-      resolver={zodResolver(
-        typeData === 'class' ? reportClassSchema : reportStudentSchema,
-      )}
+      resolver={zodResolver(schema)}
     >
       <Card>
         <CardContent>
@@ -65,12 +85,11 @@ export const ContentCardReport = ({
                   label="Selecione o modelo"
                   name="type"
                   options={[
+                    { id: 'school', label: 'Escola' },
                     { id: 'class', label: 'Turma' },
                     { id: 'student', label: 'Aluno' },
                   ]}
-                  onChange={(value: 'class' | 'student') =>
-                    handleTypeData(value)
-                  }
+                  onChange={(value: iReport) => handleTypeData(value)}
                   required
                 />
               </Grid>

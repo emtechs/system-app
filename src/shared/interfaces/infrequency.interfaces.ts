@@ -1,12 +1,16 @@
 import { iYear } from './calendar.interfaces'
 
+export type iReport = 'school' | 'class' | 'student'
+
+interface iDataBase {
+  id: string
+  name: string
+}
+
 interface iDataReportClass {
   id: string
   name: string
-  school: {
-    id: string
-    name: string
-  }
+  school: iDataBase
   year: iYear
   students: number
   frequencies: number
@@ -33,4 +37,36 @@ interface iStudentReportClass {
 export interface iReportClass {
   result: iDataReportClass
   students: iStudentReportClass[]
+}
+
+interface iDataReportStudent {
+  id: string
+  name: string
+  registry: string
+  class: iDataBase
+  school: iDataBase
+  year: iYear
+  frequencies: number
+  infrequency: number
+  presences: number
+  justified: number
+  absences: number
+  period: {
+    category: string
+    id: string
+    name: string
+  }
+}
+
+interface iFrequencyReportStudent {
+  id: string
+  date: string
+  status: string
+  justification?: string
+  user: iDataBase
+}
+
+export interface iReportStudent {
+  result: iDataReportStudent
+  frequencies: iFrequencyReportStudent[]
 }

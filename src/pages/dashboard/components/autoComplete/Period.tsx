@@ -7,17 +7,21 @@ import { apiCalendar } from '../../../../shared/services'
 export const AutoCompletePeriodReportPage = () => {
   const { watch } = useFormContext()
   const classData: iClass = watch('class')
+  const school_id: string = watch('school_id')
   const [periodDataSelect, setPeriodDataSelect] = useState<iSelectBase[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     setLoading(true)
-    if (classData)
+    let query = ''
+    if (classData) query = `?key_class=${classData.key}`
+    if (school_id) query = `?school_id=${school_id}`
+    if (query.length > 0)
       apiCalendar
-        .listPeriod(`?key_class=${classData.key}`)
+        .listPeriod(query)
         .then((res) => setPeriodDataSelect(res))
         .finally(() => setLoading(false))
-  }, [classData])
+  }, [classData, school_id])
 
   return (
     <AutocompleteElement
