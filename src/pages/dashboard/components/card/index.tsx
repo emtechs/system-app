@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FieldValues } from 'react-hook-form-mui'
 import { useReactToPrint } from 'react-to-print'
 import { Box, Paper } from '@mui/material'
@@ -59,9 +59,17 @@ export const CardDashboardSchoolReportPage = () => {
     return componentRef.current
   }, [])
 
+  const documentTitle = useMemo(() => {
+    switch (typeData) {
+      case 'class':
+        return `${reportClassData?.result.school.name}_${reportClassData?.result.name}_${reportClassData?.result.period.category}_${reportClassData?.result.year.year}`.toUpperCase()
+    }
+  }, [reportClassData, typeData])
+
   const handlePrint = useReactToPrint({
     content: reactToPrintContent,
     onBeforeGetContent: handleOnBeforeGetContent,
+    documentTitle,
     removeAfterPrint: true,
   })
 
