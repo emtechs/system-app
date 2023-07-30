@@ -1,45 +1,19 @@
-import { useState, useEffect } from 'react'
+import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { AutocompleteElement } from 'react-hook-form-mui'
-import { iClass, iSelectBase } from '../../../../shared/interfaces'
-import { apiCalendar } from '../../../../shared/services'
+import { iClass } from '../../../../shared/interfaces'
+import { AutoCompletePeriod } from '../../../../shared'
 
 export const AutoCompletePeriodReportPage = () => {
   const { watch } = useFormContext()
   const classData: iClass = watch('class')
   const school_id: string = watch('school_id')
-  const [periodDataSelect, setPeriodDataSelect] = useState<iSelectBase[]>([])
-  const [loading, setLoading] = useState(true)
+  const year_id: string = watch('year_id')
 
-  useEffect(() => {
-    setLoading(true)
-    let query = ''
-    if (classData) query = `?key_class=${classData.key}`
-    if (school_id) query = `?school_id=${school_id}`
-    if (query.length > 0)
-      apiCalendar
-        .listPeriod(query)
-        .then((res) => setPeriodDataSelect(res))
-        .finally(() => setLoading(false))
-  }, [classData, school_id])
+  const query = useMemo(() => {
+    if (classData) return `?key_class=${classData.key}`
+    if (school_id && year_id)
+      return `?school_id=${school_id}&year_id=${year_id}`
+  }, [classData, school_id, year_id])
 
-  return (
-    <AutocompleteElement
-      name="period"
-      label="Período"
-      required
-      loading={loading}
-      options={
-        periodDataSelect && periodDataSelect.length > 0
-          ? periodDataSelect
-          : [
-              {
-                id: 1,
-                label: 'No momento, não há nenhum período cadastrado',
-              },
-            ]
-      }
-      textFieldProps={{ fullWidth: true }}
-    />
-  )
+  return <AutoCompletePeriod query={query} />
 }
