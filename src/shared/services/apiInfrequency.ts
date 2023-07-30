@@ -1,5 +1,5 @@
 import { FieldValues } from 'react-hook-form'
-import { iInfrequency, iPeriod } from '../interfaces'
+import { iInfrequency, iPeriod, iReportClass } from '../interfaces'
 import { apiUsingNow } from './api'
 
 const update = async (data: FieldValues, id: string): Promise<void> => {
@@ -30,8 +30,17 @@ const listClass = async (query: string): Promise<iListClassReturn> => {
   return response
 }
 
+const reportClass = async (data: FieldValues): Promise<iReportClass> => {
+  const { data: response } = await apiUsingNow.post<iReportClass>(
+    'infrequencies/report/class',
+    data,
+  )
+  return response
+}
+
 export const apiInfrequency = {
   update,
   list,
   listClass,
+  reportClass,
 }

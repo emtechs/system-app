@@ -1,107 +1,105 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { FieldValues } from 'react-hook-form-mui'
+import { useReactToPrint } from 'react-to-print'
+import { Box, Paper } from '@mui/material'
 import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Grid,
-  Paper,
-} from '@mui/material'
+  useAuthContext,
+  iReportClass,
+  apiInfrequency,
+  CompLoading,
+  HeaderReport,
+} from '../../../../shared'
 import {
-  FormContainer,
-  RadioButtonGroup,
-  useFormContext,
-} from 'react-hook-form-mui'
-import { AutoCompleteYear } from '../../../../shared/components'
-import { useAuthContext } from '../../../../shared/contexts'
-import { AutoCompletePeriodReportPage } from '../autoComplete'
-import { ContentReport } from './Content'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
-import {
-  reportClassSchema,
-  reportStudentSchema,
-} from '../../../../shared/schemas'
-
-const ResetButton = () => {
-  const { reset } = useFormContext()
-  const { yearData } = useAuthContext()
-
-  return (
-    <Button
-      onClick={() => {
-        reset({
-          type: 'class',
-          year: { id: yearData?.id, label: yearData?.year },
-        })
-      }}
-    >
-      Limpar
-    </Button>
-  )
-}
+  ContentCardReport,
+  ContentClassReport,
+  PrintClassReport,
+} from '../../components'
 
 export const CardDashboardSchoolReportPage = () => {
-  const { yearData } = useAuthContext()
+  const { userData } = useAuthContext()
+  const componentRef = useRef(null)
+  const onBeforeGetContentResolve = useRef<(() => void) | null>(null)
+  const [loading, setLoading] = useState(false)
   const [typeData, setTypeData] = useState<'class' | 'student'>('class')
+  const [dataReport, setDataReport] = useState<FieldValues>()
+  const [reportClassData, setReportClassData] = useState<iReportClass>()
+
+  const onSuccess = (data: FieldValues) => {
+    createReport(data)
+    setDataReport(data)
+  }
+
+  const handleTypeData = (newType: 'class' | 'student') => setTypeData(newType)
+
+  const createReport = useCallback(
+    async (data: FieldValues) => {
+      setLoading(true)
+
+      switch (typeData) {
+        case 'class':
+          apiInfrequency
+            .reportClass(data)
+            .then((res) => setReportClassData(res))
+            .finally(() => setLoading(false))
+          break
+      }
+    },
+    [typeData],
+  )
+
+  const handleOnBeforeGetContent = useCallback(() => {
+    return new Promise<void>((resolve) => {
+      onBeforeGetContentResolve.current = resolve
+      if (dataReport) createReport(dataReport)
+      resolve()
+    })
+  }, [createReport, dataReport])
+
+  const reactToPrintContent = useCallback(() => {
+    return componentRef.current
+  }, [])
+
+  const handlePrint = useReactToPrint({
+    content: reactToPrintContent,
+    onBeforeGetContent: handleOnBeforeGetContent,
+    removeAfterPrint: true,
+  })
+
+  useEffect(() => {
+    if (
+      reportClassData &&
+      typeof onBeforeGetContentResolve.current === 'function'
+    ) {
+      onBeforeGetContentResolve.current()
+    }
+  }, [reportClassData])
+
+  if (reportClassData && userData)
+    return (
+      <>
+        <CompLoading loading={loading} />
+        <HeaderReport onClikPrint={handlePrint} />
+        <PrintClassReport report={reportClassData} />
+        <div style={{ display: 'none' }}>
+          <ContentClassReport
+            ref={componentRef}
+            report={reportClassData}
+            user={userData}
+          />
+        </div>
+      </>
+    )
+
   return (
-    <Box my={1} mx={2} component={Paper} variant="outlined">
-      <FormContainer
-        onSuccess={(data) => {
-          console.log(data)
-        }}
-        defaultValues={{
-          type: 'class',
-          year: { id: yearData?.id, label: yearData?.year },
-        }}
-        resolver={zodResolver(
-          typeData === 'class' ? reportClassSchema : reportStudentSchema,
-        )}
-      >
-        <Card>
-          <CardContent>
-            <Grid
-              container
-              direction="row"
-              alignItems="center"
-              p={3}
-              spacing={3}
-            >
-              <Grid container item direction="column" spacing={2} md={3}>
-                <Grid item>
-                  <RadioButtonGroup
-                    label="Selecione o modelo"
-                    name="type"
-                    options={[
-                      { id: 'class', label: 'Turma' },
-                      { id: 'student', label: 'Aluno' },
-                    ]}
-                    onChange={(value: 'class' | 'student') =>
-                      setTypeData(value)
-                    }
-                    required
-                  />
-                </Grid>
-                <Grid item>
-                  <AutoCompleteYear />
-                </Grid>
-              </Grid>
-              <Grid item md={5}>
-                <ContentReport />
-              </Grid>
-              <Grid item md={4}>
-                <AutoCompletePeriodReportPage />
-              </Grid>
-            </Grid>
-          </CardContent>
-          <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <ResetButton />
-            <Button type="submit" variant="contained" disableElevation>
-              Consultar
-            </Button>
-          </CardActions>
-        </Card>
-      </FormContainer>
-    </Box>
+    <>
+      <Box my={1} mx={2} component={Paper} variant="outlined">
+        <ContentCardReport
+          handleTypeData={handleTypeData}
+          onSuccess={onSuccess}
+          typeData={typeData}
+        />
+      </Box>
+      <CompLoading loading={loading} />
+    </>
   )
 }

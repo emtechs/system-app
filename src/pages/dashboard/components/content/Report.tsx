@@ -1,9 +1,9 @@
 import { useFormContext } from 'react-hook-form'
+import { Box } from '@mui/material'
 import {
   AutoCompleteClassReportPage,
   AutoCompleteStudentReportPage,
 } from '../autoComplete'
-import { Box } from '@mui/material'
 
 export const ContentReport = () => {
   const { watch } = useFormContext()

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
-  useAppThemeContext,
   useAuthContext,
   useCalendarContext,
   useDrawerContext,
@@ -10,11 +10,10 @@ import {
 import { CalendarBase } from './Base'
 import { apiUsingNow } from '../../services'
 import { iCalendar } from '../../interfaces'
-import { useNavigate } from 'react-router-dom'
+import { CompLoading } from '../loading'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import 'dayjs/locale/pt-br'
-import { Backdrop, CircularProgress } from '@mui/material'
 dayjs.extend(localizedFormat)
 
 interface iCalendarSelectProps {
@@ -23,7 +22,6 @@ interface iCalendarSelectProps {
 
 export const CalendarSelect = ({ onClick }: iCalendarSelectProps) => {
   const navigate = useNavigate()
-  const { theme } = useAppThemeContext()
   const { yearData } = useAuthContext()
   const { schoolSelect } = useSchoolContext()
   const { monthData, setEventData, setDateData } = useCalendarContext()
@@ -71,15 +69,7 @@ export const CalendarSelect = ({ onClick }: iCalendarSelectProps) => {
         }}
         handleFrequency={onClick}
       />
-      <Backdrop
-        sx={{
-          color: theme.palette.secondary.main,
-          zIndex: theme.zIndex.drawer + 1,
-        }}
-        open={loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <CompLoading loading={loading} />
     </>
   )
 }

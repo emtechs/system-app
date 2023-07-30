@@ -22,7 +22,6 @@ import {
   ViewUserPage,
 } from '../pages'
 import { ProtectedAdmin, ProtectedAuth } from '../shared/components'
-import { Test } from '../pages/test'
 
 const AppRoutes = () => {
   return (
@@ -65,7 +64,6 @@ const AppRoutes = () => {
           <Route path=":view" element={<ViewDashboardSchoolPage />} />
         </Route>
       </Route>
-      <Route path="/test" element={<Test />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   )
