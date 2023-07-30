@@ -4,10 +4,15 @@ import { apiCalendar } from '../../services'
 import { AutocompleteElement } from 'react-hook-form-mui'
 
 export const AutoCompleteYear = () => {
-  const [yearDataSelect, setYearDataSelect] = useState<iYear[]>()
+  const [yearDataSelect, setYearDataSelect] = useState<iYear[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    apiCalendar.listYear().then((res) => setYearDataSelect(res))
+    setLoading(true)
+    apiCalendar
+      .listYear()
+      .then((res) => setYearDataSelect(res))
+      .finally(() => setLoading(false))
   }, [])
 
   return (
@@ -15,9 +20,9 @@ export const AutoCompleteYear = () => {
       name="year"
       label="Ano Letivo"
       required
-      loading={!yearDataSelect}
+      loading={loading}
       options={
-        yearDataSelect && yearDataSelect.length > 0
+        yearDataSelect.length > 0
           ? yearDataSelect
           : [
               {

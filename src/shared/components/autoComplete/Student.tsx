@@ -12,10 +12,15 @@ export const AutoCompleteStudent = ({
   query = '',
   message = 'No momento, não há nenhum aluno cadastrado',
 }: iAutoCompleteStudentProps) => {
-  const [studentDataSelect, setStudentDataSelect] = useState<iStudent[]>()
+  const [studentDataSelect, setStudentDataSelect] = useState<iStudent[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    apiStudent.listClass(query).then((res) => setStudentDataSelect(res.result))
+    setLoading(true)
+    apiStudent
+      .listClass(query)
+      .then((res) => setStudentDataSelect(res.result))
+      .finally(() => setLoading(false))
   }, [query])
 
   return (
@@ -23,9 +28,9 @@ export const AutoCompleteStudent = ({
       name="student"
       label="Aluno"
       required
-      loading={!studentDataSelect}
+      loading={loading}
       options={
-        studentDataSelect && studentDataSelect.length > 0
+        studentDataSelect.length > 0
           ? studentDataSelect
           : [
               {

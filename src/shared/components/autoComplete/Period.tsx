@@ -10,10 +10,15 @@ interface iAutoCompletePeriodProps {
 export const AutoCompletePeriod = ({
   query = '',
 }: iAutoCompletePeriodProps) => {
-  const [periodDataSelect, setPeriodDataSelect] = useState<iPeriod[]>()
+  const [periodDataSelect, setPeriodDataSelect] = useState<iPeriod[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    apiCalendar.listPeriod(query).then((res) => setPeriodDataSelect(res))
+    setLoading(true)
+    apiCalendar
+      .listPeriod(query)
+      .then((res) => setPeriodDataSelect(res))
+      .finally(() => setLoading(false))
   }, [query])
 
   return (
@@ -21,9 +26,9 @@ export const AutoCompletePeriod = ({
       name="period"
       label="Período"
       required
-      loading={!periodDataSelect}
+      loading={loading}
       options={
-        periodDataSelect && periodDataSelect.length > 0
+        periodDataSelect.length > 0
           ? periodDataSelect
           : [
               {
