@@ -3,6 +3,7 @@ import {
   iInfrequency,
   iPeriod,
   iReportClass,
+  iReportSchool,
   iReportStudent,
 } from '../interfaces'
 import { apiUsingNow } from './api'
@@ -43,6 +44,14 @@ const reportClass = async (data: FieldValues): Promise<iReportClass> => {
   return response
 }
 
+const reportSchool = async (data: FieldValues): Promise<iReportSchool> => {
+  const { data: response } = await apiUsingNow.post<iReportSchool>(
+    'infrequencies/report/school',
+    data,
+  )
+  return response
+}
+
 const reportStudent = async (data: FieldValues): Promise<iReportStudent> => {
   const { data: response } = await apiUsingNow.post<iReportStudent>(
     'infrequencies/report/student',
@@ -56,5 +65,6 @@ export const apiInfrequency = {
   list,
   listClass,
   reportClass,
+  reportSchool,
   reportStudent,
 }

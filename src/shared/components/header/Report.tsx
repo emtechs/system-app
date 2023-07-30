@@ -1,4 +1,4 @@
-import { Print } from '@mui/icons-material'
+import { ArrowBack, Print } from '@mui/icons-material'
 import {
   AppBar,
   Container,
@@ -10,9 +10,13 @@ import {
 
 interface iHeaderReportProps {
   onClikPrint: () => void
+  onClikBack: () => void
 }
 
-export const HeaderReport = ({ onClikPrint }: iHeaderReportProps) => {
+export const HeaderReport = ({
+  onClikPrint,
+  onClikBack,
+}: iHeaderReportProps) => {
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -27,6 +31,15 @@ export const HeaderReport = ({ onClikPrint }: iHeaderReportProps) => {
           <Box width="100%" display="flex" justifyContent="space-between">
             <Typography variant="h5">Relatório de Frequência</Typography>
             <Box display="flex" gap={1}>
+              <Button
+                color="secondary"
+                variant="contained"
+                disableElevation
+                startIcon={<ArrowBack />}
+                onClick={onClikBack}
+              >
+                Voltar
+              </Button>
               <Button
                 color="secondary"
                 variant="contained"

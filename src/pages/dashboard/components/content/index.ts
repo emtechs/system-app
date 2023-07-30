@@ -1,4 +1,5 @@
 export * from './Card'
 export * from './Class'
 export * from './Report'
+export * from './School'
 export * from './Student'

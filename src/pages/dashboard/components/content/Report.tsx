@@ -21,8 +21,8 @@ export const ContentReport = () => {
           label="Selecione o tipo"
           name="model"
           options={[
-            { id: 'resume', label: 'Resumo' },
             { id: 'details', label: 'Detalhado' },
+            { id: 'resume', label: 'Resumido' },
           ]}
           required
         />

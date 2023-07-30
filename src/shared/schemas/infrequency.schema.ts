@@ -31,8 +31,10 @@ export const reportSchoolSchema = reportSchema
       })
       .nonempty('Tipo obrigatório'),
     school_id: z.string(),
+    year_id: z.string().uuid().optional(),
   })
   .refine((field) => (field.period_id = field.period.id))
+  .refine((field) => (field.year_id = field.year.id))
 
 export const reportClassSchema = reportSchema
   .extend({

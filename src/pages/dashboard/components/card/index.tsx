@@ -10,12 +10,15 @@ import {
   HeaderReport,
   iReportStudent,
   iReport,
+  iReportSchool,
 } from '../../../../shared'
 import {
   ContentCardReport,
   ContentClassReport,
+  ContentSchoolReport,
   ContentStudentReport,
   PrintClassReport,
+  PrintSchoolReport,
   PrintStudentReport,
 } from '../../components'
 
@@ -27,6 +30,7 @@ export const CardDashboardSchoolReportPage = () => {
   const [typeData, setTypeData] = useState<iReport>()
   const [dataReport, setDataReport] = useState<FieldValues>()
   const [reportClassData, setReportClassData] = useState<iReportClass>()
+  const [reportSchoolData, setReportSchoolData] = useState<iReportSchool>()
   const [reportStudentData, setReportStudentData] = useState<iReportStudent>()
 
   const onSuccess = (data: FieldValues) => {
@@ -45,6 +49,12 @@ export const CardDashboardSchoolReportPage = () => {
           apiInfrequency
             .reportClass(data)
             .then((res) => setReportClassData(res))
+            .finally(() => setLoading(false))
+          break
+        case 'school':
+          apiInfrequency
+            .reportSchool(data)
+            .then((res) => setReportSchoolData(res))
             .finally(() => setLoading(false))
           break
         case 'student':
@@ -75,10 +85,13 @@ export const CardDashboardSchoolReportPage = () => {
       case 'class':
         return `${reportClassData?.result.school.name}_${reportClassData?.result.name}_${reportClassData?.result.period.category}_${reportClassData?.result.year.year}`.toUpperCase()
 
+      case 'school':
+        return `${reportSchoolData?.result.name}_${reportSchoolData?.result.period.category}_${reportSchoolData?.result.year.year}_${reportSchoolData?.result.type}`.toUpperCase()
+
       case 'student':
         return `${reportStudentData?.result.name}_${reportStudentData?.result.period.category}_${reportStudentData?.result.year.year}`.toUpperCase()
     }
-  }, [reportClassData, reportStudentData, typeData])
+  }, [reportClassData, reportSchoolData, reportStudentData, typeData])
 
   const handlePrint = useReactToPrint({
     content: reactToPrintContent,
@@ -88,17 +101,20 @@ export const CardDashboardSchoolReportPage = () => {
   })
 
   useEffect(() => {
-    if (reportClassData || reportStudentData) {
+    if (reportClassData || reportStudentData || reportSchoolData) {
       if (typeof onBeforeGetContentResolve.current === 'function')
         onBeforeGetContentResolve.current()
     }
-  }, [reportClassData, reportStudentData])
+  }, [reportClassData, reportSchoolData, reportStudentData])
 
   if (reportClassData && userData)
     return (
       <>
         <CompLoading loading={loading} />
-        <HeaderReport onClikPrint={handlePrint} />
+        <HeaderReport
+          onClikBack={() => setReportClassData(undefined)}
+          onClikPrint={handlePrint}
+        />
         <PrintClassReport report={reportClassData} />
         <div style={{ display: 'none' }}>
           <ContentClassReport
@@ -110,11 +126,33 @@ export const CardDashboardSchoolReportPage = () => {
       </>
     )
 
+  if (reportSchoolData && userData)
+    return (
+      <>
+        <CompLoading loading={loading} />
+        <HeaderReport
+          onClikBack={() => setReportSchoolData(undefined)}
+          onClikPrint={handlePrint}
+        />
+        <PrintSchoolReport report={reportSchoolData} />
+        <div style={{ display: 'none' }}>
+          <ContentSchoolReport
+            ref={componentRef}
+            report={reportSchoolData}
+            user={userData}
+          />
+        </div>
+      </>
+    )
+
   if (reportStudentData && userData)
     return (
       <>
         <CompLoading loading={loading} />
-        <HeaderReport onClikPrint={handlePrint} />
+        <HeaderReport
+          onClikBack={() => setReportStudentData(undefined)}
+          onClikPrint={handlePrint}
+        />
         <PrintStudentReport report={reportStudentData} />
         <div style={{ display: 'none' }}>
           <ContentStudentReport

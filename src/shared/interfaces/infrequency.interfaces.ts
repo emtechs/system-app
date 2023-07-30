@@ -39,6 +39,28 @@ export interface iReportClass {
   students: iStudentReportClass[]
 }
 
+interface iDataReportSchool {
+  id: string
+  name: string
+  director?: iDataBase
+  year: iYear
+  students: number
+  frequencies: number
+  infrequency: number
+  classes: number
+  type: 'detalhado' | 'resumido'
+  period: {
+    category: string
+    id: string
+    name: string
+  }
+}
+
+export interface iReportSchool {
+  result: iDataReportSchool
+  classes: { result: iDataReportClass; students?: iStudentReportClass[] }[]
+}
+
 interface iDataReportStudent {
   id: string
   name: string

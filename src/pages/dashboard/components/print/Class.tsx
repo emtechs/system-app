@@ -13,9 +13,13 @@ import { iReportClass } from '../../../../shared/interfaces'
 
 interface iPrintClassReportProps {
   report: iReportClass
+  isSchool?: boolean
 }
 
-export const PrintClassReport = ({ report }: iPrintClassReportProps) => {
+export const PrintClassReport = ({
+  report,
+  isSchool,
+}: iPrintClassReportProps) => {
   const { result, students } = report
   return (
     <Box>
@@ -23,27 +27,33 @@ export const PrintClassReport = ({ report }: iPrintClassReportProps) => {
         <Divider />
         <Container maxWidth="xl">
           <Box p={1}>
-            <Box
-              justifyContent="space-between"
-              display="flex"
-              alignItems="center"
-              gap={1.5}
-            >
-              <Box display="flex" flexDirection="column" gap={1}>
-                <Typography variant="h4">{result.school.name}</Typography>
-                <Typography variant="h6">{result.name}</Typography>
+            {isSchool ? (
+              <Box justifyContent="center" display="flex" alignItems="center">
+                <Typography variant="h4">{result.name}</Typography>
               </Box>
+            ) : (
               <Box
+                justifyContent="space-between"
                 display="flex"
-                alignItems="flex-end"
-                flexDirection="column"
-                gap={0.5}
+                alignItems="center"
+                gap={1.5}
               >
-                <Typography>{result.year.year}</Typography>
-                <Typography>{result.period.category}</Typography>
-                <Typography>{result.period.name}</Typography>
+                <Box display="flex" flexDirection="column" gap={1}>
+                  <Typography variant="h4">{result.school.name}</Typography>
+                  <Typography variant="h6">{result.name}</Typography>
+                </Box>
+                <Box
+                  display="flex"
+                  alignItems="flex-end"
+                  flexDirection="column"
+                  gap={0.5}
+                >
+                  <Typography>{result.year.year}</Typography>
+                  <Typography>{result.period.category}</Typography>
+                  <Typography>{result.period.name}</Typography>
+                </Box>
               </Box>
-            </Box>
+            )}
           </Box>
         </Container>
         <Divider />
@@ -104,30 +114,32 @@ export const PrintClassReport = ({ report }: iPrintClassReportProps) => {
         </Container>
         <Divider />
       </Box>
-      <Box mt={0.5}>
-        <Divider />
-        <Container maxWidth="xl">
-          <Box p={1}>
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              gap={1.5}
-            >
-              <Typography>P - PRESENÇAS</Typography>
-              <Typography>|</Typography>
-              <Typography>J - JUSTIFICADAS</Typography>
-              <Typography>|</Typography>
-              <Typography>F - FALTAS</Typography>
-              <Typography>|</Typography>
-              <Typography>T - TOTAL</Typography>
-              <Typography>|</Typography>
-              <Typography>I - INFREQUÊNCIA</Typography>
+      {!isSchool && (
+        <Box mt={0.5}>
+          <Divider />
+          <Container maxWidth="xl">
+            <Box p={1}>
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                gap={1.5}
+              >
+                <Typography>P - PRESENÇAS</Typography>
+                <Typography>|</Typography>
+                <Typography>J - JUSTIFICADAS</Typography>
+                <Typography>|</Typography>
+                <Typography>F - FALTAS</Typography>
+                <Typography>|</Typography>
+                <Typography>T - TOTAL</Typography>
+                <Typography>|</Typography>
+                <Typography>I - INFREQUÊNCIA</Typography>
+              </Box>
             </Box>
-          </Box>
-        </Container>
-        <Divider />
-      </Box>
+          </Container>
+          <Divider />
+        </Box>
+      )}
     </Box>
   )
 }
