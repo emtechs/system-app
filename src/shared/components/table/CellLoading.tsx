@@ -1,18 +1,18 @@
 import { TableCell, Skeleton } from '@mui/material'
 import { iChildren } from '../../interfaces'
 
-interface iCellLoadingProps extends iChildren {
+interface iTableCellLoadingProps extends iChildren {
   loading: boolean
   width?: number
   isNumeric?: boolean
 }
 
-export const CellLoading = ({
+export const TableCellLoading = ({
   children,
   loading,
   isNumeric,
   width = 100,
-}: iCellLoadingProps) => {
+}: iTableCellLoadingProps) => {
   return (
     <TableCell align={isNumeric ? 'right' : undefined}>
       {loading ? <Skeleton width={width} /> : children}

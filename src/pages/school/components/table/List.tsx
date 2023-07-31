@@ -1,10 +1,15 @@
 import sortArray from 'sort-array'
 import { useMemo } from 'react'
-import { TableRow, TableCell, Skeleton } from '@mui/material'
-import { LinkText, TableBase } from '../../../../shared/components'
-import { usePaginationContext } from '../../../../shared/contexts'
-import { iHeadCell, iSchool } from '../../../../shared/interfaces'
-import { ActionsSchool } from '../actions'
+import { TableRow, TableCell } from '@mui/material'
+import {
+  iSchool,
+  usePaginationContext,
+  iHeadCell,
+  TableBase,
+  LinkText,
+  TableCellLoading,
+  ActionsActive,
+} from '../../../../shared'
 
 interface iTableSchoolPageProps {
   listData: iSchool[]
@@ -40,23 +45,36 @@ export const TableSchoolPage = ({
 
   return (
     <TableBase headCells={headCells} message="Nenhuma escola encotrada">
-      {data.map((school) => (
-        <TableRow key={school.id} hover>
-          <TableCell>
-            <LinkText
-              label={school.name}
-              isLoading={isLoading}
-              onClick={onClickReset}
-              to={`/school/${school.id}`}
-              width={250}
+      {data.map((school) => {
+        const { id, name, director, is_active } = school
+        const to = `/school/${school.id}`
+        const handleData = () => handleSchool(school)
+        return (
+          <TableRow key={id} hover>
+            <TableCell>
+              {is_active ? (
+                <LinkText
+                  label={name}
+                  isLoading={isLoading}
+                  onClick={onClickReset}
+                  to={to}
+                  width={250}
+                />
+              ) : (
+                name
+              )}
+            </TableCell>
+            <TableCellLoading loading={isLoading} width={200}>
+              {director?.name}
+            </TableCellLoading>
+            <ActionsActive
+              handleData={handleData}
+              is_active={is_active}
+              to={to}
             />
-          </TableCell>
-          <TableCell>
-            {isLoading ? <Skeleton width={200} /> : school.director?.name}
-          </TableCell>
-          <ActionsSchool school={school} handleSchool={handleSchool} />
-        </TableRow>
-      ))}
+          </TableRow>
+        )
+      })}
     </TableBase>
   )
 }

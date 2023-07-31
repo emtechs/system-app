@@ -6,7 +6,7 @@ import {
   usePaginationContext,
   iHeadCell,
   TableBase,
-  CellLoading,
+  TableCellLoading,
 } from '../../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
@@ -35,13 +35,13 @@ export const TablePeriodPage = ({ listData }: iTablePeriodPageProps) => {
     <TableBase headCells={headCells} message="Nenhum usuário encotrado">
       {data.map((el) => (
         <TableRow key={el.id} hover>
-          <CellLoading loading={isLoading}>{el.name}</CellLoading>
-          <CellLoading loading={isLoading}>
+          <TableCellLoading loading={isLoading}>{el.name}</TableCellLoading>
+          <TableCellLoading loading={isLoading}>
             {dayjs(el.date_initial).utc().format('L')}
-          </CellLoading>
-          <CellLoading loading={isLoading}>
+          </TableCellLoading>
+          <TableCellLoading loading={isLoading}>
             {dayjs(el.date_final).utc().format('L')}
-          </CellLoading>
+          </TableCellLoading>
         </TableRow>
       ))}
     </TableBase>

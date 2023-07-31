@@ -1,10 +1,15 @@
 import { useState } from 'react'
-import { usePaginationContext } from '../../../../shared/contexts'
-import { iHeadCell, iSchool } from '../../../../shared/interfaces'
-import { DialogCreateSchool, TableBase } from '../../../../shared/components'
-import { Link, Skeleton, TableCell, TableRow } from '@mui/material'
-import { ActionsSchool } from '../actions'
-import { Link as RouterLink } from 'react-router-dom'
+import { TableCell, TableRow } from '@mui/material'
+import {
+  iSchool,
+  usePaginationContext,
+  iHeadCell,
+  TableBase,
+  LinkText,
+  DialogCreateSchool,
+  TableCellLoading,
+  ActionsActive,
+} from '../../../../shared'
 
 interface iTableSchoolProps {
   data: iSchool[]
@@ -25,32 +30,36 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
   return (
     <>
       <TableBase headCells={headCells} message="Nenhuma escola encotrada">
-        {data.map((school) => (
-          <TableRow key={school.id} hover>
-            <TableCell>
-              {isLoading ? (
-                <Skeleton width={250} />
-              ) : school.is_active ? (
-                <Link
-                  underline="none"
-                  variant="body2"
-                  color="inherit"
-                  component={RouterLink}
-                  to={`/school/${school.id}`}
-                  onClick={onClickReset}
-                >
-                  {school.name}
-                </Link>
-              ) : (
-                school.name
-              )}
-            </TableCell>
-            <TableCell>
-              {isLoading ? <Skeleton width={200} /> : school.director?.name}
-            </TableCell>
-            <ActionsSchool school={school} handleSchool={handleSchool} />
-          </TableRow>
-        ))}
+        {data.map((school) => {
+          const { id, is_active, name, director } = school
+          const handleData = () => handleSchool(school)
+          const to = `/school/${school.id}`
+          return (
+            <TableRow key={id} hover>
+              <TableCell>
+                {is_active ? (
+                  <LinkText
+                    label={name}
+                    isLoading={isLoading}
+                    onClick={onClickReset}
+                    to={to}
+                    width={250}
+                  />
+                ) : (
+                  name
+                )}
+              </TableCell>
+              <TableCellLoading loading={isLoading} width={200}>
+                {director?.name}
+              </TableCellLoading>
+              <ActionsActive
+                handleData={handleData}
+                is_active={is_active}
+                to={to}
+              />
+            </TableRow>
+          )
+        })}
       </TableBase>
       <DialogCreateSchool />
       {schoolData && <></>}
