@@ -1,4 +1,4 @@
-import { iYear } from './calendar.interfaces'
+import { iPeriod } from './calendar.interfaces'
 
 export type iReport = 'school' | 'class' | 'student'
 
@@ -11,15 +11,10 @@ interface iDataReportClass {
   id: string
   name: string
   school: iDataBase
-  year: iYear
   students: number
   frequencies: number
   infrequency: number
-  period: {
-    category: string
-    id: string
-    name: string
-  }
+  period: iPeriod
 }
 
 interface iStudentReportClass {
@@ -43,17 +38,12 @@ interface iDataReportSchool {
   id: string
   name: string
   director?: iDataBase
-  year: iYear
   students: number
   frequencies: number
   infrequency: number
   classes: number
   type: 'detalhado' | 'resumido'
-  period: {
-    category: string
-    id: string
-    name: string
-  }
+  period: iPeriod
 }
 
 export interface iReportSchool {
@@ -67,17 +57,12 @@ interface iDataReportStudent {
   registry: string
   class: iDataBase
   school: iDataBase
-  year: iYear
   frequencies: number
   infrequency: number
   presences: number
   justified: number
   absences: number
-  period: {
-    category: string
-    id: string
-    name: string
-  }
+  period: iPeriod
 }
 
 interface iFrequencyReportStudent {

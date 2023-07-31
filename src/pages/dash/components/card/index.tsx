@@ -83,13 +83,13 @@ export const CardDashboardSchoolReportPage = () => {
   const documentTitle = useMemo(() => {
     switch (typeData) {
       case 'class':
-        return `${reportClassData?.result.school.name}_${reportClassData?.result.name}_${reportClassData?.result.period.category}_${reportClassData?.result.year.year}`.toUpperCase()
+        return `${reportClassData?.result.school.name}_${reportClassData?.result.name}_${reportClassData?.result.period.category}_${reportClassData?.result.period.year.year}`.toUpperCase()
 
       case 'school':
-        return `${reportSchoolData?.result.name}_${reportSchoolData?.result.period.category}_${reportSchoolData?.result.year.year}_${reportSchoolData?.result.type}`.toUpperCase()
+        return `${reportSchoolData?.result.name}_${reportSchoolData?.result.period.category}_${reportSchoolData?.result.period.year.year}_${reportSchoolData?.result.type}`.toUpperCase()
 
       case 'student':
-        return `${reportStudentData?.result.name}_${reportStudentData?.result.period.category}_${reportStudentData?.result.year.year}`.toUpperCase()
+        return `${reportStudentData?.result.name}_${reportStudentData?.result.period.category}_${reportStudentData?.result.period.year.year}`.toUpperCase()
     }
   }, [reportClassData, reportSchoolData, reportStudentData, typeData])
 

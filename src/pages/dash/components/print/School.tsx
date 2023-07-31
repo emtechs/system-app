@@ -10,7 +10,7 @@ import {
   TableCell,
   TableBody,
 } from '@mui/material'
-import { iReportSchool } from '../../../../shared/interfaces'
+import { iReportSchool, HeaderReportData } from '../../../../shared'
 import { PrintClassReport } from './Class'
 
 interface iPrintSchoolReportProps {
@@ -19,39 +19,10 @@ interface iPrintSchoolReportProps {
 
 export const PrintSchoolReport = ({ report }: iPrintSchoolReportProps) => {
   const { result, classes } = report
+  const { name, type, period } = result
   return (
     <Box>
-      <Box mt={0.5}>
-        <Divider />
-        <Container maxWidth="xl">
-          <Box p={1}>
-            <Box
-              justifyContent="space-between"
-              display="flex"
-              alignItems="center"
-              gap={1.5}
-            >
-              <Box display="flex" flexDirection="column" gap={1}>
-                <Typography variant="h4">{result.name}</Typography>
-                <Typography variant="h6">
-                  {result.type.toUpperCase()}
-                </Typography>
-              </Box>
-              <Box
-                display="flex"
-                alignItems="flex-end"
-                flexDirection="column"
-                gap={0.5}
-              >
-                <Typography>{result.year.year}</Typography>
-                <Typography>{result.period.category}</Typography>
-                <Typography>{result.period.name}</Typography>
-              </Box>
-            </Box>
-          </Box>
-        </Container>
-        <Divider />
-      </Box>
+      <HeaderReportData period={period} subTitle={type} title={name} />
       <Box mt={0.5}>
         <Divider />
         <Container maxWidth="xl">
@@ -76,7 +47,7 @@ export const PrintSchoolReport = ({ report }: iPrintSchoolReportProps) => {
         </Container>
         <Divider />
       </Box>
-      {result.type === 'resumido' ? (
+      {type === 'resumido' ? (
         <Box mt={0.5}>
           <Divider />
           <Container maxWidth="xl">

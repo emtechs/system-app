@@ -38,7 +38,7 @@
     "@types/react-dom": "^18.2.7",
     "@types/react-router-dom": "^5.3.3",
     "@types/sort-array": "^4.1.0",
-    "@vitejs/plugin-react": "^4.0.3",
+    "@vitejs/plugin-react": "^4.0.4",
     "eslint": "^8.46.0",
     "typescript": "^5.1.6",
     "vite": "^4.4.7"

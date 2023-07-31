@@ -9,7 +9,7 @@ import {
   TableCell,
   TableBody,
 } from '@mui/material'
-import { iReportClass } from '../../../../shared/interfaces'
+import { iReportClass, HeaderReportData } from '../../../../shared'
 
 interface iPrintClassReportProps {
   report: iReportClass
@@ -21,43 +21,25 @@ export const PrintClassReport = ({
   isSchool,
 }: iPrintClassReportProps) => {
   const { result, students } = report
+  const { name, school, period } = result
+
   return (
     <Box>
-      <Box mt={0.5}>
-        <Divider />
-        <Container maxWidth="xl">
-          <Box p={1}>
-            {isSchool ? (
+      {isSchool ? (
+        <Box mt={0.5}>
+          <Divider />
+          <Container maxWidth="xl">
+            <Box p={1}>
               <Box justifyContent="center" display="flex" alignItems="center">
-                <Typography variant="h4">{result.name}</Typography>
+                <Typography variant="h4">{name}</Typography>
               </Box>
-            ) : (
-              <Box
-                justifyContent="space-between"
-                display="flex"
-                alignItems="center"
-                gap={1.5}
-              >
-                <Box display="flex" flexDirection="column" gap={1}>
-                  <Typography variant="h4">{result.school.name}</Typography>
-                  <Typography variant="h6">{result.name}</Typography>
-                </Box>
-                <Box
-                  display="flex"
-                  alignItems="flex-end"
-                  flexDirection="column"
-                  gap={0.5}
-                >
-                  <Typography>{result.year.year}</Typography>
-                  <Typography>{result.period.category}</Typography>
-                  <Typography>{result.period.name}</Typography>
-                </Box>
-              </Box>
-            )}
-          </Box>
-        </Container>
-        <Divider />
-      </Box>
+            </Box>
+          </Container>
+          <Divider />
+        </Box>
+      ) : (
+        <HeaderReportData period={period} subTitle={name} title={school.name} />
+      )}
       <Box mt={0.5}>
         <Divider />
         <Container maxWidth="xl">
