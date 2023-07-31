@@ -1,14 +1,17 @@
 import sortArray from 'sort-array'
 import { useMemo } from 'react'
-import { TableRow, TableCell, Skeleton } from '@mui/material'
-import { LinkText, TableBase } from '../../../../shared/components'
+import { TableRow, TableCell } from '@mui/material'
 import {
+  iUser,
   useAppThemeContext,
   usePaginationContext,
-} from '../../../../shared/contexts'
-import { iHeadCell, iUser } from '../../../../shared/interfaces'
-import { ActionsUser } from '../actions'
-import { rolePtBr } from '../../../../shared/scripts'
+  iHeadCell,
+  TableBase,
+  LinkText,
+  TableCellLoading,
+  rolePtBr,
+  ActionsActive,
+} from '../../../../shared'
 
 interface iTableUserPageProps {
   listData: iUser[]
@@ -44,32 +47,41 @@ export const TableUserPage = ({
 
   return (
     <TableBase headCells={headCells} message="Nenhum usuário encotrado">
-      {data.map((user) => (
-        <TableRow key={user.id} hover>
-          <TableCell>
-            {user.is_active ? (
-              <LinkText
-                isLoading={isLoading}
-                label={user.name}
-                width={250}
-                to={`/user/${user.id}`}
-                onClick={onClickReset}
-              />
-            ) : (
-              user.name
-            )}
-          </TableCell>
-          <TableCell>
-            {isLoading ? <Skeleton width={100} /> : user.cpf}
-          </TableCell>
-          {!mdDown && (
+      {data.map((user) => {
+        const { id, name, is_active, cpf, role } = user
+        const to = `/user/${user.id}`
+        const handleData = () => handleUser(user)
+
+        return (
+          <TableRow key={id} hover>
             <TableCell>
-              {isLoading ? <Skeleton width={100} /> : rolePtBr(user.role)}
+              {is_active ? (
+                <LinkText
+                  isLoading={isLoading}
+                  label={name}
+                  width={250}
+                  to={to}
+                  onClick={onClickReset}
+                />
+              ) : (
+                name
+              )}
             </TableCell>
-          )}
-          <ActionsUser user={user} handleUser={handleUser} />
-        </TableRow>
-      ))}
+            <TableCellLoading loading={isLoading}>{cpf}</TableCellLoading>
+            {!mdDown && (
+              <TableCellLoading loading={isLoading}>
+                {rolePtBr(role)}
+              </TableCellLoading>
+            )}
+            <ActionsActive
+              handleData={handleData}
+              is_active={is_active}
+              to={to}
+              role={role}
+            />
+          </TableRow>
+        )
+      })}
     </TableBase>
   )
 }

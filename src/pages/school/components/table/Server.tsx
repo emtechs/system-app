@@ -1,15 +1,16 @@
 import sortArray from 'sort-array'
 import { useEffect, useMemo } from 'react'
+import { TableRow, TableCell } from '@mui/material'
 import {
+  iSchoolUser,
+  useDebounce,
   useAppThemeContext,
   usePaginationContext,
-} from '../../../../shared/contexts'
-import { useDebounce } from '../../../../shared/hooks'
-import { iHeadCell, iSchoolUser } from '../../../../shared/interfaces'
-import { TableRow, TableCell } from '@mui/material'
-import { TableBase } from '../../../../shared/components'
-import { rolePtBr } from '../../../../shared/scripts'
-import { ActionsUser } from '../../../class/components/actions'
+  iHeadCell,
+  TableBase,
+  rolePtBr,
+  ActionsRemove,
+} from '../../../../shared'
 
 interface iTableSchoolServerPageProps {
   getServer: (query: string) => void
@@ -63,19 +64,22 @@ export const TableSchoolServerPage = ({
 
   return (
     <TableBase headCells={headCells}>
-      {data.map((user) => (
-        <TableRow key={user.id} hover>
-          <TableCell>{user.name}</TableCell>
-          <TableCell>{user.cpf}</TableCell>
-          {!mdDown && <TableCell>{rolePtBr(user.role)}</TableCell>}
-          {!mdDown && (
-            <TableCell>
-              {user.dash === 'SCHOOL' ? 'Escola' : 'Frequência'}
-            </TableCell>
-          )}
-          <ActionsUser user={user} handleUser={handleUser} />
-        </TableRow>
-      ))}
+      {data.map((user) => {
+        const handleData = () => handleUser(user)
+        return (
+          <TableRow key={user.id} hover>
+            <TableCell>{user.name}</TableCell>
+            <TableCell>{user.cpf}</TableCell>
+            {!mdDown && <TableCell>{rolePtBr(user.role)}</TableCell>}
+            {!mdDown && (
+              <TableCell>
+                {user.dash === 'SCHOOL' ? 'Escola' : 'Frequência'}
+              </TableCell>
+            )}
+            <ActionsRemove handleData={handleData} />
+          </TableRow>
+        )
+      })}
     </TableBase>
   )
 }

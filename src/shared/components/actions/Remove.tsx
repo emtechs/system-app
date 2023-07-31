@@ -1,19 +1,17 @@
 import { RemoveDone, Visibility } from '@mui/icons-material'
 import { IconButton, TableCell, Tooltip } from '@mui/material'
-import { useDialogContext, usePaginationContext } from '../../../../contexts'
-import { iSchoolUser } from '../../../../interfaces'
+import { useDialogContext, usePaginationContext } from '../../../shared'
 
-interface iActionsUserProps {
-  user: iSchoolUser
-  handleUser: (newUser: iSchoolUser) => void
+interface iActionsRemoveProps {
+  handleData: () => void
 }
 
-export const ActionsUser = ({ handleUser, user }: iActionsUserProps) => {
+export const ActionsRemove = ({ handleData }: iActionsRemoveProps) => {
   const { handleOpenActive } = useDialogContext()
   const { onClickReset } = usePaginationContext()
 
   const onClickActive = () => {
-    handleUser(user)
+    handleData()
     handleOpenActive()
   }
 

@@ -1,9 +1,12 @@
 import { TableRow, TableCell } from '@mui/material'
 import { useMemo } from 'react'
-import { TableBase } from '../../../../shared/components'
-import { useAppThemeContext } from '../../../../shared/contexts'
-import { iHeadCell, iStudent } from '../../../../shared/interfaces'
-import { ActionsStudent } from '../actions'
+import {
+  iStudent,
+  useAppThemeContext,
+  iHeadCell,
+  TableBase,
+  ActionsStudent,
+} from '../../..'
 
 interface iTableStudentSchoolProps {
   data: iStudent[]

@@ -1,11 +1,15 @@
 import { Fragment, useMemo, useState } from 'react'
-import { TableBase } from '../../../components'
-import { useAppThemeContext, usePaginationContext } from '../../../contexts'
-import { iUser, iHeadCell } from '../../../interfaces'
-import { rolePtBr } from '../../../scripts'
-import { Link, TableCell, TableRow } from '@mui/material'
-import { ActionsUser } from '../actions'
 import { Link as RouterLink } from 'react-router-dom'
+import { Link, TableCell, TableRow } from '@mui/material'
+import {
+  iUser,
+  useAppThemeContext,
+  usePaginationContext,
+  iHeadCell,
+  TableBase,
+  rolePtBr,
+  ActionsRemove,
+} from '../../../../shared'
 
 interface iTableUserSchoolProps {
   data: iUser[]
@@ -39,42 +43,41 @@ export const TableUserSchool = ({ data, school_id }: iTableUserSchoolProps) => {
   return (
     <>
       <TableBase headCells={headCells}>
-        {data.map((user) => (
-          <Fragment key={user.id}>
-            {user.work_school && (
-              <TableRow hover>
-                <TableCell>
-                  <Link
-                    underline="none"
-                    variant="body2"
-                    color="inherit"
-                    component={RouterLink}
-                    to={`/user/${user.id}?school_id=${school_id}`}
-                    onClick={onClickReset}
-                  >
-                    {user.name}
-                  </Link>
-                </TableCell>
-                <TableCell>{user.cpf}</TableCell>
-                {!mdDown && (
-                  <TableCell>{rolePtBr(user.work_school.role)}</TableCell>
-                )}
-                {!mdDown && (
+        {data.map((user) => {
+          const handleData = () => handleUser(user)
+          return (
+            <Fragment key={user.id}>
+              {user.work_school && (
+                <TableRow hover>
                   <TableCell>
-                    {user.work_school.dash === 'SCHOOL'
-                      ? 'Escola'
-                      : 'Frequência'}
+                    <Link
+                      underline="none"
+                      variant="body2"
+                      color="inherit"
+                      component={RouterLink}
+                      to={`/user/${user.id}?school_id=${school_id}`}
+                      onClick={onClickReset}
+                    >
+                      {user.name}
+                    </Link>
                   </TableCell>
-                )}
-                <ActionsUser
-                  user={user}
-                  handleUser={handleUser}
-                  school_id={school_id}
-                />
-              </TableRow>
-            )}
-          </Fragment>
-        ))}
+                  <TableCell>{user.cpf}</TableCell>
+                  {!mdDown && (
+                    <TableCell>{rolePtBr(user.work_school.role)}</TableCell>
+                  )}
+                  {!mdDown && (
+                    <TableCell>
+                      {user.work_school.dash === 'SCHOOL'
+                        ? 'Escola'
+                        : 'Frequência'}
+                    </TableCell>
+                  )}
+                  <ActionsRemove handleData={handleData} />
+                </TableRow>
+              )}
+            </Fragment>
+          )
+        })}
       </TableBase>
       {userData && <></>}
     </>
