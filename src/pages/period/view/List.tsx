@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import { usePaginationContext } from '../../../shared/contexts'
-import { useDebounce } from '../../../shared/hooks'
-import { iPeriod } from '../../../shared/interfaces'
-import { apiCalendar } from '../../../shared/services'
-import { TablePeriodPage } from '../components'
+import {
+  useDebounce,
+  usePaginationContext,
+  iPeriod,
+  apiCalendar,
+} from '../../../shared'
+import { DialogEditPeriod, TablePeriodPage } from '../components'
 
 export const ViewPeriodPage = () => {
   const { debounce } = useDebounce()
@@ -28,6 +30,8 @@ export const ViewPeriodPage = () => {
     return `?category=ANO${comp}`
   }, [])
 
+  const getData = () => getPeriod('')
+
   useEffect(() => {
     let query_data = ''
     if (search) {
@@ -41,7 +45,7 @@ export const ViewPeriodPage = () => {
   return (
     <>
       <TablePeriodPage listData={listData} handlePeriod={handlePeriod} />
-      {periodData && <></>}
+      {periodData && <DialogEditPeriod period={periodData} getData={getData} />}
     </>
   )
 }
