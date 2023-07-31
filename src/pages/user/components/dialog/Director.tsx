@@ -1,16 +1,17 @@
 import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  DialogBaseChildren,
-  BaseContentChildren,
-  ValidateCPF,
-  AutoCompleteSchool,
-} from '../../../../components'
-import { useAppThemeContext, useDialogContext } from '../../../../contexts'
-import { iUserDirectorRequest } from '../../../../interfaces'
-import { createDirectorSchema } from '../../../../schemas'
-import { apiUser } from '../../../../services'
 import { useNavigate } from 'react-router-dom'
+import {
+  useAppThemeContext,
+  useDialogContext,
+  iUserDirectorRequest,
+  apiUser,
+  DialogBaseChildren,
+  createDirectorSchema,
+  BaseContentChildren,
+  AutoCompleteSchool,
+  ValidateCPF,
+} from '../../../../shared'
 
 export const DialogCreateDirector = () => {
   const navigate = useNavigate()

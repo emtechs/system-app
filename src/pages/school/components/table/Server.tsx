@@ -1,40 +1,33 @@
 import sortArray from 'sort-array'
-import { useEffect, useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { TableRow, TableCell } from '@mui/material'
 import {
   iSchoolUser,
-  useDebounce,
   useAppThemeContext,
   usePaginationContext,
   iHeadCell,
   TableBase,
   rolePtBr,
   ActionsRemove,
+  DialogRemoveUser,
+  useSchoolContext,
 } from '../../../../shared'
 
 interface iTableSchoolServerPageProps {
-  getServer: (query: string) => void
+  getData: () => void
   listData: iSchoolUser[]
-  handleUser: (newUser: iSchoolUser) => void
 }
 
 export const TableSchoolServerPage = ({
-  getServer,
-  handleUser,
+  getData,
   listData,
 }: iTableSchoolServerPageProps) => {
-  const { debounce } = useDebounce()
   const { mdDown } = useAppThemeContext()
-  const { search, order, by } = usePaginationContext()
+  const { order, by } = usePaginationContext()
+  const { schoolSelect } = useSchoolContext()
+  const [userData, setUserData] = useState<iSchoolUser>()
 
-  useEffect(() => {
-    if (search) {
-      const query_data = `&name=${search}`
-      debounce(() => {
-        getServer(query_data)
-      })
-    } else getServer('')
-  }, [search])
+  const handleUser = (newUser: iSchoolUser) => setUserData(newUser)
 
   const data = useMemo(() => {
     const listServer = sortArray<iSchoolUser>(listData, {
@@ -63,23 +56,35 @@ export const TableSchoolServerPage = ({
   }, [mdDown])
 
   return (
-    <TableBase headCells={headCells}>
-      {data.map((user) => {
-        const handleData = () => handleUser(user)
-        return (
-          <TableRow key={user.id} hover>
-            <TableCell>{user.name}</TableCell>
-            <TableCell>{user.cpf}</TableCell>
-            {!mdDown && <TableCell>{rolePtBr(user.role)}</TableCell>}
-            {!mdDown && (
-              <TableCell>
-                {user.dash === 'SCHOOL' ? 'Escola' : 'Frequência'}
-              </TableCell>
-            )}
-            <ActionsRemove handleData={handleData} />
-          </TableRow>
-        )
-      })}
-    </TableBase>
+    <>
+      <TableBase headCells={headCells}>
+        {data.map((user) => {
+          const handleData = () => handleUser(user)
+          return (
+            <TableRow key={user.id} hover>
+              <TableCell>{user.name}</TableCell>
+              <TableCell>{user.cpf}</TableCell>
+              {!mdDown && <TableCell>{rolePtBr(user.role)}</TableCell>}
+              {!mdDown && (
+                <TableCell>
+                  {user.dash === 'SCHOOL' ? 'Escola' : 'Frequência'}
+                </TableCell>
+              )}
+              <ActionsRemove handleData={handleData} />
+            </TableRow>
+          )
+        })}
+      </TableBase>
+      {schoolSelect && userData && (
+        <DialogRemoveUser
+          school_id={schoolSelect.id}
+          school_name={schoolSelect.label}
+          user_id={userData.id}
+          user_name={userData.name}
+          user_role={userData.role}
+          getData={getData}
+        />
+      )}
+    </>
   )
 }

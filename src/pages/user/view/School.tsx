@@ -15,21 +15,16 @@ import {
   Tools,
   TabsUserRetrievePage,
   Footer,
-  DialogCreateSchoolServer,
-  DialogRemoveUser,
 } from '../../../shared'
-import { TableUserSchoolPage } from '../components'
+import { DialogCreateSchoolServer, TableUserSchoolPage } from '../components'
 
 export const ViewUserSchoolPage = () => {
   const { user_id } = useParams()
   const { debounce } = useDebounce()
-  const { userRetrieve } = useUserContext()
+  const { userSelect } = useUserContext()
   const { search, setIsLoading, setCount } = usePaginationContext()
   const { openCreate, handleOpenCreate } = useDialogContext()
   const [listData, setListData] = useState<iSchool[]>([])
-  const [schoolData, setSchoolData] = useState<iSchool>()
-
-  const handleSchool = (newSchool: iSchool) => setSchoolData(newSchool)
 
   const getSchool = useCallback((query: string) => {
     setIsLoading(true)
@@ -77,25 +72,17 @@ export const ViewUserSchoolPage = () => {
         tools={<Tools back="/user" isNew titleNew="Nova" isSearch isReset />}
       >
         <TabsUserRetrievePage value="school" />
-        <TableUserSchoolPage listData={listData} handleSchool={handleSchool} />
+        <TableUserSchoolPage listData={listData} getData={list} />
         <Footer />
       </LayoutBasePage>
-      {userRetrieve && (
-        <>
-          <DialogCreateSchoolServer
-            user={userRetrieve}
-            getData={list}
-            open={openCreate}
-            onClose={handleOpenCreate}
-          />
-          {schoolData && (
-            <DialogRemoveUser
-              user={userRetrieve}
-              school={schoolData}
-              getData={list}
-            />
-          )}
-        </>
+      {userSelect && (
+        <DialogCreateSchoolServer
+          getData={list}
+          open={openCreate}
+          onClose={handleOpenCreate}
+          user_id={userSelect.id}
+          user_name={userSelect.label}
+        />
       )}
     </>
   )

@@ -1,25 +1,37 @@
-import { useAppThemeContext, useDialogContext } from '../../../contexts'
-import { iDialogUserProps, iSchool } from '../../../interfaces'
-import { rolePtBr } from '../../../scripts'
-import { DialogBase } from '../structure'
-import { apiSchool } from '../../../services'
+import {
+  DialogBase,
+  apiSchool,
+  iDialogDataProps,
+  iRole,
+  rolePtBr,
+  useAppThemeContext,
+  useDialogContext,
+} from '../../../../shared'
 
-interface iDialogRemoveUserProps extends iDialogUserProps {
-  school: iSchool
+interface iDialogRemoveUserProps extends iDialogDataProps {
+  user_name: string
+  user_role: iRole
+  school_name: string
+  user_id: string
+  school_id: string
 }
 
 export const DialogRemoveUser = ({
-  user,
-  school,
+  school_id,
+  school_name,
+  user_id,
+  user_name,
+  user_role,
   getData,
 }: iDialogRemoveUserProps) => {
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
   const { openActive, handleOpenActive } = useDialogContext()
 
-  const deleteServer = async (school_id: string, server_id: string) => {
+  const deleteServer = async () => {
     try {
+      handleOpenActive()
       setLoading(true)
-      await apiSchool.deleteServer(school_id, server_id)
+      await apiSchool.deleteServer(school_id, user_id)
       handleSucess('Usuário removido da função com sucesso!')
       getData && getData()
     } catch {
@@ -34,12 +46,9 @@ export const DialogRemoveUser = ({
       open={openActive}
       onClose={handleOpenActive}
       title="Remover Usuário da Função"
-      description={`Deseja continuar removendo o usúario ${user.name.toUpperCase()} da
-    Função ${rolePtBr(school.role).toUpperCase()} da Escola ${school.name}?`}
-      action={() => {
-        deleteServer(school.id, user.id)
-        handleOpenActive()
-      }}
+      description={`Deseja continuar removendo o usúario ${user_name.toUpperCase()} da
+    Função ${rolePtBr(user_role).toUpperCase()} da Escola ${school_name}?`}
+      action={deleteServer}
       actionTitle="Continuar"
     />
   )

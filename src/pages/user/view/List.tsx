@@ -1,19 +1,19 @@
 import { useSearchParams } from 'react-router-dom'
 import { useCallback, useEffect, useState } from 'react'
 import {
-  useDialogContext,
+  useDebounce,
   usePaginationContext,
-} from '../../../shared/contexts'
-import { useDebounce } from '../../../shared/hooks'
-import { iUser } from '../../../shared/interfaces'
-import { apiUser } from '../../../shared/services'
-import { TableUserPage } from '../components/table'
+  useDialogContext,
+  iUser,
+  apiUser,
+} from '../../../shared'
 import {
+  TableUserPage,
   DialogCreateAdmin,
+  DialogCreateDirector,
   DialogActiveUser,
   DialogCreateSchoolServer,
-  DialogCreateDirector,
-} from '../../../shared/components'
+} from '../components'
 
 export const ViewUserPage = () => {
   const [searchParams] = useSearchParams()
@@ -66,7 +66,8 @@ export const ViewUserPage = () => {
       {userData && <DialogActiveUser user={userData} getData={list} />}
       {userData && (
         <DialogCreateSchoolServer
-          user={userData}
+          user_id={userData.id}
+          user_name={userData.name}
           onClose={handleOpenEdit}
           open={openEdit}
         />

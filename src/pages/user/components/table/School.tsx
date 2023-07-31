@@ -1,32 +1,32 @@
 import sortArray from 'sort-array'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { TableRow, TableCell } from '@mui/material'
 import {
-  TableRow,
-  TableCell,
-  Skeleton,
-  IconButton,
-  Tooltip,
-} from '@mui/material'
-import { TableBase } from '../../../../shared/components'
-import {
-  useDialogContext,
+  iSchool,
   usePaginationContext,
-} from '../../../../shared/contexts'
-import { iHeadCell, iSchool } from '../../../../shared/interfaces'
-import { rolePtBr } from '../../../../shared/scripts'
-import { RemoveDone } from '@mui/icons-material'
+  iHeadCell,
+  TableBase,
+  TableCellLoading,
+  rolePtBr,
+  ActionsRemove,
+  DialogRemoveUser,
+  useUserContext,
+} from '../../../../shared'
 
 interface iTableUserSchoolPageProps {
   listData: iSchool[]
-  handleSchool: (newSchool: iSchool) => void
+  getData: () => void
 }
 
 export const TableUserSchoolPage = ({
-  handleSchool,
+  getData,
   listData,
 }: iTableUserSchoolPageProps) => {
-  const { handleOpenActive } = useDialogContext()
   const { order, by, isLoading } = usePaginationContext()
+  const { userSelect } = useUserContext()
+  const [schoolData, setSchoolData] = useState<iSchool>()
+
+  const handleSchool = (newSchool: iSchool) => setSchoolData(newSchool)
 
   const data = useMemo(() => {
     return sortArray<iSchool>(listData, { by: order, order: by })
@@ -42,32 +42,35 @@ export const TableUserSchoolPage = ({
   }, [])
 
   return (
-    <TableBase headCells={headCells} message="Nenhuma escola encotrada">
-      {data.map((school) => (
-        <TableRow key={school.key} hover>
-          <TableCell>
-            {isLoading ? <Skeleton width={250} /> : school.name}
-          </TableCell>
-          <TableCell>{rolePtBr(school.role)}</TableCell>
-          <TableCell>
-            {school.dash === 'SCHOOL' ? 'Escola' : 'Frequência'}
-          </TableCell>
-          <TableCell>
-            <Tooltip title="Remover">
-              <IconButton
-                color="error"
-                size="small"
-                onClick={() => {
-                  handleSchool(school)
-                  handleOpenActive()
-                }}
-              >
-                <RemoveDone fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          </TableCell>
-        </TableRow>
-      ))}
-    </TableBase>
+    <>
+      <TableBase headCells={headCells} message="Nenhuma escola encotrada">
+        {data.map((el) => {
+          const { key, name, role } = el
+          const handleData = () => handleSchool(el)
+          return (
+            <TableRow key={key} hover>
+              <TableCellLoading loading={isLoading} width={250}>
+                {name}
+              </TableCellLoading>
+              <TableCell>{rolePtBr(role)}</TableCell>
+              <TableCell>
+                {el.dash === 'SCHOOL' ? 'Escola' : 'Frequência'}
+              </TableCell>
+              <ActionsRemove handleData={handleData} />
+            </TableRow>
+          )
+        })}
+      </TableBase>
+      {userSelect && schoolData && (
+        <DialogRemoveUser
+          school_id={schoolData.id}
+          school_name={schoolData.name}
+          user_id={userSelect.id}
+          user_name={userSelect.label}
+          user_role={schoolData.role}
+          getData={getData}
+        />
+      )}
+    </>
   )
 }

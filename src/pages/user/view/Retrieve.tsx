@@ -12,10 +12,8 @@ import {
   Typography,
 } from '@mui/material'
 import { ExpandMore, RemoveDone } from '@mui/icons-material'
-import { DialogActiveUser } from '../../../shared/components'
-import { useDialogContext } from '../../../shared/contexts'
-import { iUser } from '../../../shared/interfaces'
-import { apiUser } from '../../../shared/services'
+import { useDialogContext, iUser, apiUser } from '../../../shared'
+import { DialogActiveUser } from '../components'
 
 export const ViewRetrieveUserPage = () => {
   const { user_id } = useParams()

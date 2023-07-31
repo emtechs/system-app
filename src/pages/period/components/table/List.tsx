@@ -7,6 +7,7 @@ import {
   iHeadCell,
   TableBase,
   TableCellLoading,
+  ActionsEdit,
 } from '../../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
@@ -16,9 +17,13 @@ dayjs.extend(utc)
 
 interface iTablePeriodPageProps {
   listData: iPeriod[]
+  handlePeriod: (newPeriod: iPeriod) => void
 }
 
-export const TablePeriodPage = ({ listData }: iTablePeriodPageProps) => {
+export const TablePeriodPage = ({
+  listData,
+  handlePeriod,
+}: iTablePeriodPageProps) => {
   const { order, by, isLoading } = usePaginationContext()
 
   const data = useMemo(() => {
@@ -29,21 +34,26 @@ export const TablePeriodPage = ({ listData }: iTablePeriodPageProps) => {
     { order: 'name', numeric: 'left', label: 'Ano Letivo' },
     { order: 'date_initial', numeric: 'left', label: 'Início' },
     { order: 'date_final', numeric: 'left', label: 'Fim' },
+    { numeric: 'left', label: 'Ações' },
   ]
 
   return (
     <TableBase headCells={headCells} message="Nenhum usuário encotrado">
-      {data.map((el) => (
-        <TableRow key={el.id} hover>
-          <TableCellLoading loading={isLoading}>{el.name}</TableCellLoading>
-          <TableCellLoading loading={isLoading}>
-            {dayjs(el.date_initial).utc().format('L')}
-          </TableCellLoading>
-          <TableCellLoading loading={isLoading}>
-            {dayjs(el.date_final).utc().format('L')}
-          </TableCellLoading>
-        </TableRow>
-      ))}
+      {data.map((el) => {
+        const handleData = () => handlePeriod(el)
+        return (
+          <TableRow key={el.id} hover>
+            <TableCellLoading loading={isLoading}>{el.name}</TableCellLoading>
+            <TableCellLoading loading={isLoading}>
+              {dayjs(el.date_initial).utc().format('L')}
+            </TableCellLoading>
+            <TableCellLoading loading={isLoading}>
+              {dayjs(el.date_final).utc().format('L')}
+            </TableCellLoading>
+            <ActionsEdit handleData={handleData} />
+          </TableRow>
+        )
+      })}
     </TableBase>
   )
 }

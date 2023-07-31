@@ -1,15 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
+import { useNavigate } from 'react-router-dom'
 import {
+  useAppThemeContext,
+  useDialogContext,
+  iUserAdmRequest,
+  apiUser,
   DialogBaseChildren,
+  createAdmSchema,
   BaseContentChildren,
   ValidateCPF,
-} from '../../../../components'
-import { useAppThemeContext, useDialogContext } from '../../../../contexts'
-import { iUserAdmRequest } from '../../../../interfaces'
-import { createAdmSchema } from '../../../../schemas'
-import { apiUser } from '../../../../services'
-import { useNavigate } from 'react-router-dom'
+} from '../../../../shared'
 
 export const DialogCreateAdmin = () => {
   const navigate = useNavigate()

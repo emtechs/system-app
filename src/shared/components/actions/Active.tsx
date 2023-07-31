@@ -56,13 +56,7 @@ export const ActionsActive = ({
             onClick={onClickReset}
             to={to}
           />
-          {role && role !== 'ADMIN' ? (
-            <Tooltip title="Liberar Acesso">
-              <IconButton color="secondary" size="small" onClick={onClickEdit}>
-                <School fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          ) : (
+          {!role ? (
             <>
               <Tooltip title="Editar">
                 <IconButton color="success" size="small" onClick={onClickEdit}>
@@ -79,6 +73,18 @@ export const ActionsActive = ({
                 </IconButton>
               </Tooltip>
             </>
+          ) : (
+            role !== 'ADMIN' && (
+              <Tooltip title="Liberar Acesso">
+                <IconButton
+                  color="secondary"
+                  size="small"
+                  onClick={onClickEdit}
+                >
+                  <School fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            )
           )}
           <Tooltip title="Desativar">
             <IconButton color="error" size="small" onClick={onClickActive}>

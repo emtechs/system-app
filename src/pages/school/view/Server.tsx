@@ -1,6 +1,6 @@
 import { People, PersonAdd } from '@mui/icons-material'
 import { Chip } from '@mui/material'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
   usePaginationContext,
@@ -13,16 +13,15 @@ import {
   TabsSchoolRetrievePage,
   Footer,
   DialogCreateServer,
+  useDebounce,
 } from '../../../shared'
 import { TableSchoolServerPage } from '../components'
 
 export const ViewSchoolServerPage = () => {
   const { school_id } = useParams()
-  const { setIsLoading, setCount } = usePaginationContext()
+  const { debounce } = useDebounce()
+  const { setIsLoading, setCount, search } = usePaginationContext()
   const [listData, setListData] = useState<iSchoolUser[]>([])
-  const [userData, setUserData] = useState<iSchoolUser>()
-
-  const handleUser = (newUser: iSchoolUser) => setUserData(newUser)
 
   const getServer = useCallback(
     (query: string) => {
@@ -39,6 +38,17 @@ export const ViewSchoolServerPage = () => {
     },
     [school_id],
   )
+
+  const getData = () => getServer('')
+
+  useEffect(() => {
+    if (search) {
+      const query_data = `&name=${search}`
+      debounce(() => {
+        getServer(query_data)
+      })
+    } else getServer('')
+  }, [search])
 
   return (
     <>
@@ -66,15 +76,10 @@ export const ViewSchoolServerPage = () => {
         }
       >
         <TabsSchoolRetrievePage value="server" />
-        <TableSchoolServerPage
-          getServer={getServer}
-          handleUser={handleUser}
-          listData={listData}
-        />
+        <TableSchoolServerPage getData={getData} listData={listData} />
         <Footer />
       </LayoutBasePage>
       <DialogCreateServer getServer={getServer} school_id={school_id} />
-      {userData && <></>}
     </>
   )
 }

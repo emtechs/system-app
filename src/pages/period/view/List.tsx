@@ -9,6 +9,9 @@ export const ViewPeriodPage = () => {
   const { debounce } = useDebounce()
   const { search, setIsLoading, setCount } = usePaginationContext()
   const [listData, setListData] = useState<iPeriod[]>([])
+  const [periodData, setPeriodData] = useState<iPeriod>()
+
+  const handlePeriod = (newPeriod: iPeriod) => setPeriodData(newPeriod)
 
   const getPeriod = useCallback((query: string) => {
     setIsLoading(true)
@@ -35,5 +38,10 @@ export const ViewPeriodPage = () => {
     } else getPeriod(define_query(query_data))
   }, [debounce, define_query, getPeriod, search])
 
-  return <TablePeriodPage listData={listData} />
+  return (
+    <>
+      <TablePeriodPage listData={listData} handlePeriod={handlePeriod} />
+      {periodData && <></>}
+    </>
+  )
 }

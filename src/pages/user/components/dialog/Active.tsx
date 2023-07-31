@@ -1,13 +1,13 @@
 import { FieldValues } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import {
-  useAppThemeContext,
-  useDialogContext,
+  iDialogUserProps,
   usePaginationContext,
-} from '../../../contexts'
-import { iDialogUserProps } from '../../../interfaces'
-import { apiUser } from '../../../services'
-import { DialogActive } from '../structure'
+  useDialogContext,
+  useAppThemeContext,
+  apiUser,
+  DialogActive,
+} from '../../../../shared'
 
 export const DialogActiveUser = ({ user, getData }: iDialogUserProps) => {
   const navigate = useNavigate()
