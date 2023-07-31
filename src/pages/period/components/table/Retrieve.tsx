@@ -1,14 +1,14 @@
 import sortArray from 'sort-array'
 import { useMemo } from 'react'
-import { TableCell, TableRow } from '@mui/material'
+import { IconButton, TableCell, TableRow, Tooltip } from '@mui/material'
+import { Edit } from '@mui/icons-material'
 import {
   iPeriod,
   usePaginationContext,
   iHeadCell,
   TableBase,
   TableCellLoading,
-  ActionsEdit,
-  LinkText,
+  useDialogContext,
 } from '../../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
@@ -16,23 +16,24 @@ import utc from 'dayjs/plugin/utc'
 dayjs.locale('pt-br')
 dayjs.extend(utc)
 
-interface iTablePeriodPageProps {
+interface iTableRetrievePeriodPageProps {
   listData: iPeriod[]
   handlePeriod: (newPeriod: iPeriod) => void
 }
 
-export const TablePeriodPage = ({
+export const TableRetrievePeriodPage = ({
   listData,
   handlePeriod,
-}: iTablePeriodPageProps) => {
-  const { order, by, isLoading, onClickReset } = usePaginationContext()
+}: iTableRetrievePeriodPageProps) => {
+  const { order, by, isLoading } = usePaginationContext()
+  const { handleOpenEdit } = useDialogContext()
 
   const data = useMemo(() => {
     return sortArray<iPeriod>(listData, { by: order, order: by })
   }, [by, listData, order])
 
   const headCells: iHeadCell[] = [
-    { order: 'name', numeric: 'left', label: 'Ano Letivo' },
+    { order: 'name', numeric: 'left', label: 'Nome' },
     { order: 'date_initial', numeric: 'left', label: 'Início' },
     { order: 'date_final', numeric: 'left', label: 'Fim' },
     { numeric: 'left', label: 'Ações' },
@@ -41,24 +42,26 @@ export const TablePeriodPage = ({
   return (
     <TableBase headCells={headCells} message="Nenhum período encotrado">
       {data.map((el) => {
-        const handleData = () => handlePeriod(el)
+        const onClickEdit = () => {
+          handleOpenEdit()
+          handlePeriod(el)
+        }
         return (
           <TableRow key={el.id} hover>
-            <TableCell>
-              <LinkText
-                label={el.name}
-                isLoading={isLoading}
-                onClick={onClickReset}
-                to={`/period/${el.year.id}`}
-              />
-            </TableCell>
+            <TableCellLoading loading={isLoading}>{el.name}</TableCellLoading>
             <TableCellLoading loading={isLoading}>
               {dayjs(el.date_initial).utc().format('L')}
             </TableCellLoading>
             <TableCellLoading loading={isLoading}>
               {dayjs(el.date_final).utc().format('L')}
             </TableCellLoading>
-            <ActionsEdit handleData={handleData} to={`/period/${el.year.id}`} />
+            <TableCell>
+              <Tooltip title="Editar">
+                <IconButton color="success" size="small" onClick={onClickEdit}>
+                  <Edit fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </TableCell>
           </TableRow>
         )
       })}

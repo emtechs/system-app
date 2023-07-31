@@ -1,8 +1,27 @@
+import { FieldValues } from 'react-hook-form'
 import { apiUsingNow } from '.'
 import { iPeriod, iYear } from '../interfaces'
 
+const create = async (data: FieldValues, id: string): Promise<iPeriod> => {
+  const { data: response } = await apiUsingNow.post<iPeriod>(
+    `/calendar/${id}`,
+    data,
+  )
+
+  return response
+}
+
 const listYear = async (): Promise<iYear[]> => {
   const { data: response } = await apiUsingNow.get<iYear[]>(`/calendar/year`)
+
+  return response
+}
+
+const createYear = async (data: FieldValues): Promise<iYear> => {
+  const { data: response } = await apiUsingNow.post<iYear>(
+    '/calendar/year',
+    data,
+  )
 
   return response
 }
@@ -31,4 +50,23 @@ const listPeriod = async (query: string): Promise<iListPeriodReturn> => {
   return response
 }
 
-export const apiCalendar = { year, listYear, listPeriod }
+const updatePeriod = async (
+  data: FieldValues,
+  id: string,
+): Promise<iPeriod> => {
+  const { data: response } = await apiUsingNow.patch<iPeriod>(
+    `/calendar/period/${id}`,
+    data,
+  )
+
+  return response
+}
+
+export const apiCalendar = {
+  year,
+  create,
+  createYear,
+  listYear,
+  listPeriod,
+  updatePeriod,
+}

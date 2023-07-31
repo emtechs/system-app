@@ -19,5 +19,5 @@ export interface iPeriod {
   category: iCategory
   date_initial: Date
   date_final: Date
-  year_id: string
+  year: iYear
 }
