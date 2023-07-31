@@ -1,16 +1,16 @@
 import { useEffect } from 'react'
 import { useParams, Outlet } from 'react-router-dom'
-import {
-  Footer,
-  TabsStudentYearPage,
-  TitleBasePage,
-  ToolsSchool,
-} from '../../shared/components'
-import { useVerifyYear } from '../../shared/hooks'
-import { LayoutBasePage } from '../../shared/layouts'
-import { ViewStudentPage } from './view'
 import { Groups } from '@mui/icons-material'
 import { Chip } from '@mui/material'
+import {
+  useVerifyYear,
+  LayoutBasePage,
+  TitleBasePage,
+  Tools,
+  TabsStudentYearPage,
+  Footer,
+} from '../../shared'
+import { ViewStudentPage } from './view'
 import { StudentNonePage } from './None'
 
 export const StudentPage = () => {
@@ -35,7 +35,7 @@ export const StudentPage = () => {
         </TitleBasePage>
       }
       tools={
-        <ToolsSchool
+        <Tools
           isHome
           isSearch
           isDirector

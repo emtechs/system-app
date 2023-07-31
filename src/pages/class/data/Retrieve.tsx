@@ -1,19 +1,17 @@
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import {
-  ToolsSchool,
-  TitleClassRetrievePage,
-  TabsClassRetrievePage,
-  Footer,
-} from '../../../shared/components'
-import { useValueTabs } from '../../../shared/hooks'
-import { LayoutBasePage } from '../../../shared/layouts'
-import {
   ViewClassData,
+  Tools,
+  useValueTabs,
+  TitleClassRetrievePage,
   ViewStudent,
   ViewFrequency,
   ViewInfrequency,
-} from '../../../shared/views'
+  LayoutBasePage,
+  TabsClassRetrievePage,
+  Footer,
+} from '../../../shared'
 
 export const RetrieveClassPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -21,7 +19,7 @@ export const RetrieveClassPage = () => {
   const viewData = searchParams.get('view') || ''
   const school_id = searchParams.get('school_id') || undefined
   const [view, setView] = useState(<ViewClassData id={class_id} />)
-  const [tools, setTools] = useState(<ToolsSchool back="/school" />)
+  const [tools, setTools] = useState(<Tools back="/school" />)
   const { valueTabs } = useValueTabs()
 
   const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
@@ -37,29 +35,29 @@ export const RetrieveClassPage = () => {
     switch (viewData) {
       case 'school':
         setView(<></>)
-        setTools(<ToolsSchool isDash back="/school" />)
+        setTools(<Tools isDash back="/school" />)
         break
 
       case 'student':
         setView(<ViewStudent />)
         setTools(
-          <ToolsSchool back="/school" isNew titleNew="Aluno" isDash isSearch />,
+          <Tools back="/school" isNew titleNew="Aluno" isDash isSearch />,
         )
         break
 
       case 'frequency':
         setView(<ViewFrequency table_def="school" />)
-        setTools(<ToolsSchool isDash back="/school" />)
+        setTools(<Tools isDash back="/school" />)
         break
 
       case 'infrequency':
         setView(<ViewInfrequency />)
-        setTools(<ToolsSchool isDash back="/school" />)
+        setTools(<Tools isDash back="/school" />)
         break
 
       default:
         setView(<ViewClassData id={class_id} />)
-        setTools(<ToolsSchool isDash back="/school" />)
+        setTools(<Tools isDash back="/school" />)
     }
   }, [viewData, class_id])
 

@@ -3,19 +3,20 @@ import { Box, Chip } from '@mui/material'
 import { SyntheticEvent, useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
-  ToolsSchool,
-  TabsSchoolRetrievePage,
-  Footer,
-  TabsYear,
-  LabelSchool,
+  useDebounce,
+  useAuthContext,
+  usePaginationContext,
+  iClass,
+  apiClass,
+  LayoutBasePage,
   TitleBaseItemsPage,
-} from '../../../shared/components'
-import { LayoutBasePage } from '../../../shared/layouts'
+  LabelSchool,
+  Tools,
+  TabsSchoolRetrievePage,
+  TabsYear,
+  Footer,
+} from '../../../shared'
 import { TableSchoolClassPage } from '../components'
-import { iClass } from '../../../shared/interfaces'
-import { apiClass } from '../../../shared/services'
-import { useAuthContext, usePaginationContext } from '../../../shared/contexts'
-import { useDebounce } from '../../../shared/hooks'
 
 export const ViewSchoolClassPage = () => {
   const { school_id } = useParams()
@@ -70,7 +71,7 @@ export const ViewSchoolClassPage = () => {
           </TitleBaseItemsPage>
         }
         tools={
-          <ToolsSchool
+          <Tools
             back="/school"
             isNew
             titleNew="Turma"

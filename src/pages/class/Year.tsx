@@ -1,13 +1,13 @@
 import { Workspaces } from '@mui/icons-material'
 import {
-  Footer,
-  LabelYear,
-  LinkChip,
-  TabsClassYearPage,
+  LayoutBasePage,
   TitleBaseItemsPage,
-  ToolsSchool,
-} from '../../shared/components'
-import { LayoutBasePage } from '../../shared/layouts'
+  LinkChip,
+  LabelYear,
+  Tools,
+  TabsClassYearPage,
+  Footer,
+} from '../../shared'
 import { ViewClassYearPage } from './view'
 
 export const ClassYearPage = () => {
@@ -23,7 +23,7 @@ export const ClassYearPage = () => {
           <LabelYear />
         </TitleBaseItemsPage>
       }
-      tools={<ToolsSchool isHome isSearch isNew titleNew="Nova" isReset />}
+      tools={<Tools isHome isSearch isNew titleNew="Nova" isReset />}
     >
       <TabsClassYearPage />
       <ViewClassYearPage />

@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
-  Footer,
-  TabsUserRetrievePage,
   TitleUserRetrievePage,
+  Tools,
   TitleUserViewFrequencyPage,
   TitleUserViewHistoryPage,
-  ToolsUser,
-} from '../../shared/components'
-import { LayoutBasePage } from '../../shared/layouts'
+  LayoutBasePage,
+  TabsUserRetrievePage,
+  Footer,
+} from '../../shared'
 import { ViewUserSchoolPage } from './view'
 
 export const ViewUserPage = () => {
   const { view } = useParams()
   const [title, setTitle] = useState(<TitleUserRetrievePage />)
-  const [tools, setTools] = useState(<ToolsUser back="/user" />)
+  const [tools, setTools] = useState(<Tools back="/user" />)
   const [viewData, setViewData] = useState(<></>)
 
   useEffect(() => {
@@ -22,13 +22,13 @@ export const ViewUserPage = () => {
       case 'frequency':
         setTitle(<TitleUserViewFrequencyPage />)
         setViewData(<></>)
-        setTools(<ToolsUser back="/user" />)
+        setTools(<Tools back="/user" />)
         break
 
       case 'history':
         setTitle(<TitleUserViewHistoryPage />)
         setViewData(<></>)
-        setTools(<ToolsUser back="/user" />)
+        setTools(<Tools back="/user" />)
         break
     }
   }, [view])

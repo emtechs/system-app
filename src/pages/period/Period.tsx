@@ -16,7 +16,7 @@ export const PeriodPage = () => {
           />
         </TitleBasePage>
       }
-      tools={<Tools isHome isSearch isReset />}
+      tools={<Tools isHome isNew isSearch isReset />}
     >
       <ViewPeriodPage />
       <Footer />

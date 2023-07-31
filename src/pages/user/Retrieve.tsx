@@ -1,14 +1,14 @@
 import { useEffect } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
-import { LayoutBasePage } from '../../shared/layouts'
 import {
-  Footer,
-  TabsUserRetrievePage,
+  useUserContext,
+  LayoutBasePage,
   TitleUserRetrievePage,
-  ToolsUser,
-} from '../../shared/components'
+  Tools,
+  TabsUserRetrievePage,
+  Footer,
+} from '../../shared'
 import { ViewRetrieveUserPage } from './view'
-import { useUserContext } from '../../shared/contexts'
 
 export const RetrieveUserPage = () => {
   const { view, user_id } = useParams()
@@ -25,7 +25,7 @@ export const RetrieveUserPage = () => {
   return (
     <LayoutBasePage
       title={<TitleUserRetrievePage />}
-      tools={<ToolsUser back="/user" />}
+      tools={<Tools back="/user" />}
     >
       <TabsUserRetrievePage value={view} />
       <ViewRetrieveUserPage />

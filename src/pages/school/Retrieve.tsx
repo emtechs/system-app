@@ -2,16 +2,17 @@ import { useEffect } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
 import { School } from '@mui/icons-material'
 import {
-  Footer,
-  LabelSchool,
-  LinkChip,
-  TabsSchoolRetrievePage,
+  useAppThemeContext,
+  useSchoolContext,
+  LayoutBasePage,
   TitleBaseItemsPage,
-  ToolsSchool,
-} from '../../shared/components'
-import { LayoutBasePage } from '../../shared/layouts'
-import { useAppThemeContext, useSchoolContext } from '../../shared/contexts'
-import { ViewRetrieveSchoolPage } from './view/Retrieve'
+  LinkChip,
+  LabelSchool,
+  Tools,
+  TabsSchoolRetrievePage,
+  Footer,
+} from '../../shared'
+import { ViewRetrieveSchoolPage } from './view'
 
 export const RetrieveSchoolPage = () => {
   const { view, school_id } = useParams()
@@ -38,7 +39,7 @@ export const RetrieveSchoolPage = () => {
           <LabelSchool />
         </TitleBaseItemsPage>
       }
-      tools={<ToolsSchool isDash back="/school" />}
+      tools={<Tools isDash back="/school" />}
     >
       <TabsSchoolRetrievePage value={view} />
       <ViewRetrieveSchoolPage />

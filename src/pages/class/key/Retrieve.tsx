@@ -1,6 +1,5 @@
 import { Outlet, useParams } from 'react-router-dom'
-import { ToolsSchool, Footer } from '../../../shared/components'
-import { LayoutBasePage } from '../../../shared/layouts'
+import { LayoutBasePage, Tools, Footer } from '../../../shared'
 
 export const RetrieveClassKeyPage = () => {
   const { view } = useParams()
@@ -8,7 +7,7 @@ export const RetrieveClassKeyPage = () => {
   if (view) return <Outlet />
 
   return (
-    <LayoutBasePage title={<></>} tools={<ToolsSchool isDash back="/school" />}>
+    <LayoutBasePage title={<></>} tools={<Tools isDash back="/school" />}>
       <Footer />
     </LayoutBasePage>
   )

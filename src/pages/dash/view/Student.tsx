@@ -10,18 +10,19 @@ import {
   useState,
 } from 'react'
 import {
-  ToolsSchool,
-  Footer,
+  useDebounce,
+  useAuthContext,
+  usePaginationContext,
+  iStudent,
+  apiStudent,
+  LayoutBasePage,
+  TitleSchoolDashViewPage,
+  Tools,
   TabsYear,
   PaginationTable,
-  TitleSchoolDashViewPage,
-} from '../../../shared/components'
-import { LayoutBasePage } from '../../../shared/layouts'
+  Footer,
+} from '../../../shared'
 import { TableDashboardSchoolStudentPage } from '../components'
-import { iStudent } from '../../../shared/interfaces'
-import { apiStudent } from '../../../shared/services'
-import { useAuthContext, usePaginationContext } from '../../../shared/contexts'
-import { useDebounce } from '../../../shared/hooks'
 
 export const ViewDashboardSchoolStudentPage = () => {
   const { school_id } = useParams()
@@ -114,7 +115,7 @@ export const ViewDashboardSchoolStudentPage = () => {
           />
         </TitleSchoolDashViewPage>
       }
-      tools={<ToolsSchool isSearch isReset />}
+      tools={<Tools isSearch isReset />}
     >
       <Box display="flex" justifyContent="space-between">
         <TabsYear value={index} handleChange={handleChange} />

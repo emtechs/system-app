@@ -12,28 +12,29 @@ import {
   AddBox,
   ArrowBack,
   ClearAll,
-  Home,
+  Dashboard,
   ManageAccountsOutlined,
   PersonOffOutlined,
   PersonOutlined,
 } from '@mui/icons-material'
 import {
   useAppThemeContext,
+  useDialogContext,
   useDrawerContext,
   usePaginationContext,
+  useSchoolContext,
 } from '../../contexts'
 import { ActiveButton, CompBase, HomeButton, UserTools } from './components'
 import { ButtonDest } from '../button'
 
 interface iToolsProps {
   back?: string
-  isSingle?: boolean
   isHome?: boolean
   toHome?: string
   isUser?: boolean
+  isNew?: boolean
   titleNew?: string
   iconNew?: ReactNode
-  onClickNew?: () => void
   isSearch?: boolean
   isActive?: boolean
   isDirector?: boolean
@@ -42,17 +43,17 @@ interface iToolsProps {
   setInfreq?: (text: string) => void
   finish?: ReactNode
   isReset?: boolean
+  isDash?: boolean
 }
 
 export const Tools = ({
   back,
-  isSingle,
   isHome,
   toHome = '/',
   isUser,
+  isNew,
   titleNew = 'Novo',
   iconNew = <AddBox />,
-  onClickNew,
   isSearch,
   isActive,
   isDirector,
@@ -61,18 +62,21 @@ export const Tools = ({
   setInfreq,
   finish,
   isReset,
+  isDash,
 }: iToolsProps) => {
   const { theme, mdDown } = useAppThemeContext()
+  const { handleOpenCreate } = useDialogContext()
+  const { handleDisplayDash } = useDrawerContext()
+  const { schoolSelect } = useSchoolContext()
   const {
     is_active,
-    is_director,
-    search,
-    setSearch,
     director,
     setDirector,
+    is_director,
     onClickReset,
+    search,
+    setSearch,
   } = usePaginationContext()
-  const { handleClickButtonTools } = useDrawerContext()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -102,7 +106,7 @@ export const Tools = ({
     )
       return false
     return true
-  }, [search, infreq, is_director, is_active])
+  }, [search, infreq.length, is_director.length, is_active])
 
   return (
     <Box
@@ -118,19 +122,24 @@ export const Tools = ({
       {back && (
         <ButtonDest to={back} title="Voltar" startIcon={<ArrowBack />} isResp />
       )}
-      {isSingle && (
-        <ButtonDest
-          to={toHome}
-          title="Página Inicial"
-          startIcon={<Home />}
-          onClick={handleClickButtonTools}
+      {isHome && <HomeButton to={toHome} />}
+      {isNew && (
+        <CompBase
+          title={titleNew}
+          startIcon={iconNew}
+          onClick={handleOpenCreate}
         />
       )}
-      {isHome && <HomeButton to={toHome} />}
-      {onClickNew && (
-        <CompBase title={titleNew} startIcon={iconNew} onClick={onClickNew} />
-      )}
       {isUser && <UserTools />}
+      {isDash && (
+        <ButtonDest
+          title="Painel"
+          to={`/${schoolSelect?.id}`}
+          startIcon={<Dashboard />}
+          isResp
+          onClick={() => handleDisplayDash('SCHOOL')}
+        />
+      )}
       {isSearch && (
         <TextField
           size="small"

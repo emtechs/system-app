@@ -73,7 +73,7 @@ export const ListFrequencyClosedAdm = () => {
   return (
     <LayoutBasePage
       title={`Frequências Realizadas ${date ? '- ' + date : ''}`}
-      tools={<Tools isSingle />}
+      tools={<Tools isHome />}
     >
       <TableBase headCells={headCells}>
         {data?.map((el) => <CardFrequency key={el.id} freq={el} />)}

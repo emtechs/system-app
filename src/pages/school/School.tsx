@@ -2,9 +2,13 @@ import { Outlet, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { Chip } from '@mui/material'
 import { School } from '@mui/icons-material'
-import { useVerifySchool } from '../../shared/hooks'
-import { ToolsSchool, Footer, TitleBasePage } from '../../shared/components'
-import { LayoutBasePage } from '../../shared/layouts'
+import {
+  useVerifySchool,
+  LayoutBasePage,
+  TitleBasePage,
+  Tools,
+  Footer,
+} from '../../shared'
 import { ViewSchoolPage } from './view'
 
 export const SchoolPage = () => {
@@ -29,7 +33,7 @@ export const SchoolPage = () => {
         </TitleBasePage>
       }
       tools={
-        <ToolsSchool
+        <Tools
           isHome
           isSearch
           isDirector

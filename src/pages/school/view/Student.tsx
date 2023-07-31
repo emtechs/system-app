@@ -10,23 +10,24 @@ import {
   useState,
 } from 'react'
 import {
-  ToolsSchool,
+  useDebounce,
+  useAuthContext,
+  usePaginationContext,
+  iStudent,
+  apiStudent,
+  LayoutBasePage,
+  TitleBaseItemsPage,
+  LabelSchool,
+  Tools,
   TabsSchoolRetrievePage,
-  Footer,
   TabsYear,
+  PaginationTable,
+  Footer,
   DialogCreateStudentSchool,
   DialogRemoveStudent,
   DialogTransferStudent,
-  PaginationTable,
-  LabelSchool,
-  TitleBaseItemsPage,
-} from '../../../shared/components'
-import { LayoutBasePage } from '../../../shared/layouts'
+} from '../../../shared'
 import { TableSchoolStudentPage } from '../components'
-import { iStudent } from '../../../shared/interfaces'
-import { apiStudent } from '../../../shared/services'
-import { useAuthContext, usePaginationContext } from '../../../shared/contexts'
-import { useDebounce } from '../../../shared/hooks'
 
 export const ViewSchoolStudentPage = () => {
   const { school_id } = useParams()
@@ -127,7 +128,7 @@ export const ViewSchoolStudentPage = () => {
           </TitleBaseItemsPage>
         }
         tools={
-          <ToolsSchool
+          <Tools
             back="/school"
             isNew
             titleNew="Aluno"

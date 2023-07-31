@@ -3,17 +3,18 @@ import { Box, Chip } from '@mui/material'
 import { SyntheticEvent, useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
-  ToolsSchool,
-  Footer,
-  TabsYear,
+  useDebounce,
+  useAuthContext,
+  usePaginationContext,
+  iClass,
+  apiClass,
+  LayoutBasePage,
   TitleSchoolDashViewPage,
-} from '../../../shared/components'
-import { LayoutBasePage } from '../../../shared/layouts'
+  Tools,
+  TabsYear,
+  Footer,
+} from '../../../shared'
 import { TableDashboardSchoolClassPage } from '../components'
-import { iClass } from '../../../shared/interfaces'
-import { apiClass } from '../../../shared/services'
-import { useAuthContext, usePaginationContext } from '../../../shared/contexts'
-import { useDebounce } from '../../../shared/hooks'
 
 export const ViewDashboardSchoolClassPage = () => {
   const { school_id } = useParams()
@@ -66,7 +67,7 @@ export const ViewDashboardSchoolClassPage = () => {
             />
           </TitleSchoolDashViewPage>
         }
-        tools={<ToolsSchool isSearch isReset />}
+        tools={<Tools isSearch isReset />}
       >
         <Box display="flex" justifyContent="space-between">
           <TabsYear value={index} handleChange={handleChange} />

@@ -3,18 +3,18 @@ import { Chip } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
-  ToolsSchool,
+  usePaginationContext,
+  iSchoolUser,
+  apiSchoolRetrieve,
+  LayoutBasePage,
+  TitleBaseItemsPage,
+  LabelSchool,
+  Tools,
   TabsSchoolRetrievePage,
   Footer,
   DialogCreateServer,
-  TitleBaseItemsPage,
-  LabelSchool,
-} from '../../../shared/components'
-import { LayoutBasePage } from '../../../shared/layouts'
+} from '../../../shared'
 import { TableSchoolServerPage } from '../components'
-import { iSchoolUser } from '../../../shared/interfaces'
-import { apiSchoolRetrieve } from '../../../shared/services'
-import { usePaginationContext } from '../../../shared/contexts'
 
 export const ViewSchoolServerPage = () => {
   const { school_id } = useParams()
@@ -54,7 +54,7 @@ export const ViewSchoolServerPage = () => {
           </TitleBaseItemsPage>
         }
         tools={
-          <ToolsSchool
+          <Tools
             back="/school"
             iconNew={<PersonAdd />}
             isNew

@@ -1,13 +1,13 @@
 import { Close, Groups } from '@mui/icons-material'
 import { Chip } from '@mui/material'
 import {
-  Footer,
-  LinkChip,
-  TabsStudentYearPage,
+  LayoutBasePage,
   TitleBaseItemsPage,
-  ToolsSchool,
-} from '../../shared/components'
-import { LayoutBasePage } from '../../shared/layouts'
+  LinkChip,
+  Tools,
+  TabsStudentYearPage,
+  Footer,
+} from '../../shared'
 import { ViewStudentNonePage } from './view'
 
 export const StudentNonePage = () => {
@@ -27,7 +27,7 @@ export const StudentNonePage = () => {
           />
         </TitleBaseItemsPage>
       }
-      tools={<ToolsSchool isHome isSearch isNew titleNew="Nova" isReset />}
+      tools={<Tools isHome isSearch isNew titleNew="Nova" isReset />}
     >
       <TabsStudentYearPage />
       <ViewStudentNonePage />

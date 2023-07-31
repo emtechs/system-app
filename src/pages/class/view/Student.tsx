@@ -1,25 +1,23 @@
+import sortArray from 'sort-array'
+import { useParams } from 'react-router-dom'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
+  useDebounce,
+  useSchoolContext,
+  usePaginationContext,
+  iStudent,
+  apiStudent,
+  LayoutBasePage,
+  TitleBaseItemsPage,
+  LabelSchool,
+  LabelClass,
+  Tools,
+  TabsSchoolRetrievePage,
+  Footer,
   DialogCreateStudentSchool,
   DialogRemoveStudent,
   DialogTransferStudent,
-  Footer,
-  LabelClass,
-  LabelSchool,
-  TabsSchoolRetrievePage,
-  TitleBaseItemsPage,
-  ToolsSchool,
-} from '../../../shared/components'
-import { iStudent } from '../../../shared/interfaces'
-import { apiStudent } from '../../../shared/services'
-import {
-  usePaginationContext,
-  useSchoolContext,
-} from '../../../shared/contexts'
-import sortArray from 'sort-array'
-import { useDebounce } from '../../../shared/hooks'
-import { useParams } from 'react-router-dom'
-import { LayoutBasePage } from '../../../shared/layouts'
+} from '../../../shared'
 import { TableClassStudentPage } from '../components'
 
 export const ViewClassStudentPage = () => {
@@ -89,9 +87,7 @@ export const ViewClassStudentPage = () => {
             <LabelClass />
           </TitleBaseItemsPage>
         }
-        tools={
-          <ToolsSchool back="/school" isNew titleNew="Aluno" isDash isSearch />
-        }
+        tools={<Tools back="/school" isNew titleNew="Aluno" isDash isSearch />}
       >
         <TabsSchoolRetrievePage value="student" />
         <TableClassStudentPage data={data} handleStudent={handleStudent} />

@@ -3,17 +3,15 @@ import { Outlet, useParams } from 'react-router-dom'
 import { Chip } from '@mui/material'
 import { Workspaces } from '@mui/icons-material'
 import {
-  Footer,
-  TabsClassYearPage,
-  TitleBasePage,
-  ToolsSchool,
-} from '../../shared/components'
-import {
   useVerifyClass,
-  useVerifyClassKey,
   useVerifyYear,
-} from '../../shared/hooks'
-import { LayoutBasePage } from '../../shared/layouts'
+  useVerifyClassKey,
+  LayoutBasePage,
+  TitleBasePage,
+  Tools,
+  TabsClassYearPage,
+  Footer,
+} from '../../shared'
 import { ViewClass } from './view'
 
 export const ClassPage = () => {
@@ -41,9 +39,7 @@ export const ClassPage = () => {
           />
         </TitleBasePage>
       }
-      tools={
-        <ToolsSchool isHome isSearch isActive isNew titleNew="Nova" isReset />
-      }
+      tools={<Tools isHome isSearch isNew titleNew="Nova" isReset />}
     >
       <TabsClassYearPage />
       <ViewClass />

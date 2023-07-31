@@ -3,23 +3,21 @@ import { useCallback, useEffect, useState } from 'react'
 import { School } from '@mui/icons-material'
 import { Chip } from '@mui/material'
 import {
-  useDialogContext,
-  usePaginationContext,
+  useDebounce,
   useUserContext,
-} from '../../../shared/contexts'
-import { useDebounce } from '../../../shared/hooks'
-import { iSchool } from '../../../shared/interfaces'
-import { apiSchool } from '../../../shared/services'
-import {
+  usePaginationContext,
+  useDialogContext,
+  iSchool,
+  apiSchool,
+  LayoutBasePage,
+  TitleBaseItemsPage,
+  LabelUser,
+  Tools,
+  TabsUserRetrievePage,
+  Footer,
   DialogCreateSchoolServer,
   DialogRemoveUser,
-  Footer,
-  LabelUser,
-  TabsUserRetrievePage,
-  TitleBaseItemsPage,
-  ToolsUser,
-} from '../../../shared/components'
-import { LayoutBasePage } from '../../../shared/layouts'
+} from '../../../shared'
 import { TableUserSchoolPage } from '../components'
 
 export const ViewUserSchoolPage = () => {
@@ -76,9 +74,7 @@ export const ViewUserSchoolPage = () => {
             />
           </TitleBaseItemsPage>
         }
-        tools={
-          <ToolsUser back="/user" isNew titleNew="Nova" isSearch isReset />
-        }
+        tools={<Tools back="/user" isNew titleNew="Nova" isSearch isReset />}
       >
         <TabsUserRetrievePage value="school" />
         <TableUserSchoolPage listData={listData} handleSchool={handleSchool} />

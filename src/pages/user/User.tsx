@@ -2,9 +2,13 @@ import { useEffect } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
 import { People } from '@mui/icons-material'
 import { Chip } from '@mui/material'
-import { Footer, TitleBasePage, ToolsUser } from '../../shared/components'
-import { useVerifyUser } from '../../shared/hooks'
-import { LayoutBasePage } from '../../shared/layouts'
+import {
+  useVerifyUser,
+  LayoutBasePage,
+  TitleBasePage,
+  Tools,
+  Footer,
+} from '../../shared'
 import { ViewUserPage } from './view'
 
 export const UserPage = () => {
@@ -28,7 +32,7 @@ export const UserPage = () => {
           />
         </TitleBasePage>
       }
-      tools={<ToolsUser isHome isUser isActive isSearch isReset />}
+      tools={<Tools isHome isUser isActive isSearch isReset />}
     >
       <ViewUserPage />
       <Footer />
