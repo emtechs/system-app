@@ -1,4 +1,5 @@
 export * from './auth.schema'
+export * from './calendar.schema'
 export * from './class.schema'
 export * from './file.schema'
 export * from './frequency.schema'

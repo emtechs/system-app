@@ -1,12 +1,17 @@
 import { Edit, Visibility } from '@mui/icons-material'
 import { IconButton, TableCell, Tooltip } from '@mui/material'
-import { useDialogContext, usePaginationContext } from '../../../shared'
+import {
+  LinkIcon,
+  useDialogContext,
+  usePaginationContext,
+} from '../../../shared'
 
 interface iActionsEditProps {
   handleData: () => void
+  to: string
 }
 
-export const ActionsEdit = ({ handleData }: iActionsEditProps) => {
+export const ActionsEdit = ({ handleData, to }: iActionsEditProps) => {
   const { handleOpenEdit } = useDialogContext()
   const { onClickReset } = usePaginationContext()
 
@@ -17,11 +22,12 @@ export const ActionsEdit = ({ handleData }: iActionsEditProps) => {
 
   return (
     <TableCell>
-      <Tooltip title="Detalhar">
-        <IconButton color="primary" size="small" onClick={onClickReset}>
-          <Visibility fontSize="small" />
-        </IconButton>
-      </Tooltip>
+      <LinkIcon
+        icon={<Visibility fontSize="small" />}
+        label="Detalhar"
+        onClick={onClickReset}
+        to={to}
+      />
       <Tooltip title="Editar">
         <IconButton color="success" size="small" onClick={onClickEdit}>
           <Edit fontSize="small" />

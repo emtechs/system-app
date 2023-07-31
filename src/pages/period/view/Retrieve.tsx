@@ -1,18 +1,24 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useParams, useSearchParams } from 'react-router-dom'
 import {
   useDebounce,
   usePaginationContext,
   iPeriod,
   apiCalendar,
+  useCalendarContext,
 } from '../../../shared'
 import {
-  DialogCreateYearPeriod,
+  DialogCreatePeriod,
   DialogEditPeriod,
-  TablePeriodPage,
+  TableRetrievePeriodPage,
 } from '../components'
 
-export const ViewPeriodPage = () => {
+export const ViewRetrievePeriodPage = () => {
+  const { year_id } = useParams()
+  const [searchParams] = useSearchParams()
+  const view = searchParams.get('view') || 'BIMESTRE'
   const { debounce } = useDebounce()
+  const { yearSelect } = useCalendarContext()
   const { search, setIsLoading, setCount } = usePaginationContext()
   const [listData, setListData] = useState<iPeriod[]>([])
   const [periodData, setPeriodData] = useState<iPeriod>()
@@ -30,9 +36,12 @@ export const ViewPeriodPage = () => {
       .finally(() => setIsLoading(false))
   }, [])
 
-  const define_query = useCallback((comp: string) => {
-    return `?category=ANO${comp}`
-  }, [])
+  const define_query = useCallback(
+    (comp: string) => {
+      return `?year_id=${year_id}&category=${view}${comp}`
+    },
+    [view, year_id],
+  )
 
   const getData = () => getPeriod(define_query(''))
 
@@ -48,8 +57,13 @@ export const ViewPeriodPage = () => {
 
   return (
     <>
-      <TablePeriodPage listData={listData} handlePeriod={handlePeriod} />
-      <DialogCreateYearPeriod getData={getData} />
+      <TableRetrievePeriodPage
+        listData={listData}
+        handlePeriod={handlePeriod}
+      />
+      {yearSelect && (
+        <DialogCreatePeriod getData={getData} view={view} year={yearSelect} />
+      )}
       {periodData && <DialogEditPeriod period={periodData} getData={getData} />}
     </>
   )

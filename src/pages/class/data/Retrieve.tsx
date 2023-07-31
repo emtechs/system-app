@@ -14,8 +14,8 @@ import {
 } from '../../../shared'
 
 export const RetrieveClassPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams()
   const { class_id } = useParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const viewData = searchParams.get('view') || ''
   const school_id = searchParams.get('school_id') || undefined
   const [view, setView] = useState(<ViewClassData id={class_id} />)

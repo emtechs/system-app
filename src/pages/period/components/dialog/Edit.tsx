@@ -1,32 +1,23 @@
-import {
-  FieldValues,
-  FormContainer,
-  TextFieldElement,
-} from 'react-hook-form-mui'
+import { FieldValues, FormContainer } from 'react-hook-form-mui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Button } from '@mui/material'
 import {
   usePaginationContext,
   useDialogContext,
   useAppThemeContext,
-  apiSchool,
   DialogBaseChildren,
-  schoolUpdateSchema,
   BaseContentChildren,
   iDialogDataProps,
   iPeriod,
+  periodUpdateSchema,
+  apiCalendar,
 } from '../../../../shared'
+import { DateEditPeriod } from '../date'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 import utc from 'dayjs/plugin/utc'
 dayjs.locale('pt-br')
 dayjs.extend(utc)
-
-const DateElem = () => {
-  return (
-    <TextFieldElement name="date_initial" label="Início" required fullWidth />
-  )
-}
 
 interface iDialogEditPeriod extends iDialogDataProps {
   period: iPeriod
@@ -37,15 +28,15 @@ export const DialogEditPeriod = ({ period, getData }: iDialogEditPeriod) => {
   const { handleOpenEdit, openEdit } = useDialogContext()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
 
-  const updateSchool = async (data: FieldValues, id: string) => {
+  const updatePeriod = async (data: FieldValues, id: string) => {
     try {
       setLoading(true)
-      await apiSchool.update(data, id, '')
-      handleSucess(`Sucesso ao alterar o nome da Escola!`)
+      await apiCalendar.updatePeriod(data, id)
+      handleSucess(`Sucesso ao alterar o período!`)
       onClickReset()
       getData && getData()
     } catch {
-      handleError(`Não foi possível atualizar o nome da escola no momento!`)
+      handleError(`Não foi possível atualizar o período no momento!`)
     } finally {
       setLoading(false)
     }
@@ -60,29 +51,21 @@ export const DialogEditPeriod = ({ period, getData }: iDialogEditPeriod) => {
     >
       <FormContainer
         defaultValues={{
-          date_initial: dayjs(period.date_initial).utc().format('L'),
-          date_final: dayjs(period.date_final).utc().format('L'),
+          old_initial: dayjs(period.date_initial).utc(),
+          initial: dayjs(period.date_initial).utc().format('L'),
+          old_final: dayjs(period.date_final).utc(),
+          final: dayjs(period.date_final).utc().format('L'),
         }}
         onSuccess={(data) => {
-          updateSchool(data, period.id)
+          updatePeriod(data, period.id)
           handleOpenEdit()
         }}
-        resolver={zodResolver(schoolUpdateSchema)}
+        resolver={zodResolver(periodUpdateSchema)}
       >
         <BaseContentChildren>
           <Box display="flex" gap={1}>
-            <TextFieldElement
-              name="date_initial"
-              label="Início"
-              required
-              fullWidth
-            />
-            <TextFieldElement
-              name="date_final"
-              label="Fim"
-              required
-              fullWidth
-            />
+            <DateEditPeriod name="initial" label="Início" year={period.year} />
+            <DateEditPeriod name="final" label="Fim" year={period.year} />
           </Box>
           <Button variant="contained" type="submit" fullWidth>
             Salvar
