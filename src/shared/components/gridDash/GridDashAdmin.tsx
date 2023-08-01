@@ -42,7 +42,7 @@ export const GridDashAdmin = () => {
           icon={<Workspaces fontSize="large" />}
           quant={userDashData.countClass}
           info="Turmas"
-          dest={`/class/year/${yearData?.id}`}
+          dest={`/class?year_id=${yearData?.id}`}
         />
         <GridDashContent
           icon={<Groups fontSize="large" />}
@@ -54,7 +54,7 @@ export const GridDashAdmin = () => {
           icon={<Checklist fontSize="large" />}
           quant={userDashData.countFrequency}
           info="Frequências"
-          dest="/frequency/list"
+          dest="/frequency"
         />
         <GridDashContent
           icon={<People fontSize="large" />}
@@ -66,7 +66,7 @@ export const GridDashAdmin = () => {
           icon={<Close fontSize="large" />}
           quant={userDashData.countNotClass}
           info="Não enturmados"
-          dest="/student/year/none"
+          dest="/student?year_id=none"
         />
         <GridDashOrgan />
       </Grid>

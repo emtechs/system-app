@@ -22,8 +22,8 @@ interface iCalendarContextData {
   setYearSelect: Dispatch<SetStateAction<iSelectBase | undefined>>
   yearIdSelect: string | undefined
   setYearIdSelect: Dispatch<SetStateAction<string | undefined>>
-  listMonth: iMonth[]
-  setListMonth: Dispatch<SetStateAction<iMonth[]>>
+  listMonth: iMonth[] | undefined
+  setListMonth: Dispatch<SetStateAction<iMonth[] | undefined>>
 }
 
 const CalendarContext = createContext({} as iCalendarContextData)
@@ -34,7 +34,7 @@ export const CalendarProvider = ({ children }: iChildren) => {
   const [monthData, setMonthData] = useState(dayjs().format('MMMM'))
   const [yearSelect, setYearSelect] = useState<iSelectBase>()
   const [yearIdSelect, setYearIdSelect] = useState<string>()
-  const [listMonth, setListMonth] = useState<iMonth[]>([])
+  const [listMonth, setListMonth] = useState<iMonth[]>()
 
   return (
     <CalendarContext.Provider

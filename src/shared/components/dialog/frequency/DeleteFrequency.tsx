@@ -1,35 +1,47 @@
 import { Box, Typography } from '@mui/material'
-import { iFrequencyWithInfreq } from '../../../interfaces'
-import { useFrequencyContext } from '../../../contexts'
+import {
+  apiFrequency,
+  iDialogDataProps,
+  iFrequencyBase,
+  useAppThemeContext,
+  useDialogContext,
+} from '../../../../shared'
 import { DialogBaseChildrenAction } from '../structure'
 
-interface iDialogDeleteFrequencyProps {
-  open: boolean
-  onClose: () => void
-  frequency: iFrequencyWithInfreq
+interface iDialogDeleteFrequencyProps extends iDialogDataProps {
+  frequency: iFrequencyBase
 }
 
 export const DialogDeleteFrequency = ({
-  open,
-  onClose,
   frequency,
+  getData,
 }: iDialogDeleteFrequencyProps) => {
-  const { destroyFrequency, setRetrieveFreq } = useFrequencyContext()
-  const action = () => {
-    destroyFrequency(frequency.id)
-    setRetrieveFreq(undefined)
-    onClose()
+  const { handleOpenActive, openActive } = useDialogContext()
+  const { setLoading, handleError, handleSucess } = useAppThemeContext()
+  const destroyFrequency = async () => {
+    try {
+      handleOpenActive()
+      setLoading(true)
+      await apiFrequency.destroy(frequency.id)
+      handleSucess('Frequência deletada com sucesso!')
+      getData && getData()
+    } catch {
+      handleError('Não foi possível deletar a frequência no momento!')
+    } finally {
+      setLoading(false)
+    }
   }
+
   return (
     <DialogBaseChildrenAction
-      open={open}
-      onClose={onClose}
+      open={openActive}
+      onClose={handleOpenActive}
       title="Excluir Frequência"
-      description={`Você está prestes a exluir uma frequência. Verifique cuidadosamente as
+      description={`Você está prestes a excluir uma frequência. Verifique cuidadosamente as
       informações para confirmar se é realmente a que você deseja excluir.
       Se estiver correto, clique em "Excluir". Caso contrário, clique em
       "Sair".`}
-      action={action}
+      action={destroyFrequency}
       actionTitle="Excluir"
     >
       <Box display="flex" flexDirection="column" gap={1} mt={1}>

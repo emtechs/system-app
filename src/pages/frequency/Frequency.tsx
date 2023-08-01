@@ -8,8 +8,8 @@ import {
   Tools,
   Footer,
   useVerifyYear,
+  TabsFrequencyPage,
 } from '../../shared'
-import { TabsFrequencyPage } from './components'
 import {
   ViewFrequencyNonePage,
   ViewFrequencyPage,

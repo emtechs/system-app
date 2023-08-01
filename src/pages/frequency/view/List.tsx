@@ -5,6 +5,8 @@ import {
   PaginationTable,
   apiFrequency,
   iFrequencyBase,
+  DialogDeleteFrequency,
+  DialogRetrieveFrequency,
 } from '../../../shared'
 import { TableFrequencyPage } from '../components'
 
@@ -53,6 +55,8 @@ export const ViewFrequencyPage = () => {
 
   const onClick = () => getFrequency(define_query(handleFace(face)), true)
 
+  const list = () => getFrequency(define_query(''))
+
   useEffect(() => {
     let query_data = ''
     if (search) {
@@ -73,7 +77,12 @@ export const ViewFrequencyPage = () => {
         total={listData ? listData.length : 0}
         onClick={onClick}
       />
-      {frequencyData && <></>}
+      {frequencyData && (
+        <>
+          <DialogRetrieveFrequency frequency={frequencyData} getData={list} />
+          <DialogDeleteFrequency frequency={frequencyData} getData={list} />
+        </>
+      )}
     </>
   )
 }

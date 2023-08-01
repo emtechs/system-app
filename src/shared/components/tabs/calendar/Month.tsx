@@ -13,7 +13,7 @@ export const TabsMonth = ({ value, handleChange }: iTabsBaseProps) => {
       variant="scrollable"
       sx={{ borderRight: 1, borderColor: 'divider' }}
     >
-      {listMonth.map((el, index) => (
+      {listMonth?.map((el, index) => (
         <Tab key={el.id} label={el.name} value={index} />
       ))}
     </Tabs>

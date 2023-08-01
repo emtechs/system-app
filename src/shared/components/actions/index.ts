@@ -1,4 +1,5 @@
 export * from './Active'
+export * from './Detail'
 export * from './Edit'
 export * from './Frequency'
 export * from './Remove'

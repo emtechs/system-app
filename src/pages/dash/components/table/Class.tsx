@@ -1,13 +1,15 @@
 import sortArray from 'sort-array'
 import { useMemo } from 'react'
 import { TableRow, TableCell } from '@mui/material'
-import { Visibility } from '@mui/icons-material'
 import {
+  iClass,
   useAppThemeContext,
   usePaginationContext,
-} from '../../../../shared/contexts'
-import { iClass, iHeadCell } from '../../../../shared/interfaces'
-import { LinkIcon, LinkText, TableBase } from '../../../../shared/components'
+  iHeadCell,
+  TableBase,
+  LinkText,
+  ActionsDetail,
+} from '../../../../shared'
 
 interface iTableDashboardSchoolClassPageProps {
   listData: iClass[]
@@ -60,14 +62,7 @@ export const TableDashboardSchoolClassPage = ({
               <TableCell align="right">{el.frequencies}</TableCell>
             </>
           )}
-          <TableCell>
-            <LinkIcon
-              icon={<Visibility fontSize="small" />}
-              label="Detalhar"
-              onClick={onClickReset}
-              to={`/class/key/${el.key}?view=student`}
-            />
-          </TableCell>
+          <ActionsDetail to="" />
         </TableRow>
       ))}
     </TableBase>

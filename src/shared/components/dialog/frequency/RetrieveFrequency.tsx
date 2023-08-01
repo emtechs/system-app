@@ -1,35 +1,50 @@
 import { Box, Typography } from '@mui/material'
-import { iFrequencyWithInfreq } from '../../../interfaces'
-import { useFrequencyContext } from '../../../contexts'
+import {
+  iDialogDataProps,
+  iFrequencyBase,
+  useDialogContext,
+  useAppThemeContext,
+  apiFrequency,
+} from '../../../../shared'
 import { DialogBaseChildrenAction } from '../structure'
 
-interface iDialogDeleteFrequencyProps {
-  open: boolean
-  onClose: () => void
-  frequency: iFrequencyWithInfreq
+interface iDialogRetrieveFrequencyProps extends iDialogDataProps {
+  frequency: iFrequencyBase
 }
 
 export const DialogRetrieveFrequency = ({
-  open,
-  onClose,
   frequency,
-}: iDialogDeleteFrequencyProps) => {
-  const { updateFrequency, setRetrieveFreq } = useFrequencyContext()
-  const action = () => {
-    updateFrequency({ status: 'OPENED' }, frequency.id, true)
-    setRetrieveFreq(undefined)
-    onClose()
+  getData,
+}: iDialogRetrieveFrequencyProps) => {
+  const { handleOpenEdit, openEdit } = useDialogContext()
+
+  const { setLoading, handleError, handleSucess } = useAppThemeContext()
+  const updateFrequency = async () => {
+    try {
+      handleOpenEdit()
+      setLoading(true)
+      await apiFrequency.update(
+        { status: 'OPENED', finished_at: 0 },
+        frequency.id,
+      )
+      handleSucess('Frequência reaberta com sucesso!')
+      getData && getData()
+    } catch {
+      handleError('Não foi possível reabrir a frequência no momento!')
+    } finally {
+      setLoading(false)
+    }
   }
   return (
     <DialogBaseChildrenAction
-      open={open}
-      onClose={onClose}
+      open={openEdit}
+      onClose={handleOpenEdit}
       title="Reabrir Frequência"
       description={`Você está prestes a reabrir uma frequência que já foi encerrada.
             Verifique cuidadosamente as informações para confirmar se é
             realmente a que você deseja reabrir. Se estiver correto, clique em
             "Reabrir". Caso contrário, clique em "Sair".`}
-      action={action}
+      action={updateFrequency}
       actionTitle="Reabrir"
     >
       <Box display="flex" flexDirection="column" gap={1} mt={1}>

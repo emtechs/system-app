@@ -1,33 +1,31 @@
 import { Checklist } from '@mui/icons-material'
-import { Box } from '@mui/material'
+import { Box, Chip } from '@mui/material'
+import { SyntheticEvent, useCallback, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import {
-  LayoutBasePage,
-  Tools,
-  Footer,
-  PaginationTable,
-  apiFrequency,
-  iFrequencyBase,
   useDebounce,
   usePaginationContext,
-  LabelYear,
-  LinkChip,
-  TitleBaseItemsPage,
-  TabsMonth,
+  LayoutBasePage,
+  TitleSchoolDashViewPage,
+  Tools,
+  Footer,
   useCalendarContext,
-  DialogDeleteFrequency,
-  DialogRetrieveFrequency,
+  apiFrequency,
+  iFrequencyBase,
+  PaginationTable,
   TabsFrequencyPage,
+  TabsMonth,
 } from '../../../shared'
-import { TableFrequencyPage } from '../components'
-import { useState, useCallback, useEffect, SyntheticEvent } from 'react'
+import { TableDashboardSchoolFrequencyPage } from '../components'
 
-interface iViewFrequencyYearPageProps {
-  year_id: string
+interface iViewDashboardSchoolFrequencyPageProps {
+  year_id?: string
 }
 
-export const ViewFrequencyYearPage = ({
+export const ViewDashboardSchoolFrequencyPage = ({
   year_id,
-}: iViewFrequencyYearPageProps) => {
+}: iViewDashboardSchoolFrequencyPageProps) => {
+  const { school_id } = useParams()
   const { debounce } = useDebounce()
   const { setListMonth, listMonth } = useCalendarContext()
   const {
@@ -40,14 +38,10 @@ export const ViewFrequencyYearPage = ({
     face,
   } = usePaginationContext()
   const [listData, setListData] = useState<iFrequencyBase[]>([])
-  const [frequencyData, setFrequencyData] = useState<iFrequencyBase>()
   const [index, setIndex] = useState(0)
 
   const handleChange = (_event: SyntheticEvent, newValue: number | string) =>
     setIndex(Number(newValue))
-
-  const handleFrequency = (newFrequency: iFrequencyBase) =>
-    setFrequencyData(newFrequency)
 
   const getFrequency = useCallback((query: string, isFace?: boolean) => {
     setIsLoading(true)
@@ -71,18 +65,20 @@ export const ViewFrequencyYearPage = ({
 
   const define_query = useCallback(
     (comp: string) => {
-      return (
-        `?year_id=${year_id}&month_id=${listMonth?.at(index)?.id}` +
-        comp +
-        query_page()
-      )
+      const query = `?school_id=${school_id}${comp}${query_page()}`
+      if (year_id) {
+        if (year_id !== 'none')
+          return `${query}&year_id=${year_id}&month_id=${listMonth?.at(index)
+            ?.id}`
+        return `${query}&is_active=false`
+      }
+
+      return query
     },
-    [index, query_page, year_id],
+    [index, query_page, school_id, year_id],
   )
 
   const onClick = () => getFrequency(define_query(handleFace(face)), true)
-
-  const list = () => getFrequency(define_query(''))
 
   useEffect(() => {
     let query_data = ''
@@ -97,37 +93,29 @@ export const ViewFrequencyYearPage = ({
   return (
     <LayoutBasePage
       title={
-        <TitleBaseItemsPage>
-          <LinkChip
+        <TitleSchoolDashViewPage>
+          <Chip
+            color="primary"
             label="Frequências"
             icon={<Checklist sx={{ mr: 0.5 }} fontSize="inherit" />}
-            to="/frequency"
           />
-          <LabelYear />
-        </TitleBaseItemsPage>
+        </TitleSchoolDashViewPage>
       }
-      tools={<Tools isHome isSearch isReset />}
+      tools={<Tools isSearch isReset />}
     >
-      <TabsFrequencyPage value={year_id} />
+      <TabsFrequencyPage value={year_id} href={`/${school_id}/frequency`} />
       <Box display="flex" justifyContent="space-between">
-        <TabsMonth value={index} handleChange={handleChange} />
+        {year_id && year_id !== 'none' && (
+          <TabsMonth value={index} handleChange={handleChange} />
+        )}
         <Box flex={1}>
-          <TableFrequencyPage
-            listData={listData}
-            handleFrequency={handleFrequency}
-          />
+          <TableDashboardSchoolFrequencyPage listData={listData} />
         </Box>
       </Box>
       <PaginationTable
         total={listData ? listData.length : 0}
         onClick={onClick}
       />
-      {frequencyData && (
-        <>
-          <DialogRetrieveFrequency frequency={frequencyData} getData={list} />
-          <DialogDeleteFrequency frequency={frequencyData} getData={list} />
-        </>
-      )}
       <Footer />
     </LayoutBasePage>
   )

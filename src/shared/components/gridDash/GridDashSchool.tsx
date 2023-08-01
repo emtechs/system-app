@@ -82,7 +82,7 @@ export const GridDashSchool = () => {
                   ? 'Frequência em aberto'
                   : 'Frequências em aberto'
               }
-              dest="/frequency/open"
+              dest={`/${schoolSelect?.id}/frequency?year_id=none`}
             />
           ) : (
             <GridDashContent

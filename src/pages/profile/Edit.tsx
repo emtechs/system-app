@@ -1,4 +1,5 @@
 import { Box, Button, Chip, Grid, Paper } from '@mui/material'
+import { Edit } from '@mui/icons-material'
 import { Outlet, useParams } from 'react-router-dom'
 import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -11,7 +12,6 @@ import {
   LabelProfile,
   TitleBaseItemsPage,
 } from '../../shared'
-import { Edit } from '@mui/icons-material'
 
 export const EditProfilePage = () => {
   const { view } = useParams()

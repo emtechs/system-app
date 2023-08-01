@@ -12,8 +12,11 @@ import {
   usePaginationContext,
   LinkChip,
   TitleBaseItemsPage,
+  DialogDeleteFrequency,
+  DialogRetrieveFrequency,
+  TabsFrequencyPage,
 } from '../../../shared'
-import { TableFrequencyPage, TabsFrequencyPage } from '../components'
+import { TableFrequencyPage } from '../components'
 
 interface iViewFrequencyNonePageProps {
   year_id: string
@@ -66,6 +69,8 @@ export const ViewFrequencyNonePage = ({
 
   const onClick = () => getFrequency(define_query(handleFace(face)), true)
 
+  const list = () => getFrequency(define_query(''))
+
   useEffect(() => {
     let query_data = ''
     if (search) {
@@ -103,7 +108,12 @@ export const ViewFrequencyNonePage = ({
         total={listData ? listData.length : 0}
         onClick={onClick}
       />
-      {frequencyData && <></>}
+      {frequencyData && (
+        <>
+          <DialogRetrieveFrequency frequency={frequencyData} getData={list} />
+          <DialogDeleteFrequency frequency={frequencyData} getData={list} />
+        </>
+      )}
       <Footer />
     </LayoutBasePage>
   )
