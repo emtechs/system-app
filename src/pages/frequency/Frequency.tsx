@@ -1,9 +1,37 @@
+import { useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Checklist } from '@mui/icons-material'
 import { Chip } from '@mui/material'
-import { LayoutBasePage, TitleBasePage, Tools, Footer } from '../../shared'
-import { ViewFrequencyPage } from './view'
+import {
+  LayoutBasePage,
+  TitleBasePage,
+  Tools,
+  Footer,
+  useVerifyYear,
+} from '../../shared'
+import { TabsFrequencyPage } from './components'
+import {
+  ViewFrequencyNonePage,
+  ViewFrequencyPage,
+  ViewFrequencyYearPage,
+} from './view'
 
 export const FrequencyPage = () => {
+  const [searchParams] = useSearchParams()
+  const year_id = searchParams.get('year_id') || undefined
+  const { verifyYear } = useVerifyYear()
+
+  useEffect(() => {
+    if (year_id && year_id !== 'none') verifyYear(year_id)
+  }, [verifyYear, year_id])
+
+  if (year_id)
+    return year_id === 'none' ? (
+      <ViewFrequencyNonePage year_id={year_id} />
+    ) : (
+      <ViewFrequencyYearPage year_id={year_id} />
+    )
+
   return (
     <LayoutBasePage
       title={
@@ -17,6 +45,7 @@ export const FrequencyPage = () => {
       }
       tools={<Tools isHome isSearch isReset />}
     >
+      <TabsFrequencyPage value={year_id} />
       <ViewFrequencyPage />
       <Footer />
     </LayoutBasePage>

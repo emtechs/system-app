@@ -1,6 +1,5 @@
 export * from './ClassData'
 export * from './Frequency'
-export * from './History'
 export * from './Infrequency'
 export * from './Student'
 export * from './dash'

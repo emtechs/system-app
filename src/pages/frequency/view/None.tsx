@@ -1,14 +1,27 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useState, useCallback, useEffect } from 'react'
+import { Checklist, Close } from '@mui/icons-material'
+import { Chip } from '@mui/material'
 import {
-  useDebounce,
-  usePaginationContext,
+  LayoutBasePage,
+  Tools,
+  Footer,
   PaginationTable,
   apiFrequency,
   iFrequencyBase,
+  useDebounce,
+  usePaginationContext,
+  LinkChip,
+  TitleBaseItemsPage,
 } from '../../../shared'
-import { TableFrequencyPage } from '../components'
+import { TableFrequencyPage, TabsFrequencyPage } from '../components'
 
-export const ViewFrequencyPage = () => {
+interface iViewFrequencyNonePageProps {
+  year_id: string
+}
+
+export const ViewFrequencyNonePage = ({
+  year_id,
+}: iViewFrequencyNonePageProps) => {
   const { debounce } = useDebounce()
   const {
     setCount,
@@ -46,7 +59,7 @@ export const ViewFrequencyPage = () => {
 
   const define_query = useCallback(
     (comp: string) => {
-      return '?by=asc' + comp + query_page()
+      return '?is_active=false' + comp + query_page()
     },
     [query_page],
   )
@@ -64,7 +77,24 @@ export const ViewFrequencyPage = () => {
   }, [define_query, search])
 
   return (
-    <>
+    <LayoutBasePage
+      title={
+        <TitleBaseItemsPage>
+          <LinkChip
+            label="Frequências"
+            icon={<Checklist sx={{ mr: 0.5 }} fontSize="inherit" />}
+            to="/frequency"
+          />
+          <Chip
+            label="Em Aberto"
+            color="primary"
+            icon={<Close sx={{ mr: 0.5 }} fontSize="inherit" />}
+          />
+        </TitleBaseItemsPage>
+      }
+      tools={<Tools isHome isSearch isReset />}
+    >
+      <TabsFrequencyPage value={year_id} />
       <TableFrequencyPage
         listData={listData}
         handleFrequency={handleFrequency}
@@ -74,6 +104,7 @@ export const ViewFrequencyPage = () => {
         onClick={onClick}
       />
       {frequencyData && <></>}
-    </>
+      <Footer />
+    </LayoutBasePage>
   )
 }

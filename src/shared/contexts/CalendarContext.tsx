@@ -5,7 +5,7 @@ import {
   useContext,
   useState,
 } from 'react'
-import { iCalendar, iChildren, iSelectBase } from '../interfaces'
+import { iCalendar, iChildren, iMonth, iSelectBase } from '../interfaces'
 import dayjs, { Dayjs } from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import 'dayjs/locale/pt-br'
@@ -22,6 +22,8 @@ interface iCalendarContextData {
   setYearSelect: Dispatch<SetStateAction<iSelectBase | undefined>>
   yearIdSelect: string | undefined
   setYearIdSelect: Dispatch<SetStateAction<string | undefined>>
+  listMonth: iMonth[]
+  setListMonth: Dispatch<SetStateAction<iMonth[]>>
 }
 
 const CalendarContext = createContext({} as iCalendarContextData)
@@ -32,6 +34,7 @@ export const CalendarProvider = ({ children }: iChildren) => {
   const [monthData, setMonthData] = useState(dayjs().format('MMMM'))
   const [yearSelect, setYearSelect] = useState<iSelectBase>()
   const [yearIdSelect, setYearIdSelect] = useState<string>()
+  const [listMonth, setListMonth] = useState<iMonth[]>([])
 
   return (
     <CalendarContext.Provider
@@ -46,6 +49,8 @@ export const CalendarProvider = ({ children }: iChildren) => {
         setYearSelect,
         setYearIdSelect,
         yearIdSelect,
+        listMonth,
+        setListMonth,
       }}
     >
       {children}

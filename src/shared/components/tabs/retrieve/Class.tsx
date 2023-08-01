@@ -1,7 +1,7 @@
-import { Checklist, Groups, Percent, Workspaces } from '@mui/icons-material'
+import { Workspaces, Groups, Checklist, Percent } from '@mui/icons-material'
 import { useParams } from 'react-router-dom'
-import { TabsBase } from '../../Base'
-import { useClassContext } from '../../../../contexts'
+import { useClassContext } from '../../../contexts'
+import { TabsBase } from '../Base'
 
 interface iTabsClassYearRetrievePageProps {
   value?: string

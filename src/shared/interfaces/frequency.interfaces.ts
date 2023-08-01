@@ -14,22 +14,23 @@ interface iUserFreq {
   cpf: string
 }
 
+interface iDataFreq {
+  id: string
+  name: string
+}
+
 export interface iFrequencyBase {
   id: string
   date: string
+  date_time: Date
   status: iStatusFrequency
   created_at: Date
   finished_at: number
   infrequency: number
   total_students: number
-  school: {
-    id: string
-    name: string
-  }
-  class: {
-    id: string
-    name: string
-  }
+  school: iDataFreq
+  class: iDataFreq
+  user: iDataFreq
 }
 
 interface iFrequencyInfreqBase extends iFrequencyBase {

@@ -8,6 +8,7 @@ interface iTabsStudentPageProps {
 
 export const TabsStudentPage = ({ value = '' }: iTabsStudentPageProps) => {
   const { listYear } = useAuthContext()
+
   return (
     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
       <Tabs value={value} variant="scrollable" scrollButtons="auto">

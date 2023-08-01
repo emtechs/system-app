@@ -4,6 +4,7 @@ import {
   iFrequencyBase,
   iFrequencyHistory,
   iFrequencyStudentsBase,
+  iMonth,
 } from '../interfaces'
 import { apiUsingNow } from './api'
 
@@ -66,6 +67,7 @@ const students = async (
 interface iList {
   total: number
   result: iFrequencyBase[]
+  months: iMonth[]
 }
 
 const list = async (query: string): Promise<iList> => {

@@ -1,27 +1,33 @@
 import { Box, Tabs, Tab } from '@mui/material'
 import { Link } from 'react-router-dom'
+import { useAuthContext } from '../../../../shared'
 
 interface iTabsFrequencyPageProps {
-  value: string
-  href: string
+  value?: string
 }
 
-export const TabsFrequencyPage = ({ href, value }: iTabsFrequencyPageProps) => {
+export const TabsFrequencyPage = ({ value = '' }: iTabsFrequencyPageProps) => {
+  const { listYear } = useAuthContext()
+
   return (
     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
       <Tabs value={value} variant="scrollable" scrollButtons="auto">
+        <Tab label="Frequências" value="" component={Link} to={'/frequency'} />
         <Tab
-          label="Bimestre"
-          value="BIMESTRE"
+          label="Em Aberto"
+          value="none"
           component={Link}
-          to={`${href}?view=BIMESTRE`}
+          to="/frequency?year_id=none"
         />
-        <Tab
-          label="Semestre"
-          value="SEMESTRE"
-          component={Link}
-          to={`${href}?view=SEMESTRE`}
-        />
+        {listYear?.map((el) => (
+          <Tab
+            key={el.id}
+            label={el.year}
+            value={el.id}
+            component={Link}
+            to={`/frequency?year_id=${el.id}`}
+          />
+        ))}
       </Tabs>
     </Box>
   )

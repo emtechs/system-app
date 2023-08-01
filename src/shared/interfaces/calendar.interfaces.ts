@@ -1,3 +1,9 @@
+export interface iMonth {
+  id: string
+  name: string
+  month: number
+}
+
 export interface iYear {
   id: string
   year: string
