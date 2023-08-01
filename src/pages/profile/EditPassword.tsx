@@ -1,16 +1,33 @@
+import { Box, Button, Chip, Grid, Paper } from '@mui/material'
+import { Password } from '@mui/icons-material'
 import { FormContainer, PasswordElement } from 'react-hook-form-mui'
-import { LayoutBasePage } from '../../shared/layouts'
-import { useAuthContext, useUserContext } from '../../shared/contexts'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { userPasswordSchema } from '../../shared/schemas'
-import { Box, Button, Grid, Paper } from '@mui/material'
-import { Footer } from '../../shared/components'
+import {
+  useAuthContext,
+  useUserContext,
+  LayoutBasePage,
+  userPasswordSchema,
+  Footer,
+  LabelProfile,
+  TitleBaseItemsPage,
+} from '../../shared'
 
 export const EditPasswordPage = () => {
   const { userData } = useAuthContext()
   const { editPassword } = useUserContext()
   return (
-    <LayoutBasePage title="Editar Senha">
+    <LayoutBasePage
+      title={
+        <TitleBaseItemsPage>
+          <LabelProfile />
+          <Chip
+            label="Editar Senha"
+            color="primary"
+            icon={<Password sx={{ mr: 0.5 }} fontSize="inherit" />}
+          />
+        </TitleBaseItemsPage>
+      }
+    >
       <FormContainer
         onSuccess={(data) => {
           if (userData) editPassword(userData.id, data)

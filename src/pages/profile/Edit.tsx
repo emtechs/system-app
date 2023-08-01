@@ -1,16 +1,38 @@
+import { Box, Button, Chip, Grid, Paper } from '@mui/material'
+import { Outlet, useParams } from 'react-router-dom'
 import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
-import { LayoutBasePage } from '../../shared/layouts'
-import { useAuthContext, useUserContext } from '../../shared/contexts'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { userUpdateSchema } from '../../shared/schemas'
-import { Box, Button, Grid, Paper } from '@mui/material'
-import { Footer } from '../../shared/components'
+import {
+  useAuthContext,
+  useUserContext,
+  LayoutBasePage,
+  userUpdateSchema,
+  Footer,
+  LabelProfile,
+  TitleBaseItemsPage,
+} from '../../shared'
+import { Edit } from '@mui/icons-material'
 
 export const EditProfilePage = () => {
+  const { view } = useParams()
   const { userData } = useAuthContext()
   const { updateUser } = useUserContext()
+
+  if (view) return <Outlet />
+
   return (
-    <LayoutBasePage title="Editar Perfil">
+    <LayoutBasePage
+      title={
+        <TitleBaseItemsPage>
+          <LabelProfile />
+          <Chip
+            label="Editar Perfil"
+            color="primary"
+            icon={<Edit sx={{ mr: 0.5 }} fontSize="inherit" />}
+          />
+        </TitleBaseItemsPage>
+      }
+    >
       <FormContainer
         defaultValues={{
           name: userData ? userData.name : '',

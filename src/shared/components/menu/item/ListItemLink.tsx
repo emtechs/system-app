@@ -6,25 +6,29 @@ import {
 } from '@mui/material'
 import { ReactNode } from 'react'
 import { useLocation, Link } from 'react-router-dom'
-import { useDrawerContext } from '../../../contexts'
 
 interface iListItemLinkProps {
   icon: ReactNode
   label: string
   to: string
+  onClick?: () => void
 }
 
-export const ListItemLink = ({ icon, label, to }: iListItemLinkProps) => {
+export const ListItemLink = ({
+  icon,
+  label,
+  to,
+  onClick,
+}: iListItemLinkProps) => {
   const theme = useTheme()
   const location = useLocation()
-  const { handleClickButton } = useDrawerContext()
   const normalizeTo = to.split('?')[0]
 
   return (
     <ListItemButton
       autoFocus={true}
-      onClick={handleClickButton}
-      selected={location.pathname === `/${normalizeTo}`}
+      onClick={onClick}
+      selected={location.pathname === `${normalizeTo}`}
       sx={{ pl: theme.spacing(4) }}
       component={Link}
       to={to}

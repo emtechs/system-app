@@ -24,7 +24,6 @@ import {
   useAuthContext,
   useSchoolContext,
   useCalendarContext,
-  useDrawerContext,
   usePaginationContext,
   iDashSchool,
   iHeadCell,
@@ -93,7 +92,6 @@ export const ViewFrequencyDayPage = () => {
   const { yearData } = useAuthContext()
   const { schoolSelect } = useSchoolContext()
   const { dateData, monthData } = useCalendarContext()
-  const { handleClickSchool } = useDrawerContext()
   const { setIsLoading, query_page, setCount } = usePaginationContext()
   const [infoSchool, setInfoSchool] = useState<iDashSchool>()
   const [listClassData, setListClassData] = useState<iClassDash[]>()
@@ -224,7 +222,6 @@ export const ViewFrequencyDayPage = () => {
                         quant={infoSchool.classTotal}
                         info={infoSchool.classTotal === 1 ? 'Turma' : 'Turmas'}
                         dest={`/${schoolSelect?.id}/class`}
-                        onClick={handleClickSchool}
                       />
                       {infoSchool.frequencyOpen !== 0 ? (
                         <GridDashContent
@@ -243,7 +240,6 @@ export const ViewFrequencyDayPage = () => {
                           quant={infoSchool.stundents}
                           info={infoSchool.stundents === 1 ? 'Aluno' : 'Alunos'}
                           dest={`/${schoolSelect?.id}/student`}
-                          onClick={handleClickSchool}
                         />
                       )}
                       <GridDashContent

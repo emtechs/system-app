@@ -1,9 +1,5 @@
 import { TableCell, TableRow } from '@mui/material'
-import {
-  useAppThemeContext,
-  useDrawerContext,
-  useFrequencyContext,
-} from '../../../contexts'
+import { useAppThemeContext, useFrequencyContext } from '../../../contexts'
 import { iFrequencyStudentsBase, iHeadCell } from '../../../interfaces'
 import { TableBase } from '../../table'
 import { DialogBaseChildrenAction } from '../structure'
@@ -52,7 +48,6 @@ export const DialogFinishFrequency = ({
   students,
 }: iDialogFinishFrequencyProps) => {
   const { updateFrequency } = useFrequencyContext()
-  const { handleClickButtonTools } = useDrawerContext()
 
   const action = () => {
     updateFrequency(
@@ -62,7 +57,6 @@ export const DialogFinishFrequency = ({
       },
       frequency_id,
     )
-    handleClickButtonTools()
     onClose()
   }
 

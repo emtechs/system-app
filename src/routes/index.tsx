@@ -2,6 +2,8 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import {
   ClassPage,
   DashboardSchoolPage,
+  EditPasswordPage,
+  EditProfilePage,
   FrequencyDayPage,
   FrequencyPage,
   HomePage,
@@ -60,6 +62,9 @@ const AppRoutes = () => {
         </Route>
         <Route path="/:school_id" element={<DashboardSchoolPage />}>
           <Route path=":view" element={<ViewDashboardSchoolPage />} />
+        </Route>
+        <Route path="/profile/edit" element={<EditProfilePage />}>
+          <Route path=":view" element={<EditPasswordPage />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" />} />

@@ -3,7 +3,6 @@ import {
   useAuthContext,
   useCalendarContext,
   useClassContext,
-  useDrawerContext,
   useSchoolContext,
 } from '../../../shared/contexts'
 import {
@@ -45,7 +44,6 @@ export const StudentFrequencyPage = () => {
   const { theme, setLoading } = useAppThemeContext()
   const { yearData } = useAuthContext()
   const { schoolRetrieve } = useSchoolContext()
-  const { handleClickSchool, handleClickButtonTools } = useDrawerContext()
   const { monthData } = useCalendarContext()
   const { classWithSchoolSelect } = useClassContext()
   const [infoClass, setInfoClass] = useState<iDashClass>()
@@ -71,13 +69,7 @@ export const StudentFrequencyPage = () => {
     <LayoutBasePage
       title={
         <Breadcrumbs aria-label="breadcrumb">
-          <Link
-            underline="none"
-            color="inherit"
-            component={RouterLink}
-            to="/"
-            onClick={handleClickButtonTools}
-          >
+          <Link underline="none" color="inherit" component={RouterLink} to="/">
             <Chip
               clickable
               color="primary"
@@ -145,7 +137,6 @@ export const StudentFrequencyPage = () => {
                           quant={infoClass.stundents}
                           info="Alunos"
                           dest="/school/student"
-                          onClick={handleClickSchool}
                         />
                       )}
                       <GridDashContent
@@ -157,7 +148,6 @@ export const StudentFrequencyPage = () => {
                         }
                         info="Infrequência"
                         dest="/school/class"
-                        onClick={handleClickSchool}
                       />
                     </>
                   )}

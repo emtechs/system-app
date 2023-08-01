@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import {
   useAuthContext,
   useCalendarContext,
-  useDrawerContext,
   usePaginationContext,
   useSchoolContext,
 } from '../../contexts'
@@ -25,7 +24,6 @@ export const CalendarSelect = ({ onClick }: iCalendarSelectProps) => {
   const { yearData } = useAuthContext()
   const { schoolSelect } = useSchoolContext()
   const { monthData, setEventData, setDateData } = useCalendarContext()
-  const { handleClickFrequency } = useDrawerContext()
   const { query } = usePaginationContext()
   const [loading, setLoading] = useState(false)
 
@@ -65,7 +63,6 @@ export const CalendarSelect = ({ onClick }: iCalendarSelectProps) => {
             setDateData(dayjs(arg.event.start))
             navigate('/frequency')
           }
-          handleClickFrequency()
         }}
         handleFrequency={onClick}
       />

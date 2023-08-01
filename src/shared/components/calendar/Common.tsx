@@ -3,7 +3,6 @@ import {
   useAppThemeContext,
   useAuthContext,
   useCalendarContext,
-  useDrawerContext,
   usePaginationContext,
   useSchoolContext,
 } from '../../contexts'
@@ -26,7 +25,6 @@ export const CalendarDashCommon = ({ onClick }: iCalendarDashCommonProps) => {
   const { yearData } = useAuthContext()
   const { schoolSelect } = useSchoolContext()
   const { monthData, setEventData, setDateData } = useCalendarContext()
-  const { handleClickFrequency } = useDrawerContext()
   const { query } = usePaginationContext()
 
   useEffect(() => {
@@ -64,7 +62,6 @@ export const CalendarDashCommon = ({ onClick }: iCalendarDashCommonProps) => {
           setDateData(dayjs(arg.event.start))
           navigate('/frequency')
         }
-        handleClickFrequency()
       }}
       handleFrequency={onClick}
     />

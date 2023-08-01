@@ -3,7 +3,6 @@ import { Footer, TableBase } from '../../../shared/components'
 import {
   useAppThemeContext,
   useAuthContext,
-  useDrawerContext,
   usePaginationContext,
   useSchoolContext,
 } from '../../../shared/contexts'
@@ -63,7 +62,6 @@ export const ListFrequencyCommon = () => {
   const { mdDown } = useAppThemeContext()
   const { yearData } = useAuthContext()
   const { schoolRetrieve } = useSchoolContext()
-  const { handleClickButtonTools } = useDrawerContext()
   const { setCount, setIsLoading, query } = usePaginationContext()
   const [data, setData] = useState<iFrequency[]>()
 
@@ -115,13 +113,7 @@ export const ListFrequencyCommon = () => {
     <LayoutBasePage
       title={
         <Breadcrumbs aria-label="breadcrumb">
-          <Link
-            underline="none"
-            color="inherit"
-            component={RouterLink}
-            to="/"
-            onClick={handleClickButtonTools}
-          >
+          <Link underline="none" color="inherit" component={RouterLink} to="/">
             <Chip
               clickable
               color="primary"

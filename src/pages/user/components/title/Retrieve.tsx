@@ -1,25 +1,15 @@
 import { Breadcrumbs, Chip, Link } from '@mui/material'
-import {
-  useAppThemeContext,
-  useDrawerContext,
-} from '../../../../shared/contexts'
+import { useAppThemeContext } from '../../../../shared/contexts'
 import { LabelUser } from '../../../../shared/components'
 import { Home, People } from '@mui/icons-material'
 import { Link as RouterLink } from 'react-router-dom'
 
 export const TitleRetrieveUser = () => {
   const { mdDown } = useAppThemeContext()
-  const { handleClickButtonTools } = useDrawerContext()
 
   return (
     <Breadcrumbs maxItems={mdDown ? 2 : undefined} aria-label="breadcrumb">
-      <Link
-        underline="none"
-        color="inherit"
-        component={RouterLink}
-        to="/"
-        onClick={handleClickButtonTools}
-      >
+      <Link underline="none" color="inherit" component={RouterLink} to="/">
         <Chip
           clickable
           color="primary"

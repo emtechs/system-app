@@ -2,11 +2,7 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { EventClickArg } from '@fullcalendar/core/index.js'
-import {
-  useAuthContext,
-  useCalendarContext,
-  useDrawerContext,
-} from '../../contexts'
+import { useAuthContext, useCalendarContext } from '../../contexts'
 import { FieldValues } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
@@ -36,7 +32,6 @@ export const CalendarBase = ({
 }: iCalendarBaseProps) => {
   const navigate = useNavigate()
   const { yearData } = useAuthContext()
-  const { handleClickFrequency } = useDrawerContext()
   const { eventData, setDateData, monthData, setMonthData } =
     useCalendarContext()
 
@@ -103,10 +98,7 @@ export const CalendarBase = ({
             setDateData(dayjs(arg.date))
             if (handleFrequency) {
               handleFrequency()
-            } else {
-              handleClickFrequency()
-              navigate('/frequency')
-            }
+            } else navigate('/frequency')
           }
         }
       }}

@@ -8,11 +8,7 @@ import {
   School,
   Workspaces,
 } from '@mui/icons-material'
-import {
-  useAppThemeContext,
-  useAuthContext,
-  useDrawerContext,
-} from '../../contexts'
+import { useAppThemeContext, useAuthContext } from '../../contexts'
 import { iUserDash } from '../../interfaces'
 import { apiUsingNow } from '../../services'
 import { GridDashContent } from './GridDashContent'
@@ -21,8 +17,6 @@ import { GridDashOrgan } from './Organ'
 export const GridDashAdmin = () => {
   const { setLoading } = useAppThemeContext()
   const { yearData } = useAuthContext()
-  const { handleClickStudent, handleClickFrequency, handleClickUser } =
-    useDrawerContext()
   const [userDashData, setUserDashData] = useState<iUserDash>()
 
   useEffect(() => {
@@ -61,21 +55,18 @@ export const GridDashAdmin = () => {
           quant={userDashData.countFrequency}
           info="Frequências"
           dest="/frequency/list"
-          onClick={handleClickFrequency}
         />
         <GridDashContent
           icon={<People fontSize="large" />}
           quant={userDashData.countServer}
           info="Servidores"
           dest="/user?role=SERV"
-          onClick={handleClickUser}
         />
         <GridDashContent
           icon={<Close fontSize="large" />}
           quant={userDashData.countNotClass}
           info="Não enturmados"
           dest="/student/year/none"
-          onClick={handleClickStudent}
         />
         <GridDashOrgan />
       </Grid>

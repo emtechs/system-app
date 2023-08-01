@@ -17,7 +17,7 @@ import {
   MenuItem,
 } from '@mui/material'
 import { useAuthContext, useDrawerContext } from '../../../../contexts'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 interface iMenuBaseProps {
   anchorEl: HTMLElement | null
@@ -38,7 +38,7 @@ export const MenuUserMdDown = ({
 }: iMenuBaseProps) => {
   const navigate = useNavigate()
   const { logout } = useAuthContext()
-  const { handleDisplayDash } = useDrawerContext()
+  const { handleDisplayDash, handleClickProfile } = useDrawerContext()
   return (
     <Menu
       sx={{ mt: '45px' }}
@@ -78,13 +78,21 @@ export const MenuUserMdDown = ({
       </MenuItem>
       <Collapse in={open}>
         <List component="div">
-          <ListItemButton onClick={handleClose}>
+          <ListItemButton
+            component={Link}
+            to="/profile/edit"
+            onClick={handleClickProfile}
+          >
             <ListItemIcon>
               <Edit />
             </ListItemIcon>
             <ListItemText primary="Editar Perfil" />
           </ListItemButton>
-          <ListItemButton onClick={handleClose}>
+          <ListItemButton
+            component={Link}
+            to="/profile/edit/password"
+            onClick={handleClickProfile}
+          >
             <ListItemIcon>
               <Password />
             </ListItemIcon>

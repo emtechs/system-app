@@ -3,7 +3,6 @@ import {
   useAuthContext,
   useCalendarContext,
   useClassContext,
-  useDrawerContext,
   useSchoolContext,
 } from '../../../shared/contexts'
 import { Box, Card, CardContent, Grid, Paper } from '@mui/material'
@@ -26,7 +25,6 @@ export const CreateFrequencyAdm = () => {
   const { theme, setLoading } = useAppThemeContext()
   const { yearData } = useAuthContext()
   const { schoolRetrieve } = useSchoolContext()
-  const { handleClickSchool } = useDrawerContext()
   const { monthData } = useCalendarContext()
   const { classWithSchoolSelect } = useClassContext()
   const [infoClass, setInfoClass] = useState<iDashClass>()
@@ -97,7 +95,6 @@ export const CreateFrequencyAdm = () => {
                           quant={infoClass.stundents}
                           info="Alunos"
                           dest="/school/student"
-                          onClick={handleClickSchool}
                         />
                       )}
                       <GridDashContent
@@ -109,7 +106,6 @@ export const CreateFrequencyAdm = () => {
                         }
                         info="Infrequência"
                         dest="/school/class"
-                        onClick={handleClickSchool}
                       />
                     </>
                   )}

@@ -9,7 +9,6 @@ import {
 import { Footer, TableBase } from '../../../shared/components'
 import {
   useAppThemeContext,
-  useDrawerContext,
   useFrequencyContext,
   usePaginationContext,
   useSchoolContext,
@@ -73,7 +72,6 @@ export const ListStudentFrequencyPage = () => {
   const id = searchParams.get('id')
   const { schoolRetrieve } = useSchoolContext()
   const { dataStudents, setDataStudents } = useFrequencyContext()
-  const { handleClickButtonTools } = useDrawerContext()
   const { setIsLoading, query, setCount } = usePaginationContext()
   const [dataFrequency, setDataFrequency] = useState<iFrequencyBase>()
 
@@ -104,13 +102,7 @@ export const ListStudentFrequencyPage = () => {
     <LayoutBasePage
       title={
         <Breadcrumbs aria-label="breadcrumb">
-          <Link
-            underline="none"
-            color="inherit"
-            component={RouterLink}
-            to="/"
-            onClick={handleClickButtonTools}
-          >
+          <Link underline="none" color="inherit" component={RouterLink} to="/">
             <Chip
               clickable
               color="primary"

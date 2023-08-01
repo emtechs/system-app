@@ -1,6 +1,6 @@
 import { Box, Grid, Typography } from '@mui/material'
 import { Checklist, Group, School } from '@mui/icons-material'
-import { useDrawerContext, useSchoolContext } from '../../contexts'
+import { useSchoolContext } from '../../contexts'
 import { GridDashContent } from './GridDashContent'
 import { GridDashOrgan } from './Organ'
 import { CardSchool } from '../card'
@@ -11,7 +11,6 @@ dayjs.extend(localizedFormat)
 
 export const GridDashSchoolAdmin = () => {
   const { schoolRetrieve } = useSchoolContext()
-  const { handleClickFrequency } = useDrawerContext()
 
   return (
     schoolRetrieve && (
@@ -48,7 +47,6 @@ export const GridDashSchoolAdmin = () => {
               schoolRetrieve.frequencies === 1 ? 'Frequência' : 'Frequências'
             }
             dest="/frequency/list"
-            onClick={handleClickFrequency}
           />
           <GridDashContent
             icon={<School fontSize="large" />}

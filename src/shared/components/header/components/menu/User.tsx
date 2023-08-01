@@ -1,5 +1,7 @@
 import { Edit, Password } from '@mui/icons-material'
 import { ListItemIcon, Menu, MenuItem } from '@mui/material'
+import { useDrawerContext } from '../../../..'
+import { Link } from 'react-router-dom'
 
 interface iMenuBaseProps {
   anchorEl: HTMLElement | null
@@ -7,6 +9,8 @@ interface iMenuBaseProps {
 }
 
 export const MenuUser = ({ anchorEl, handleClose }: iMenuBaseProps) => {
+  const { handleClickProfile } = useDrawerContext()
+
   return (
     <Menu
       sx={{ mt: '45px' }}
@@ -23,13 +27,21 @@ export const MenuUser = ({ anchorEl, handleClose }: iMenuBaseProps) => {
       open={Boolean(anchorEl)}
       onClose={handleClose}
     >
-      <MenuItem onClick={handleClose}>
+      <MenuItem
+        component={Link}
+        to="/profile/edit"
+        onClick={handleClickProfile}
+      >
         <ListItemIcon>
           <Edit />
         </ListItemIcon>
         Editar Perfil
       </MenuItem>
-      <MenuItem onClick={handleClose}>
+      <MenuItem
+        component={Link}
+        to="/profile/edit/password"
+        onClick={handleClickProfile}
+      >
         <ListItemIcon>
           <Password />
         </ListItemIcon>
