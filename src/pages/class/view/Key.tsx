@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useVerifyClassKey } from '../../../shared'
-import { ViewClassStudentPage } from '../view'
+import { ViewClassStudentPage } from './Student'
 
 export const ViewClassKeyPage = () => {
   const { view: key } = useParams()

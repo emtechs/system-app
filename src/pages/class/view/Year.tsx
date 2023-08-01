@@ -1,10 +1,19 @@
-import { useCallback, useEffect, useState } from 'react'
-import { iClass } from '../../../shared/interfaces'
-import { apiClass } from '../../../shared/services'
-import { usePaginationContext } from '../../../shared/contexts'
-import { TableClassYearPage } from '../components'
-import { useDebounce } from '../../../shared/hooks'
-import { PaginationTable } from '../../../shared/components'
+import { useState, useCallback, useEffect } from 'react'
+import {
+  useDebounce,
+  usePaginationContext,
+  iClass,
+  apiClass,
+  LayoutBasePage,
+  Tools,
+  PaginationTable,
+  Footer,
+  LabelYear,
+  LinkChip,
+  TitleBaseItemsPage,
+} from '../../../shared'
+import { TabsClassPage, TableClassYearPage } from '../components'
+import { Workspaces } from '@mui/icons-material'
 
 interface iViewClassYearPageProps {
   year_id: string
@@ -62,12 +71,26 @@ export const ViewClassYearPage = ({ year_id }: iViewClassYearPageProps) => {
   }, [define_query, search])
 
   return (
-    <>
+    <LayoutBasePage
+      title={
+        <TitleBaseItemsPage>
+          <LinkChip
+            label="Turmas"
+            icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
+            to="/class"
+          />
+          <LabelYear />
+        </TitleBaseItemsPage>
+      }
+      tools={<Tools isHome isSearch isNew titleNew="Nova" isReset />}
+    >
+      <TabsClassPage value={year_id} />
       <TableClassYearPage listData={listData} />
       <PaginationTable
         total={listData ? listData.length : 0}
         onClick={onClick}
       />
-    </>
+      <Footer />
+    </LayoutBasePage>
   )
 }

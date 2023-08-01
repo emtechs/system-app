@@ -1,20 +1,25 @@
+import sortArray from 'sort-array'
 import { useMemo } from 'react'
 import { TableRow, TableCell, IconButton, Tooltip } from '@mui/material'
 import { Workspaces } from '@mui/icons-material'
 import { TableBase } from '../../../../shared/components'
 import { iHeadCell, iStudent } from '../../../../shared/interfaces'
-import { useDialogContext } from '../../../../shared/contexts'
+import {
+  useDialogContext,
+  usePaginationContext,
+} from '../../../../shared/contexts'
 
 interface iTableStudentPageProps {
-  data: iStudent[]
+  listData: iStudent[]
   handleStudent: (newStudent: iStudent) => void
 }
 
 export const TableStudentNonePage = ({
-  data,
+  listData,
   handleStudent,
 }: iTableStudentPageProps) => {
   const { handleOpenEdit } = useDialogContext()
+  const { order, by } = usePaginationContext()
 
   const headCells: iHeadCell[] = useMemo(() => {
     return [
@@ -23,6 +28,10 @@ export const TableStudentNonePage = ({
       { numeric: 'left', label: 'Ações' },
     ]
   }, [])
+
+  const data = useMemo(() => {
+    return sortArray<iStudent>(listData, { by: order, order: by })
+  }, [by, listData, order])
 
   return (
     <TableBase headCells={headCells}>

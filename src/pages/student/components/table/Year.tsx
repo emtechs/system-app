@@ -1,19 +1,26 @@
 import { useMemo } from 'react'
 import { TableRow, TableCell } from '@mui/material'
-import { useAppThemeContext } from '../../../../shared/contexts'
-import { iHeadCell, iStudent } from '../../../../shared/interfaces'
-import { ActionsStudent, TableBase } from '../../../../shared/components'
+import sortArray from 'sort-array'
+import {
+  iStudent,
+  useAppThemeContext,
+  usePaginationContext,
+  iHeadCell,
+  TableBase,
+  ActionsStudent,
+} from '../../../../shared'
 
 interface iTableStudentYearPageProps {
-  data: iStudent[]
+  listData: iStudent[]
   handleStudent: (newStudent: iStudent) => void
 }
 
 export const TableStudentYearPage = ({
-  data,
+  listData,
   handleStudent,
 }: iTableStudentYearPageProps) => {
   const { mdDown } = useAppThemeContext()
+  const { order, by } = usePaginationContext()
 
   const headCells: iHeadCell[] = useMemo(() => {
     if (mdDown)
@@ -30,6 +37,31 @@ export const TableStudentYearPage = ({
       { numeric: 'left', label: 'Ações' },
     ]
   }, [mdDown])
+
+  const data = useMemo(() => {
+    let listStundet: iStudent[]
+
+    if (order === 'school_name')
+      listStundet = sortArray<iStudent>(listData, {
+        by: order,
+        order: by,
+        computed: { school_name: (row) => row.school.name },
+      })
+
+    if (order === 'class_name')
+      listStundet = sortArray<iStudent>(listData, {
+        by: order,
+        order: by,
+        computed: { class_name: (row) => row.class.name },
+      })
+
+    listStundet = sortArray<iStudent>(listData, {
+      by: order,
+      order: by,
+    })
+
+    return listStundet
+  }, [by, listData, order])
 
   return (
     <TableBase headCells={headCells}>

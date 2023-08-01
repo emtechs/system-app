@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useParams, Outlet } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { Groups } from '@mui/icons-material'
 import { Chip } from '@mui/material'
 import {
@@ -7,21 +7,30 @@ import {
   LayoutBasePage,
   TitleBasePage,
   Tools,
-  TabsStudentYearPage,
   Footer,
 } from '../../shared'
-import { ViewStudentPage } from './view'
-import { StudentNonePage } from './None'
+import {
+  ViewStudentNonePage,
+  ViewStudentPage,
+  ViewStudentYearPage,
+} from './view'
+import { TabsStudentPage } from './components'
 
 export const StudentPage = () => {
-  const { year_id } = useParams()
+  const [searchParams] = useSearchParams()
+  const year_id = searchParams.get('year_id') || undefined
   const { verifyYear } = useVerifyYear()
 
   useEffect(() => {
     if (year_id && year_id !== 'none') verifyYear(year_id)
   }, [verifyYear, year_id])
 
-  if (year_id) return year_id === 'none' ? <StudentNonePage /> : <Outlet />
+  if (year_id)
+    return year_id === 'none' ? (
+      <ViewStudentNonePage />
+    ) : (
+      <ViewStudentYearPage year_id={year_id} />
+    )
 
   return (
     <LayoutBasePage
@@ -34,19 +43,9 @@ export const StudentPage = () => {
           />
         </TitleBasePage>
       }
-      tools={
-        <Tools
-          isHome
-          isSearch
-          isDirector
-          isActive
-          isNew
-          titleNew="Nova"
-          isReset
-        />
-      }
+      tools={<Tools isHome isSearch isNew isReset />}
     >
-      <TabsStudentYearPage />
+      <TabsStudentPage />
       <ViewStudentPage />
       <Footer />
     </LayoutBasePage>

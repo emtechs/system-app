@@ -1,26 +1,32 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Groups } from '@mui/icons-material'
+import { useState, useCallback, useEffect } from 'react'
 import {
+  useDebounce,
+  usePaginationContext,
+  iStudent,
+  apiStudent,
+  LayoutBasePage,
+  TitleBaseItemsPage,
+  LinkChip,
+  LabelYear,
+  Tools,
+  PaginationTable,
   DialogRemoveStudent,
   DialogTransferStudent,
-  PaginationTable,
-} from '../../../shared/components'
-import { iStudent } from '../../../shared/interfaces'
-import { apiStudent } from '../../../shared/services'
-import { usePaginationContext } from '../../../shared/contexts'
-import { TableStudentYearPage } from '../components'
-import sortArray from 'sort-array'
-import { useDebounce } from '../../../shared/hooks'
-import { useParams } from 'react-router-dom'
+  Footer,
+} from '../../../shared'
+import { TabsStudentPage, TableStudentYearPage } from '../components'
 
-export const ViewStudentYearPage = () => {
-  const { year_id } = useParams()
+interface iViewStudentYearPageProps {
+  year_id: string
+}
+
+export const ViewStudentYearPage = ({ year_id }: iViewStudentYearPageProps) => {
   const { debounce } = useDebounce()
   const {
     setCount,
     setIsLoading,
     search,
-    order,
-    by,
     setFace,
     query_page,
     handleFace,
@@ -71,34 +77,22 @@ export const ViewStudentYearPage = () => {
     } else getStudent(define_query(query_data))
   }, [define_query, search])
 
-  const data = useMemo(() => {
-    let listStundet: iStudent[]
-
-    if (order === 'school_name')
-      listStundet = sortArray<iStudent>(listData, {
-        by: order,
-        order: by,
-        computed: { school_name: (row) => row.school.name },
-      })
-
-    if (order === 'class_name')
-      listStundet = sortArray<iStudent>(listData, {
-        by: order,
-        order: by,
-        computed: { class_name: (row) => row.class.name },
-      })
-
-    listStundet = sortArray<iStudent>(listData, {
-      by: order,
-      order: by,
-    })
-
-    return listStundet
-  }, [by, listData, order])
-
   return (
-    <>
-      <TableStudentYearPage data={data} handleStudent={handleStudent} />
+    <LayoutBasePage
+      title={
+        <TitleBaseItemsPage>
+          <LinkChip
+            label="Alunos"
+            icon={<Groups sx={{ mr: 0.5 }} fontSize="inherit" />}
+            to="/student"
+          />
+          <LabelYear />
+        </TitleBaseItemsPage>
+      }
+      tools={<Tools isHome isSearch isNew titleNew="Nova" isReset />}
+    >
+      <TabsStudentPage value={year_id} />
+      <TableStudentYearPage listData={listData} handleStudent={handleStudent} />
       <PaginationTable
         total={listData ? listData.length : 0}
         onClick={onClick}
@@ -107,6 +101,7 @@ export const ViewStudentYearPage = () => {
       {studentData && (
         <DialogTransferStudent student={studentData} list={list} />
       )}
-    </>
+      <Footer />
+    </LayoutBasePage>
   )
 }

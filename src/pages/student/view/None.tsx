@@ -1,11 +1,21 @@
-import sortArray from 'sort-array'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAuthContext, usePaginationContext } from '../../../shared/contexts'
-import { useDebounce } from '../../../shared/hooks'
-import { iStudent } from '../../../shared/interfaces'
-import { apiStudent } from '../../../shared/services'
-import { DialogGroupStudent, PaginationTable } from '../../../shared/components'
-import { TableStudentNonePage } from '../components'
+import { Close, Groups } from '@mui/icons-material'
+import { Chip } from '@mui/material'
+import { useState, useCallback, useEffect } from 'react'
+import {
+  useDebounce,
+  useAuthContext,
+  usePaginationContext,
+  iStudent,
+  apiStudent,
+  LayoutBasePage,
+  TitleBaseItemsPage,
+  LinkChip,
+  Tools,
+  PaginationTable,
+  DialogGroupStudent,
+  Footer,
+} from '../../../shared'
+import { TabsStudentPage, TableStudentNonePage } from '../components'
 
 export const ViewStudentNonePage = () => {
   const { debounce } = useDebounce()
@@ -13,8 +23,6 @@ export const ViewStudentNonePage = () => {
   const {
     setCount,
     setIsLoading,
-    order,
-    by,
     search,
     setFace,
     query_page,
@@ -66,18 +74,32 @@ export const ViewStudentNonePage = () => {
     } else getStudents(define_query(query_data))
   }, [define_query, search])
 
-  const data = useMemo(() => {
-    return sortArray<iStudent>(listData, { by: order, order: by })
-  }, [by, listData, order])
-
   return (
-    <>
-      <TableStudentNonePage data={data} handleStudent={handleStudent} />
+    <LayoutBasePage
+      title={
+        <TitleBaseItemsPage>
+          <LinkChip
+            label="Alunos"
+            icon={<Groups sx={{ mr: 0.5 }} fontSize="inherit" />}
+            to="/student"
+          />
+          <Chip
+            color="primary"
+            label="Não Enturmados"
+            icon={<Close sx={{ mr: 0.5 }} fontSize="inherit" />}
+          />
+        </TitleBaseItemsPage>
+      }
+      tools={<Tools isHome isSearch isNew titleNew="Nova" isReset />}
+    >
+      <TabsStudentPage value="none" />
+      <TableStudentNonePage listData={listData} handleStudent={handleStudent} />
       <PaginationTable
         total={listData ? listData.length : 0}
         onClick={onClick}
       />
       {studentData && <DialogGroupStudent student={studentData} list={list} />}
-    </>
+      <Footer />
+    </LayoutBasePage>
   )
 }

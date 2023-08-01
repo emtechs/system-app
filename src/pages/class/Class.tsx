@@ -1,15 +1,17 @@
 import { useEffect } from 'react'
 import { Outlet, useParams, useSearchParams } from 'react-router-dom'
+import { Workspaces } from '@mui/icons-material'
+import { Chip } from '@mui/material'
 import {
   useVerifyClass,
   useVerifyYear,
   LayoutBasePage,
   Tools,
   Footer,
+  TitleBasePage,
 } from '../../shared'
-import { TabsClassPage, TitleClassPage, TitleClassYearPage } from './components'
-import { ViewClassPage, ViewClassYearPage } from './view'
-import { ViewClassKeyPage } from './key'
+import { TabsClassPage } from './components'
+import { ViewClassKeyPage, ViewClassPage, ViewClassYearPage } from './view'
 
 export const ClassPage = () => {
   const [searchParams] = useSearchParams()
@@ -25,13 +27,23 @@ export const ClassPage = () => {
 
   if (class_id) return class_id === 'key' ? <ViewClassKeyPage /> : <Outlet />
 
+  if (year_id) return <ViewClassYearPage year_id={year_id} />
+
   return (
     <LayoutBasePage
-      title={year_id ? <TitleClassYearPage /> : <TitleClassPage />}
+      title={
+        <TitleBasePage>
+          <Chip
+            label="Turmas"
+            color="primary"
+            icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
+          />
+        </TitleBasePage>
+      }
       tools={<Tools isHome isSearch isNew titleNew="Nova" isReset />}
     >
-      <TabsClassPage value={year_id} />
-      {year_id ? <ViewClassYearPage year_id={year_id} /> : <ViewClassPage />}
+      <TabsClassPage />
+      <ViewClassPage />
       <Footer />
     </LayoutBasePage>
   )
