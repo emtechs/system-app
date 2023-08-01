@@ -3,29 +3,27 @@ import { Outlet, useParams, useSearchParams } from 'react-router-dom'
 import {
   useVerifyClass,
   useVerifyYear,
-  useVerifyClassKey,
   LayoutBasePage,
   Tools,
   Footer,
 } from '../../shared'
 import { TabsClassPage, TitleClassPage, TitleClassYearPage } from './components'
 import { ViewClassPage, ViewClassYearPage } from './view'
+import { ViewClassKeyPage } from './key'
 
 export const ClassPage = () => {
   const [searchParams] = useSearchParams()
   const year_id = searchParams.get('year_id') || undefined
-  const { class_id, key } = useParams()
+  const { class_id } = useParams()
   const { verifyClass } = useVerifyClass()
   const { verifyYear } = useVerifyYear()
-  const { verifyClassKey } = useVerifyClassKey()
 
   useEffect(() => {
-    if (class_id) verifyClass(class_id)
+    if (class_id && class_id !== 'key') verifyClass(class_id)
     if (year_id) verifyYear(year_id)
-    if (key) verifyClassKey(key)
-  }, [class_id, key, verifyClass, verifyClassKey, verifyYear, year_id])
+  }, [class_id, verifyClass, verifyYear, year_id])
 
-  if (class_id || key) return <Outlet />
+  if (class_id) return class_id === 'key' ? <ViewClassKeyPage /> : <Outlet />
 
   return (
     <LayoutBasePage

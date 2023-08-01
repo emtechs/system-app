@@ -21,7 +21,7 @@ import {
 import { TableClassStudentPage } from '../components'
 
 export const ViewClassStudentPage = () => {
-  const { key } = useParams()
+  const { view: key } = useParams()
   const { debounce } = useDebounce()
   const { schoolSelect } = useSchoolContext()
   const { setCount, setIsLoading, search, order, by } = usePaginationContext()

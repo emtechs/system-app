@@ -59,7 +59,7 @@ export const TableClassYearPage = ({ listData }: iTableClassYearPageProps) => {
               label={el.name}
               isLoading={isLoading}
               onClick={onClickReset}
-              to={`/class/key/${el.key}/student`}
+              to={`/class/key/${el.key}?view=student`}
             />
           </TableCell>
           {!mdDown && (
@@ -74,7 +74,7 @@ export const TableClassYearPage = ({ listData }: iTableClassYearPageProps) => {
               icon={<Visibility fontSize="small" />}
               label="Detalhar"
               onClick={onClickReset}
-              to={`/class/key/${el.key}/student`}
+              to={`/class/key/${el.key}?view=student`}
             />
           </TableCell>
         </TableRow>

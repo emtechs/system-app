@@ -51,7 +51,7 @@ export const TableSchoolClassPage = ({
               label={el.name}
               isLoading={isLoading}
               onClick={onClickReset}
-              to={`/class/key/${el.key}/student`}
+              to={`/class/key/${el.key}?view=student`}
             />
           </TableCell>
           {!mdDown && (
@@ -65,7 +65,7 @@ export const TableSchoolClassPage = ({
               icon={<Visibility fontSize="small" />}
               label="Detalhar"
               onClick={onClickReset}
-              to={`/class/key/${el.key}/student`}
+              to={`/class/key/${el.key}?view=student`}
             />
           </TableCell>
         </TableRow>
