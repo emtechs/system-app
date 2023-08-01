@@ -1,12 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { usePaginationContext } from '../../../shared/contexts'
-import { useDebounce } from '../../../shared/hooks'
-import { iClass } from '../../../shared/interfaces'
 import sortArray from 'sort-array'
-import { apiClass } from '../../../shared/services'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  useDebounce,
+  usePaginationContext,
+  iClass,
+  apiClass,
+} from '../../../shared'
 import { TableClass } from '../components'
 
-export const ViewClass = () => {
+export const ViewClassPage = () => {
   const { debounce } = useDebounce()
   const { setCount, setIsLoading, query, order, by, search } =
     usePaginationContext()

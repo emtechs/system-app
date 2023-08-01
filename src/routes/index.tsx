@@ -1,9 +1,9 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import {
   ClassPage,
-  ClassYearPage,
   DashboardSchoolPage,
   FrequencyDayPage,
+  FrequencyPage,
   HomePage,
   Login,
   PeriodPage,
@@ -46,7 +46,6 @@ const AppRoutes = () => {
             <Route path="key/:key" element={<RetrieveClassKeyPage />}>
               <Route path=":view" element={<ViewClassKeyPage />} />
             </Route>
-            <Route path="year/:year_id" element={<ClassYearPage />} />
             <Route path=":class_id" element={<RetrieveClassPage />}>
               <Route path=":view" element={<ViewClassPage />} />
             </Route>
@@ -57,6 +56,7 @@ const AppRoutes = () => {
               <Route path=":view" element={<ViewSchoolPage />} />
             </Route>
           </Route>
+          <Route path="/frequency" element={<FrequencyPage />} />
           <Route path="/period" element={<PeriodPage />}>
             <Route path=":year_id" element={<RetrievePeriodPage />} />
           </Route>

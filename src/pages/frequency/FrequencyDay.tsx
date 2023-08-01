@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
-import { FrequencyPage } from './Frequency'
-import { useVerifySchool } from '../../shared/hooks'
+import { useVerifySchool } from '../../shared'
+import { ViewFrequencyDayPage } from './view'
 
 export const FrequencyDayPage = () => {
   const { school_id, frequency_id } = useParams()
@@ -13,5 +13,5 @@ export const FrequencyDayPage = () => {
 
   if (frequency_id) return <Outlet />
 
-  return <FrequencyPage />
+  return <ViewFrequencyDayPage />
 }

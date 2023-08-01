@@ -1,21 +1,20 @@
 import { useEffect } from 'react'
-import { Outlet, useParams } from 'react-router-dom'
-import { Chip } from '@mui/material'
-import { Workspaces } from '@mui/icons-material'
+import { Outlet, useParams, useSearchParams } from 'react-router-dom'
 import {
   useVerifyClass,
   useVerifyYear,
   useVerifyClassKey,
   LayoutBasePage,
-  TitleBasePage,
   Tools,
-  TabsClassYearPage,
   Footer,
 } from '../../shared'
-import { ViewClass } from './view'
+import { TabsClassPage, TitleClassPage, TitleClassYearPage } from './components'
+import { ViewClassPage, ViewClassYearPage } from './view'
 
 export const ClassPage = () => {
-  const { class_id, year_id, key } = useParams()
+  const [searchParams] = useSearchParams()
+  const year_id = searchParams.get('year_id') || undefined
+  const { class_id, key } = useParams()
   const { verifyClass } = useVerifyClass()
   const { verifyYear } = useVerifyYear()
   const { verifyClassKey } = useVerifyClassKey()
@@ -26,23 +25,15 @@ export const ClassPage = () => {
     if (key) verifyClassKey(key)
   }, [class_id, key, verifyClass, verifyClassKey, verifyYear, year_id])
 
-  if (class_id || year_id || key) return <Outlet />
+  if (class_id || key) return <Outlet />
 
   return (
     <LayoutBasePage
-      title={
-        <TitleBasePage>
-          <Chip
-            label="Turmas"
-            color="primary"
-            icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
-          />
-        </TitleBasePage>
-      }
+      title={year_id ? <TitleClassYearPage /> : <TitleClassPage />}
       tools={<Tools isHome isSearch isNew titleNew="Nova" isReset />}
     >
-      <TabsClassYearPage />
-      <ViewClass />
+      <TabsClassPage value={year_id} />
+      {year_id ? <ViewClassYearPage year_id={year_id} /> : <ViewClassPage />}
       <Footer />
     </LayoutBasePage>
   )

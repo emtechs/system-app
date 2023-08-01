@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom'
 import { useCallback, useEffect, useState } from 'react'
 import { iClass } from '../../../shared/interfaces'
 import { apiClass } from '../../../shared/services'
@@ -7,8 +6,11 @@ import { TableClassYearPage } from '../components'
 import { useDebounce } from '../../../shared/hooks'
 import { PaginationTable } from '../../../shared/components'
 
-export const ViewClassYearPage = () => {
-  const { year_id } = useParams()
+interface iViewClassYearPageProps {
+  year_id: string
+}
+
+export const ViewClassYearPage = ({ year_id }: iViewClassYearPageProps) => {
   const { debounce } = useDebounce()
   const {
     setCount,
