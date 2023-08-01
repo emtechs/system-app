@@ -11,7 +11,7 @@ interface iHomePageProps {
 
 export const HomePage = ({ isHome }: iHomePageProps) => {
   const { theme, mdDown } = useAppThemeContext()
-  const { isAuthenticated, userData } = useAuthContext()
+  const { isAuthenticated, userData, periodsUser } = useAuthContext()
 
   if (!isAuthenticated) return <Navigate to="/login" />
 
@@ -28,7 +28,7 @@ export const HomePage = ({ isHome }: iHomePageProps) => {
             spacing={mdDown ? 2 : 5}
           >
             <School />
-            <User user={userData} />
+            <User user={userData} periods={periodsUser} />
           </Grid>
         </Container>
       </Box>

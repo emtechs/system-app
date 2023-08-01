@@ -1,14 +1,17 @@
 import { Box, Divider, Grid, Paper, Typography } from '@mui/material'
-import { iUser } from '../../../shared/interfaces'
-import { useAppThemeContext } from '../../../shared/contexts'
-import { AccountBox } from '@mui/icons-material'
+import { AccountBox, Today, WavingHand } from '@mui/icons-material'
+import { iPeriod, iUser } from '../../../shared'
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import 'dayjs/locale/pt-br'
+dayjs.extend(localizedFormat)
 
 interface iUserProps {
   user?: iUser
+  periods: iPeriod[]
 }
 
-export const User = ({ user }: iUserProps) => {
-  const { theme } = useAppThemeContext()
+export const User = ({ user, periods }: iUserProps) => {
   return (
     <Grid item xs={12} md={3}>
       <Box mb={2} component={Paper}>
@@ -17,12 +20,64 @@ export const User = ({ user }: iUserProps) => {
           display="flex"
           alignItems="center"
           justifyContent="space-between"
-          height={theme.spacing(7)}
           p={1}
         >
           <Typography
             component="div"
-            variant="h6"
+            variant="body1"
+            display="flex"
+            alignItems="center"
+            gap={1}
+          >
+            <Today />
+            Período
+          </Typography>
+        </Box>
+        <Divider />
+        <Box p={1}>
+          <Typography
+            variant="subtitle2"
+            textAlign="center"
+            fontWeight="bolder"
+            mb={1}
+          >
+            {dayjs().format('dddd, LL')}
+          </Typography>
+          <Grid container px={2}>
+            <Grid
+              item
+              xs={6}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <WavingHand fontSize="large" />
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="subtitle2" textAlign="right">
+                {periods.filter((el) => el.category === 'BIMESTRE')[0].name}
+              </Typography>
+              <Typography variant="subtitle2" textAlign="right">
+                {periods.filter((el) => el.category === 'SEMESTRE')[0].name}
+              </Typography>
+              <Typography variant="subtitle2" textAlign="right">
+                {periods.filter((el) => el.category === 'ANO')[0].name}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+      <Box mb={2} component={Paper}>
+        <Box
+          width="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          p={1}
+        >
+          <Typography
+            component="div"
+            variant="body1"
             display="flex"
             alignItems="center"
             gap={1}

@@ -35,7 +35,7 @@ export const DialogCreateDirector = () => {
     <DialogBaseChildren
       open={openDirector}
       onClose={handleOpenDirector}
-      title="Novo Administrador"
+      title="Novo Diretor"
       description=""
     >
       <FormContainer

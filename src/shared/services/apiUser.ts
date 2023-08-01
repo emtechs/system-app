@@ -1,6 +1,7 @@
 import { FieldValues } from 'react-hook-form'
 import { apiUsingNow } from './api'
 import {
+  iPeriod,
   iSchool,
   iSchoolServer,
   iUser,
@@ -39,11 +40,12 @@ const retrieve = async (id: string, query: string): Promise<iUser> => {
 interface iProfileReturn {
   user: iUser
   years: iYear[]
+  periods: iPeriod[]
 }
 
-const profile = async (token: string): Promise<iProfileReturn> => {
+const profile = async (token: string, query = ''): Promise<iProfileReturn> => {
   const { data: response } = await apiUsingNow.get<iProfileReturn>(
-    'users/profile',
+    `users/profile${query}`,
     {
       headers: { Authorization: `Bearer ${token}` },
     },

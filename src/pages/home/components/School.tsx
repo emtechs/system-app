@@ -9,27 +9,33 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { School as SchoolIcon } from '@mui/icons-material'
 import {
+  PaginationBase,
+  apiUser,
+  iSelectBase,
+  iWorkSchool,
   useAppThemeContext,
   useAuthContext,
+  useDebounce,
   usePaginationContext,
-} from '../../../shared/contexts'
-import { useDebounce } from '../../../shared/hooks'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { iWorkSchool } from '../../../shared/interfaces'
-import { apiUser } from '../../../shared/services'
-import { School as SchoolIcon } from '@mui/icons-material'
+} from '../../../shared'
 import { DialogSchool } from './DialogSchool'
 import { CardSchool } from './CardSchool'
-import { PaginationBase } from '../../../shared/components'
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import 'dayjs/locale/pt-br'
+dayjs.extend(localizedFormat)
 
 export const School = () => {
   const { debounce } = useDebounce()
   const { smDown, mdDown, theme } = useAppThemeContext()
   const { yearData } = useAuthContext()
-  const { query, setCount, query_page } = usePaginationContext()
+  const { setCount, query_page } = usePaginationContext()
   const [loading, setLoading] = useState(false)
   const [search, setSearch] = useState('')
+  const [listSchoolSelect, setListSchoolSelect] = useState<iSelectBase[]>()
   const [schoolsData, setSchoolsData] = useState<iWorkSchool[]>()
   const [open, setOpen] = useState(false)
 
@@ -41,6 +47,7 @@ export const School = () => {
       .schools(query)
       .then((res) => {
         setSchoolsData(res.result)
+        setListSchoolSelect(res.schools)
         setCount(res.total)
       })
       .finally(() => setLoading(false))
@@ -54,17 +61,24 @@ export const School = () => {
     return 3
   }, [smDown, mdDown])
 
+  const query_data = useCallback(
+    (comp: string) => {
+      return `?year_id=${yearData?.id}&date=${dayjs().format(
+        'DD/MM/YYYY',
+      )}${comp}${query_page(take, true)}`
+    },
+    [query_page, take, yearData?.id],
+  )
+
   useEffect(() => {
-    if (yearData) {
-      let queryData = query(yearData.id) + query_page(take, true)
-      if (search) {
-        queryData += `&name=${search}`
-        debounce(() => {
-          getSchools(queryData)
-        })
-      } else getSchools(queryData)
-    }
-  }, [query, query_page, search, take, yearData])
+    let queryData = ''
+    if (search) {
+      queryData += `&name=${search}`
+      debounce(() => {
+        getSchools(query_data(queryData))
+      })
+    } else getSchools(query_data(queryData))
+  }, [query_data, search])
 
   return (
     <>
@@ -127,7 +141,11 @@ export const School = () => {
           <PaginationBase />
         </Box>
       </Grid>
-      <DialogSchool open={open} onClose={onClose} />
+      <DialogSchool
+        open={open}
+        onClose={onClose}
+        listSchoolSelect={listSchoolSelect}
+      />
     </>
   )
 }

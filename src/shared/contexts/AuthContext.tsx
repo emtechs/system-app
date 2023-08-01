@@ -12,6 +12,7 @@ import {
   iChildren,
   iDash,
   iLoginRequest,
+  iPeriod,
   iRecoveryPasswordRequest,
   iRecoveryRequest,
   iUser,
@@ -20,9 +21,11 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { useAppThemeContext } from './ThemeContext'
 import { apiAuth, apiCalendar, apiUser, apiUsingNow } from '../services'
-import dayjs from 'dayjs'
-import 'dayjs/locale/pt-br'
 import { AxiosError } from 'axios'
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import 'dayjs/locale/pt-br'
+dayjs.extend(localizedFormat)
 
 interface iAuthContextData {
   logout: () => void
@@ -44,6 +47,7 @@ interface iAuthContextData {
   listYear: iYear[]
   setListYear: Dispatch<SetStateAction<iYear[]>>
   profileUser: () => void
+  periodsUser: iPeriod[]
 }
 
 const AuthContext = createContext({} as iAuthContextData)
@@ -56,6 +60,7 @@ export const AuthProvider = ({ children }: iChildren) => {
   const [dashData, setDashData] = useState<iDash>()
   const [yearData, setYearData] = useState<iYear>()
   const [listYear, setListYear] = useState<iYear[]>([])
+  const [periodsUser, setPeriodsUser] = useState<iPeriod[]>([])
 
   useEffect(() => {
     const accessToken = localStorage.getItem('@EMTechs:token')
@@ -71,12 +76,13 @@ export const AuthProvider = ({ children }: iChildren) => {
     if (accessToken) {
       setLoading(true)
       apiUser
-        .profile(accessToken)
+        .profile(accessToken, `?date=${dayjs().format('DD/MM/YYYY')}`)
         .then((res) => {
           apiUsingNow.defaults.headers.authorization = `Bearer ${accessToken}`
           setUserData(res.user)
           setDashData(res.user.dash)
           setListYear(res.years)
+          setPeriodsUser(res.periods)
         })
         .catch(() => {
           localStorage.removeItem('@EMTechs:token')
@@ -184,6 +190,7 @@ export const AuthProvider = ({ children }: iChildren) => {
         listYear,
         setListYear,
         profileUser,
+        periodsUser,
       }}
     >
       {children}
