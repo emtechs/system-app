@@ -8,6 +8,7 @@ import {
   FrequencyPage,
   HomePage,
   Login,
+  PasswordPage,
   PeriodPage,
   RetrieveClassPage,
   RetrieveFrequencyPage,
@@ -28,6 +29,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/password/:userId/:token" element={<PasswordPage />} />
       <Route element={<ProtectedAuth />}>
         <Route element={<ProtectedAdmin />}>
           <Route path="/dash" element={<HomePage isHome />} />
