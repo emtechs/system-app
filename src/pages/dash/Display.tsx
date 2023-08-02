@@ -7,6 +7,7 @@ import {
   ViewDashboardSchoolReportPage,
   ViewDashboardSchoolStudentPage,
 } from './view'
+import { z } from 'zod'
 
 export const ViewDashboardSchoolPage = () => {
   const { view } = useParams()
@@ -15,7 +16,7 @@ export const ViewDashboardSchoolPage = () => {
   const { verifyYear } = useVerifyYear()
 
   useEffect(() => {
-    if (year_id && year_id !== 'none') verifyYear(year_id)
+    if (z.string().uuid().safeParse(year_id).success) verifyYear(year_id)
   }, [verifyYear, year_id])
 
   switch (view) {

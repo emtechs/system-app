@@ -65,6 +65,7 @@ export interface iTable extends iChildren {
   headCells: iHeadCell[]
   message?: string
   link?: 'div'
+  isCount?: boolean
 }
 
 export type iLocale = 'list' | 'data'

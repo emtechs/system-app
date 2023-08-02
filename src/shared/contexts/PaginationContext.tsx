@@ -44,6 +44,7 @@ interface iPaginationContextData {
   onClickReset: () => void
   director: boolean[]
   setDirector: Dispatch<SetStateAction<boolean[]>>
+  initialPage: () => void
 }
 
 const PaginationContext = createContext({} as iPaginationContextData)
@@ -169,6 +170,11 @@ export const PaginationProvider = ({ children }: iChildren) => {
     [define_take, skip],
   )
 
+  const initialPage = useCallback(() => {
+    setPage(1)
+    setSkip(undefined)
+  }, [])
+
   return (
     <PaginationContext.Provider
       value={{
@@ -197,6 +203,7 @@ export const PaginationProvider = ({ children }: iChildren) => {
         onClickReset,
         director,
         setDirector,
+        initialPage,
       }}
     >
       {children}

@@ -10,10 +10,7 @@ import {
   iChildren,
   iSelectBase,
   iUser,
-  iUserFirstRequest,
-  iUserPasswordRequest,
   iUserSecretRequest,
-  iUserUpdateRequest,
 } from '../interfaces'
 import { useNavigate } from 'react-router-dom'
 import { FieldValues } from 'react-hook-form'
@@ -22,17 +19,12 @@ import { useAppThemeContext } from './ThemeContext'
 
 interface iUserContextData {
   createSecret: (data: iUserSecretRequest, back?: string) => Promise<void>
-  editPassword: (id: string, data: iUserPasswordRequest) => Promise<void>
-  first: (id: string, data: iUserFirstRequest) => Promise<void>
-  updateUser: (id: string, data: iUserUpdateRequest) => Promise<void>
   updateAllUser: (
     id: string,
     data: FieldValues,
     is_all: boolean,
     back?: string,
   ) => Promise<void>
-  updateUserData: iUser | undefined
-  setUpdateUserData: Dispatch<SetStateAction<iUser | undefined>>
   userSelect: iSelectBase | undefined
   loadingUser: boolean
   userRetrieve: iUser | undefined
@@ -45,7 +37,6 @@ const UserContext = createContext({} as iUserContextData)
 export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
-  const [updateUserData, setUpdateUserData] = useState<iUser>()
   const [userSelect, setUserSelect] = useState<iSelectBase>()
   const [loadingUser, setLoadingUser] = useState(true)
   const [userRetrieve, setUserRetrieve] = useState<iUser>()
@@ -75,43 +66,11 @@ export const UserProvider = ({ children }: iChildren) => {
     [],
   )
 
-  const handleFirstUser = useCallback(
-    async (id: string, data: iUserFirstRequest) => {
-      try {
-        setLoading(true)
-        await apiUser.update(id, data)
-        handleSucess('Dados cadastrados com sucesso')
-        navigate('/')
-      } catch {
-        handleError('Não foi possível cadastrar os dados no momento!')
-      } finally {
-        setLoading(false)
-      }
-    },
-    [],
-  )
-
-  const handleUpdateUser = useCallback(
-    async (id: string, data: iUserUpdateRequest) => {
-      try {
-        setLoading(true)
-        await apiUser.update(id, data)
-        handleSucess('Dados alterado com sucesso')
-      } catch {
-        handleError('Não foi possível atualizar os dados no momento!')
-      } finally {
-        setLoading(false)
-      }
-    },
-    [],
-  )
-
   const handleUpdateAllUser = useCallback(
     async (id: string, data: FieldValues, is_all: boolean, back?: string) => {
       try {
         setLoading(true)
-        const user = await apiUser.update(id, data)
-        setUpdateUserData(user)
+        await apiUser.update(id, data)
         if (!is_all) handleSucess('Sucesso ao alterar o estado do usuário!')
         if (back) navigate(back)
       } catch {
@@ -126,32 +85,11 @@ export const UserProvider = ({ children }: iChildren) => {
     [],
   )
 
-  const handlePasswordUser = useCallback(
-    async (id: string, data: iUserPasswordRequest) => {
-      try {
-        setLoading(true)
-        await apiUser.update(id, data)
-        handleSucess('Senha alterada com sucesso')
-        navigate('/')
-      } catch {
-        handleError('Senha atual incorreta!')
-      } finally {
-        setLoading(false)
-      }
-    },
-    [],
-  )
-
   return (
     <UserContext.Provider
       value={{
         createSecret: handleCreateUserSecret,
-        first: handleFirstUser,
-        updateUser: handleUpdateUser,
-        editPassword: handlePasswordUser,
         updateAllUser: handleUpdateAllUser,
-        updateUserData,
-        setUpdateUserData,
         userSelect,
         loadingUser,
         userDataRetrieve,

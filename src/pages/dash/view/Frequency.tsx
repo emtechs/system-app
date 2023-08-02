@@ -1,7 +1,7 @@
 import { Checklist } from '@mui/icons-material'
 import { Box, Chip } from '@mui/material'
 import { SyntheticEvent, useCallback, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import {
   useDebounce,
   usePaginationContext,
@@ -17,6 +17,7 @@ import {
   TabsMonth,
 } from '../../../shared'
 import { TableDashboardSchoolFrequencyPage } from '../components'
+import { z } from 'zod'
 
 interface iViewDashboardSchoolFrequencyPageProps {
   year_id?: string
@@ -27,6 +28,8 @@ export const ViewDashboardSchoolFrequencyPage = ({
 }: iViewDashboardSchoolFrequencyPageProps) => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
+  const [searchParams] = useSearchParams()
+  const date = searchParams.get('date') || undefined
   const { handleListMonth, listMonth } = useCalendarContext()
   const {
     setCount,
@@ -67,15 +70,22 @@ export const ViewDashboardSchoolFrequencyPage = ({
     (comp: string) => {
       const query = `?school_id=${school_id}${comp}${query_page()}`
       if (year_id) {
-        if (year_id !== 'none')
-          return `${query}&year_id=${year_id}&month_id=${listMonth?.at(index)
-            ?.id}`
-        return `${query}&is_active=false`
+        switch (year_id) {
+          case 'none':
+            return `${query}&is_active=false`
+
+          case 'day':
+            return `${query}&date=${date}`
+
+          default:
+            return `${query}&year_id=${year_id}&month_id=${listMonth?.at(index)
+              ?.id}`
+        }
       }
 
       return query
     },
-    [index, query_page, school_id, year_id],
+    [date, index, query_page, school_id, year_id],
   )
 
   const onClick = () => getFrequency(define_query(handleFace(face)), true)
@@ -103,9 +113,14 @@ export const ViewDashboardSchoolFrequencyPage = ({
       }
       tools={<Tools isSearch isReset />}
     >
-      <TabsFrequencyPage value={year_id} href={`/${school_id}/frequency`} />
+      <TabsFrequencyPage
+        date={date}
+        value={year_id}
+        href={`/${school_id}/frequency`}
+        isSchool
+      />
       <Box display="flex" justifyContent="space-between">
-        {year_id && year_id !== 'none' && (
+        {year_id && z.string().uuid().safeParse(year_id).success && (
           <TabsMonth value={index} handleChange={handleChange} />
         )}
         <Box flex={1}>

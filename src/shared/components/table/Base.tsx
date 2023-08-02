@@ -15,7 +15,13 @@ import { iLinkComp, iTable } from '../../interfaces'
 import { TableSort } from './Sort'
 import { TableCellLink } from './CellLink'
 
-export const TableBase = ({ message, children, headCells, link }: iTable) => {
+export const TableBase = ({
+  message,
+  children,
+  headCells,
+  link,
+  isCount = true,
+}: iTable) => {
   const { isLoading, count } = usePaginationContext()
 
   const msg = useMemo(() => {
@@ -30,7 +36,7 @@ export const TableBase = ({ message, children, headCells, link }: iTable) => {
             <LinearProgress variant="indeterminate" />
           </Box>
         )
-      } else if (count === 0)
+      } else if (isCount && count === 0)
         return (
           <Box width="100%" p={2}>
             <Typography color="GrayText" variant="body2">
@@ -56,7 +62,9 @@ export const TableBase = ({ message, children, headCells, link }: iTable) => {
       <Table {...linkComp}>
         <TableSort headCells={headCells} linkComp={linkComp} link={link} />
         <TableBody {...linkComp}>{children}</TableBody>
-        {!link && count === 0 && !isLoading && <caption>{msg}</caption>}
+        {!link && isCount && count === 0 && !isLoading && (
+          <caption>{msg}</caption>
+        )}
         {!link && (
           <TableFooter>
             {isLoading && (

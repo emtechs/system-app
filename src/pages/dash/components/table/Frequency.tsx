@@ -1,13 +1,17 @@
 import sortArray from 'sort-array'
 import { useMemo } from 'react'
-import { TableRow, TableCell } from '@mui/material'
 import {
   useAppThemeContext,
   usePaginationContext,
   iHeadCell,
   TableBase,
-  ActionsDetail,
   iFrequencyBase,
+  TableRowLink,
+  useSchoolContext,
+  TableCellLink,
+  defineBgColorInfrequency,
+  ChildrenLoading,
+  TableCellLinkLoading,
 } from '../../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
@@ -22,21 +26,22 @@ interface iTableDashboardSchoolFrequencyPageProps {
 export const TableDashboardSchoolFrequencyPage = ({
   listData,
 }: iTableDashboardSchoolFrequencyPageProps) => {
-  const { mdDown } = useAppThemeContext()
-  const { order, by } = usePaginationContext()
+  const { mdDown, theme } = useAppThemeContext()
+  const { order, by, onClickReset, isLoading } = usePaginationContext()
+  const { schoolSelect } = useSchoolContext()
 
   const headCells: iHeadCell[] = useMemo(() => {
     if (mdDown)
       return [
         { order: 'date', numeric: 'left', label: 'Data' },
         { order: 'class_name', numeric: 'left', label: 'Turma' },
-        { numeric: 'left', label: 'Ações' },
+        { order: 'infrequency', numeric: 'right', label: 'Infrequência' },
       ]
     return [
       { order: 'finished_at', numeric: 'left', label: 'Finalizado' },
       { order: 'date', numeric: 'left', label: 'Data' },
       { order: 'class_name', numeric: 'left', label: 'Turma' },
-      { numeric: 'left', label: 'Ações' },
+      { order: 'infrequency', numeric: 'right', label: 'Infrequência' },
     ]
   }, [mdDown])
 
@@ -59,21 +64,50 @@ export const TableDashboardSchoolFrequencyPage = ({
   }, [by, listData, order])
 
   return (
-    <TableBase headCells={headCells}>
-      {data.map((el) => (
-        <TableRow key={el.id}>
-          {!mdDown && (
-            <TableCell>
-              {el.finished_at > 0
-                ? dayjs(el.finished_at).fromNow()
-                : 'Não Finalizado'}
-            </TableCell>
-          )}
-          <TableCell>{el.date}</TableCell>
-          <TableCell>{el.class.name}</TableCell>
-          <ActionsDetail to="" />
-        </TableRow>
-      ))}
+    <TableBase
+      headCells={headCells}
+      link="div"
+      message="Nenhuma frequência realizada"
+    >
+      {data.map((el) => {
+        const { id, status, finished_at, date, infrequency } = el
+        const href = status === 'CLOSED' ? '' : `/${schoolSelect?.id}/day/${id}`
+        return (
+          <TableRowLink key={id} href={href} onClick={onClickReset}>
+            {!mdDown && (
+              <TableCellLink link="div">
+                <ChildrenLoading isLoading={isLoading} width={100}>
+                  {status === 'CLOSED'
+                    ? dayjs(finished_at).fromNow()
+                    : 'Não Finalizado'}
+                </ChildrenLoading>
+              </TableCellLink>
+            )}
+            <TableCellLink link="div">
+              <ChildrenLoading isLoading={isLoading} width={80}>
+                {date}
+              </ChildrenLoading>
+            </TableCellLink>
+            <TableCellLink link="div">
+              <ChildrenLoading isLoading={isLoading} width={80}>
+                {el.class.name}
+              </ChildrenLoading>
+            </TableCellLink>
+            <TableCellLinkLoading width={100} isLoading={isLoading}>
+              <TableCellLink
+                link="div"
+                numeric="right"
+                sx={{
+                  color: '#fff',
+                  bgcolor: defineBgColorInfrequency(infrequency, theme),
+                }}
+              >
+                {infrequency.toFixed(0)}%
+              </TableCellLink>
+            </TableCellLinkLoading>
+          </TableRowLink>
+        )
+      })}
     </TableBase>
   )
 }

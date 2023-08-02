@@ -1,15 +1,16 @@
 import { Box, Card, CardContent, Grid, Paper } from '@mui/material'
-import { LayoutBasePage } from '../../shared/layouts'
-import {
-  CalendarDashCommon,
-  Footer,
-  GridDashSchool,
-  TitleSchoolDashPage,
-} from '../../shared/components'
-import { useAppThemeContext } from '../../shared/contexts'
 import { useEffect } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
-import { useVerifyDisplay, useVerifySchool } from '../../shared/hooks'
+import {
+  useAppThemeContext,
+  useVerifySchool,
+  useVerifyDisplay,
+  LayoutBasePage,
+  TitleSchoolDashPage,
+  CalendarDashCommon,
+  Footer,
+} from '../../shared'
+import { GridDashboardSchoolPage } from './components'
 
 export const DashboardSchoolPage = () => {
   const { view, school_id } = useParams()
@@ -48,7 +49,7 @@ export const DashboardSchoolPage = () => {
                     <CalendarDashCommon />
                   </Box>
                 </Grid>
-                <GridDashSchool />
+                <GridDashboardSchoolPage />
               </Grid>
             </Grid>
           </CardContent>

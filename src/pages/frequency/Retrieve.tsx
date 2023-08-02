@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Chip,
   FormControlLabel,
   TableCell,
   TableRow,
@@ -11,7 +12,9 @@ import {
   DialogMissed,
   DialogRemoveMissed,
   Footer,
+  LinkChip,
   TableBase,
+  TitleSchoolDashViewPage,
   Tools,
 } from '../../shared/components'
 import {
@@ -19,7 +22,11 @@ import {
   useFrequencyContext,
   usePaginationContext,
 } from '../../shared/contexts'
-import { iFrequencyStudentsBase, iHeadCell } from '../../shared/interfaces'
+import {
+  iFrequencyBase,
+  iFrequencyStudentsBase,
+  iHeadCell,
+} from '../../shared/interfaces'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { apiFrequency } from '../../shared/services'
 import dayjs from 'dayjs'
@@ -27,7 +34,7 @@ import 'dayjs/locale/pt-br'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { Navigate, useParams } from 'react-router-dom'
 import { LayoutBasePage } from '../../shared/layouts'
-import { Checklist } from '@mui/icons-material'
+import { Checklist, Workspaces } from '@mui/icons-material'
 import {
   defineBgColorFrequency,
   statusFrequencyPtBr,
@@ -93,12 +100,10 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
 
 export const RetrieveFrequencyPage = () => {
   const { frequency_id } = useParams()
-  // const { schoolData } = useAuthContext();
-  // const { handleClickButtonTools } = useDrawerContext();
-  const { dataStudents, setDataStudents, alterStudents, setAlterStudents } =
+  const { dataStudents, setDataStudents, setAlterStudents } =
     useFrequencyContext()
   const { setIsLoading, query, setCount } = usePaginationContext()
-  // const [dataFrequency, setDataFrequency] = useState<iFrequencyBase>();
+  const [dataFrequency, setDataFrequency] = useState<iFrequencyBase>()
   const [isAlter, setIsAlter] = useState(false)
   const [open, setOpen] = useState(false)
   const handleClose = () => setOpen(!open)
@@ -130,7 +135,7 @@ export const RetrieveFrequencyPage = () => {
       apiFrequency
         .students(frequency_id, queryData)
         .then((res) => {
-          // setDataFrequency(res.frequency);
+          setDataFrequency(res.frequency)
           setDataStudents(res.result)
           setCount(res.total)
         })
@@ -142,27 +147,23 @@ export const RetrieveFrequencyPage = () => {
     return <Navigate to={'/frequency/create'} />
   }
 
-  // const title = [
-  //   <LinkRouter underline="none" color="inherit" to="/frequency/create">
-  //     <Chip
-  //       clickable
-  //       color="primary"
-  //       variant="outlined"
-  //       label={dataFrequency?.class.class.name}
-  //       icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
-  //     />
-  //   </LinkRouter>,
-  //   <Chip
-  //     label={dataFrequency?.date}
-  //     color="primary"
-  //     icon={<EventAvailable sx={{ mr: 0.5 }} fontSize="inherit" />}
-  //   />,
-  // ];
-
   return (
     <>
       <LayoutBasePage
-        title=""
+        title={
+          <TitleSchoolDashViewPage>
+            <LinkChip
+              label="Frequências"
+              icon={<Checklist sx={{ mr: 0.5 }} fontSize="inherit" />}
+              to={`/${dataFrequency?.school.id}/frequency`}
+            />
+            <Chip
+              label={`${dataFrequency?.class.name} - ${dataFrequency?.date}`}
+              color="primary"
+              icon={<Workspaces sx={{ mr: 0.5 }} fontSize="inherit" />}
+            />
+          </TitleSchoolDashViewPage>
+        }
         tools={
           <Tools
             finish={
@@ -190,7 +191,7 @@ export const RetrieveFrequencyPage = () => {
           />
         }
       >
-        <TableBase headCells={headCells}>
+        <TableBase headCells={headCells} isCount={false}>
           {dataStudents?.map((el) => (
             <CardFrequency key={el.id} student={el} />
           ))}
@@ -198,14 +199,11 @@ export const RetrieveFrequencyPage = () => {
         <Box height={20} />
         <Footer />
       </LayoutBasePage>
-      {alterStudents && (
-        <DialogFinishFrequency
-          open={open}
-          onClose={handleClose}
-          frequency_id={frequency_id}
-          students={alterStudents}
-        />
-      )}
+      <DialogFinishFrequency
+        open={open}
+        onClose={handleClose}
+        frequency_id={frequency_id}
+      />
     </>
   )
 }

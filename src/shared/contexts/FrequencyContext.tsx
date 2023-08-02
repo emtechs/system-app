@@ -6,16 +6,16 @@ import {
   useContext,
   useState,
 } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { FieldValues } from 'react-hook-form'
 import {
-  iChildren,
   iFrequency,
   iFrequencyStudentsBase,
   iFrequencyWithInfreq,
-} from '../interfaces'
-import { useNavigate } from 'react-router-dom'
-import { useAppThemeContext, useSchoolContext } from '.'
-import { FieldValues } from 'react-hook-form'
-import { apiFrequency } from '../services'
+  iChildren,
+  apiFrequency,
+  useAppThemeContext,
+} from '../../shared'
 
 interface iFrequencyContextData {
   createFrequency: (data: FieldValues, back?: string) => Promise<void>
@@ -23,6 +23,7 @@ interface iFrequencyContextData {
     data: FieldValues,
     id: string,
     isOpen?: boolean,
+    back?: string,
   ) => Promise<void>
   updateFrequencyStudent: (data: FieldValues, id: string) => Promise<void>
   destroyFrequency: (id: string) => Promise<void>
@@ -49,7 +50,6 @@ const FrequencyContext = createContext({} as iFrequencyContextData)
 export const FrequencyProvider = ({ children }: iChildren) => {
   const navigate = useNavigate()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
-  const { schoolRetrieve } = useSchoolContext()
   const [frequencyData, setFrequencyData] = useState<iFrequency>()
   const [studentData, setStudentData] = useState<iFrequencyStudentsBase>()
   const [retrieveFreq, setRetrieveFreq] = useState<iFrequencyWithInfreq>()
@@ -74,7 +74,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
   )
 
   const handleUpdateFrequency = useCallback(
-    async (data: FieldValues, id: string, isOpen?: boolean) => {
+    async (data: FieldValues, id: string, isOpen?: boolean, back?: string) => {
       try {
         setLoading(true)
         await apiFrequency.update(data, id)
@@ -83,7 +83,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
         } else {
           handleSucess('Frequência realizada com sucesso!')
         }
-        navigate('/' + schoolRetrieve?.id)
+        navigate(back || '/')
       } catch {
         if (isOpen) {
           handleSucess('Não foi possível reabrir a frequência no momento!')

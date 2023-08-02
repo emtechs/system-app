@@ -7,7 +7,6 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, IconButton } from '@mui/material'
 import { Info } from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
 import {
   iChildren,
   useAppThemeContext,
@@ -21,18 +20,17 @@ import {
 } from '../../../shared'
 
 export const First = ({ children }: iChildren) => {
-  const navigate = useNavigate()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
-  const { userProfile } = useAuthContext()
+  const { userProfile, handleUserProfile } = useAuthContext()
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(!open)
 
   const first = async (id: string, data: iUserFirstRequest) => {
     try {
       setLoading(true)
-      await apiUser.update(id, data)
+      const user = await apiUser.update(id, data)
       handleSucess('Dados cadastrados com sucesso')
-      navigate('/')
+      handleUserProfile(user)
     } catch {
       handleError('Não foi possível cadastrar os dados no momento!')
     } finally {

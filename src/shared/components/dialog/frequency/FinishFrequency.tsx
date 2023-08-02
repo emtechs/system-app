@@ -1,13 +1,23 @@
 import { TableCell, TableRow } from '@mui/material'
-import { useAppThemeContext, useFrequencyContext } from '../../../contexts'
-import { iFrequencyStudentsBase, iHeadCell } from '../../../interfaces'
-import { TableBase } from '../../table'
-import { DialogBaseChildrenAction } from '../structure'
-import { defineBgColorFrequency, statusFrequencyPtBr } from '../../../scripts'
+import {
+  iHeadCell,
+  iFrequencyStudentsBase,
+  useAppThemeContext,
+  defineBgColorFrequency,
+  statusFrequencyPtBr,
+  useFrequencyContext,
+  DialogBaseChildrenAction,
+  PaginationBase,
+  TableBase,
+  usePaginationContext,
+  apiFrequency,
+} from '../../../../shared'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 const headCells: iHeadCell[] = [
-  { order: 'registry', numeric: 'left', label: 'Matrícula' },
-  { order: 'name', numeric: 'left', label: 'Aluno' },
+  { numeric: 'left', label: 'Matrícula' },
+  { numeric: 'left', label: 'Aluno' },
   { numeric: 'left', label: 'Estado da Presença' },
 ]
 
@@ -38,16 +48,32 @@ interface iDialogFinishFrequencyProps {
   open: boolean
   onClose: () => void
   frequency_id: string
-  students: iFrequencyStudentsBase[]
 }
 
 export const DialogFinishFrequency = ({
   open,
   onClose,
   frequency_id,
-  students,
 }: iDialogFinishFrequencyProps) => {
+  const { school_id } = useParams()
   const { updateFrequency } = useFrequencyContext()
+  const { setCount, setIsLoading, query_page } = usePaginationContext()
+  const [alterStudents, setAlterStudents] = useState<iFrequencyStudentsBase[]>(
+    [],
+  )
+
+  useEffect(() => {
+    const queryData =
+      '?by=asc&order=name&isNot_presented=true' + query_page(2, true)
+    setIsLoading(true)
+    apiFrequency
+      .students(frequency_id, queryData)
+      .then((res) => {
+        setCount(res.total)
+        setAlterStudents(res.result)
+      })
+      .finally(() => setIsLoading(false))
+  }, [frequency_id, query_page])
 
   const action = () => {
     updateFrequency(
@@ -56,6 +82,8 @@ export const DialogFinishFrequency = ({
         finished_at: Date.now(),
       },
       frequency_id,
+      undefined,
+      `/${school_id}`,
     )
     onClose()
   }
@@ -75,10 +103,11 @@ export const DialogFinishFrequency = ({
         headCells={headCells}
         message="Todos os alunos estão presentes."
       >
-        {students.map((el) => (
+        {alterStudents.map((el) => (
           <CardFrequency key={el.id} student={el} />
         ))}
       </TableBase>
+      <PaginationBase />
     </DialogBaseChildrenAction>
   )
 }

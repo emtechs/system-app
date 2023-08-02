@@ -8,7 +8,6 @@ import {
   iHeadCell,
   TableBase,
   LinkText,
-  ActionsDetail,
 } from '../../../../shared'
 
 interface iTableDashboardSchoolClassPageProps {
@@ -31,16 +30,11 @@ export const TableDashboardSchoolClassPage = ({
   }, [by, listData, order])
 
   const headCells: iHeadCell[] = useMemo(() => {
-    if (mdDown)
-      return [
-        { order: 'name', numeric: 'left', label: 'Turma' },
-        { numeric: 'left', label: 'Ações' },
-      ]
+    if (mdDown) return [{ order: 'name', numeric: 'left', label: 'Turma' }]
     return [
       { order: 'name', numeric: 'left', label: 'Turma' },
       { order: 'students', numeric: 'right', label: 'Alunos' },
       { order: 'frequencies', numeric: 'right', label: 'Frequências' },
-      { numeric: 'left', label: 'Ações' },
     ]
   }, [mdDown])
 
@@ -62,7 +56,6 @@ export const TableDashboardSchoolClassPage = ({
               <TableCell align="right">{el.frequencies}</TableCell>
             </>
           )}
-          <ActionsDetail to="" />
         </TableRow>
       ))}
     </TableBase>

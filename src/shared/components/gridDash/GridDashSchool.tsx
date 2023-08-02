@@ -5,7 +5,7 @@ import {
   useAppThemeContext,
   useAuthContext,
   useCalendarContext,
-  usePaginationContext,
+  useDialogContext,
   useSchoolContext,
 } from '../../contexts'
 import { iDashSchool } from '../../interfaces'
@@ -23,22 +23,21 @@ export const GridDashSchool = () => {
   const { yearData } = useAuthContext()
   const { schoolSelect } = useSchoolContext()
   const { setDateData } = useCalendarContext()
-  const { query } = usePaginationContext()
+  const { handleOpenCreate } = useDialogContext()
   const [infoSchool, setInfoSchool] = useState<iDashSchool>()
 
   useEffect(() => {
     if (schoolSelect && yearData) {
       const date = dayjs().format('DD/MM/YYYY')
-      const query_data = query(undefined, undefined, undefined, date)
       setLoading(true)
       apiUsingNow
         .get<iDashSchool>(
-          `schools/${schoolSelect.id}/dash/${yearData.id}${query_data}`,
+          `schools/${schoolSelect.id}/dash/${yearData.id}?date=${date}`,
         )
         .then((res) => setInfoSchool(res.data))
         .finally(() => setLoading(false))
     }
-  }, [schoolSelect, yearData, query])
+  }, [schoolSelect, yearData])
 
   return (
     <Grid container item direction="row" xs={12} md={5} spacing={2}>
@@ -64,13 +63,14 @@ export const GridDashSchool = () => {
             info="Frequências no dia"
             dest={
               infoSchool.frequencies === infoSchool.classTotal
-                ? `/${schoolSelect?.id}/frequency?date=${dayjs().format(
+                ? `/${schoolSelect?.id}/frequency?year_id=day&date=${dayjs().format(
                     'DD/MM/YYYY',
                   )}`
-                : `/${schoolSelect?.id}/day`
+                : ''
             }
             onClick={() => {
               setDateData(dayjs())
+              handleOpenCreate()
             }}
           />
           {infoSchool.frequencyOpen !== 0 ? (
@@ -95,11 +95,11 @@ export const GridDashSchool = () => {
           <GridDashContent
             icon={<School fontSize="large" />}
             quant={
-              infoSchool?.school_infreq
-                ? infoSchool.school_infreq.toFixed(0) + '%'
+              infoSchool?.day_infreq
+                ? infoSchool.day_infreq.toFixed(0) + '%'
                 : '0%'
             }
-            info="Infrequência"
+            info="Infrequência do dia"
             dest={`/${schoolSelect?.id}/infrequency`}
           />
         </>

@@ -1,8 +1,13 @@
 import { Box, Pagination } from '@mui/material'
 import { usePaginationContext } from '../../contexts'
+import { useEffect } from 'react'
 
 export const PaginationBase = () => {
-  const { steps, page, handleChange } = usePaginationContext()
+  const { steps, page, handleChange, initialPage } = usePaginationContext()
+
+  useEffect(() => {
+    initialPage()
+  }, [])
 
   return (
     steps > 0 && (

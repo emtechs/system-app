@@ -1,7 +1,6 @@
 import {
   AccountBox,
   Checklist,
-  EventAvailable,
   Groups,
   Home,
   Percent,
@@ -10,7 +9,6 @@ import {
 } from '@mui/icons-material'
 import {
   useAppThemeContext,
-  useCalendarContext,
   useDrawerContext,
   useSchoolContext,
 } from '../../../contexts'
@@ -20,7 +18,6 @@ import { ListItemLinkOpen, OtherListItemLink } from '../item'
 export const OptionsSchool = () => {
   const { mdDown } = useAppThemeContext()
   const { schoolSelect } = useSchoolContext()
-  const { dateData } = useCalendarContext()
   const { handleClickProfile, openProfile } = useDrawerContext()
   const baseHref = `/${schoolSelect?.id}`
   return (
@@ -29,12 +26,6 @@ export const OptionsSchool = () => {
         icon={<Home />}
         label="Página Inicial"
         baseHref={baseHref}
-      />
-      <OtherListItemLink
-        icon={<EventAvailable />}
-        label={dateData.format('DD/MM/YYYY')}
-        baseHref={baseHref}
-        to="/day"
       />
       <OtherListItemLink
         icon={<Workspaces />}

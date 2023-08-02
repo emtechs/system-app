@@ -3,6 +3,7 @@ import {
   useAppThemeContext,
   useAuthContext,
   useCalendarContext,
+  useDialogContext,
   usePaginationContext,
   useSchoolContext,
 } from '../../contexts'
@@ -25,6 +26,7 @@ export const CalendarDashCommon = ({ onClick }: iCalendarDashCommonProps) => {
   const { yearData } = useAuthContext()
   const { schoolSelect } = useSchoolContext()
   const { monthData, setEventData, setDateData } = useCalendarContext()
+  const { handleOpenCreate } = useDialogContext()
   const { query } = usePaginationContext()
 
   useEffect(() => {
@@ -54,13 +56,13 @@ export const CalendarDashCommon = ({ onClick }: iCalendarDashCommonProps) => {
         if (onClick) onClick()
         if (arg.event.classNames.includes('allFrequency')) {
           navigate(
-            `/frequency/list?date=${dayjs(arg.event.start).format(
-              'DD/MM/YYYY',
-            )}`,
+            `/${schoolSelect?.id}/frequency?year_id=day&date=${dayjs(
+              arg.event.start,
+            ).format('DD/MM/YYYY')}`,
           )
         } else {
           setDateData(dayjs(arg.event.start))
-          navigate('/frequency')
+          handleOpenCreate()
         }
       }}
       handleFrequency={onClick}
