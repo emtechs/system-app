@@ -16,8 +16,12 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material'
-import { useAuthContext, useDrawerContext } from '../../../../contexts'
-import { Link, useNavigate } from 'react-router-dom'
+import {
+  useAuthContext,
+  useDialogContext,
+  useDrawerContext,
+} from '../../../../contexts'
+import { Link } from 'react-router-dom'
 
 interface iMenuBaseProps {
   anchorEl: HTMLElement | null
@@ -36,9 +40,25 @@ export const MenuUserMdDown = ({
   open,
   isHome,
 }: iMenuBaseProps) => {
-  const navigate = useNavigate()
   const { logout } = useAuthContext()
-  const { handleDisplayDash, handleClickProfile } = useDrawerContext()
+  const { handleDisplayDash } = useDrawerContext()
+  const { handleOpenCreate, handleOpenEdit } = useDialogContext()
+
+  const onClickHome = () => {
+    handleDisplayDash('ADMIN')
+    handleClose()
+  }
+
+  const onClickEdit = () => {
+    handleClose()
+    handleOpenCreate()
+  }
+
+  const onClickPassword = () => {
+    handleClose()
+    handleOpenEdit()
+  }
+
   return (
     <Menu
       sx={{ mt: '45px' }}
@@ -56,13 +76,7 @@ export const MenuUserMdDown = ({
       onClose={handleClose}
     >
       {isHome && (
-        <MenuItem
-          onClick={() => {
-            handleDisplayDash('ADMIN')
-            navigate('/')
-            handleClose()
-          }}
-        >
+        <MenuItem component={Link} to="/" onClick={onClickHome}>
           <ListItemIcon>
             <Home />
           </ListItemIcon>
@@ -78,21 +92,13 @@ export const MenuUserMdDown = ({
       </MenuItem>
       <Collapse in={open}>
         <List component="div">
-          <ListItemButton
-            component={Link}
-            to="/profile/edit"
-            onClick={handleClickProfile}
-          >
+          <ListItemButton onClick={onClickEdit}>
             <ListItemIcon>
               <Edit />
             </ListItemIcon>
             <ListItemText primary="Editar Perfil" />
           </ListItemButton>
-          <ListItemButton
-            component={Link}
-            to="/profile/edit/password"
-            onClick={handleClickProfile}
-          >
+          <ListItemButton onClick={onClickPassword}>
             <ListItemIcon>
               <Password />
             </ListItemIcon>

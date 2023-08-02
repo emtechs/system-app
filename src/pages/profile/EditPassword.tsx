@@ -4,17 +4,35 @@ import { FormContainer, PasswordElement } from 'react-hook-form-mui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   useAuthContext,
-  useUserContext,
   LayoutBasePage,
   userPasswordSchema,
   Footer,
   LabelProfile,
   TitleBaseItemsPage,
+  apiUser,
+  iUserPasswordRequest,
+  useAppThemeContext,
 } from '../../shared'
+import { useNavigate } from 'react-router-dom'
 
 export const EditPasswordPage = () => {
-  const { userData } = useAuthContext()
-  const { editPassword } = useUserContext()
+  const navigate = useNavigate()
+  const { setLoading, handleSucess, handleError } = useAppThemeContext()
+  const { userProfile } = useAuthContext()
+
+  const editPassword = async (id: string, data: iUserPasswordRequest) => {
+    try {
+      setLoading(true)
+      await apiUser.update(id, data)
+      handleSucess('Senha alterada com sucesso')
+      navigate('/')
+    } catch {
+      handleError('Senha atual incorreta!')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <LayoutBasePage
       title={
@@ -30,7 +48,7 @@ export const EditPasswordPage = () => {
     >
       <FormContainer
         onSuccess={(data) => {
-          if (userData) editPassword(userData.id, data)
+          if (userProfile) editPassword(userProfile.id, data)
         }}
         resolver={zodResolver(userPasswordSchema)}
       >

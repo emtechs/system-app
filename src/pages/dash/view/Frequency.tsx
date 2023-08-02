@@ -27,7 +27,7 @@ export const ViewDashboardSchoolFrequencyPage = ({
 }: iViewDashboardSchoolFrequencyPageProps) => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
-  const { setListMonth, listMonth } = useCalendarContext()
+  const { handleListMonth, listMonth } = useCalendarContext()
   const {
     setCount,
     setIsLoading,
@@ -56,7 +56,7 @@ export const ViewDashboardSchoolFrequencyPage = ({
         .then((res) => {
           setFace(1)
           setListData(res.result)
-          setListMonth(res.months)
+          handleListMonth(res.months)
           setCount(res.total)
         })
         .finally(() => setIsLoading(false))

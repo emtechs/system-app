@@ -1,9 +1,8 @@
-import { Box, Container, Grid } from '@mui/material'
-import { useAppThemeContext, useAuthContext } from '../../shared/contexts'
-import { HomePageAdmin } from './Admin'
-import { Header } from '../../shared/components'
-import { School, User } from './components'
 import { Navigate } from 'react-router-dom'
+import { Box, Container, Grid } from '@mui/material'
+import { HomePageAdmin } from './Admin'
+import { School, User } from './components'
+import { useAppThemeContext, useAuthContext, Header } from '../../shared'
 
 interface iHomePageProps {
   isHome?: boolean
@@ -11,11 +10,11 @@ interface iHomePageProps {
 
 export const HomePage = ({ isHome }: iHomePageProps) => {
   const { theme, mdDown } = useAppThemeContext()
-  const { isAuthenticated, userData, periodsUser } = useAuthContext()
+  const { isAuthenticated, userProfile } = useAuthContext()
 
   if (!isAuthenticated) return <Navigate to="/login" />
 
-  if (userData?.role === 'ADMIN' && !isHome) return <HomePageAdmin />
+  if (userProfile?.role === 'ADMIN' && !isHome) return <HomePageAdmin />
 
   return (
     <Box display="flex" flexDirection="column">
@@ -28,7 +27,7 @@ export const HomePage = ({ isHome }: iHomePageProps) => {
             spacing={mdDown ? 2 : 5}
           >
             <School />
-            <User user={userData} periods={periodsUser} />
+            <User />
           </Grid>
         </Container>
       </Box>

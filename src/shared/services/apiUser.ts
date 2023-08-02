@@ -5,8 +5,8 @@ import {
   iSchool,
   iSchoolServer,
   iUser,
+  iUserProfile,
   iWorkSchool,
-  iYear,
 } from '../interfaces'
 
 const create = async (
@@ -37,15 +37,21 @@ const retrieve = async (id: string, query: string): Promise<iUser> => {
   return response
 }
 
-interface iProfileReturn {
+interface iPageReturn {
   user: iUser
-  years: iYear[]
   periods: iPeriod[]
 }
 
-const profile = async (token: string, query = ''): Promise<iProfileReturn> => {
-  const { data: response } = await apiUsingNow.get<iProfileReturn>(
-    `users/profile${query}`,
+const page = async (query: string): Promise<iPageReturn> => {
+  const { data: response } = await apiUsingNow.get<iPageReturn>(
+    `users/page${query}`,
+  )
+  return response
+}
+
+const profile = async (token: string): Promise<iUserProfile> => {
+  const { data: response } = await apiUsingNow.get<iUserProfile>(
+    'users/profile',
     {
       headers: { Authorization: `Bearer ${token}` },
     },
@@ -84,6 +90,7 @@ const schools = async (query: string) => {
 export const apiUser = {
   create,
   createServer,
+  page,
   profile,
   update,
   schools,

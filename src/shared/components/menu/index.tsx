@@ -24,9 +24,9 @@ export const MenuDrawer = () => {
   const { theme, smDown } = useAppThemeContext()
   const { isDrawerOpen, toggleDrawerOpen, handleClick, displayDash } =
     useDrawerContext()
-  const { userData, logout, dashData } = useAuthContext()
+  const { userProfile, logout, dashData } = useAuthContext()
   const user = {
-    name: adaptName(userData?.name),
+    name: adaptName(userProfile?.name),
   }
 
   const listButton = useMemo(() => {

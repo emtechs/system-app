@@ -11,7 +11,6 @@ import {
 } from 'react'
 import {
   useDebounce,
-  useAuthContext,
   usePaginationContext,
   iStudent,
   apiStudent,
@@ -26,13 +25,14 @@ import {
   DialogCreateStudentSchool,
   DialogRemoveStudent,
   DialogTransferStudent,
+  useCalendarContext,
 } from '../../../shared'
 import { TableSchoolStudentPage } from '../components'
 
 export const ViewSchoolStudentPage = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
-  const { listYear } = useAuthContext()
+  const { listYear } = useCalendarContext()
   const {
     setCount,
     setIsLoading,

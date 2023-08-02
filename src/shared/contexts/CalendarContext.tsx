@@ -2,10 +2,18 @@ import {
   Dispatch,
   SetStateAction,
   createContext,
+  useCallback,
   useContext,
   useState,
 } from 'react'
-import { iCalendar, iChildren, iMonth, iSelectBase } from '../interfaces'
+import {
+  iCalendar,
+  iChildren,
+  iMonth,
+  iPeriod,
+  iSelectBase,
+  iYear,
+} from '../interfaces'
 import dayjs, { Dayjs } from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import 'dayjs/locale/pt-br'
@@ -22,8 +30,12 @@ interface iCalendarContextData {
   setYearSelect: Dispatch<SetStateAction<iSelectBase | undefined>>
   yearIdSelect: string | undefined
   setYearIdSelect: Dispatch<SetStateAction<string | undefined>>
+  listYear: iYear[]
+  handleListYear: (newList: iYear[]) => void
+  listPeriod: iPeriod[]
+  handleListPeriod: (newList: iPeriod[]) => void
   listMonth: iMonth[] | undefined
-  setListMonth: Dispatch<SetStateAction<iMonth[] | undefined>>
+  handleListMonth: (newList: iMonth[]) => void
 }
 
 const CalendarContext = createContext({} as iCalendarContextData)
@@ -34,7 +46,24 @@ export const CalendarProvider = ({ children }: iChildren) => {
   const [monthData, setMonthData] = useState(dayjs().format('MMMM'))
   const [yearSelect, setYearSelect] = useState<iSelectBase>()
   const [yearIdSelect, setYearIdSelect] = useState<string>()
+  const [listYear, setListYear] = useState<iYear[]>([])
+  const [listPeriod, setListPeriod] = useState<iPeriod[]>([])
   const [listMonth, setListMonth] = useState<iMonth[]>()
+
+  const handleListYear = useCallback(
+    (newList: iYear[]) => setListYear(newList),
+    [],
+  )
+
+  const handleListPeriod = useCallback(
+    (newList: iPeriod[]) => setListPeriod(newList),
+    [],
+  )
+
+  const handleListMonth = useCallback(
+    (newList: iMonth[]) => setListMonth(newList),
+    [],
+  )
 
   return (
     <CalendarContext.Provider
@@ -49,8 +78,12 @@ export const CalendarProvider = ({ children }: iChildren) => {
         setYearSelect,
         setYearIdSelect,
         yearIdSelect,
+        handleListMonth,
+        handleListPeriod,
+        handleListYear,
         listMonth,
-        setListMonth,
+        listPeriod,
+        listYear,
       }}
     >
       {children}

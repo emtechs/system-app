@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useMemo,
   useState,
 } from 'react'
 import {
@@ -31,7 +32,7 @@ interface iThemeContextProps {
 const ThemeContext = createContext({} as iThemeContextProps)
 
 export const AppThemeProvider = ({ children }: iChildren) => {
-  const theme = Theme
+  const theme = useMemo(() => Theme, [])
   const smDown = useMediaQuery(theme.breakpoints.down('sm'))
   const mdDown = useMediaQuery(theme.breakpoints.down('md'))
   const [loading, setLoading] = useState(false)

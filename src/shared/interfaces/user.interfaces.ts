@@ -14,16 +14,19 @@ export type iRole = 'ADMIN' | 'SERV' | 'DIRET' | 'SECRET'
 
 export type iDash = 'COMMON' | 'SCHOOL' | 'ORGAN' | 'ADMIN'
 
-export interface iUser {
+export interface iUserProfile {
   id: string
-  login: string
   name: string
-  cpf: string
-  email: string
   role: iRole
   dash: iDash
-  is_active: boolean
   is_first_access: boolean
+}
+
+export interface iUser extends iUserProfile {
+  login: string
+  cpf: string
+  email: string
+  is_active: boolean
   created_at: Date
   frequencies: number
   work_school?: iWorkSchool

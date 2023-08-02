@@ -1,6 +1,6 @@
 import { PureComponent } from 'react'
 import { Box, Container, Divider, Typography } from '@mui/material'
-import { iReportStudent, iUser } from '../../../../shared/interfaces'
+import { iReportStudent, iUserProfile } from '../../../../shared/interfaces'
 import { PrintStudentReport } from '../print'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -8,7 +8,7 @@ import 'dayjs/locale/pt-br'
 dayjs.extend(localizedFormat)
 
 type Props = {
-  user: iUser
+  user: iUserProfile
   report: iReportStudent
 }
 

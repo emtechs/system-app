@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 import { useDebounce } from '../hooks'
 import {
   useAppThemeContext,
-  useAuthContext,
+  useCalendarContext,
   usePaginationContext,
 } from '../contexts'
 import { SyntheticEvent, useCallback, useEffect, useState } from 'react'
@@ -22,7 +22,7 @@ export const ViewInfrequency = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
   const { theme } = useAppThemeContext()
-  const { listYear } = useAuthContext()
+  const { listYear } = useCalendarContext()
   const { setCount, setIsLoading, query, search } = usePaginationContext()
   const [data, setData] = useState<iInfrequency[]>()
   const [index, setIndex] = useState(0)

@@ -15,7 +15,7 @@ import {
   DialogRemoveStudent,
   DialogTransferStudent,
 } from '../../components'
-import { useAuthContext, usePaginationContext } from '../../contexts'
+import { useCalendarContext, usePaginationContext } from '../../contexts'
 import { iStudent } from '../../interfaces'
 import { apiStudent } from '../../services'
 import { TableStudentSchool } from '../tables'
@@ -23,7 +23,7 @@ import { TableStudentSchool } from '../tables'
 export const ViewSchoolStudent = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
-  const { listYear } = useAuthContext()
+  const { listYear } = useCalendarContext()
   const { search, order, by, setCount, setIsLoading } = usePaginationContext()
   const [listData, setListData] = useState<iStudent[]>([])
   const [index, setIndex] = useState(0)

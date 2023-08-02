@@ -8,7 +8,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import { MouseEvent, useMemo, useState } from 'react'
+import { MouseEvent, useState } from 'react'
 import {
   useAppThemeContext,
   useAuthContext,
@@ -25,15 +25,13 @@ interface iHeaderProps {
 
 export const Header = ({ isHome }: iHeaderProps) => {
   const { mdDown } = useAppThemeContext()
-  const { logout, userData } = useAuthContext()
+  const { logout, userProfile } = useAuthContext()
   const { handleDisplayDash } = useDrawerContext()
   const [open, setOpen] = useState(true)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
 
-  const name = useMemo(() => {
-    return adaptName(userData?.name)
-  }, [userData])
+  const name = adaptName(userProfile?.name)
 
   const handleOpenMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)

@@ -1,5 +1,5 @@
 import { useDebounce } from '../hooks'
-import { useAuthContext, usePaginationContext } from '../contexts'
+import { useCalendarContext, usePaginationContext } from '../contexts'
 import {
   SyntheticEvent,
   useCallback,
@@ -26,7 +26,7 @@ export const ViewFrequency = ({
   table_def,
 }: iViewFrequency) => {
   const { debounce } = useDebounce()
-  const { listYear } = useAuthContext()
+  const { listYear } = useCalendarContext()
   const {
     setCount,
     setIsLoading,

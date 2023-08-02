@@ -4,14 +4,14 @@ import { useAppThemeContext, useAuthContext, adaptName } from '../../../shared'
 
 export const LabelProfile = () => {
   const { mdDown, loading } = useAppThemeContext()
-  const { userData } = useAuthContext()
+  const { userProfile } = useAuthContext()
 
   const label = loading ? (
     <Skeleton width={100} />
   ) : mdDown ? (
-    adaptName(userData?.name)
+    adaptName(userProfile?.name)
   ) : (
-    userData?.name
+    userProfile?.name
   )
 
   return (

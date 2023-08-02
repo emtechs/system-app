@@ -1,13 +1,13 @@
 import { Box, Tabs, Tab } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { useAuthContext } from '../../../../shared'
+import { useCalendarContext } from '../../../../shared'
 
 interface iTabsStudentPageProps {
   value?: string
 }
 
 export const TabsStudentPage = ({ value = '' }: iTabsStudentPageProps) => {
-  const { listYear } = useAuthContext()
+  const { listYear } = useCalendarContext()
 
   return (
     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

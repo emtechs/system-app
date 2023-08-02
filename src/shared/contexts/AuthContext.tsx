@@ -1,6 +1,4 @@
 import {
-  Dispatch,
-  SetStateAction,
   createContext,
   useCallback,
   useContext,
@@ -12,10 +10,9 @@ import {
   iChildren,
   iDash,
   iLoginRequest,
-  iPeriod,
   iRecoveryPasswordRequest,
   iRecoveryRequest,
-  iUser,
+  iUserProfile,
   iYear,
 } from '../interfaces'
 import { useNavigate } from 'react-router-dom'
@@ -29,25 +26,19 @@ dayjs.extend(localizedFormat)
 
 interface iAuthContextData {
   logout: () => void
-  accessToken: string | undefined
-  setAccessToken: Dispatch<SetStateAction<string | undefined>>
-  isAuthenticated: boolean
-  login: (data: iLoginRequest) => Promise<void>
   recovery: (data: iRecoveryRequest) => Promise<void>
+  login: (data: iLoginRequest) => Promise<void>
   recoveryPassword: (
     data: iRecoveryPasswordRequest,
     userId: string,
     token: string,
   ) => Promise<void>
-  userData: iUser | undefined
-  setUserData: Dispatch<SetStateAction<iUser | undefined>>
+  isAuthenticated: boolean
+  userProfile: iUserProfile | undefined
+  handleUserProfile: (newUser: iUserProfile) => void
   dashData: iDash | undefined
-  setDashData: Dispatch<SetStateAction<iDash | undefined>>
   yearData: iYear | undefined
-  listYear: iYear[]
-  setListYear: Dispatch<SetStateAction<iYear[]>>
   profileUser: () => void
-  periodsUser: iPeriod[]
 }
 
 const AuthContext = createContext({} as iAuthContextData)
@@ -56,11 +47,11 @@ export const AuthProvider = ({ children }: iChildren) => {
   const navigate = useNavigate()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
   const [accessToken, setAccessToken] = useState<string>()
-  const [userData, setUserData] = useState<iUser>()
+  const [userProfile, setUserProfile] = useState<iUserProfile>()
   const [dashData, setDashData] = useState<iDash>()
   const [yearData, setYearData] = useState<iYear>()
-  const [listYear, setListYear] = useState<iYear[]>([])
-  const [periodsUser, setPeriodsUser] = useState<iPeriod[]>([])
+
+  const handleUserProfile = (newUser: iUserProfile) => setUserProfile(newUser)
 
   useEffect(() => {
     const accessToken = localStorage.getItem('@EMTechs:token')
@@ -76,13 +67,11 @@ export const AuthProvider = ({ children }: iChildren) => {
     if (accessToken) {
       setLoading(true)
       apiUser
-        .profile(accessToken, `?date=${dayjs().format('DD/MM/YYYY')}`)
+        .profile(accessToken)
         .then((res) => {
           apiUsingNow.defaults.headers.authorization = `Bearer ${accessToken}`
-          setUserData(res.user)
-          setDashData(res.user.dash)
-          setListYear(res.years)
-          setPeriodsUser(res.periods)
+          setUserProfile(res)
+          setDashData(res.dash)
         })
         .catch(() => {
           localStorage.removeItem('@EMTechs:token')
@@ -165,7 +154,7 @@ export const AuthProvider = ({ children }: iChildren) => {
   const handleLogout = useCallback(() => {
     localStorage.removeItem('@EMTechs:token')
     setAccessToken(undefined)
-    setUserData(undefined)
+    setUserProfile(undefined)
     setDashData(undefined)
     navigate('/login')
   }, [])
@@ -180,17 +169,11 @@ export const AuthProvider = ({ children }: iChildren) => {
         logout: handleLogout,
         recovery: handleRecovey,
         recoveryPassword: handleRecoveyPassword,
-        accessToken,
-        setAccessToken,
         dashData,
-        setDashData,
-        setUserData,
-        userData,
         yearData,
-        listYear,
-        setListYear,
         profileUser,
-        periodsUser,
+        handleUserProfile,
+        userProfile,
       }}
     >
       {children}

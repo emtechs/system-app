@@ -19,7 +19,6 @@ import { useNavigate } from 'react-router-dom'
 import { FieldValues } from 'react-hook-form'
 import { apiUser } from '../services'
 import { useAppThemeContext } from './ThemeContext'
-import { useAuthContext } from './AuthContext'
 
 interface iUserContextData {
   createSecret: (data: iUserSecretRequest, back?: string) => Promise<void>
@@ -46,7 +45,6 @@ const UserContext = createContext({} as iUserContextData)
 export const UserProvider = ({ children }: iChildren) => {
   const navigate = useNavigate()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
-  const { setDashData, setUserData } = useAuthContext()
   const [updateUserData, setUpdateUserData] = useState<iUser>()
   const [userSelect, setUserSelect] = useState<iSelectBase>()
   const [loadingUser, setLoadingUser] = useState(true)
@@ -81,10 +79,8 @@ export const UserProvider = ({ children }: iChildren) => {
     async (id: string, data: iUserFirstRequest) => {
       try {
         setLoading(true)
-        const user = await apiUser.update(id, data)
+        await apiUser.update(id, data)
         handleSucess('Dados cadastrados com sucesso')
-        setUserData(user)
-        setDashData(user.dash)
         navigate('/')
       } catch {
         handleError('Não foi possível cadastrar os dados no momento!')
@@ -99,10 +95,8 @@ export const UserProvider = ({ children }: iChildren) => {
     async (id: string, data: iUserUpdateRequest) => {
       try {
         setLoading(true)
-        const user = await apiUser.update(id, data)
+        await apiUser.update(id, data)
         handleSucess('Dados alterado com sucesso')
-        setUserData(user)
-        navigate('/')
       } catch {
         handleError('Não foi possível atualizar os dados no momento!')
       } finally {

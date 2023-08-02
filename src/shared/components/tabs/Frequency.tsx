@@ -1,6 +1,6 @@
 import { Box, Tabs, Tab } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { useAuthContext } from '../../contexts'
+import { useCalendarContext } from '../../contexts'
 
 interface iTabsFrequencyPageProps {
   href?: string
@@ -11,7 +11,7 @@ export const TabsFrequencyPage = ({
   href = '/frequency',
   value = '',
 }: iTabsFrequencyPageProps) => {
-  const { listYear } = useAuthContext()
+  const { listYear } = useCalendarContext()
 
   return (
     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

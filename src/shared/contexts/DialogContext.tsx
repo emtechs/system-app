@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useState } from 'react'
 import { iChildren } from '../interfaces'
 
 interface iDialogContextData {
@@ -20,10 +20,13 @@ export const DialogProvider = ({ children }: iChildren) => {
   const [openDirector, setOpenDirector] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
 
-  const handleOpenActive = () => setOpenActive(!openActive)
-  const handleOpenCreate = () => setOpenCreate(!openCreate)
-  const handleOpenDirector = () => setOpenDirector(!openDirector)
-  const handleOpenEdit = () => setOpenEdit(!openEdit)
+  const handleOpenActive = useCallback(() => setOpenActive((old) => !old), [])
+  const handleOpenCreate = useCallback(() => setOpenCreate((old) => !old), [])
+  const handleOpenDirector = useCallback(
+    () => setOpenDirector((old) => !old),
+    [],
+  )
+  const handleOpenEdit = useCallback(() => setOpenEdit((old) => !old), [])
 
   return (
     <DialogContext.Provider

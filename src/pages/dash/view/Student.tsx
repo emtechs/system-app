@@ -11,7 +11,6 @@ import {
 } from 'react'
 import {
   useDebounce,
-  useAuthContext,
   usePaginationContext,
   iStudent,
   apiStudent,
@@ -21,13 +20,14 @@ import {
   TabsYear,
   PaginationTable,
   Footer,
+  useCalendarContext,
 } from '../../../shared'
 import { TableDashboardSchoolStudentPage } from '../components'
 
 export const ViewDashboardSchoolStudentPage = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
-  const { listYear } = useAuthContext()
+  const { listYear } = useCalendarContext()
   const {
     setCount,
     setIsLoading,

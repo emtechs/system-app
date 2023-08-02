@@ -2,14 +2,14 @@ import { useCallback } from 'react'
 import { useAuthContext, useDrawerContext } from '../../contexts'
 
 export const useVerifyDisplay = () => {
-  const { userData } = useAuthContext()
+  const { userProfile } = useAuthContext()
   const { displayDash, handleDisplayDash } = useDrawerContext()
 
   const verifyDisplay = useCallback(() => {
-    if (userData?.role === 'ADMIN') {
+    if (userProfile?.role === 'ADMIN') {
       if (displayDash === 'ADMIN') handleDisplayDash('SCHOOL')
     }
-  }, [displayDash, handleDisplayDash, userData])
+  }, [displayDash, handleDisplayDash, userProfile])
 
   return { verifyDisplay }
 }

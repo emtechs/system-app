@@ -23,7 +23,7 @@ import {
 } from '../../components'
 
 export const CardDashboardSchoolReportPage = () => {
-  const { userData } = useAuthContext()
+  const { userProfile } = useAuthContext()
   const componentRef = useRef(null)
   const onBeforeGetContentResolve = useRef<(() => void) | null>(null)
   const [loading, setLoading] = useState(false)
@@ -107,7 +107,7 @@ export const CardDashboardSchoolReportPage = () => {
     }
   }, [reportClassData, reportSchoolData, reportStudentData])
 
-  if (reportClassData && userData)
+  if (reportClassData && userProfile)
     return (
       <>
         <CompLoading loading={loading} />
@@ -120,13 +120,13 @@ export const CardDashboardSchoolReportPage = () => {
           <ContentClassReport
             ref={componentRef}
             report={reportClassData}
-            user={userData}
+            user={userProfile}
           />
         </div>
       </>
     )
 
-  if (reportSchoolData && userData)
+  if (reportSchoolData && userProfile)
     return (
       <>
         <CompLoading loading={loading} />
@@ -139,13 +139,13 @@ export const CardDashboardSchoolReportPage = () => {
           <ContentSchoolReport
             ref={componentRef}
             report={reportSchoolData}
-            user={userData}
+            user={userProfile}
           />
         </div>
       </>
     )
 
-  if (reportStudentData && userData)
+  if (reportStudentData && userProfile)
     return (
       <>
         <CompLoading loading={loading} />
@@ -158,7 +158,7 @@ export const CardDashboardSchoolReportPage = () => {
           <ContentStudentReport
             ref={componentRef}
             report={reportStudentData}
-            user={userData}
+            user={userProfile}
           />
         </div>
       </>

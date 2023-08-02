@@ -4,7 +4,6 @@ import { SyntheticEvent, useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
   useDebounce,
-  useAuthContext,
   usePaginationContext,
   iClass,
   apiClass,
@@ -13,13 +12,14 @@ import {
   Tools,
   TabsYear,
   Footer,
+  useCalendarContext,
 } from '../../../shared'
 import { TableDashboardSchoolClassPage } from '../components'
 
 export const ViewDashboardSchoolClassPage = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
-  const { listYear } = useAuthContext()
+  const { listYear } = useCalendarContext()
   const { setIsLoading, setCount, search } = usePaginationContext()
   const [listData, setListData] = useState<iClass[]>([])
   const [index, setIndex] = useState(0)

@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom'
 import sortArray from 'sort-array'
 import { useDebounce } from '../../hooks'
 import { TabsYear } from '../../components'
-import { useAuthContext, usePaginationContext } from '../../contexts'
+import { useCalendarContext, usePaginationContext } from '../../contexts'
 import { iStudent } from '../../interfaces'
 import { apiStudent } from '../../services'
 import { TableStudentSchool } from './tables'
@@ -18,7 +18,7 @@ import { TableStudentSchool } from './tables'
 export const ViewDashSchoolStudent = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
-  const { listYear } = useAuthContext()
+  const { listYear } = useCalendarContext()
   const { search, order, by, setCount, setIsLoading } = usePaginationContext()
   const [listData, setListData] = useState<iStudent[]>([])
   const [index, setIndex] = useState(0)

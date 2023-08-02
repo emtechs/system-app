@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import {
   useAppThemeContext,
   useAuthContext,
+  useCalendarContext,
   useClassContext,
   useDrawerContext,
 } from '../../contexts'
@@ -11,9 +12,10 @@ import { apiAuth } from '../../services'
 export const useVerifyClass = () => {
   const navigate = useNavigate()
   const { setLoading } = useAppThemeContext()
-  const { setListYear, yearData } = useAuthContext()
+  const { yearData } = useAuthContext()
   const { setClassSelect } = useClassContext()
   const { handleDisplayDash } = useDrawerContext()
+  const { handleListYear } = useCalendarContext()
 
   const verifyClass = useCallback((id: string) => {
     setLoading(true)
@@ -23,9 +25,9 @@ export const useVerifyClass = () => {
         setClassSelect(res.select)
         if (res.years) {
           if (res.years.length > 0) {
-            setListYear(res.years)
+            handleListYear(res.years)
           } else if (yearData) {
-            setListYear([yearData])
+            handleListYear([yearData])
           }
         }
       })
