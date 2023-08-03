@@ -1,4 +1,4 @@
-import { Box, LinearProgress } from '@mui/material'
+import { Box } from '@mui/material'
 import {
   SyntheticEvent,
   useCallback,
@@ -31,9 +31,13 @@ export const InfrequencyPeriod = ({ year_id }: iInfrequencyPeriodProps) => {
   const { setIsLoading } = usePaginationContext()
   const [listData, setListData] = useState<iDataInfrequency[]>([])
   const [period, setPeriod] = useState('ANO')
-  const [listPeriod, setListPeriod] = useState<iPeriod[]>()
+  const [listPeriodData, setListPeriodData] = useState<iPeriod[]>()
   const [index, setIndex] = useState(0)
-  const [loading, setLoading] = useState(false)
+
+  const listPeriod = useMemo(() => {
+    if (period !== 'ANO' && listPeriodData)
+      return listPeriodData.filter((el) => el.category === period)
+  }, [listPeriodData, period])
 
   const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
     setPeriod(String(newValue))
@@ -47,14 +51,10 @@ export const InfrequencyPeriod = ({ year_id }: iInfrequencyPeriodProps) => {
   }
 
   const getPeriods = useCallback(() => {
-    setIndex(0)
-    setLoading(true)
     apiCalendar
-      .listPeriod(`?year_id=${year_id}&category=${period}`)
-      .then((res) => setListPeriod(res.result))
-      .finally(() => setLoading(false))
-    if (period === 'ANO') setListPeriod(undefined)
-  }, [period, year_id])
+      .listPeriod(`?year_id=${year_id}`)
+      .then((res) => setListPeriodData(res.result))
+  }, [year_id])
 
   const getInfrequency = useCallback(
     (school_id: string, year_id_data: string, query: string) => {
@@ -67,13 +67,23 @@ export const InfrequencyPeriod = ({ year_id }: iInfrequencyPeriodProps) => {
     [],
   )
 
+  const name = useMemo(() => {
+    if (period !== 'ANO' && listPeriod) {
+      if (listPeriod[index]) return listPeriod[index].name
+
+      setIndex(0)
+
+      return listPeriod[0].name
+    }
+  }, [index, listPeriod, period])
+
   const query = useMemo(() => {
     let query_data = `?category=${period}`
 
-    if (period !== 'ANO') query_data += `&name=${listPeriod?.at(index)?.name}`
+    if (name) query_data += `&name=${name}`
 
     return query_data
-  }, [index, listPeriod, period])
+  }, [name, period])
 
   useEffect(() => getPeriods(), [getPeriods])
 
@@ -85,20 +95,16 @@ export const InfrequencyPeriod = ({ year_id }: iInfrequencyPeriodProps) => {
     <Box display="flex" justifyContent="space-between">
       <TabsPeriodVertical value={period} handleChange={handleChange} />
       <Box flex={1}>
-        {period !== 'ANO' &&
-          listPeriod &&
-          (loading ? (
-            <LinearProgress variant="indeterminate" />
-          ) : (
-            <>
-              <TabsPeriodName
-                listPeriod={listPeriod}
-                value={index}
-                handleChange={handleChangeName}
-              />
-              <TableInfrequencyPeriod listData={listData} />
-            </>
-          ))}
+        {period !== 'ANO' && listPeriod && (
+          <>
+            <TabsPeriodName
+              listPeriod={listPeriod}
+              value={index}
+              handleChange={handleChangeName}
+            />
+            <TableInfrequencyPeriod listData={listData} />
+          </>
+        )}
         {period === 'ANO' && <TableInfrequencyPeriod listData={listData} />}
       </Box>
     </Box>
