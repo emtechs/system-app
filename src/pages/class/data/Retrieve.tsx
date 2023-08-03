@@ -7,7 +7,7 @@ import {
   TitleClassRetrievePage,
   ViewStudent,
   ViewFrequency,
-  ViewInfrequency,
+  // ViewInfrequency,
   LayoutBasePage,
   TabsClassRetrievePage,
   Footer,
@@ -50,10 +50,10 @@ export const RetrieveClassPage = () => {
         setTools(<Tools isDash back="/school" />)
         break
 
-      case 'infrequency':
-        setView(<ViewInfrequency />)
-        setTools(<Tools isDash back="/school" />)
-        break
+      // case 'infrequency':
+      //   setView(<ViewInfrequency />)
+      //   setTools(<Tools isDash back="/school" />)
+      //   break
 
       default:
         setView(<ViewClassData id={class_id} />)

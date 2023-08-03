@@ -7,6 +7,11 @@ interface iDataBase {
   name: string
 }
 
+export interface iDataInfrequency extends iDataBase {
+  infrequency: number
+  frequencies: number
+}
+
 interface iDataReportClass {
   id: string
   name: string

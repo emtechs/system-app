@@ -1,9 +1,10 @@
 import { useEffect } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { useVerifyYear, LayoutBasePage, Footer } from '../../shared'
+import { useVerifyYear } from '../../shared'
 import {
   ViewDashboardSchoolClassPage,
   ViewDashboardSchoolFrequencyPage,
+  ViewDashboardSchoolInfrequencyPage,
   ViewDashboardSchoolReportPage,
   ViewDashboardSchoolStudentPage,
 } from './view'
@@ -28,11 +29,9 @@ export const ViewDashboardSchoolPage = () => {
       return <ViewDashboardSchoolFrequencyPage year_id={year_id} />
     case 'report':
       return <ViewDashboardSchoolReportPage />
+    case 'infrequency':
+      return <ViewDashboardSchoolInfrequencyPage year_id={year_id} />
+    default:
+      return <></>
   }
-
-  return (
-    <LayoutBasePage title={<></>} tools={<></>}>
-      <Footer />
-    </LayoutBasePage>
-  )
 }

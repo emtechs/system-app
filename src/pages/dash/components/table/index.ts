@@ -1,4 +1,6 @@
 export * from './Class'
 export * from './ClassFrequency'
 export * from './Frequency'
+export * from './Infrequency'
+export * from './InfrequencyPeriod'
 export * from './Student'

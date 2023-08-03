@@ -7,8 +7,8 @@ import {
   TableBase,
   LinkText,
   DialogCreateSchool,
-  TableCellLoading,
   ActionsActive,
+  TableCellDataLoading,
 } from '../../../../shared'
 
 interface iTableSchoolProps {
@@ -49,9 +49,9 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
                   name
                 )}
               </TableCell>
-              <TableCellLoading loading={isLoading} width={200}>
+              <TableCellDataLoading loading={isLoading} width={200}>
                 {director?.name}
-              </TableCellLoading>
+              </TableCellDataLoading>
               <ActionsActive
                 handleData={handleData}
                 is_active={is_active}

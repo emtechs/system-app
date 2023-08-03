@@ -1,37 +1,19 @@
 import { FieldValues } from 'react-hook-form'
 import {
-  iInfrequency,
-  iPeriod,
+  iDataInfrequency,
   iReportClass,
   iReportSchool,
   iReportStudent,
 } from '../interfaces'
 import { apiUsingNow } from './api'
 
-const update = async (data: FieldValues, id: string): Promise<void> => {
-  await apiUsingNow.patch(`infrequencies/${id}`, data)
-}
-
-interface iInfrequencyReturn {
-  result: iInfrequency[]
-  total: number
-}
-
-const list = async (query: string): Promise<iInfrequencyReturn> => {
-  const { data: response } = await apiUsingNow.get<iInfrequencyReturn>(
-    `infrequencies${query}`,
-  )
-  return response
-}
-
-interface iListClassReturn {
-  periods: iPeriod[]
-  total: number
-}
-
-const listClass = async (query: string): Promise<iListClassReturn> => {
-  const { data: response } = await apiUsingNow.get<iListClassReturn>(
-    `infrequencies/class${query}`,
+const school = async (
+  id: string,
+  year_id: string,
+  query: string,
+): Promise<iDataInfrequency[]> => {
+  const { data: response } = await apiUsingNow.get<iDataInfrequency[]>(
+    `infrequencies/school/${id}/${year_id}${query}`,
   )
   return response
 }
@@ -61,9 +43,7 @@ const reportStudent = async (data: FieldValues): Promise<iReportStudent> => {
 }
 
 export const apiInfrequency = {
-  update,
-  list,
-  listClass,
+  school,
   reportClass,
   reportSchool,
   reportStudent,

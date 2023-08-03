@@ -7,7 +7,7 @@ import {
   iHeadCell,
   TableBase,
   LinkText,
-  TableCellLoading,
+  TableCellDataLoading,
   ActionsActive,
 } from '../../../../shared'
 
@@ -64,9 +64,9 @@ export const TableSchoolPage = ({
                 name
               )}
             </TableCell>
-            <TableCellLoading loading={isLoading} width={200}>
+            <TableCellDataLoading loading={isLoading} width={200}>
               {director?.name}
-            </TableCellLoading>
+            </TableCellDataLoading>
             <ActionsActive
               handleData={handleData}
               is_active={is_active}

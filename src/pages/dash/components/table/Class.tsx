@@ -7,7 +7,7 @@ import {
   usePaginationContext,
   iHeadCell,
   TableBase,
-  LinkText,
+  TableCellDataLoading,
 } from '../../../../shared'
 
 interface iTableDashboardSchoolClassPageProps {
@@ -18,7 +18,7 @@ export const TableDashboardSchoolClassPage = ({
   listData,
 }: iTableDashboardSchoolClassPageProps) => {
   const { mdDown } = useAppThemeContext()
-  const { order, by, isLoading, onClickReset } = usePaginationContext()
+  const { order, by, isLoading } = usePaginationContext()
 
   const data = useMemo(() => {
     const listClass = sortArray<iClass>(listData, {
@@ -41,15 +41,10 @@ export const TableDashboardSchoolClassPage = ({
   return (
     <TableBase headCells={headCells}>
       {data.map((el) => (
-        <TableRow key={el.key} hover>
-          <TableCell>
-            <LinkText
-              label={el.name}
-              isLoading={isLoading}
-              onClick={onClickReset}
-              to={`/class/key/${el.key}?view=student`}
-            />
-          </TableCell>
+        <TableRow key={el.key}>
+          <TableCellDataLoading loading={isLoading}>
+            {el.name}
+          </TableCellDataLoading>
           {!mdDown && (
             <>
               <TableCell align="right">{el.students}</TableCell>

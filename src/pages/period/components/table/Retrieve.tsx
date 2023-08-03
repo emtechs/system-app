@@ -7,8 +7,8 @@ import {
   usePaginationContext,
   iHeadCell,
   TableBase,
-  TableCellLoading,
   useDialogContext,
+  TableCellDataLoading,
 } from '../../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
@@ -48,13 +48,15 @@ export const TableRetrievePeriodPage = ({
         }
         return (
           <TableRow key={el.id} hover>
-            <TableCellLoading loading={isLoading}>{el.name}</TableCellLoading>
-            <TableCellLoading loading={isLoading}>
+            <TableCellDataLoading loading={isLoading}>
+              {el.name}
+            </TableCellDataLoading>
+            <TableCellDataLoading loading={isLoading}>
               {dayjs(el.date_initial).utc().format('L')}
-            </TableCellLoading>
-            <TableCellLoading loading={isLoading}>
+            </TableCellDataLoading>
+            <TableCellDataLoading loading={isLoading}>
               {dayjs(el.date_final).utc().format('L')}
-            </TableCellLoading>
+            </TableCellDataLoading>
             <TableCell>
               <Tooltip title="Editar">
                 <IconButton color="success" size="small" onClick={onClickEdit}>

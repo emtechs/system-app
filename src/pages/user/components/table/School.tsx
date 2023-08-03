@@ -6,7 +6,7 @@ import {
   usePaginationContext,
   iHeadCell,
   TableBase,
-  TableCellLoading,
+  TableCellDataLoading,
   rolePtBr,
   ActionsRemove,
   DialogRemoveUser,
@@ -49,9 +49,9 @@ export const TableUserSchoolPage = ({
           const handleData = () => handleSchool(el)
           return (
             <TableRow key={key} hover>
-              <TableCellLoading loading={isLoading} width={250}>
+              <TableCellDataLoading loading={isLoading} width={250}>
                 {name}
-              </TableCellLoading>
+              </TableCellDataLoading>
               <TableCell>{rolePtBr(role)}</TableCell>
               <TableCell>
                 {el.dash === 'SCHOOL' ? 'Escola' : 'Frequência'}

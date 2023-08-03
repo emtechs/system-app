@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { Checklist } from '@mui/icons-material'
 import { Box, Chip } from '@mui/material'
 import { SyntheticEvent, useCallback, useEffect, useState } from 'react'
@@ -17,7 +18,6 @@ import {
   TabsMonth,
 } from '../../../shared'
 import { TableDashboardSchoolFrequencyPage } from '../components'
-import { z } from 'zod'
 
 interface iViewDashboardSchoolFrequencyPageProps {
   year_id?: string

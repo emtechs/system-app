@@ -6,9 +6,9 @@ import {
   usePaginationContext,
   iHeadCell,
   TableBase,
-  TableCellLoading,
   ActionsEdit,
   LinkText,
+  TableCellDataLoading,
 } from '../../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
@@ -52,12 +52,12 @@ export const TablePeriodPage = ({
                 to={`/period/${el.year.id}`}
               />
             </TableCell>
-            <TableCellLoading loading={isLoading}>
+            <TableCellDataLoading loading={isLoading}>
               {dayjs(el.date_initial).utc().format('L')}
-            </TableCellLoading>
-            <TableCellLoading loading={isLoading}>
+            </TableCellDataLoading>
+            <TableCellDataLoading loading={isLoading}>
               {dayjs(el.date_final).utc().format('L')}
-            </TableCellLoading>
+            </TableCellDataLoading>
             <ActionsEdit handleData={handleData} to={`/period/${el.year.id}`} />
           </TableRow>
         )

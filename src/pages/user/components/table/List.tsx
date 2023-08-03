@@ -8,7 +8,7 @@ import {
   iHeadCell,
   TableBase,
   LinkText,
-  TableCellLoading,
+  TableCellDataLoading,
   rolePtBr,
   ActionsActive,
 } from '../../../../shared'
@@ -67,11 +67,13 @@ export const TableUserPage = ({
                 name
               )}
             </TableCell>
-            <TableCellLoading loading={isLoading}>{cpf}</TableCellLoading>
+            <TableCellDataLoading loading={isLoading}>
+              {cpf}
+            </TableCellDataLoading>
             {!mdDown && (
-              <TableCellLoading loading={isLoading}>
+              <TableCellDataLoading loading={isLoading}>
                 {rolePtBr(role)}
-              </TableCellLoading>
+              </TableCellDataLoading>
             )}
             <ActionsActive
               handleData={handleData}

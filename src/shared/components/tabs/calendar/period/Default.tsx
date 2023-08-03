@@ -1,5 +1,5 @@
 import { Box, Tab, Tabs } from '@mui/material'
-import { iTabsBaseProps } from '../../interfaces'
+import { iTabsBaseProps } from '../../../../interfaces'
 
 export const TabsPeriod = ({ value, handleChange }: iTabsBaseProps) => {
   return (
