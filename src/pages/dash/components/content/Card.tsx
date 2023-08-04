@@ -1,22 +1,31 @@
+import { useMemo } from 'react'
 import { Button, Card, CardActions, CardContent, Grid } from '@mui/material'
+import { zodResolver } from '@hookform/resolvers/zod'
 import {
   FieldValues,
   FormContainer,
   RadioButtonGroup,
   useFormContext,
 } from 'react-hook-form-mui'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { AutoCompleteYear } from '../../../../shared/components'
-import { useAuthContext, useSchoolContext } from '../../../../shared/contexts'
 import {
+  useAuthContext,
+  useSchoolContext,
+  iReport,
   reportClassSchema,
-  reportSchema,
   reportSchoolSchema,
   reportStudentSchema,
-} from '../../../../shared/schemas'
-import { AutoCompletePeriodReportPage, ContentReport } from '../../components'
-import { iReport } from '../../../../shared'
-import { useMemo } from 'react'
+  reportSchema,
+  AutoCompleteYear,
+  reportCustomSchema,
+  reportCustomClassSchema,
+  reportCustomSchoolSchema,
+  reportCustomStudentSchema,
+} from '../../../../shared'
+import {
+  AutoCompletePeriodReportPage,
+  ContentReport,
+  ContentReportCustom,
+} from '../../components'
 
 const ResetButton = () => {
   const { reset } = useFormContext()
@@ -41,12 +50,14 @@ interface iContentCardReportProps {
   typeData?: iReport
   handleTypeData: (newType: iReport) => void
   onSuccess: (data: FieldValues) => void
+  view?: string
 }
 
 export const ContentCardReport = ({
   handleTypeData,
   onSuccess,
   typeData,
+  view,
 }: iContentCardReportProps) => {
   const { yearData } = useAuthContext()
   const { schoolSelect } = useSchoolContext()
@@ -54,18 +65,22 @@ export const ContentCardReport = ({
   const schema = useMemo(() => {
     switch (typeData) {
       case 'class':
+        if (view) return reportCustomClassSchema
         return reportClassSchema
 
       case 'school':
+        if (view) return reportCustomSchoolSchema
         return reportSchoolSchema
 
       case 'student':
+        if (view) return reportCustomStudentSchema
         return reportStudentSchema
 
       default:
+        if (view) return reportCustomSchema
         return reportSchema
     }
-  }, [typeData])
+  }, [typeData, view])
 
   return (
     <FormContainer
@@ -101,7 +116,11 @@ export const ContentCardReport = ({
               <ContentReport />
             </Grid>
             <Grid item md={4}>
-              <AutoCompletePeriodReportPage />
+              {view ? (
+                <ContentReportCustom />
+              ) : (
+                <AutoCompletePeriodReportPage />
+              )}
             </Grid>
           </Grid>
         </CardContent>

@@ -22,7 +22,13 @@ import {
   PrintStudentReport,
 } from '../../components'
 
-export const CardDashboardSchoolReportPage = () => {
+interface iCardDashboardSchoolReportPageProps {
+  view?: string
+}
+
+export const CardDashboardSchoolReportPage = ({
+  view,
+}: iCardDashboardSchoolReportPageProps) => {
   const { userProfile } = useAuthContext()
   const componentRef = useRef(null)
   const onBeforeGetContentResolve = useRef<(() => void) | null>(null)
@@ -171,6 +177,7 @@ export const CardDashboardSchoolReportPage = () => {
           handleTypeData={handleTypeData}
           onSuccess={onSuccess}
           typeData={typeData}
+          view={view}
         />
       </Box>
       <CompLoading loading={loading} />
