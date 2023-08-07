@@ -78,7 +78,7 @@ export const DialogFinishFrequency = ({
   const action = () => {
     updateFrequency(
       {
-        status: 'CLOSED',
+        is_open: false,
         finished_at: Date.now(),
       },
       frequency_id,

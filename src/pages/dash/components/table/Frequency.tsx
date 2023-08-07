@@ -70,16 +70,14 @@ export const TableDashboardSchoolFrequencyPage = ({
       message="Nenhuma frequência realizada"
     >
       {data.map((el) => {
-        const { id, status, finished_at, date, infrequency } = el
-        const href = status === 'CLOSED' ? '' : `/${schoolSelect?.id}/day/${id}`
+        const { id, is_open, finished_at, date, infrequency } = el
+        const href = is_open ? `/${schoolSelect?.id}/day/${id}` : ''
         return (
           <TableRowLink key={id} href={href} onClick={onClickReset}>
             {!mdDown && (
               <TableCellLink link="div">
                 <ChildrenLoading isLoading={isLoading} width={100}>
-                  {status === 'CLOSED'
-                    ? dayjs(finished_at).fromNow()
-                    : 'Não Finalizado'}
+                  {is_open ? 'Não Finalizado' : dayjs(finished_at).fromNow()}
                 </ChildrenLoading>
               </TableCellLink>
             )}

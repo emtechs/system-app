@@ -4,8 +4,6 @@ import { iStudent } from './student.interface'
 
 export type iFrequencyRequest = z.infer<typeof frequencyCreateSchema>
 
-export type iStatusFrequency = 'OPENED' | 'CLOSED'
-
 export type iStatusStudent = 'PRESENTED' | 'MISSED' | 'JUSTIFIED'
 
 interface iUserFreq {
@@ -23,7 +21,7 @@ export interface iFrequencyBase {
   id: string
   date: string
   date_time: Date
-  status: iStatusFrequency
+  is_open: boolean
   created_at: Date
   finished_at: number
   infrequency: number
