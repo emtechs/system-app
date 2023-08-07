@@ -3,28 +3,25 @@ import { useNavigate } from 'react-router-dom'
 import {
   useAppThemeContext,
   useSchoolContext,
-  useClassContext,
-  useCalendarContext,
   useDrawerContext,
+  useFrequencyContext,
 } from '../../contexts'
 import { apiAuth } from '../../services'
 
-export const useVerifyClassKey = () => {
+export const useVerifyFrequency = () => {
   const navigate = useNavigate()
   const { setLoading } = useAppThemeContext()
   const { setSchoolSelect } = useSchoolContext()
-  const { setClassSelect } = useClassContext()
-  const { setYearSelect } = useCalendarContext()
+  const { setFrequencySelect } = useFrequencyContext()
   const { handleDisplayDash } = useDrawerContext()
 
-  const verifyClassKey = useCallback((id: string) => {
+  const verifyFrequency = useCallback((id: string) => {
     setLoading(true)
     apiAuth
-      .verify(`?key_class=${id}`)
+      .verify(`?frequency_id=${id}`)
       .then((res) => {
-        setClassSelect(res.select)
+        setFrequencySelect(res.select)
         setSchoolSelect(res.school)
-        setYearSelect(res.year)
       })
       .catch(() => {
         handleDisplayDash('ADMIN')
@@ -33,5 +30,5 @@ export const useVerifyClassKey = () => {
       .finally(() => setLoading(false))
   }, [])
 
-  return { verifyClassKey }
+  return { verifyFrequency }
 }

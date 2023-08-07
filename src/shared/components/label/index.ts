@@ -1,4 +1,5 @@
 export * from './Class'
+export * from './Frequency'
 export * from './Profile'
 export * from './School'
 export * from './User'

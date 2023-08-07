@@ -2,16 +2,15 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import {
   ClassPage,
   DashboardSchoolPage,
+  DataDashboardSchoolPage,
   EditPasswordPage,
   EditProfilePage,
-  FrequencyDayPage,
   FrequencyPage,
   HomePage,
   Login,
   PasswordPage,
   PeriodPage,
   RetrieveClassPage,
-  RetrieveFrequencyPage,
   RetrievePeriodPage,
   RetrieveSchoolPage,
   RetrieveUserPage,
@@ -59,11 +58,10 @@ const AppRoutes = () => {
           </Route>
         </Route>
         <Route path="/" element={<HomePage />} />
-        <Route path="/:school_id/day" element={<FrequencyDayPage />}>
-          <Route path=":frequency_id" element={<RetrieveFrequencyPage />} />
-        </Route>
         <Route path="/:school_id" element={<DashboardSchoolPage />}>
-          <Route path=":view" element={<ViewDashboardSchoolPage />} />
+          <Route path=":view" element={<ViewDashboardSchoolPage />}>
+            <Route path=":id" element={<DataDashboardSchoolPage />} />
+          </Route>
         </Route>
         <Route path="/profile/edit" element={<EditProfilePage />}>
           <Route path=":view" element={<EditPasswordPage />} />

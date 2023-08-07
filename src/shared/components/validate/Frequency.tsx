@@ -20,7 +20,7 @@ export const ValidateFrequency = () => {
           year_id: classData.year_id,
           students: classData.students,
         },
-        `/${classData.school_id}/day`,
+        `/${classData.school_id}/frequency`,
       )
     }
   }, [classData, dateData, monthData])

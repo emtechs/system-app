@@ -31,6 +31,7 @@ export interface iViewBaseProps {
 export interface iSelectBase {
   id: string
   label: string
+  is_open?: boolean
 }
 
 export interface iButtonBaseProps {

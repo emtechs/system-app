@@ -15,6 +15,7 @@ import {
   iChildren,
   apiFrequency,
   useAppThemeContext,
+  iSelectBase,
 } from '../../shared'
 
 interface iFrequencyContextData {
@@ -43,6 +44,8 @@ interface iFrequencyContextData {
   >
   isInfreq: boolean
   setIsInfreq: Dispatch<SetStateAction<boolean>>
+  frequencySelect: iSelectBase | undefined
+  setFrequencySelect: Dispatch<SetStateAction<iSelectBase | undefined>>
 }
 
 const FrequencyContext = createContext({} as iFrequencyContextData)
@@ -55,6 +58,7 @@ export const FrequencyProvider = ({ children }: iChildren) => {
   const [retrieveFreq, setRetrieveFreq] = useState<iFrequencyWithInfreq>()
   const [dataStudents, setDataStudents] = useState<iFrequencyStudentsBase[]>()
   const [alterStudents, setAlterStudents] = useState<iFrequencyStudentsBase[]>()
+  const [frequencySelect, setFrequencySelect] = useState<iSelectBase>()
   const [isInfreq, setIsInfreq] = useState(false)
 
   const handleCreateFrequency = useCallback(
@@ -150,6 +154,8 @@ export const FrequencyProvider = ({ children }: iChildren) => {
         setDataStudents,
         alterStudents,
         setAlterStudents,
+        frequencySelect,
+        setFrequencySelect,
       }}
     >
       {children}

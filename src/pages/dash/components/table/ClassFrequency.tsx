@@ -60,7 +60,7 @@ export const TableDashboardSchoolClassFrequencyPage = ({
                 year_id: el.year_id,
                 students: el.students,
               },
-              `/${el.school_id}/day`,
+              `/${el.school_id}/frequency`,
             )
           }}
         >

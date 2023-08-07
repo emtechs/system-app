@@ -1,5 +1,7 @@
 export * from './Class'
 export * from './Frequency'
+export * from './FrequencyData'
 export * from './Infrequency'
 export * from './Report'
 export * from './Student'
+export * from './data'

@@ -50,7 +50,6 @@ const destroy = async (id: string) => {
 
 interface iStudentsReturn {
   total: number
-  frequency: iFrequencyBase
   result: iFrequencyStudentsBase[]
 }
 

@@ -71,9 +71,12 @@ export const TableDashboardSchoolFrequencyPage = ({
     >
       {data.map((el) => {
         const { id, is_open, finished_at, date, infrequency } = el
-        const href = is_open ? `/${schoolSelect?.id}/day/${id}` : ''
         return (
-          <TableRowLink key={id} href={href} onClick={onClickReset}>
+          <TableRowLink
+            key={id}
+            href={`/${schoolSelect?.id}/frequency/${id}`}
+            onClick={onClickReset}
+          >
             {!mdDown && (
               <TableCellLink link="div">
                 <ChildrenLoading isLoading={isLoading} width={100}>

@@ -1,6 +1,5 @@
 import { z } from 'zod'
 import { frequencyCreateSchema } from '../schemas'
-import { iStudent } from './student.interface'
 
 export type iFrequencyRequest = z.infer<typeof frequencyCreateSchema>
 
@@ -42,10 +41,11 @@ interface iFrequencyInfreqBase extends iFrequencyBase {
 
 export interface iFrequencyStudentsBase {
   id: string
+  name: string
+  registry: string
   status: iStatusStudent
   justification?: string
   updated_at?: string
-  student: iStudent
 }
 
 export interface iFrequencyStudents extends iFrequencyStudentsBase {

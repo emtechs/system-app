@@ -1,38 +1,62 @@
+import { useCallback } from 'react'
 import { Box, Button, Typography } from '@mui/material'
-import { iFrequencyStudentsBase } from '../../../interfaces'
-import { useFrequencyContext } from '../../../contexts'
+import {
+  FieldValues,
+  FormContainer,
+  TextFieldElement,
+} from 'react-hook-form-mui'
+import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
-import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
-import { frequencyUpdateSchema } from '../../../schemas'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { DialogBaseChildrenAction } from '../structure'
+import {
+  iFrequencyStudentsBase,
+  useAppThemeContext,
+  apiFrequency,
+  frequencyUpdateSchema,
+  DialogBaseChildrenAction,
+} from '../../../../shared'
 
 interface iDialogMissedProps {
   open: boolean
   onClose: () => void
   student: iFrequencyStudentsBase
+  list: () => void
 }
 
 export const DialogMissed = ({
   open,
   onClose,
   student,
+  list,
 }: iDialogMissedProps) => {
-  const { updateFrequencyStudent, setStudentData } = useFrequencyContext()
-  const action = () => {
-    updateFrequencyStudent(
-      { status: 'MISSED', updated_at: dayjs().format() },
-      student.id,
-    )
-    onClose()
-  }
+  const { setLoading, handleError } = useAppThemeContext()
+
+  const updateFrequencyStudent = useCallback(
+    (data: FieldValues) => {
+      onClose()
+      setLoading(true)
+      apiFrequency
+        .updateFreqStudent(data, student.id)
+        .catch(() =>
+          handleError('Não foi possível cadastrar a falta no momento!'),
+        )
+        .finally(() => {
+          setLoading(false)
+          list()
+        })
+    },
+    [student],
+  )
+
+  const action = () =>
+    updateFrequencyStudent({ status: 'MISSED', updated_at: dayjs().format() })
+
   return (
     <DialogBaseChildrenAction
       open={open}
       onClose={onClose}
       title="Informar Falta"
-      description={`Você está cadastrando a falta para o aluno ${student.student.name}.
+      description={`Você está cadastrando a falta para o aluno ${student.name}.
       No campo abaixo, preencha a justificativa da falta caso o
       aluno tenha justificado. Caso contrário, clique no botão
       "Faltou".`}
@@ -40,16 +64,12 @@ export const DialogMissed = ({
       actionTitle="Faltou"
     >
       <FormContainer
-        onSuccess={(data) => {
-          updateFrequencyStudent(data, student.id)
-          setStudentData(undefined)
-          onClose()
-        }}
+        onSuccess={updateFrequencyStudent}
         resolver={zodResolver(frequencyUpdateSchema)}
       >
         <Box mt={1} display="flex" flexDirection="column" gap={1}>
-          <Typography>Matrícula: {student.student.registry}</Typography>
-          <Typography>Aluno: {student.student.name}</Typography>
+          <Typography>Matrícula: {student.registry}</Typography>
+          <Typography>Aluno: {student.name}</Typography>
           <TextFieldElement
             name="justification"
             label="Justificativa"

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { Outlet, useParams, useSearchParams } from 'react-router-dom'
 import { useVerifyYear } from '../../shared'
 import {
   ViewDashboardSchoolClassPage,
@@ -11,7 +11,7 @@ import {
 import { z } from 'zod'
 
 export const ViewDashboardSchoolPage = () => {
-  const { view } = useParams()
+  const { view, id } = useParams()
   const [searchParams] = useSearchParams()
   const year_id = searchParams.get('year_id') || undefined
   const { verifyYear } = useVerifyYear()
@@ -19,6 +19,8 @@ export const ViewDashboardSchoolPage = () => {
   useEffect(() => {
     if (z.string().uuid().safeParse(year_id).success) verifyYear(year_id)
   }, [verifyYear, year_id])
+
+  if (id) return <Outlet />
 
   switch (view) {
     case 'class':

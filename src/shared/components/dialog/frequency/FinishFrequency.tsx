@@ -30,8 +30,8 @@ const CardFrequency = ({ student }: iCardFrequencyProps) => {
 
   return (
     <TableRow>
-      <TableCell>{student.student.registry}</TableCell>
-      <TableCell>{student.student.name}</TableCell>
+      <TableCell>{student.registry}</TableCell>
+      <TableCell>{student.name}</TableCell>
       <TableCell
         sx={{
           bgcolor: defineBgColorFrequency(student.status, theme),

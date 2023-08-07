@@ -1,6 +1,7 @@
 export * from './UseVerifyClass'
 export * from './UseVerifyClassKey'
 export * from './UseVerifyDisplay'
+export * from './UseVerifyFrequency'
 export * from './UseVerifySchool'
 export * from './UseVerifyUser'
 export * from './UseVerifyYear'

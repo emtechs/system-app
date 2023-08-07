@@ -20,6 +20,8 @@ export const OtherListItemLink = ({
   const href = baseHref + to
   const location = useLocation()
 
+  console.log(location.pathname, href)
+
   const selected = useMemo(() => {
     if (baseHref.length > 1) return location.pathname === href
 

@@ -1,5 +1,7 @@
 export * from './Class'
 export * from './ClassFrequency'
+export * from './DataFrequency'
+export * from './DataFrequencyOpen'
 export * from './Frequency'
 export * from './Infrequency'
 export * from './InfrequencyPeriod'
