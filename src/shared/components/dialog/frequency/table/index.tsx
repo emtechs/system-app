@@ -6,27 +6,27 @@ import {
   useAppThemeContext,
   usePaginationContext,
   iHeadCell,
+  defineBgColorFrequency,
+  statusFrequencyPtBr,
   TableBase,
   TableCellDataLoading,
   TableCellLoading,
-  defineBgColorFrequency,
-  statusFrequencyPtBr,
-} from '../../../../shared'
+} from '../../../../../shared'
 
-interface iTableDashboardSchoolFrequencyDataPageProps {
+interface iTableDialogFinishFrequencyProps {
   listData: iFrequencyStudentsBase[]
 }
 
-export const TableDashboardSchoolFrequencyDataPage = ({
+export const TableDialogFinishFrequency = ({
   listData,
-}: iTableDashboardSchoolFrequencyDataPageProps) => {
+}: iTableDialogFinishFrequencyProps) => {
   const { theme } = useAppThemeContext()
   const { isLoading, order, by } = usePaginationContext()
 
   const headCells: iHeadCell[] = [
-    { order: 'registry', numeric: 'left', label: 'Matrícula' },
-    { order: 'name', numeric: 'left', label: 'Aluno' },
-    { order: 'status', numeric: 'left', label: 'Estado da Presença' },
+    { numeric: 'left', label: 'Matrícula' },
+    { numeric: 'left', label: 'Aluno' },
+    { numeric: 'left', label: 'Estado da Presença' },
   ]
 
   const data = useMemo(() => {
@@ -37,16 +37,16 @@ export const TableDashboardSchoolFrequencyDataPage = ({
   }, [by, listData, order])
 
   return (
-    <TableBase headCells={headCells}>
+    <TableBase headCells={headCells} message="Todos os alunos estão presentes.">
       {data.map((el) => (
         <TableRow key={el.id}>
           <TableCellDataLoading loading={isLoading} width={80}>
             {el.registry}
           </TableCellDataLoading>
-          <TableCellDataLoading loading={isLoading} width={200}>
+          <TableCellDataLoading loading={isLoading} width={150}>
             {el.name}
           </TableCellDataLoading>
-          <TableCellLoading isLoading={isLoading}>
+          <TableCellLoading isLoading={isLoading} width={100}>
             <TableCell
               sx={{
                 bgcolor: defineBgColorFrequency(el.status, theme),

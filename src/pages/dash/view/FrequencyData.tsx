@@ -12,6 +12,7 @@ import {
   Footer,
   LabelFrequency,
   DialogFinishFrequency,
+  useDialogContext,
 } from '../../../shared'
 import {
   DataDashboardSchoolFrequencyOpenPage,
@@ -28,9 +29,8 @@ export const ViewDashboardSchoolFrequencyDataPage = ({
   const { schoolSelect } = useSchoolContext()
   const { frequencySelect } = useFrequencyContext()
   const { verifyFrequency } = useVerifyFrequency()
+  const { handleOpenCreate } = useDialogContext()
   const [isAlter, setIsAlter] = useState(false)
-  const [open, setOpen] = useState(false)
-  const handleClose = () => setOpen(!open)
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
     setIsAlter(event.target.checked)
@@ -57,7 +57,7 @@ export const ViewDashboardSchoolFrequencyDataPage = ({
                 label="Alteradas"
               />
               <Button
-                onClick={handleClose}
+                onClick={handleOpenCreate}
                 disableElevation
                 variant="contained"
                 endIcon={<Checklist />}
@@ -80,11 +80,12 @@ export const ViewDashboardSchoolFrequencyDataPage = ({
             frequency_id={frequency_id}
             isAlter={isAlter}
           />
-          <DialogFinishFrequency
-            open={open}
-            onClose={handleClose}
-            frequency_id={frequency_id}
-          />
+          {schoolSelect && (
+            <DialogFinishFrequency
+              frequency_id={frequency_id}
+              school_id={schoolSelect.id}
+            />
+          )}
         </>
       )
 

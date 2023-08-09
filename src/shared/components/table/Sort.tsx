@@ -1,7 +1,10 @@
 import { TableHead, TableRow, TableSortLabel } from '@mui/material'
-import { usePaginationContext } from '../../contexts'
-import { iLinkComp, iHeadCell } from '../../interfaces'
-import { TableCellLink } from './CellLink'
+import {
+  TableCellLink,
+  iHeadCell,
+  iLinkComp,
+  usePaginationContext,
+} from '../../../shared'
 
 interface iSortProps {
   headCells: iHeadCell[]

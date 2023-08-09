@@ -10,10 +10,13 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import { usePaginationContext } from '../../contexts'
-import { iLinkComp, iTable } from '../../interfaces'
+import {
+  iTable,
+  usePaginationContext,
+  iLinkComp,
+  TableCellLink,
+} from '../../../shared'
 import { TableSort } from './Sort'
-import { TableCellLink } from './CellLink'
 
 export const TableBase = ({
   message,
