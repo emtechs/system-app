@@ -14,36 +14,26 @@ import {
   apiFrequency,
   frequencyUpdateSchema,
   DialogBaseChildrenAction,
+  useDialogContext,
 } from '../../../../shared'
 
 interface iDialogMissedProps {
-  open: boolean
-  onClose: () => void
   student: iFrequencyStudentsBase
   list: () => void
 }
 
-export const DialogMissed = ({
-  open,
-  onClose,
-  student,
-  list,
-}: iDialogMissedProps) => {
-  const { setLoading, handleError } = useAppThemeContext()
-
+export const DialogMissed = ({ student, list }: iDialogMissedProps) => {
+  const { openEdit, handleOpenEdit } = useDialogContext()
+  const { handleError } = useAppThemeContext()
   const updateFrequencyStudent = useCallback(
     (data: FieldValues) => {
-      onClose()
-      setLoading(true)
+      handleOpenEdit()
       apiFrequency
         .updateFreqStudent(data, student.id)
         .catch(() =>
           handleError('Não foi possível cadastrar a falta no momento!'),
         )
-        .finally(() => {
-          setLoading(false)
-          list()
-        })
+        .finally(() => list())
     },
     [student],
   )
@@ -53,8 +43,8 @@ export const DialogMissed = ({
 
   return (
     <DialogBaseChildrenAction
-      open={open}
-      onClose={onClose}
+      open={openEdit}
+      onClose={handleOpenEdit}
       title="Informar Falta"
       description={`Você está cadastrando a falta para o aluno ${student.name}.
       No campo abaixo, preencha a justificativa da falta caso o

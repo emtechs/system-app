@@ -22,8 +22,12 @@ export const DialogFinishFrequency = ({
 }: iDialogFinishFrequencyProps) => {
   const navigate = useNavigate()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
-  const { openCreate, handleOpenCreate } = useDialogContext()
-  const { setCount, setIsLoading, query_page } = usePaginationContext()
+  const {
+    openCreate,
+    handleOpenCreate,
+    setLoading: setIsLoading,
+  } = useDialogContext()
+  const { setCount, query_page } = usePaginationContext()
   const [alterStudents, setAlterStudents] = useState<iFrequencyStudentsBase[]>(
     [],
   )

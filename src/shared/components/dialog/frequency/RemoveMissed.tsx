@@ -5,28 +5,25 @@ import {
   useAppThemeContext,
   apiFrequency,
   DialogBaseChildrenAction,
+  useDialogContext,
 } from '../../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 
 interface iDialogRemoveMissedProps {
-  open: boolean
-  onClose: () => void
   student: iFrequencyStudentsBase
   list: () => void
 }
 
 export const DialogRemoveMissed = ({
-  open,
-  onClose,
   student,
   list,
 }: iDialogRemoveMissedProps) => {
-  const { setLoading, handleError } = useAppThemeContext()
+  const { handleError } = useAppThemeContext()
+  const { openEdit, handleOpenEdit } = useDialogContext()
 
   const action = useCallback(() => {
-    onClose()
-    setLoading(true)
+    handleOpenEdit()
     apiFrequency
       .updateFreqStudent(
         {
@@ -39,16 +36,13 @@ export const DialogRemoveMissed = ({
       .catch(() =>
         handleError('Não foi possível cadastrar a falta no momento!'),
       )
-      .finally(() => {
-        setLoading(false)
-        list()
-      })
+      .finally(() => list())
   }, [student])
 
   return (
     <DialogBaseChildrenAction
-      open={open}
-      onClose={onClose}
+      open={openEdit}
+      onClose={handleOpenEdit}
       title="Retirar Falta"
       description={`Deseja continuar removendo a falta do aluno ${student.name}
       ?`}

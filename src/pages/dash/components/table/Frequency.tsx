@@ -21,10 +21,12 @@ dayjs.extend(relativeTime)
 
 interface iTableDashboardSchoolFrequencyPageProps {
   listData: iFrequencyBase[]
+  message: string
 }
 
 export const TableDashboardSchoolFrequencyPage = ({
   listData,
+  message,
 }: iTableDashboardSchoolFrequencyPageProps) => {
   const { mdDown, theme } = useAppThemeContext()
   const { order, by, onClickReset, isLoading } = usePaginationContext()
@@ -64,11 +66,7 @@ export const TableDashboardSchoolFrequencyPage = ({
   }, [by, listData, order])
 
   return (
-    <TableBase
-      headCells={headCells}
-      link="div"
-      message="Nenhuma frequência realizada"
-    >
+    <TableBase headCells={headCells} link="div" message={message}>
       {data.map((el) => {
         const { id, is_open, finished_at, date, infrequency } = el
         return (

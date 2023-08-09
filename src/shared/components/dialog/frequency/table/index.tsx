@@ -11,6 +11,7 @@ import {
   TableBase,
   TableCellDataLoading,
   TableCellLoading,
+  useDialogContext,
 } from '../../../../../shared'
 
 interface iTableDialogFinishFrequencyProps {
@@ -21,7 +22,8 @@ export const TableDialogFinishFrequency = ({
   listData,
 }: iTableDialogFinishFrequencyProps) => {
   const { theme } = useAppThemeContext()
-  const { isLoading, order, by } = usePaginationContext()
+  const { order, by } = usePaginationContext()
+  const { loading } = useDialogContext()
 
   const headCells: iHeadCell[] = [
     { numeric: 'left', label: 'Matrícula' },
@@ -40,13 +42,13 @@ export const TableDialogFinishFrequency = ({
     <TableBase headCells={headCells} message="Todos os alunos estão presentes.">
       {data.map((el) => (
         <TableRow key={el.id}>
-          <TableCellDataLoading loading={isLoading} width={80}>
+          <TableCellDataLoading loading={loading} width={80}>
             {el.registry}
           </TableCellDataLoading>
-          <TableCellDataLoading loading={isLoading} width={150}>
+          <TableCellDataLoading loading={loading} width={150}>
             {el.name}
           </TableCellDataLoading>
-          <TableCellLoading isLoading={isLoading} width={100}>
+          <TableCellLoading isLoading={loading} width={100}>
             <TableCell
               sx={{
                 bgcolor: defineBgColorFrequency(el.status, theme),

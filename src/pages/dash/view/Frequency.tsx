@@ -124,7 +124,14 @@ export const ViewDashboardSchoolFrequencyPage = ({
           <TabsMonth value={index} handleChange={handleChange} />
         )}
         <Box flex={1}>
-          <TableDashboardSchoolFrequencyPage listData={listData} />
+          <TableDashboardSchoolFrequencyPage
+            listData={listData}
+            message={
+              year_id === 'none'
+                ? 'Nenhuma frequência pendente'
+                : 'Nenhuma frequência realizada'
+            }
+          />
         </Box>
       </Box>
       <PaginationTable

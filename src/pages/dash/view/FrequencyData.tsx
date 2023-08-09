@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
-import { Checklist } from '@mui/icons-material'
+import { Checklist, RestartAlt } from '@mui/icons-material'
 import { Box, Button, Checkbox, FormControlLabel } from '@mui/material'
 import {
   useSchoolContext,
@@ -29,7 +29,7 @@ export const ViewDashboardSchoolFrequencyDataPage = ({
   const { schoolSelect } = useSchoolContext()
   const { frequencySelect } = useFrequencyContext()
   const { verifyFrequency } = useVerifyFrequency()
-  const { handleOpenCreate } = useDialogContext()
+  const { handleOpenCreate, handleOpenEdit } = useDialogContext()
   const [isAlter, setIsAlter] = useState(false)
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
@@ -40,10 +40,20 @@ export const ViewDashboardSchoolFrequencyDataPage = ({
     [frequency_id, verifyFrequency],
   )
 
+  const back = useMemo(() => {
+    let data = `/${schoolSelect?.id}/frequency`
+
+    if (frequencySelect)
+      data += `?year_id=day&date=${frequencySelect.label.split(' - ').at(-1)}`
+
+    return data
+  }, [frequencySelect, schoolSelect])
+
   const tools = useMemo(() => {
     if (frequencySelect?.is_open)
       return (
         <Tools
+          back={back}
           finish={
             <Box>
               <FormControlLabel
@@ -69,8 +79,24 @@ export const ViewDashboardSchoolFrequencyDataPage = ({
         />
       )
 
-    return <Tools isSearch isReset />
-  }, [frequencySelect, isAlter])
+    return (
+      <Tools
+        back={back}
+        isSearch
+        isReset
+        finish={
+          <Button
+            onClick={handleOpenEdit}
+            disableElevation
+            variant="contained"
+            endIcon={<RestartAlt />}
+          >
+            Reiniciar
+          </Button>
+        }
+      />
+    )
+  }, [back, frequencySelect, isAlter])
 
   const data = useMemo(() => {
     if (frequencySelect?.is_open)
@@ -99,7 +125,7 @@ export const ViewDashboardSchoolFrequencyDataPage = ({
           <LinkChip
             label="Frequências"
             icon={<Checklist sx={{ mr: 0.5 }} fontSize="inherit" />}
-            to={`/${schoolSelect?.id}/frequency`}
+            to={back}
           />
           <LabelFrequency />
         </TitleSchoolDashViewPage>

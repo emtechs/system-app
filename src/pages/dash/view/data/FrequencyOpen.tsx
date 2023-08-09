@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
+  DialogMissed,
+  DialogRemoveMissed,
   apiFrequency,
   iFrequencyStudentsBase,
   usePaginationContext,
@@ -17,6 +19,9 @@ export const DataDashboardSchoolFrequencyOpenPage = ({
 }: iDataDashboardSchoolFrequencyOpenPageProps) => {
   const { setIsLoading, query } = usePaginationContext()
   const [dataStudents, setDataStudents] = useState<iFrequencyStudentsBase[]>([])
+  const [studentData, setStudentData] = useState<iFrequencyStudentsBase>()
+  const handleStudentData = (newData: iFrequencyStudentsBase) =>
+    setStudentData(newData)
 
   const getStudents = useCallback(
     (query_data: string) => {
@@ -41,9 +46,17 @@ export const DataDashboardSchoolFrequencyOpenPage = ({
   useEffect(() => getStudents(define_query), [define_query])
 
   return (
-    <TableDashboardSchoolFrequencyOpenPage
-      listData={dataStudents}
-      list={list}
-    />
+    <>
+      <TableDashboardSchoolFrequencyOpenPage
+        listData={dataStudents}
+        handleStudentData={handleStudentData}
+      />
+      {studentData &&
+        (studentData.status === 'PRESENTED' ? (
+          <DialogMissed student={studentData} list={list} />
+        ) : (
+          <DialogRemoveMissed student={studentData} list={list} />
+        ))}
+    </>
   )
 }
