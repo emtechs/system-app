@@ -38,7 +38,7 @@ export const TableDashboardSchoolFrequencyOpenPage = ({
   ]
 
   return (
-    <TableBase headCells={headCells} isCount={false}>
+    <TableBase headCells={headCells} message="Nenhuma presença foi alterada">
       {listData.map((el) => (
         <TableRow
           key={el.id}

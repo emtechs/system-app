@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { TableRow, TableCell } from '@mui/material'
 import {
   ActionsFrequency,
-  iFrequencyBase,
+  iFrequency,
   iHeadCell,
   TableBase,
   usePaginationContext,
@@ -15,8 +15,8 @@ dayjs.locale('pt-br')
 dayjs.extend(relativeTime)
 
 interface iTableFrequencyPageProps {
-  listData: iFrequencyBase[]
-  handleFrequency: (newFrequency: iFrequencyBase) => void
+  listData: iFrequency[]
+  handleFrequency: (newFrequency: iFrequency) => void
 }
 
 export const TableFrequencyPage = ({
@@ -36,30 +36,30 @@ export const TableFrequencyPage = ({
   }, [])
 
   const data = useMemo(() => {
-    let listFreq: iFrequencyBase[]
+    let listFreq: iFrequency[]
 
     if (order === 'school_name')
-      listFreq = sortArray<iFrequencyBase>(listData, {
+      listFreq = sortArray<iFrequency>(listData, {
         by: order,
         order: by,
         computed: { school_name: (row) => row.school.name },
       })
 
     if (order === 'class_name')
-      listFreq = sortArray<iFrequencyBase>(listData, {
+      listFreq = sortArray<iFrequency>(listData, {
         by: order,
         order: by,
         computed: { class_name: (row) => row.class.name },
       })
 
     if (order === 'user_name')
-      listFreq = sortArray<iFrequencyBase>(listData, {
+      listFreq = sortArray<iFrequency>(listData, {
         by: order,
         order: by,
         computed: { user_name: (row) => row.user.name },
       })
 
-    listFreq = sortArray<iFrequencyBase>(listData, {
+    listFreq = sortArray<iFrequency>(listData, {
       by: order,
       order: by,
     })

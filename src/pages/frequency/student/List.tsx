@@ -14,7 +14,7 @@
 //   useSchoolContext,
 // } from '../../../shared/contexts'
 // import {
-//   iFrequencyBase,
+//   iFrequency,
 //   iFrequencyStudentsBase,
 //   iHeadCell,
 // } from '../../../shared/interfaces'
@@ -73,7 +73,7 @@
 //   const { schoolRetrieve } = useSchoolContext()
 //   const { dataStudents, setDataStudents } = useFrequencyContext()
 //   const { setIsLoading, query, setCount } = usePaginationContext()
-//   const [dataFrequency, setDataFrequency] = useState<iFrequencyBase>()
+//   const [dataFrequency, setDataFrequency] = useState<iFrequency>()
 
 //   useEffect(() => {
 //     setDataStudents(undefined)

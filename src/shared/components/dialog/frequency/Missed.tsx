@@ -15,14 +15,14 @@ import {
   frequencyUpdateSchema,
   DialogBaseChildrenAction,
   useDialogContext,
+  iDialogDataProps,
 } from '../../../../shared'
 
-interface iDialogMissedProps {
+interface iDialogMissedProps extends iDialogDataProps {
   student: iFrequencyStudentsBase
-  list: () => void
 }
 
-export const DialogMissed = ({ student, list }: iDialogMissedProps) => {
+export const DialogMissed = ({ student, getData }: iDialogMissedProps) => {
   const { openEdit, handleOpenEdit } = useDialogContext()
   const { handleError } = useAppThemeContext()
   const updateFrequencyStudent = useCallback(
@@ -33,7 +33,7 @@ export const DialogMissed = ({ student, list }: iDialogMissedProps) => {
         .catch(() =>
           handleError('Não foi possível cadastrar a falta no momento!'),
         )
-        .finally(() => list())
+        .finally(() => getData && getData())
     },
     [student],
   )

@@ -6,18 +6,18 @@ import {
   apiFrequency,
   DialogBaseChildrenAction,
   useDialogContext,
+  iDialogDataProps,
 } from '../../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 
-interface iDialogRemoveMissedProps {
+interface iDialogRemoveMissedProps extends iDialogDataProps {
   student: iFrequencyStudentsBase
-  list: () => void
 }
 
 export const DialogRemoveMissed = ({
   student,
-  list,
+  getData,
 }: iDialogRemoveMissedProps) => {
   const { handleError } = useAppThemeContext()
   const { openEdit, handleOpenEdit } = useDialogContext()
@@ -36,7 +36,7 @@ export const DialogRemoveMissed = ({
       .catch(() =>
         handleError('Não foi possível cadastrar a falta no momento!'),
       )
-      .finally(() => list())
+      .finally(() => getData && getData())
   }, [student])
 
   return (

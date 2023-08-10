@@ -1,15 +1,15 @@
 import { Box, Typography } from '@mui/material'
 import {
+  DialogBaseChildrenAction,
   apiFrequency,
   iDialogDataProps,
-  iFrequencyBase,
+  iFrequency,
   useAppThemeContext,
   useDialogContext,
 } from '../../../../shared'
-import { DialogBaseChildrenAction } from '../structure'
 
 interface iDialogDeleteFrequencyProps extends iDialogDataProps {
-  frequency: iFrequencyBase
+  frequency: iFrequency
 }
 
 export const DialogDeleteFrequency = ({

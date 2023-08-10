@@ -1,13 +1,12 @@
-import { FieldValues } from 'react-hook-form'
-import {
-  useAppThemeContext,
-  useDialogContext,
-  usePaginationContext,
-} from '../../../contexts'
-import { iDialogSchoolProps } from '../../../interfaces'
-import { apiSchool } from '../../../services'
-import { DialogActive } from '../structure'
 import { useNavigate } from 'react-router-dom'
+import {
+  iDialogSchoolProps,
+  usePaginationContext,
+  useDialogContext,
+  useAppThemeContext,
+  apiSchool,
+  DialogActive,
+} from '../../../../shared'
 
 export const DialogActiveSchool = ({ getData, school }: iDialogSchoolProps) => {
   const navigate = useNavigate()
@@ -15,14 +14,21 @@ export const DialogActiveSchool = ({ getData, school }: iDialogSchoolProps) => {
   const { handleOpenActive } = useDialogContext()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
 
-  const updateSchool = async (data: FieldValues, id: string, back: string) => {
+  const updateSchool = async () => {
     try {
+      handleOpenActive()
       setLoading(true)
-      await apiSchool.update(data, id, '')
+      await apiSchool.update(
+        {
+          is_active: !school.is_active,
+        },
+        school.id,
+        '',
+      )
       handleSucess(`Sucesso ao alterar o estado da Escola!`)
       onClickReset()
       getData && getData()
-      navigate(back)
+      navigate(school.is_active ? '/school' : `/school/${school.id}`)
     } catch {
       handleError(`Não foi possível atualizar o estado da escola no momento!`)
     } finally {
@@ -33,16 +39,7 @@ export const DialogActiveSchool = ({ getData, school }: iDialogSchoolProps) => {
   return (
     school && (
       <DialogActive
-        action={() => {
-          updateSchool(
-            {
-              is_active: !school.is_active,
-            },
-            school.id,
-            school.is_active ? '/school' : `/school/${school.id}`,
-          )
-          handleOpenActive()
-        }}
+        action={updateSchool}
         description={`a escola ${school.name.toUpperCase()}`}
         is_active={school.is_active}
         title="Escola"

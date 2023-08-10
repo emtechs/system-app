@@ -6,15 +6,16 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Typography } from '@mui/material'
 import {
+  BaseContentChildren,
+  DialogBaseChildren,
+  ValidateCPF,
+  apiSchool,
+  iDialogSchoolProps,
+  schoolUpdateDirectorSchema,
   useAppThemeContext,
   useDialogContext,
   usePaginationContext,
-} from '../../../contexts'
-import { iDialogSchoolProps } from '../../../interfaces'
-import { BaseContentChildren, DialogBaseChildren } from '../structure'
-import { schoolUpdateDirectorSchema } from '../../../schemas'
-import { ValidateCPF } from '../../validate'
-import { apiSchool } from '../../../services'
+} from '../../../../shared'
 
 export const DialogDirectorSchool = ({
   school,
@@ -24,10 +25,15 @@ export const DialogDirectorSchool = ({
   const { handleOpenDirector, openDirector } = useDialogContext()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
 
-  const updateSchool = async (data: FieldValues, id: string, query: string) => {
+  const updateSchool = async (data: FieldValues) => {
     try {
+      handleOpenDirector()
       setLoading(true)
-      await apiSchool.update(data, id, query)
+      await apiSchool.update(
+        data,
+        school.id,
+        school.director ? `?director_id=${school.director.id}` : '',
+      )
       handleSucess(`Sucesso ao alterar o diretor da Escola!`)
       onClickReset()
       getData && getData()
@@ -46,13 +52,7 @@ export const DialogDirectorSchool = ({
       description=""
     >
       <FormContainer
-        onSuccess={(data) => {
-          const query = school.director
-            ? `?director_id=${school.director.id}`
-            : ''
-          updateSchool(data, school.id, query)
-          handleOpenDirector()
-        }}
+        onSuccess={updateSchool}
         resolver={zodResolver(schoolUpdateDirectorSchema)}
       >
         <BaseContentChildren>

@@ -33,6 +33,13 @@ export const frequencyCreateSchema = z
       })),
   )
 
+export const RequestFrequencyCreateSchema = z.object({
+  justification: z
+    .string({ required_error: 'Justificativa obrigatória' })
+    .nonempty('Justificativa obrigatória'),
+  frequency_id: z.string().uuid(),
+})
+
 export const frequencyUpdateSchema = z
   .object({
     justification: z

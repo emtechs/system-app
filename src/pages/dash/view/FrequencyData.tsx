@@ -116,7 +116,7 @@ export const ViewDashboardSchoolFrequencyDataPage = ({
       )
 
     return <DataDashboardSchoolFrequencyPage frequency_id={frequency_id} />
-  }, [frequencySelect, frequency_id, isAlter, open])
+  }, [frequencySelect, frequency_id, isAlter, schoolSelect])
 
   return (
     <LayoutBasePage

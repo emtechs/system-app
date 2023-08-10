@@ -12,7 +12,7 @@ import {
   Footer,
   useCalendarContext,
   apiFrequency,
-  iFrequencyBase,
+  iFrequency,
   PaginationTable,
   TabsFrequencyPage,
   TabsMonth,
@@ -40,7 +40,7 @@ export const ViewDashboardSchoolFrequencyPage = ({
     handleFace,
     face,
   } = usePaginationContext()
-  const [listData, setListData] = useState<iFrequencyBase[]>([])
+  const [listData, setListData] = useState<iFrequency[]>([])
   const [index, setIndex] = useState(0)
 
   const handleChange = (_event: SyntheticEvent, newValue: number | string) =>

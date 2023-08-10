@@ -4,7 +4,7 @@ import {
   usePaginationContext,
   PaginationTable,
   apiFrequency,
-  iFrequencyBase,
+  iFrequency,
   DialogDeleteFrequency,
   DialogRetrieveFrequency,
 } from '../../../shared'
@@ -21,10 +21,10 @@ export const ViewFrequencyPage = () => {
     handleFace,
     face,
   } = usePaginationContext()
-  const [listData, setListData] = useState<iFrequencyBase[]>([])
-  const [frequencyData, setFrequencyData] = useState<iFrequencyBase>()
+  const [listData, setListData] = useState<iFrequency[]>([])
+  const [frequencyData, setFrequencyData] = useState<iFrequency>()
 
-  const handleFrequency = (newFrequency: iFrequencyBase) =>
+  const handleFrequency = (newFrequency: iFrequency) =>
     setFrequencyData(newFrequency)
 
   const getFrequency = useCallback((query: string, isFace?: boolean) => {

@@ -16,7 +16,7 @@ interface iDataFreq {
   name: string
 }
 
-export interface iFrequencyBase {
+export interface iFrequency {
   id: string
   date: string
   date_time: Date
@@ -30,7 +30,7 @@ export interface iFrequencyBase {
   user: iDataFreq
 }
 
-interface iFrequencyInfreqBase extends iFrequencyBase {
+interface iFrequencyInfreqBase extends iFrequency {
   user: iUserFreq
   _count: { students: number }
   infreq?: number
@@ -65,10 +65,6 @@ export interface iFrequencyStudentsWithInfreq {
   absences: number
   frequencies: number
   infrequency: number
-}
-
-export interface iFrequency extends iFrequencyInfreqBase {
-  students: iFrequencyStudents[]
 }
 
 export interface iFrequencyWithInfreq extends iFrequencyInfreqBase {

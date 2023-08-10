@@ -7,7 +7,7 @@ import {
   Footer,
   PaginationTable,
   apiFrequency,
-  iFrequencyBase,
+  iFrequency,
   useDebounce,
   usePaginationContext,
   LinkChip,
@@ -35,10 +35,10 @@ export const ViewFrequencyNonePage = ({
     handleFace,
     face,
   } = usePaginationContext()
-  const [listData, setListData] = useState<iFrequencyBase[]>([])
-  const [frequencyData, setFrequencyData] = useState<iFrequencyBase>()
+  const [listData, setListData] = useState<iFrequency[]>([])
+  const [frequencyData, setFrequencyData] = useState<iFrequency>()
 
-  const handleFrequency = (newFrequency: iFrequencyBase) =>
+  const handleFrequency = (newFrequency: iFrequency) =>
     setFrequencyData(newFrequency)
 
   const getFrequency = useCallback((query: string, isFace?: boolean) => {

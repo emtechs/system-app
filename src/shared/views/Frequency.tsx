@@ -1,5 +1,4 @@
-import { useDebounce } from '../hooks'
-import { useCalendarContext, usePaginationContext } from '../contexts'
+import sortArray from 'sort-array'
 import {
   SyntheticEvent,
   useCallback,
@@ -7,12 +6,16 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { iFrequencyBase } from '../interfaces'
-import { apiFrequency } from '../services'
 import { Box } from '@mui/material'
+import {
+  useDebounce,
+  useCalendarContext,
+  usePaginationContext,
+  iFrequency,
+  apiFrequency,
+} from '../../shared'
 import { TableFrequencySchool, TableFrequencyUser } from './tables'
 import { PaginationTable, TabsYear } from '../components'
-import sortArray from 'sort-array'
 
 interface iViewFrequency {
   school_id?: string
@@ -39,7 +42,7 @@ export const ViewFrequency = ({
     query_page,
     search,
   } = usePaginationContext()
-  const [data, setData] = useState<iFrequencyBase[]>()
+  const [data, setData] = useState<iFrequency[]>()
   const [index, setIndex] = useState(0)
 
   const year_id = listYear[index].id
@@ -90,11 +93,11 @@ export const ViewFrequency = ({
   }, [define_query, search])
 
   const table = useMemo(() => {
-    let frequencies: iFrequencyBase[]
+    let frequencies: iFrequency[]
     if (data) {
-      frequencies = sortArray<iFrequencyBase>(data, { by: order, order: by })
+      frequencies = sortArray<iFrequency>(data, { by: order, order: by })
       if (order === 'class_name')
-        frequencies = sortArray<iFrequencyBase>(data, {
+        frequencies = sortArray<iFrequency>(data, {
           by: order,
           order: by,
           computed: { class_name: (row) => row.class.name },

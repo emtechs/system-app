@@ -6,24 +6,26 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@mui/material'
 import {
-  useAppThemeContext,
-  useDialogContext,
+  iDialogSchoolProps,
   usePaginationContext,
-} from '../../../contexts'
-import { iDialogSchoolProps } from '../../../interfaces'
-import { BaseContentChildren, DialogBaseChildren } from '../structure'
-import { schoolUpdateSchema } from '../../../schemas'
-import { apiSchool } from '../../../services'
+  useDialogContext,
+  useAppThemeContext,
+  apiSchool,
+  schoolUpdateSchema,
+  BaseContentChildren,
+  DialogBaseChildren,
+} from '../../../../shared'
 
 export const DialogEditSchool = ({ school, getData }: iDialogSchoolProps) => {
   const { onClickReset } = usePaginationContext()
   const { handleOpenEdit, openEdit } = useDialogContext()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
 
-  const updateSchool = async (data: FieldValues, id: string) => {
+  const updateSchool = async (data: FieldValues) => {
     try {
+      handleOpenEdit()
       setLoading(true)
-      await apiSchool.update(data, id, '')
+      await apiSchool.update(data, school.id, '')
       handleSucess(`Sucesso ao alterar o nome da Escola!`)
       onClickReset()
       getData && getData()
@@ -45,10 +47,7 @@ export const DialogEditSchool = ({ school, getData }: iDialogSchoolProps) => {
         defaultValues={{
           name: school.name,
         }}
-        onSuccess={(data) => {
-          updateSchool(data, school.id)
-          handleOpenEdit()
-        }}
+        onSuccess={updateSchool}
         resolver={zodResolver(schoolUpdateSchema)}
       >
         <BaseContentChildren>

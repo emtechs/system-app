@@ -1,11 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
-import { DialogBaseChildren, BaseContentChildren } from '..'
-import { ValidateCPF } from '../..'
-import { useAppThemeContext, useDialogContext } from '../../../contexts'
-import { iServerRequest } from '../../../interfaces'
-import { serverCreateSchema } from '../../../schemas'
-import { apiUser } from '../../../services'
+import {
+  useAppThemeContext,
+  useDialogContext,
+  iServerRequest,
+  apiUser,
+  serverCreateSchema,
+  BaseContentChildren,
+  DialogBaseChildren,
+  ValidateCPF,
+} from '../../../../shared'
 
 interface iDialogCreateServer {
   school_id?: string
@@ -19,10 +23,11 @@ export const DialogCreateServer = ({
   const { setLoading, handleError, handleSucess } = useAppThemeContext()
   const { openCreate, handleOpenCreate } = useDialogContext()
 
-  const createServer = async (data: iServerRequest, id: string) => {
+  const createServer = async (data: iServerRequest) => {
     try {
+      handleOpenCreate()
       setLoading(true)
-      await apiUser.createServer(data, id)
+      await apiUser.createServer(data, school_id)
       handleSucess('Servidor cadastrado com sucesso!')
       getServer('')
     } catch {
@@ -40,10 +45,7 @@ export const DialogCreateServer = ({
       description=""
     >
       <FormContainer
-        onSuccess={(data) => {
-          handleOpenCreate()
-          createServer(data, school_id)
-        }}
+        onSuccess={createServer}
         resolver={zodResolver(serverCreateSchema)}
       >
         <BaseContentChildren>

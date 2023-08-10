@@ -1,23 +1,25 @@
-import { Breadcrumbs, Chip, Link, TableCell, TableRow } from '@mui/material'
-import { Footer, TableBase } from '../../../shared/components'
-import {
-  useAppThemeContext,
-  useAuthContext,
-  usePaginationContext,
-  useSchoolContext,
-} from '../../../shared/contexts'
 import { useEffect, useState } from 'react'
-import { apiUsingNow } from '../../../shared/services'
-import { iFrequency, iHeadCell } from '../../../shared/interfaces'
-import { LayoutBasePage } from '../../../shared/layouts'
+import { Breadcrumbs, Chip, Link, TableCell, TableRow } from '@mui/material'
+import { EventAvailable, List, School } from '@mui/icons-material'
 import {
   Navigate,
   useNavigate,
   useSearchParams,
   Link as RouterLink,
 } from 'react-router-dom'
-import { EventAvailable, List, School } from '@mui/icons-material'
-import { defineBgColorInfrequency } from '../../../shared/scripts'
+import {
+  iFrequency,
+  useAppThemeContext,
+  defineBgColorInfrequency,
+  useAuthContext,
+  useSchoolContext,
+  usePaginationContext,
+  iHeadCell,
+  apiUsingNow,
+  LayoutBasePage,
+  TableBase,
+  Footer,
+} from '../../../shared'
 
 interface iCardFrequencyProps {
   freq: iFrequency
@@ -37,9 +39,9 @@ const CardFrequency = ({ freq, isDate }: iCardFrequencyProps) => {
       {isDate && <TableCell>{freq.date}</TableCell>}
       <TableCell>{freq.class.name}</TableCell>
       {!isDate ? (
-        <TableCell align="right">{freq._count.students}</TableCell>
+        <TableCell align="right">{freq.total_students}</TableCell>
       ) : (
-        !mdDown && <TableCell align="right">{freq._count.students}</TableCell>
+        !mdDown && <TableCell align="right">{freq.total_students}</TableCell>
       )}
       <TableCell
         align="right"

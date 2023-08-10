@@ -1,7 +1,6 @@
 import { FieldValues } from 'react-hook-form'
 import {
   iFrequency,
-  iFrequencyBase,
   iFrequencyHistory,
   iFrequencyStudentsBase,
   iMonth,
@@ -11,6 +10,14 @@ import { apiUsingNow } from './api'
 const create = async (data: FieldValues): Promise<iFrequency> => {
   const { data: response } = await apiUsingNow.post<iFrequency>(
     'frequencies',
+    data,
+  )
+  return response
+}
+
+const createRequest = async (data: FieldValues): Promise<iFrequency> => {
+  const { data: response } = await apiUsingNow.post<iFrequency>(
+    'frequencies/request',
     data,
   )
   return response
@@ -33,6 +40,17 @@ const update = async (data: FieldValues, id: string): Promise<iFreqUpdate> => {
   return response
 }
 
+const updateRequest = async (
+  data: FieldValues,
+  id: string,
+): Promise<iFreqUpdate> => {
+  const { data: response } = await apiUsingNow.patch<iFreqUpdate>(
+    `frequencies/request/${id}`,
+    data,
+  )
+  return response
+}
+
 const updateFreqStudent = async (
   data: FieldValues,
   id: string,
@@ -44,6 +62,13 @@ const updateFreqStudent = async (
   return response
 }
 
+const retrieve = async (id: string): Promise<iFrequency> => {
+  const { data: response } = await apiUsingNow.patch<iFrequency>(
+    `frequencies/${id}`,
+  )
+  return response
+}
+
 const destroy = async (id: string) => {
   await apiUsingNow.delete(`frequencies/${id}`)
 }
@@ -51,6 +76,7 @@ const destroy = async (id: string) => {
 interface iStudentsReturn {
   total: number
   result: iFrequencyStudentsBase[]
+  frequency: iFrequency
 }
 
 const students = async (
@@ -65,7 +91,7 @@ const students = async (
 
 interface iList {
   total: number
-  result: iFrequencyBase[]
+  result: iFrequency[]
   months: iMonth[]
 }
 
@@ -88,10 +114,13 @@ const history = async (query: string): Promise<iHistoryReturn> => {
 
 export const apiFrequency = {
   create,
+  createRequest,
   update,
+  updateRequest,
   updateFreqStudent,
   destroy,
   students,
   list,
   history,
+  retrieve,
 }

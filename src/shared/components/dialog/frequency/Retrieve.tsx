@@ -1,15 +1,15 @@
 import { Box, Typography } from '@mui/material'
 import {
   iDialogDataProps,
-  iFrequencyBase,
+  iFrequency,
   useDialogContext,
   useAppThemeContext,
   apiFrequency,
+  DialogBaseChildrenAction,
 } from '../../../../shared'
-import { DialogBaseChildrenAction } from '../structure'
 
 interface iDialogRetrieveFrequencyProps extends iDialogDataProps {
-  frequency: iFrequencyBase
+  frequency: iFrequency
 }
 
 export const DialogRetrieveFrequency = ({

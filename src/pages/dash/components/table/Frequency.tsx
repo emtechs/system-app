@@ -5,7 +5,7 @@ import {
   usePaginationContext,
   iHeadCell,
   TableBase,
-  iFrequencyBase,
+  iFrequency,
   TableRowLink,
   useSchoolContext,
   TableCellLink,
@@ -20,7 +20,7 @@ dayjs.locale('pt-br')
 dayjs.extend(relativeTime)
 
 interface iTableDashboardSchoolFrequencyPageProps {
-  listData: iFrequencyBase[]
+  listData: iFrequency[]
   message: string
 }
 
@@ -48,16 +48,16 @@ export const TableDashboardSchoolFrequencyPage = ({
   }, [mdDown])
 
   const data = useMemo(() => {
-    let listFreq: iFrequencyBase[]
+    let listFreq: iFrequency[]
 
     if (order === 'class_name')
-      listFreq = sortArray<iFrequencyBase>(listData, {
+      listFreq = sortArray<iFrequency>(listData, {
         by: order,
         order: by,
         computed: { class_name: (row) => row.class.name },
       })
 
-    listFreq = sortArray<iFrequencyBase>(listData, {
+    listFreq = sortArray<iFrequency>(listData, {
       by: order,
       order: by,
     })

@@ -1,16 +1,19 @@
 import { TableCell, TableRow } from '@mui/material'
-import { Footer, TableBase, Tools } from '../../../shared/components'
+import { useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
+  iHeadCell,
+  iFrequency,
   useAppThemeContext,
+  defineBgColorInfrequency,
   useAuthContext,
   usePaginationContext,
-} from '../../../shared/contexts'
-import { useEffect, useState } from 'react'
-import { apiUsingNow } from '../../../shared/services'
-import { iFrequency, iHeadCell } from '../../../shared/interfaces'
-import { LayoutBasePage } from '../../../shared/layouts'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { defineBgColorInfrequency } from '../../../shared/scripts'
+  apiUsingNow,
+  LayoutBasePage,
+  Tools,
+  TableBase,
+  Footer,
+} from '../../../shared'
 
 const headCells: iHeadCell[] = [
   { order: 'date', numeric: 'left', label: 'Data' },
@@ -30,7 +33,7 @@ const CardFrequency = ({ freq }: iCardFrequencyProps) => {
     <TableRow>
       <TableCell>{freq.date}</TableCell>
       <TableCell>{freq.class.name}</TableCell>
-      <TableCell align="right">{freq._count.students}</TableCell>
+      <TableCell align="right">{freq.total_students}</TableCell>
       <TableCell
         align="right"
         sx={{

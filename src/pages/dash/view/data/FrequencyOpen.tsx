@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   DialogMissed,
   DialogRemoveMissed,
@@ -17,33 +17,25 @@ export const DataDashboardSchoolFrequencyOpenPage = ({
   frequency_id,
   isAlter,
 }: iDataDashboardSchoolFrequencyOpenPageProps) => {
-  const { setIsLoading, query } = usePaginationContext()
+  const { setIsLoading, setCount } = usePaginationContext()
   const [dataStudents, setDataStudents] = useState<iFrequencyStudentsBase[]>([])
   const [studentData, setStudentData] = useState<iFrequencyStudentsBase>()
+
   const handleStudentData = (newData: iFrequencyStudentsBase) =>
     setStudentData(newData)
 
-  const getStudents = useCallback(
-    (query_data: string) => {
-      setIsLoading(true)
-      apiFrequency
-        .students(frequency_id, query_data)
-        .then((res) => setDataStudents(res.result))
-        .finally(() => setIsLoading(false))
-    },
-    [frequency_id],
-  )
+  const getStudents = useCallback(() => {
+    setIsLoading(true)
+    apiFrequency
+      .students(frequency_id, isAlter ? '?is_alter=true' : '')
+      .then((res) => {
+        setDataStudents(res.result)
+        setCount(res.total)
+      })
+      .finally(() => setIsLoading(false))
+  }, [frequency_id, isAlter])
 
-  const define_query = useMemo(() => {
-    let queryData = query() + '&order=name'
-    if (isAlter) queryData += '&is_alter=true'
-
-    return queryData
-  }, [isAlter, query])
-
-  const list = () => getStudents(define_query)
-
-  useEffect(() => getStudents(define_query), [define_query])
+  useEffect(() => getStudents(), [getStudents])
 
   return (
     <>
@@ -53,9 +45,9 @@ export const DataDashboardSchoolFrequencyOpenPage = ({
       />
       {studentData &&
         (studentData.status === 'PRESENTED' ? (
-          <DialogMissed student={studentData} list={list} />
+          <DialogMissed student={studentData} getData={getStudents} />
         ) : (
-          <DialogRemoveMissed student={studentData} list={list} />
+          <DialogRemoveMissed student={studentData} getData={getStudents} />
         ))}
     </>
   )

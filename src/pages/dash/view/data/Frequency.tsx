@@ -4,6 +4,8 @@ import {
   iFrequencyStudentsBase,
   apiFrequency,
   useDebounce,
+  iFrequency,
+  DialogRequestFrequency,
 } from '../../../../shared'
 import { TableDashboardSchoolFrequencyDataPage } from '../../components'
 
@@ -17,6 +19,7 @@ export const DataDashboardSchoolFrequencyPage = ({
   const { debounce } = useDebounce()
   const { setIsLoading, search, setCount } = usePaginationContext()
   const [dataStudents, setDataStudents] = useState<iFrequencyStudentsBase[]>([])
+  const [frequencyData, setFrequencyData] = useState<iFrequency>()
 
   const getStudents = useCallback(
     (query: string) => {
@@ -25,6 +28,7 @@ export const DataDashboardSchoolFrequencyPage = ({
         .students(frequency_id, query)
         .then((res) => {
           setDataStudents(res.result)
+          setFrequencyData(res.frequency)
           setCount(res.total)
         })
         .finally(() => setIsLoading(false))
@@ -40,5 +44,10 @@ export const DataDashboardSchoolFrequencyPage = ({
     } else getStudents('')
   }, [search])
 
-  return <TableDashboardSchoolFrequencyDataPage listData={dataStudents} />
+  return (
+    <>
+      <TableDashboardSchoolFrequencyDataPage listData={dataStudents} />
+      {frequencyData && <DialogRequestFrequency frequency={frequencyData} />}
+    </>
+  )
 }

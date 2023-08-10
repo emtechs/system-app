@@ -1,11 +1,11 @@
 import { Delete, RestartAlt } from '@mui/icons-material'
 import { IconButton, TableCell, Tooltip } from '@mui/material'
 import { useDialogContext } from '../../contexts'
-import { iFrequencyBase } from '../../interfaces'
+import { iFrequency } from '../../interfaces'
 
 interface iActionsFrequencyProps {
-  frequency: iFrequencyBase
-  handleFrequency: (newFrequency: iFrequencyBase) => void
+  frequency: iFrequency
+  handleFrequency: (newFrequency: iFrequency) => void
 }
 
 export const ActionsFrequency = ({

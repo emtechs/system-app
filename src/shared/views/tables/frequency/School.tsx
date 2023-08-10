@@ -1,11 +1,11 @@
 import { TableCell, TableRow } from '@mui/material'
 import { TableBase } from '../../../components'
 import { useAppThemeContext } from '../../../contexts'
-import { iFrequencyBase, iHeadCell } from '../../../interfaces'
+import { iFrequency, iHeadCell } from '../../../interfaces'
 import { defineBgColorInfrequency } from '../../../scripts'
 
 interface iTableFrequencySchoolProps {
-  data: iFrequencyBase[]
+  data: iFrequency[]
 }
 
 export const TableFrequencySchool = ({ data }: iTableFrequencySchoolProps) => {
