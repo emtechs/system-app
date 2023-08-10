@@ -74,6 +74,12 @@ const destroy = async (id: string) => {
   await apiUsingNow.delete(`frequencies/${id}`)
 }
 
+const destroyRequest = async (data: FieldValues) => {
+  await apiUsingNow.delete('frequencies/request', {
+    data: { ...data },
+  })
+}
+
 interface iStudentsReturn {
   total: number
   result: iFrequencyStudentsBase[]
@@ -132,6 +138,7 @@ export const apiFrequency = {
   updateRequest,
   updateFreqStudent,
   destroy,
+  destroyRequest,
   students,
   list,
   listRequest,

@@ -5,11 +5,16 @@ import {
   GridDashAdmin,
   TitleAdminDash,
 } from '../../shared/components'
-import { useAppThemeContext } from '../../shared/contexts'
+import { useAppThemeContext, useAuthContext } from '../../shared/contexts'
 import { LayoutBasePage } from '../../shared/layouts'
+import { useEffect } from 'react'
 
 export const HomePageAdmin = () => {
+  const { refreshUser } = useAuthContext()
   const { theme } = useAppThemeContext()
+
+  useEffect(() => refreshUser(), [])
+
   return (
     <LayoutBasePage title={<TitleAdminDash />}>
       <Box

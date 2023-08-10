@@ -1,6 +1,18 @@
 import { ChangeEvent } from 'react'
-import { Paper, Table, TableBody, TableContainer } from '@mui/material'
-import { iTableBase } from '../../../shared'
+import {
+  LinearProgress,
+  Paper,
+  Table,
+  TableBody,
+  TableContainer,
+  TableFooter,
+  TableRow,
+} from '@mui/material'
+import {
+  TableCellLink,
+  iTableBase,
+  usePaginationContext,
+} from '../../../shared'
 import { TableSortCheckbox } from './SortCheckbox'
 
 interface iTableBaseCheckboxProps extends iTableBase {
@@ -12,6 +24,8 @@ export const TableBaseCheckbox = ({
   headCells,
   onSelectAllClick,
 }: iTableBaseCheckboxProps) => {
+  const { isLoading, count } = usePaginationContext()
+
   return (
     <TableContainer
       sx={{ mx: 2, mt: 1, width: 'auto' }}
@@ -24,6 +38,18 @@ export const TableBaseCheckbox = ({
           onSelectAllClick={onSelectAllClick}
         />
         <TableBody>{children}</TableBody>
+        {count === 0 && !isLoading && (
+          <caption>Nenhum registro encontrado.</caption>
+        )}
+        <TableFooter>
+          {isLoading && (
+            <TableRow>
+              <TableCellLink colSpan={headCells.length + 1}>
+                <LinearProgress variant="indeterminate" />
+              </TableCellLink>
+            </TableRow>
+          )}
+        </TableFooter>
       </Table>
     </TableContainer>
   )

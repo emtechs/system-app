@@ -39,6 +39,7 @@ interface iAuthContextData {
   dashData: iDash | undefined
   yearData: iYear | undefined
   profileUser: () => void
+  refreshUser: () => void
 }
 
 const AuthContext = createContext({} as iAuthContextData)
@@ -61,6 +62,14 @@ export const AuthProvider = ({ children }: iChildren) => {
     } else {
       setAccessToken(undefined)
     }
+  }, [])
+
+  const refreshUser = useCallback(() => {
+    setLoading(true)
+    apiUser
+      .refresh()
+      .then((res) => setUserProfile(res))
+      .finally(() => setLoading(false))
   }, [])
 
   const profileUser = useCallback(() => {
@@ -174,6 +183,7 @@ export const AuthProvider = ({ children }: iChildren) => {
         profileUser,
         handleUserProfile,
         userProfile,
+        refreshUser,
       }}
     >
       {children}

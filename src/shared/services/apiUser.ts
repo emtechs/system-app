@@ -59,6 +59,13 @@ const profile = async (token: string): Promise<iUserProfile> => {
   return response
 }
 
+const refresh = async (): Promise<iUserProfile> => {
+  const { data: response } = await apiUsingNow.get<iUserProfile>(
+    'users/profile',
+  )
+  return response
+}
+
 interface iListReturn {
   total: number
   result: iUser[]
@@ -92,6 +99,7 @@ export const apiUser = {
   createServer,
   page,
   profile,
+  refresh,
   update,
   schools,
   retrieve,
