@@ -9,8 +9,8 @@ import {
   Workspaces,
 } from '@mui/icons-material'
 import { List } from '@mui/material'
+import { useAuthContext } from '../../../../contexts'
 import { ListItemLink } from '../item'
-import { useAuthContext } from '../../../contexts'
 
 export const School = () => {
   const { dashData } = useAuthContext()

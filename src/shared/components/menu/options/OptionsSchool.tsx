@@ -9,11 +9,10 @@ import {
 } from '@mui/icons-material'
 import {
   useAppThemeContext,
-  useDrawerContext,
   useSchoolContext,
+  useDrawerContext,
 } from '../../../contexts'
-import { Profile } from '../components'
-import { ListItemLinkOpen, OtherListItemLink } from '../item'
+import { OtherListItemLink, ListItemLinkOpen, Profile } from '../components'
 
 export const OptionsSchool = () => {
   const { mdDown } = useAppThemeContext()

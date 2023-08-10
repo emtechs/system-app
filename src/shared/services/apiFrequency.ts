@@ -4,6 +4,7 @@ import {
   iFrequencyHistory,
   iFrequencyStudentsBase,
   iMonth,
+  iRequest,
 } from '../interfaces'
 import { apiUsingNow } from './api'
 
@@ -100,6 +101,18 @@ const list = async (query: string): Promise<iList> => {
   return response
 }
 
+interface iListRequest {
+  total: number
+  result: iRequest[]
+}
+
+const listRequest = async (): Promise<iListRequest> => {
+  const { data: response } = await apiUsingNow.get<iListRequest>(
+    'frequencies/request',
+  )
+  return response
+}
+
 interface iHistoryReturn {
   result: iFrequencyHistory[]
   total: number
@@ -121,6 +134,7 @@ export const apiFrequency = {
   destroy,
   students,
   list,
+  listRequest,
   history,
   retrieve,
 }

@@ -20,6 +20,7 @@ export interface iUserProfile {
   role: iRole
   dash: iDash
   is_first_access: boolean
+  requests: number
 }
 
 export interface iUser extends iUserProfile {

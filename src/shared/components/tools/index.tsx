@@ -76,6 +76,7 @@ export const Tools = ({
     onClickReset,
     search,
     setSearch,
+    selected,
   } = usePaginationContext()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -102,11 +103,12 @@ export const Tools = ({
       search ||
       infreq.length > 0 ||
       is_director.length > 0 ||
-      is_active() === '&is_active=false'
+      is_active() === '&is_active=false' ||
+      selected.length > 0
     )
       return false
     return true
-  }, [search, infreq.length, is_director.length, is_active])
+  }, [search, infreq.length, is_director.length, is_active, selected.length])
 
   return (
     <Box

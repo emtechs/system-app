@@ -1,7 +1,7 @@
 import { Edit, Password } from '@mui/icons-material'
 import { List } from '@mui/material'
+import { useDrawerContext } from '../../../../contexts'
 import { ListItemLink } from '../item'
-import { useDrawerContext } from '../../..'
 
 export const Profile = () => {
   const { handleClickToProfile } = useDrawerContext()

@@ -4,7 +4,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material'
-import { iChildren } from '../../../interfaces'
+import { iChildren } from '../../../../interfaces'
 import { iOtherListItemLinkProps } from './OtherListItemLink'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 

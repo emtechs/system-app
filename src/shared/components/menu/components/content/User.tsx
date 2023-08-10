@@ -1,6 +1,4 @@
 import { List } from '@mui/material'
-import { useAuthContext } from '../../../contexts'
-import { ListItemLink } from '../item'
 import {
   HowToReg,
   PeopleAlt,
@@ -8,6 +6,8 @@ import {
   Person2,
   PersonAdd,
 } from '@mui/icons-material'
+import { useAuthContext } from '../../../../contexts'
+import { ListItemLink } from '../item'
 
 export const User = () => {
   const { dashData } = useAuthContext()

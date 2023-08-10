@@ -109,3 +109,11 @@ export interface iFrequencyHistory {
     name: string
   }
 }
+
+export interface iRequest {
+  id: string
+  description: string
+  justification: string
+  created_at: Date
+  user: iDataFreq
+}

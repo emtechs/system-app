@@ -1,6 +1,4 @@
 import { List } from '@mui/material'
-import { useAuthContext } from '../../../contexts'
-import { ListItemLink } from '../item'
 import {
   AddBox,
   DoneAll,
@@ -8,6 +6,8 @@ import {
   Groups,
   SchoolTwoTone,
 } from '@mui/icons-material'
+import { useAuthContext } from '../../../../contexts'
+import { ListItemLink } from '../item'
 
 export const Class = () => {
   const { dashData } = useAuthContext()

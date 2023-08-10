@@ -62,8 +62,11 @@ export interface iHeadCell {
   label: string
 }
 
-export interface iTable extends iChildren {
+export interface iTableBase extends iChildren {
   headCells: iHeadCell[]
+}
+
+export interface iTable extends iTableBase {
   message?: string
   link?: 'div'
   isCount?: boolean
