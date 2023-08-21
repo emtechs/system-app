@@ -82,11 +82,7 @@ export const MenuDrawer = () => {
           flexShrink={0}
         >
           <Box display="flex" alignItems="center" justifyContent="center">
-            <img
-              src="/pref_massape_out.png"
-              height={theme.spacing(8)}
-              alt="Massapê"
-            />
+            <img src="/logo_out.webp" alt="De Olho na Frequência" />
           </Box>
           <Box
             display="flex"

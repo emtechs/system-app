@@ -1,7 +1,7 @@
 import { PureComponent } from 'react'
 import { Box, Container, Divider, Typography } from '@mui/material'
-import { iReportSchool, iUserProfile } from '../../../../shared/interfaces'
-import { PrintSchoolReport } from '../print'
+import { iReportSchool, iUserProfile } from '../../../../shared'
+import { PrintSchoolReport, ReportLogo } from '../../components'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import 'dayjs/locale/pt-br'
@@ -40,13 +40,7 @@ export class ContentSchoolReport extends PureComponent<Props> {
                     {user.name.toUpperCase()}
                   </Typography>
                 </Box>
-                <Box height="100%">
-                  <img
-                    style={{ height: '100%' }}
-                    src="/header.webp"
-                    alt="Portal de Frequência"
-                  />
-                </Box>
+                <ReportLogo />
               </Box>
             </Box>
           </Container>

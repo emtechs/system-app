@@ -18,7 +18,9 @@ export const BoxResp = ({ children, isLogin, isProfile }: iBoxRespProps) => {
         gap={2}
         width="80vw"
       >
-        {!isProfile && <img src="/pref_massape.png" width="100%" />}
+        {!isProfile && (
+          <img src="/logo.webp" width="100%" alt="De Olho na Frequência" />
+        )}
         {children}
         {isLogin && (
           <Typography fontSize="0.7rem">
@@ -30,7 +32,9 @@ export const BoxResp = ({ children, isLogin, isProfile }: iBoxRespProps) => {
   }
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-      {!isProfile && <img src="/pref_massape.png" />}
+      {!isProfile && (
+        <img src="/logo.webp" width="100%" alt="De Olho na Frequência" />
+      )}
       {children}
       {isLogin && (
         <Typography>

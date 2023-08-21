@@ -6,7 +6,6 @@ import {
   IconButton,
   Toolbar,
   Tooltip,
-  Typography,
 } from '@mui/material'
 import { MouseEvent, useState } from 'react'
 import {
@@ -65,10 +64,9 @@ export const Header = ({ isHome }: iHeaderProps) => {
               width={mdDown ? '100vw' : '100%'}
               display="flex"
               justifyContent="space-between"
+              alignItems="center"
             >
-              <Typography variant={mdDown ? 'h6' : 'h5'}>
-                Portal de Frequência
-              </Typography>
+              <img src="/logo_out.webp" alt="De Olho na Frequência" />
               {!mdDown && (
                 <Box display="flex" gap={1}>
                   <>

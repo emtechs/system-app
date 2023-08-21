@@ -1,12 +1,5 @@
 import { ArrowBack, Print } from '@mui/icons-material'
-import {
-  AppBar,
-  Container,
-  Toolbar,
-  Box,
-  Typography,
-  Button,
-} from '@mui/material'
+import { AppBar, Container, Toolbar, Box, Button } from '@mui/material'
 
 interface iHeaderReportProps {
   onClikPrint: () => void
@@ -28,8 +21,13 @@ export const HeaderReport = ({
               alt="Portal de Frequência"
             />
           </Box>
-          <Box width="100%" display="flex" justifyContent="space-between">
-            <Typography variant="h5">Relatório de Frequência</Typography>
+          <Box
+            width="100%"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <img src="/logo_out.webp" alt="De Olho na Frequência" />
             <Box display="flex" gap={1}>
               <Button
                 color="secondary"
