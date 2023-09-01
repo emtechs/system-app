@@ -16,9 +16,9 @@ interface iTabsSchoolRetrievePageProps {
 export const TabsSchoolRetrievePage = ({
   value = '',
 }: iTabsSchoolRetrievePageProps) => {
-  const { schoolRetrieve } = useSchoolContext()
+  const { schoolSelect, schoolRetrieve } = useSchoolContext()
 
-  const href = `/school/${schoolRetrieve?.id}`
+  const href = `/school/${schoolSelect?.id}`
 
   const elemArr = [
     { icon: <School />, label: 'Escola', value: '', href },

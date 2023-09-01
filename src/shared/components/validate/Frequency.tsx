@@ -1,16 +1,22 @@
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form-mui'
-import { useCalendarContext, useFrequencyContext } from '../../contexts'
-import { iClassDash } from '../../interfaces'
+import {
+  useFrequencyContext,
+  useCalendarContext,
+  useDialogContext,
+  iClassDash,
+} from '../../../shared'
 
 export const ValidateFrequency = () => {
   const { watch } = useFormContext()
   const { createFrequency } = useFrequencyContext()
   const { dateData, monthData } = useCalendarContext()
+  const { handleOpenCreate } = useDialogContext()
   const classData: iClassDash = watch('class')
 
   useEffect(() => {
     if (classData) {
+      handleOpenCreate()
       createFrequency(
         {
           date: dateData.format('DD/MM/YYYY'),

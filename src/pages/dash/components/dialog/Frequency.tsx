@@ -67,7 +67,7 @@ export const DialogDashboardSchoolClassFrequencyPage = () => {
                     },
                   ]
             }
-            textFieldProps={{ fullWidth: true, onClick: handleOpenCreate }}
+            textFieldProps={{ fullWidth: true }}
           />
           <ValidateFrequency />
         </FormContainer>
