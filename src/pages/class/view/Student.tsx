@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   useDebounce,
-  useSchoolContext,
   usePaginationContext,
   iStudent,
   apiStudent,
@@ -14,16 +13,14 @@ import {
   Tools,
   TabsSchoolRetrievePage,
   Footer,
-  DialogCreateStudentSchool,
   DialogRemoveStudent,
   DialogTransferStudent,
 } from '../../../shared'
-import { TableClassStudentPage } from '../components'
+import { DialogClassStudentPage, TableClassStudentPage } from '../components'
 
 export const ViewClassStudentPage = () => {
   const { view: key } = useParams()
   const { debounce } = useDebounce()
-  const { schoolSelect } = useSchoolContext()
   const { setCount, setIsLoading, search, order, by } = usePaginationContext()
   const [listData, setListData] = useState<iStudent[]>([])
   const [studentData, setStudentData] = useState<iStudent>()
@@ -93,9 +90,7 @@ export const ViewClassStudentPage = () => {
         <TableClassStudentPage data={data} handleStudent={handleStudent} />
         <Footer />
       </LayoutBasePage>
-      {schoolSelect && (
-        <DialogCreateStudentSchool id={schoolSelect.id} list={list} />
-      )}
+      {key && <DialogClassStudentPage id={key} getData={list} />}
       {studentData && <DialogRemoveStudent student={studentData} list={list} />}
       {studentData && (
         <DialogTransferStudent student={studentData} list={list} />

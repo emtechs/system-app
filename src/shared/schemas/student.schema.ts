@@ -1,5 +1,14 @@
 import { z } from 'zod'
 
+export const studentSchema = z.object({
+  name: z
+    .string({ required_error: 'Nome obrigatório' })
+    .nonempty('Nome obrigatório'),
+  registry: z
+    .string({ required_error: 'Matricula obrigatória' })
+    .nonempty('Matricula obrigatória'),
+})
+
 export const studentRemoveSchema = z
   .object({
     justify_disabled: z
@@ -33,23 +42,8 @@ export const studentTransferSchema = z
   .refine((fields) => (fields.class_id = fields.class.id))
   .refine((fields) => (fields.school_id = fields.school.id))
 
-export const studentClassCreateSchema = z.object({
-  name: z
-    .string({ required_error: 'Nome obrigatório' })
-    .nonempty('Nome obrigatório'),
-  registry: z
-    .string({ required_error: 'Matricula obrigatória' })
-    .nonempty('Matricula obrigatória'),
-})
-
-export const studentSchoolCreateSchema = z
-  .object({
-    name: z
-      .string({ required_error: 'Nome obrigatório' })
-      .nonempty('Nome obrigatório'),
-    registry: z
-      .string({ required_error: 'Matricula obrigatória' })
-      .nonempty('Matricula obrigatória'),
+export const studentSchoolCreateSchema = studentSchema
+  .extend({
     class: z.object(
       { id: z.string().uuid() },
       { required_error: 'Turma obrigatória' },
