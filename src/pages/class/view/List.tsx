@@ -6,7 +6,7 @@ import {
   iClass,
   apiClass,
 } from '../../../shared'
-import { TableClass } from '../components'
+import { DialogCreateClass, TableClass } from '../components'
 
 export const ViewClassPage = () => {
   const { debounce } = useDebounce()
@@ -48,5 +48,10 @@ export const ViewClassPage = () => {
     return <TableClass data={classes} />
   }, [by, data, order])
 
-  return table
+  return (
+    <>
+      {table}
+      <DialogCreateClass />
+    </>
+  )
 }

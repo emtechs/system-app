@@ -18,12 +18,7 @@ export const TitleClassRetrievePage = () => {
           icon={<Home sx={{ mr: 0.5 }} fontSize="inherit" />}
         />
       </Link>
-      <Link
-        underline="none"
-        color="inherit"
-        component={RouterLink}
-        to="/school"
-      >
+      <Link underline="none" color="inherit" component={RouterLink} to="/class">
         <Chip
           clickable
           color="primary"

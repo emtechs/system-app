@@ -1,6 +1,12 @@
 import { Workspaces } from '@mui/icons-material'
 import { Box, Chip } from '@mui/material'
-import { SyntheticEvent, useCallback, useEffect, useState } from 'react'
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { useParams } from 'react-router-dom'
 import {
   useDebounce,
@@ -16,7 +22,7 @@ import {
   Footer,
   useCalendarContext,
 } from '../../../shared'
-import { TableSchoolClassPage } from '../components'
+import { DialogSchoolClassPage, TableSchoolClassPage } from '../components'
 
 export const ViewSchoolClassPage = () => {
   const { school_id } = useParams()
@@ -41,11 +47,15 @@ export const ViewSchoolClassPage = () => {
       .finally(() => setIsLoading(false))
   }, [])
 
+  const year_id = useMemo(() => {
+    return listYear[index].id
+  }, [index, listYear])
+
   const define_query = useCallback(
     (comp: string) => {
-      return `?school_id=${school_id}&year_id=${listYear[index].id}${comp}`
+      return `?school_id=${school_id}&year_id=${year_id}${comp}`
     },
-    [index, listYear, school_id],
+    [school_id, year_id],
   )
 
   useEffect(() => {
@@ -56,6 +66,8 @@ export const ViewSchoolClassPage = () => {
       })
     } else getClass(define_query(''))
   }, [define_query, search])
+
+  const getData = () => getClass(define_query(''))
 
   return (
     <>
@@ -90,6 +102,13 @@ export const ViewSchoolClassPage = () => {
         </Box>
         <Footer />
       </LayoutBasePage>
+      {school_id && (
+        <DialogSchoolClassPage
+          school_id={school_id}
+          year_id={year_id}
+          getData={getData}
+        />
+      )}
     </>
   )
 }

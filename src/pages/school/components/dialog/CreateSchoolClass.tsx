@@ -1,58 +1,70 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@mui/material'
 import { AutocompleteElement, FormContainer } from 'react-hook-form-mui'
 import {
-  BaseContentChildren,
+  useAppThemeContext,
   DialogBaseChildren,
-} from '../../../../shared/components'
-import { useSchoolContext } from '../../../../shared/contexts'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { schoolClassCreateSchema } from '../../../../shared/schemas'
-import { Button, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
-import { apiUsingNow } from '../../../../shared/services'
-import {
+  BaseContentChildren,
+  iDialogDataProps,
+  useDialogContext,
+  apiSchool,
+  iSchoolClassRequest,
+  apiUsingNow,
   iClass,
-  iDialogBaseProps,
-  iSchool,
-  iYear,
-} from '../../../../shared/interfaces'
+  schoolClassCreateSchema,
+} from '../../../../shared'
+import { useState, useEffect } from 'react'
 
-interface iCreateSchoolClassProps extends iDialogBaseProps {
-  school: iSchool
-  year: iYear
+interface iDialogSchoolClassPageProps extends iDialogDataProps {
+  school_id: string
+  year_id: string
 }
 
-export const CreateSchoolClass = ({
-  onClose,
-  open,
-  school,
-  year,
-}: iCreateSchoolClassProps) => {
-  const { createSchoolClass } = useSchoolContext()
+export const DialogSchoolClassPage = ({
+  getData,
+  school_id,
+  year_id,
+}: iDialogSchoolClassPageProps) => {
+  const { setLoading, handleSucess, handleError } = useAppThemeContext()
+  const { handleOpenCreate, openCreate } = useDialogContext()
   const [classDataSelect, setClassDataSelect] = useState<iClass[]>()
 
   useEffect(() => {
     apiUsingNow
       .get<{ result: iClass[] }>(
-        `classes?school_id=${school.id}&year_id=${year.id}&is_active=true&by=asc&order=name`,
+        `classes?school_id=${school_id}&year_id=${year_id}&is_school=true`,
       )
       .then((res) => setClassDataSelect(res.data.result))
   }, [])
 
+  const createClass = async (data: iSchoolClassRequest) => {
+    try {
+      handleOpenCreate()
+      setLoading(true)
+      await apiSchool.createClass(data, school_id, year_id)
+      handleSucess('A turma foi cadastrada com sucesso na escola!')
+      getData && getData()
+    } catch {
+      handleError(
+        'No momento, não foi possível cadastrar a turma na escola. Por favor, tente novamente mais tarde.',
+      )
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <DialogBaseChildren
-      open={open}
-      onClose={onClose}
-      title="Nova Escola"
+      open={openCreate}
+      onClose={handleOpenCreate}
+      title="Nova Turma"
       description=""
     >
       <FormContainer
-        onSuccess={(data) => {
-          createSchoolClass(data, school.id, year.id)
-        }}
+        onSuccess={createClass}
         resolver={zodResolver(schoolClassCreateSchema)}
       >
         <BaseContentChildren>
-          <Typography>Escola: {school.name}</Typography>
           <AutocompleteElement
             name="classes"
             label="Turma"

@@ -35,29 +35,27 @@ export const RetrieveClassPage = () => {
     switch (viewData) {
       case 'school':
         setView(<></>)
-        setTools(<Tools isDash back="/school" />)
+        setTools(<Tools back="/class" />)
         break
 
       case 'student':
         setView(<ViewStudent />)
-        setTools(
-          <Tools back="/school" isNew titleNew="Aluno" isDash isSearch />,
-        )
+        setTools(<Tools back="/class" isNew titleNew="Aluno" isSearch />)
         break
 
       case 'frequency':
         setView(<ViewFrequency table_def="school" />)
-        setTools(<Tools isDash back="/school" />)
+        setTools(<Tools back="/class" />)
         break
 
       // case 'infrequency':
       //   setView(<ViewInfrequency />)
-      //   setTools(<Tools isDash back="/school" />)
+      //   setTools(<Tools  back="/class" />)
       //   break
 
       default:
         setView(<ViewClassData id={class_id} />)
-        setTools(<Tools isDash back="/school" />)
+        setTools(<Tools back="/class" />)
     }
   }, [viewData, class_id])
 
