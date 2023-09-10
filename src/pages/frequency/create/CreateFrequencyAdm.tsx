@@ -118,7 +118,7 @@ export const CreateFrequencyAdm = () => {
                           alignItems="center"
                           gap={1}
                         >
-                          <img width="50%" src="/pref_massape.png" />
+                          <img width="50%" src="/pref.png" />
                           <img width="25%" src="/emtechs.jpg" />
                         </Box>
                       </CardContent>

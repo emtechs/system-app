@@ -13,7 +13,7 @@ export const GridDashOrgan = () => {
           >
             <img
               width="50%"
-              src="/pref_massape.png"
+              src="/pref.png"
               alt="Prefeitura de Massapê"
             />
             <img
