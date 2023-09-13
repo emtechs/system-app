@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
+  usePaginationContext,
+  iFrequencyStudentsBase,
+  apiFrequency,
   DialogMissed,
   DialogRemoveMissed,
-  apiFrequency,
-  iFrequencyStudentsBase,
-  usePaginationContext,
-} from '../../../../shared'
-import { TableDashboardSchoolFrequencyOpenPage } from '../../components'
+} from '../../../../../shared'
+import { TableDashboardSchoolFrequencyOpenPage } from '../../../components'
 
 interface iDataDashboardSchoolFrequencyOpenPageProps {
   frequency_id: string

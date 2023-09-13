@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Box, Grid, Typography } from '@mui/material'
-import { Checklist, EventBusy, Groups, School } from '@mui/icons-material'
+import { Box, Grid, IconButton, Tooltip, Typography } from '@mui/material'
+import { Checklist, EventBusy, Groups, Info, School } from '@mui/icons-material'
 import {
   useAppThemeContext,
   useAuthContext,
@@ -13,7 +13,10 @@ import {
   GridDashContent,
   GridDashOrgan,
 } from '../../../../shared'
-import { DialogDashboardSchoolClassFrequencyPage } from '../dialog'
+import {
+  DialogDashboardSchoolClassFrequencyPage,
+  DialogDashboardSchoolResumePage,
+} from '../dialog'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import 'dayjs/locale/pt-br'
@@ -22,10 +25,11 @@ dayjs.extend(localizedFormat)
 export const GridDashboardSchoolPage = () => {
   const { setLoading } = useAppThemeContext()
   const { yearData } = useAuthContext()
-  const { schoolSelect } = useSchoolContext()
+  const { schoolSelect, loadingSchoolResume } = useSchoolContext()
   const { setDateData } = useCalendarContext()
   const { handleOpenCreate } = useDialogContext()
   const [infoSchool, setInfoSchool] = useState<iDashSchool>()
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     if (schoolSelect && yearData) {
@@ -54,9 +58,26 @@ export const GridDashboardSchoolPage = () => {
             <Typography variant="h6" textAlign="center">
               {dayjs().format('dddd, LL')}
             </Typography>
-            <CardSchool />
+            <Box display="flex" alignItems="center">
+              <CardSchool />
+              <Tooltip title={loadingSchoolResume ? 'Calculando' : 'Faltas'}>
+                <span>
+                  <IconButton
+                    onClick={() => setOpen((old) => !old)}
+                    disabled={loadingSchoolResume}
+                    color="secondary"
+                  >
+                    <Info />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            </Box>
           </Box>
         </Grid>
+        <DialogDashboardSchoolResumePage
+          open={open}
+          onClose={() => setOpen((old) => !old)}
+        />
         {infoSchool && (
           <>
             <GridDashContent

@@ -1,11 +1,3 @@
-import {
-  iChildren,
-  iSchool,
-  iSchoolClassRequest,
-  iSchoolImportRequest,
-  iSelectBase,
-  iWorkSchool,
-} from '../interfaces'
 import { FieldValues } from 'react-hook-form'
 import {
   Dispatch,
@@ -16,8 +8,17 @@ import {
   useState,
 } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAppThemeContext } from './ThemeContext'
-import { apiSchool } from '../services'
+import {
+  iWorkSchool,
+  iSchoolImportRequest,
+  iSchoolClassRequest,
+  iSelectBase,
+  iSchool,
+  iStudentResume,
+  iChildren,
+  useAppThemeContext,
+  apiSchool,
+} from '../../shared'
 
 interface iSchoolContextData {
   updateServerData: iWorkSchool | undefined
@@ -39,7 +40,11 @@ interface iSchoolContextData {
   setSchoolSelect: Dispatch<SetStateAction<iSelectBase | undefined>>
   schoolDataRetrieve: (id: string, query: string) => void
   schoolRetrieve: iSchool | undefined
+  schoolResume: iStudentResume[]
+  setSchoolResume: Dispatch<SetStateAction<iStudentResume[]>>
   loadingSchool: boolean
+  loadingSchoolResume: boolean
+  setLoadingSchoolResume: Dispatch<SetStateAction<boolean>>
 }
 
 const SchoolContext = createContext({} as iSchoolContextData)
@@ -50,7 +55,9 @@ export const SchoolProvider = ({ children }: iChildren) => {
   const [updateServerData, setUpdateServerData] = useState<iWorkSchool>()
   const [schoolSelect, setSchoolSelect] = useState<iSelectBase>()
   const [schoolRetrieve, setSchoolRetrieve] = useState<iSchool>()
+  const [schoolResume, setSchoolResume] = useState<iStudentResume[]>([])
   const [loadingSchool, setLoadingSchool] = useState(false)
+  const [loadingSchoolResume, setLoadingSchoolResume] = useState(false)
 
   const schoolDataRetrieve = useCallback((id: string, query: string) => {
     setLoadingSchool(true)
@@ -132,6 +139,10 @@ export const SchoolProvider = ({ children }: iChildren) => {
         schoolDataRetrieve,
         schoolRetrieve,
         setSchoolSelect,
+        schoolResume,
+        setSchoolResume,
+        loadingSchoolResume,
+        setLoadingSchoolResume,
       }}
     >
       {children}

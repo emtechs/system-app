@@ -18,6 +18,19 @@ export interface iStudent {
   key: string
 }
 
+export interface iStudentResume {
+  id: string
+  name: string
+  registry: string
+  class: {
+    id: string
+    name: string
+  }
+  frequencies: number
+  infrequency: number
+  absences: number
+}
+
 export interface iStudentClass {
   student: {
     id: string

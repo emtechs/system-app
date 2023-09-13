@@ -7,13 +7,14 @@ import {
   useDrawerContext,
   useSchoolContext,
 } from '../../contexts'
-import { apiAuth } from '../../services'
+import { apiAuth, apiSchool } from '../../services'
 
 export const useVerifySchool = () => {
   const navigate = useNavigate()
   const { setLoading } = useAppThemeContext()
   const { yearData } = useAuthContext()
-  const { setSchoolSelect } = useSchoolContext()
+  const { setSchoolSelect, setSchoolResume, setLoadingSchoolResume } =
+    useSchoolContext()
   const { handleDisplayDash } = useDrawerContext()
   const { handleListYear } = useCalendarContext()
 
@@ -36,6 +37,14 @@ export const useVerifySchool = () => {
         navigate('/')
       })
       .finally(() => setLoading(false))
+
+    if (yearData) {
+      setLoadingSchoolResume(true)
+      apiSchool
+        .resume(id, yearData.id)
+        .then((res) => setSchoolResume(res))
+        .finally(() => setLoadingSchoolResume(false))
+    }
   }, [])
 
   return { verifySchool }

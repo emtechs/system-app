@@ -1,2 +1,2 @@
-export * from './Frequency'
-export * from './FrequencyOpen'
+export * from './frequency'
+export * from './student'
