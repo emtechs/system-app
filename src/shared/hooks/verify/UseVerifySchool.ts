@@ -41,8 +41,8 @@ export const useVerifySchool = () => {
     if (yearData) {
       setLoadingSchoolResume(true)
       apiSchool
-        .resume(id, yearData.id)
-        .then((res) => setSchoolResume(res))
+        .resume(id, yearData.id, '')
+        .then((res) => setSchoolResume(res.result))
         .finally(() => setLoadingSchoolResume(false))
     }
   }, [])

@@ -84,12 +84,18 @@ const listServers = async (query: string): Promise<ilistServers> => {
   return response
 }
 
+interface iResume {
+  total: number
+  result: iStudentResume[]
+}
+
 const resume = async (
   id: string,
   year_id: string,
-): Promise<iStudentResume[]> => {
-  const { data: response } = await apiUsingNow.get<iStudentResume[]>(
-    `schools/${id}/resume/${year_id}`,
+  query: string,
+): Promise<iResume> => {
+  const { data: response } = await apiUsingNow.get<iResume>(
+    `schools/${id}/resume/${year_id}${query}`,
   )
 
   return response

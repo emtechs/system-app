@@ -1,16 +1,19 @@
 import { useMemo } from 'react'
 import { TableRow, TableCell } from '@mui/material'
-import { useAppThemeContext } from '../../../../shared/contexts'
-import { iHeadCell, iStudent } from '../../../../shared/interfaces'
-import { TableBase } from '../../../../shared/components'
+import {
+  iStudent,
+  useAppThemeContext,
+  iHeadCell,
+  TableBase,
+} from '../../../../../shared'
 
-interface iTableDashboardSchoolStudentPageProps {
+interface iTableDashboardSchoolStudentAllPageProps {
   data: iStudent[]
 }
 
-export const TableDashboardSchoolStudentPage = ({
+export const TableDashboardSchoolStudentAllPage = ({
   data,
-}: iTableDashboardSchoolStudentPageProps) => {
+}: iTableDashboardSchoolStudentAllPageProps) => {
   const { mdDown } = useAppThemeContext()
 
   const headCells: iHeadCell[] = useMemo(() => {

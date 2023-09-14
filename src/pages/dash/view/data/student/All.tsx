@@ -17,7 +17,7 @@ import {
   TabsYear,
   PaginationTable,
 } from '../../../../../shared'
-import { TableDashboardSchoolStudentPage } from '../../../components'
+import { TableDashboardSchoolStudentAllPage } from '../../../components'
 
 export const ViewDashboardSchoolStudentAllPage = () => {
   const { school_id } = useParams()
@@ -103,7 +103,7 @@ export const ViewDashboardSchoolStudentAllPage = () => {
     <Box display="flex" justifyContent="space-between">
       <TabsYear value={index} handleChange={handleChange} />
       <Box flex={1}>
-        <TableDashboardSchoolStudentPage data={data} />
+        <TableDashboardSchoolStudentAllPage data={data} />
         <PaginationTable
           total={listData ? listData.length : 0}
           onClick={onClick}

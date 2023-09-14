@@ -27,7 +27,7 @@ export const ViewDashboardSchoolStudentPage = () => {
           />
         </TitleSchoolDashViewPage>
       }
-      tools={view ? undefined : <Tools isSearch isReset />}
+      tools={<Tools isSearch isReset />}
     >
       <TabsDashboardSchoolStudentPage value={view} />
       {view ? (

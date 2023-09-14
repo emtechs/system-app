@@ -1,10 +1,10 @@
-import {
-  TableBase,
-  iHeadCell,
-  useBgColorInfrequency,
-  useSchoolContext,
-} from '../../../../shared'
 import { TableRow, TableCell } from '@mui/material'
+import {
+  useSchoolContext,
+  useBgColorInfrequency,
+  iHeadCell,
+  TableBase,
+} from '../../../../../shared'
 
 export const TableDashboardSchoolResumePage = () => {
   const { schoolResume } = useSchoolContext()

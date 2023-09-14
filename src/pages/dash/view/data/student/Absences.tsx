@@ -1,44 +1,65 @@
-import { TableRow, TableCell } from '@mui/material'
+import sortArray from 'sort-array'
+import { useParams } from 'react-router-dom'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import {
-  useSchoolContext,
-  useBgColorInfrequency,
-  iHeadCell,
-  TableBase,
+  apiSchool,
+  iStudentResume,
+  useAuthContext,
+  useDebounce,
+  usePaginationContext,
 } from '../../../../../shared'
+import { TableDashboardSchoolStudentAbsencesPage } from '../../../components'
 
 export const ViewDashboardSchoolStudentAbsencesPage = () => {
-  const { schoolResume } = useSchoolContext()
-  const { defineBgColorInfrequency } = useBgColorInfrequency()
+  const { school_id } = useParams()
+  const { debounce } = useDebounce()
+  const { yearData } = useAuthContext()
+  const { setCount, setIsLoading, search, order, by } = usePaginationContext()
+  const [listData, setListData] = useState<iStudentResume[]>([])
 
-  const headCells: iHeadCell[] = [
-    { numeric: 'left', label: 'Matrícula' },
-    { numeric: 'left', label: 'Aluno' },
-    { numeric: 'left', label: 'Turma' },
-    { numeric: 'right', label: 'Frequências' },
-    { numeric: 'right', label: 'Faltas' },
-    { numeric: 'right', label: 'Infrequência' },
-  ]
-
-  return (
-    <TableBase headCells={headCells}>
-      {schoolResume.map((el) => (
-        <TableRow key={el.id}>
-          <TableCell>{el.registry}</TableCell>
-          <TableCell>{el.name}</TableCell>
-          <TableCell>{el.class.name}</TableCell>
-          <TableCell align="right">{el.frequencies}</TableCell>
-          <TableCell align="right">{el.absences}</TableCell>
-          <TableCell
-            align="right"
-            sx={{
-              color: '#fff',
-              bgcolor: defineBgColorInfrequency(el.infrequency),
-            }}
-          >
-            {el.infrequency.toFixed(0)}%
-          </TableCell>
-        </TableRow>
-      ))}
-    </TableBase>
+  const getStudent = useCallback(
+    (id: string, year_id: string, query: string) => {
+      setIsLoading(true)
+      apiSchool
+        .resume(id, year_id, query)
+        .then((res) => {
+          setListData(res.result)
+          setCount(res.total)
+        })
+        .finally(() => setIsLoading(false))
+    },
+    [],
   )
+
+  useEffect(() => {
+    if (school_id && yearData) {
+      let query_data = ''
+      if (search) {
+        query_data += `?name=${search}`
+        debounce(() => {
+          getStudent(school_id, yearData.id, query_data)
+        })
+      } else getStudent(school_id, yearData.id, query_data)
+    }
+  }, [school_id, search, yearData])
+
+  const data = useMemo(() => {
+    let listStundet: iStudentResume[]
+
+    if (order === 'class_name')
+      listStundet = sortArray<iStudentResume>(listData, {
+        by: order,
+        order: by,
+        computed: { class_name: (row) => row.class.name },
+      })
+
+    listStundet = sortArray<iStudentResume>(listData, {
+      by: order,
+      order: by,
+    })
+
+    return listStundet
+  }, [by, listData, order])
+
+  return <TableDashboardSchoolStudentAbsencesPage data={data} />
 }
