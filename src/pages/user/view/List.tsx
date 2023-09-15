@@ -13,6 +13,7 @@ import {
   DialogCreateDirector,
   DialogActiveUser,
   DialogCreateSchoolServer,
+  DialogCreateServer,
 } from '../components'
 
 export const ViewUserPage = () => {
@@ -63,6 +64,7 @@ export const ViewUserPage = () => {
       <TableUserPage listData={listData} handleUser={handleUser} />
       <DialogCreateAdmin />
       <DialogCreateDirector />
+      <DialogCreateServer />
       {userData && <DialogActiveUser user={userData} getData={list} />}
       {userData && (
         <DialogCreateSchoolServer

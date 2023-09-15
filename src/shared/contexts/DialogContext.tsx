@@ -12,10 +12,12 @@ interface iDialogContextData {
   openActive: boolean
   openCreate: boolean
   openDirector: boolean
+  openServer: boolean
   openEdit: boolean
   handleOpenActive: () => void
   handleOpenCreate: () => void
   handleOpenDirector: () => void
+  handleOpenServer: () => void
   handleOpenEdit: () => void
   loading: boolean
   setLoading: Dispatch<SetStateAction<boolean>>
@@ -27,6 +29,7 @@ export const DialogProvider = ({ children }: iChildren) => {
   const [openActive, setOpenActive] = useState(false)
   const [openCreate, setOpenCreate] = useState(false)
   const [openDirector, setOpenDirector] = useState(false)
+  const [openServer, setOpenServer] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -36,6 +39,7 @@ export const DialogProvider = ({ children }: iChildren) => {
     () => setOpenDirector((old) => !old),
     [],
   )
+  const handleOpenServer = useCallback(() => setOpenServer((old) => !old), [])
   const handleOpenEdit = useCallback(() => setOpenEdit((old) => !old), [])
 
   return (
@@ -51,6 +55,8 @@ export const DialogProvider = ({ children }: iChildren) => {
         openEdit,
         loading,
         setLoading,
+        handleOpenServer,
+        openServer,
       }}
     >
       {children}

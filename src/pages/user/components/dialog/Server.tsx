@@ -13,19 +13,19 @@ import {
   ValidateCPF,
 } from '../../../../shared'
 
-export const DialogCreateDirector = () => {
+export const DialogCreateServer = () => {
   const navigate = useNavigate()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
-  const { handleOpenDirector, openDirector } = useDialogContext()
+  const { handleOpenServer, openServer } = useDialogContext()
 
-  const createDirector = async (data: iUserDirectorRequest) => {
+  const createServer = async (data: iUserDirectorRequest) => {
     try {
       setLoading(true)
-      const user = await apiUser.create(data)
-      handleSucess('Diretor cadastrado com sucesso!')
+      const user = await apiUser.create(data, '?is_server=true')
+      handleSucess('Servidor cadastrado com sucesso!')
       navigate(`/user/${user.id}`)
     } catch {
-      handleError('Não foi possível cadastrar o Diretor no momento!')
+      handleError('Não foi possível cadastrar o Servidor no momento!')
     } finally {
       setLoading(false)
     }
@@ -33,20 +33,20 @@ export const DialogCreateDirector = () => {
 
   return (
     <DialogBaseChildren
-      open={openDirector}
-      onClose={handleOpenDirector}
-      title="Novo Diretor"
+      open={openServer}
+      onClose={handleOpenServer}
+      title="Novo Servidor"
       description=""
     >
       <FormContainer
         onSuccess={(data) => {
-          handleOpenDirector()
-          createDirector(data)
+          handleOpenServer()
+          createServer(data)
         }}
         resolver={zodResolver(createDirectorSchema)}
       >
         <BaseContentChildren>
-          <AutoCompleteSchool isMultiple query="&is_director=false" />
+          <AutoCompleteSchool isMultiple />
           <TextFieldElement name="cpf" label="CPF" required fullWidth />
           <TextFieldElement name="name" label="Nome" required fullWidth />
           <ValidateCPF allNotServ />

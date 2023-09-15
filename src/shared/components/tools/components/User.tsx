@@ -12,7 +12,8 @@ import { useAppThemeContext, useDialogContext } from '../../../contexts'
 
 export const UserTools = () => {
   const { mdDown } = useAppThemeContext()
-  const { handleOpenCreate, handleOpenDirector } = useDialogContext()
+  const { handleOpenCreate, handleOpenDirector, handleOpenServer } =
+    useDialogContext()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -73,7 +74,6 @@ export const UserTools = () => {
           </ListItemIcon>
           Administrador
         </MenuItem>
-
         <MenuItem
           onClick={() => {
             handleOpenDirector()
@@ -84,6 +84,17 @@ export const UserTools = () => {
             <PersonAdd />
           </ListItemIcon>
           Diretor
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleOpenServer()
+            handleClose()
+          }}
+        >
+          <ListItemIcon>
+            <PersonAdd />
+          </ListItemIcon>
+          Servidor
         </MenuItem>
       </Menu>
     </>
