@@ -11,16 +11,21 @@ import {
   LabelSchool,
   LabelClass,
   Tools,
-  TabsSchoolRetrievePage,
   Footer,
   DialogRemoveStudent,
   DialogTransferStudent,
+  useSchoolContext,
 } from '../../../shared'
-import { DialogClassStudentPage, TableClassStudentPage } from '../components'
+import {
+  DialogClassStudentPage,
+  TableClassStudentPage,
+  TabsClassKeyPage,
+} from '../components'
 
 export const ViewClassStudentPage = () => {
   const { view: key } = useParams()
   const { debounce } = useDebounce()
+  const { schoolSelect } = useSchoolContext()
   const { setCount, setIsLoading, search, order, by } = usePaginationContext()
   const [listData, setListData] = useState<iStudent[]>([])
   const [studentData, setStudentData] = useState<iStudent>()
@@ -84,9 +89,16 @@ export const ViewClassStudentPage = () => {
             <LabelClass />
           </TitleBaseItemsPage>
         }
-        tools={<Tools back="/school" isNew titleNew="Aluno" isDash isSearch />}
+        tools={
+          <Tools
+            back={`/school/${schoolSelect?.id}`}
+            isNew
+            titleNew="Aluno"
+            isSearch
+          />
+        }
       >
-        <TabsSchoolRetrievePage value="student" />
+        <TabsClassKeyPage value="student" />
         <TableClassStudentPage data={data} handleStudent={handleStudent} />
         <Footer />
       </LayoutBasePage>
