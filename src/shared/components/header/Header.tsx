@@ -14,7 +14,7 @@ import {
   useDrawerContext,
 } from '../../contexts'
 import { Home, Logout, Menu, Person } from '@mui/icons-material'
-import { MenuUser, MenuUserMdDown } from './components'
+import { MenuUser, MenuUserMdDown, Organ } from './components'
 import { adaptName } from '../../scripts'
 import { Link } from 'react-router-dom'
 
@@ -51,15 +51,7 @@ export const Header = ({ isHome }: iHeaderProps) => {
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            {!mdDown && (
-              <Box ml={2} mr={2} height={80}>
-                <img
-                  style={{ height: '100%' }}
-                  src="/header.webp"
-                  alt="Portal de Frequência"
-                />
-              </Box>
-            )}
+            {!mdDown && <Organ />}
             <Box
               width={mdDown ? '100vw' : '100%'}
               display="flex"

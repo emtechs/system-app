@@ -1,5 +1,6 @@
 import { ArrowBack, Print } from '@mui/icons-material'
 import { AppBar, Container, Toolbar, Box, Button } from '@mui/material'
+import { Organ } from './components'
 
 interface iHeaderReportProps {
   onClikPrint: () => void
@@ -14,13 +15,7 @@ export const HeaderReport = ({
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box ml={2} mr={2} height={80}>
-            <img
-              style={{ height: '100%' }}
-              src="/header.webp"
-              alt="Portal de Frequência"
-            />
-          </Box>
+          <Organ />
           <Box
             width="100%"
             display="flex"
