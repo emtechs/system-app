@@ -20,6 +20,9 @@ export interface iUserProfile {
   role: iRole
   dash: iDash
   is_first_access: boolean
+  profile?: {
+    url: string
+  }
   requests: number
 }
 

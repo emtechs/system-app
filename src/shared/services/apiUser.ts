@@ -60,9 +60,8 @@ const profile = async (token: string): Promise<iUserProfile> => {
 }
 
 const refresh = async (): Promise<iUserProfile> => {
-  const { data: response } = await apiUsingNow.get<iUserProfile>(
-    'users/profile',
-  )
+  const { data: response } =
+    await apiUsingNow.get<iUserProfile>('users/profile')
   return response
 }
 

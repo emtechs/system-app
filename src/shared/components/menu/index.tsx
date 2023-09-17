@@ -9,16 +9,16 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material'
-import { Dashboard, FirstPage, Logout, Person } from '@mui/icons-material'
+import { Dashboard, FirstPage, Logout } from '@mui/icons-material'
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import {
   useAppThemeContext,
-  useAuthContext,
   useDrawerContext,
-} from '../../contexts'
+  useAuthContext,
+  adaptName,
+} from '../../../shared'
 import { Options } from './options'
-import { adaptName } from '../../scripts'
-import { useMemo } from 'react'
 
 export const MenuDrawer = () => {
   const { theme, smDown } = useAppThemeContext()
@@ -27,6 +27,7 @@ export const MenuDrawer = () => {
   const { userProfile, logout, dashData } = useAuthContext()
   const user = {
     name: adaptName(userProfile?.name),
+    src: userProfile?.profile?.url,
   }
 
   const listButton = useMemo(() => {
@@ -91,12 +92,11 @@ export const MenuDrawer = () => {
             gap={theme.spacing(0.5)}
           >
             <Avatar
+              src={user.src}
               sx={{
                 bgcolor: theme.palette.secondary.main,
               }}
-            >
-              {user.name.length > 0 ? user.name[0].toUpperCase() : <Person />}
-            </Avatar>
+            />
             <Typography color={theme.palette.primary.contrastText}>
               {user.name}
             </Typography>

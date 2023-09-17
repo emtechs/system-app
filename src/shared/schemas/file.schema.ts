@@ -11,21 +11,16 @@ export const ACCEPTED_IMAGE_TYPES = [
 
 export const imageSchema = z
   .instanceof(FileList)
-  .transform((list) => list.item(0)!)
-  .refine((file) => {
-    try {
-      return file.size <= MAX_FILE_SIZE
-    } catch {
-      /* empty */
-    }
-  }, 'A imagem precisa ter no máximo 2Mb')
-  .refine((file) => {
-    try {
-      return ACCEPTED_IMAGE_TYPES.includes(file.type)
-    } catch {
-      /* empty */
-    }
-  }, 'Somente esses tipos de imagens são permitidos .jpg, .jpeg, .png e .webp')
+  .refine((files) => files?.length === 1, 'Arquivo de imagem obrigatório')
+  .refine(
+    (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+    'A imagem precisa ter no máximo 2Mb',
+  )
+  .refine(
+    (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+    'Somente esses tipos de imagens são permitidos .jpg, .jpeg, .png e .webp',
+  )
+  .transform((list) => list.item(0))
 
 export const csvSchema = z
   .instanceof(FileList)
@@ -44,3 +39,7 @@ export const csvSchema = z
       /* empty */
     }
   }, 'Somente arquivo .csv é permitido')
+
+export const avatarSchema = z.object({
+  avatar: imageSchema,
+})

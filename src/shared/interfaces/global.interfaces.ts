@@ -1,4 +1,6 @@
+import { z } from 'zod'
 import { ReactNode, SyntheticEvent } from 'react'
+import { avatarSchema } from '../schemas'
 
 export interface iChildren {
   children: ReactNode
@@ -73,3 +75,5 @@ export interface iTable extends iTableBase {
 }
 
 export type iLocale = 'list' | 'data'
+
+export type iAvatarRequest = z.infer<typeof avatarSchema>

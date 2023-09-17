@@ -1,65 +1,40 @@
-import { UploadFile } from '@mui/icons-material'
-import { Box, IconButton, InputLabel, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form-mui'
+import { iAvatarRequest } from '../../interfaces'
 
-export const InputFile = () => {
-  const [fileName, setFileName] = useState('Nenhum arquivo escolhido')
-  const {
-    watch,
-    formState: { errors },
-    register,
-  } = useFormContext()
+interface iInputFileProps {
+  label: string
+}
 
-  const file: FileList = watch('file')
+export const InputFile = ({ label }: iInputFileProps) => {
+  const { register, formState } = useFormContext<iAvatarRequest>()
 
-  let message = ''
-  let colorError = '#0009'
+  const { errors } = formState
 
-  try {
-    if (errors.file) {
-      colorError = '#D91604'
-      message = String(errors.file.message)
-    }
-  } catch {
-    /* empty */
-  }
-
-  useEffect(() => {
-    if (file) {
-      if (file[0]) setFileName(file[0].name)
-    }
-  }, [file])
+  const data_errors = !!errors.avatar
 
   return (
-    <Box position="relative" marginBottom={2}>
-      <Box minWidth={200} display="flex" alignItems="center" gap={1}>
-        <IconButton
-          color="primary"
-          aria-label="upload picture"
-          component="label"
-        >
-          <input
-            hidden
-            id="file"
-            accept="text/csv"
-            type="file"
-            {...register('file')}
-          />
-          <UploadFile />
-        </IconButton>
-        <InputLabel
-          htmlFor="file"
-          sx={{ cursor: 'pointer', color: `${colorError}` }}
-        >
-          {fileName}
-        </InputLabel>
-      </Box>
-      {message && (
-        <Typography position="absolute" left={15} fontSize={12} color="#D91604">
-          {message}
-        </Typography>
+    <div>
+      <div
+        data-errors={data_errors}
+        className="flex flex-col gap-2 border border-neutral-300 hover:border-neutral-700 transition-colors rounded-[4px] px-[14px] pt-3 pb-[16.5px] text-neutral-500 hover:cursor-pointer data-[errors=true]:border-red-600 data-[errors=true]:first:text-red-600 data-[errors=true]:hover:border-red-600"
+      >
+        <label htmlFor="avatar" className="text-sm hover:cursor-pointer">
+          {label} *
+        </label>
+        <input
+          id="avatar"
+          type="file"
+          required
+          accept="image/jpeg, image/jpg, image/png, image/webp"
+          className="text-sm cursor-pointer file:bg-primary file:hover:bg-blue-900 file:transition-colors file:uppercase file:text-xs file:p-[6px]  file:text-white file:shadow file:rounded file:border-none file:cursor-pointer"
+          {...register('avatar')}
+        />
+      </div>
+      {errors.avatar && (
+        <span className="text-red-600 text-xs ml-[14px]">
+          {errors.avatar.message}
+        </span>
       )}
-    </Box>
+    </div>
   )
 }
