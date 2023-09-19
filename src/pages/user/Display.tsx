@@ -14,7 +14,7 @@ import { ViewUserSchoolPage } from './view'
 export const ViewUserPage = () => {
   const { view } = useParams()
   const [title, setTitle] = useState(<TitleUserRetrievePage />)
-  const [tools, setTools] = useState(<Tools back="/user" />)
+  const [tools, setTools] = useState(<Tools isBack />)
   const [viewData, setViewData] = useState(<></>)
 
   useEffect(() => {
@@ -22,13 +22,13 @@ export const ViewUserPage = () => {
       case 'frequency':
         setTitle(<TitleUserViewFrequencyPage />)
         setViewData(<></>)
-        setTools(<Tools back="/user" />)
+        setTools(<Tools isBack />)
         break
 
       case 'history':
         setTitle(<TitleUserViewHistoryPage />)
         setViewData(<></>)
-        setTools(<Tools back="/user" />)
+        setTools(<Tools isBack />)
         break
     }
   }, [view])

@@ -18,6 +18,7 @@ interface iActionsActiveProps {
   handleData: () => void
   is_active: boolean
   to: string
+  back: string
   role?: iRole
 }
 
@@ -25,11 +26,17 @@ export const ActionsActive = ({
   handleData,
   is_active,
   to,
+  back,
   role,
 }: iActionsActiveProps) => {
   const { handleOpenEdit, handleOpenActive, handleOpenDirector } =
     useDialogContext()
-  const { onClickReset } = usePaginationContext()
+  const { onClickReset, handleBack } = usePaginationContext()
+
+  const onClickDetail = () => {
+    handleBack(back)
+    onClickReset()
+  }
 
   const onClickEdit = () => {
     handleData()
@@ -53,7 +60,7 @@ export const ActionsActive = ({
           <LinkIcon
             icon={<Visibility fontSize="small" />}
             label="Detalhar"
-            onClick={onClickReset}
+            onClick={onClickDetail}
             to={to}
           />
           {!role ? (

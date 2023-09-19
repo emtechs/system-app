@@ -39,7 +39,7 @@ export const RetrieveSchoolPage = () => {
           <LabelSchool />
         </TitleBaseItemsPage>
       }
-      tools={<Tools isDash back="/school" />}
+      tools={<Tools isDash isBack />}
     >
       <TabsSchoolRetrievePage value={view} />
       <ViewRetrieveSchoolPage />

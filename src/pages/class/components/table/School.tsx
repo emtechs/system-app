@@ -16,8 +16,13 @@ interface iTableSchoolProps {
 }
 
 export const TableSchool = ({ data }: iTableSchoolProps) => {
-  const { isLoading, onClickReset } = usePaginationContext()
+  const { isLoading, onClickReset, handleBack } = usePaginationContext()
   const [schoolData, setSchoolData] = useState<iSchool>()
+
+  const onClickDetail = () => {
+    handleBack('/school')
+    onClickReset()
+  }
 
   const handleSchool = (newSchool: iSchool) => setSchoolData(newSchool)
 
@@ -41,7 +46,7 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
                   <LinkText
                     label={name}
                     isLoading={isLoading}
-                    onClick={onClickReset}
+                    onClick={onClickDetail}
                     to={to}
                     width={250}
                   />
@@ -56,6 +61,7 @@ export const TableSchool = ({ data }: iTableSchoolProps) => {
                 handleData={handleData}
                 is_active={is_active}
                 to={to}
+                back="/school"
               />
             </TableRow>
           )

@@ -53,7 +53,7 @@ export const ViewDashboardSchoolFrequencyDataPage = ({
     if (frequencySelect?.is_open)
       return (
         <Tools
-          back={back}
+          isBack
           finish={
             <Box>
               <FormControlLabel
@@ -81,7 +81,7 @@ export const ViewDashboardSchoolFrequencyDataPage = ({
 
     return (
       <Tools
-        back={back}
+        isBack
         isSearch
         isReset
         finish={
@@ -96,7 +96,7 @@ export const ViewDashboardSchoolFrequencyDataPage = ({
         }
       />
     )
-  }, [back, frequencySelect, isAlter])
+  }, [frequencySelect, isAlter])
 
   const data = useMemo(() => {
     if (frequencySelect?.is_open)

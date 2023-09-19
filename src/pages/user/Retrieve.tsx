@@ -23,10 +23,7 @@ export const RetrieveUserPage = () => {
   if (view) return <Outlet />
 
   return (
-    <LayoutBasePage
-      title={<TitleUserRetrievePage />}
-      tools={<Tools back="/user" />}
-    >
+    <LayoutBasePage title={<TitleUserRetrievePage />} tools={<Tools isBack />}>
       <TabsUserRetrievePage value={view} />
       <ViewRetrieveUserPage />
       <Footer />

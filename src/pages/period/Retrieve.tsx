@@ -29,7 +29,7 @@ export const RetrievePeriodPage = () => {
           <LabelYear />
         </TitleBaseItemsPage>
       }
-      tools={<Tools back="/period" isHome isNew isSearch isReset />}
+      tools={<Tools isBack isHome isNew isSearch isReset />}
     >
       <TabsPeriodRetrievePage value={view} />
       <ViewRetrievePeriodPage />

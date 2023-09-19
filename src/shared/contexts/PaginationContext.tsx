@@ -40,6 +40,7 @@ interface iPaginationContextData {
   query_page: (take_data?: number, isSkip?: boolean) => string
   search: string
   setSearch: Dispatch<SetStateAction<string>>
+  back: string
   is_director: '' | '&is_director=true' | '&is_director=false'
   onClickReset: () => void
   director: boolean[]
@@ -47,6 +48,7 @@ interface iPaginationContextData {
   initialPage: () => void
   selected: readonly string[]
   setSelected: Dispatch<SetStateAction<readonly string[]>>
+  handleBack: (newBack: string) => void
 }
 
 const PaginationContext = createContext({} as iPaginationContextData)
@@ -63,8 +65,11 @@ export const PaginationProvider = ({ children }: iChildren) => {
   const [isLoading, setIsLoading] = useState(true)
   const [active, setActive] = useState(true)
   const [search, setSearch] = useState('')
+  const [back, setBack] = useState('')
   const [director, setDirector] = useState([true, true])
   const [selected, setSelected] = useState<readonly string[]>([])
+
+  const handleBack = (newBack: string) => setBack(newBack)
 
   const onClickReset = useCallback(() => {
     setDirector([true, true])
@@ -210,6 +215,8 @@ export const PaginationProvider = ({ children }: iChildren) => {
         initialPage,
         selected,
         setSelected,
+        back,
+        handleBack,
       }}
     >
       {children}

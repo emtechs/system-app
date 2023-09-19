@@ -28,7 +28,7 @@ import { ActiveButton, CompBase, HomeButton, UserTools } from './components'
 import { ButtonDest } from '../button'
 
 interface iToolsProps {
-  back?: string
+  isBack?: boolean
   isHome?: boolean
   toHome?: string
   isUser?: boolean
@@ -47,7 +47,7 @@ interface iToolsProps {
 }
 
 export const Tools = ({
-  back,
+  isBack,
   isHome,
   toHome = '/',
   isUser,
@@ -77,6 +77,7 @@ export const Tools = ({
     search,
     setSearch,
     selected,
+    back,
   } = usePaginationContext()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -121,7 +122,7 @@ export const Tools = ({
       paddingX={2}
       component={Paper}
     >
-      {back && (
+      {isBack && (
         <ButtonDest to={back} title="Voltar" startIcon={<ArrowBack />} isResp />
       )}
       {isHome && <HomeButton to={toHome} />}

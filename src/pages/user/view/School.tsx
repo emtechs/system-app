@@ -69,7 +69,7 @@ export const ViewUserSchoolPage = () => {
             />
           </TitleBaseItemsPage>
         }
-        tools={<Tools back="/user" isNew titleNew="Nova" isSearch isReset />}
+        tools={<Tools isBack isNew titleNew="Nova" isSearch isReset />}
       >
         <TabsUserRetrievePage value="school" />
         <TableUserSchoolPage listData={listData} getData={list} />

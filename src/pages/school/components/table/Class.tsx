@@ -2,12 +2,16 @@ import sortArray from 'sort-array'
 import { useMemo } from 'react'
 import { TableRow, TableCell } from '@mui/material'
 import { Visibility } from '@mui/icons-material'
+import { useParams } from 'react-router-dom'
 import {
+  iClass,
   useAppThemeContext,
   usePaginationContext,
-} from '../../../../shared/contexts'
-import { iClass, iHeadCell } from '../../../../shared/interfaces'
-import { LinkIcon, LinkText, TableBase } from '../../../../shared/components'
+  iHeadCell,
+  TableBase,
+  LinkText,
+  LinkIcon,
+} from '../../../../shared'
 
 interface iTableSchoolClassPageProps {
   listData: iClass[]
@@ -16,8 +20,15 @@ interface iTableSchoolClassPageProps {
 export const TableSchoolClassPage = ({
   listData,
 }: iTableSchoolClassPageProps) => {
+  const { school_id } = useParams()
   const { mdDown } = useAppThemeContext()
-  const { order, by, isLoading, onClickReset } = usePaginationContext()
+  const { order, by, isLoading, onClickReset, handleBack } =
+    usePaginationContext()
+
+  const onClickDetail = () => {
+    handleBack(`/school/${school_id}/class`)
+    onClickReset()
+  }
 
   const data = useMemo(() => {
     const listClass = sortArray<iClass>(listData, {
@@ -50,7 +61,7 @@ export const TableSchoolClassPage = ({
             <LinkText
               label={el.name}
               isLoading={isLoading}
-              onClick={onClickReset}
+              onClick={onClickDetail}
               to={`/class/key/${el.key}?view=student`}
             />
           </TableCell>
@@ -64,7 +75,7 @@ export const TableSchoolClassPage = ({
             <LinkIcon
               icon={<Visibility fontSize="small" />}
               label="Detalhar"
-              onClick={onClickReset}
+              onClick={onClickDetail}
               to={`/class/key/${el.key}?view=student`}
             />
           </TableCell>

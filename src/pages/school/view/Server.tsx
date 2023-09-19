@@ -65,7 +65,7 @@ export const ViewSchoolServerPage = () => {
         }
         tools={
           <Tools
-            back="/school"
+            isBack
             iconNew={<PersonAdd />}
             isNew
             titleNew="Servidor"

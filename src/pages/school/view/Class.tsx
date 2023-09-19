@@ -82,16 +82,7 @@ export const ViewSchoolClassPage = () => {
             />
           </TitleBaseItemsPage>
         }
-        tools={
-          <Tools
-            back="/school"
-            isNew
-            titleNew="Turma"
-            isDash
-            isSearch
-            isReset
-          />
-        }
+        tools={<Tools isBack isNew titleNew="Turma" isDash isSearch isReset />}
       >
         <TabsSchoolRetrievePage value="class" />
         <Box display="flex" justifyContent="space-between">

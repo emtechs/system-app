@@ -18,7 +18,12 @@ interface iTableClassProps {
 }
 
 export const TableClass = ({ data }: iTableClassProps) => {
-  const { isLoading, onClickReset } = usePaginationContext()
+  const { isLoading, onClickReset, handleBack } = usePaginationContext()
+
+  const onClickDetail = () => {
+    handleBack('/class')
+    onClickReset()
+  }
 
   const headCells: iHeadCell[] = useMemo(() => {
     return [
@@ -44,7 +49,7 @@ export const TableClass = ({ data }: iTableClassProps) => {
                 color="inherit"
                 component={RouterLink}
                 to={`/class/${el.id}`}
-                onClick={onClickReset}
+                onClick={onClickDetail}
               >
                 {el.name}
               </Link>
@@ -68,7 +73,7 @@ export const TableClass = ({ data }: iTableClassProps) => {
                 size="small"
                 component={RouterLink}
                 to={`/class/${el.id}`}
-                onClick={onClickReset}
+                onClick={onClickDetail}
               >
                 <Visibility fontSize="small" />
               </IconButton>

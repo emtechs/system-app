@@ -19,7 +19,7 @@ export const RetrieveClassPage = () => {
   const viewData = searchParams.get('view') || ''
   const school_id = searchParams.get('school_id') || undefined
   const [view, setView] = useState(<ViewClassData id={class_id} />)
-  const [tools, setTools] = useState(<Tools back="/school" />)
+  const [tools, setTools] = useState(<Tools isBack />)
   const { valueTabs } = useValueTabs()
 
   const handleChange = (_event: SyntheticEvent, newValue: string | number) => {
@@ -35,17 +35,17 @@ export const RetrieveClassPage = () => {
     switch (viewData) {
       case 'school':
         setView(<></>)
-        setTools(<Tools back="/class" />)
+        setTools(<Tools isBack />)
         break
 
       case 'student':
         setView(<ViewStudent />)
-        setTools(<Tools back="/class" isNew titleNew="Aluno" isSearch />)
+        setTools(<Tools isBack isNew titleNew="Aluno" isSearch />)
         break
 
       case 'frequency':
         setView(<ViewFrequency table_def="school" />)
-        setTools(<Tools back="/class" />)
+        setTools(<Tools isBack />)
         break
 
       // case 'infrequency':
@@ -55,7 +55,7 @@ export const RetrieveClassPage = () => {
 
       default:
         setView(<ViewClassData id={class_id} />)
-        setTools(<Tools back="/class" />)
+        setTools(<Tools isBack />)
     }
   }, [viewData, class_id])
 
