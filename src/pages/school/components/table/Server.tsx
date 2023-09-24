@@ -4,13 +4,13 @@ import { TableRow, TableCell } from '@mui/material'
 import {
   iSchoolUser,
   useAppThemeContext,
-  usePaginationContext,
   iHeadCell,
   TableBase,
   rolePtBr,
   ActionsRemove,
   DialogRemoveUser,
   useSchoolContext,
+  useParamsContext,
 } from '../../../../shared'
 
 interface iTableSchoolServerPageProps {
@@ -23,7 +23,7 @@ export const TableSchoolServerPage = ({
   listData,
 }: iTableSchoolServerPageProps) => {
   const { mdDown } = useAppThemeContext()
-  const { order, by } = usePaginationContext()
+  const { order, by } = useParamsContext()
   const { schoolSelect } = useSchoolContext()
   const [userData, setUserData] = useState<iSchoolUser>()
 

@@ -1,20 +1,21 @@
 import { useCallback, useEffect, useState } from 'react'
-import { usePaginationContext } from '../../../shared/contexts'
-import { useDebounce } from '../../../shared/hooks'
-import { iSchool } from '../../../shared/interfaces'
-import { apiSchool } from '../../../shared/services'
 import {
+  useDebounce,
+  usePaginationContext,
+  useParamsContext,
+  iSchool,
+  apiSchool,
+  DialogCreateSchool,
   DialogEditSchool,
   DialogDirectorSchool,
   DialogActiveSchool,
-  DialogCreateSchool,
-} from '../../../shared/components'
+} from '../../../shared'
 import { TableSchoolPage } from '../components'
 
 export const ViewSchoolPage = () => {
   const { debounce } = useDebounce()
-  const { is_active, is_director, search, setIsLoading, setCount } =
-    usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { is_active, is_director, search, setIsLoading } = useParamsContext()
   const [listData, setListData] = useState<iSchool[]>([])
   const [schoolData, setSchoolData] = useState<iSchool>()
 

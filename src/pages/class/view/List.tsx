@@ -5,13 +5,14 @@ import {
   usePaginationContext,
   iClass,
   apiClass,
+  useParamsContext,
 } from '../../../shared'
 import { DialogCreateClass, TableClass } from '../components'
 
 export const ViewClassPage = () => {
   const { debounce } = useDebounce()
-  const { setCount, setIsLoading, query, order, by, search } =
-    usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { setIsLoading, query, order, by, search } = useParamsContext()
   const [data, setData] = useState<iClass[]>([])
 
   const getClasses = useCallback((query: string) => {

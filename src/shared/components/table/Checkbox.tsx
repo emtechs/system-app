@@ -12,6 +12,7 @@ import {
   TableCellLink,
   iTableBase,
   usePaginationContext,
+  useParamsContext,
 } from '../../../shared'
 import { TableSortCheckbox } from './SortCheckbox'
 
@@ -24,7 +25,8 @@ export const TableBaseCheckbox = ({
   headCells,
   onSelectAllClick,
 }: iTableBaseCheckboxProps) => {
-  const { isLoading, count } = usePaginationContext()
+  const { count } = usePaginationContext()
+  const { isLoading } = useParamsContext()
 
   return (
     <TableContainer

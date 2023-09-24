@@ -1,13 +1,13 @@
 import { IconButton, Tooltip } from '@mui/material'
-import { usePaginationContext } from '../../../contexts'
 import { Check, Close } from '@mui/icons-material'
+import { useParamsContext } from '../../../../shared'
 
 interface iActiveButtonProps {
   isFem?: boolean
 }
 
 export const ActiveButton = ({ isFem = true }: iActiveButtonProps) => {
-  const { active, setActive } = usePaginationContext()
+  const { active, setActive } = useParamsContext()
 
   const onClick = () => setActive(!active)
 

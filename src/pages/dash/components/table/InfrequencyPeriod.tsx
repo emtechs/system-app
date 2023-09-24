@@ -3,13 +3,13 @@ import { TableRow, TableCell } from '@mui/material'
 import { useMemo } from 'react'
 import {
   useAppThemeContext,
-  usePaginationContext,
   iHeadCell,
   TableBase,
   defineBgColorInfrequency,
   iDataInfrequency,
   TableCellLoading,
   TableCellDataLoading,
+  useParamsContext,
 } from '../../../../shared'
 
 interface iTableInfrequencyPeriodProps {
@@ -20,7 +20,7 @@ export const TableInfrequencyPeriod = ({
   listData,
 }: iTableInfrequencyPeriodProps) => {
   const { theme } = useAppThemeContext()
-  const { order, by, isLoading } = usePaginationContext()
+  const { order, by, isLoading } = useParamsContext()
 
   const headCells: iHeadCell[] = useMemo(() => {
     return [

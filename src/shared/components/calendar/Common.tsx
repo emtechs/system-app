@@ -1,16 +1,16 @@
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   useAppThemeContext,
   useAuthContext,
+  useSchoolContext,
   useCalendarContext,
   useDialogContext,
-  usePaginationContext,
-  useSchoolContext,
-} from '../../contexts'
+  useParamsContext,
+  apiUsingNow,
+  iCalendar,
+} from '../../../shared'
 import { CalendarBase } from './Base'
-import { apiUsingNow } from '../../services'
-import { iCalendar } from '../../interfaces'
-import { useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import 'dayjs/locale/pt-br'
@@ -27,7 +27,7 @@ export const CalendarDashCommon = ({ onClick }: iCalendarDashCommonProps) => {
   const { schoolSelect } = useSchoolContext()
   const { monthData, setEventData, setDateData } = useCalendarContext()
   const { handleOpenCreate } = useDialogContext()
-  const { query } = usePaginationContext()
+  const { query } = useParamsContext()
 
   useEffect(() => {
     setEventData(undefined)

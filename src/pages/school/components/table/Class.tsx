@@ -6,11 +6,11 @@ import { useParams } from 'react-router-dom'
 import {
   iClass,
   useAppThemeContext,
-  usePaginationContext,
   iHeadCell,
   TableBase,
   LinkText,
   LinkIcon,
+  useParamsContext,
 } from '../../../../shared'
 
 interface iTableSchoolClassPageProps {
@@ -22,11 +22,11 @@ export const TableSchoolClassPage = ({
 }: iTableSchoolClassPageProps) => {
   const { school_id } = useParams()
   const { mdDown } = useAppThemeContext()
-  const { order, by, isLoading, onClickReset, handleBack } =
-    usePaginationContext()
+  const { order, by, isLoading, onClickReset, handleBack, back } =
+    useParamsContext()
 
   const onClickDetail = () => {
-    handleBack(`/school/${school_id}/class`)
+    handleBack(back, `/school/${school_id}/class`)
     onClickReset()
   }
 

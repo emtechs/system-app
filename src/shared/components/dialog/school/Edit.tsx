@@ -7,17 +7,17 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@mui/material'
 import {
   iDialogSchoolProps,
-  usePaginationContext,
   useDialogContext,
   useAppThemeContext,
   apiSchool,
   schoolUpdateSchema,
   BaseContentChildren,
   DialogBaseChildren,
+  useParamsContext,
 } from '../../../../shared'
 
 export const DialogEditSchool = ({ school, getData }: iDialogSchoolProps) => {
-  const { onClickReset } = usePaginationContext()
+  const { onClickReset } = useParamsContext()
   const { handleOpenEdit, openEdit } = useDialogContext()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
 

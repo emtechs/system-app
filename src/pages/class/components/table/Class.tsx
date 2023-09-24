@@ -9,7 +9,7 @@ import {
   TableRow,
   Tooltip,
 } from '@mui/material'
-import { usePaginationContext } from '../../../../shared/contexts'
+import { useParamsContext } from '../../../../shared/contexts'
 import { Visibility } from '@mui/icons-material'
 import { Link as RouterLink } from 'react-router-dom'
 
@@ -18,10 +18,10 @@ interface iTableClassProps {
 }
 
 export const TableClass = ({ data }: iTableClassProps) => {
-  const { isLoading, onClickReset, handleBack } = usePaginationContext()
+  const { isLoading, onClickReset, handleBack, back } = useParamsContext()
 
   const onClickDetail = () => {
-    handleBack('/class')
+    handleBack(back, '/class')
     onClickReset()
   }
 

@@ -1,13 +1,16 @@
 import sortArray from 'sort-array'
 import { useMemo } from 'react'
 import { TableRow, TableCell } from '@mui/material'
-import {
-  useAppThemeContext,
-  usePaginationContext,
-} from '../../../../shared/contexts'
-import { iClass, iHeadCell } from '../../../../shared/interfaces'
-import { LinkIcon, LinkText, TableBase } from '../../../../shared/components'
 import { Visibility } from '@mui/icons-material'
+import {
+  iClass,
+  useAppThemeContext,
+  useParamsContext,
+  iHeadCell,
+  TableBase,
+  LinkText,
+  LinkIcon,
+} from '../../../../shared'
 
 interface iTableClassYearPageProps {
   listData: iClass[]
@@ -15,7 +18,7 @@ interface iTableClassYearPageProps {
 
 export const TableClassYearPage = ({ listData }: iTableClassYearPageProps) => {
   const { mdDown } = useAppThemeContext()
-  const { order, by, isLoading, onClickReset } = usePaginationContext()
+  const { order, by, isLoading, onClickReset } = useParamsContext()
 
   const data = useMemo(() => {
     let listClass: iClass[]

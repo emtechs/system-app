@@ -8,13 +8,13 @@ import { Box, Button } from '@mui/material'
 import {
   iDialogDataProps,
   iSelectBase,
-  usePaginationContext,
   useDialogContext,
   useAppThemeContext,
   apiCalendar,
   DialogBaseChildren,
   createPeriodSchema,
   BaseContentChildren,
+  useParamsContext,
 } from '../../../../shared'
 import { DateCreatePeriod } from '../date'
 
@@ -28,7 +28,7 @@ export const DialogCreatePeriod = ({
   view,
   year,
 }: iDialogCreatePeriodProps) => {
-  const { onClickReset } = usePaginationContext()
+  const { onClickReset } = useParamsContext()
   const { handleOpenCreate, openCreate } = useDialogContext()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
 

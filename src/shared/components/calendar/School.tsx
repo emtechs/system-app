@@ -3,7 +3,7 @@ import {
   useAppThemeContext,
   useAuthContext,
   useCalendarContext,
-  usePaginationContext,
+  useParamsContext,
   useSchoolContext,
 } from '../../contexts'
 import { CalendarBase } from './Base'
@@ -15,7 +15,7 @@ export const CalendarDashSchool = () => {
   const { yearData } = useAuthContext()
   const { schoolRetrieve } = useSchoolContext()
   const { monthData, setEventData } = useCalendarContext()
-  const { query } = usePaginationContext()
+  const { query } = useParamsContext()
 
   useEffect(() => {
     setEventData(undefined)

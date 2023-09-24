@@ -1,15 +1,16 @@
-import {
-  iChildren,
-  iStudent,
-  iStudentImportRequest,
-  iStudentRequest,
-} from '../interfaces'
 import { FieldValues } from 'react-hook-form'
 import { createContext, useCallback, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAppThemeContext } from './ThemeContext'
-import { apiStudent } from '../services'
-import { usePaginationContext } from '.'
+import {
+  iStudentRequest,
+  iStudentImportRequest,
+  iStudent,
+  iChildren,
+  useAppThemeContext,
+  useParamsContext,
+  usePaginationContext,
+  apiStudent,
+} from '../../shared'
 
 interface iStudentContextData {
   createStudent: (
@@ -36,7 +37,8 @@ const StudentContext = createContext({} as iStudentContextData)
 export const StudentProvider = ({ children }: iChildren) => {
   const navigate = useNavigate()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
-  const { setIsLoading, setFace, setCount } = usePaginationContext()
+  const { setIsLoading } = useParamsContext()
+  const { setFace, setCount } = usePaginationContext()
   const [listData, setListData] = useState<iStudent[]>([])
 
   const getStudents = useCallback((query: string, isPage?: boolean) => {

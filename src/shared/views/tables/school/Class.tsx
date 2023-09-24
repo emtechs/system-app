@@ -1,16 +1,19 @@
 import { useMemo } from 'react'
 import { Skeleton, TableCell, TableRow } from '@mui/material'
-import { TableBase } from '../../../components'
-import { iSchool, iHeadCell } from '../../../interfaces'
-import { useBgColorInfrequency } from '../../../hooks'
-import { usePaginationContext } from '../../../contexts'
+import {
+  iSchool,
+  useParamsContext,
+  useBgColorInfrequency,
+  iHeadCell,
+  TableBase,
+} from '../../../../shared'
 
 interface iTableSchoolProps {
   data: iSchool[]
 }
 
 export const TableSchoolClass = ({ data }: iTableSchoolProps) => {
-  const { isLoading } = usePaginationContext()
+  const { isLoading } = useParamsContext()
   const { defineBgColorInfrequency } = useBgColorInfrequency()
 
   const headCells: iHeadCell[] = useMemo(() => {

@@ -1,6 +1,6 @@
 import { RemoveDone, Visibility } from '@mui/icons-material'
 import { IconButton, TableCell, Tooltip } from '@mui/material'
-import { useDialogContext, usePaginationContext } from '../../../shared'
+import { useDialogContext, useParamsContext } from '../../../shared'
 
 interface iActionsRemoveProps {
   handleData: () => void
@@ -8,7 +8,7 @@ interface iActionsRemoveProps {
 
 export const ActionsRemove = ({ handleData }: iActionsRemoveProps) => {
   const { handleOpenActive } = useDialogContext()
-  const { onClickReset } = usePaginationContext()
+  const { onClickReset } = useParamsContext()
 
   const onClickActive = () => {
     handleData()

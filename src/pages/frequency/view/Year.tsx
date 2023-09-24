@@ -17,6 +17,7 @@ import {
   DialogDeleteFrequency,
   DialogRetrieveFrequency,
   TabsFrequencyPage,
+  useParamsContext,
 } from '../../../shared'
 import { TableFrequencyPage } from '../components'
 import { useState, useCallback, useEffect, SyntheticEvent } from 'react'
@@ -30,15 +31,9 @@ export const ViewFrequencyYearPage = ({
 }: iViewFrequencyYearPageProps) => {
   const { debounce } = useDebounce()
   const { handleListMonth, listMonth } = useCalendarContext()
-  const {
-    setCount,
-    setIsLoading,
-    search,
-    setFace,
-    query_page,
-    handleFace,
-    face,
-  } = usePaginationContext()
+  const { setIsLoading, search } = useParamsContext()
+  const { setCount, setFace, query_page, handleFace, face } =
+    usePaginationContext()
   const [listData, setListData] = useState<iFrequency[]>([])
   const [frequencyData, setFrequencyData] = useState<iFrequency>()
   const [index, setIndex] = useState(0)

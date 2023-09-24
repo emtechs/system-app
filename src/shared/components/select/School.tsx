@@ -1,12 +1,16 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { usePaginationContext, useSchoolContext } from '../../contexts'
+import {
+  useSchoolContext,
+  useParamsContext,
+  iSchool,
+  iWorkSchool,
+  apiUser,
+} from '../../../shared'
 import { BaseSchool, ListBase, Loading } from './structure'
-import { iSchool, iWorkSchool } from '../../interfaces'
-import { apiUser } from '../../services'
 
 export const SelectSchool = () => {
   const { schoolRetrieve } = useSchoolContext()
-  const { query } = usePaginationContext()
+  const { query } = useParamsContext()
   const [listSchoolSelect, setListSchoolSelect] = useState<iSchool[]>()
   const [listData, setListData] = useState<iWorkSchool[]>()
   const [loading, setLoading] = useState(true)

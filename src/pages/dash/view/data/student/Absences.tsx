@@ -7,6 +7,7 @@ import {
   useAuthContext,
   useDebounce,
   usePaginationContext,
+  useParamsContext,
 } from '../../../../../shared'
 import { TableDashboardSchoolStudentAbsencesPage } from '../../../components'
 
@@ -14,7 +15,8 @@ export const ViewDashboardSchoolStudentAbsencesPage = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
   const { yearData } = useAuthContext()
-  const { setCount, setIsLoading, search, order, by } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { setIsLoading, search, order, by } = useParamsContext()
   const [listData, setListData] = useState<iStudentResume[]>([])
 
   const getStudent = useCallback(

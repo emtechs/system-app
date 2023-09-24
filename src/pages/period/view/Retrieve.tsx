@@ -6,6 +6,7 @@ import {
   iPeriod,
   apiCalendar,
   useCalendarContext,
+  useParamsContext,
 } from '../../../shared'
 import {
   DialogCreatePeriod,
@@ -19,7 +20,8 @@ export const ViewRetrievePeriodPage = () => {
   const view = searchParams.get('view') || 'BIMESTRE'
   const { debounce } = useDebounce()
   const { yearSelect } = useCalendarContext()
-  const { search, setIsLoading, setCount } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { search, setIsLoading } = useParamsContext()
   const [listData, setListData] = useState<iPeriod[]>([])
   const [periodData, setPeriodData] = useState<iPeriod>()
 

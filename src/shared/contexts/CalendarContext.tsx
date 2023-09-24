@@ -8,12 +8,12 @@ import {
 } from 'react'
 import {
   iCalendar,
-  iChildren,
-  iMonth,
-  iPeriod,
   iSelectBase,
   iYear,
-} from '../interfaces'
+  iPeriod,
+  iMonth,
+  iChildren,
+} from '../../shared'
 import dayjs, { Dayjs } from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import 'dayjs/locale/pt-br'

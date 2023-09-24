@@ -4,10 +4,10 @@ import { TableRow, TableCell } from '@mui/material'
 import {
   iClass,
   useAppThemeContext,
-  usePaginationContext,
   iHeadCell,
   TableBase,
   TableCellDataLoading,
+  useParamsContext,
 } from '../../../../shared'
 
 interface iTableDashboardSchoolClassPageProps {
@@ -18,7 +18,7 @@ export const TableDashboardSchoolClassPage = ({
   listData,
 }: iTableDashboardSchoolClassPageProps) => {
   const { mdDown } = useAppThemeContext()
-  const { order, by, isLoading } = usePaginationContext()
+  const { order, by, isLoading } = useParamsContext()
 
   const data = useMemo(() => {
     const listClass = sortArray<iClass>(listData, {

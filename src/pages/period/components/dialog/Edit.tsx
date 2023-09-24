@@ -2,7 +2,6 @@ import { FieldValues, FormContainer } from 'react-hook-form-mui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Button } from '@mui/material'
 import {
-  usePaginationContext,
   useDialogContext,
   useAppThemeContext,
   DialogBaseChildren,
@@ -11,6 +10,7 @@ import {
   iPeriod,
   periodUpdateSchema,
   apiCalendar,
+  useParamsContext,
 } from '../../../../shared'
 import { DateEditPeriod } from '../date'
 import dayjs from 'dayjs'
@@ -24,7 +24,7 @@ interface iDialogEditPeriod extends iDialogDataProps {
 }
 
 export const DialogEditPeriod = ({ period, getData }: iDialogEditPeriod) => {
-  const { onClickReset } = usePaginationContext()
+  const { onClickReset } = useParamsContext()
   const { handleOpenEdit, openEdit } = useDialogContext()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
 

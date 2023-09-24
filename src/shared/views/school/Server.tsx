@@ -1,16 +1,20 @@
 import sortArray from 'sort-array'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useDebounce } from '../../hooks'
-import { usePaginationContext } from '../../contexts'
-import { iSchoolUser } from '../../interfaces'
-import { apiSchoolRetrieve } from '../../services'
+import {
+  useDebounce,
+  usePaginationContext,
+  useParamsContext,
+  iSchoolUser,
+  apiSchoolRetrieve,
+} from '../../../shared'
 import { TableUserSchool } from './tables'
 
 export const ViewSchoolServer = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
-  const { search, order, by, setCount, setIsLoading } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { search, order, by, setIsLoading } = useParamsContext()
   const [listData, setListData] = useState<iSchoolUser[]>([])
 
   const getServer = useCallback(

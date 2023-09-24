@@ -2,7 +2,6 @@ import { FieldValues, FormContainer } from 'react-hook-form-mui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@mui/material'
 import {
-  usePaginationContext,
   useDialogContext,
   useAppThemeContext,
   DialogBaseChildren,
@@ -10,11 +9,12 @@ import {
   iDialogDataProps,
   apiCalendar,
   createYearSchema,
+  useParamsContext,
 } from '../../../../shared'
 import { DateCreateYearPeriod } from '../date'
 
 export const DialogCreateYearPeriod = ({ getData }: iDialogDataProps) => {
-  const { onClickReset } = usePaginationContext()
+  const { onClickReset } = useParamsContext()
   const { handleOpenCreate, openCreate } = useDialogContext()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
 

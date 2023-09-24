@@ -6,6 +6,7 @@ import {
   useDialogContext,
   iUser,
   apiUser,
+  useParamsContext,
 } from '../../../shared'
 import {
   TableUserPage,
@@ -20,7 +21,8 @@ export const ViewUserPage = () => {
   const [searchParams] = useSearchParams()
   const role = searchParams.get('role') || undefined
   const { debounce } = useDebounce()
-  const { query, search, setIsLoading, setCount } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { query, search, setIsLoading } = useParamsContext()
   const { handleOpenEdit, openEdit } = useDialogContext()
   const [listData, setListData] = useState<iUser[]>([])
   const [userData, setUserData] = useState<iUser>()

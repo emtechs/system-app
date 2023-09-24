@@ -4,11 +4,11 @@ import { Link, TableCell, TableRow } from '@mui/material'
 import {
   iUser,
   useAppThemeContext,
-  usePaginationContext,
   iHeadCell,
   TableBase,
   rolePtBr,
   ActionsRemove,
+  useParamsContext,
 } from '../../../../shared'
 
 interface iTableUserSchoolProps {
@@ -18,7 +18,7 @@ interface iTableUserSchoolProps {
 
 export const TableUserSchool = ({ data, school_id }: iTableUserSchoolProps) => {
   const { mdDown } = useAppThemeContext()
-  const { onClickReset } = usePaginationContext()
+  const { onClickReset } = useParamsContext()
   const [userData, setUserData] = useState<iUser>()
 
   const handleUser = (newUser: iUser) => setUserData(newUser)

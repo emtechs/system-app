@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   useAuthContext,
-  useCalendarContext,
-  usePaginationContext,
   useSchoolContext,
-} from '../../contexts'
+  useCalendarContext,
+  useParamsContext,
+  apiUsingNow,
+  iCalendar,
+  CompLoading,
+} from '../../../shared'
 import { CalendarBase } from './Base'
-import { apiUsingNow } from '../../services'
-import { iCalendar } from '../../interfaces'
-import { CompLoading } from '../loading'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import 'dayjs/locale/pt-br'
@@ -24,7 +24,7 @@ export const CalendarSelect = ({ onClick }: iCalendarSelectProps) => {
   const { yearData } = useAuthContext()
   const { schoolSelect } = useSchoolContext()
   const { monthData, setEventData, setDateData } = useCalendarContext()
-  const { query } = usePaginationContext()
+  const { query } = useParamsContext()
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {

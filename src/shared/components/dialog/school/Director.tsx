@@ -14,14 +14,14 @@ import {
   schoolUpdateDirectorSchema,
   useAppThemeContext,
   useDialogContext,
-  usePaginationContext,
+  useParamsContext,
 } from '../../../../shared'
 
 export const DialogDirectorSchool = ({
   school,
   getData,
 }: iDialogSchoolProps) => {
-  const { onClickReset } = usePaginationContext()
+  const { onClickReset } = useParamsContext()
   const { handleOpenDirector, openDirector } = useDialogContext()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
 

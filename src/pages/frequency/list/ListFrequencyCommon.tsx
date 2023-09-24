@@ -19,6 +19,7 @@ import {
   LayoutBasePage,
   TableBase,
   Footer,
+  useParamsContext,
 } from '../../../shared'
 
 interface iCardFrequencyProps {
@@ -64,7 +65,8 @@ export const ListFrequencyCommon = () => {
   const { mdDown } = useAppThemeContext()
   const { yearData } = useAuthContext()
   const { schoolRetrieve } = useSchoolContext()
-  const { setCount, setIsLoading, query } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { setIsLoading, query } = useParamsContext()
   const [data, setData] = useState<iFrequency[]>()
 
   const headCells: iHeadCell[] = !date

@@ -1,25 +1,20 @@
 import sortArray from 'sort-array'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { usePaginationContext } from '../../../shared/contexts'
-import { useDebounce } from '../../../shared/hooks'
-import { iStudent } from '../../../shared/interfaces'
-import { apiStudent } from '../../../shared/services'
-import { PaginationTable } from '../../../shared/components'
+import {
+  useDebounce,
+  useParamsContext,
+  usePaginationContext,
+  iStudent,
+  apiStudent,
+  PaginationTable,
+} from '../../../shared'
 import { TableStudentPage } from '../components'
 
 export const ViewStudentPage = () => {
   const { debounce } = useDebounce()
-  const {
-    setCount,
-    setIsLoading,
-    order,
-    by,
-    search,
-    setFace,
-    query_page,
-    handleFace,
-    face,
-  } = usePaginationContext()
+  const { setIsLoading, order, by, search } = useParamsContext()
+  const { setCount, setFace, query_page, handleFace, face } =
+    usePaginationContext()
   const [listData, setListData] = useState<iStudent[]>([])
 
   const getStudents = useCallback((query: string, isFace?: boolean) => {

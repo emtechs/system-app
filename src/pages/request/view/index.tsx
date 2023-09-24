@@ -5,7 +5,7 @@ import {
   TableBaseCheckbox,
   iHeadCell,
   iRequest,
-  usePaginationContext,
+  useParamsContext,
 } from '../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
@@ -18,7 +18,7 @@ interface iViewRequestPageProps {
 }
 
 export const ViewRequestPage = ({ listData }: iViewRequestPageProps) => {
-  const { order, by, selected, setSelected } = usePaginationContext()
+  const { order, by, selected, setSelected } = useParamsContext()
 
   const handleClick = (_event: MouseEvent<unknown>, id: string) => {
     const selectedIndex = selected.indexOf(id)

@@ -2,7 +2,6 @@ import sortArray from 'sort-array'
 import { useMemo } from 'react'
 import {
   useAppThemeContext,
-  usePaginationContext,
   iHeadCell,
   TableBase,
   iFrequency,
@@ -12,6 +11,7 @@ import {
   defineBgColorInfrequency,
   ChildrenLoading,
   TableCellLinkLoading,
+  useParamsContext,
 } from '../../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
@@ -29,7 +29,7 @@ export const TableDashboardSchoolFrequencyPage = ({
   message,
 }: iTableDashboardSchoolFrequencyPageProps) => {
   const { mdDown, theme } = useAppThemeContext()
-  const { order, by, onClickReset, isLoading } = usePaginationContext()
+  const { order, by, onClickReset, isLoading } = useParamsContext()
   const { schoolSelect } = useSchoolContext()
 
   const headCells: iHeadCell[] = useMemo(() => {

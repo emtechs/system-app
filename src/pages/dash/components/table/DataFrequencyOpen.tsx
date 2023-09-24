@@ -9,7 +9,7 @@ import {
   TableCellDataLoading,
   TableCellLoading,
   useDialogContext,
-  usePaginationContext,
+  useParamsContext,
 } from '../../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
@@ -28,7 +28,7 @@ export const TableDashboardSchoolFrequencyOpenPage = ({
 }: iTableDashboardSchoolFrequencyOpenPageProps) => {
   const { theme } = useAppThemeContext()
   const { handleOpenEdit } = useDialogContext()
-  const { isLoading } = usePaginationContext()
+  const { isLoading } = useParamsContext()
 
   const headCells: iHeadCell[] = [
     { numeric: 'left', label: 'Matrícula' },

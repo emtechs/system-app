@@ -13,9 +13,10 @@ import {
   usePaginationContext,
   iFrequency,
   apiFrequency,
+  useParamsContext,
 } from '../../shared'
-import { TableFrequencySchool, TableFrequencyUser } from './tables'
 import { PaginationTable, TabsYear } from '../components'
+import { TableFrequencySchool, TableFrequencyUser } from './tables'
 
 interface iViewFrequency {
   school_id?: string
@@ -30,18 +31,9 @@ export const ViewFrequency = ({
 }: iViewFrequency) => {
   const { debounce } = useDebounce()
   const { listYear } = useCalendarContext()
-  const {
-    setCount,
-    setIsLoading,
-    query,
-    setFace,
-    face,
-    handleFace,
-    order,
-    by,
-    query_page,
-    search,
-  } = usePaginationContext()
+  const { setIsLoading, query, order, by, search } = useParamsContext()
+  const { setCount, setFace, face, handleFace, query_page } =
+    usePaginationContext()
   const [data, setData] = useState<iFrequency[]>()
   const [index, setIndex] = useState(0)
 

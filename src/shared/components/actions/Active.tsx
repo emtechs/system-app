@@ -11,7 +11,7 @@ import {
   LinkIcon,
   iRole,
   useDialogContext,
-  usePaginationContext,
+  useParamsContext,
 } from '../../../shared'
 
 interface iActionsActiveProps {
@@ -31,10 +31,10 @@ export const ActionsActive = ({
 }: iActionsActiveProps) => {
   const { handleOpenEdit, handleOpenActive, handleOpenDirector } =
     useDialogContext()
-  const { onClickReset, handleBack } = usePaginationContext()
+  const { onClickReset, handleBack, back: oldBack } = useParamsContext()
 
   const onClickDetail = () => {
-    handleBack(back)
+    handleBack(oldBack, back)
     onClickReset()
   }
 

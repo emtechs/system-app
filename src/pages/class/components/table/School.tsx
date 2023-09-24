@@ -2,13 +2,13 @@ import { useState } from 'react'
 import { TableCell, TableRow } from '@mui/material'
 import {
   iSchool,
-  usePaginationContext,
   iHeadCell,
   TableBase,
   LinkText,
   DialogCreateSchool,
   ActionsActive,
   TableCellDataLoading,
+  useParamsContext,
 } from '../../../../shared'
 
 interface iTableSchoolProps {
@@ -16,11 +16,11 @@ interface iTableSchoolProps {
 }
 
 export const TableSchool = ({ data }: iTableSchoolProps) => {
-  const { isLoading, onClickReset, handleBack } = usePaginationContext()
+  const { isLoading, onClickReset, handleBack, back } = useParamsContext()
   const [schoolData, setSchoolData] = useState<iSchool>()
 
   const onClickDetail = () => {
-    handleBack('/school')
+    handleBack(back, '/school')
     onClickReset()
   }
 

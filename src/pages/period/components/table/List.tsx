@@ -3,12 +3,12 @@ import { useMemo } from 'react'
 import { TableCell, TableRow } from '@mui/material'
 import {
   iPeriod,
-  usePaginationContext,
   iHeadCell,
   TableBase,
   ActionsEdit,
   LinkText,
   TableCellDataLoading,
+  useParamsContext,
 } from '../../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
@@ -25,7 +25,7 @@ export const TablePeriodPage = ({
   listData,
   handlePeriod,
 }: iTablePeriodPageProps) => {
-  const { order, by, isLoading, onClickReset } = usePaginationContext()
+  const { order, by, isLoading, onClickReset } = useParamsContext()
 
   const data = useMemo(() => {
     return sortArray<iPeriod>(listData, { by: order, order: by })

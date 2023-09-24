@@ -14,6 +14,7 @@ import {
   Footer,
   DialogRemoveStudent,
   DialogTransferStudent,
+  useParamsContext,
 } from '../../../shared'
 import {
   DialogClassStudentPage,
@@ -24,7 +25,8 @@ import {
 export const ViewClassStudentPage = () => {
   const { view: key } = useParams()
   const { debounce } = useDebounce()
-  const { setCount, setIsLoading, search, order, by } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { setIsLoading, search, order, by } = useParamsContext()
   const [listData, setListData] = useState<iStudent[]>([])
   const [studentData, setStudentData] = useState<iStudent>()
 

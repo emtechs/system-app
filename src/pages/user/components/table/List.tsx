@@ -4,13 +4,13 @@ import { TableRow, TableCell } from '@mui/material'
 import {
   iUser,
   useAppThemeContext,
-  usePaginationContext,
   iHeadCell,
   TableBase,
   LinkText,
   TableCellDataLoading,
   rolePtBr,
   ActionsActive,
+  useParamsContext,
 } from '../../../../shared'
 
 interface iTableUserPageProps {
@@ -23,11 +23,11 @@ export const TableUserPage = ({
   listData,
 }: iTableUserPageProps) => {
   const { mdDown } = useAppThemeContext()
-  const { order, by, isLoading, onClickReset, handleBack } =
-    usePaginationContext()
+  const { order, by, isLoading, onClickReset, handleBack, back } =
+    useParamsContext()
 
   const onClickDetail = () => {
-    handleBack('/user')
+    handleBack(back, '/user')
     onClickReset()
   }
 

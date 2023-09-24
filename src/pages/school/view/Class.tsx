@@ -21,6 +21,7 @@ import {
   TabsYear,
   Footer,
   useCalendarContext,
+  useParamsContext,
 } from '../../../shared'
 import { DialogSchoolClassPage, TableSchoolClassPage } from '../components'
 
@@ -28,7 +29,8 @@ export const ViewSchoolClassPage = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
   const { listYear } = useCalendarContext()
-  const { setIsLoading, setCount, search } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { setIsLoading, search } = useParamsContext()
   const [listData, setListData] = useState<iClass[]>([])
   const [index, setIndex] = useState(0)
 

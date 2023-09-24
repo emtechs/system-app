@@ -1,16 +1,16 @@
 import { useNavigate } from 'react-router-dom'
 import {
   iDialogSchoolProps,
-  usePaginationContext,
   useDialogContext,
   useAppThemeContext,
   apiSchool,
   DialogActive,
+  useParamsContext,
 } from '../../../../shared'
 
 export const DialogActiveSchool = ({ getData, school }: iDialogSchoolProps) => {
   const navigate = useNavigate()
-  const { onClickReset } = usePaginationContext()
+  const { onClickReset } = useParamsContext()
   const { handleOpenActive } = useDialogContext()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
 

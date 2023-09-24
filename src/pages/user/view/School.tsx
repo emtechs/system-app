@@ -15,6 +15,7 @@ import {
   Tools,
   TabsUserRetrievePage,
   Footer,
+  useParamsContext,
 } from '../../../shared'
 import { DialogCreateSchoolServer, TableUserSchoolPage } from '../components'
 
@@ -22,7 +23,8 @@ export const ViewUserSchoolPage = () => {
   const { user_id } = useParams()
   const { debounce } = useDebounce()
   const { userSelect } = useUserContext()
-  const { search, setIsLoading, setCount } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { search, setIsLoading } = useParamsContext()
   const { openCreate, handleOpenCreate } = useDialogContext()
   const [listData, setListData] = useState<iSchool[]>([])
 

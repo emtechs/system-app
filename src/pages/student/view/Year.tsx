@@ -14,6 +14,7 @@ import {
   DialogRemoveStudent,
   DialogTransferStudent,
   Footer,
+  useParamsContext,
 } from '../../../shared'
 import { TabsStudentPage, TableStudentYearPage } from '../components'
 
@@ -23,15 +24,9 @@ interface iViewStudentYearPageProps {
 
 export const ViewStudentYearPage = ({ year_id }: iViewStudentYearPageProps) => {
   const { debounce } = useDebounce()
-  const {
-    setCount,
-    setIsLoading,
-    search,
-    setFace,
-    query_page,
-    handleFace,
-    face,
-  } = usePaginationContext()
+  const { setIsLoading, search } = useParamsContext()
+  const { setCount, setFace, query_page, handleFace, face } =
+    usePaginationContext()
   const [listData, setListData] = useState<iStudent[]>([])
   const [studentData, setStudentData] = useState<iStudent>()
 

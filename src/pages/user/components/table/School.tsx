@@ -3,7 +3,6 @@ import { useMemo, useState } from 'react'
 import { TableRow, TableCell } from '@mui/material'
 import {
   iSchool,
-  usePaginationContext,
   iHeadCell,
   TableBase,
   TableCellDataLoading,
@@ -11,6 +10,7 @@ import {
   ActionsRemove,
   DialogRemoveUser,
   useUserContext,
+  useParamsContext,
 } from '../../../../shared'
 
 interface iTableUserSchoolPageProps {
@@ -22,7 +22,7 @@ export const TableUserSchoolPage = ({
   getData,
   listData,
 }: iTableUserSchoolPageProps) => {
-  const { order, by, isLoading } = usePaginationContext()
+  const { order, by, isLoading } = useParamsContext()
   const { userSelect } = useUserContext()
   const [schoolData, setSchoolData] = useState<iSchool>()
 

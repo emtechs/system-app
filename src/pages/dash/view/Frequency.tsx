@@ -16,6 +16,7 @@ import {
   PaginationTable,
   TabsFrequencyPage,
   TabsMonth,
+  useParamsContext,
 } from '../../../shared'
 import { TableDashboardSchoolFrequencyPage } from '../components'
 
@@ -31,15 +32,9 @@ export const ViewDashboardSchoolFrequencyPage = ({
   const [searchParams] = useSearchParams()
   const date = searchParams.get('date') || undefined
   const { handleListMonth, listMonth } = useCalendarContext()
-  const {
-    setCount,
-    setIsLoading,
-    search,
-    setFace,
-    query_page,
-    handleFace,
-    face,
-  } = usePaginationContext()
+  const { setIsLoading, search } = useParamsContext()
+  const { setCount, setFace, query_page, handleFace, face } =
+    usePaginationContext()
   const [listData, setListData] = useState<iFrequency[]>([])
   const [index, setIndex] = useState(0)
 

@@ -14,21 +14,16 @@ import {
   PaginationTable,
   DialogGroupStudent,
   Footer,
+  useParamsContext,
 } from '../../../shared'
 import { TabsStudentPage, TableStudentNonePage } from '../components'
 
 export const ViewStudentNonePage = () => {
   const { debounce } = useDebounce()
   const { yearData } = useAuthContext()
-  const {
-    setCount,
-    setIsLoading,
-    search,
-    setFace,
-    query_page,
-    handleFace,
-    face,
-  } = usePaginationContext()
+  const { setIsLoading, search } = useParamsContext()
+  const { setCount, setFace, query_page, handleFace, face } =
+    usePaginationContext()
   const [listData, setListData] = useState<iStudent[]>([])
   const [studentData, setStudentData] = useState<iStudent>()
 

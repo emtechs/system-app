@@ -9,9 +9,13 @@ import {
 } from '@mui/material'
 import { Visibility } from '@mui/icons-material'
 import { Link as RouterLink } from 'react-router-dom'
-import { TableBase } from '../../../components'
-import { useAppThemeContext, usePaginationContext } from '../../../contexts'
-import { iSchoolClass, iHeadCell } from '../../../interfaces'
+import {
+  iSchoolClass,
+  useAppThemeContext,
+  useParamsContext,
+  iHeadCell,
+  TableBase,
+} from '../../../../shared'
 
 interface iTableClassSchoolProps {
   data: iSchoolClass[]
@@ -19,7 +23,7 @@ interface iTableClassSchoolProps {
 
 export const TableClassSchool = ({ data }: iTableClassSchoolProps) => {
   const { mdDown } = useAppThemeContext()
-  const { isLoading, onClickReset } = usePaginationContext()
+  const { isLoading, onClickReset } = useParamsContext()
 
   const headCells: iHeadCell[] = useMemo(() => {
     if (mdDown)

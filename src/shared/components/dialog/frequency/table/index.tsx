@@ -4,7 +4,6 @@ import { TableRow, TableCell } from '@mui/material'
 import {
   iFrequencyStudentsBase,
   useAppThemeContext,
-  usePaginationContext,
   iHeadCell,
   defineBgColorFrequency,
   statusFrequencyPtBr,
@@ -12,6 +11,7 @@ import {
   TableCellDataLoading,
   TableCellLoading,
   useDialogContext,
+  useParamsContext,
 } from '../../../../../shared'
 
 interface iTableDialogFinishFrequencyProps {
@@ -22,7 +22,7 @@ export const TableDialogFinishFrequency = ({
   listData,
 }: iTableDialogFinishFrequencyProps) => {
   const { theme } = useAppThemeContext()
-  const { order, by } = usePaginationContext()
+  const { order, by } = useParamsContext()
   const { loading } = useDialogContext()
 
   const headCells: iHeadCell[] = [

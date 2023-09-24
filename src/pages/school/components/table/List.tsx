@@ -3,12 +3,12 @@ import { useMemo } from 'react'
 import { TableRow, TableCell } from '@mui/material'
 import {
   iSchool,
-  usePaginationContext,
   iHeadCell,
   TableBase,
   LinkText,
   TableCellDataLoading,
   ActionsActive,
+  useParamsContext,
 } from '../../../../shared'
 
 interface iTableSchoolPageProps {
@@ -20,11 +20,11 @@ export const TableSchoolPage = ({
   handleSchool,
   listData,
 }: iTableSchoolPageProps) => {
-  const { order, by, isLoading, onClickReset, handleBack } =
-    usePaginationContext()
+  const { order, by, isLoading, onClickReset, handleBack, back } =
+    useParamsContext()
 
   const onClickDetail = () => {
-    handleBack('/school')
+    handleBack(back, '/school')
     onClickReset()
   }
 

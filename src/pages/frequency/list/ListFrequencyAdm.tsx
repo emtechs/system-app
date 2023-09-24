@@ -13,6 +13,7 @@ import {
   Tools,
   TableBase,
   Footer,
+  useParamsContext,
 } from '../../../shared'
 
 const headCells: iHeadCell[] = [
@@ -53,7 +54,8 @@ export const ListFrequencyAdm = () => {
   const date = searchParams.get('date')
   const status = searchParams.get('status')
   const { yearData } = useAuthContext()
-  const { setCount, setIsLoading, query } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { setIsLoading, query } = useParamsContext()
   const [data, setData] = useState<iFrequency[]>()
 
   useEffect(() => {

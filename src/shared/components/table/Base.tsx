@@ -15,6 +15,7 @@ import {
   usePaginationContext,
   iLinkComp,
   TableCellLink,
+  useParamsContext,
 } from '../../../shared'
 import { TableSort } from './Sort'
 
@@ -25,7 +26,8 @@ export const TableBase = ({
   link,
   isCount = true,
 }: iTable) => {
-  const { isLoading, count } = usePaginationContext()
+  const { count } = usePaginationContext()
+  const { isLoading } = useParamsContext()
 
   const msg = useMemo(() => {
     return message || 'Nenhum registro encontrado.'

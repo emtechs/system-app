@@ -38,6 +38,7 @@ import {
   GridDashContent,
   GridDashOrgan,
   Footer,
+  useParamsContext,
 } from '../../../shared'
 
 interface iCardClassDashProps {
@@ -91,8 +92,9 @@ export const ViewFrequencyDayPage = () => {
   const { setLoading, mdDown } = useAppThemeContext()
   const { yearData } = useAuthContext()
   const { schoolSelect } = useSchoolContext()
+  const { setIsLoading } = useParamsContext()
   const { dateData, monthData } = useCalendarContext()
-  const { setIsLoading, query_page, setCount } = usePaginationContext()
+  const { query_page, setCount } = usePaginationContext()
   const [infoSchool, setInfoSchool] = useState<iDashSchool>()
   const [listClassData, setListClassData] = useState<iClassDash[]>()
   const [listClassSelectData, setListClassSelectData] = useState<iClassDash[]>()

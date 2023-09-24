@@ -6,22 +6,23 @@ import {
   useContext,
   useState,
 } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { FieldValues } from 'react-hook-form'
 import {
-  iChildren,
-  iClass,
   iClassRequest,
   iClassSchoolRequest,
-  iClassSelect,
-  iClassWithSchool,
   iSchoolImportRequest,
+  iClassSelect,
+  iClass,
+  iClassWithSchool,
   iSelectBase,
   iStudent,
-} from '../interfaces'
-import { useNavigate } from 'react-router-dom'
-import { useAppThemeContext } from './ThemeContext'
-import { FieldValues } from 'react-hook-form'
-import { apiClass } from '../services'
-import { usePaginationContext } from './PaginationContext'
+  iChildren,
+  useAppThemeContext,
+  usePaginationContext,
+  apiClass,
+  useParamsContext,
+} from '../../shared'
 
 interface iClassContextData {
   createClass: (data: iClassRequest, back?: string) => Promise<void>
@@ -50,7 +51,8 @@ const ClassContext = createContext({} as iClassContextData)
 export const ClassProvider = ({ children }: iChildren) => {
   const navigate = useNavigate()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
-  const { setCount, setIsLoading } = usePaginationContext()
+  const { setIsLoading } = useParamsContext()
+  const { setCount } = usePaginationContext()
   const [classDataSelect, setClassDataSelect] = useState<iClassSelect[]>()
   const [listClassData, setListClassData] = useState<iClass[]>()
   const [classWithSchoolSelect, setClassWithSchoolSelect] =

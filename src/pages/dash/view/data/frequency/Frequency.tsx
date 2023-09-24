@@ -6,6 +6,7 @@ import {
   iFrequency,
   apiFrequency,
   DialogRequestFrequency,
+  useParamsContext,
 } from '../../../../../shared'
 import { TableDashboardSchoolFrequencyDataPage } from '../../../components'
 
@@ -17,7 +18,8 @@ export const DataDashboardSchoolFrequencyPage = ({
   frequency_id,
 }: iDataDashboardSchoolFrequencyPageProps) => {
   const { debounce } = useDebounce()
-  const { setIsLoading, search, setCount } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { setIsLoading, search } = useParamsContext()
   const [dataStudents, setDataStudents] = useState<iFrequencyStudentsBase[]>([])
   const [frequencyData, setFrequencyData] = useState<iFrequency>()
 

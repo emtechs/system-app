@@ -8,18 +8,23 @@ import {
 } from 'react'
 import { Box } from '@mui/material'
 import { useParams } from 'react-router-dom'
-import { TabsYear } from '../../components'
-import { useCalendarContext, usePaginationContext } from '../../contexts'
-import { useDebounce } from '../../hooks'
-import { iSchoolClass } from '../../interfaces'
-import { apiSchoolRetrieve } from '../../services'
+import {
+  useDebounce,
+  useCalendarContext,
+  usePaginationContext,
+  useParamsContext,
+  iSchoolClass,
+  apiSchoolRetrieve,
+  TabsYear,
+} from '../../../shared'
 import { TableClassSchool } from './tables'
 
 export const ViewSchoolClass = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
   const { listYear } = useCalendarContext()
-  const { search, order, by, setCount, setIsLoading } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { search, order, by, setIsLoading } = useParamsContext()
   const [listData, setListData] = useState<iSchoolClass[]>([])
   const [index, setIndex] = useState(0)
 

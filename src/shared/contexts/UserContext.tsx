@@ -6,16 +6,16 @@ import {
   useContext,
   useState,
 } from 'react'
-import {
-  iChildren,
-  iSelectBase,
-  iUser,
-  iUserSecretRequest,
-} from '../interfaces'
 import { useNavigate } from 'react-router-dom'
 import { FieldValues } from 'react-hook-form'
-import { apiUser } from '../services'
-import { useAppThemeContext } from './ThemeContext'
+import {
+  iUserSecretRequest,
+  iSelectBase,
+  iUser,
+  iChildren,
+  useAppThemeContext,
+  apiUser,
+} from '../../shared'
 
 interface iUserContextData {
   createSecret: (data: iUserSecretRequest, back?: string) => Promise<void>

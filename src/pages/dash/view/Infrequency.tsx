@@ -3,7 +3,6 @@ import { Chip } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import {
-  usePaginationContext,
   LayoutBasePage,
   TitleSchoolDashViewPage,
   Footer,
@@ -11,6 +10,7 @@ import {
   apiInfrequency,
   iDataInfrequency,
   useAuthContext,
+  useParamsContext,
 } from '../../../shared'
 import { TableDashboardSchoolInfrequencyPage } from '../components'
 import dayjs from 'dayjs'
@@ -30,7 +30,7 @@ export const ViewDashboardSchoolInfrequencyPage = ({
   const [searchParams] = useSearchParams()
   const date = searchParams.get('date') || undefined
   const { yearData } = useAuthContext()
-  const { setIsLoading } = usePaginationContext()
+  const { setIsLoading } = useParamsContext()
   const [listData, setListData] = useState<iDataInfrequency[]>([])
 
   const getInfrequency = useCallback(

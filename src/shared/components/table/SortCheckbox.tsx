@@ -6,7 +6,11 @@ import {
   TableRow,
   TableSortLabel,
 } from '@mui/material'
-import { iHeadCell, usePaginationContext } from '../../../shared'
+import {
+  iHeadCell,
+  usePaginationContext,
+  useParamsContext,
+} from '../../../shared'
 
 interface iSortProps {
   headCells: iHeadCell[]
@@ -17,7 +21,8 @@ export const TableSortCheckbox = ({
   headCells,
   onSelectAllClick,
 }: iSortProps) => {
-  const { by, setBy, order, setOrder, count, selected } = usePaginationContext()
+  const { count } = usePaginationContext()
+  const { by, setBy, order, setOrder, selected } = useParamsContext()
 
   const numSelected = useMemo(() => {
     return selected.length

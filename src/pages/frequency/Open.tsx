@@ -14,6 +14,7 @@ import {
   LayoutBasePage,
   TableBase,
   Footer,
+  useParamsContext,
 } from '../../shared'
 
 const headCells: iHeadCell[] = [
@@ -56,7 +57,8 @@ export const FrequencyOpenPage = () => {
   const navigate = useNavigate()
   const { yearData } = useAuthContext()
   const { schoolRetrieve } = useSchoolContext()
-  const { setCount, setIsLoading, query } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { setIsLoading, query } = useParamsContext()
   const [data, setData] = useState<iFrequency[]>()
 
   useEffect(() => {

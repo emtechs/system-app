@@ -1,7 +1,7 @@
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { Box, Skeleton, Typography } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
-import { usePaginationContext } from '../../contexts'
+import { usePaginationContext, useParamsContext } from '../../contexts'
 
 interface iPaginationTableProps {
   total: number
@@ -9,7 +9,8 @@ interface iPaginationTableProps {
 }
 
 export const PaginationTable = ({ onClick, total }: iPaginationTableProps) => {
-  const { count, isLoading } = usePaginationContext()
+  const { count } = usePaginationContext()
+  const { isLoading } = useParamsContext()
 
   return (
     count !== total && (

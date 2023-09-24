@@ -13,6 +13,7 @@ import {
   TabsYear,
   Footer,
   useCalendarContext,
+  useParamsContext,
 } from '../../../shared'
 import { TableDashboardSchoolClassPage } from '../components'
 
@@ -20,7 +21,8 @@ export const ViewDashboardSchoolClassPage = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
   const { listYear } = useCalendarContext()
-  const { setIsLoading, setCount, search } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { setIsLoading, search } = useParamsContext()
   const [listData, setListData] = useState<iClass[]>([])
   const [index, setIndex] = useState(0)
 

@@ -16,6 +16,7 @@ import {
   apiStudent,
   TabsYear,
   PaginationTable,
+  useParamsContext,
 } from '../../../../../shared'
 import { TableDashboardSchoolStudentAllPage } from '../../../components'
 
@@ -23,17 +24,9 @@ export const ViewDashboardSchoolStudentAllPage = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
   const { listYear } = useCalendarContext()
-  const {
-    setCount,
-    setIsLoading,
-    search,
-    order,
-    by,
-    setFace,
-    query_page,
-    handleFace,
-    face,
-  } = usePaginationContext()
+  const { setIsLoading, search, order, by } = useParamsContext()
+  const { setCount, setFace, query_page, handleFace, face } =
+    usePaginationContext()
   const [listData, setListData] = useState<iStudent[]>([])
   const [index, setIndex] = useState(0)
 

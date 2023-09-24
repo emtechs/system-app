@@ -6,7 +6,7 @@ import {
   iFrequency,
   iHeadCell,
   TableBase,
-  usePaginationContext,
+  useParamsContext,
 } from '../../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
@@ -23,7 +23,7 @@ export const TableFrequencyPage = ({
   handleFrequency,
   listData,
 }: iTableFrequencyPageProps) => {
-  const { order, by } = usePaginationContext()
+  const { order, by } = useParamsContext()
   const headCells: iHeadCell[] = useMemo(() => {
     return [
       { order: 'finished_at', numeric: 'left', label: 'Finalizado' },

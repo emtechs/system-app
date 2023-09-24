@@ -4,13 +4,13 @@ import { TableRow, TableCell } from '@mui/material'
 import {
   iFrequencyStudentsBase,
   useAppThemeContext,
-  usePaginationContext,
   iHeadCell,
   TableBase,
   TableCellDataLoading,
   TableCellLoading,
   defineBgColorFrequency,
   statusFrequencyPtBr,
+  useParamsContext,
 } from '../../../../shared'
 
 interface iTableDashboardSchoolFrequencyDataPageProps {
@@ -21,7 +21,7 @@ export const TableDashboardSchoolFrequencyDataPage = ({
   listData,
 }: iTableDashboardSchoolFrequencyDataPageProps) => {
   const { theme } = useAppThemeContext()
-  const { isLoading, order, by } = usePaginationContext()
+  const { isLoading, order, by } = useParamsContext()
 
   const headCells: iHeadCell[] = [
     { order: 'registry', numeric: 'left', label: 'Matrícula' },

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
   usePaginationContext,
+  useParamsContext,
   iFrequencyStudentsBase,
   apiFrequency,
   DialogMissed,
@@ -17,7 +18,8 @@ export const DataDashboardSchoolFrequencyOpenPage = ({
   frequency_id,
   isAlter,
 }: iDataDashboardSchoolFrequencyOpenPageProps) => {
-  const { setIsLoading, setCount } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { setIsLoading } = useParamsContext()
   const [dataStudents, setDataStudents] = useState<iFrequencyStudentsBase[]>([])
   const [studentData, setStudentData] = useState<iFrequencyStudentsBase>()
 

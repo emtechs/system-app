@@ -7,20 +7,15 @@ import {
   iFrequency,
   DialogDeleteFrequency,
   DialogRetrieveFrequency,
+  useParamsContext,
 } from '../../../shared'
 import { TableFrequencyPage } from '../components'
 
 export const ViewFrequencyPage = () => {
   const { debounce } = useDebounce()
-  const {
-    setCount,
-    setIsLoading,
-    search,
-    setFace,
-    query_page,
-    handleFace,
-    face,
-  } = usePaginationContext()
+  const { setIsLoading, search } = useParamsContext()
+  const { setCount, setFace, query_page, handleFace, face } =
+    usePaginationContext()
   const [listData, setListData] = useState<iFrequency[]>([])
   const [frequencyData, setFrequencyData] = useState<iFrequency>()
 

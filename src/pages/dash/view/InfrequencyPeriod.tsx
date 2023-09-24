@@ -8,13 +8,13 @@ import {
 } from 'react'
 import { useParams } from 'react-router-dom'
 import {
-  usePaginationContext,
   apiInfrequency,
   iDataInfrequency,
   TabsPeriodVertical,
   TabsPeriodName,
   iPeriod,
   apiCalendar,
+  useParamsContext,
 } from '../../../shared'
 import { TableInfrequencyPeriod } from '../components'
 import dayjs from 'dayjs'
@@ -28,7 +28,7 @@ interface iInfrequencyPeriodProps {
 
 export const InfrequencyPeriod = ({ year_id }: iInfrequencyPeriodProps) => {
   const { school_id } = useParams()
-  const { setIsLoading } = usePaginationContext()
+  const { setIsLoading } = useParamsContext()
   const [listData, setListData] = useState<iDataInfrequency[]>([])
   const [period, setPeriod] = useState('ANO')
   const [listPeriodData, setListPeriodData] = useState<iPeriod[]>()

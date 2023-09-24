@@ -4,10 +4,10 @@ import sortArray from 'sort-array'
 import {
   iStudent,
   useAppThemeContext,
-  usePaginationContext,
   iHeadCell,
   TableBase,
   ActionsStudent,
+  useParamsContext,
 } from '../../../../shared'
 
 interface iTableStudentYearPageProps {
@@ -20,7 +20,7 @@ export const TableStudentYearPage = ({
   handleStudent,
 }: iTableStudentYearPageProps) => {
   const { mdDown } = useAppThemeContext()
-  const { order, by } = usePaginationContext()
+  const { order, by } = useParamsContext()
 
   const headCells: iHeadCell[] = useMemo(() => {
     if (mdDown)

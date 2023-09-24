@@ -12,15 +12,17 @@ import {
   useCalendarContext,
   ValidateFrequency,
   PaginationBase,
+  useParamsContext,
 } from '../../../../shared'
 import { TableDashboardSchoolClassFrequencyPage } from '../table'
 
 export const DialogDashboardSchoolClassFrequencyPage = () => {
-  const { handleOpenCreate, openCreate } = useDialogContext()
-  const { query_page, setIsLoading, setCount } = usePaginationContext()
   const { yearData } = useAuthContext()
   const { schoolSelect } = useSchoolContext()
+  const { setIsLoading } = useParamsContext()
   const { dateData, monthData } = useCalendarContext()
+  const { query_page, setCount } = usePaginationContext()
+  const { handleOpenCreate, openCreate } = useDialogContext()
   const [listClassData, setListClassData] = useState<iClassDash[]>([])
   const [listClassSelectData, setListClassSelectData] = useState<iClassDash[]>()
 

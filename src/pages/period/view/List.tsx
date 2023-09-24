@@ -4,6 +4,7 @@ import {
   usePaginationContext,
   iPeriod,
   apiCalendar,
+  useParamsContext,
 } from '../../../shared'
 import {
   DialogCreateYearPeriod,
@@ -13,7 +14,8 @@ import {
 
 export const ViewPeriodPage = () => {
   const { debounce } = useDebounce()
-  const { search, setIsLoading, setCount } = usePaginationContext()
+  const { search, setIsLoading } = useParamsContext()
+  const { setCount } = usePaginationContext()
   const [listData, setListData] = useState<iPeriod[]>([])
   const [periodData, setPeriodData] = useState<iPeriod>()
 

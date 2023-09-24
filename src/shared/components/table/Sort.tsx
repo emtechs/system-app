@@ -3,7 +3,7 @@ import {
   TableCellLink,
   iHeadCell,
   iLinkComp,
-  usePaginationContext,
+  useParamsContext,
 } from '../../../shared'
 
 interface iSortProps {
@@ -13,7 +13,7 @@ interface iSortProps {
 }
 
 export const TableSort = ({ headCells, linkComp, link }: iSortProps) => {
-  const { by, setBy, order, setOrder } = usePaginationContext()
+  const { by, setBy, order, setOrder } = useParamsContext()
 
   const createSortHandler = (property?: string) => () => {
     const isAsc = order === property && by === 'asc'

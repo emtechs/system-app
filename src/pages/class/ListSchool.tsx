@@ -1,12 +1,20 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TableCell, TableRow } from '@mui/material'
-import { Footer, TableBase, Tools } from '../../shared/components'
-import { useAuthContext, usePaginationContext } from '../../shared/contexts'
-import { iSchool, iHeadCell } from '../../shared/interfaces'
-import { apiSchool } from '../../shared/services'
-import { useBgColorInfrequency, useDebounce } from '../../shared/hooks'
-import { LayoutBasePage } from '../../shared/layouts'
+import {
+  iHeadCell,
+  iSchool,
+  useBgColorInfrequency,
+  useDebounce,
+  useAuthContext,
+  usePaginationContext,
+  useParamsContext,
+  apiSchool,
+  LayoutBasePage,
+  Tools,
+  TableBase,
+  Footer,
+} from '../../shared'
 
 const headCells: iHeadCell[] = [
   { order: 'name', numeric: 'left', label: 'Escola' },
@@ -54,7 +62,8 @@ const CardSchool = ({ school }: iCardSchoolProps) => {
 export const ListSchoolPage = () => {
   const { debounce } = useDebounce()
   const { yearData } = useAuthContext()
-  const { setCount, setIsLoading, query, search } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { setIsLoading, query, search } = useParamsContext()
   const [listSchoolData, setListSchoolData] = useState<iSchool[]>()
   const [infreq, setInfreq] = useState<string>()
 

@@ -11,6 +11,7 @@ import {
   LabelYear,
   LinkChip,
   TitleBaseItemsPage,
+  useParamsContext,
 } from '../../../shared'
 import { TabsClassPage, TableClassYearPage } from '../components'
 import { Workspaces } from '@mui/icons-material'
@@ -21,15 +22,9 @@ interface iViewClassYearPageProps {
 
 export const ViewClassYearPage = ({ year_id }: iViewClassYearPageProps) => {
   const { debounce } = useDebounce()
-  const {
-    setCount,
-    setIsLoading,
-    search,
-    setFace,
-    handleFace,
-    face,
-    query_page,
-  } = usePaginationContext()
+  const { setIsLoading, search } = useParamsContext()
+  const { setCount, setFace, handleFace, face, query_page } =
+    usePaginationContext()
   const [listData, setListData] = useState<iClass[]>([])
 
   const getClass = useCallback((query: string, isFace?: boolean) => {

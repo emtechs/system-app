@@ -4,11 +4,11 @@ import { IconButton, TableCell, TableRow, Tooltip } from '@mui/material'
 import { Edit } from '@mui/icons-material'
 import {
   iPeriod,
-  usePaginationContext,
   iHeadCell,
   TableBase,
   useDialogContext,
   TableCellDataLoading,
+  useParamsContext,
 } from '../../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
@@ -25,7 +25,7 @@ export const TableRetrievePeriodPage = ({
   listData,
   handlePeriod,
 }: iTableRetrievePeriodPageProps) => {
-  const { order, by, isLoading } = usePaginationContext()
+  const { order, by, isLoading } = useParamsContext()
   const { handleOpenEdit } = useDialogContext()
 
   const data = useMemo(() => {

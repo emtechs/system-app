@@ -11,6 +11,7 @@ import {
   apiFrequency,
   useAuthContext,
   iRequest,
+  useParamsContext,
 } from '../../shared'
 import { ViewRequestPage } from './view'
 import { ButtonRequestPage } from './components'
@@ -18,8 +19,8 @@ import { ButtonRequestPage } from './components'
 export const RequestPage = () => {
   const { setLoading, handleError, handleSucess } = useAppThemeContext()
   const { refreshUser } = useAuthContext()
-  const { selected, onClickReset, setIsLoading, setCount } =
-    usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { selected, onClickReset, setIsLoading } = useParamsContext()
   const [requestData, setRequestData] = useState<iRequest[]>([])
 
   const getRequest = useCallback(() => {

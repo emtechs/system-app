@@ -16,8 +16,7 @@ import {
   ThemeProvider,
   useMediaQuery,
 } from '@mui/material'
-import { iChildren } from '../interfaces'
-import { Theme } from '../themes'
+import { iChildren, Theme } from '../../shared'
 
 interface iThemeContextProps {
   theme: iTheme

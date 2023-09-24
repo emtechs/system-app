@@ -6,7 +6,7 @@ import {
   useContext,
   useState,
 } from 'react'
-import { iChildren } from '../interfaces'
+import { iChildren } from '../../shared'
 
 interface iDialogContextData {
   openActive: boolean

@@ -8,23 +8,26 @@ import {
 } from 'react'
 import { useParams } from 'react-router-dom'
 import sortArray from 'sort-array'
-import { useDebounce } from '../../hooks'
 import {
+  useDebounce,
+  useCalendarContext,
+  usePaginationContext,
+  useParamsContext,
+  iStudent,
+  apiStudent,
   TabsYear,
   DialogCreateStudentSchool,
   DialogRemoveStudent,
   DialogTransferStudent,
-} from '../../components'
-import { useCalendarContext, usePaginationContext } from '../../contexts'
-import { iStudent } from '../../interfaces'
-import { apiStudent } from '../../services'
+} from '../../../shared'
 import { TableStudentSchool } from '../tables'
 
 export const ViewSchoolStudent = () => {
   const { school_id } = useParams()
   const { debounce } = useDebounce()
   const { listYear } = useCalendarContext()
-  const { search, order, by, setCount, setIsLoading } = usePaginationContext()
+  const { setCount } = usePaginationContext()
+  const { search, order, by, setIsLoading } = useParamsContext()
   const [listData, setListData] = useState<iStudent[]>([])
   const [index, setIndex] = useState(0)
   const [studentData, setStudentData] = useState<iStudent>()

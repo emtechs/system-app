@@ -6,7 +6,7 @@ import {
   iHeadCell,
   useDialogContext,
   useFrequencyContext,
-  usePaginationContext,
+  useParamsContext,
 } from '../../../../shared'
 import { TableRow, TableCell } from '@mui/material'
 
@@ -23,7 +23,7 @@ export const TableDashboardSchoolClassFrequencyPage = ({
 }: iTableDashboardSchoolClassFrequencyPageProps) => {
   const { createFrequency } = useFrequencyContext()
   const { handleOpenCreate } = useDialogContext()
-  const { order, by } = usePaginationContext()
+  const { order, by } = useParamsContext()
   const headCells: iHeadCell[] = [
     { order: 'label', numeric: 'left', label: 'Turma' },
     { numeric: 'right', label: 'Alunos' },
