@@ -81,6 +81,7 @@ export const MenuDrawer = () => {
           display="flex"
           flexDirection="column"
           flexShrink={0}
+          justifyContent="space-evenly"
         >
           <Box display="flex" alignItems="center" justifyContent="center">
             <img src="/logo_out.webp" alt="De Olho na Frequência" />
