@@ -1,271 +1,111 @@
+import { Chip } from '@mui/material'
+import { useCallback, useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { Checklist, EventAvailable } from '@mui/icons-material'
 import {
-  Box,
-  Card,
-  CardContent,
-  Chip,
-  Grid,
-  Paper,
-  TableCell,
-  TableRow,
-} from '@mui/material'
-import { useEffect, useMemo, useState } from 'react'
-import {
-  EventAvailable,
-  EventBusy,
-  Groups,
-  Workspaces,
-} from '@mui/icons-material'
-import { AutocompleteElement, FormContainer } from 'react-hook-form-mui'
-import {
-  iClassDash,
-  useAppThemeContext,
-  useFrequencyContext,
-  defineBgColorInfrequency,
-  useAuthContext,
-  useSchoolContext,
-  useCalendarContext,
   usePaginationContext,
-  iDashSchool,
-  iHeadCell,
-  apiClass,
-  apiUsingNow,
   LayoutBasePage,
-  TitleSchoolDashViewPage,
-  ValidateFrequency,
-  TableBase,
-  PaginationBase,
-  SelectDate,
-  GridDashContent,
-  GridDashOrgan,
   Footer,
   useParamsContext,
+  LinkChip,
+  TitleBaseItemsPage,
+  apiFrequency,
+  iFrequency,
+  useDebounce,
+  DialogDeleteFrequency,
+  DialogRetrieveFrequency,
+  PaginationTable,
+  TabsFrequencyPage,
+  Tools,
 } from '../../../shared'
-
-interface iCardClassDashProps {
-  classDash: iClassDash
-  date: string
-  name: string
-}
-
-const CardClassDash = ({ classDash, date, name }: iCardClassDashProps) => {
-  const { mdDown, theme } = useAppThemeContext()
-  const { createFrequency } = useFrequencyContext()
-  return (
-    <TableRow
-      hover
-      sx={{ cursor: 'pointer' }}
-      onClick={() => {
-        createFrequency(
-          {
-            date,
-            name,
-            class_id: classDash.class.id,
-            school_id: classDash.school_id,
-            year_id: classDash.year_id,
-            students: classDash.students,
-          },
-          `/${classDash.school_id}/day`,
-        )
-      }}
-    >
-      <TableCell>{classDash.class.name}</TableCell>
-      {!mdDown && (
-        <>
-          <TableCell align="right">{classDash._count.students}</TableCell>
-          <TableCell align="right">{classDash._count.frequencies}</TableCell>
-        </>
-      )}
-      <TableCell
-        align="right"
-        sx={{
-          color: '#fff',
-          bgcolor: defineBgColorInfrequency(classDash.infrequency, theme),
-        }}
-      >
-        {classDash.infrequency.toFixed(0)}%
-      </TableCell>
-    </TableRow>
-  )
-}
+import { TableFrequencyPage } from '../components'
 
 export const ViewFrequencyDayPage = () => {
-  const { setLoading, mdDown } = useAppThemeContext()
-  const { yearData } = useAuthContext()
-  const { schoolSelect } = useSchoolContext()
-  const { setIsLoading } = useParamsContext()
-  const { dateData, monthData } = useCalendarContext()
-  const { query_page, setCount } = usePaginationContext()
-  const [infoSchool, setInfoSchool] = useState<iDashSchool>()
-  const [listClassData, setListClassData] = useState<iClassDash[]>()
-  const [listClassSelectData, setListClassSelectData] = useState<iClassDash[]>()
+  const [searchParams] = useSearchParams()
+  const date = searchParams.get('date') || undefined
+  const { debounce } = useDebounce()
+  const { setIsLoading, search } = useParamsContext()
+  const { setCount, setFace, query_page, handleFace, face } =
+    usePaginationContext()
+  const [listData, setListData] = useState<iFrequency[]>([])
+  const [frequencyData, setFrequencyData] = useState<iFrequency>()
 
-  const headCells: iHeadCell[] = mdDown
-    ? [
-        { numeric: 'left', label: 'Turma' },
-        { numeric: 'right', label: 'Infrequência' },
-      ]
-    : [
-        { numeric: 'left', label: 'Turma' },
-        { numeric: 'right', label: 'Alunos' },
-        { numeric: 'right', label: 'Frequências' },
-        { numeric: 'right', label: 'Infrequência' },
-      ]
+  const handleFrequency = (newFrequency: iFrequency) =>
+    setFrequencyData(newFrequency)
 
-  const date = useMemo(() => {
-    return dateData.format('DD/MM/YYYY')
-  }, [dateData])
-
-  useEffect(() => {
-    if (schoolSelect && yearData) {
-      const queryData = `?by=asc&order=name&date=${date}` + query_page(3, true)
-      setIsLoading(true)
-      apiClass
-        .listDash(schoolSelect.id, yearData.id, queryData)
+  const getFrequency = useCallback((query: string, isFace?: boolean) => {
+    setIsLoading(true)
+    if (isFace) {
+      apiFrequency
+        .list(query)
+        .then((res) => setListData((old) => old?.concat(res.result)))
+        .finally(() => setIsLoading(false))
+    } else {
+      apiFrequency
+        .list(query)
         .then((res) => {
-          setListClassSelectData(res.classes)
-          setListClassData(res.result)
+          setFace(1)
+          setListData(res.result)
           setCount(res.total)
         })
         .finally(() => setIsLoading(false))
     }
-  }, [date, query_page, schoolSelect, yearData])
+  }, [])
+
+  const define_query = useCallback(
+    (comp: string) => {
+      return `?date=${date}` + comp + query_page()
+    },
+    [date, query_page],
+  )
+
+  const onClick = () => getFrequency(define_query(handleFace(face)), true)
+
+  const list = () => getFrequency(define_query(''))
 
   useEffect(() => {
-    if (schoolSelect && yearData) {
-      const queryData = `?date=${date}`
-      setLoading(true)
-      apiUsingNow
-        .get<iDashSchool>(
-          `schools/${schoolSelect.id}/dash/${yearData.id}${queryData}`,
-        )
-        .then((res) => setInfoSchool(res.data))
-        .finally(() => setLoading(false))
-    }
-  }, [date, schoolSelect, yearData])
+    let query_data = ''
+    if (search) {
+      query_data += `&name=${search}`
+      debounce(() => {
+        getFrequency(define_query(query_data))
+      })
+    } else getFrequency(define_query(query_data))
+  }, [define_query, search])
 
   return (
     <LayoutBasePage
       title={
-        <TitleSchoolDashViewPage>
+        <TitleBaseItemsPage>
+          <LinkChip
+            label="Frequências"
+            icon={<Checklist sx={{ mr: 0.5 }} fontSize="inherit" />}
+            to="/frequency"
+          />
           <Chip
             label={date}
             color="primary"
             icon={<EventAvailable sx={{ mr: 0.5 }} fontSize="inherit" />}
           />
-        </TitleSchoolDashViewPage>
+        </TitleBaseItemsPage>
       }
+      tools={<Tools isHome isSearch isReset />}
     >
-      <Box my={1} mx={2} component={Paper} variant="outlined">
-        <Card>
-          <CardContent>
-            <Grid container direction="column" p={2} spacing={2}>
-              <Grid
-                container
-                item
-                direction="row"
-                justifyContent="center"
-                spacing={2}
-              >
-                <Grid item xs={12} md={7}>
-                  <Box>
-                    <FormContainer>
-                      <AutocompleteElement
-                        name="class"
-                        label="Turma"
-                        loading={!listClassSelectData}
-                        options={
-                          listClassSelectData && listClassSelectData.length > 0
-                            ? listClassSelectData
-                            : [
-                                {
-                                  id: 1,
-                                  label:
-                                    'Todas as frequências do dia já foram registradas.',
-                                },
-                              ]
-                        }
-                        textFieldProps={{ fullWidth: true }}
-                      />
-                      <ValidateFrequency />
-                    </FormContainer>
-                  </Box>
-                  <TableBase
-                    message="Todas as frequências do dia já foram registradas."
-                    headCells={headCells}
-                  >
-                    {listClassData?.map((el) => (
-                      <CardClassDash
-                        key={el.class.id}
-                        classDash={el}
-                        date={date}
-                        name={monthData}
-                      />
-                    ))}
-                  </TableBase>
-                  <PaginationBase />
-                </Grid>
-                <Grid container item direction="row" xs={12} md={5} spacing={2}>
-                  <Grid item xs={12}>
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      alignItems="center"
-                      justifyContent="center"
-                      gap={2}
-                    >
-                      <SelectDate />
-                    </Box>
-                  </Grid>
-
-                  {infoSchool && (
-                    <>
-                      <GridDashContent
-                        icon={<Workspaces fontSize="large" />}
-                        quant={infoSchool.classTotal}
-                        info={infoSchool.classTotal === 1 ? 'Turma' : 'Turmas'}
-                        dest={`/${schoolSelect?.id}/class`}
-                      />
-                      {infoSchool.frequencyOpen !== 0 ? (
-                        <GridDashContent
-                          icon={<EventBusy fontSize="large" />}
-                          quant={infoSchool.frequencyOpen}
-                          info={
-                            infoSchool.frequencyOpen === 1
-                              ? 'Frequência em aberto'
-                              : 'Frequências em aberto'
-                          }
-                          dest="/frequency/open"
-                        />
-                      ) : (
-                        <GridDashContent
-                          icon={<Groups fontSize="large" />}
-                          quant={infoSchool.stundents}
-                          info={infoSchool.stundents === 1 ? 'Aluno' : 'Alunos'}
-                          dest={`/${schoolSelect?.id}/student`}
-                        />
-                      )}
-                      <GridDashContent
-                        icon={<EventBusy fontSize="large" />}
-                        quant={
-                          infoSchool?.day_infreq
-                            ? infoSchool.day_infreq.toFixed(0) + '%'
-                            : '0%'
-                        }
-                        info="Infrequência do dia"
-                        dest={
-                          '/frequency/list?date=' +
-                          dateData.format('DD/MM/YYYY')
-                        }
-                      />
-                    </>
-                  )}
-                  <GridDashOrgan />
-                </Grid>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Box>
+      <TabsFrequencyPage value="day" date={date} />
+      <TableFrequencyPage
+        listData={listData}
+        handleFrequency={handleFrequency}
+      />
+      <PaginationTable
+        total={listData ? listData.length : 0}
+        onClick={onClick}
+      />
+      {frequencyData && (
+        <>
+          <DialogRetrieveFrequency frequency={frequencyData} getData={list} />
+          <DialogDeleteFrequency frequency={frequencyData} getData={list} />
+        </>
+      )}
       <Footer />
     </LayoutBasePage>
   )

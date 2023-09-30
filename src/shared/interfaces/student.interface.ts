@@ -1,31 +1,26 @@
 import { z } from 'zod'
-import { studentRemoveSchema, studentTransferSchema } from '../schemas'
-import { iClass, iClassFreq } from './class.interfaces'
+import {
+  iClass,
+  iClassFreq,
+  iDataBase,
+  studentRemoveSchema,
+  studentTransferSchema,
+} from '../../shared'
 
-export interface iStudent {
+export interface iStudentBase {
   id: string
   name: string
   registry: string
-  class: {
-    id: string
-    name: string
-  }
-  school: {
-    id: string
-    name: string
-  }
+  class: iDataBase
+  school: iDataBase
+}
+
+export interface iStudent extends iStudentBase {
   year_id: string
   key: string
 }
 
-export interface iStudentResume {
-  id: string
-  name: string
-  registry: string
-  class: {
-    id: string
-    name: string
-  }
+export interface iStudentResume extends iStudentBase {
   frequencies: number
   infrequency: number
   absences: number

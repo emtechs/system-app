@@ -19,6 +19,12 @@ export const TabsStudentPage = ({ value = '' }: iTabsStudentPageProps) => {
           component={Link}
           to="/student?year_id=none"
         />
+        <Tab
+          label="Faltosos"
+          value="absences"
+          component={Link}
+          to="/student?year_id=absences"
+        />
         {listYear?.map((el) => (
           <Tab
             key={el.id}

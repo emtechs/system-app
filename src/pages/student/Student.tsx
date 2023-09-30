@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { z } from 'zod'
 import { Groups } from '@mui/icons-material'
 import { Chip } from '@mui/material'
 import {
@@ -10,6 +11,7 @@ import {
   Footer,
 } from '../../shared'
 import {
+  ViewStudentAbsencesPage,
   ViewStudentNonePage,
   ViewStudentPage,
   ViewStudentYearPage,
@@ -22,15 +24,21 @@ export const StudentPage = () => {
   const { verifyYear } = useVerifyYear()
 
   useEffect(() => {
-    if (year_id && year_id !== 'none') verifyYear(year_id)
+    if (z.string().uuid().safeParse(year_id).success) verifyYear(year_id)
   }, [verifyYear, year_id])
 
-  if (year_id)
-    return year_id === 'none' ? (
-      <ViewStudentNonePage />
-    ) : (
-      <ViewStudentYearPage year_id={year_id} />
-    )
+  if (year_id) {
+    switch (year_id) {
+      case 'none':
+        return <ViewStudentNonePage />
+
+      case 'absences':
+        return <ViewStudentAbsencesPage />
+
+      default:
+        return <ViewStudentYearPage year_id={year_id} />
+    }
+  }
 
   return (
     <LayoutBasePage

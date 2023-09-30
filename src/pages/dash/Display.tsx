@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { useEffect } from 'react'
 import { Outlet, useParams, useSearchParams } from 'react-router-dom'
 import { useVerifyYear } from '../../shared'
@@ -8,7 +9,6 @@ import {
   ViewDashboardSchoolReportPage,
   ViewDashboardSchoolStudentPage,
 } from './view'
-import { z } from 'zod'
 
 export const ViewDashboardSchoolPage = () => {
   const { view, id } = useParams()

@@ -1,5 +1,5 @@
 import { FieldValues } from 'react-hook-form'
-import { iStudent } from '../interfaces'
+import { iStudent, iStudentResume } from '../interfaces'
 import { apiUsingNow } from './api'
 
 const create = async (data: FieldValues, query?: string): Promise<iStudent> => {
@@ -55,6 +55,18 @@ const impStudentAll = async (data: FormData): Promise<void> => {
   await apiUsingNow.post('imports/student', data)
 }
 
+interface iResume {
+  total: number
+  result: iStudentResume[]
+}
+
+const resume = async (year_id: string, query: string): Promise<iResume> => {
+  const { data: response } = await apiUsingNow.get<iResume>(
+    `students/resume/${year_id}${query}`,
+  )
+  return response
+}
+
 export const apiStudent = {
   create,
   update,
@@ -63,4 +75,5 @@ export const apiStudent = {
   impStudentAll,
   list,
   listClass,
+  resume,
 }

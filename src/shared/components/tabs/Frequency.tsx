@@ -9,14 +9,12 @@ dayjs.extend(localizedFormat)
 interface iTabsFrequencyPageProps {
   href?: string
   value?: string
-  isSchool?: boolean
   date?: string
 }
 
 export const TabsFrequencyPage = ({
   href = '/frequency',
   value = '',
-  isSchool,
   date = 'Hoje',
 }: iTabsFrequencyPageProps) => {
   const { listYear } = useCalendarContext()
@@ -25,14 +23,12 @@ export const TabsFrequencyPage = ({
     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
       <Tabs value={value} variant="scrollable" scrollButtons="auto">
         <Tab label="Frequências" value="" component={Link} to={href} />
-        {isSchool && (
-          <Tab
-            label={date}
-            value="day"
-            component={Link}
-            to={`${href}?year_id=day&date=${dayjs().format('DD/MM/YYYY')}`}
-          />
-        )}
+        <Tab
+          label={date}
+          value="day"
+          component={Link}
+          to={`${href}?year_id=day&date=${dayjs().format('DD/MM/YYYY')}`}
+        />
         <Tab
           label="Em Aberto"
           value="none"

@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Checklist } from '@mui/icons-material'
@@ -11,6 +12,7 @@ import {
   TabsFrequencyPage,
 } from '../../shared'
 import {
+  ViewFrequencyDayPage,
   ViewFrequencyNonePage,
   ViewFrequencyPage,
   ViewFrequencyYearPage,
@@ -22,15 +24,21 @@ export const FrequencyPage = () => {
   const { verifyYear } = useVerifyYear()
 
   useEffect(() => {
-    if (year_id && year_id !== 'none') verifyYear(year_id)
+    if (z.string().uuid().safeParse(year_id).success) verifyYear(year_id)
   }, [verifyYear, year_id])
 
-  if (year_id)
-    return year_id === 'none' ? (
-      <ViewFrequencyNonePage year_id={year_id} />
-    ) : (
-      <ViewFrequencyYearPage year_id={year_id} />
-    )
+  if (year_id) {
+    switch (year_id) {
+      case 'none':
+        return <ViewFrequencyNonePage />
+
+      case 'day':
+        return <ViewFrequencyDayPage />
+
+      default:
+        return <ViewFrequencyYearPage year_id={year_id} />
+    }
+  }
 
   return (
     <LayoutBasePage

@@ -1,22 +1,25 @@
-import sortArray from 'sort-array'
-import { useParams } from 'react-router-dom'
+import { Groups } from '@mui/icons-material'
+import { Chip } from '@mui/material'
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import {
-  PaginationTable,
-  apiStudent,
-  iStudentResume,
-  useAuthContext,
   useDebounce,
+  useAuthContext,
   usePaginationContext,
+  apiStudent,
+  LayoutBasePage,
+  Tools,
+  PaginationTable,
+  Footer,
   useParamsContext,
-} from '../../../../../shared'
-import { TableDashboardSchoolStudentAbsencesPage } from '../../../components'
+  TitleBasePage,
+  iStudentResume,
+} from '../../../shared'
+import { TabsStudentPage, TableStudentAbsencesPage } from '../components'
 
-export const ViewDashboardSchoolStudentAbsencesPage = () => {
-  const { school_id } = useParams()
+export const ViewStudentAbsencesPage = () => {
   const { debounce } = useDebounce()
   const { yearData } = useAuthContext()
-  const { setIsLoading, search, order, by } = useParamsContext()
+  const { setIsLoading, search } = useParamsContext()
   const { setCount, setFace, query_page, handleFace, face } =
     usePaginationContext()
   const [listData, setListData] = useState<iStudentResume[]>([])
@@ -50,9 +53,9 @@ export const ViewDashboardSchoolStudentAbsencesPage = () => {
 
   const define_query = useCallback(
     (comp: string) => {
-      return `?school_id=${school_id}${comp}${query_page()}`
+      return `?by=asc${comp}${query_page()}`
     },
-    [query_page, school_id],
+    [query_page],
   )
 
   const onClick = () =>
@@ -68,31 +71,26 @@ export const ViewDashboardSchoolStudentAbsencesPage = () => {
     } else getStudent(year_id_data, define_query(query_data))
   }, [define_query, search, year_id_data])
 
-  const data = useMemo(() => {
-    let listStundet: iStudentResume[]
-
-    if (order === 'class_name')
-      listStundet = sortArray<iStudentResume>(listData, {
-        by: order,
-        order: by,
-        computed: { class_name: (row) => row.class.name },
-      })
-
-    listStundet = sortArray<iStudentResume>(listData, {
-      by: order,
-      order: by,
-    })
-
-    return listStundet
-  }, [by, listData, order])
-
   return (
-    <>
-      <TableDashboardSchoolStudentAbsencesPage data={data} />
+    <LayoutBasePage
+      title={
+        <TitleBasePage>
+          <Chip
+            label="Alunos"
+            color="primary"
+            icon={<Groups sx={{ mr: 0.5 }} fontSize="inherit" />}
+          />
+        </TitleBasePage>
+      }
+      tools={<Tools isHome isSearch isReset />}
+    >
+      <TabsStudentPage value="absences" />
+      <TableStudentAbsencesPage listData={listData} />
       <PaginationTable
         total={listData ? listData.length : 0}
         onClick={onClick}
       />
-    </>
+      <Footer />
+    </LayoutBasePage>
   )
 }

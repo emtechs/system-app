@@ -2,7 +2,7 @@ import { iPeriod } from './calendar.interfaces'
 
 export type iReport = 'school' | 'class' | 'student'
 
-interface iDataBase {
+export interface iDataBase {
   id: string
   name: string
 }

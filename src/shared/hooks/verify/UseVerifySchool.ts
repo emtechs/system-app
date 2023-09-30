@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import {
   useAppThemeContext,
   useAuthContext,
-  useCalendarContext,
-  useDrawerContext,
   useSchoolContext,
-} from '../../contexts'
-import { apiAuth, apiSchool } from '../../services'
+  useDrawerContext,
+  useCalendarContext,
+  apiAuth,
+  apiStudent,
+} from '../../../shared'
 
 export const useVerifySchool = () => {
   const navigate = useNavigate()
@@ -40,8 +41,8 @@ export const useVerifySchool = () => {
 
     if (yearData) {
       setLoadingSchoolResume(true)
-      apiSchool
-        .resume(id, yearData.id, '')
+      apiStudent
+        .resume(yearData.id, `?take=3&school_id=${id}`)
         .then((res) => setSchoolResume(res.result))
         .finally(() => setLoadingSchoolResume(false))
     }

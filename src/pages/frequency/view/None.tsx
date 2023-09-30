@@ -19,13 +19,7 @@ import {
 } from '../../../shared'
 import { TableFrequencyPage } from '../components'
 
-interface iViewFrequencyNonePageProps {
-  year_id: string
-}
-
-export const ViewFrequencyNonePage = ({
-  year_id,
-}: iViewFrequencyNonePageProps) => {
+export const ViewFrequencyNonePage = () => {
   const { debounce } = useDebounce()
   const { setIsLoading, search } = useParamsContext()
   const { setCount, setFace, query_page, handleFace, face } =
@@ -94,7 +88,7 @@ export const ViewFrequencyNonePage = ({
       }
       tools={<Tools isHome isSearch isReset />}
     >
-      <TabsFrequencyPage value={year_id} />
+      <TabsFrequencyPage value="none" />
       <TableFrequencyPage
         listData={listData}
         handleFrequency={handleFrequency}

@@ -112,7 +112,6 @@ export const ViewDashboardSchoolFrequencyPage = ({
         date={date}
         value={year_id}
         href={`/${school_id}/frequency`}
-        isSchool
       />
       <Box display="flex" justifyContent="space-between">
         {year_id && z.string().uuid().safeParse(year_id).success && (
