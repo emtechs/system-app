@@ -11,6 +11,12 @@ interface iUserFreq {
   cpf: string
 }
 
+export interface iResumeFreq {
+  id: string
+  name: string
+  prc: number
+}
+
 interface iDataFreq {
   id: string
   name: string

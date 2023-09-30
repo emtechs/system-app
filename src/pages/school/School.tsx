@@ -1,4 +1,4 @@
-import { Outlet, useParams } from 'react-router-dom'
+import { Outlet, useParams, useSearchParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { Chip } from '@mui/material'
 import { School } from '@mui/icons-material'
@@ -9,9 +9,12 @@ import {
   Tools,
   Footer,
 } from '../../shared'
-import { ViewSchoolPage } from './view'
+import { ViewSchoolPage, ViewSchoolUtilPage } from './view'
+import { TabsSchoolPage } from './components'
 
 export const SchoolPage = () => {
+  const [searchParams] = useSearchParams()
+  const view = searchParams.get('view') || undefined
   const { school_id } = useParams()
   const { verifySchool } = useVerifySchool()
 
@@ -20,6 +23,8 @@ export const SchoolPage = () => {
   }, [school_id, verifySchool])
 
   if (school_id) return <Outlet />
+
+  if (view) return <ViewSchoolUtilPage />
 
   return (
     <LayoutBasePage
@@ -44,6 +49,7 @@ export const SchoolPage = () => {
         />
       }
     >
+      <TabsSchoolPage />
       <ViewSchoolPage />
       <Footer />
     </LayoutBasePage>

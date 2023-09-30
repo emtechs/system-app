@@ -5,6 +5,7 @@ import {
   iFrequencyStudentsBase,
   iMonth,
   iRequest,
+  iResumeFreq,
 } from '../interfaces'
 import { apiUsingNow } from './api'
 
@@ -59,6 +60,21 @@ const updateFreqStudent = async (
   const { data: response } = await apiUsingNow.patch<{ frequency_id: string }>(
     `frequencies/student/${id}`,
     data,
+  )
+  return response
+}
+
+interface iResumeReturn {
+  total: number
+  result: iResumeFreq[]
+}
+
+const resume = async (
+  year_id: string,
+  query: string,
+): Promise<iResumeReturn> => {
+  const { data: response } = await apiUsingNow.get<iResumeReturn>(
+    `frequencies/resume/${year_id}${query}`,
   )
   return response
 }
@@ -144,4 +160,5 @@ export const apiFrequency = {
   listRequest,
   history,
   retrieve,
+  resume,
 }
