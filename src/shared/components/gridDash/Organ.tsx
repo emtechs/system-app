@@ -11,11 +11,7 @@ export const GridDashOrgan = () => {
             alignItems="center"
             gap={1}
           >
-            <img
-              width="50%"
-              src="/pref.png"
-              alt="Prefeitura de Massapê"
-            />
+            <img width="50%" src="/pref.png" alt="Prefeitura de Massapê" />
             <img
               width="25%"
               src="/emtechs.jpg"

@@ -29,8 +29,14 @@ export const TableDashboardSchoolFrequencyPage = ({
   message,
 }: iTableDashboardSchoolFrequencyPageProps) => {
   const { mdDown, theme } = useAppThemeContext()
-  const { order, by, onClickReset, isLoading } = useParamsContext()
   const { schoolSelect } = useSchoolContext()
+  const { order, by, isLoading, onClickReset, handleBack, back } =
+    useParamsContext()
+
+  const onClickDetail = () => {
+    handleBack(back, `/${schoolSelect?.id}/frequency`)
+    onClickReset()
+  }
 
   const headCells: iHeadCell[] = useMemo(() => {
     if (mdDown)
@@ -73,7 +79,7 @@ export const TableDashboardSchoolFrequencyPage = ({
           <TableRowLink
             key={id}
             href={`/${schoolSelect?.id}/frequency/${id}`}
-            onClick={onClickReset}
+            onClick={onClickDetail}
           >
             {!mdDown && (
               <TableCellLink link="div">
