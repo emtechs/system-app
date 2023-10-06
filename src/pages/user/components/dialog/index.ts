@@ -1,5 +1,6 @@
 export * from './Active'
 export * from './Admin'
+export * from './Delete'
 export * from './Director'
 export * from './School'
 export * from './Server'

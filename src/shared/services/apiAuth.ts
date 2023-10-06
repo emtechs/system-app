@@ -40,4 +40,16 @@ const verify = async (query: string): Promise<iVerify> => {
   return response
 }
 
-export const apiAuth = { login, recovery, passwordRecovery, verify }
+const verifyPassword = async (
+  data: iRecoveryPasswordRequest,
+): Promise<void> => {
+  await apiUsingNow.post('verify/password', data)
+}
+
+export const apiAuth = {
+  login,
+  recovery,
+  passwordRecovery,
+  verify,
+  verifyPassword,
+}

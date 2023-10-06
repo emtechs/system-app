@@ -4,20 +4,26 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Button,
   Card,
   CardActions,
   CardContent,
   Skeleton,
   Typography,
 } from '@mui/material'
-import { ExpandMore, RemoveDone } from '@mui/icons-material'
-import { useDialogContext, iUser, apiUser } from '../../../shared'
-import { DialogActiveUser } from '../components'
+import { Delete, ExpandMore, RemoveDone } from '@mui/icons-material'
+import {
+  useDialogContext,
+  iUser,
+  apiUser,
+  ButtonSmDown,
+  useAuthContext,
+} from '../../../shared'
+import { DialogActiveUser, DialogDeleteUser } from '../components'
 
 export const ViewRetrieveUserPage = () => {
   const { user_id } = useParams()
-  const { handleOpenActive } = useDialogContext()
+  const { userProfile } = useAuthContext()
+  const { handleOpenActive, handleOpenEdit } = useDialogContext()
   const [loadingUser, setLoadingUser] = useState(true)
   const [userRetrieve, setUserRetrieve] = useState<iUser>()
 
@@ -56,18 +62,24 @@ export const ViewRetrieveUserPage = () => {
           </Accordion>
         </CardContent>
         <CardActions>
-          <Button
-            variant="contained"
+          <ButtonSmDown
+            title="Desativar"
             color="error"
-            disableElevation
-            endIcon={<RemoveDone />}
+            startIcon={<RemoveDone />}
             onClick={handleOpenActive}
-          >
-            Desativar
-          </Button>
+          />
+          {userProfile?.is_super && (
+            <ButtonSmDown
+              title="Excluir"
+              color="warning"
+              startIcon={<Delete />}
+              onClick={handleOpenEdit}
+            />
+          )}
         </CardActions>
       </Card>
       {userRetrieve && <DialogActiveUser user={userRetrieve} />}
+      {userRetrieve && <DialogDeleteUser user={userRetrieve} />}
     </>
   )
 }

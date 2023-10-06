@@ -93,6 +93,10 @@ const schools = async (query: string) => {
   return response
 }
 
+const destroy = async (login: string) => {
+  await apiUsingNow.delete(`users/${login}`)
+}
+
 export const apiUser = {
   create,
   createServer,
@@ -103,4 +107,5 @@ export const apiUser = {
   schools,
   retrieve,
   list,
+  destroy,
 }
