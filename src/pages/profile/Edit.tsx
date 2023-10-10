@@ -175,12 +175,7 @@ export const EditProfilePage = () => {
           onSuccess={updateImage}
           resolver={zodResolver(avatarSchema)}
         >
-          <Box
-            display="flex"
-            gap={2}
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Box display="flex" flexDirection="column" gap={2}>
             <InputFile label="Foto de Perfil" />
             <Button variant="contained" type="submit">
               Salvar
