@@ -19,7 +19,11 @@ export const BoxResp = ({ children, isLogin, isProfile }: iBoxRespProps) => {
         width="80vw"
       >
         {!isProfile && (
-          <img src="/logo.webp" width="100%" alt="De Olho na Frequência" />
+          <img
+            src="/logo.webp"
+            width="100%"
+            alt="EMTI Digital - Massapê - Frequência"
+          />
         )}
         {children}
         {isLogin && (
@@ -33,7 +37,11 @@ export const BoxResp = ({ children, isLogin, isProfile }: iBoxRespProps) => {
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
       {!isProfile && (
-        <img src="/logo.webp" width="100%" alt="De Olho na Frequência" />
+        <img
+          src="/logo.webp"
+          width="100%"
+          alt="EMTI Digital - Massapê - Frequência"
+        />
       )}
       {children}
       {isLogin && (

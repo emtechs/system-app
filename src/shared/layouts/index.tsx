@@ -3,7 +3,7 @@ import { iChildren } from '../interfaces'
 import { Menu } from '@mui/icons-material'
 import { useAppThemeContext, useDrawerContext } from '../contexts'
 import { ReactNode, useRef } from 'react'
-import { ButtonTop, MenuDrawer } from '../components'
+import { ButtonTop, HeaderProfile, MenuDrawer } from '../components'
 
 interface iLayoutBasePageProps extends iChildren {
   title: ReactNode
@@ -15,7 +15,7 @@ export const LayoutBasePage = ({
   title,
   tools,
 }: iLayoutBasePageProps) => {
-  const { theme, smDown, mdDown } = useAppThemeContext()
+  const { theme, smDown } = useAppThemeContext()
   const { toggleDrawerOpen } = useDrawerContext()
 
   const elem = useRef<HTMLElement>(null)
@@ -32,13 +32,8 @@ export const LayoutBasePage = ({
           gap={1}
           paddingLeft={smDown ? 0 : 2}
         >
-          <Box
-            padding={1}
-            display="flex"
-            alignItems="center"
-            height={theme.spacing(smDown ? 6 : mdDown ? 8 : 10)}
-            gap={1}
-          >
+          <HeaderProfile />
+          <Box padding={1} display="flex" alignItems="center" gap={1}>
             {smDown && (
               <IconButton color="primary" onClick={toggleDrawerOpen}>
                 <Menu />

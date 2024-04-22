@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { ReactNode, SyntheticEvent } from 'react'
+import { MouseEvent, ReactNode, SyntheticEvent } from 'react'
 import { avatarSchema } from '../schemas'
 
 export interface iChildren {
@@ -19,6 +19,21 @@ export interface iLabelBaseProps {
   clickable?: boolean
   isSchool?: boolean
   to?: string
+}
+
+type option = {
+  to: string
+  value: string
+}
+
+export interface iMenuLayoutProps {
+  title: string
+  icon: ReactNode
+  anchorEl: HTMLElement | null
+  open: boolean
+  onClick: (event: MouseEvent<HTMLButtonElement>) => void
+  onClose: () => void
+  options: option[]
 }
 
 export interface iTabsBaseProps {

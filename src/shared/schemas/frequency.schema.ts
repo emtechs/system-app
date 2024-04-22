@@ -7,7 +7,7 @@ export const frequencyCreateSchema = z
       .string({
         required_error: 'Por favor, selecione uma data no calendário.',
       })
-      .nonempty('Por favor, selecione uma data no calendário.'),
+      .min(1, 'Por favor, selecione uma data no calendário.'),
     class: z.object(
       {
         id: z.string().uuid(),
@@ -36,7 +36,7 @@ export const frequencyCreateSchema = z
 export const RequestFrequencyCreateSchema = z.object({
   justification: z
     .string({ required_error: 'Justificativa obrigatória' })
-    .nonempty('Justificativa obrigatória'),
+    .min(1, 'Justificativa obrigatória'),
   frequency_id: z.string().uuid(),
 })
 
@@ -44,7 +44,7 @@ export const frequencyUpdateSchema = z
   .object({
     justification: z
       .string({ required_error: 'Justificativa obrigatória' })
-      .nonempty('Justificativa obrigatória'),
+      .min(1, 'Justificativa obrigatória'),
     status: z.enum(['PRESENTED', 'MISSED', 'JUSTIFIED']).optional(),
     updated_at: z.string().optional(),
   })

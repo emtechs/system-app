@@ -1,5 +1,5 @@
 import { AutocompleteElement } from 'react-hook-form-mui'
-import { iClass } from '../../interfaces'
+import { iClass } from '../../../interfaces'
 
 interface iAutoCompleteClassBaseProps {
   loading: boolean

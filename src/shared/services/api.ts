@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const token = localStorage.getItem('@EMTechs:token')
-const serverUrl = 'https://system-api.vercel.app/'
+const serverUrl = 'https://massape.frequencia.api.emtidigital.com.br/'
 const localServer = 'http://localhost:4002/'
 
 const localApi = axios.create({

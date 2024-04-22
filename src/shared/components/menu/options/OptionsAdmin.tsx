@@ -1,5 +1,4 @@
 import {
-  AccountBox,
   Checklist,
   Groups,
   Home,
@@ -12,18 +11,13 @@ import {
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Badge } from '@mui/material'
-import {
-  DialogBase,
-  useAuthContext,
-  useDrawerContext,
-} from '../../../../shared'
-import { OtherListItemLink, ListItemLinkOpen, Profile } from '../components'
+import { DialogBase, useAuthContext } from '../../../../shared'
+import { OtherListItemLink } from '../components'
 
 export const OptionsAdmin = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { userProfile } = useAuthContext()
-  const { handleClickProfile, openProfile } = useDrawerContext()
   const [open, setOpen] = useState(true)
 
   const onClose = () => setOpen((old) => !old)
@@ -54,14 +48,6 @@ export const OptionsAdmin = () => {
         to="frequency"
       />
       <OtherListItemLink icon={<Today />} label="Período" to="period" />
-      <ListItemLinkOpen
-        onClick={handleClickProfile}
-        open={openProfile}
-        icon={<AccountBox />}
-        label="Perfil"
-      >
-        <Profile />
-      </ListItemLinkOpen>
       {userProfile &&
         userProfile.requests > 0 &&
         !location.pathname.includes('request') && (

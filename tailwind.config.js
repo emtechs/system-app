@@ -3,7 +3,7 @@ export default {
   content: ['./src/**/*.tsx'],
   theme: {
     extend: {
-      colors: { primary: '#006CBE', secondary: '#F8BB05', bgd: '#F9F9F9' },
+      colors: { primary: '#626169', secondary: '#4460a8', bgd: '#cad8e3' },
     },
   },
 }

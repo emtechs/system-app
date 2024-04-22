@@ -14,7 +14,7 @@ import {
   useDrawerContext,
 } from '../../contexts'
 import { Home, Logout, Menu, Person } from '@mui/icons-material'
-import { MenuUser, MenuUserMdDown, Organ } from './components'
+import { MenuUser, MenuUserMdDown } from './components'
 import { adaptName } from '../../scripts'
 import { Link } from 'react-router-dom'
 
@@ -48,17 +48,20 @@ export const Header = ({ isHome }: iHeaderProps) => {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" color="inherit">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            {!mdDown && <Organ />}
             <Box
               width={mdDown ? '100vw' : '100%'}
               display="flex"
               justifyContent="space-between"
               alignItems="center"
             >
-              <img src="/logo_out.webp" alt="De Olho na Frequência" />
+              <img
+                src="/logo.webp"
+                alt="EMTI Digital - Massapê - Frequência"
+                className="h-12"
+              />
               {!mdDown && (
                 <Box display="flex" gap={1}>
                   <>

@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const classCreateSchema = z.object({
   name: z
     .string({ required_error: 'Nome obrigatório' })
-    .nonempty('Nome obrigatório'),
+    .min(1, 'Nome obrigatório'),
 })
 
 export const classSchoolCreateSchema = z

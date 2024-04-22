@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { AutocompleteElement } from 'react-hook-form-mui'
-import { iStudent } from '../../interfaces'
-import { apiStudent } from '../../services'
+import { iStudent } from '../../../interfaces'
+import { apiStudent } from '../../../services'
 
 interface iAutoCompleteStudentProps {
   query?: string

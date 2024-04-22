@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { iSchool, iClass } from '../../interfaces'
-import { apiClass } from '../../services'
+import { iSchool, iClass } from '../../../interfaces'
+import { apiClass } from '../../../services'
 import { AutoCompleteClassBase } from './ClassBase'
 
 interface iAutoCompleteClassProps {

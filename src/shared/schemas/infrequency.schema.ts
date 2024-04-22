@@ -5,7 +5,7 @@ export const reportSchema = z.object({
     .string({
       required_error: 'Modelo obrigatório',
     })
-    .nonempty('Modelo obrigatório'),
+    .min(1, 'Modelo obrigatório'),
   year: z.object(
     { id: z.string().uuid() },
     {
@@ -29,7 +29,7 @@ export const reportSchoolSchema = reportSchema
       .string({
         required_error: 'Tipo obrigatório',
       })
-      .nonempty('Tipo obrigatório'),
+      .min(1, 'Tipo obrigatório'),
     school_id: z.string(),
     year_id: z.string().uuid().optional(),
   })
@@ -78,7 +78,7 @@ export const reportCustomSchema = z.object({
     .string({
       required_error: 'Modelo obrigatório',
     })
-    .nonempty('Modelo obrigatório'),
+    .min(1, 'Modelo obrigatório'),
   year: z.object(
     { id: z.string().uuid() },
     {
@@ -88,10 +88,10 @@ export const reportCustomSchema = z.object({
   ),
   initial: z
     .string({ required_error: 'Início obrigatório' })
-    .nonempty('Início obrigatório'),
+    .min(1, 'Início obrigatório'),
   final: z
     .string({ required_error: 'Fim obrigatório' })
-    .nonempty('Fim obrigatório'),
+    .min(1, 'Fim obrigatório'),
 })
 
 export const reportCustomSchoolSchema = reportCustomSchema
@@ -100,7 +100,7 @@ export const reportCustomSchoolSchema = reportCustomSchema
       .string({
         required_error: 'Tipo obrigatório',
       })
-      .nonempty('Tipo obrigatório'),
+      .min(1, 'Tipo obrigatório'),
     school_id: z.string(),
     year_id: z.string().uuid().optional(),
   })

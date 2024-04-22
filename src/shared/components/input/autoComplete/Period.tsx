@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { AutocompleteElement } from 'react-hook-form-mui'
-import { iPeriod } from '../../interfaces'
-import { apiCalendar } from '../../services'
+import { iPeriod } from '../../../interfaces'
+import { apiCalendar } from '../../../services'
 
 interface iAutoCompletePeriodProps {
   query?: string

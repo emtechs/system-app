@@ -1,6 +1,5 @@
 import { ArrowBack, Print } from '@mui/icons-material'
 import { AppBar, Container, Toolbar, Box, Button } from '@mui/material'
-import { Organ } from './components'
 
 interface iHeaderReportProps {
   onClikPrint: () => void
@@ -12,17 +11,20 @@ export const HeaderReport = ({
   onClikBack,
 }: iHeaderReportProps) => {
   return (
-    <AppBar position="static">
+    <AppBar position="static" color="inherit">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Organ />
           <Box
             width="100%"
             display="flex"
             justifyContent="space-between"
             alignItems="center"
           >
-            <img src="/logo_out.webp" alt="De Olho na Frequência" />
+            <img
+              src="/logo.webp"
+              alt="EMTI Digital - Massapê - Frequência"
+              className="h-12"
+            />
             <Box display="flex" gap={1}>
               <Button
                 color="secondary"

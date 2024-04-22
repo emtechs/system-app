@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Divider,
   Drawer,
@@ -7,7 +6,6 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Typography,
 } from '@mui/material'
 import { Dashboard, FirstPage, Logout } from '@mui/icons-material'
 import { useMemo } from 'react'
@@ -16,7 +14,6 @@ import {
   useAppThemeContext,
   useDrawerContext,
   useAuthContext,
-  adaptName,
 } from '../../../shared'
 import { Options } from './options'
 
@@ -24,11 +21,7 @@ export const MenuDrawer = () => {
   const { theme, smDown } = useAppThemeContext()
   const { isDrawerOpen, toggleDrawerOpen, handleClick, displayDash } =
     useDrawerContext()
-  const { userProfile, logout, dashData } = useAuthContext()
-  const user = {
-    name: adaptName(userProfile?.name),
-    src: userProfile?.profile?.url,
-  }
+  const { logout, dashData } = useAuthContext()
 
   const listButton = useMemo(() => {
     if (dashData === 'ADMIN') {
@@ -74,34 +67,8 @@ export const MenuDrawer = () => {
         width={theme.spacing(28)}
         height="100%"
       >
-        <Box
-          width="100%"
-          bgcolor={theme.palette.primary.main}
-          height={theme.spacing(17)}
-          display="flex"
-          flexDirection="column"
-          flexShrink={0}
-          justifyContent="space-evenly"
-        >
-          <Box display="flex" alignItems="center" justifyContent="center">
-            <img src="/logo_out.webp" alt="De Olho na Frequência" />
-          </Box>
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            gap={theme.spacing(0.5)}
-          >
-            <Avatar
-              src={user.src}
-              sx={{
-                bgcolor: theme.palette.secondary.main,
-              }}
-            />
-            <Typography color={theme.palette.primary.contrastText}>
-              {user.name}
-            </Typography>
-          </Box>
+        <Box width="100%" bgcolor={theme.palette.background.default} p={2}>
+          <img src="/logo.webp" alt="EMTI Digital - Massapê - Frequência" />
         </Box>
         <Divider />
         <Box flex={1}>

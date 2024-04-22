@@ -4,7 +4,7 @@ import { csvSchema } from './file.schema'
 export const schoolCreateSchema = z.object({
   name: z
     .string({ required_error: 'Nome da Escola obrigatório' })
-    .nonempty('Nome da Escola obrigatório'),
+    .min(1, 'Nome da Escola obrigatório'),
 })
 
 export const schoolClassCreateSchema = z.object({
@@ -18,7 +18,7 @@ export const schoolImportSchema = z.object({
 export const schoolUpdateSchema = z.object({
   name: z
     .string({ required_error: 'Nome da Escola obrigatório' })
-    .nonempty('Nome da Escola obrigatório'),
+    .min(1, 'Nome da Escola obrigatório'),
 })
 
 export const schoolUpdateDirectorSchema = z
@@ -29,7 +29,7 @@ export const schoolUpdateDirectorSchema = z
       .min(14, 'Precisa ter 14 digitos'),
     name_diret: z
       .string({ required_error: 'Nome obrigatório' })
-      .nonempty('Nome obrigatório'),
+      .min(1, 'Nome obrigatório'),
     password: z.string().optional(),
     role: z.enum(['SERV', 'DIRET', 'SECRET', 'ADMIN']).default('DIRET'),
     dash: z.enum(['COMMON', 'SCHOOL', 'ORGAN', 'ADMIN']).default('SCHOOL'),
@@ -40,7 +40,7 @@ export const serverCreateSchema = z
   .object({
     name: z
       .string({ required_error: 'Nome obrigatório' })
-      .nonempty('Nome obrigatório'),
+      .min(1, 'Nome obrigatório'),
     login: z.string(),
     cpf: z
       .string({ required_error: 'CPF obrigatório' })
@@ -53,10 +53,10 @@ export const studentCreateSchema = z
   .object({
     name: z
       .string({ required_error: 'Nome obrigatório' })
-      .nonempty('Nome obrigatório'),
+      .min(1, 'Nome obrigatório'),
     registry: z
       .string({ required_error: 'Matricula obrigatória' })
-      .nonempty('Matricula obrigatória'),
+      .min(1, 'Matricula obrigatória'),
     class: z.object(
       { id: z.string().uuid() },
       { required_error: 'Turma obrigatória' },

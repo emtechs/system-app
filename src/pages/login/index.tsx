@@ -1,20 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, IconButton } from '@mui/material'
 import { Login as LoginIcon, LockReset, Info } from '@mui/icons-material'
-import {
-  FormContainer,
-  TextFieldElement,
-  PasswordElement,
-} from 'react-hook-form-mui'
+import { FormContainer, PasswordElement } from 'react-hook-form-mui'
 import { useAuthContext } from '../../shared/contexts'
 import { useState } from 'react'
 import { loginSchema, recoverySchema } from '../../shared/schemas'
-import {
-  BasePage,
-  BoxResp,
-  Glossary,
-  ValidateLogin,
-} from '../../shared/components'
+import { BasePage, BoxResp, Glossary, InputCpf } from '../../shared/components'
 import { Navigate } from 'react-router-dom'
 
 export const Login = () => {
@@ -34,13 +25,7 @@ export const Login = () => {
               <IconButton onClick={handleOpen} color="secondary">
                 <Info />
               </IconButton>
-              <TextFieldElement
-                name="login"
-                label="Usuário"
-                required
-                fullWidth
-              />
-              <ValidateLogin />
+              <InputCpf name="login" />
               <PasswordElement
                 name="password"
                 label="Senha"
@@ -75,13 +60,7 @@ export const Login = () => {
               <IconButton onClick={handleOpen} color="secondary">
                 <Info />
               </IconButton>
-              <TextFieldElement
-                name="login"
-                label="Usuário"
-                required
-                fullWidth
-              />
-              <ValidateLogin />
+              <InputCpf name="login" />
               <Button
                 variant="contained"
                 color="secondary"

@@ -3,17 +3,17 @@ import { z } from 'zod'
 export const studentSchema = z.object({
   name: z
     .string({ required_error: 'Nome obrigatório' })
-    .nonempty('Nome obrigatório'),
+    .min(1, 'Nome obrigatório'),
   registry: z
     .string({ required_error: 'Matricula obrigatória' })
-    .nonempty('Matricula obrigatória'),
+    .min(1, 'Matricula obrigatória'),
 })
 
 export const studentRemoveSchema = z
   .object({
     justify_disabled: z
       .string({ required_error: 'Justificativa obrigatório' })
-      .nonempty('Justificativa obrigatório'),
+      .min(1, 'Justificativa obrigatório'),
     finished_at: z.number().optional(),
   })
   .refine((fields) => (fields.finished_at = Date.now()))
@@ -22,7 +22,7 @@ export const studentTransferSchema = z
   .object({
     justify_disabled: z
       .string({ required_error: 'Justificativa obrigatório' })
-      .nonempty('Justificativa obrigatório'),
+      .min(1, 'Justificativa obrigatório'),
     finished_at: z.number().optional(),
     class: z.object(
       { id: z.string().uuid() },

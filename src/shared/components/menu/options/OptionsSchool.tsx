@@ -1,5 +1,4 @@
 import {
-  AccountBox,
   Checklist,
   Groups,
   Home,
@@ -7,17 +6,12 @@ import {
   Summarize,
   Workspaces,
 } from '@mui/icons-material'
-import {
-  useAppThemeContext,
-  useSchoolContext,
-  useDrawerContext,
-} from '../../../contexts'
-import { OtherListItemLink, ListItemLinkOpen, Profile } from '../components'
+import { useAppThemeContext, useSchoolContext } from '../../../contexts'
+import { OtherListItemLink } from '../components'
 
 export const OptionsSchool = () => {
   const { mdDown } = useAppThemeContext()
   const { schoolSelect } = useSchoolContext()
-  const { handleClickProfile, openProfile } = useDrawerContext()
   const baseHref = `/${schoolSelect?.id}`
   return (
     <>
@@ -58,14 +52,6 @@ export const OptionsSchool = () => {
           to="/report"
         />
       )}
-      <ListItemLinkOpen
-        onClick={handleClickProfile}
-        open={openProfile}
-        icon={<AccountBox />}
-        label="Perfil"
-      >
-        <Profile />
-      </ListItemLinkOpen>
     </>
   )
 }
