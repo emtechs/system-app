@@ -25,6 +25,7 @@ export interface iUserProfile {
     url: string
   }
   requests: number
+  email: string
 }
 
 export interface iUser extends iUserProfile {

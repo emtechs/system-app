@@ -12,31 +12,25 @@ import { Edit } from '@mui/icons-material'
 import { Outlet, useNavigate, useParams } from 'react-router-dom'
 import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
-  useAuthContext,
-  useAppThemeContext,
-  iUser,
-  iUserUpdateRequest,
-  apiUser,
-  iAvatarRequest,
-  apiImage,
+  DialogImage,
+  Footer,
+  LabelProfile,
   LayoutBasePage,
   TitleBaseItemsPage,
-  LabelProfile,
+  apiUser,
+  iUserUpdateRequest,
+  useAppThemeContext,
+  useAuthContext,
   userUpdateSchema,
-  Footer,
-  DialogBaseChildren,
-  avatarSchema,
-  InputFile,
 } from '../../shared'
 
 export const EditProfilePage = () => {
   const navigate = useNavigate()
   const { view } = useParams()
-  const { handleUserProfile } = useAuthContext()
+  const { userProfile, profileUser } = useAuthContext()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
-  const [userData, setUserData] = useState<iUser>()
   const [open, setOpen] = useState(false)
 
   const onClose = () => setOpen((old) => !old)
@@ -46,7 +40,7 @@ export const EditProfilePage = () => {
       setLoading(true)
       await apiUser.update(id, data)
       handleSucess('Dados alterado com sucesso')
-      getUser()
+      profileUser()
       navigate('/')
     } catch {
       handleError('Não foi possível atualizar os dados no momento!')
@@ -54,35 +48,6 @@ export const EditProfilePage = () => {
       setLoading(false)
     }
   }
-
-  const updateImage = async (data: iAvatarRequest) => {
-    try {
-      onClose()
-      setLoading(true)
-      const dataImage = new FormData()
-      if (data.avatar) dataImage.append('image', data.avatar)
-      await apiImage.createUser(dataImage)
-      handleSucess('Foto alterada com sucesso')
-      getUser()
-    } catch {
-      handleError('Não foi possível atualizar a foto no momento!')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const getUser = useCallback(() => {
-    setLoading(true)
-    apiUser
-      .page('')
-      .then((res) => {
-        setUserData(res.user)
-        handleUserProfile(res.user)
-      })
-      .finally(() => setLoading(false))
-  }, [])
-
-  useEffect(() => getUser(), [])
 
   if (view) return <Outlet />
 
@@ -101,9 +66,12 @@ export const EditProfilePage = () => {
         }
       >
         <FormContainer
-          values={{ name: userData?.name || '', email: userData?.email || '' }}
+          values={{
+            name: userProfile?.name || '',
+            email: userProfile?.email || '',
+          }}
           onSuccess={(data) => {
-            if (userData) updateUser(userData.id, data)
+            if (userProfile) updateUser(userProfile.id, data)
           }}
           resolver={zodResolver(userUpdateSchema)}
         >
@@ -131,7 +99,7 @@ export const EditProfilePage = () => {
                 <Tooltip title="Alterar foto">
                   <IconButton size="small" onClick={onClose}>
                     <Avatar
-                      src={userData?.profile?.url}
+                      src={userProfile?.profile?.url}
                       sx={{ width: '150px', height: '150px' }}
                     />
                   </IconButton>
@@ -165,24 +133,7 @@ export const EditProfilePage = () => {
         </FormContainer>
         <Footer />
       </LayoutBasePage>
-      <DialogBaseChildren
-        open={open}
-        onClose={onClose}
-        description=""
-        title="Alterar Foto de Perfil"
-      >
-        <FormContainer
-          onSuccess={updateImage}
-          resolver={zodResolver(avatarSchema)}
-        >
-          <Box display="flex" flexDirection="column" gap={2}>
-            <InputFile label="Foto de Perfil" />
-            <Button variant="contained" type="submit">
-              Salvar
-            </Button>
-          </Box>
-        </FormContainer>
-      </DialogBaseChildren>
+      <DialogImage onClose={onClose} open={open} />
     </>
   )
 }
