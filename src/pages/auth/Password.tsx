@@ -45,10 +45,12 @@ export const PasswordPage = () => {
           </BoxResp>
         </FormContainer>
       </BasePage>
-      <Glossary open={open} onClose={handleOpen}>
-        Preencha as informações com a sua nova senha e repita-a para ter acesso
-        ao sistema com a senha atualizada.
-      </Glossary>
+      <Glossary
+        open={open}
+        onClose={handleOpen}
+        message="Preencha as informações com a sua nova senha e repita-a para ter acesso
+        ao sistema com a senha atualizada."
+      />
     </>
   )
 }

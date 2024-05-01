@@ -32,7 +32,9 @@ export const CreateSchoolClass = ({
 
   useEffect(() => {
     apiUsingNow
-      .get<{ result: iClass[] }>(
+      .get<{
+        result: iClass[]
+      }>(
         `classes?school_id=${school.id}&year_id=${year.id}&is_active=true&by=asc&order=name`,
       )
       .then((res) => setClassDataSelect(res.data.result))

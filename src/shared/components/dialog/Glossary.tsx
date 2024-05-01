@@ -7,14 +7,14 @@ import {
   useTheme,
 } from '@mui/material'
 import { Close } from '@mui/icons-material'
-import { iChildren } from '../../interfaces'
 
-interface iGlossaryProps extends iChildren {
+interface iGlossaryProps {
   onClose: () => void
   open: boolean
+  message: string
 }
 
-export const Glossary = ({ onClose, open, children }: iGlossaryProps) => {
+export const Glossary = ({ onClose, open, message }: iGlossaryProps) => {
   const theme = useTheme()
 
   return (
@@ -39,7 +39,7 @@ export const Glossary = ({ onClose, open, children }: iGlossaryProps) => {
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
-        <DialogContentText>{children}</DialogContentText>
+        <DialogContentText>{message}</DialogContentText>
       </DialogContent>
     </Dialog>
   )

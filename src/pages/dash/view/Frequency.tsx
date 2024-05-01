@@ -73,8 +73,9 @@ export const ViewDashboardSchoolFrequencyPage = ({
             return `${query}&date=${date}`
 
           default:
-            return `${query}&year_id=${year_id}&month_id=${listMonth?.at(index)
-              ?.id}`
+            return `${query}&year_id=${year_id}&month_id=${
+              listMonth?.at(index)?.id
+            }`
         }
       }
 

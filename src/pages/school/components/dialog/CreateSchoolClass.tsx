@@ -31,9 +31,9 @@ export const DialogSchoolClassPage = ({
 
   useEffect(() => {
     apiUsingNow
-      .get<{ result: iClass[] }>(
-        `classes?school_id=${school_id}&year_id=${year_id}&is_school=true`,
-      )
+      .get<{
+        result: iClass[]
+      }>(`classes?school_id=${school_id}&year_id=${year_id}&is_school=true`)
       .then((res) => setClassDataSelect(res.data.result))
   }, [])
 

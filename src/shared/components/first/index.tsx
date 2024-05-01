@@ -90,9 +90,11 @@ export const First = ({ children }: iChildren) => {
               </BoxResp>
             </FormContainer>
           </BasePage>
-          <Glossary open={open} onClose={handleOpen}>
-            Preencha as informações com seus dados para obter acesso ao sistema.
-          </Glossary>
+          <Glossary
+            open={open}
+            onClose={handleOpen}
+            message="Preencha as informações com seus dados para obter acesso ao sistema."
+          />
         </>
       ) : (
         <></>

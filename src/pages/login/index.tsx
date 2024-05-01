@@ -82,19 +82,15 @@ export const Login = () => {
           </FormContainer>
         )}
       </BasePage>
-      <Glossary open={open} onClose={handleOpen}>
-        {isLogin ? (
-          <>
-            Preencha as informações com seu usuário e senha para obter acesso ao
-            sistema.
-          </>
-        ) : (
-          <>
-            Preencha o campo com seu usuário. Em seguida, você receberá um link
-            no seu email cadastrado para efetuar a troca da senha.
-          </>
-        )}
-      </Glossary>
+      <Glossary
+        open={open}
+        onClose={handleOpen}
+        message={
+          isLogin
+            ? 'Preencha as informações com seu usuário e senha para obter acesso ao sistema.'
+            : 'Preencha o campo com seu usuário. Em seguida, você receberá um link no seu email cadastrado para efetuar a troca da senha.'
+        }
+      />
     </>
   )
 }
