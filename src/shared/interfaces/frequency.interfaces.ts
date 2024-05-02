@@ -1,9 +1,11 @@
 import { z } from 'zod'
-import { frequencyCreateSchema } from '../schemas'
+import {
+  frequencyCreateSchema,
+  iFrequencyStudentsWithInfreq,
+  iStatusStudent,
+} from '../../shared'
 
 export type iFrequencyRequest = z.infer<typeof frequencyCreateSchema>
-
-export type iStatusStudent = 'PRESENTED' | 'MISSED' | 'JUSTIFIED'
 
 interface iUserFreq {
   id: string
@@ -43,35 +45,6 @@ interface iFrequencyInfreqBase extends iFrequency {
   class_infreq?: number
   school_frequencies?: number
   school_infreq?: number
-}
-
-export interface iFrequencyStudentsBase {
-  id: string
-  name: string
-  registry: string
-  status: iStatusStudent
-  justification?: string
-  updated_at?: string
-  frequency_id: string
-}
-
-export interface iFrequencyStudents extends iFrequencyStudentsBase {
-  _count: { students: number }
-}
-
-export interface iFrequencyStudentsWithInfreq {
-  id: string
-  status: iStatusStudent
-  justification?: string
-  updated_at?: string
-  name: string
-  registry: string
-  frequencyStudent_id: string
-  presences: number
-  justified: number
-  absences: number
-  frequencies: number
-  infrequency: number
 }
 
 export interface iFrequencyWithInfreq extends iFrequencyInfreqBase {

@@ -3,27 +3,28 @@ import { Box, Typography } from '@mui/material'
 import {
   DialogBaseChildrenAction,
   apiFrequencyStudent,
-  iDialogDataProps,
-  iFrequencyStudentsBase,
+  iFrequencyDataStudent,
   useAppThemeContext,
   useDialogContext,
 } from '../../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 
-interface iDialogRemoveMissedProps extends iDialogDataProps {
-  student: iFrequencyStudentsBase
+interface iDialogRemoveMissedProps {
+  student: iFrequencyDataStudent
+  handleDataStudents: (id: string, newData: iFrequencyDataStudent) => void
 }
 
 export const DialogRemoveMissed = ({
   student,
-  getData,
+  handleDataStudents,
 }: iDialogRemoveMissedProps) => {
   const { handleError } = useAppThemeContext()
   const { openEdit, handleOpenEdit } = useDialogContext()
 
   const action = useCallback(() => {
     handleOpenEdit()
+    handleDataStudents(student.id, { ...student, is_loading: true })
     apiFrequencyStudent
       .update(
         {
@@ -33,10 +34,21 @@ export const DialogRemoveMissed = ({
         },
         student.id,
       )
-      .catch(() =>
-        handleError('Não foi possível cadastrar a falta no momento!'),
+      .then((res) =>
+        handleDataStudents(res.id, {
+          ...res,
+          is_loading: false,
+          is_error: false,
+        }),
       )
-      .finally(() => getData && getData())
+      .catch(() => {
+        handleDataStudents(student.id, {
+          ...student,
+          is_loading: false,
+          is_error: true,
+        })
+        handleError('Não foi possível cadastrar a falta no momento!')
+      })
   }, [student])
 
   return (

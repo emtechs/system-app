@@ -9,31 +9,46 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 import {
-  iFrequencyStudentsBase,
-  useAppThemeContext,
-  frequencyUpdateSchema,
   DialogBaseChildrenAction,
-  useDialogContext,
-  iDialogDataProps,
   apiFrequencyStudent,
+  frequencyUpdateSchema,
+  iFrequencyDataStudent,
+  useAppThemeContext,
+  useDialogContext,
 } from '../../../../shared'
 
-interface iDialogMissedProps extends iDialogDataProps {
-  student: iFrequencyStudentsBase
+interface iDialogMissedProps {
+  student: iFrequencyDataStudent
+  handleDataStudents: (id: string, newData: iFrequencyDataStudent) => void
 }
 
-export const DialogMissed = ({ student, getData }: iDialogMissedProps) => {
+export const DialogMissed = ({
+  student,
+  handleDataStudents,
+}: iDialogMissedProps) => {
   const { openEdit, handleOpenEdit } = useDialogContext()
   const { handleError } = useAppThemeContext()
   const updateFrequencyStudent = useCallback(
     (data: FieldValues) => {
       handleOpenEdit()
+      handleDataStudents(student.id, { ...student, is_loading: true })
       apiFrequencyStudent
         .update(data, student.id)
-        .catch(() =>
-          handleError('Não foi possível cadastrar a falta no momento!'),
+        .then((res) =>
+          handleDataStudents(res.id, {
+            ...res,
+            is_loading: false,
+            is_error: false,
+          }),
         )
-        .finally(() => getData && getData())
+        .catch(() => {
+          handleDataStudents(student.id, {
+            ...student,
+            is_loading: false,
+            is_error: true,
+          })
+          handleError('Não foi possível cadastrar a falta no momento!')
+        })
     },
     [student],
   )
