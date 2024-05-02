@@ -4,9 +4,9 @@ import {
   usePaginationContext,
   iFrequencyStudentsBase,
   iFrequency,
-  apiFrequency,
   DialogRequestFrequency,
   useParamsContext,
+  apiFrequencyStudent,
 } from '../../../../../shared'
 import { TableDashboardSchoolFrequencyDataPage } from '../../../components'
 
@@ -23,28 +23,26 @@ export const DataDashboardSchoolFrequencyPage = ({
   const [dataStudents, setDataStudents] = useState<iFrequencyStudentsBase[]>([])
   const [frequencyData, setFrequencyData] = useState<iFrequency>()
 
-  const getStudents = useCallback(
-    (query: string) => {
-      setIsLoading(true)
-      apiFrequency
-        .students(frequency_id, query)
-        .then((res) => {
-          setDataStudents(res.result)
-          setFrequencyData(res.frequency)
-          setCount(res.total)
-        })
-        .finally(() => setIsLoading(false))
-    },
-    [frequency_id],
-  )
+  const getStudents = useCallback((query: string) => {
+    setIsLoading(true)
+    apiFrequencyStudent
+      .list(query)
+      .then((res) => {
+        setDataStudents(res.result)
+        setFrequencyData(res.frequency)
+        setCount(res.total)
+      })
+      .finally(() => setIsLoading(false))
+  }, [])
 
   useEffect(() => {
+    const query = `?frequency_id=${frequency_id}`
     if (search) {
       debounce(() => {
-        getStudents(`?name=${search}`)
+        getStudents(`${query}&name=${search}`)
       })
-    } else getStudents('')
-  }, [search])
+    } else getStudents(query)
+  }, [frequency_id, search])
 
   return (
     <>

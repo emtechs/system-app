@@ -3,9 +3,9 @@ import {
   usePaginationContext,
   useParamsContext,
   iFrequencyStudentsBase,
-  apiFrequency,
   DialogMissed,
   DialogRemoveMissed,
+  apiFrequencyStudent,
 } from '../../../../../shared'
 import { TableDashboardSchoolFrequencyOpenPage } from '../../../components'
 
@@ -27,9 +27,10 @@ export const DataDashboardSchoolFrequencyOpenPage = ({
     setStudentData(newData)
 
   const getStudents = useCallback(() => {
+    const query = `?frequency_id=${frequency_id}`
     setIsLoading(true)
-    apiFrequency
-      .students(frequency_id, isAlter ? '?is_alter=true' : '')
+    apiFrequencyStudent
+      .list(isAlter ? `${query}&is_alter=true` : query)
       .then((res) => {
         setDataStudents(res.result)
         setCount(res.total)

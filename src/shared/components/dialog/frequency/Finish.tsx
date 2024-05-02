@@ -8,6 +8,7 @@ import {
   apiFrequency,
   useDialogContext,
   useAppThemeContext,
+  apiFrequencyStudent,
 } from '../../../../shared'
 import { TableDialogFinishFrequency } from './table'
 
@@ -33,11 +34,10 @@ export const DialogFinishFrequency = ({
   )
 
   useEffect(() => {
-    const queryData =
-      '?by=asc&order=name&isNot_presented=true' + query_page(2, true)
+    const queryData = `?by=asc&order=name&isNot_presented=true&frequency_id=${frequency_id}${query_page(2, true)}`
     setIsLoading(true)
-    apiFrequency
-      .students(frequency_id, queryData)
+    apiFrequencyStudent
+      .list(queryData)
       .then((res) => {
         setCount(res.total)
         setAlterStudents(res.result)

@@ -1,12 +1,12 @@
 import { useCallback } from 'react'
 import { Box, Typography } from '@mui/material'
 import {
+  DialogBaseChildrenAction,
+  apiFrequencyStudent,
+  iDialogDataProps,
   iFrequencyStudentsBase,
   useAppThemeContext,
-  apiFrequency,
-  DialogBaseChildrenAction,
   useDialogContext,
-  iDialogDataProps,
 } from '../../../../shared'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
@@ -24,8 +24,8 @@ export const DialogRemoveMissed = ({
 
   const action = useCallback(() => {
     handleOpenEdit()
-    apiFrequency
-      .updateFreqStudent(
+    apiFrequencyStudent
+      .update(
         {
           status: 'PRESENTED',
           justification: '',

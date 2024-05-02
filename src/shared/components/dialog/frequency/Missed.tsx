@@ -11,11 +11,11 @@ import 'dayjs/locale/pt-br'
 import {
   iFrequencyStudentsBase,
   useAppThemeContext,
-  apiFrequency,
   frequencyUpdateSchema,
   DialogBaseChildrenAction,
   useDialogContext,
   iDialogDataProps,
+  apiFrequencyStudent,
 } from '../../../../shared'
 
 interface iDialogMissedProps extends iDialogDataProps {
@@ -28,8 +28,8 @@ export const DialogMissed = ({ student, getData }: iDialogMissedProps) => {
   const updateFrequencyStudent = useCallback(
     (data: FieldValues) => {
       handleOpenEdit()
-      apiFrequency
-        .updateFreqStudent(data, student.id)
+      apiFrequencyStudent
+        .update(data, student.id)
         .catch(() =>
           handleError('Não foi possível cadastrar a falta no momento!'),
         )

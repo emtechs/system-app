@@ -52,6 +52,7 @@ export interface iFrequencyStudentsBase {
   status: iStatusStudent
   justification?: string
   updated_at?: string
+  frequency_id: string
 }
 
 export interface iFrequencyStudents extends iFrequencyStudentsBase {

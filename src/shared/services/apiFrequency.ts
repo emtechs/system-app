@@ -2,7 +2,6 @@ import { FieldValues } from 'react-hook-form'
 import {
   iFrequency,
   iFrequencyHistory,
-  iFrequencyStudentsBase,
   iMonth,
   iRequest,
   iResumeFreq,
@@ -53,17 +52,6 @@ const updateRequest = async (
   return response
 }
 
-const updateFreqStudent = async (
-  data: FieldValues,
-  id: string,
-): Promise<{ frequency_id: string }> => {
-  const { data: response } = await apiUsingNow.patch<{ frequency_id: string }>(
-    `frequencies/student/${id}`,
-    data,
-  )
-  return response
-}
-
 interface iResumeReturn {
   total: number
   result: iResumeFreq[]
@@ -94,22 +82,6 @@ const destroyRequest = async (data: FieldValues) => {
   await apiUsingNow.delete('frequencies/request', {
     data: { ...data },
   })
-}
-
-interface iStudentsReturn {
-  total: number
-  result: iFrequencyStudentsBase[]
-  frequency: iFrequency
-}
-
-const students = async (
-  id: string,
-  query: string,
-): Promise<iStudentsReturn> => {
-  const { data: response } = await apiUsingNow.get<iStudentsReturn>(
-    `frequencies/${id}/student${query}`,
-  )
-  return response
 }
 
 interface iList {
@@ -152,10 +124,8 @@ export const apiFrequency = {
   createRequest,
   update,
   updateRequest,
-  updateFreqStudent,
   destroy,
   destroyRequest,
-  students,
   list,
   listRequest,
   history,

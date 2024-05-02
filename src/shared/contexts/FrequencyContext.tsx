@@ -9,13 +9,14 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { FieldValues } from 'react-hook-form'
 import {
+  apiFrequency,
+  apiFrequencyStudent,
+  iChildren,
   iFrequency,
   iFrequencyStudentsBase,
   iFrequencyWithInfreq,
-  iChildren,
-  apiFrequency,
-  useAppThemeContext,
   iSelectBase,
+  useAppThemeContext,
 } from '../../shared'
 
 interface iFrequencyContextData {
@@ -107,10 +108,9 @@ export const FrequencyProvider = ({ children }: iChildren) => {
     async (data: FieldValues, id: string) => {
       try {
         setLoading(true)
-        const { frequency_id } = await apiFrequency.updateFreqStudent(data, id)
-        const students = await apiFrequency.students(
-          frequency_id,
-          '?order=name&by=asc',
+        const { frequency_id } = await apiFrequencyStudent.update(data, id)
+        const students = await apiFrequencyStudent.list(
+          `?order=name&by=asc&frequency_id=${frequency_id}`,
         )
         setDataStudents(students.result)
       } catch {
