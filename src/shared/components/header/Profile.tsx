@@ -1,6 +1,6 @@
+import { AccountCircle, Settings } from '@mui/icons-material'
+import { Avatar, Box, Typography } from '@mui/material'
 import { MouseEvent, useState } from 'react'
-import { Box, Typography, Avatar } from '@mui/material'
-import { AccountCircle } from '@mui/icons-material'
 import {
   MenuLayout,
   adaptName,
@@ -12,16 +12,19 @@ export const HeaderProfile = () => {
   const { theme, smDown } = useAppThemeContext()
   const { userProfile } = useAuthContext()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [openPerfil, setOpenPerfil] = useState(false)
+  const [activeMenu, setActiveMenu] = useState<string | null>(null)
 
-  const handleClickPerfil = (event: MouseEvent<HTMLButtonElement>) => {
+  const handleOpenMenu = (
+    event: MouseEvent<HTMLButtonElement>,
+    menu: string,
+  ) => {
     setAnchorEl(event.currentTarget)
-    setOpenPerfil(true)
+    setActiveMenu(menu)
   }
 
-  const handleClosePerfil = () => {
+  const handleCloseMenu = () => {
     setAnchorEl(null)
-    setOpenPerfil(false)
+    setActiveMenu(null)
   }
 
   const user = {
@@ -29,21 +32,39 @@ export const HeaderProfile = () => {
     src: userProfile?.profile?.url,
   }
 
+  const menus = [
+    {
+      id: 'settings',
+      title: 'Configurações',
+      icon: <Settings fontSize="small" />,
+      options: [{ to: '/profile/edit', value: 'Ano Letivo' }],
+    },
+    {
+      id: 'profile',
+      title: 'Perfil',
+      icon: <AccountCircle fontSize="small" />,
+      options: [
+        { to: '/profile/edit', value: 'Editar Perfil' },
+        { to: '/profile/edit/password', value: 'Editar Senha' },
+      ],
+    },
+  ]
+
   return (
     <Box pt={1} pl={1} pr={2} display="flex" justifyContent="space-between">
       <Box display="flex">
-        <MenuLayout
-          anchorEl={anchorEl}
-          onClick={handleClickPerfil}
-          onClose={handleClosePerfil}
-          open={openPerfil}
-          title="Perfil"
-          icon={<AccountCircle fontSize="small" />}
-          options={[
-            { to: '/profile/edit', value: 'Editar Perfil' },
-            { to: '/profile/edit/password', value: 'Editar Senha' },
-          ]}
-        />
+        {menus.map((menu) => (
+          <MenuLayout
+            key={menu.id}
+            anchorEl={activeMenu === menu.id ? anchorEl : null}
+            onClick={(event) => handleOpenMenu(event, menu.id)}
+            onClose={handleCloseMenu}
+            open={activeMenu === menu.id}
+            title={menu.title}
+            icon={menu.icon}
+            options={menu.options}
+          />
+        ))}
       </Box>
       <Box display="flex" alignItems="center" gap={1}>
         <Typography>{user.name}</Typography>
