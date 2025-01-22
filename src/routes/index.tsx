@@ -22,6 +22,7 @@ import {
   ViewDashboardSchoolPage,
   ViewSchoolPage,
   ViewUserPage,
+  YearPage,
 } from '../pages'
 import { ProtectedAdmin, ProtectedAuth } from '../shared/components'
 
@@ -29,6 +30,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/year" element={<YearPage />} />
       <Route path="/password/:userId/:token" element={<PasswordPage />} />
       <Route element={<ProtectedAuth />}>
         <Route element={<ProtectedAdmin />}>

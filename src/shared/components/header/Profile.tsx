@@ -37,7 +37,7 @@ export const HeaderProfile = () => {
       id: 'settings',
       title: 'Configurações',
       icon: <Settings fontSize="small" />,
-      options: [{ to: '/profile/edit', value: 'Ano Letivo' }],
+      options: [{ to: '/year', value: 'Ano Letivo' }],
     },
     {
       id: 'profile',

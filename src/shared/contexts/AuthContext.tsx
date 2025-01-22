@@ -1,3 +1,7 @@
+import { AxiosError } from 'axios'
+import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
 import {
   createContext,
   useCallback,
@@ -7,24 +11,20 @@ import {
   useState,
 } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AxiosError } from 'axios'
 import {
-  iRecoveryRequest,
-  iLoginRequest,
-  iRecoveryPasswordRequest,
-  iUserProfile,
-  iDash,
-  iYear,
-  iChildren,
-  useAppThemeContext,
+  apiAuth,
+  apiCalendar,
   apiUser,
   apiUsingNow,
-  apiCalendar,
-  apiAuth,
+  iChildren,
+  iDash,
+  iLoginRequest,
+  iRecoveryPasswordRequest,
+  iRecoveryRequest,
+  iUserProfile,
+  iYear,
+  useAppThemeContext,
 } from '../../shared'
-import dayjs from 'dayjs'
-import localizedFormat from 'dayjs/plugin/localizedFormat'
-import 'dayjs/locale/pt-br'
 dayjs.extend(localizedFormat)
 
 interface iAuthContextData {
@@ -39,6 +39,7 @@ interface iAuthContextData {
   isAuthenticated: boolean
   userProfile: iUserProfile | undefined
   handleUserProfile: (newUser: iUserProfile) => void
+  handleYearStore: (newYear: number) => void
   dashData: iDash | undefined
   yearData: iYear | undefined
   profileUser: () => void
@@ -51,19 +52,26 @@ export const AuthProvider = ({ children }: iChildren) => {
   const navigate = useNavigate()
   const { setLoading, handleSucess, handleError } = useAppThemeContext()
   const [accessToken, setAccessToken] = useState<string>()
+  const [yearStore, setYearStore] = useState<number>(dayjs().year())
   const [userProfile, setUserProfile] = useState<iUserProfile>()
   const [dashData, setDashData] = useState<iDash>()
   const [yearData, setYearData] = useState<iYear>()
 
   const handleUserProfile = (newUser: iUserProfile) => setUserProfile(newUser)
+  const handleYearStore = (newYear: number) => setYearStore(newYear)
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('@EMTechs:token')
+    const accessTokenStorage = localStorage.getItem('@EMTechs:token')
+    const yearStorage = localStorage.getItem('@EMTechs:year')
 
-    if (accessToken) {
-      setAccessToken(accessToken)
+    if (accessTokenStorage) {
+      setAccessToken(accessTokenStorage)
     } else {
       setAccessToken(undefined)
+    }
+
+    if (yearStorage) {
+      setYearStore(+yearStorage)
     }
   }, [])
 
@@ -94,13 +102,13 @@ export const AuthProvider = ({ children }: iChildren) => {
 
       setLoading(true)
       apiCalendar
-        .year(accessToken, dayjs().year())
+        .year(accessToken, yearStore)
         .then((res) => {
           setYearData(res)
         })
         .finally(() => setLoading(false))
     }
-  }, [accessToken])
+  }, [accessToken, yearStore])
 
   const handleLogin = useCallback(async (data: iLoginRequest) => {
     try {
@@ -187,6 +195,7 @@ export const AuthProvider = ({ children }: iChildren) => {
         handleUserProfile,
         userProfile,
         refreshUser,
+        handleYearStore,
       }}
     >
       {children}
